@@ -240,6 +240,46 @@ const LandingPage = () => {
         </div>
       </section>
 
+      {/* Social Proof Section */}
+      <section className="px-6 py-20 bg-white">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            <div className="order-2 lg:order-1">
+              <img
+                src="https://images.unsplash.com/photo-1752652011717-f06f7ed3927a?crop=entropy&cs=srgb&fm=jpg&q=85"
+                alt="Familia protegida con MANO"
+                className="w-full rounded-2xl shadow-2xl"
+              />
+            </div>
+            <div className="order-1 lg:order-2 space-y-6">
+              <h2 className="text-3xl sm:text-4xl font-bold">
+                Miles de familias ya están protegidas
+              </h2>
+              <p className="text-lg text-zinc-600">
+                MANO no solo protege a personas individuales. Protege a familias completas, 
+                especialmente a los más vulnerables: nuestros mayores.
+              </p>
+              <div className="space-y-4">
+                {[
+                  { stat: '10,000+', label: 'Usuarios protegidos' },
+                  { stat: '50,000+', label: 'Amenazas bloqueadas' },
+                  { stat: '99.8%', label: 'Precisión en detección' },
+                  { stat: '24/7', label: 'Protección continua' }
+                ].map((item, idx) => (
+                  <div key={idx} className="flex items-center gap-4">
+                    <div className="w-2 h-2 rounded-full bg-indigo-600" />
+                    <div>
+                      <span className="font-bold text-2xl text-indigo-600">{item.stat}</span>
+                      <span className="text-zinc-600 ml-2">{item.label}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* CTA Final */}
       <section className="px-6 py-20 bg-indigo-600 text-white">
         <div className="max-w-4xl mx-auto text-center">
