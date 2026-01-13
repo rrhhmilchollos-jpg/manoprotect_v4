@@ -78,7 +78,12 @@ export const AuthProvider = ({ children }) => {
         body: JSON.stringify({ email, password })
       });
 
-      const data = await response.json();
+      let data;
+      try {
+        data = await response.json();
+      } catch {
+        throw new Error('Error de conexión con el servidor');
+      }
       
       if (!response.ok) {
         throw new Error(data.detail || 'Credenciales inválidas');
