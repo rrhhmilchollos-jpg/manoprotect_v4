@@ -153,7 +153,7 @@ const Dashboard = () => {
         )}
 
         {/* Analyzer */}
-        <Card className="mb-8 border-zinc-200 shadow-sm">
+        <Card className="mb-8 border-zinc-200 shadow-sm bg-white">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Search className="w-5 h-5" />
