@@ -1922,8 +1922,7 @@ async def download_investor_pdf(
     request: Request,
     session_token: Optional[str] = Cookie(None)
 ):
-    """Download document as PDF (investor only)"""
-    from weasyprint import HTML, CSS
+    """Download document as HTML (styled for printing/PDF conversion) - investor only"""
     import markdown2
     
     user = await require_investor(request, session_token)
@@ -1946,6 +1945,170 @@ async def download_investor_pdf(
         "format": "pdf",
         "downloaded_at": datetime.now(timezone.utc).isoformat()
     })
+    
+    # Read markdown
+    with open(file_path, 'r', encoding='utf-8') as f:
+        md_content = f.read()
+    
+    # Convert markdown to HTML
+    html_content = markdown2.markdown(md_content, extras=["tables", "fenced-code-blocks", "header-ids"])
+    
+    # Create styled HTML document (can be printed to PDF from browser)
+    full_html = f"""<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MANO - {doc_type.replace('-', ' ').title()}</title>
+    <style>
+        @media print {{
+            body {{ margin: 2cm; }}
+            .no-print {{ display: none; }}
+        }}
+        body {{
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 12pt;
+            line-height: 1.6;
+            color: #1a1a1a;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }}
+        h1 {{
+            color: #4338ca;
+            font-size: 28pt;
+            border-bottom: 3px solid #4338ca;
+            padding-bottom: 15px;
+            margin-top: 40px;
+        }}
+        h2 {{
+            color: #4338ca;
+            font-size: 20pt;
+            margin-top: 30px;
+            border-bottom: 1px solid #e5e7eb;
+            padding-bottom: 10px;
+        }}
+        h3 {{
+            color: #374151;
+            font-size: 16pt;
+            margin-top: 25px;
+        }}
+        table {{
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }}
+        th, td {{
+            border: 1px solid #d1d5db;
+            padding: 10px 15px;
+            text-align: left;
+        }}
+        th {{
+            background-color: #f3f4f6;
+            font-weight: bold;
+        }}
+        tr:nth-child(even) {{
+            background-color: #f9fafb;
+        }}
+        code {{
+            background-color: #f3f4f6;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 11pt;
+        }}
+        pre {{
+            background-color: #1f2937;
+            color: #f9fafb;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+        }}
+        blockquote {{
+            border-left: 4px solid #4338ca;
+            padding-left: 20px;
+            margin: 20px 0;
+            color: #4b5563;
+            font-style: italic;
+        }}
+        ul, ol {{
+            margin: 15px 0;
+            padding-left: 30px;
+        }}
+        li {{
+            margin: 8px 0;
+        }}
+        .header {{
+            text-align: center;
+            margin-bottom: 50px;
+            padding: 30px;
+            background: linear-gradient(135deg, #4338ca 0%, #6366f1 100%);
+            color: white;
+            border-radius: 12px;
+        }}
+        .header h1 {{
+            color: white;
+            border: none;
+            margin: 0 0 10px 0;
+            font-size: 32pt;
+        }}
+        .header p {{
+            margin: 0;
+            font-size: 14pt;
+            opacity: 0.9;
+        }}
+        .confidential {{
+            text-align: center;
+            color: #dc2626;
+            font-weight: bold;
+            margin: 30px 0;
+            padding: 15px;
+            border: 2px solid #dc2626;
+            border-radius: 8px;
+            background-color: #fef2f2;
+        }}
+        .print-btn {{
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #4338ca;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14pt;
+            box-shadow: 0 4px 12px rgba(67, 56, 202, 0.3);
+        }}
+        .print-btn:hover {{
+            background: #3730a3;
+        }}
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>MANO</h1>
+        <p>Plataforma Integral de Protección contra Fraudes</p>
+    </div>
+    <div class="confidential">
+        ⚠️ DOCUMENTO CONFIDENCIAL - Solo para inversores autorizados
+    </div>
+    {html_content}
+    <div style="margin-top: 50px; padding-top: 20px; border-top: 1px solid #e5e7eb; text-align: center; color: #6b7280; font-size: 10pt;">
+        MANO © 2025 - Documento generado el {datetime.now().strftime('%d/%m/%Y')} - Confidencial
+    </div>
+    <button class="print-btn no-print" onclick="window.print()">Imprimir / Guardar PDF</button>
+</body>
+</html>"""
+    
+    filename = f"MANO_{doc_type.replace('-', '_')}_CONFIDENCIAL_2025.html"
+    
+    return Response(
+        content=full_html,
+        media_type="text/html",
+        headers={
+            "Content-Disposition": f'attachment; filename="{filename}"'
+        }
+    )
     
     # Read markdown
     with open(file_path, 'r', encoding='utf-8') as f:
