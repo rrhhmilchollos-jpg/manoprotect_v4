@@ -99,15 +99,6 @@ class InvestorRequest(BaseModel):
     reviewed_by: Optional[str] = None
     reviewed_at: Optional[datetime] = None
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
-    
-    @field_validator('cif')
-    @classmethod
-    def validate_cif(cls, v):
-        # Spanish CIF validation (basic format)
-        cif_pattern = r'^[ABCDEFGHJKLMNPQRSUVW][0-9]{7}[0-9A-J]$'
-        if not re.match(cif_pattern, v.upper()):
-            raise ValueError('CIF inválido. Formato esperado: letra + 7 dígitos + letra/dígito')
-        return v.upper()
 
 class InvestorRegisterRequest(BaseModel):
     cif: str
@@ -117,6 +108,15 @@ class InvestorRegisterRequest(BaseModel):
     contact_phone: str
     position: str
     reason: str
+    
+    @field_validator('cif')
+    @classmethod
+    def validate_cif(cls, v):
+        # Spanish CIF validation (basic format)
+        cif_pattern = r'^[ABCDEFGHJKLMNPQRSUVW][0-9]{7}[0-9A-J]$'
+        if not re.match(cif_pattern, v.upper()):
+            raise ValueError('CIF inválido. Formato esperado: letra + 7 dígitos + letra/dígito')
+        return v.upper()
 
 class ThreatAnalysis(BaseModel):
     model_config = ConfigDict(extra="ignore")
