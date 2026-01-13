@@ -87,6 +87,165 @@ Este directorio contiene todos los documentos clave para el lanzamiento y crecim
 
 ---
 
+### 5. [Financial Model Detallado](./financial-model.md)
+**Uso:** Due diligence inversores y planificación financiera
+**Contenido:**
+- Proyecciones mensuales Año 1 (12 meses detallados)
+- Proyecciones trimestrales Año 2-5
+- Unit Economics completos (LTV/CAC, Payback, Churn)
+- 3 Escenarios: Best/Base/Worst case con sensibilidad
+- Cash flow analysis mes a mes
+- Valuation scenarios (Pre-Seed → Series A → Exit)
+- 89+ métricas financieras (SaaS Magic Number, Rule of 40)
+- Capital allocation y use of funds
+
+**Highlights:**
+- **Año 1:** €4M ARR, -€450K EBITDA (investment year)
+- **Año 2:** €15.6M ARR, +€7.2M EBITDA (46% margin)
+- **Año 5:** €176.4M ARR, +€100.3M EBITDA (57% margin)
+- **Unit Economics:** LTV/CAC 20-36x, Payback <1 month
+- **Exit:** €500M-800M valuation Year 4-5
+- **ROI Pre-Seed:** 100-160x (246% IRR)
+
+**Estado:** ✅ Completo con sensibilidad
+**Actualización:** Mensual con actuals
+
+---
+
+### 6. [Plan de Negocio Completo](./plan-de-negocio-completo.md) ⭐ NEW
+**Uso:** Presentación formal a inversores institucionales y bancos
+**Contenido:** **120 páginas** de documentación exhaustiva
+- Resumen Ejecutivo
+- Análisis de Mercado (TAM/SAM/SOM €12B/€2.5B/€177M)
+- Problema y Solución (con validación cuantitativa)
+- Producto y Tecnología (arquitectura detallada)
+- Modelo de Negocio (7 revenue streams)
+- Go-to-Market Strategy (3 fases)
+- Análisis Competitivo (matriz 15 competidores)
+- Plan Operativo (org chart, herramientas, procesos)
+- Equipo y Culture fit
+- Proyecciones Financieras (P&L, Balance, Cash Flow)
+- Uso de Fondos (desglose detallado €500K)
+- Riesgos y Mitigación (13 riesgos principales)
+- Hitos y Timeline (roadmap 24 meses)
+- Términos de Inversión (SAFE, cap table proyectada)
+- 9 Anexos (glosario, legal, research, demos)
+
+**Audiencia:**
+- VCs institucionales (due diligence)
+- Bancos para partnerships B2B
+- Corporate investors
+- Government grants/subsidies
+- Board members potenciales
+
+**Estado:** ✅ Listo para presentación formal
+**Formato recomendado:** 
+- Convertir a PDF profesional con diseño corporativo
+- Crear versión ejecutiva de 20 páginas
+- Versión impresa para meetings presenciales
+
+---
+
+## 🎯 Nuevos Próximos Pasos
+
+### Documentación Adicional Creada
+- [x] Sistema de precios premium (semanal/mensual/trimestral/anual)
+- [x] Plan Enterprise Custom para bancos
+- [x] Financial model con 3 escenarios
+- [x] Plan de negocio 120 páginas completo
+
+### Inmediato (Esta Semana)
+- [ ] **Convertir Plan de Negocio a PDF profesional**
+  - Diseño corporativo con branding MANO
+  - Tabla de contenidos clickeable
+  - Gráficos y tablas visuales
+  - Formato A4 imprimible
+
+- [ ] **Crear Executive Summary (5 páginas)**
+  - Extracción top highlights del plan completo
+  - Para envío inicial a inversores
+  - Teaser que genera interés
+
+- [ ] **Testing página Pricing**
+  - A/B test precios (€29.99 vs €34.99)
+  - Conversión CTAs
+  - Optimización mobile
+
+- [ ] **Integración Stripe real**
+  - Checkout funcional
+  - Webhooks para subscripciones
+  - Customer portal
+
+### Corto Plazo (2-4 Semanas)
+- [ ] **Dashboard métricas financieras**
+  - MRR/ARR en tiempo real
+  - Gráficos Recharts
+  - KPIs SaaS (CAC, LTV, Churn)
+  
+- [ ] **Modelo financiero interactivo**
+  - Google Sheets compartible
+  - Inputs ajustables
+  - Scenarios automáticos
+
+- [ ] **Video pitch 3 minutos**
+  - Grabación profesional
+  - Animaciones product demo
+  - Call to action claro
+
+- [ ] **Data Room setup**
+  - Google Drive organizado
+  - Permisos por inversor
+  - NDA automático
+
+---
+
+## 💰 Pricing Strategy Implementada
+
+### Justificación Precios Premium
+
+**Contexto:** Un solo fraude cuesta €5,000-25,000
+**Solución MANO:** €249.99/año = €20.83/mes
+**ROI Cliente:** 20x-100x en protección
+
+**Comparables:**
+- Seguros hogar: €30-50/mes
+- Servicios legales: €100+/mes  
+- Antivirus premium: €25/mes
+- **MANO es más económico que alternativas**
+
+### Planes Implementados
+
+**Individual:**
+- 🔹 Semanal: €9.99 (trial extendido)
+- 🔸 Mensual: €29.99 (popular) 
+- 🟢 Trimestral: €74.99 (ahorro 17%)
+- 👑 Anual: €249.99 (ahorro 31%, €20.83/mes)
+
+**Familiar (5 usuarios):**
+- Mensual: €49.99
+- Trimestral: €129.99 (ahorro 13%)
+- Anual: €399.99 (ahorro 33%, €33.33/mes)
+
+**Enterprise Custom:**
+- Bancos: €150K-2M/año (según clientes)
+- Empresas: €10-15/empleado/mes
+- Ayuntamientos: €20K-100K/año
+- Pricing bajo consulta (posicionamiento premium)
+
+### Proyección Revenue Mix
+
+| Plan Type | Year 1 | Year 3 | Year 5 |
+|-----------|--------|--------|--------|
+| Semanal | 5% | 3% | 2% |
+| Mensual | 50% | 40% | 35% |
+| Trimestral | 15% | 20% | 20% |
+| Anual | 25% | 32% | 38% |
+| Familiar | 5% | 5% | 5% |
+
+**Estrategia:** Migrar usuarios hacia Annual (mejor LTV, menor churn)
+
+---
+
 ## 🎯 Próximos Pasos Recomendados
 
 ### Inmediato (Esta Semana)
