@@ -404,6 +404,21 @@ async def get_user(user_id: str):
 @api_router.patch("/users/{user_id}", response_model=User)
 async def update_user_settings(user_id: str, updates: UserUpdate):
     update_data = updates.model_dump(exclude_unset=True)
+    
+    # Check if user exists, if not create a default user first
+    existing_user = await db.users.find_one({"id": user_id}, {"_id": 0})
+    if not existing_user:
+        # Create default user
+        default_user = User(
+            id=user_id,
+            email="demo@mano.com",
+            name="Usuario Demo"
+        )
+        doc = default_user.model_dump()
+        doc['created_at'] = doc['created_at'].isoformat()
+        await db.users.insert_one(doc)
+    
+    # Now update with the provided data
     if update_data:
         await db.users.update_one({"id": user_id}, {"$set": update_data})
     
