@@ -211,6 +211,31 @@ def main():
     tester.test_create_contact()
     tester.test_get_contacts()
     
+    print("\n🚨 Testing SOS functionality...")
+    tester.test_sos_alert()
+    
+    print("\n🌐 Testing community alerts...")
+    tester.test_community_alerts()
+    
+    print("\n📤 Testing export functionality...")
+    tester.test_export_threats()
+    
+    print("\n📚 Testing knowledge base...")
+    tester.test_knowledge_base()
+    
+    print("\n👤 Testing user management...")
+    tester.test_get_user()
+    tester.test_update_user_settings()
+    
+    print("\n🔗 Testing threat sharing...")
+    tester.test_share_threat()
+    
+    print("\n🚩 Testing false positive reporting...")
+    tester.test_report_false_positive()
+    
+    print("\n🗑️ Testing contact deletion...")
+    tester.test_delete_contact()
+    
     # Print final results
     print(f"\n📊 Test Results Summary")
     print("=" * 50)
