@@ -1,6 +1,5 @@
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Shield, Phone, Mail, MessageSquare, Users, Building2, Check, ArrowRight } from 'lucide-react';
+import { Phone, Mail, MessageSquare, Users, Building2, Check, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const LandingPage = () => {
@@ -11,9 +10,12 @@ const LandingPage = () => {
       {/* Header */}
       <header className="glass sticky top-0 z-50 px-6 py-4">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Shield className="w-8 h-8 text-indigo-600" />
-            <span className="text-2xl font-bold tracking-tight">MANO</span>
+          <div className="flex items-center gap-3">
+            <img 
+              src="https://customer-assets.emergentagent.com/job_5c97b24f-9a55-4567-9954-bd76179fb951/artifacts/8y6ab2pd_logo%20App%20Mano.png" 
+              alt="MANO Logo" 
+              className="h-10 w-auto"
+            />
           </div>
           <Button
             data-testid="header-dashboard-btn"
@@ -32,7 +34,11 @@ const LandingPage = () => {
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="space-y-8">
               <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-indigo-50 border border-indigo-200">
-                <Shield className="w-4 h-4 text-indigo-600" />
+                <img 
+                  src="https://customer-assets.emergentagent.com/job_5c97b24f-9a55-4567-9954-bd76179fb951/artifacts/8y6ab2pd_logo%20App%20Mano.png" 
+                  alt="MANO" 
+                  className="h-5 w-auto"
+                />
                 <span className="text-sm font-medium text-indigo-700">Protección en Tiempo Real</span>
               </div>
               
@@ -85,8 +91,8 @@ const LandingPage = () => {
             <div className="relative">
               <div className="aspect-square rounded-2xl overflow-hidden border border-zinc-200 shadow-2xl">
                 <img
-                  src="https://images.unsplash.com/photo-1752652011717-f06f7ed3927a?crop=entropy&cs=srgb&fm=jpg&q=85"
-                  alt="Familia protegida usando dispositivos seguros"
+                  src="https://customer-assets.emergentagent.com/job_5c97b24f-9a55-4567-9954-bd76179fb951/artifacts/1nwr2vau_dashboard.png"
+                  alt="MANO Dashboard - Protección contra fraudes"
                   className="w-full h-full object-cover"
                 />
               </div>
@@ -112,7 +118,7 @@ const LandingPage = () => {
               { icon: Phone, label: 'Vishing', desc: 'Llamadas fraudulentas' },
               { icon: MessageSquare, label: 'Smishing', desc: 'SMS maliciosos' },
               { icon: Mail, label: 'Phishing', desc: 'Correos engañosos' },
-              { icon: Shield, label: 'Suplantación', desc: 'Identidad falsa' }
+              { icon: Users, label: 'Suplantación', desc: 'Identidad falsa' }
             ].map((item, idx) => (
               <div
                 key={idx}
@@ -145,7 +151,11 @@ const LandingPage = () => {
             <div className="bento-large card-hover p-8 rounded-2xl bg-white border border-zinc-200">
               <div className="flex items-start gap-6">
                 <div className="flex-1">
-                  <Shield className="w-10 h-10 text-indigo-600 mb-4" />
+                  <img 
+                    src="https://customer-assets.emergentagent.com/job_5c97b24f-9a55-4567-9954-bd76179fb951/artifacts/8y6ab2pd_logo%20App%20Mano.png" 
+                    alt="MANO" 
+                    className="h-10 w-auto mb-4"
+                  />
                   <h3 className="text-2xl font-bold mb-3">Para Personas</h3>
                   <p className="text-zinc-600 mb-6">
                     Detección automática de amenazas en llamadas, SMS, WhatsApp y correos. Bloqueo inteligente y alertas en tiempo real.
@@ -161,8 +171,8 @@ const LandingPage = () => {
                 </div>
                 <div className="w-48 h-48 rounded-xl overflow-hidden hidden lg:block">
                   <img
-                    src="https://images.unsplash.com/photo-1758686254056-6cd980b9aaee?crop=entropy&cs=srgb&fm=jpg&q=85"
-                    alt="Persona protegida"
+                    src="https://customer-assets.emergentagent.com/job_5c97b24f-9a55-4567-9954-bd76179fb951/artifacts/t8tv8klb_alerta.png"
+                    alt="Alertas de seguridad"
                     className="w-full h-full object-cover"
                   />
                 </div>
@@ -235,9 +245,12 @@ const LandingPage = () => {
       {/* Footer */}
       <footer className="px-6 py-12 bg-zinc-900 text-zinc-400">
         <div className="max-w-7xl mx-auto text-center">
-          <div className="flex items-center justify-center gap-2 mb-4">
-            <Shield className="w-6 h-6 text-indigo-400" />
-            <span className="text-xl font-bold text-white">MANO</span>
+          <div className="flex items-center justify-center gap-3 mb-4">
+            <img 
+              src="https://customer-assets.emergentagent.com/job_5c97b24f-9a55-4567-9954-bd76179fb951/artifacts/8y6ab2pd_logo%20App%20Mano.png" 
+              alt="MANO Logo" 
+              className="h-8 w-auto"
+            />
           </div>
           <p className="text-sm">
             Protección integral contra fraudes digitales © 2025
