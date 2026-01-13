@@ -92,7 +92,7 @@ const Pricing = () => {
         'Equivale a €20.83/mes',
         'Ahorra €109.89/año',
         '2 meses GRATIS',
-        'Garantía satisfacción 30 días'
+        'Garantía satisfacción 15 días'
       ],
       savings: 109.89
     }
