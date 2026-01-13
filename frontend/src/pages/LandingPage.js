@@ -17,21 +17,31 @@ const LandingPage = () => {
               className="h-10 w-auto"
             />
           </div>
-          <Button
-            data-testid="header-dashboard-btn"
-            onClick={() => navigate('/dashboard')}
-            className="bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg px-6 h-12 shadow-sm hover:shadow-md active:scale-95 transition-all"
-          >
-            Acceder al Dashboard
-          </Button>
-          <Button
-            data-testid="header-pricing-btn"
-            onClick={() => navigate('/pricing')}
-            variant="outline"
-            className="border-2 border-indigo-600 text-indigo-600 hover:bg-indigo-50 rounded-lg px-6 h-12"
-          >
-            Ver Precios
-          </Button>
+          <div className="flex items-center gap-3">
+            <Button
+              data-testid="header-pricing-btn"
+              onClick={() => navigate('/pricing')}
+              variant="ghost"
+              className="text-zinc-700 hover:text-indigo-600 rounded-lg px-4 h-10"
+            >
+              Precios
+            </Button>
+            <Button
+              data-testid="header-downloads-btn"
+              onClick={() => navigate('/downloads')}
+              variant="ghost"
+              className="text-zinc-700 hover:text-indigo-600 rounded-lg px-4 h-10"
+            >
+              Inversores
+            </Button>
+            <Button
+              data-testid="header-dashboard-btn"
+              onClick={() => navigate('/dashboard')}
+              className="bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg px-6 h-12 shadow-sm hover:shadow-md active:scale-95 transition-all"
+            >
+              Acceder al Dashboard
+            </Button>
+          </div>
         </div>
       </header>
 
