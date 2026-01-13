@@ -258,7 +258,7 @@ const Dashboard = () => {
         )}
 
         {/* Threats History */}
-        <Card className="border-zinc-200">
+        <Card className="border-zinc-200 bg-white">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Clock className="w-5 h-5" />
