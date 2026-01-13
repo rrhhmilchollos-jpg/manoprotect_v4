@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
-import { Shield, Download, FileText, TrendingUp, Users, Briefcase, ArrowLeft, CheckCircle, Lock } from 'lucide-react';
+import { Shield, Download, FileText, TrendingUp, Users, Briefcase, ArrowLeft, CheckCircle, Lock, FileType } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -14,10 +14,14 @@ const Downloads = () => {
   const { user, isInvestor } = useAuth();
   const [downloading, setDownloading] = useState(null);
 
-  const handleDownload = async (docType, filename) => {
-    setDownloading(docType);
+  const handleDownload = async (docType, filename, format = 'md') => {
+    setDownloading(`${docType}-${format}`);
     try {
-      const response = await fetch(`${API}/investor/download/${docType}`, {
+      const endpoint = format === 'pdf' 
+        ? `${API}/investor/download-pdf/${docType}`
+        : `${API}/investor/download/${docType}`;
+      
+      const response = await fetch(endpoint, {
         credentials: 'include'
       });
       
@@ -34,12 +38,13 @@ const Downloads = () => {
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = filename;
+      const extension = format === 'pdf' ? '.pdf' : '.md';
+      a.download = filename.replace(/\.(pdf|md)$/, extension);
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
       window.URL.revokeObjectURL(url);
-      toast.success(`${filename} descargado correctamente`);
+      toast.success(`${filename.replace(/\.(pdf|md)$/, extension)} descargado correctamente`);
     } catch (error) {
       toast.error('Error al descargar el archivo');
       console.error('Download error:', error);
