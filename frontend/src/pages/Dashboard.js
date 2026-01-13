@@ -116,6 +116,50 @@ const Dashboard = () => {
             </div>
           </div>
           <div className="flex items-center gap-3">
+            <Button
+              data-testid="family-mode-btn"
+              variant="ghost"
+              onClick={() => navigate('/family-mode')}
+              className="rounded-lg hover:bg-emerald-50 hover:text-emerald-700"
+            >
+              <Users className="w-5 h-5 mr-2" />
+              Modo Familiar
+            </Button>
+            <Button
+              data-testid="contacts-btn"
+              variant="ghost"
+              onClick={() => navigate('/contacts')}
+              className="rounded-lg"
+            >
+              <Phone className="w-5 h-5 mr-2" />
+              Contactos
+            </Button>
+            <Button
+              data-testid="knowledge-btn"
+              variant="ghost"
+              onClick={() => navigate('/knowledge')}
+              className="rounded-lg"
+            >
+              <Book className="w-5 h-5 mr-2" />
+              Aprende
+            </Button>
+            <Button
+              data-testid="community-btn"
+              variant="ghost"
+              onClick={() => navigate('/community')}
+              className="rounded-lg"
+            >
+              <TrendingUp className="w-5 h-5 mr-2" />
+              Comunidad
+            </Button>
+            <Button
+              data-testid="profile-btn"
+              variant="ghost"
+              onClick={() => navigate('/profile')}
+              className="rounded-lg"
+            >
+              <User className="w-5 h-5" />
+            </Button>
             <Badge className="bg-emerald-500 text-white px-3 py-1">Plan Gratis</Badge>
           </div>
         </div>
