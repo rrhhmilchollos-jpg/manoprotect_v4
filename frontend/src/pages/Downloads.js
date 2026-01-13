@@ -1,24 +1,32 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Shield, Download, FileText, TrendingUp, Users, Briefcase, ArrowLeft, CheckCircle } from 'lucide-react';
+import { useAuth } from '@/context/AuthContext';
+import { Shield, Download, FileText, TrendingUp, Users, Briefcase, ArrowLeft, CheckCircle, Lock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
 
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
-const API = `${BACKEND_URL}/api`;
+const API = process.env.REACT_APP_BACKEND_URL + '/api';
 
 const Downloads = () => {
   const navigate = useNavigate();
+  const { user, isInvestor } = useAuth();
   const [downloading, setDownloading] = useState(null);
 
   const handleDownload = async (docType, filename) => {
     setDownloading(docType);
     try {
-      const response = await fetch(`${API}/download/${docType}`);
+      const response = await fetch(`${API}/investor/download/${docType}`, {
+        credentials: 'include'
+      });
       
       if (!response.ok) {
+        if (response.status === 403) {
+          toast.error('Acceso denegado. Se requiere acceso de inversor aprobado.');
+          navigate('/investor/register');
+          return;
+        }
         throw new Error('Error al descargar');
       }
       
@@ -26,12 +34,12 @@ const Downloads = () => {
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = filename.replace('.pdf', '.md'); // Download as markdown
+      a.download = filename;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
       window.URL.revokeObjectURL(url);
-      toast.success(`${filename.replace('.pdf', '.md')} descargado correctamente`);
+      toast.success(`${filename} descargado correctamente`);
     } catch (error) {
       toast.error('Error al descargar el archivo');
       console.error('Download error:', error);
@@ -46,8 +54,8 @@ const Downloads = () => {
       title: 'Plan de Negocio Completo',
       description: '120 páginas de documentación exhaustiva para inversores institucionales',
       icon: Briefcase,
-      filename: 'MANO_Plan_de_Negocio_2025.pdf',
-      size: '2.8 MB',
+      filename: 'MANO_Plan_de_Negocio_CONFIDENCIAL_2025.md',
+      size: '72 KB',
       pages: '120 páginas',
       color: 'indigo',
       highlights: [
@@ -62,8 +70,8 @@ const Downloads = () => {
       title: 'Modelo Financiero Detallado',
       description: 'Proyecciones mensuales, trimestrales y escenarios de sensibilidad',
       icon: TrendingUp,
-      filename: 'MANO_Financial_Model_2025-2029.pdf',
-      size: '850 KB',
+      filename: 'MANO_Financial_Model_CONFIDENCIAL_2025.md',
+      size: '10 KB',
       pages: '25 páginas',
       color: 'emerald',
       highlights: [
@@ -78,8 +86,8 @@ const Downloads = () => {
       title: 'Pitch Deck Inversores',
       description: '11 slides optimizadas para presentación a VCs y Business Angels',
       icon: FileText,
-      filename: 'MANO_Pitch_Deck_Pre-Seed.pdf',
-      size: '3.2 MB',
+      filename: 'MANO_Pitch_Deck_CONFIDENCIAL_2025.md',
+      size: '23 KB',
       pages: '11 slides',
       color: 'orange',
       highlights: [
@@ -94,8 +102,8 @@ const Downloads = () => {
       title: 'Dossier Comercial B2B',
       description: 'Propuesta de valor para bancos, ayuntamientos y empresas',
       icon: Users,
-      filename: 'MANO_Dossier_Comercial_B2B.pdf',
-      size: '1.5 MB',
+      filename: 'MANO_Dossier_B2B_CONFIDENCIAL_2025.md',
+      size: '9 KB',
       pages: '47 páginas',
       color: 'blue',
       highlights: [
@@ -129,35 +137,60 @@ const Downloads = () => {
               />
             </div>
           </div>
+          <div className="flex items-center gap-3">
+            <Badge className="bg-amber-600 text-white">
+              <Lock className="w-3 h-3 mr-1" />
+              Acceso Verificado
+            </Badge>
+            <span className="text-sm text-zinc-600">{user?.name}</span>
+          </div>
         </div>
       </header>
 
       <div className="max-w-6xl mx-auto px-6 py-16">
         {/* Hero */}
         <div className="text-center mb-16">
-          <Badge className="bg-indigo-600 text-white px-4 py-2 text-sm mb-6">
-            Documentación Oficial para Inversores
+          <Badge className="bg-amber-600 text-white px-4 py-2 text-sm mb-6">
+            Documentación Confidencial para Inversores Verificados
           </Badge>
           <h1 className="text-4xl sm:text-5xl font-bold mb-6">
             Centro de <span className="text-indigo-600">Descargas</span>
           </h1>
           <p className="text-xl text-zinc-600 max-w-3xl mx-auto">
             Accede a toda la documentación comercial y financiera de MANO. 
-            Perfecta para due diligence, presentaciones y análisis de inversión.
+            Estos documentos son confidenciales y están protegidos por NDA implícito.
           </p>
         </div>
+
+        {/* Confidentiality Notice */}
+        <Card className="mb-12 border-amber-300 bg-amber-50">
+          <CardContent className="pt-6">
+            <div className="flex items-start gap-4">
+              <Shield className="w-8 h-8 text-amber-600 flex-shrink-0" />
+              <div>
+                <h3 className="font-bold text-amber-800 mb-2">Aviso de Confidencialidad</h3>
+                <p className="text-amber-700 text-sm">
+                  Los documentos disponibles en esta sección son <strong>estrictamente confidenciales</strong> y 
+                  están destinados exclusivamente para su uso personal en la evaluación de inversión en MANO. 
+                  Queda prohibida su distribución, reproducción o compartición sin autorización expresa por escrito.
+                  Todas las descargas quedan registradas para auditoría.
+                </p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
 
         {/* Documents Grid */}
         <div className="grid md:grid-cols-2 gap-8 mb-16">
           {documents.map((doc) => (
             <Card 
               key={doc.id}
-              className={`border-2 hover:border-${doc.color}-400 transition-all card-hover bg-white`}
+              className="border-2 hover:border-indigo-400 transition-all card-hover bg-white"
             >
               <CardHeader>
                 <div className="flex items-start justify-between mb-4">
-                  <div className={`w-14 h-14 rounded-xl bg-${doc.color}-100 flex items-center justify-center`}>
-                    <doc.icon className={`w-7 h-7 text-${doc.color}-600`} />
+                  <div className="w-14 h-14 rounded-xl bg-indigo-100 flex items-center justify-center">
+                    <doc.icon className="w-7 h-7 text-indigo-600" />
                   </div>
                   <div className="text-right">
                     <div className="text-sm text-zinc-600">{doc.pages}</div>
@@ -182,14 +215,14 @@ const Downloads = () => {
                   data-testid={`download-${doc.id}`}
                   onClick={() => handleDownload(doc.id, doc.filename)}
                   disabled={downloading === doc.id}
-                  className={`w-full bg-${doc.color}-600 hover:bg-${doc.color}-700 text-white rounded-lg h-12 shadow-sm active:scale-95 transition-all`}
+                  className="w-full bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg h-12 shadow-sm active:scale-95 transition-all"
                 >
                   {downloading === doc.id ? (
                     'Descargando...'
                   ) : (
                     <>
                       <Download className="w-5 h-5 mr-2" />
-                      Descargar PDF
+                      Descargar Documento
                     </>
                   )}
                 </Button>
@@ -198,12 +231,12 @@ const Downloads = () => {
           ))}
         </div>
 
-        {/* Additional Resources */}
+        {/* Contact Section */}
         <Card className="bg-gradient-to-br from-indigo-50 to-blue-50 border-indigo-200">
           <CardHeader>
             <CardTitle className="text-2xl">¿Necesitas más información?</CardTitle>
             <CardDescription className="text-base">
-              Estamos disponibles para responder cualquier pregunta sobre MANO
+              Nuestro equipo de relaciones con inversores está disponible para responder cualquier pregunta
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -237,14 +270,15 @@ const Downloads = () => {
         {/* Legal Notice */}
         <div className="mt-12 p-6 bg-zinc-100 rounded-lg border border-zinc-200">
           <div className="flex items-start gap-3">
-            <Shield className="w-6 h-6 text-zinc-600 flex-shrink-0 mt-1" />
+            <Lock className="w-6 h-6 text-zinc-600 flex-shrink-0 mt-1" />
             <div className="text-sm text-zinc-700">
-              <p className="font-semibold mb-2">Aviso de Confidencialidad</p>
+              <p className="font-semibold mb-2">Aviso Legal</p>
               <p>
-                Estos documentos contienen información confidencial y están destinados únicamente 
-                para inversores potenciales y partners estratégicos. Las proyecciones financieras 
-                están basadas en assumptions razonables pero no constituyen garantías. 
-                Prohibida su distribución sin autorización escrita de MANO.
+                Estos documentos contienen información confidencial protegida por acuerdos de no divulgación. 
+                Las proyecciones financieras están basadas en supuestos razonables pero no constituyen garantías. 
+                El acceso a esta documentación implica aceptación de las obligaciones de confidencialidad.
+                <br/><br/>
+                <strong>Usuario verificado:</strong> {user?.email} | <strong>Fecha:</strong> {new Date().toLocaleDateString('es-ES')}
               </p>
             </div>
           </div>
