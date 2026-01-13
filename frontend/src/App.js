@@ -1,5 +1,8 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import { Toaster } from 'sonner';
+import { AuthProvider, useAuth } from '@/context/AuthContext';
+
+// Pages
 import LandingPage from '@/pages/LandingPage';
 import Dashboard from '@/pages/Dashboard';
 import HowItWorks from '@/pages/HowItWorks';
@@ -10,25 +13,120 @@ import Knowledge from '@/pages/Knowledge';
 import Community from '@/pages/Community';
 import Pricing from '@/pages/Pricing';
 import Downloads from '@/pages/Downloads';
+import Login from '@/pages/Login';
+import Register from '@/pages/Register';
+import AuthCallback from '@/pages/AuthCallback';
+import InvestorRegister from '@/pages/InvestorRegister';
+
 import '@/App.css';
+
+// Protected Route Component
+const ProtectedRoute = ({ children, requireInvestor = false }) => {
+  const { isAuthenticated, isInvestor, loading } = useAuth();
+  const location = useLocation();
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-zinc-50 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
+      </div>
+    );
+  }
+
+  if (!isAuthenticated) {
+    return <Navigate to="/login" state={{ from: location }} replace />;
+  }
+
+  if (requireInvestor && !isInvestor) {
+    return <Navigate to="/investor/register" replace />;
+  }
+
+  return children;
+};
+
+// App Router with session_id detection
+function AppRouter() {
+  const location = useLocation();
+  
+  // Check URL fragment for session_id (Google OAuth callback)
+  // REMINDER: This synchronous check prevents race conditions
+  if (location.hash?.includes('session_id=')) {
+    return <AuthCallback />;
+  }
+
+  return (
+    <Routes>
+      {/* Public Routes */}
+      <Route path="/" element={<LandingPage />} />
+      <Route path="/how-it-works" element={<HowItWorks />} />
+      <Route path="/pricing" element={<Pricing />} />
+      <Route path="/knowledge" element={<Knowledge />} />
+      <Route path="/community" element={<Community />} />
+      
+      {/* Auth Routes */}
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
+      <Route path="/auth/callback" element={<AuthCallback />} />
+      
+      {/* Investor Routes */}
+      <Route path="/investor/register" element={<InvestorRegister />} />
+      <Route 
+        path="/downloads" 
+        element={
+          <ProtectedRoute requireInvestor={true}>
+            <Downloads />
+          </ProtectedRoute>
+        } 
+      />
+      
+      {/* Protected Routes */}
+      <Route 
+        path="/dashboard" 
+        element={
+          <ProtectedRoute>
+            <Dashboard />
+          </ProtectedRoute>
+        } 
+      />
+      <Route 
+        path="/family-mode" 
+        element={
+          <ProtectedRoute>
+            <FamilyMode />
+          </ProtectedRoute>
+        } 
+      />
+      <Route 
+        path="/contacts" 
+        element={
+          <ProtectedRoute>
+            <Contacts />
+          </ProtectedRoute>
+        } 
+      />
+      <Route 
+        path="/profile" 
+        element={
+          <ProtectedRoute>
+            <Profile />
+          </ProtectedRoute>
+        } 
+      />
+      
+      {/* Fallback */}
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
+  );
+}
 
 function App() {
   return (
     <div className="App">
       <BrowserRouter>
-        <Toaster position="top-center" richColors />
-        <Routes>
-          <Route path="/" element={<LandingPage />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/how-it-works" element={<HowItWorks />} />
-          <Route path="/family-mode" element={<FamilyMode />} />
-          <Route path="/contacts" element={<Contacts />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/knowledge" element={<Knowledge />} />
-          <Route path="/community" element={<Community />} />
-          <Route path="/pricing" element={<Pricing />} />
-          <Route path="/downloads" element={<Downloads />} />
-        </Routes>
+        <AuthProvider>
+          <Toaster position="top-center" richColors />
+          <AppRouter />
+        </AuthProvider>
       </BrowserRouter>
     </div>
   );
