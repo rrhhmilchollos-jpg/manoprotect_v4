@@ -240,11 +240,11 @@ const Downloads = () => {
                     className="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg h-12"
                   >
                     {downloading === `${doc.id}-pdf` ? (
-                      'Generando PDF...'
+                      'Generando...'
                     ) : (
                       <>
                         <Download className="w-4 h-4 mr-2" />
-                        PDF
+                        HTML/PDF
                       </>
                     )}
                   </Button>
