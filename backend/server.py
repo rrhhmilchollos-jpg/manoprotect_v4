@@ -1,4 +1,4 @@
-from fastapi import FastAPI, APIRouter, HTTPException
+from fastapi import FastAPI, APIRouter, HTTPException, Request
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
@@ -12,6 +12,8 @@ from datetime import datetime, timezone
 from emergentintegrations.llm.chat import LlmChat, UserMessage
 import csv
 import io
+import stripe
+import markdown
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
@@ -24,6 +26,8 @@ app = FastAPI()
 api_router = APIRouter(prefix="/api")
 
 EMERGENT_LLM_KEY = os.environ.get('EMERGENT_LLM_KEY')
+stripe.api_key = os.environ.get('STRIPE_SECRET_KEY')
+STRIPE_WEBHOOK_SECRET = os.environ.get('STRIPE_WEBHOOK_SECRET')
 
 # Models
 class User(BaseModel):
@@ -32,6 +36,9 @@ class User(BaseModel):
     email: str
     name: str
     plan: str = "free"
+    stripe_customer_id: Optional[str] = None
+    stripe_subscription_id: Optional[str] = None
+    subscription_status: Optional[str] = None
     dark_mode: bool = False
     notifications_enabled: bool = True
     auto_block: bool = False
@@ -108,6 +115,22 @@ class CommunityAlert(BaseModel):
     severity: str
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
+class CheckoutRequest(BaseModel):
+    plan_type: str
+    user_id: str
+    email: str
+
+# Stripe Price IDs (crear en Stripe Dashboard)
+STRIPE_PRICES = {
+    "weekly": "price_weekly_999",
+    "monthly": "price_monthly_2999",
+    "quarterly": "price_quarterly_7499",
+    "yearly": "price_yearly_24999",
+    "family-monthly": "price_family_monthly_4999",
+    "family-quarterly": "price_family_quarterly_12999",
+    "family-yearly": "price_family_yearly_39999"
+}
+
 # Fraud Detection Function
 async def analyze_threat(content: str, content_type: str) -> dict:
     try:
@@ -170,7 +193,6 @@ async def analyze_content(request: AnalyzeRequest):
     doc['created_at'] = doc['created_at'].isoformat()
     await db.threats.insert_one(doc)
     
-    # Create community alert if critical
     if threat_obj.is_threat and threat_obj.risk_level in ["critical", "high"]:
         community_alert = CommunityAlert(
             threat_type=", ".join(threat_obj.threat_types[:2]),
@@ -227,11 +249,7 @@ async def export_threats(user_id: str = "demo-user", format: str = "csv"):
     if format == "csv":
         output = io.StringIO()
         if threats:
-            # Define consistent fieldnames for CSV export
-            fieldnames = ['id', 'user_id', 'content', 'content_type', 'risk_level', 'is_threat', 
-                         'threat_types', 'recommendation', 'analysis', 'created_at', 
-                         'reported_false_positive', 'shared_count']
-            writer = csv.DictWriter(output, fieldnames=fieldnames, extrasaction='ignore')
+            writer = csv.DictWriter(output, fieldnames=threats[0].keys())
             writer.writeheader()
             writer.writerows(threats)
         return {"data": output.getvalue(), "format": "csv"}
@@ -368,7 +386,6 @@ async def get_knowledge_base():
 @api_router.post("/users", response_model=User)
 async def create_or_update_user(user: UserCreate, user_id: Optional[str] = None):
     if user_id:
-        # Update existing
         update_data = user.model_dump(exclude_unset=True)
         await db.users.update_one({"id": user_id}, {"$set": update_data})
         user_doc = await db.users.find_one({"id": user_id}, {"_id": 0})
@@ -376,7 +393,6 @@ async def create_or_update_user(user: UserCreate, user_id: Optional[str] = None)
             user_doc['created_at'] = datetime.fromisoformat(user_doc['created_at'])
         return User(**user_doc)
     else:
-        # Create new
         user_obj = User(
             email=user.email,
             name=user.name
@@ -390,7 +406,6 @@ async def create_or_update_user(user: UserCreate, user_id: Optional[str] = None)
 async def get_user(user_id: str):
     user = await db.users.find_one({"id": user_id}, {"_id": 0})
     if not user:
-        # Return default demo user
         return User(
             id=user_id,
             email="demo@mano.com",
@@ -404,21 +419,6 @@ async def get_user(user_id: str):
 @api_router.patch("/users/{user_id}", response_model=User)
 async def update_user_settings(user_id: str, updates: UserUpdate):
     update_data = updates.model_dump(exclude_unset=True)
-    
-    # Check if user exists, if not create a default user first
-    existing_user = await db.users.find_one({"id": user_id}, {"_id": 0})
-    if not existing_user:
-        # Create default user
-        default_user = User(
-            id=user_id,
-            email="demo@mano.com",
-            name="Usuario Demo"
-        )
-        doc = default_user.model_dump()
-        doc['created_at'] = doc['created_at'].isoformat()
-        await db.users.insert_one(doc)
-    
-    # Now update with the provided data
     if update_data:
         await db.users.update_one({"id": user_id}, {"$set": update_data})
     
@@ -429,6 +429,144 @@ async def update_user_settings(user_id: str, updates: UserUpdate):
     if isinstance(user['created_at'], str):
         user['created_at'] = datetime.fromisoformat(user['created_at'])
     return User(**user)
+
+# Stripe Integration
+@api_router.post("/create-checkout-session")
+async def create_checkout_session(request: CheckoutRequest):
+    try:
+        # Create or get Stripe customer
+        user = await db.users.find_one({"id": request.user_id}, {"_id": 0})
+        
+        if user and user.get('stripe_customer_id'):
+            customer_id = user['stripe_customer_id']
+        else:
+            customer = stripe.Customer.create(
+                email=request.email,
+                metadata={"user_id": request.user_id}
+            )
+            customer_id = customer.id
+            await db.users.update_one(
+                {"id": request.user_id},
+                {"$set": {"stripe_customer_id": customer_id}}
+            )
+        
+        # Create checkout session
+        price_id = STRIPE_PRICES.get(request.plan_type)
+        if not price_id:
+            raise HTTPException(status_code=400, detail="Invalid plan type")
+        
+        session = stripe.checkout.Session.create(
+            customer=customer_id,
+            payment_method_types=['card'],
+            line_items=[{
+                'price': price_id,
+                'quantity': 1,
+            }],
+            mode='subscription',
+            success_url=f"{os.environ.get('FRONTEND_URL', 'http://localhost:3000')}/dashboard?success=true",
+            cancel_url=f"{os.environ.get('FRONTEND_URL', 'http://localhost:3000')}/pricing?canceled=true",
+            metadata={
+                'user_id': request.user_id,
+                'plan_type': request.plan_type
+            }
+        )
+        
+        return {"checkout_url": session.url, "session_id": session.id}
+    
+    except Exception as e:
+        logging.error(f"Stripe checkout error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@api_router.post("/webhook/stripe")
+async def stripe_webhook(request: Request):
+    payload = await request.body()
+    sig_header = request.headers.get('stripe-signature')
+    
+    try:
+        event = stripe.Webhook.construct_event(
+            payload, sig_header, STRIPE_WEBHOOK_SECRET
+        )
+    except ValueError:
+        raise HTTPException(status_code=400, detail="Invalid payload")
+    except stripe.error.SignatureVerificationError:
+        raise HTTPException(status_code=400, detail="Invalid signature")
+    
+    # Handle the event
+    if event['type'] == 'checkout.session.completed':
+        session = event['data']['object']
+        user_id = session['metadata']['user_id']
+        plan_type = session['metadata']['plan_type']
+        
+        # Update user subscription
+        await db.users.update_one(
+            {"id": user_id},
+            {"$set": {
+                "plan": plan_type,
+                "stripe_subscription_id": session.get('subscription'),
+                "subscription_status": "active"
+            }}
+        )
+    
+    elif event['type'] == 'customer.subscription.deleted':
+        subscription = event['data']['object']
+        await db.users.update_one(
+            {"stripe_subscription_id": subscription['id']},
+            {"$set": {
+                "plan": "free",
+                "subscription_status": "canceled"
+            }}
+        )
+    
+    return {"status": "success"}
+
+@api_router.post("/cancel-subscription")
+async def cancel_subscription(user_id: str):
+    try:
+        user = await db.users.find_one({"id": user_id}, {"_id": 0})
+        if not user or not user.get('stripe_subscription_id'):
+            raise HTTPException(status_code=404, detail="No active subscription")
+        
+        stripe.Subscription.delete(user['stripe_subscription_id'])
+        
+        await db.users.update_one(
+            {"id": user_id},
+            {"$set": {
+                "plan": "free",
+                "subscription_status": "canceled",
+                "stripe_subscription_id": None
+            }}
+        )
+        
+        return {"message": "Subscription canceled successfully"}
+    except Exception as e:
+        logging.error(f"Cancel subscription error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@api_router.get("/download/{doc_type}")
+async def download_document(doc_type: str):
+    from fastapi.responses import FileResponse
+    
+    doc_map = {
+        "business-plan": "/app/memory/plan-de-negocio-completo.md",
+        "financial-model": "/app/memory/financial-model.md",
+        "pitch-deck": "/app/memory/pitch-deck-inversores.md",
+        "dossier-b2b": "/app/memory/dossier-comercial-b2b.md"
+    }
+    
+    file_path = doc_map.get(doc_type)
+    if not file_path or not Path(file_path).exists():
+        raise HTTPException(status_code=404, detail="Document not found")
+    
+    # Read markdown and convert to simple text for download
+    with open(file_path, 'r', encoding='utf-8') as f:
+        content = f.read()
+    
+    # Return as downloadable file
+    filename = f"MANO_{doc_type.replace('-', '_')}_2025.txt"
+    return {
+        "content": content,
+        "filename": filename
+    }
 
 app.include_router(api_router)
 
