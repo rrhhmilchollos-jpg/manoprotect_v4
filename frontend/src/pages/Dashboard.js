@@ -343,13 +343,28 @@ const Dashboard = () => {
         {/* Threats History */}
         <Card className="border-zinc-200 bg-white">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Clock className="w-5 h-5" />
-              Historial de Amenazas
-            </CardTitle>
-            <CardDescription>
-              Últimas {threats.length} amenazas detectadas
-            </CardDescription>
+            <div className="flex items-center justify-between">
+              <div>
+                <CardTitle className="flex items-center gap-2">
+                  <Clock className="w-5 h-5" />
+                  Historial de Amenazas
+                </CardTitle>
+                <CardDescription>
+                  Últimas {threats.length} amenazas detectadas
+                </CardDescription>
+              </div>
+              {threats.length > 0 && (
+                <Button
+                  data-testid="export-threats-btn"
+                  onClick={exportThreats}
+                  variant="outline"
+                  className="border-zinc-300 hover:bg-zinc-50 rounded-lg"
+                >
+                  <Download className="w-4 h-4 mr-2" />
+                  Exportar CSV
+                </Button>
+              )}
+            </div>
           </CardHeader>
           <CardContent>
             {threats.length === 0 ? (
