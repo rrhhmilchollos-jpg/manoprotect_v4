@@ -423,6 +423,94 @@ const Pricing = () => {
           </div>
         </div>
 
+        {/* Enterprise Custom Plan */}
+        <div className="mb-20">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold mb-4">Plan Enterprise Custom</h2>
+            <p className="text-lg text-zinc-600">Soluciones personalizadas para bancos y grandes corporaciones</p>
+          </div>
+          <Card className="mb-16 max-w-4xl mx-auto border-2 border-amber-300 bg-gradient-to-br from-amber-50 to-yellow-50">
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <div>
+                  <Badge className="bg-amber-600 text-white px-4 py-2 text-sm mb-4">
+                    Enterprise Custom
+                  </Badge>
+                  <CardTitle className="text-3xl mb-2">Protección Bancaria Avanzada</CardTitle>
+                  <p className="text-zinc-600 text-lg">Integración completa con sistemas bancarios y compliance regulatorio</p>
+                </div>
+                <div className="text-right">
+                  <div className="text-4xl font-bold text-amber-600">Consultar</div>
+                  <div className="text-sm text-zinc-600">Precio personalizado</div>
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="grid md:grid-cols-2 gap-8">
+                <div>
+                  <h4 className="font-semibold mb-4 text-amber-600 text-lg">🏦 Características Enterprise:</h4>
+                  <ul className="space-y-3">
+                    {[
+                      'API integración sistemas bancarios',
+                      'Compliance GDPR y PCI-DSS',
+                      'Análisis masivo transacciones',
+                      'Dashboard ejecutivo personalizado',
+                      'Alertas en tiempo real 24/7',
+                      'Soporte técnico dedicado',
+                      'SLA 99.9% uptime garantizado',
+                      'Implementación on-premise disponible'
+                    ].map((feature, idx) => (
+                      <li key={idx} className="flex items-start gap-3 text-sm">
+                        <Check className="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5" />
+                        <span className="font-medium">{feature}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <div>
+                  <h4 className="font-semibold mb-4 text-amber-600 text-lg">🎯 Casos de Uso:</h4>
+                  <ul className="space-y-3 mb-6">
+                    {[
+                      'Bancos con +100,000 clientes',
+                      'Detección fraude wire transfers',
+                      'Protección banca online',
+                      'Análisis comportamiento usuarios',
+                      'Prevención lavado de dinero',
+                      'Cumplimiento regulatorio automático'
+                    ].map((useCase, idx) => (
+                      <li key={idx} className="flex items-start gap-3 text-sm">
+                        <Crown className="w-5 h-5 text-amber-500 flex-shrink-0 mt-0.5" />
+                        <span>{useCase}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  <div className="bg-white p-4 rounded-lg border border-amber-200">
+                    <div className="text-sm text-zinc-600 mb-2">Implementación típica:</div>
+                    <div className="text-2xl font-bold text-amber-600">2-4 semanas</div>
+                    <div className="text-xs text-zinc-500">Incluye migración y training</div>
+                  </div>
+                </div>
+              </div>
+              <div className="mt-8 flex flex-col sm:flex-row gap-4">
+                <Button
+                  onClick={() => toast.info('Contacto comercial próximamente')}
+                  className="flex-1 bg-amber-600 hover:bg-amber-700 text-white rounded-lg h-14 text-lg font-semibold"
+                >
+                  Solicitar Demo Personalizada
+                  <ArrowRight className="ml-2 w-5 h-5" />
+                </Button>
+                <Button
+                  onClick={() => toast.info('Descarga próximamente')}
+                  variant="outline"
+                  className="flex-1 border-2 border-amber-300 hover:border-amber-400 rounded-lg h-14 text-lg"
+                >
+                  Descargar Plan de Negocio
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
         {/* Free Plan */}
         <Card className="mb-16 max-w-3xl mx-auto border-zinc-300">
           <CardHeader>
