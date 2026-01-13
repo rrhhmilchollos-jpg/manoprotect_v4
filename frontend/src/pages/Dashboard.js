@@ -125,25 +125,25 @@ const Dashboard = () => {
         {/* Stats */}
         {stats && (
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-            <Card className="card-hover border-zinc-200">
+            <Card className="card-hover border-zinc-200 bg-white">
               <CardHeader className="pb-3">
                 <CardDescription>Total Analizados</CardDescription>
                 <CardTitle className="text-3xl text-indigo-600">{stats.total_analyzed}</CardTitle>
               </CardHeader>
             </Card>
-            <Card className="card-hover border-zinc-200">
+            <Card className="card-hover border-zinc-200 bg-white">
               <CardHeader className="pb-3">
                 <CardDescription>Amenazas Bloqueadas</CardDescription>
                 <CardTitle className="text-3xl text-rose-600">{stats.threats_blocked}</CardTitle>
               </CardHeader>
             </Card>
-            <Card className="card-hover border-zinc-200">
+            <Card className="card-hover border-zinc-200 bg-white">
               <CardHeader className="pb-3">
                 <CardDescription>Críticas</CardDescription>
                 <CardTitle className="text-3xl text-orange-500">{stats.risk_distribution.critical}</CardTitle>
               </CardHeader>
             </Card>
-            <Card className="card-hover border-zinc-200">
+            <Card className="card-hover border-zinc-200 bg-white">
               <CardHeader className="pb-3">
                 <CardDescription>Altas</CardDescription>
                 <CardTitle className="text-3xl text-yellow-600">{stats.risk_distribution.high}</CardTitle>
