@@ -191,7 +191,7 @@ const InvestorRegister = () => {
         </Card>
 
         {/* Registration Form */}
-        <Card className="border-2 border-zinc-200 shadow-xl">
+        <Card className="border-2 border-zinc-200 shadow-xl bg-white">
           <CardHeader>
             <CardTitle>Datos de la Empresa</CardTitle>
             <CardDescription>
