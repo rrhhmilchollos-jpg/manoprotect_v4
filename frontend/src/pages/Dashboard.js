@@ -237,20 +237,11 @@ const Dashboard = () => {
             <Button
               data-testid="knowledge-btn"
               variant="ghost"
-              onClick={() => navigate('/knowledge')}}
+              onClick={() => navigate('/knowledge')}
               className="rounded-lg"
             >
               <Book className="w-5 h-5 mr-2" />
               Aprende
-            </Button>
-            <Button
-              data-testid="community-btn"
-              variant="ghost"
-              onClick={() => navigate('/community')}
-              className="rounded-lg"
-            >
-              <TrendingUp className="w-5 h-5 mr-2" />
-              Comunidad
             </Button>
             <Button
               data-testid="profile-btn"
@@ -260,12 +251,28 @@ const Dashboard = () => {
             >
               <User className="w-5 h-5" />
             </Button>
-            <Badge className="bg-emerald-500 text-white px-3 py-1">Plan Gratis</Badge>
+            <Badge className={`${user?.plan?.includes('family') ? 'bg-emerald-600' : user?.plan !== 'free' ? 'bg-indigo-600' : 'bg-zinc-500'} text-white px-3 py-1`}>
+              {user?.plan?.includes('family') ? 'Familiar' : user?.plan !== 'free' ? 'Premium' : 'Gratis'}
+            </Badge>
+            <Button
+              data-testid="logout-btn"
+              variant="ghost"
+              onClick={handleLogout}
+              className="rounded-lg text-zinc-600 hover:text-red-600"
+            >
+              <LogOut className="w-5 h-5" />
+            </Button>
           </div>
         </div>
       </header>
 
       <div className="max-w-7xl mx-auto px-6 py-8">
+        {/* Welcome */}
+        <div className="mb-6">
+          <h1 className="text-2xl font-bold text-zinc-900">Hola, {user?.name || 'Usuario'}</h1>
+          <p className="text-zinc-600">Tu protección está activa. Analiza contenido sospechoso abajo.</p>
+        </div>
+
         {/* Stats */}
         {stats && (
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
