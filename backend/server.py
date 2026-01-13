@@ -1395,6 +1395,824 @@ async def create_admin_user(email: str, name: str, password: str):
     return {"message": "Admin creado", "user_id": user.user_id}
 
 # ============================================
+# ENTERPRISE DASHBOARD ROUTES
+# ============================================
+
+class EnterpriseDepartment(BaseModel):
+    name: str
+    employee_count: int = 0
+    threats_blocked: int = 0
+    risk_score: float = 0.0
+
+@api_router.get("/enterprise/dashboard")
+async def get_enterprise_dashboard(request: Request, session_token: Optional[str] = Cookie(None)):
+    """Get enterprise dashboard with advanced metrics"""
+    user = await require_auth(request, session_token)
+    
+    # Get all threats for the organization
+    threats = await db.threats.find({"user_id": user.user_id}, {"_id": 0}).to_list(1000)
+    
+    # Calculate metrics
+    total_threats = len(threats)
+    threats_blocked = len([t for t in threats if t.get("is_threat")])
+    
+    # Risk distribution
+    risk_counts = {"critical": 0, "high": 0, "medium": 0, "low": 0}
+    for t in threats:
+        level = t.get("risk_level", "low")
+        if level in risk_counts:
+            risk_counts[level] += 1
+    
+    # Threat types distribution
+    threat_types_count = {}
+    for t in threats:
+        for tt in t.get("threat_types", []):
+            threat_types_count[tt] = threat_types_count.get(tt, 0) + 1
+    
+    # Calculate money saved (estimated €500 per blocked threat)
+    money_saved = threats_blocked * 500
+    
+    # Time-based analysis (last 30 days)
+    now = datetime.now(timezone.utc)
+    thirty_days_ago = now - timedelta(days=30)
+    
+    daily_threats = {}
+    for t in threats:
+        created = t.get("created_at")
+        if isinstance(created, str):
+            created = datetime.fromisoformat(created.replace('Z', '+00:00'))
+        if created and created > thirty_days_ago:
+            day_key = created.strftime("%Y-%m-%d")
+            daily_threats[day_key] = daily_threats.get(day_key, 0) + 1
+    
+    # Generate last 30 days trend
+    trend_data = []
+    for i in range(30):
+        day = (now - timedelta(days=29-i)).strftime("%Y-%m-%d")
+        trend_data.append({
+            "date": day,
+            "threats": daily_threats.get(day, 0)
+        })
+    
+    # Simulated departments (in production, this would come from org structure)
+    departments = [
+        {"name": "Dirección", "employee_count": 5, "threats_blocked": int(threats_blocked * 0.1), "risk_score": 2.3},
+        {"name": "Finanzas", "employee_count": 12, "threats_blocked": int(threats_blocked * 0.35), "risk_score": 4.7},
+        {"name": "Comercial", "employee_count": 25, "threats_blocked": int(threats_blocked * 0.3), "risk_score": 3.8},
+        {"name": "IT", "employee_count": 8, "threats_blocked": int(threats_blocked * 0.15), "risk_score": 2.1},
+        {"name": "RRHH", "employee_count": 6, "threats_blocked": int(threats_blocked * 0.1), "risk_score": 3.2}
+    ]
+    
+    return {
+        "summary": {
+            "total_analyzed": total_threats,
+            "threats_blocked": threats_blocked,
+            "protection_rate": round((threats_blocked / total_threats * 100) if total_threats > 0 else 100, 1),
+            "money_saved": money_saved,
+            "active_employees": sum(d["employee_count"] for d in departments)
+        },
+        "risk_distribution": risk_counts,
+        "threat_types": threat_types_count,
+        "trend_data": trend_data,
+        "departments": departments,
+        "recent_alerts": threats[:10] if threats else []
+    }
+
+@api_router.get("/enterprise/reports")
+async def get_enterprise_reports(
+    request: Request,
+    session_token: Optional[str] = Cookie(None),
+    period: str = "month"
+):
+    """Get enterprise reports for specified period"""
+    user = await require_auth(request, session_token)
+    
+    # Calculate date range
+    now = datetime.now(timezone.utc)
+    if period == "week":
+        start_date = now - timedelta(days=7)
+    elif period == "month":
+        start_date = now - timedelta(days=30)
+    elif period == "quarter":
+        start_date = now - timedelta(days=90)
+    else:
+        start_date = now - timedelta(days=365)
+    
+    # Get threats in period
+    threats = await db.threats.find({"user_id": user.user_id}, {"_id": 0}).to_list(1000)
+    
+    period_threats = []
+    for t in threats:
+        created = t.get("created_at")
+        if isinstance(created, str):
+            created = datetime.fromisoformat(created.replace('Z', '+00:00'))
+        if created and created > start_date:
+            period_threats.append(t)
+    
+    return {
+        "period": period,
+        "start_date": start_date.isoformat(),
+        "end_date": now.isoformat(),
+        "total_threats": len(period_threats),
+        "blocked": len([t for t in period_threats if t.get("is_threat")]),
+        "by_type": {},
+        "by_risk": {}
+    }
+
+# ============================================
+# FAMILY ADMIN ROUTES
+# ============================================
+
+class FamilyMember(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: f"member_{uuid.uuid4().hex[:8]}")
+    family_owner_id: str
+    name: str
+    email: Optional[str] = None
+    phone: Optional[str] = None
+    relationship: str  # "hijo", "hija", "padre", "madre", "abuelo", "abuela", etc.
+    is_senior: bool = False
+    simplified_mode: bool = False
+    alert_level: str = "all"  # "all", "high", "critical"
+    threats_count: int = 0
+    last_activity: Optional[datetime] = None
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+class FamilyMemberCreate(BaseModel):
+    name: str
+    email: Optional[str] = None
+    phone: Optional[str] = None
+    relationship: str
+    is_senior: Optional[bool] = False
+    simplified_mode: Optional[bool] = False
+    alert_level: Optional[str] = "all"
+
+class FamilyAlert(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: f"falert_{uuid.uuid4().hex[:8]}")
+    family_owner_id: str
+    member_id: str
+    member_name: str
+    alert_type: str  # "threat_detected", "sos_triggered", "suspicious_activity"
+    severity: str
+    message: str
+    is_read: bool = False
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+@api_router.get("/family/dashboard")
+async def get_family_dashboard(request: Request, session_token: Optional[str] = Cookie(None)):
+    """Get family protection dashboard"""
+    user = await require_auth(request, session_token)
+    
+    # Check if user has family plan
+    if not user.plan or not user.plan.startswith("family"):
+        # Allow access but show upgrade prompt
+        pass
+    
+    # Get family members
+    members = await db.family_members.find(
+        {"family_owner_id": user.user_id},
+        {"_id": 0}
+    ).to_list(10)
+    
+    # Get family alerts
+    alerts = await db.family_alerts.find(
+        {"family_owner_id": user.user_id},
+        {"_id": 0}
+    ).sort("created_at", -1).limit(20).to_list(20)
+    
+    # Calculate stats
+    total_threats = sum(m.get("threats_count", 0) for m in members)
+    senior_members = len([m for m in members if m.get("is_senior")])
+    unread_alerts = len([a for a in alerts if not a.get("is_read")])
+    
+    return {
+        "members": members,
+        "alerts": alerts,
+        "stats": {
+            "total_members": len(members),
+            "senior_members": senior_members,
+            "total_threats_blocked": total_threats,
+            "unread_alerts": unread_alerts,
+            "protection_active": True
+        },
+        "has_family_plan": user.plan and user.plan.startswith("family")
+    }
+
+@api_router.post("/family/members")
+async def add_family_member(
+    data: FamilyMemberCreate,
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Add a family member to protection"""
+    user = await require_auth(request, session_token)
+    
+    # Check member limit (5 for family plan)
+    existing_count = await db.family_members.count_documents({"family_owner_id": user.user_id})
+    if existing_count >= 5:
+        raise HTTPException(status_code=400, detail="Límite de 5 miembros familiares alcanzado")
+    
+    member = FamilyMember(
+        family_owner_id=user.user_id,
+        name=data.name,
+        email=data.email,
+        phone=data.phone,
+        relationship=data.relationship,
+        is_senior=data.is_senior,
+        simplified_mode=data.simplified_mode or data.is_senior,
+        alert_level=data.alert_level
+    )
+    
+    doc = member.model_dump()
+    doc['created_at'] = doc['created_at'].isoformat()
+    if doc.get('last_activity'):
+        doc['last_activity'] = doc['last_activity'].isoformat()
+    await db.family_members.insert_one(doc)
+    
+    return {"message": "Miembro familiar añadido", "member_id": member.id}
+
+@api_router.patch("/family/members/{member_id}")
+async def update_family_member(
+    member_id: str,
+    data: FamilyMemberCreate,
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Update family member settings"""
+    user = await require_auth(request, session_token)
+    
+    update_data = data.model_dump(exclude_unset=True)
+    result = await db.family_members.update_one(
+        {"id": member_id, "family_owner_id": user.user_id},
+        {"$set": update_data}
+    )
+    
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Miembro no encontrado")
+    
+    return {"message": "Miembro actualizado"}
+
+@api_router.delete("/family/members/{member_id}")
+async def remove_family_member(
+    member_id: str,
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Remove family member from protection"""
+    user = await require_auth(request, session_token)
+    
+    result = await db.family_members.delete_one({
+        "id": member_id,
+        "family_owner_id": user.user_id
+    })
+    
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Miembro no encontrado")
+    
+    return {"message": "Miembro eliminado"}
+
+@api_router.get("/family/members/{member_id}/activity")
+async def get_member_activity(
+    member_id: str,
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Get activity history for a family member"""
+    user = await require_auth(request, session_token)
+    
+    member = await db.family_members.find_one(
+        {"id": member_id, "family_owner_id": user.user_id},
+        {"_id": 0}
+    )
+    
+    if not member:
+        raise HTTPException(status_code=404, detail="Miembro no encontrado")
+    
+    # Get member's threats (simulated - in production would be linked to member's account)
+    alerts = await db.family_alerts.find(
+        {"member_id": member_id},
+        {"_id": 0}
+    ).sort("created_at", -1).limit(50).to_list(50)
+    
+    return {
+        "member": member,
+        "activity": alerts,
+        "stats": {
+            "total_alerts": len(alerts),
+            "threats_blocked": member.get("threats_count", 0)
+        }
+    }
+
+@api_router.post("/family/alerts/{alert_id}/read")
+async def mark_alert_read(
+    alert_id: str,
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Mark family alert as read"""
+    user = await require_auth(request, session_token)
+    
+    await db.family_alerts.update_one(
+        {"id": alert_id, "family_owner_id": user.user_id},
+        {"$set": {"is_read": True}}
+    )
+    
+    return {"message": "Alerta marcada como leída"}
+
+# ============================================
+# NOTIFICATIONS ROUTES
+# ============================================
+
+class NotificationSubscription(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: f"sub_{uuid.uuid4().hex[:8]}")
+    user_id: str
+    endpoint: str
+    keys: Dict[str, str]
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+class Notification(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: f"notif_{uuid.uuid4().hex[:8]}")
+    user_id: str
+    title: str
+    body: str
+    notification_type: str  # "threat", "sos", "family", "system"
+    data: Dict = {}
+    is_read: bool = False
+    is_sent: bool = False
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+class SubscriptionRequest(BaseModel):
+    endpoint: str
+    keys: Dict[str, str]
+
+class NotificationPreferences(BaseModel):
+    email_notifications: bool = True
+    push_notifications: bool = True
+    threat_alerts: bool = True
+    family_alerts: bool = True
+    marketing: bool = False
+
+@api_router.post("/notifications/subscribe")
+async def subscribe_push(
+    data: SubscriptionRequest,
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Subscribe to push notifications"""
+    user = await require_auth(request, session_token)
+    
+    # Check if already subscribed
+    existing = await db.push_subscriptions.find_one(
+        {"user_id": user.user_id, "endpoint": data.endpoint}
+    )
+    
+    if existing:
+        return {"message": "Ya estás suscrito a notificaciones"}
+    
+    subscription = NotificationSubscription(
+        user_id=user.user_id,
+        endpoint=data.endpoint,
+        keys=data.keys
+    )
+    
+    doc = subscription.model_dump()
+    doc['created_at'] = doc['created_at'].isoformat()
+    await db.push_subscriptions.insert_one(doc)
+    
+    return {"message": "Suscripción a notificaciones activada"}
+
+@api_router.delete("/notifications/unsubscribe")
+async def unsubscribe_push(
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Unsubscribe from push notifications"""
+    user = await require_auth(request, session_token)
+    
+    await db.push_subscriptions.delete_many({"user_id": user.user_id})
+    
+    return {"message": "Suscripción cancelada"}
+
+@api_router.get("/notifications")
+async def get_notifications(
+    request: Request,
+    session_token: Optional[str] = Cookie(None),
+    limit: int = 50
+):
+    """Get user notifications"""
+    user = await require_auth(request, session_token)
+    
+    notifications = await db.notifications.find(
+        {"user_id": user.user_id},
+        {"_id": 0}
+    ).sort("created_at", -1).limit(limit).to_list(limit)
+    
+    unread_count = await db.notifications.count_documents({
+        "user_id": user.user_id,
+        "is_read": False
+    })
+    
+    return {
+        "notifications": notifications,
+        "unread_count": unread_count
+    }
+
+@api_router.post("/notifications/{notification_id}/read")
+async def mark_notification_read(
+    notification_id: str,
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Mark notification as read"""
+    user = await require_auth(request, session_token)
+    
+    await db.notifications.update_one(
+        {"id": notification_id, "user_id": user.user_id},
+        {"$set": {"is_read": True}}
+    )
+    
+    return {"message": "Notificación marcada como leída"}
+
+@api_router.post("/notifications/read-all")
+async def mark_all_notifications_read(
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Mark all notifications as read"""
+    user = await require_auth(request, session_token)
+    
+    await db.notifications.update_many(
+        {"user_id": user.user_id, "is_read": False},
+        {"$set": {"is_read": True}}
+    )
+    
+    return {"message": "Todas las notificaciones marcadas como leídas"}
+
+@api_router.get("/notifications/preferences")
+async def get_notification_preferences(
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Get notification preferences"""
+    user = await require_auth(request, session_token)
+    
+    prefs = await db.notification_preferences.find_one(
+        {"user_id": user.user_id},
+        {"_id": 0}
+    )
+    
+    if not prefs:
+        prefs = {
+            "email_notifications": True,
+            "push_notifications": True,
+            "threat_alerts": True,
+            "family_alerts": True,
+            "marketing": False
+        }
+    
+    return prefs
+
+@api_router.patch("/notifications/preferences")
+async def update_notification_preferences(
+    data: NotificationPreferences,
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Update notification preferences"""
+    user = await require_auth(request, session_token)
+    
+    prefs_data = data.model_dump()
+    prefs_data["user_id"] = user.user_id
+    
+    await db.notification_preferences.update_one(
+        {"user_id": user.user_id},
+        {"$set": prefs_data},
+        upsert=True
+    )
+    
+    return {"message": "Preferencias actualizadas"}
+
+# Helper function to create notification
+async def create_notification(user_id: str, title: str, body: str, notification_type: str, data: dict = {}):
+    """Create and store a notification"""
+    notification = Notification(
+        user_id=user_id,
+        title=title,
+        body=body,
+        notification_type=notification_type,
+        data=data
+    )
+    
+    doc = notification.model_dump()
+    doc['created_at'] = doc['created_at'].isoformat()
+    await db.notifications.insert_one(doc)
+    
+    return notification
+
+# ============================================
+# PDF GENERATION ROUTES
+# ============================================
+
+@api_router.get("/investor/download-pdf/{doc_type}")
+async def download_investor_pdf(
+    doc_type: str,
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Download document as PDF (investor only)"""
+    from weasyprint import HTML, CSS
+    import markdown2
+    
+    user = await require_investor(request, session_token)
+    
+    doc_map = {
+        "business-plan": "/app/memory/plan-de-negocio-completo.md",
+        "financial-model": "/app/memory/financial-model.md",
+        "pitch-deck": "/app/memory/pitch-deck-inversores.md",
+        "dossier-b2b": "/app/memory/dossier-comercial-b2b.md"
+    }
+    
+    file_path = doc_map.get(doc_type)
+    if not file_path or not Path(file_path).exists():
+        raise HTTPException(status_code=404, detail="Documento no encontrado")
+    
+    # Log download
+    await db.document_downloads.insert_one({
+        "user_id": user.user_id,
+        "doc_type": doc_type,
+        "format": "pdf",
+        "downloaded_at": datetime.now(timezone.utc).isoformat()
+    })
+    
+    # Read markdown
+    with open(file_path, 'r', encoding='utf-8') as f:
+        md_content = f.read()
+    
+    # Convert markdown to HTML
+    html_content = markdown2.markdown(md_content, extras=["tables", "fenced-code-blocks", "header-ids"])
+    
+    # Create styled HTML document
+    full_html = f"""
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <style>
+            @page {{
+                size: A4;
+                margin: 2cm;
+            }}
+            body {{
+                font-family: 'Helvetica Neue', Arial, sans-serif;
+                font-size: 11pt;
+                line-height: 1.6;
+                color: #1a1a1a;
+            }}
+            h1 {{
+                color: #4338ca;
+                font-size: 24pt;
+                border-bottom: 3px solid #4338ca;
+                padding-bottom: 10px;
+                margin-top: 30px;
+            }}
+            h2 {{
+                color: #4338ca;
+                font-size: 18pt;
+                margin-top: 25px;
+                border-bottom: 1px solid #e5e7eb;
+                padding-bottom: 8px;
+            }}
+            h3 {{
+                color: #374151;
+                font-size: 14pt;
+                margin-top: 20px;
+            }}
+            table {{
+                width: 100%;
+                border-collapse: collapse;
+                margin: 15px 0;
+            }}
+            th, td {{
+                border: 1px solid #d1d5db;
+                padding: 8px 12px;
+                text-align: left;
+            }}
+            th {{
+                background-color: #f3f4f6;
+                font-weight: bold;
+            }}
+            tr:nth-child(even) {{
+                background-color: #f9fafb;
+            }}
+            code {{
+                background-color: #f3f4f6;
+                padding: 2px 6px;
+                border-radius: 4px;
+                font-size: 10pt;
+            }}
+            pre {{
+                background-color: #1f2937;
+                color: #f9fafb;
+                padding: 15px;
+                border-radius: 8px;
+                overflow-x: auto;
+            }}
+            blockquote {{
+                border-left: 4px solid #4338ca;
+                padding-left: 15px;
+                margin: 15px 0;
+                color: #4b5563;
+                font-style: italic;
+            }}
+            ul, ol {{
+                margin: 10px 0;
+                padding-left: 25px;
+            }}
+            li {{
+                margin: 5px 0;
+            }}
+            .header {{
+                text-align: center;
+                margin-bottom: 40px;
+                padding: 20px;
+                background: linear-gradient(135deg, #4338ca 0%, #6366f1 100%);
+                color: white;
+                border-radius: 10px;
+            }}
+            .header h1 {{
+                color: white;
+                border: none;
+                margin: 0;
+            }}
+            .confidential {{
+                text-align: center;
+                color: #dc2626;
+                font-weight: bold;
+                margin: 20px 0;
+                padding: 10px;
+                border: 2px solid #dc2626;
+                border-radius: 5px;
+            }}
+            .footer {{
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                text-align: center;
+                font-size: 9pt;
+                color: #6b7280;
+                padding: 10px;
+                border-top: 1px solid #e5e7eb;
+            }}
+        </style>
+    </head>
+    <body>
+        <div class="header">
+            <h1>MANO</h1>
+            <p>Plataforma Integral de Protección contra Fraudes</p>
+        </div>
+        <div class="confidential">
+            ⚠️ DOCUMENTO CONFIDENCIAL - Solo para inversores autorizados
+        </div>
+        {html_content}
+        <div class="footer">
+            MANO © 2025 - Documento generado el {datetime.now().strftime('%d/%m/%Y')} - Confidencial
+        </div>
+    </body>
+    </html>
+    """
+    
+    # Generate PDF
+    pdf_bytes = HTML(string=full_html).write_pdf()
+    
+    filename = f"MANO_{doc_type.replace('-', '_')}_CONFIDENCIAL_2025.pdf"
+    
+    return Response(
+        content=pdf_bytes,
+        media_type="application/pdf",
+        headers={
+            "Content-Disposition": f'attachment; filename="{filename}"'
+        }
+    )
+
+# ============================================
+# ADMIN PANEL ROUTES (Enhanced)
+# ============================================
+
+@api_router.get("/admin/dashboard")
+async def get_admin_dashboard(request: Request, session_token: Optional[str] = Cookie(None)):
+    """Get admin dashboard overview"""
+    await require_admin(request, session_token)
+    
+    # Get counts
+    total_users = await db.users.count_documents({})
+    premium_users = await db.users.count_documents({"plan": {"$ne": "free"}})
+    pending_investors = await db.investor_requests.count_documents({"status": "pending"})
+    approved_investors = await db.investor_requests.count_documents({"status": "approved"})
+    
+    # Get recent activity
+    recent_users = await db.users.find({}, {"_id": 0, "password_hash": 0}).sort("created_at", -1).limit(10).to_list(10)
+    recent_threats = await db.threats.find({}, {"_id": 0}).sort("created_at", -1).limit(10).to_list(10)
+    
+    # Revenue (from successful payments)
+    payments = await db.payment_transactions.find({"payment_status": "paid"}, {"_id": 0}).to_list(1000)
+    total_revenue = sum(p.get("amount", 0) for p in payments)
+    
+    return {
+        "stats": {
+            "total_users": total_users,
+            "premium_users": premium_users,
+            "free_users": total_users - premium_users,
+            "pending_investors": pending_investors,
+            "approved_investors": approved_investors,
+            "total_revenue": total_revenue
+        },
+        "recent_users": recent_users,
+        "recent_threats": recent_threats[:5]
+    }
+
+@api_router.get("/admin/users")
+async def get_admin_users(
+    request: Request,
+    session_token: Optional[str] = Cookie(None),
+    page: int = 1,
+    limit: int = 20,
+    role: Optional[str] = None
+):
+    """Get all users (admin only)"""
+    await require_admin(request, session_token)
+    
+    query = {}
+    if role:
+        query["role"] = role
+    
+    skip = (page - 1) * limit
+    users = await db.users.find(query, {"_id": 0, "password_hash": 0}).skip(skip).limit(limit).to_list(limit)
+    total = await db.users.count_documents(query)
+    
+    return {
+        "users": users,
+        "total": total,
+        "page": page,
+        "pages": (total + limit - 1) // limit
+    }
+
+@api_router.patch("/admin/users/{user_id}/role")
+async def update_user_role(
+    user_id: str,
+    role: str,
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Update user role (admin only)"""
+    await require_admin(request, session_token)
+    
+    if role not in ["user", "investor", "admin"]:
+        raise HTTPException(status_code=400, detail="Rol inválido")
+    
+    result = await db.users.update_one(
+        {"user_id": user_id},
+        {"$set": {"role": role}}
+    )
+    
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Usuario no encontrado")
+    
+    return {"message": f"Rol actualizado a {role}"}
+
+@api_router.get("/admin/payments")
+async def get_admin_payments(
+    request: Request,
+    session_token: Optional[str] = Cookie(None),
+    status: Optional[str] = None
+):
+    """Get all payments (admin only)"""
+    await require_admin(request, session_token)
+    
+    query = {}
+    if status:
+        query["payment_status"] = status
+    
+    payments = await db.payment_transactions.find(query, {"_id": 0}).sort("created_at", -1).limit(100).to_list(100)
+    
+    return payments
+
+@api_router.get("/admin/document-downloads")
+async def get_document_downloads(
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Get document download history (admin only)"""
+    await require_admin(request, session_token)
+    
+    downloads = await db.document_downloads.find({}, {"_id": 0}).sort("downloaded_at", -1).limit(100).to_list(100)
+    
+    return downloads
+
+# ============================================
 # APP SETUP
 # ============================================
 
