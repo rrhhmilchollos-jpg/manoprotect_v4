@@ -399,7 +399,31 @@ const Dashboard = () => {
                         </Badge>
                       </div>
                       <p className="text-sm text-zinc-600 mb-2 line-clamp-2">{threat.content}</p>
-                      <p className="text-sm text-zinc-800 font-medium">{threat.recommendation}</p>
+                      <p className="text-sm text-zinc-800 font-medium mb-3">{threat.recommendation}</p>
+                      <div className="flex gap-2">
+                        <Button
+                          data-testid={`share-threat-${idx}`}
+                          variant="outline"
+                          size="sm"
+                          onClick={() => shareThreat(threat.id)}
+                          className="border-zinc-300 hover:bg-zinc-50 rounded-lg"
+                        >
+                          <Share2 className="w-4 h-4 mr-1" />
+                          Compartir
+                        </Button>
+                        {!threat.reported_false_positive && (
+                          <Button
+                            data-testid={`report-threat-${idx}`}
+                            variant="outline"
+                            size="sm"
+                            onClick={() => reportFalsePositive(threat.id)}
+                            className="border-zinc-300 hover:bg-zinc-50 rounded-lg"
+                          >
+                            <Flag className="w-4 h-4 mr-1" />
+                            Falso positivo
+                          </Button>
+                        )}
+                      </div>
                     </div>
                   );
                 })}
