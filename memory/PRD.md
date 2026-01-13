@@ -3,21 +3,7 @@
 ## Product Requirements Document (PRD)
 
 ### Problema Original
-MANO es una aplicación y sistema profesional en tiempo real que protege a personas, familias, empresas y entidades públicas frente a fraudes, estafas, suplantaciones y engaños digitales, actuando antes, durante y después del ataque.
-
-### Segmentos de Usuario
-- **Particulares:** Detección en tiempo real de Phishing, Smishing, Vishing en llamadas, SMS, WhatsApp y email
-- **Personas Mayores:** Modo "Protección Familiar" con botones grandes, lenguaje simple y alertas automáticas
-- **Familias:** Panel de seguimiento de amenazas a miembros protegidos
-- **Empresas:** Protección corporativa contra fraude bancario y facturas falsas
-- **Inversores:** Acceso verificado a documentación confidencial con CIF empresarial
-
-### Modelo de Negocio
-- **Freemium:** Plan básico gratuito
-- **Premium:** Semanal €9.99, mensual €29.99, trimestral €74.99, anual €249.99
-- **Familiar:** Mensual €49.99, trimestral €129.99, anual €399.99
-- **Enterprise:** Precio personalizado
-- **Garantía:** 15 días de devolución sin preguntas
+MANO es una aplicación y sistema profesional en tiempo real que protege a personas, familias, empresas y entidades públicas frente a fraudes, estafas, suplantaciones y engaños digitales.
 
 ---
 
@@ -25,40 +11,51 @@ MANO es una aplicación y sistema profesional en tiempo real que protege a perso
 
 ### ✅ Completado
 
-#### Sistema de Autenticación (NUEVO)
+#### Sistema de Autenticación
 - [x] Login dual: Email/Password + Google OAuth (Emergent Auth)
 - [x] Registro de usuarios con validación
 - [x] Sesiones con cookies httpOnly seguras
-- [x] Protección de rutas frontend
+- [x] Roles: user, investor, admin
 
-#### Sistema de Inversores (NUEVO)
+#### Sistema de Inversores
 - [x] Registro con validación de CIF español
 - [x] Aprobación manual por administrador
 - [x] Documentos protegidos solo para inversores aprobados
-- [x] Panel admin para gestión de solicitudes
+- [x] Descarga en Markdown y HTML (imprimible a PDF)
 
-#### Frontend (React + Tailwind CSS)
-- [x] Landing Page con botones login/register
-- [x] Página de Login (Google + Email)
-- [x] Página de Registro
-- [x] Página de Registro de Inversores
-- [x] Dashboard principal
-- [x] Página de Precios con Stripe
-- [x] Página de Descargas (protegida)
-- [x] Modo Familiar, Contactos, Perfil, etc.
+#### Dashboard Empresarial (NUEVO)
+- [x] Métricas avanzadas de seguridad
+- [x] Distribución de riesgos por nivel
+- [x] Análisis por departamento
+- [x] Tendencia de amenazas (30 días)
+- [x] Cálculo de dinero ahorrado
+- [x] Exportación de informes
 
-#### Backend (FastAPI + MongoDB)
-- [x] API de análisis de amenazas con IA (GPT-4o)
-- [x] Integración de Stripe para pagos
-- [x] Sistema de autenticación completo
-- [x] CRUD de contactos y SOS
-- [x] Gestión de inversores
+#### Panel Familiar (NUEVO)
+- [x] Gestión de miembros familiares (hasta 5)
+- [x] Modo simplificado para mayores
+- [x] Configuración de alertas por miembro
+- [x] Historial de amenazas por persona
+- [x] Alertas familiares en tiempo real
 
-### Integraciones Activas
-- **Stripe Payments:** emergentintegrations
-- **OpenAI GPT-4o:** Análisis de amenazas
-- **Google OAuth:** Emergent Auth
-- **MongoDB:** Base de datos
+#### Panel de Administración (NUEVO)
+- [x] Dashboard con estadísticas globales
+- [x] Gestión de usuarios y roles
+- [x] Aprobación/rechazo de inversores
+- [x] Historial de pagos
+- [x] Registro de descargas de documentos
+
+#### Notificaciones (NUEVO)
+- [x] Sistema de notificaciones en app
+- [x] Preferencias de notificación
+- [x] Marcado de leídas
+- [x] Suscripción a push notifications
+
+#### Pagos con Stripe
+- [x] 7 planes de suscripción
+- [x] Checkout con emergentintegrations
+- [x] Verificación de estado de pago
+- [x] Webhooks de Stripe
 
 ---
 
@@ -67,17 +64,19 @@ MANO es una aplicación y sistema profesional en tiempo real que protege a perso
 ```
 /app/
 ├── backend/
-│   ├── server.py           # API FastAPI (800+ líneas)
-│   └── tests/              # Tests pytest
+│   └── server.py           # API FastAPI (~2100 líneas)
 ├── frontend/
 │   ├── src/
 │   │   ├── context/
-│   │   │   └── AuthContext.js    # Gestión estado auth
+│   │   │   └── AuthContext.js
 │   │   └── pages/
-│   │       ├── Login.js
-│   │       ├── Register.js
+│   │       ├── AdminPanel.js      # Panel admin
+│   │       ├── EnterpriseDashboard.js  # Dashboard empresas
+│   │       ├── FamilyAdmin.js     # Panel familiar
+│   │       ├── Login.js / Register.js
 │   │       ├── InvestorRegister.js
-│   │       ├── AuthCallback.js
+│   │       ├── Downloads.js
+│   │       ├── Dashboard.js
 │   │       └── ...
 └── memory/
     └── PRD.md
@@ -88,74 +87,74 @@ MANO es una aplicación y sistema profesional en tiempo real que protege a perso
 ## APIs Principales
 
 ### Autenticación
-| Endpoint | Método | Descripción |
-|----------|--------|-------------|
-| `/api/auth/register` | POST | Registro email/password |
-| `/api/auth/login` | POST | Login email/password |
-| `/api/auth/google/session` | POST | Exchange Google OAuth |
-| `/api/auth/me` | GET | Usuario actual |
-| `/api/auth/logout` | POST | Cerrar sesión |
+- `POST /api/auth/register` - Registro
+- `POST /api/auth/login` - Login
+- `POST /api/auth/google/session` - OAuth Google
+- `GET /api/auth/me` - Usuario actual
+- `POST /api/auth/logout` - Logout
+
+### Enterprise
+- `GET /api/enterprise/dashboard` - Dashboard empresarial
+- `GET /api/enterprise/reports` - Informes por período
+
+### Familiar
+- `GET /api/family/dashboard` - Panel familiar
+- `POST /api/family/members` - Añadir miembro
+- `PATCH /api/family/members/{id}` - Editar miembro
+- `DELETE /api/family/members/{id}` - Eliminar
+- `GET /api/family/members/{id}/activity` - Actividad
 
 ### Inversores
-| Endpoint | Método | Descripción |
-|----------|--------|-------------|
-| `/api/investors/register` | POST | Solicitar acceso inversor |
-| `/api/investors/status/{cif}` | GET | Estado de solicitud |
-| `/api/admin/investors` | GET | Listar solicitudes (admin) |
-| `/api/admin/investors/{id}/approve` | POST | Aprobar inversor |
-| `/api/investor/documents` | GET | Listar documentos |
-| `/api/investor/download/{type}` | GET | Descargar documento |
+- `POST /api/investors/register` - Solicitar acceso
+- `GET /api/investors/status/{cif}` - Estado solicitud
+- `GET /api/investor/documents` - Listar documentos
+- `GET /api/investor/download/{type}` - Descargar MD
+- `GET /api/investor/download-pdf/{type}` - Descargar HTML/PDF
 
-### Core
-| Endpoint | Método | Descripción |
-|----------|--------|-------------|
-| `/api/analyze` | POST | Análisis de amenazas IA |
-| `/api/create-checkout-session` | POST | Crear sesión Stripe |
-| `/api/contacts` | GET/POST | Gestión contactos |
-| `/api/sos` | POST | Alerta de emergencia |
+### Admin
+- `GET /api/admin/dashboard` - Dashboard admin
+- `GET /api/admin/users` - Listar usuarios
+- `PATCH /api/admin/users/{id}/role` - Cambiar rol
+- `GET /api/admin/investors` - Solicitudes inversores
+- `POST /api/admin/investors/{id}/approve` - Aprobar
+- `POST /api/admin/investors/{id}/reject` - Rechazar
+
+### Notificaciones
+- `GET /api/notifications` - Obtener notificaciones
+- `POST /api/notifications/subscribe` - Suscribirse push
+- `POST /api/notifications/{id}/read` - Marcar leída
+- `GET /api/notifications/preferences` - Preferencias
+
+---
+
+## Integraciones
+- **Stripe:** emergentintegrations.payments.stripe.checkout
+- **OpenAI GPT-4o:** Análisis de amenazas
+- **Google OAuth:** Emergent Auth
+- **MongoDB:** Base de datos
 
 ---
 
 ## Tests
-- **Backend:** 22/22 tests pasados (100%)
-- **Frontend:** Todos los flujos verificados
-- **Archivos:** `/app/tests/test_auth_investor.py`
+- Backend: 24/27 tests pasados
+- Frontend: Verificado visualmente
+- Último reporte: `/app/test_reports/iteration_5.json`
 
 ---
 
 ## Próximos Pasos
 
 ### P1 - Alta Prioridad
-- [ ] Dashboard empresarial avanzado
-- [ ] Panel de administración familiar
-- [ ] Notificaciones push en tiempo real
+- [ ] Notificaciones push reales (Web Push API)
+- [ ] Integración con WhatsApp Business
+- [ ] Dashboard de métricas en tiempo real
 
 ### P2 - Media Prioridad
-- [ ] Generación de PDF de documentos
-- [ ] Integración con WhatsApp Business
-- [ ] Dashboard de métricas avanzado
-
-### P3 - Baja Prioridad
-- [ ] App móvil nativa
+- [ ] App móvil nativa (React Native)
 - [ ] Integración con bancos
 - [ ] API pública para partners
 
----
-
-## Notas Técnicas
-
-### Autenticación
-- Sesiones: MongoDB `user_sessions` collection
-- Cookies: httpOnly, secure, sameSite=none
-- Duración: 7 días
-- Google OAuth: Emergent Auth (auth.emergentagent.com)
-
-### Validación CIF
-- Formato: Letra (A-W) + 7 dígitos + letra/dígito (0-9, A-J)
-- Ejemplo válido: B12345678
-- Validación en `InvestorRegisterRequest` model
-
-### Roles de Usuario
-- `user`: Usuario normal
-- `investor`: Acceso a documentos confidenciales
-- `admin`: Gestión de inversores y administración
+### P3 - Baja Prioridad
+- [ ] Sistema de recompensas
+- [ ] Gamificación
+- [ ] Marketplace de integraciones
