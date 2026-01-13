@@ -207,7 +207,7 @@ const Pricing = () => {
             </div>
             <div className="flex items-center gap-2">
               <Check className="w-5 h-5 text-emerald-500" />
-              <span>Garantía 30 días</span>
+              <span>Garantía 15 días</span>
             </div>
           </div>
         </div>
