@@ -115,18 +115,37 @@ class CommunityAlert(BaseModel):
 
 class CheckoutRequest(BaseModel):
     plan_type: str
+    origin_url: str
+    user_id: Optional[str] = "demo-user"
+    email: Optional[str] = "demo@mano.com"
+
+class CheckoutStatusRequest(BaseModel):
+    session_id: str
+
+class PaymentTransaction(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    session_id: str
     user_id: str
     email: str
+    plan_type: str
+    amount: float
+    currency: str = "eur"
+    status: str = "pending"
+    payment_status: str = "initiated"
+    metadata: Dict = {}
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
-# Stripe Price IDs (crear en Stripe Dashboard)
-STRIPE_PRICES = {
-    "weekly": "price_weekly_999",
-    "monthly": "price_monthly_2999",
-    "quarterly": "price_quarterly_7499",
-    "yearly": "price_yearly_24999",
-    "family-monthly": "price_family_monthly_4999",
-    "family-quarterly": "price_family_quarterly_12999",
-    "family-yearly": "price_family_yearly_39999"
+# Fixed subscription pricing packages (amounts in EUR)
+SUBSCRIPTION_PACKAGES = {
+    "weekly": {"amount": 9.99, "name": "Premium Semanal", "period": "semana"},
+    "monthly": {"amount": 29.99, "name": "Premium Mensual", "period": "mes"},
+    "quarterly": {"amount": 74.99, "name": "Premium Trimestral", "period": "3 meses"},
+    "yearly": {"amount": 249.99, "name": "Premium Anual", "period": "año"},
+    "family-monthly": {"amount": 49.99, "name": "Familiar Mensual", "period": "mes"},
+    "family-quarterly": {"amount": 129.99, "name": "Familiar Trimestral", "period": "3 meses"},
+    "family-yearly": {"amount": 399.99, "name": "Familiar Anual", "period": "año"}
 }
 
 # Fraud Detection Function
