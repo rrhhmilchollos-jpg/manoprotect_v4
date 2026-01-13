@@ -112,6 +112,73 @@ class MANOAPITester:
         }
         return self.run_test("Analyze Safe Content", "POST", "analyze", 200, data=test_data, timeout=45)
 
+    def test_sos_alert(self):
+        """Test SOS alert functionality"""
+        test_data = {
+            "user_id": "demo-user",
+            "location": "Test Location",
+            "message": "Test SOS message"
+        }
+        return self.run_test("SOS Alert", "POST", "sos", 200, data=test_data)
+
+    def test_community_alerts(self):
+        """Test community alerts endpoint"""
+        return self.run_test("Community Alerts", "GET", "community-alerts?limit=10", 200)
+
+    def test_export_threats(self):
+        """Test export threats functionality"""
+        return self.run_test("Export Threats", "GET", "export/threats?user_id=demo-user&format=csv", 200)
+
+    def test_knowledge_base(self):
+        """Test knowledge base endpoint"""
+        return self.run_test("Knowledge Base", "GET", "knowledge-base", 200)
+
+    def test_get_user(self):
+        """Test get user endpoint"""
+        return self.run_test("Get User", "GET", "users/demo-user", 200)
+
+    def test_update_user_settings(self):
+        """Test update user settings"""
+        test_data = {
+            "dark_mode": True,
+            "notifications_enabled": False,
+            "auto_block": True
+        }
+        return self.run_test("Update User Settings", "PATCH", "users/demo-user", 200, data=test_data)
+
+    def test_share_threat(self):
+        """Test share threat functionality"""
+        # First get a threat ID
+        success, threats_response = self.test_get_threats()
+        if success and threats_response and len(threats_response) > 0:
+            threat_id = threats_response[0]['id']
+            return self.run_test("Share Threat", "POST", f"threats/{threat_id}/share", 200)
+        else:
+            print("⚠️  Skipping share threat test - no threats available")
+            return False, {}
+
+    def test_report_false_positive(self):
+        """Test report false positive functionality"""
+        # First get a threat ID
+        success, threats_response = self.test_get_threats()
+        if success and threats_response and len(threats_response) > 0:
+            threat_id = threats_response[0]['id']
+            return self.run_test("Report False Positive", "POST", f"threats/{threat_id}/report", 200)
+        else:
+            print("⚠️  Skipping false positive test - no threats available")
+            return False, {}
+
+    def test_delete_contact(self):
+        """Test delete contact functionality"""
+        # First get a contact ID
+        success, contacts_response = self.test_get_contacts()
+        if success and contacts_response and len(contacts_response) > 0:
+            contact_id = contacts_response[0]['id']
+            return self.run_test("Delete Contact", "DELETE", f"contacts/{contact_id}", 200)
+        else:
+            print("⚠️  Skipping delete contact test - no contacts available")
+            return False, {}
+
 def main():
     print("🛡️  MANO API Testing Suite")
     print("=" * 50)
