@@ -195,15 +195,35 @@ const Dashboard = () => {
               <span className="text-xl font-bold">MANO Dashboard</span>
             </div>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
+            {isAdmin && (
+              <Button
+                data-testid="admin-panel-btn"
+                variant="ghost"
+                onClick={() => navigate('/admin')}
+                className="rounded-lg text-red-600 hover:bg-red-50"
+              >
+                <Settings className="w-5 h-5 mr-2" />
+                Admin
+              </Button>
+            )}
             <Button
-              data-testid="family-mode-btn"
+              data-testid="enterprise-btn"
               variant="ghost"
-              onClick={() => navigate('/family-mode')}
+              onClick={() => navigate('/enterprise')}
+              className="rounded-lg hover:bg-indigo-50 hover:text-indigo-700"
+            >
+              <Building2 className="w-5 h-5 mr-2" />
+              Empresas
+            </Button>
+            <Button
+              data-testid="family-admin-btn"
+              variant="ghost"
+              onClick={() => navigate('/family-admin')}
               className="rounded-lg hover:bg-emerald-50 hover:text-emerald-700"
             >
-              <Users className="w-5 h-5 mr-2" />
-              Modo Familiar
+              <Heart className="w-5 h-5 mr-2" />
+              Familia
             </Button>
             <Button
               data-testid="contacts-btn"
@@ -217,7 +237,7 @@ const Dashboard = () => {
             <Button
               data-testid="knowledge-btn"
               variant="ghost"
-              onClick={() => navigate('/knowledge')}
+              onClick={() => navigate('/knowledge')}}
               className="rounded-lg"
             >
               <Book className="w-5 h-5 mr-2" />
