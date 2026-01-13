@@ -222,10 +222,18 @@ const Pricing = () => {
       return;
     }
 
+    if (checkingPayment) {
+      toast.info('Verificando pago en progreso...');
+      return;
+    }
+
     setLoadingPlan(planType);
     toast.info('Conectando con Stripe...');
 
     try {
+      // Get origin URL from browser (never hardcode)
+      const originUrl = window.location.origin;
+
       const response = await fetch(`${API}/create-checkout-session`, {
         method: 'POST',
         headers: {
@@ -233,6 +241,7 @@ const Pricing = () => {
         },
         body: JSON.stringify({
           plan_type: planType,
+          origin_url: originUrl,
           user_id: 'demo-user', // En producción, usar ID real del usuario autenticado
           email: 'usuario@demo.com' // En producción, usar email real
         }),
