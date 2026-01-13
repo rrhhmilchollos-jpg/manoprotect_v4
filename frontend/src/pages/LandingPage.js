@@ -178,6 +178,7 @@ const LandingPage = () => {
               </p>
               <Button
                 data-testid="family-learn-more-btn"
+                onClick={() => navigate('/family-mode')}
                 variant="outline"
                 className="border-emerald-300 hover:bg-emerald-50 rounded-lg active:scale-95 transition-all"
               >
