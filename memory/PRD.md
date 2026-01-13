@@ -7,160 +7,155 @@ MANO es una aplicación y sistema profesional en tiempo real que protege a perso
 
 ### Segmentos de Usuario
 - **Particulares:** Detección en tiempo real de Phishing, Smishing, Vishing en llamadas, SMS, WhatsApp y email
-- **Personas Mayores:** Modo "Protección Familiar" con botones grandes, lenguaje simple y alertas automáticas a familiares/cuidadores
+- **Personas Mayores:** Modo "Protección Familiar" con botones grandes, lenguaje simple y alertas automáticas
 - **Familias:** Panel de seguimiento de amenazas a miembros protegidos
-- **Empresas:** Protección corporativa contra fraude bancario, facturas falsas y ataques a empleados
-- **Bancos/Seguros:** Detección avanzada de fraude para proteger clientes
-- **Municipios:** Canal verificado de alertas oficiales a ciudadanos
+- **Empresas:** Protección corporativa contra fraude bancario y facturas falsas
+- **Inversores:** Acceso verificado a documentación confidencial con CIF empresarial
 
 ### Modelo de Negocio
-- **Freemium:** Plan básico gratuito con funcionalidades limitadas
-- **Premium:** Planes de suscripción (semanal €9.99, mensual €29.99, trimestral €74.99, anual €249.99)
-- **Familiar:** Planes para hasta 5 usuarios (mensual €49.99, trimestral €129.99, anual €399.99)
-- **Enterprise:** Precio personalizado para bancos y grandes corporaciones
+- **Freemium:** Plan básico gratuito
+- **Premium:** Semanal €9.99, mensual €29.99, trimestral €74.99, anual €249.99
+- **Familiar:** Mensual €49.99, trimestral €129.99, anual €399.99
+- **Enterprise:** Precio personalizado
 - **Garantía:** 15 días de devolución sin preguntas
 
 ---
 
-## Estado Actual de la Implementación
+## Estado Actual (Enero 2025)
 
-### ✅ Completado (Enero 2025)
+### ✅ Completado
+
+#### Sistema de Autenticación (NUEVO)
+- [x] Login dual: Email/Password + Google OAuth (Emergent Auth)
+- [x] Registro de usuarios con validación
+- [x] Sesiones con cookies httpOnly seguras
+- [x] Protección de rutas frontend
+
+#### Sistema de Inversores (NUEVO)
+- [x] Registro con validación de CIF español
+- [x] Aprobación manual por administrador
+- [x] Documentos protegidos solo para inversores aprobados
+- [x] Panel admin para gestión de solicitudes
 
 #### Frontend (React + Tailwind CSS)
-- [x] Landing Page con diseño profesional
-- [x] Dashboard principal con análisis de amenazas
-- [x] Página de Precios con 7 planes de suscripción
-- [x] Página de Descargas con documentos para inversores
-- [x] Página "Cómo Funciona"
-- [x] Modo Familiar con botón SOS
-- [x] Gestión de Contactos de Confianza
-- [x] Perfil de Usuario
-- [x] Base de Conocimiento sobre amenazas
-- [x] Comunidad con alertas colectivas
+- [x] Landing Page con botones login/register
+- [x] Página de Login (Google + Email)
+- [x] Página de Registro
+- [x] Página de Registro de Inversores
+- [x] Dashboard principal
+- [x] Página de Precios con Stripe
+- [x] Página de Descargas (protegida)
+- [x] Modo Familiar, Contactos, Perfil, etc.
 
 #### Backend (FastAPI + MongoDB)
-- [x] API de análisis de amenazas con IA (GPT-5.2)
-- [x] Integración de Stripe para pagos (emergentintegrations)
-- [x] Sistema de checkout con 7 planes de suscripción
-- [x] Verificación de estado de pago
-- [x] Webhooks de Stripe
-- [x] Descarga de documentos markdown
-- [x] CRUD de contactos de confianza
-- [x] Sistema SOS/Pánico
-- [x] Alertas comunitarias
-- [x] Exportación de datos (CSV/JSON)
-- [x] Base de conocimiento
-
-#### Documentos de Negocio
-- [x] Plan de Negocio Completo (72KB)
-- [x] Modelo Financiero Detallado (10KB)
-- [x] Pitch Deck para Inversores (23KB)
-- [x] Dossier Comercial B2B (9KB)
-- [x] Descripción App Store
-- [x] Roadmap Técnico
+- [x] API de análisis de amenazas con IA (GPT-4o)
+- [x] Integración de Stripe para pagos
+- [x] Sistema de autenticación completo
+- [x] CRUD de contactos y SOS
+- [x] Gestión de inversores
 
 ### Integraciones Activas
-- **Stripe Payments:** Usando emergentintegrations con clave de prueba
-- **OpenAI GPT-5.2:** Análisis de amenazas con IA
-- **MongoDB:** Base de datos para usuarios, amenazas, transacciones
+- **Stripe Payments:** emergentintegrations
+- **OpenAI GPT-4o:** Análisis de amenazas
+- **Google OAuth:** Emergent Auth
+- **MongoDB:** Base de datos
 
 ---
 
-## Arquitectura de Código
+## Arquitectura
 
 ```
 /app/
 ├── backend/
-│   ├── .env                    # Variables de entorno
-│   ├── requirements.txt        # Dependencias Python
-│   └── server.py               # API principal FastAPI
+│   ├── server.py           # API FastAPI (800+ líneas)
+│   └── tests/              # Tests pytest
 ├── frontend/
-│   ├── .env                    # Variables de entorno
-│   ├── package.json            # Dependencias React
 │   ├── src/
-│   │   ├── App.js              # Router principal
-│   │   ├── pages/
-│   │   │   ├── LandingPage.js  # Página de inicio
-│   │   │   ├── Dashboard.js    # Panel principal
-│   │   │   ├── Pricing.js      # Planes y checkout
-│   │   │   ├── Downloads.js    # Documentos inversores
-│   │   │   ├── HowItWorks.js   # Explicación del servicio
-│   │   │   ├── FamilyMode.js   # Modo protección familiar
-│   │   │   ├── Contacts.js     # Contactos de confianza
-│   │   │   ├── Profile.js      # Perfil usuario
-│   │   │   ├── Knowledge.js    # Base conocimiento
-│   │   │   └── Community.js    # Alertas comunitarias
-│   │   └── components/ui/      # Componentes Shadcn
+│   │   ├── context/
+│   │   │   └── AuthContext.js    # Gestión estado auth
+│   │   └── pages/
+│   │       ├── Login.js
+│   │       ├── Register.js
+│   │       ├── InvestorRegister.js
+│   │       ├── AuthCallback.js
+│   │       └── ...
 └── memory/
-    ├── PRD.md                  # Este documento
-    ├── plan-de-negocio-completo.md
-    ├── financial-model.md
-    ├── pitch-deck-inversores.md
-    ├── dossier-comercial-b2b.md
-    ├── app-store-description.md
-    └── roadmap-tecnico.md
+    └── PRD.md
 ```
 
 ---
 
 ## APIs Principales
 
+### Autenticación
 | Endpoint | Método | Descripción |
 |----------|--------|-------------|
-| `/api/` | GET | Health check |
-| `/api/analyze` | POST | Análisis de amenazas con IA |
-| `/api/threats` | GET | Historial de amenazas |
+| `/api/auth/register` | POST | Registro email/password |
+| `/api/auth/login` | POST | Login email/password |
+| `/api/auth/google/session` | POST | Exchange Google OAuth |
+| `/api/auth/me` | GET | Usuario actual |
+| `/api/auth/logout` | POST | Cerrar sesión |
+
+### Inversores
+| Endpoint | Método | Descripción |
+|----------|--------|-------------|
+| `/api/investors/register` | POST | Solicitar acceso inversor |
+| `/api/investors/status/{cif}` | GET | Estado de solicitud |
+| `/api/admin/investors` | GET | Listar solicitudes (admin) |
+| `/api/admin/investors/{id}/approve` | POST | Aprobar inversor |
+| `/api/investor/documents` | GET | Listar documentos |
+| `/api/investor/download/{type}` | GET | Descargar documento |
+
+### Core
+| Endpoint | Método | Descripción |
+|----------|--------|-------------|
+| `/api/analyze` | POST | Análisis de amenazas IA |
 | `/api/create-checkout-session` | POST | Crear sesión Stripe |
-| `/api/checkout/status/{session_id}` | GET | Estado del pago |
-| `/api/webhook/stripe` | POST | Webhooks de Stripe |
-| `/api/download/{doc_type}` | GET | Descargar documentos |
 | `/api/contacts` | GET/POST | Gestión contactos |
 | `/api/sos` | POST | Alerta de emergencia |
-| `/api/community-alerts` | GET | Alertas comunitarias |
-| `/api/knowledge-base` | GET | Base de conocimiento |
-| `/api/stats` | GET | Estadísticas usuario |
-| `/api/export/threats` | GET | Exportar datos |
 
 ---
 
-## Próximos Pasos (Backlog)
+## Tests
+- **Backend:** 22/22 tests pasados (100%)
+- **Frontend:** Todos los flujos verificados
+- **Archivos:** `/app/tests/test_auth_investor.py`
+
+---
+
+## Próximos Pasos
 
 ### P1 - Alta Prioridad
-- [ ] Sistema de autenticación (JWT o Google Auth)
-- [ ] Notificaciones push en tiempo real
-- [ ] Dashboard empresarial
+- [ ] Dashboard empresarial avanzado
 - [ ] Panel de administración familiar
+- [ ] Notificaciones push en tiempo real
 
 ### P2 - Media Prioridad
 - [ ] Generación de PDF de documentos
 - [ ] Integración con WhatsApp Business
-- [ ] Detección de llamadas en tiempo real
 - [ ] Dashboard de métricas avanzado
 
 ### P3 - Baja Prioridad
 - [ ] App móvil nativa
 - [ ] Integración con bancos
-- [ ] Sistema de recompensas
 - [ ] API pública para partners
 
 ---
 
 ## Notas Técnicas
 
-### Stripe Integration
-- Usa `emergentintegrations.payments.stripe.checkout`
-- Clave: `STRIPE_API_KEY=sk_test_emergent`
-- Flujo: origin_url → backend → checkout session → polling status
+### Autenticación
+- Sesiones: MongoDB `user_sessions` collection
+- Cookies: httpOnly, secure, sameSite=none
+- Duración: 7 días
+- Google OAuth: Emergent Auth (auth.emergentagent.com)
 
-### Análisis de Amenazas
-- Usa `emergentintegrations.llm.chat` con GPT-5.2
-- Analiza phishing, smishing, vishing, suplantación
-- Respuesta JSON con nivel de riesgo y recomendaciones
+### Validación CIF
+- Formato: Letra (A-W) + 7 dígitos + letra/dígito (0-9, A-J)
+- Ejemplo válido: B12345678
+- Validación en `InvestorRegisterRequest` model
 
-### Colecciones MongoDB
-- `users`: Usuarios y suscripciones
-- `threats`: Historial de análisis
-- `contacts`: Contactos de confianza
-- `sos_alerts`: Alertas de emergencia
-- `community_alerts`: Alertas colectivas
-- `payment_transactions`: Transacciones Stripe
+### Roles de Usuario
+- `user`: Usuario normal
+- `investor`: Acceso a documentos confidenciales
+- `admin`: Gestión de inversores y administración
