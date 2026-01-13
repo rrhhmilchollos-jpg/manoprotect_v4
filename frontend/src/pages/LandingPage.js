@@ -1,9 +1,11 @@
 import { useNavigate } from 'react-router-dom';
-import { Phone, Mail, MessageSquare, Users, Building2, Check, ArrowRight } from 'lucide-react';
+import { Phone, Mail, MessageSquare, Users, Building2, Check, ArrowRight, LogIn } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useAuth } from '@/context/AuthContext';
 
 const LandingPage = () => {
   const navigate = useNavigate();
+  const { isAuthenticated, user } = useAuth();
 
   return (
     <div className="min-h-screen bg-zinc-50">
@@ -27,20 +29,41 @@ const LandingPage = () => {
               Precios
             </Button>
             <Button
-              data-testid="header-downloads-btn"
-              onClick={() => navigate('/downloads')}
+              data-testid="header-investors-btn"
+              onClick={() => navigate('/investor/register')}
               variant="ghost"
               className="text-zinc-700 hover:text-indigo-600 rounded-lg px-4 h-10"
             >
               Inversores
             </Button>
-            <Button
-              data-testid="header-dashboard-btn"
-              onClick={() => navigate('/dashboard')}
-              className="bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg px-6 h-12 shadow-sm hover:shadow-md active:scale-95 transition-all"
-            >
-              Acceder al Dashboard
-            </Button>
+            {isAuthenticated ? (
+              <Button
+                data-testid="header-dashboard-btn"
+                onClick={() => navigate('/dashboard')}
+                className="bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg px-6 h-12 shadow-sm hover:shadow-md active:scale-95 transition-all"
+              >
+                Mi Dashboard
+              </Button>
+            ) : (
+              <>
+                <Button
+                  data-testid="header-login-btn"
+                  onClick={() => navigate('/login')}
+                  variant="outline"
+                  className="border-indigo-600 text-indigo-600 hover:bg-indigo-50 rounded-lg px-4 h-10"
+                >
+                  <LogIn className="w-4 h-4 mr-2" />
+                  Iniciar Sesión
+                </Button>
+                <Button
+                  data-testid="header-register-btn"
+                  onClick={() => navigate('/register')}
+                  className="bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg px-6 h-12 shadow-sm hover:shadow-md active:scale-95 transition-all"
+                >
+                  Registrarse Gratis
+                </Button>
+              </>
+            )}
           </div>
         </div>
       </header>
