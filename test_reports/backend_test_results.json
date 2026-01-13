@@ -1,0 +1,169 @@
+{
+  "timestamp": "2026-01-13T20:12:03.480771",
+  "summary": {
+    "tests_run": 7,
+    "tests_passed": 7,
+    "success_rate": 100.0
+  },
+  "detailed_results": [
+    {
+      "test_name": "API Root",
+      "method": "GET",
+      "endpoint": "",
+      "expected_status": 200,
+      "actual_status": 200,
+      "success": true,
+      "response_data": {
+        "message": "MANO API - Protecci\u00f3n contra fraudes"
+      },
+      "error": null
+    },
+    {
+      "test_name": "Get Stats",
+      "method": "GET",
+      "endpoint": "stats?user_id=demo-user",
+      "expected_status": 200,
+      "actual_status": 200,
+      "success": true,
+      "response_data": {
+        "total_analyzed": 2,
+        "threats_blocked": 2,
+        "risk_distribution": {
+          "critical": 0,
+          "high": 2,
+          "medium": 0,
+          "low": 0
+        }
+      },
+      "error": null
+    },
+    {
+      "test_name": "Get Threats",
+      "method": "GET",
+      "endpoint": "threats?user_id=demo-user",
+      "expected_status": 200,
+      "actual_status": 200,
+      "success": true,
+      "response_data": [
+        {
+          "id": "4be5ca8c-2b7b-47ab-9906-71922366f037",
+          "user_id": "demo-user",
+          "content": "Hola, soy de tu banco. Necesitamos que confirmes tu cuenta. Entra a este link: https://banco-segur0.xyz/confirmar",
+          "content_type": "phone",
+          "risk_level": "high",
+          "is_threat": true,
+          "threat_types": [
+            "phishing",
+            "suplantaci\u00f3n de identidad",
+            "estafa"
+          ],
+          "recommendation": "No hagas clic en el enlace ni compartas datos (usuario, contrase\u00f1a, c\u00f3digos SMS/OTP). Bloquea el n\u00famero y contacta a tu banco por canales oficiales (app oficial, web tecleada manualmente o el n\u00famero de tu tarjeta) para verificar. Si ya entraste o entregaste informaci\u00f3n, cambia tus claves, revoca accesos y solicita al banco el bloqueo/monitoreo de tu cuenta.",
+          "analysis": "El mensaje afirma ser \u201ctu banco\u201d y pide \u201cconfirmar tu cuenta\u201d mediante un enlace, una t\u00e1ctica t\u00edpica de phishing para robar credenciales o datos personales. El dominio es altamente sospechoso: \u201cbanco-segur0.xyz\u201d usa sustituci\u00f3n de caracteres (0 en lugar de o) y un TLD .xyz com\u00fan en campa\u00f1as fraudulentas; adem\u00e1s no corresponde a un dominio bancario oficial. La solicitud es gen\u00e9rica y crea urgencia (\u201cnecesitamos que confirmes\u201d), buscando que el usuario act\u00fae sin verificar. Por el canal (llamada/tel\u00e9fono) puede ser parte de una campa\u00f1a de suplantaci\u00f3n que deriva al phishing mediante enlace.",
+          "created_at": "2026-01-13T20:08:48.721045Z"
+        },
+        {
+          "id": "7247517d-bcd2-423f-9c58-24e9e152a2ed",
+          "user_id": "demo-user",
+          "content": "Felicidades! Has ganado un iPhone 15. Haz clic aqui: bit.ly/gana-iphone-ya para reclamarlo ahora",
+          "content_type": "sms",
+          "risk_level": "high",
+          "is_threat": true,
+          "threat_types": [
+            "smishing",
+            "phishing",
+            "estafa",
+            "enlace malicioso/acortado",
+            "ingenier\u00eda social"
+          ],
+          "recommendation": "No hagas clic en el enlace ni respondas. Elimina el SMS y bloquea/denuncia el n\u00famero. Si ya abriste el enlace, no ingreses datos, cierra la p\u00e1gina y ejecuta un an\u00e1lisis de seguridad en el tel\u00e9fono; cambia contrase\u00f1as si introdujiste credenciales y contacta a tu operador/banco si diste datos personales o financieros.",
+          "analysis": "El mensaje presenta se\u00f1ales claras de smishing/phishing: (1) promesa de premio de alto valor (iPhone 15) sin contexto ni participaci\u00f3n previa, t\u00edpico de estafas; (2) lenguaje de urgencia para \u201creclamarlo ahora\u201d, buscando que la v\u00edctima act\u00fae sin pensar; (3) uso de un enlace acortado (bit.ly), t\u00e9cnica com\u00fan para ocultar el destino real y facilitar redirecciones a p\u00e1ginas de captura de datos o descarga de malware; (4) ausencia de informaci\u00f3n verificable del remitente (empresa, bases legales del concurso, t\u00e9rminos). El objetivo probable es robar datos personales/credenciales, inducir pagos \u2018de env\u00edo\u2019/suscripci\u00f3n o instalar software malicioso. Por estas razones se clasifica como amenaza de riesgo alto.",
+          "created_at": "2026-01-13T20:08:28.360709Z"
+        }
+      ],
+      "error": null
+    },
+    {
+      "test_name": "Analyze Threat",
+      "method": "POST",
+      "endpoint": "analyze",
+      "expected_status": 200,
+      "actual_status": 200,
+      "success": true,
+      "response_data": {
+        "id": "9a22d459-b82b-491e-aadb-11d3228a1ffb",
+        "user_id": "demo-user",
+        "content": "Hola, soy del banco. Necesito que me confirmes tu n\u00famero de tarjeta urgentemente.",
+        "content_type": "sms",
+        "risk_level": "high",
+        "is_threat": true,
+        "threat_types": [
+          "smishing",
+          "phishing",
+          "suplantaci\u00f3n de identidad",
+          "estafa"
+        ],
+        "recommendation": "No respondas ni compartas datos. Bloquea y reporta el SMS. Contacta a tu banco por los canales oficiales (n\u00famero de tu tarjeta/app/web oficial) para verificar si existe alguna gesti\u00f3n; si ya compartiste informaci\u00f3n, cancela/ bloquea la tarjeta y cambia claves de inmediato.",
+        "analysis": "El mensaje afirma ser \u201cdel banco\u201d sin identificar entidad, usa urgencia (\u201curgentamente\u201d) para presionar y solicita un dato altamente sensible (n\u00famero de tarjeta). Los bancos no piden por SMS que confirmes el n\u00famero completo de tarjeta. Esto encaja con smishing/phishing orientado a robo de datos financieros y suplantaci\u00f3n de identidad. El objetivo probable es obtener datos para fraude con tarjeta o para continuar el enga\u00f1o con m\u00e1s informaci\u00f3n (CVV, PIN, c\u00f3digos SMS).",
+        "created_at": "2026-01-13T20:11:57.578568Z"
+      },
+      "error": null
+    },
+    {
+      "test_name": "Analyze Safe Content",
+      "method": "POST",
+      "endpoint": "analyze",
+      "expected_status": 200,
+      "actual_status": 200,
+      "success": true,
+      "response_data": {
+        "id": "bb6680e1-4bc1-48e2-944e-761635ba344b",
+        "user_id": "demo-user",
+        "content": "Hola mam\u00e1, llegu\u00e9 bien al trabajo. Te llamo luego.",
+        "content_type": "sms",
+        "risk_level": "low",
+        "is_threat": false,
+        "threat_types": [],
+        "recommendation": "No parece una amenaza. Si aun as\u00ed quieres confirmar, responde o llama al n\u00famero habitual de tu familiar y evita compartir datos personales o c\u00f3digos por SMS.",
+        "analysis": "El mensaje es breve, cotidiano y coherente (avisa que lleg\u00f3 bien y que llamar\u00e1 luego). No incluye enlaces, solicitudes de dinero, urgencia inusual, petici\u00f3n de c\u00f3digos/credenciales ni instrucciones para actuar, que son indicadores t\u00edpicos de smishing o fraude. Tampoco presenta se\u00f1ales claras de suplantaci\u00f3n (p. ej., cambio de n\u00famero con petici\u00f3n de ayuda econ\u00f3mica). El riesgo se considera bajo, aunque siempre es recomendable verificar por un canal conocido si el n\u00famero no es habitual.",
+        "created_at": "2026-01-13T20:12:03.369111Z"
+      },
+      "error": null
+    },
+    {
+      "test_name": "Create Contact",
+      "method": "POST",
+      "endpoint": "contacts?user_id=demo-user",
+      "expected_status": 200,
+      "actual_status": 200,
+      "success": true,
+      "response_data": {
+        "id": "e42ef416-8869-4e7f-a57f-c19228c5609e",
+        "user_id": "demo-user",
+        "name": "Test Contact",
+        "phone": "+34666123456",
+        "relationship": "family",
+        "created_at": "2026-01-13T20:12:03.428696Z"
+      },
+      "error": null
+    },
+    {
+      "test_name": "Get Contacts",
+      "method": "GET",
+      "endpoint": "contacts?user_id=demo-user",
+      "expected_status": 200,
+      "actual_status": 200,
+      "success": true,
+      "response_data": [
+        {
+          "id": "e42ef416-8869-4e7f-a57f-c19228c5609e",
+          "user_id": "demo-user",
+          "name": "Test Contact",
+          "phone": "+34666123456",
+          "relationship": "family",
+          "created_at": "2026-01-13T20:12:03.428696Z"
+        }
+      ],
+      "error": null
+    }
+  ]
+}
