@@ -66,7 +66,7 @@ const FamilyMode = () => {
               <ArrowLeft className="w-7 h-7" />
             </Button>
             <div className="flex items-center gap-3">
-              <Shield className="w-10 h-10 text-emerald-600" />
+              <img src="https://customer-assets.emergentagent.com/job_5c97b24f-9a55-4567-9954-bd76179fb951/artifacts/8y6ab2pd_logo%20App%20Mano.png" alt="MANO Logo" className="h-10 w-auto" />
               <span className="text-3xl font-bold">Modo Familiar</span>
             </div>
           </div>
