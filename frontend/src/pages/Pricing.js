@@ -1,30 +1,76 @@
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Shield, Check, Zap, Users, Crown, ArrowRight, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
-import { useEffect } from 'react';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
 
 const Pricing = () => {
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [billingCycle, setBillingCycle] = useState('monthly');
   const [loadingPlan, setLoadingPlan] = useState(null);
+  const [checkingPayment, setCheckingPayment] = useState(false);
+
+  // Poll payment status function
+  const pollPaymentStatus = useCallback(async (sessionId, attempts = 0) => {
+    const maxAttempts = 5;
+    const pollInterval = 2000;
+
+    if (attempts >= maxAttempts) {
+      toast.info('Verificación de pago en progreso. Revisa tu email para confirmación.');
+      setCheckingPayment(false);
+      return;
+    }
+
+    try {
+      const response = await fetch(`${API}/checkout/status/${sessionId}`);
+      if (!response.ok) throw new Error('Error al verificar estado del pago');
+
+      const data = await response.json();
+
+      if (data.payment_status === 'paid') {
+        toast.success('¡Pago exitoso! Tu suscripción Premium está activa.');
+        setCheckingPayment(false);
+        // Clean URL and redirect to dashboard
+        setTimeout(() => navigate('/dashboard?success=true'), 1500);
+        return;
+      } else if (data.status === 'expired') {
+        toast.error('La sesión de pago ha expirado. Inténtalo de nuevo.');
+        setCheckingPayment(false);
+        return;
+      }
+
+      // Continue polling
+      setTimeout(() => pollPaymentStatus(sessionId, attempts + 1), pollInterval);
+    } catch (error) {
+      console.error('Error checking payment status:', error);
+      toast.error('Error verificando el pago. Por favor, contacta soporte.');
+      setCheckingPayment(false);
+    }
+  }, [navigate]);
 
   // Check for success/cancel from Stripe redirect
   useEffect(() => {
-    if (searchParams.get('success') === 'true') {
-      toast.success('¡Pago completado! Tu suscripción está activa.');
-    }
-    if (searchParams.get('canceled') === 'true') {
+    const sessionId = searchParams.get('session_id');
+    const success = searchParams.get('success');
+    const canceled = searchParams.get('canceled');
+
+    if (sessionId && success === 'true') {
+      setCheckingPayment(true);
+      toast.info('Verificando estado del pago...');
+      pollPaymentStatus(sessionId);
+      // Clean URL params
+      setSearchParams({});
+    } else if (canceled === 'true') {
       toast.info('Pago cancelado. Puedes intentarlo de nuevo cuando quieras.');
+      setSearchParams({});
     }
-  }, [searchParams]);
+  }, [searchParams, setSearchParams, pollPaymentStatus]);
 
   const plans = {
     free: {
