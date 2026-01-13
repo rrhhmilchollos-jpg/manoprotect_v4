@@ -56,6 +56,7 @@ const LandingPage = () => {
                 </Button>
                 <Button
                   data-testid="hero-learn-more-btn"
+                  onClick={() => navigate('/how-it-works')}
                   variant="outline"
                   className="border-2 border-zinc-300 hover:border-indigo-300 rounded-lg px-8 h-14 text-lg active:scale-95 transition-all"
                 >
