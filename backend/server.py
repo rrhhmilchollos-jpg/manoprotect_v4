@@ -227,7 +227,11 @@ async def export_threats(user_id: str = "demo-user", format: str = "csv"):
     if format == "csv":
         output = io.StringIO()
         if threats:
-            writer = csv.DictWriter(output, fieldnames=threats[0].keys())
+            # Define consistent fieldnames for CSV export
+            fieldnames = ['id', 'user_id', 'content', 'content_type', 'risk_level', 'is_threat', 
+                         'threat_types', 'recommendation', 'analysis', 'created_at', 
+                         'reported_false_positive', 'shared_count']
+            writer = csv.DictWriter(output, fieldnames=fieldnames, extrasaction='ignore')
             writer.writeheader()
             writer.writerows(threats)
         return {"data": output.getvalue(), "format": "csv"}
