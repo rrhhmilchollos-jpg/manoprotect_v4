@@ -447,117 +447,179 @@ async def update_user_settings(user_id: str, updates: UserUpdate):
         user['created_at'] = datetime.fromisoformat(user['created_at'])
     return User(**user)
 
-# Stripe Integration
+# Stripe Integration using emergentintegrations
 @api_router.post("/create-checkout-session")
-async def create_checkout_session(request: CheckoutRequest):
+async def create_checkout_session(request: CheckoutRequest, http_request: Request):
     try:
-        # Create or get Stripe customer
-        user = await db.users.find_one({"id": request.user_id}, {"_id": 0})
+        # Validate plan type
+        package = SUBSCRIPTION_PACKAGES.get(request.plan_type)
+        if not package:
+            raise HTTPException(status_code=400, detail="Plan de suscripción no válido")
         
-        if user and user.get('stripe_customer_id'):
-            customer_id = user['stripe_customer_id']
-        else:
-            customer = stripe.Customer.create(
-                email=request.email,
-                metadata={"user_id": request.user_id}
-            )
-            customer_id = customer.id
-            await db.users.update_one(
-                {"id": request.user_id},
-                {"$set": {"stripe_customer_id": customer_id}}
-            )
+        # Build URLs from provided origin (never hardcode)
+        success_url = f"{request.origin_url}/pricing?session_id={{CHECKOUT_SESSION_ID}}&success=true"
+        cancel_url = f"{request.origin_url}/pricing?canceled=true"
         
-        # Create checkout session
-        price_id = STRIPE_PRICES.get(request.plan_type)
-        if not price_id:
-            raise HTTPException(status_code=400, detail="Invalid plan type")
+        # Initialize Stripe checkout with emergentintegrations
+        host_url = str(http_request.base_url).rstrip('/')
+        webhook_url = f"{host_url}/api/webhook/stripe"
+        stripe_checkout = StripeCheckout(api_key=STRIPE_API_KEY, webhook_url=webhook_url)
         
-        session = stripe.checkout.Session.create(
-            customer=customer_id,
-            payment_method_types=['card'],
-            line_items=[{
-                'price': price_id,
-                'quantity': 1,
-            }],
-            mode='subscription',
-            success_url=f"{os.environ.get('FRONTEND_URL', 'http://localhost:3000')}/dashboard?success=true",
-            cancel_url=f"{os.environ.get('FRONTEND_URL', 'http://localhost:3000')}/pricing?canceled=true",
+        # Create checkout session request with fixed price from backend
+        checkout_request = CheckoutSessionRequest(
+            amount=package["amount"],
+            currency="eur",
+            success_url=success_url,
+            cancel_url=cancel_url,
             metadata={
-                'user_id': request.user_id,
-                'plan_type': request.plan_type
+                "user_id": request.user_id,
+                "email": request.email,
+                "plan_type": request.plan_type,
+                "plan_name": package["name"]
             }
         )
         
-        return {"checkout_url": session.url, "session_id": session.id}
+        # Create checkout session
+        session: CheckoutSessionResponse = await stripe_checkout.create_checkout_session(checkout_request)
+        
+        # Create payment transaction record BEFORE redirect
+        transaction = PaymentTransaction(
+            session_id=session.session_id,
+            user_id=request.user_id,
+            email=request.email,
+            plan_type=request.plan_type,
+            amount=package["amount"],
+            currency="eur",
+            status="pending",
+            payment_status="initiated",
+            metadata={
+                "plan_name": package["name"],
+                "plan_period": package["period"]
+            }
+        )
+        
+        tx_doc = transaction.model_dump()
+        tx_doc['created_at'] = tx_doc['created_at'].isoformat()
+        tx_doc['updated_at'] = tx_doc['updated_at'].isoformat()
+        await db.payment_transactions.insert_one(tx_doc)
+        
+        return {"checkout_url": session.url, "session_id": session.session_id}
     
+    except HTTPException:
+        raise
     except Exception as e:
         logging.error(f"Stripe checkout error: {e}")
+        raise HTTPException(status_code=500, detail=f"Error al crear sesión de pago: {str(e)}")
+
+@api_router.get("/checkout/status/{session_id}")
+async def get_checkout_status(session_id: str, http_request: Request):
+    try:
+        # Initialize Stripe checkout
+        host_url = str(http_request.base_url).rstrip('/')
+        webhook_url = f"{host_url}/api/webhook/stripe"
+        stripe_checkout = StripeCheckout(api_key=STRIPE_API_KEY, webhook_url=webhook_url)
+        
+        # Get checkout status
+        status: CheckoutStatusResponse = await stripe_checkout.get_checkout_status(session_id)
+        
+        # Check if already processed to prevent duplicate updates
+        existing_tx = await db.payment_transactions.find_one(
+            {"session_id": session_id},
+            {"_id": 0}
+        )
+        
+        if existing_tx and existing_tx.get('payment_status') == 'paid':
+            return {
+                "status": status.status,
+                "payment_status": "paid",
+                "amount_total": status.amount_total,
+                "currency": status.currency,
+                "already_processed": True
+            }
+        
+        # Update transaction status
+        new_status = "completed" if status.payment_status == "paid" else status.status
+        await db.payment_transactions.update_one(
+            {"session_id": session_id},
+            {"$set": {
+                "status": new_status,
+                "payment_status": status.payment_status,
+                "updated_at": datetime.now(timezone.utc).isoformat()
+            }}
+        )
+        
+        # If payment successful, update user subscription
+        if status.payment_status == "paid" and existing_tx:
+            await db.users.update_one(
+                {"id": existing_tx.get("user_id")},
+                {"$set": {
+                    "plan": existing_tx.get("plan_type"),
+                    "subscription_status": "active",
+                    "subscription_updated_at": datetime.now(timezone.utc).isoformat()
+                }},
+                upsert=True
+            )
+        
+        return {
+            "status": status.status,
+            "payment_status": status.payment_status,
+            "amount_total": status.amount_total,
+            "currency": status.currency,
+            "metadata": status.metadata
+        }
+    
+    except Exception as e:
+        logging.error(f"Checkout status error: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
 @api_router.post("/webhook/stripe")
 async def stripe_webhook(request: Request):
-    payload = await request.body()
-    sig_header = request.headers.get('stripe-signature')
-    
     try:
-        event = stripe.Webhook.construct_event(
-            payload, sig_header, STRIPE_WEBHOOK_SECRET
+        payload = await request.body()
+        
+        # Initialize Stripe checkout
+        host_url = str(request.base_url).rstrip('/')
+        webhook_url = f"{host_url}/api/webhook/stripe"
+        stripe_checkout = StripeCheckout(api_key=STRIPE_API_KEY, webhook_url=webhook_url)
+        
+        # Handle webhook
+        webhook_response = await stripe_checkout.handle_webhook(
+            payload,
+            request.headers.get("Stripe-Signature")
         )
-    except ValueError:
-        raise HTTPException(status_code=400, detail="Invalid payload")
-    except stripe.error.SignatureVerificationError:
-        raise HTTPException(status_code=400, detail="Invalid signature")
+        
+        # Update transaction based on webhook event
+        if webhook_response.session_id:
+            await db.payment_transactions.update_one(
+                {"session_id": webhook_response.session_id},
+                {"$set": {
+                    "status": webhook_response.event_type,
+                    "payment_status": webhook_response.payment_status,
+                    "updated_at": datetime.now(timezone.utc).isoformat()
+                }}
+            )
+            
+            # If payment successful, update user
+            if webhook_response.payment_status == "paid":
+                tx = await db.payment_transactions.find_one(
+                    {"session_id": webhook_response.session_id},
+                    {"_id": 0}
+                )
+                if tx:
+                    await db.users.update_one(
+                        {"id": tx.get("user_id")},
+                        {"$set": {
+                            "plan": tx.get("plan_type"),
+                            "subscription_status": "active"
+                        }},
+                        upsert=True
+                    )
+        
+        return {"status": "success", "event_type": webhook_response.event_type}
     
-    # Handle the event
-    if event['type'] == 'checkout.session.completed':
-        session = event['data']['object']
-        user_id = session['metadata']['user_id']
-        plan_type = session['metadata']['plan_type']
-        
-        # Update user subscription
-        await db.users.update_one(
-            {"id": user_id},
-            {"$set": {
-                "plan": plan_type,
-                "stripe_subscription_id": session.get('subscription'),
-                "subscription_status": "active"
-            }}
-        )
-    
-    elif event['type'] == 'customer.subscription.deleted':
-        subscription = event['data']['object']
-        await db.users.update_one(
-            {"stripe_subscription_id": subscription['id']},
-            {"$set": {
-                "plan": "free",
-                "subscription_status": "canceled"
-            }}
-        )
-    
-    return {"status": "success"}
-
-@api_router.post("/cancel-subscription")
-async def cancel_subscription(user_id: str):
-    try:
-        user = await db.users.find_one({"id": user_id}, {"_id": 0})
-        if not user or not user.get('stripe_subscription_id'):
-            raise HTTPException(status_code=404, detail="No active subscription")
-        
-        stripe.Subscription.delete(user['stripe_subscription_id'])
-        
-        await db.users.update_one(
-            {"id": user_id},
-            {"$set": {
-                "plan": "free",
-                "subscription_status": "canceled",
-                "stripe_subscription_id": None
-            }}
-        )
-        
-        return {"message": "Subscription canceled successfully"}
     except Exception as e:
-        logging.error(f"Cancel subscription error: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        logging.error(f"Stripe webhook error: {e}")
+        raise HTTPException(status_code=400, detail=str(e))
 
 @api_router.get("/download/{doc_type}")
 async def download_document(doc_type: str):
