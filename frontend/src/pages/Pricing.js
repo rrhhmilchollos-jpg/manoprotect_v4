@@ -682,11 +682,16 @@ const Pricing = () => {
                 Protege lo que más importa. Empieza hoy con garantía de satisfacción.
               </p>
               <Button
+                data-testid="subscribe-yearly-final-btn"
                 onClick={() => handleSubscribe('yearly')}
+                disabled={loadingPlan === 'yearly'}
                 className="bg-white text-indigo-600 hover:bg-zinc-50 rounded-lg px-10 h-14 text-lg font-semibold"
               >
-                Comenzar Ahora - Plan Anual
-                <ArrowRight className="ml-2 w-5 h-5" />
+                {loadingPlan === 'yearly' ? (
+                  <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Procesando...</>
+                ) : (
+                  <>Comenzar Ahora - Plan Anual<ArrowRight className="ml-2 w-5 h-5" /></>
+                )}
               </Button>
             </CardContent>
           </Card>
