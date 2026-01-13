@@ -8,6 +8,7 @@ import Contacts from '@/pages/Contacts';
 import Profile from '@/pages/Profile';
 import Knowledge from '@/pages/Knowledge';
 import Community from '@/pages/Community';
+import Pricing from '@/pages/Pricing';
 import '@/App.css';
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/knowledge" element={<Knowledge />} />
           <Route path="/community" element={<Community />} />
+          <Route path="/pricing" element={<Pricing />} />
         </Routes>
       </BrowserRouter>
     </div>
