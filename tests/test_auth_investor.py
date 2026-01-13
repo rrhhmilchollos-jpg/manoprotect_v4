@@ -305,8 +305,10 @@ class TestInvestorRegistration:
     
     def test_register_investor_valid_cif(self):
         """Test registering investor with valid CIF"""
+        # Generate unique CIF for each test run: Letter + 7 digits + digit
+        unique_cif = f"B{uuid.uuid4().hex[:7].upper()}8"
         payload = {
-            "cif": "B12345678",  # Valid CIF format
+            "cif": unique_cif,  # Valid CIF format
             "company_name": "Test Investment Company S.L.",
             "contact_name": "Juan García",
             "contact_email": f"investor_{uuid.uuid4().hex[:6]}@testcompany.com",
