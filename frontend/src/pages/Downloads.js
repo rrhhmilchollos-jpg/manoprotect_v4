@@ -216,21 +216,39 @@ const Downloads = () => {
                     </div>
                   ))}
                 </div>
-                <Button
-                  data-testid={`download-${doc.id}`}
-                  onClick={() => handleDownload(doc.id, doc.filename)}
-                  disabled={downloading === doc.id}
-                  className="w-full bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg h-12 shadow-sm active:scale-95 transition-all"
-                >
-                  {downloading === doc.id ? (
-                    'Descargando...'
-                  ) : (
-                    <>
-                      <Download className="w-5 h-5 mr-2" />
-                      Descargar Documento
-                    </>
-                  )}
-                </Button>
+                <div className="flex gap-3">
+                  <Button
+                    data-testid={`download-${doc.id}-md`}
+                    onClick={() => handleDownload(doc.id, doc.filename, 'md')}
+                    disabled={downloading === `${doc.id}-md`}
+                    variant="outline"
+                    className="flex-1 border-indigo-300 text-indigo-600 hover:bg-indigo-50 rounded-lg h-12"
+                  >
+                    {downloading === `${doc.id}-md` ? (
+                      'Descargando...'
+                    ) : (
+                      <>
+                        <FileType className="w-4 h-4 mr-2" />
+                        Markdown
+                      </>
+                    )}
+                  </Button>
+                  <Button
+                    data-testid={`download-${doc.id}-pdf`}
+                    onClick={() => handleDownload(doc.id, doc.filename, 'pdf')}
+                    disabled={downloading === `${doc.id}-pdf`}
+                    className="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg h-12"
+                  >
+                    {downloading === `${doc.id}-pdf` ? (
+                      'Generando PDF...'
+                    ) : (
+                      <>
+                        <Download className="w-4 h-4 mr-2" />
+                        PDF
+                      </>
+                    )}
+                  </Button>
+                </div>
               </CardContent>
             </Card>
           ))}
