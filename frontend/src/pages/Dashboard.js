@@ -58,29 +58,44 @@ const Dashboard = () => {
 
     setAnalyzing(true);
     try {
-      const response = await axios.post(`${API}/analyze`, {
-        content: content.trim(),
-        content_type: contentType,
-        user_id: 'demo-user'
+      const response = await fetch(`${API}/analyze`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({
+          content: content.trim(),
+          content_type: contentType
+        })
       });
 
-      setLastAnalysis(response.data);
-      
-      if (response.data.is_threat) {
-        toast.error(`⚠️ AMENAZA DETECTADA: ${response.data.risk_level.toUpperCase()}`);
-      } else {
-        toast.success('✓ Contenido seguro');
-      }
+      if (response.ok) {
+        const data = await response.json();
+        setLastAnalysis(data);
+        
+        if (data.is_threat) {
+          toast.error(`⚠️ AMENAZA DETECTADA: ${data.risk_level.toUpperCase()}`);
+        } else {
+          toast.success('✓ Contenido seguro');
+        }
 
-      loadThreats();
-      loadStats();
-      setContent('');
+        loadThreats();
+        loadStats();
+        setContent('');
+      } else {
+        toast.error('Error al analizar el contenido');
+      }
     } catch (error) {
       console.error('Error analyzing:', error);
       toast.error('Error al analizar el contenido');
     } finally {
       setAnalyzing(false);
     }
+  };
+
+  const handleLogout = async () => {
+    await logout();
+    navigate('/');
+    toast.success('Sesión cerrada');
   };
 
   const getRiskColor = (level) => {
