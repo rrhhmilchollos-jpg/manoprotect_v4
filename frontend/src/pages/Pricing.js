@@ -148,7 +148,7 @@ const Pricing = () => {
         'Equivale a €33.33/mes',
         'Ahorra €199.89/año',
         'Protección completa familia',
-        'Garantía satisfacción 60 días'
+        'Garantía satisfacción 15 días'
       ],
       savings: 199.89
     }
