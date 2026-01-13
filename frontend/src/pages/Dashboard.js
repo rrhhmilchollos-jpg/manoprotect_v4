@@ -120,10 +120,17 @@ const Dashboard = () => {
 
   const shareThreat = async (threatId) => {
     try {
-      await axios.post(`${API}/threats/${threatId}/share`);
-      const shareUrl = `${window.location.origin}/dashboard?threat=${threatId}`;
-      await navigator.clipboard.writeText(shareUrl);
-      toast.success('Enlace copiado al portapapeles');
+      const response = await fetch(`${API}/threats/${threatId}/share`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ threat_id: threatId, share_type: 'link' })
+      });
+      if (response.ok) {
+        const data = await response.json();
+        await navigator.clipboard.writeText(data.share_text || 'Alerta de seguridad MANO');
+        toast.success('Contenido copiado al portapapeles');
+      }
     } catch (error) {
       toast.error('Error al compartir amenaza');
     }
@@ -131,9 +138,16 @@ const Dashboard = () => {
 
   const reportFalsePositive = async (threatId) => {
     try {
-      await axios.post(`${API}/threats/${threatId}/report`);
-      toast.success('Falso positivo reportado. Gracias por tu feedback.');
-      loadThreats();
+      const response = await fetch(`${API}/threats/${threatId}/report`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ threat_id: threatId, reason: 'Falso positivo reportado por usuario' })
+      });
+      if (response.ok) {
+        toast.success('Falso positivo reportado. Gracias por tu feedback.');
+        loadThreats();
+      }
     } catch (error) {
       toast.error('Error al reportar');
     }
@@ -141,17 +155,22 @@ const Dashboard = () => {
 
   const exportThreats = async () => {
     try {
-      const response = await axios.get(`${API}/export/threats?user_id=demo-user&format=csv`);
-      const blob = new Blob([response.data.data], { type: 'text/csv' });
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `mano-threats-${new Date().toISOString().split('T')[0]}.csv`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      window.URL.revokeObjectURL(url);
-      toast.success('Historial exportado correctamente');
+      const response = await fetch(`${API}/export/threats?format=csv`, {
+        credentials: 'include'
+      });
+      if (response.ok) {
+        const data = await response.json();
+        const blob = new Blob([data.data], { type: 'text/csv' });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = data.filename || `mano-threats-${new Date().toISOString().split('T')[0]}.csv`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+        toast.success('Historial exportado correctamente');
+      }
     } catch (error) {
       toast.error('Error al exportar historial');
     }
