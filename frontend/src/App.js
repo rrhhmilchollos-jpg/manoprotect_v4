@@ -17,12 +17,15 @@ import Login from '@/pages/Login';
 import Register from '@/pages/Register';
 import AuthCallback from '@/pages/AuthCallback';
 import InvestorRegister from '@/pages/InvestorRegister';
+import AdminPanel from '@/pages/AdminPanel';
+import EnterpriseDashboard from '@/pages/EnterpriseDashboard';
+import FamilyAdmin from '@/pages/FamilyAdmin';
 
 import '@/App.css';
 
 // Protected Route Component
-const ProtectedRoute = ({ children, requireInvestor = false }) => {
-  const { isAuthenticated, isInvestor, loading } = useAuth();
+const ProtectedRoute = ({ children, requireInvestor = false, requireAdmin = false }) => {
+  const { isAuthenticated, isInvestor, isAdmin, loading } = useAuth();
   const location = useLocation();
 
   if (loading) {
@@ -35,6 +38,10 @@ const ProtectedRoute = ({ children, requireInvestor = false }) => {
 
   if (!isAuthenticated) {
     return <Navigate to="/login" state={{ from: location }} replace />;
+  }
+
+  if (requireAdmin && !isAdmin) {
+    return <Navigate to="/dashboard" replace />;
   }
 
   if (requireInvestor && !isInvestor) {
@@ -97,6 +104,14 @@ function AppRouter() {
         } 
       />
       <Route 
+        path="/family-admin" 
+        element={
+          <ProtectedRoute>
+            <FamilyAdmin />
+          </ProtectedRoute>
+        } 
+      />
+      <Route 
         path="/contacts" 
         element={
           <ProtectedRoute>
@@ -109,6 +124,24 @@ function AppRouter() {
         element={
           <ProtectedRoute>
             <Profile />
+          </ProtectedRoute>
+        } 
+      />
+      <Route 
+        path="/enterprise" 
+        element={
+          <ProtectedRoute>
+            <EnterpriseDashboard />
+          </ProtectedRoute>
+        } 
+      />
+      
+      {/* Admin Routes */}
+      <Route 
+        path="/admin" 
+        element={
+          <ProtectedRoute requireAdmin={true}>
+            <AdminPanel />
           </ProtectedRoute>
         } 
       />
