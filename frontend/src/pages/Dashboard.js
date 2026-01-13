@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { Shield, Search, AlertTriangle, CheckCircle, Clock, Phone, MessageSquare, Mail, Link as LinkIcon, ArrowLeft, TrendingUp, Users, User, Book, Download, Share2, Flag } from 'lucide-react';
+import { useAuth } from '@/context/AuthContext';
+import { Shield, Search, AlertTriangle, CheckCircle, Clock, Phone, MessageSquare, Mail, Link as LinkIcon, ArrowLeft, TrendingUp, Users, User, Book, Download, Share2, Flag, Building2, Heart, Settings, Bell, LogOut } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -13,6 +13,7 @@ const API = `${BACKEND_URL}/api`;
 
 const Dashboard = () => {
   const navigate = useNavigate();
+  const { user, isAdmin, logout } = useAuth();
   const [analyzing, setAnalyzing] = useState(false);
   const [content, setContent] = useState('');
   const [contentType, setContentType] = useState('phone');
@@ -27,8 +28,11 @@ const Dashboard = () => {
 
   const loadThreats = async () => {
     try {
-      const response = await axios.get(`${API}/threats?user_id=demo-user`);
-      setThreats(response.data);
+      const response = await fetch(`${API}/threats`, { credentials: 'include' });
+      if (response.ok) {
+        const data = await response.json();
+        setThreats(data);
+      }
     } catch (error) {
       console.error('Error loading threats:', error);
     }
@@ -36,8 +40,11 @@ const Dashboard = () => {
 
   const loadStats = async () => {
     try {
-      const response = await axios.get(`${API}/stats?user_id=demo-user`);
-      setStats(response.data);
+      const response = await fetch(`${API}/stats`, { credentials: 'include' });
+      if (response.ok) {
+        const data = await response.json();
+        setStats(data);
+      }
     } catch (error) {
       console.error('Error loading stats:', error);
     }
