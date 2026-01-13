@@ -180,20 +180,29 @@ const LandingPage = () => {
             </div>
 
             {/* Family */}
-            <div className="bento-medium card-hover p-8 rounded-2xl bg-gradient-to-br from-emerald-50 to-white border border-emerald-200">
-              <Users className="w-10 h-10 text-emerald-600 mb-4" />
-              <h3 className="text-2xl font-bold mb-3">Modo Familiar</h3>
-              <p className="text-zinc-600 mb-4">
-                Protección especial para personas mayores con botón SOS y notificaciones a familiares.
-              </p>
-              <Button
-                data-testid="family-learn-more-btn"
-                onClick={() => navigate('/family-mode')}
-                variant="outline"
-                className="border-emerald-300 hover:bg-emerald-50 rounded-lg active:scale-95 transition-all"
-              >
-                Saber más
-              </Button>
+            <div className="bento-medium card-hover p-0 rounded-2xl bg-white border border-emerald-200 overflow-hidden">
+              <div className="h-48 overflow-hidden">
+                <img
+                  src="https://images.unsplash.com/photo-1758686254056-6cd980b9aaee?crop=entropy&cs=srgb&fm=jpg&q=85"
+                  alt="Personas mayores protegidas"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <div className="p-6">
+                <Users className="w-10 h-10 text-emerald-600 mb-3" />
+                <h3 className="text-2xl font-bold mb-3">Modo Familiar</h3>
+                <p className="text-zinc-600 mb-4">
+                  Protección especial para personas mayores con botón SOS y notificaciones a familiares.
+                </p>
+                <Button
+                  data-testid="family-learn-more-btn"
+                  onClick={() => navigate('/family-mode')}
+                  variant="outline"
+                  className="border-emerald-300 hover:bg-emerald-50 rounded-lg active:scale-95 transition-all"
+                >
+                  Saber más
+                </Button>
+              </div>
             </div>
 
             {/* Business */}
