@@ -17,16 +17,21 @@ const Downloads = () => {
     setDownloading(docType);
     try {
       const response = await fetch(`${API}/download/${docType}`);
+      
+      if (!response.ok) {
+        throw new Error('Error al descargar');
+      }
+      
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = filename;
+      a.download = filename.replace('.pdf', '.md'); // Download as markdown
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
       window.URL.revokeObjectURL(url);
-      toast.success(`${filename} descargado correctamente`);
+      toast.success(`${filename.replace('.pdf', '.md')} descargado correctamente`);
     } catch (error) {
       toast.error('Error al descargar el archivo');
       console.error('Download error:', error);

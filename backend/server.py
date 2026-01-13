@@ -544,7 +544,7 @@ async def cancel_subscription(user_id: str):
 
 @api_router.get("/download/{doc_type}")
 async def download_document(doc_type: str):
-    from fastapi.responses import FileResponse
+    from fastapi.responses import Response
     
     doc_map = {
         "business-plan": "/app/memory/plan-de-negocio-completo.md",
@@ -557,16 +557,20 @@ async def download_document(doc_type: str):
     if not file_path or not Path(file_path).exists():
         raise HTTPException(status_code=404, detail="Document not found")
     
-    # Read markdown and convert to simple text for download
+    # Read markdown content
     with open(file_path, 'r', encoding='utf-8') as f:
         content = f.read()
     
-    # Return as downloadable file
-    filename = f"MANO_{doc_type.replace('-', '_')}_2025.txt"
-    return {
-        "content": content,
-        "filename": filename
-    }
+    # Return as downloadable markdown file
+    filename = f"MANO_{doc_type.replace('-', '_')}_2025.md"
+    
+    return Response(
+        content=content,
+        media_type="text/markdown",
+        headers={
+            "Content-Disposition": f'attachment; filename="{filename}"'
+        }
+    )
 
 app.include_router(api_router)
 
