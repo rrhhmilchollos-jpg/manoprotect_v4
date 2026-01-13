@@ -206,12 +206,21 @@ const LandingPage = () => {
             </div>
 
             {/* Business */}
-            <div className="bento-small card-hover p-8 rounded-2xl bg-gradient-to-br from-indigo-50 to-white border border-indigo-200">
-              <Building2 className="w-10 h-10 text-indigo-600 mb-4" />
-              <h3 className="text-xl font-bold mb-2">Empresas</h3>
-              <p className="text-sm text-zinc-600">
-                Panel empresarial con estadísticas y protección para todos tus empleados.
-              </p>
+            <div className="bento-small card-hover p-0 rounded-2xl bg-white border border-indigo-200 overflow-hidden">
+              <div className="h-32 overflow-hidden">
+                <img
+                  src="https://images.unsplash.com/photo-1709715357520-5e1047a2b691?crop=entropy&cs=srgb&fm=jpg&q=85"
+                  alt="Equipo empresarial protegido"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <div className="p-6">
+                <Building2 className="w-10 h-10 text-indigo-600 mb-3" />
+                <h3 className="text-xl font-bold mb-2">Empresas</h3>
+                <p className="text-sm text-zinc-600">
+                  Panel empresarial con estadísticas y protección para todos tus empleados.
+                </p>
+              </div>
             </div>
 
             <div className="bento-small card-hover p-8 rounded-2xl bg-zinc-900 text-white">
