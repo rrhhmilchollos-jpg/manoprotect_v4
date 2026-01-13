@@ -96,6 +96,45 @@ const Dashboard = () => {
     }
   };
 
+  const shareThreat = async (threatId) => {
+    try {
+      await axios.post(`${API}/threats/${threatId}/share`);
+      const shareUrl = `${window.location.origin}/dashboard?threat=${threatId}`;
+      await navigator.clipboard.writeText(shareUrl);
+      toast.success('Enlace copiado al portapapeles');
+    } catch (error) {
+      toast.error('Error al compartir amenaza');
+    }
+  };
+
+  const reportFalsePositive = async (threatId) => {
+    try {
+      await axios.post(`${API}/threats/${threatId}/report`);
+      toast.success('Falso positivo reportado. Gracias por tu feedback.');
+      loadThreats();
+    } catch (error) {
+      toast.error('Error al reportar');
+    }
+  };
+
+  const exportThreats = async () => {
+    try {
+      const response = await axios.get(`${API}/export/threats?user_id=demo-user&format=csv`);
+      const blob = new Blob([response.data.data], { type: 'text/csv' });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `mano-threats-${new Date().toISOString().split('T')[0]}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
+      toast.success('Historial exportado correctamente');
+    } catch (error) {
+      toast.error('Error al exportar historial');
+    }
+  };
+
   return (
     <div className="min-h-screen bg-zinc-50">
       {/* Header */}
