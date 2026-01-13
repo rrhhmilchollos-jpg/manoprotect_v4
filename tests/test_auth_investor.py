@@ -380,8 +380,10 @@ class TestInvestorStatus:
     
     def test_check_investor_status_existing(self):
         """Test checking status of existing investor request"""
-        # First register an investor
-        unique_cif = f"A{uuid.uuid4().hex[:7].upper()}9"
+        # First register an investor with valid CIF format
+        import random
+        random_digits = ''.join([str(random.randint(0, 9)) for _ in range(7)])
+        unique_cif = f"A{random_digits}9"
         payload = {
             "cif": unique_cif,
             "company_name": "Status Check Company S.L.",
