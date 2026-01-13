@@ -1,9 +1,9 @@
 {
-  "timestamp": "2026-01-13T20:12:03.480771",
+  "timestamp": "2026-01-13T20:43:01.442361",
   "summary": {
-    "tests_run": 7,
-    "tests_passed": 7,
-    "success_rate": 100.0
+    "tests_run": 19,
+    "tests_passed": 17,
+    "success_rate": 89.47368421052632
   },
   "detailed_results": [
     {
@@ -26,13 +26,13 @@
       "actual_status": 200,
       "success": true,
       "response_data": {
-        "total_analyzed": 2,
-        "threats_blocked": 2,
+        "total_analyzed": 8,
+        "threats_blocked": 5,
         "risk_distribution": {
-          "critical": 0,
-          "high": 2,
+          "critical": 1,
+          "high": 4,
           "medium": 0,
-          "low": 0
+          "low": 3
         }
       },
       "error": null
@@ -45,6 +45,104 @@
       "actual_status": 200,
       "success": true,
       "response_data": [
+        {
+          "id": "823e1760-a542-4678-9b38-6ac1aefea454",
+          "user_id": "demo-user",
+          "content": "683137873",
+          "content_type": "phone",
+          "risk_level": "low",
+          "is_threat": false,
+          "threat_types": [],
+          "recommendation": "Con solo el n\u00famero no se puede confirmar una amenaza. Si recibiste una llamada/SMS/WhatsApp desde ese n\u00famero solicitando datos, c\u00f3digos o pagos, no compartas informaci\u00f3n, no devuelvas la llamada a n\u00fameros desconocidos y verifica la identidad por canales oficiales. Puedes buscar el n\u00famero en listas de spam, bloquearlo y reportarlo a tu operador si hay acoso o intento de estafa.",
+          "analysis": "El contenido proporcionado es \u00fanicamente un n\u00famero de tel\u00e9fono (683137873) sin contexto adicional (mensaje, enlace, motivo de contacto, supuesto remitente). Un n\u00famero por s\u00ed solo no constituye evidencia suficiente de phishing/smishing/vishing, suplantaci\u00f3n o estafa. Sin embargo, los n\u00fameros pueden usarse en vishing (llamadas fraudulentas) o smishing (SMS/WhatsApp con enlaces maliciosos) si vienen acompa\u00f1ados de solicitudes urgentes, verificaci\u00f3n de cuentas, premios, deudas, cobros o petici\u00f3n de c\u00f3digos OTP. Para evaluar el riesgo real se necesitar\u00eda el texto del mensaje, el enlace (si lo hay), la hora/pa\u00eds, el nombre o entidad que dice representar y qu\u00e9 te pidi\u00f3 exactamente.",
+          "reported_false_positive": false,
+          "shared_count": 0,
+          "created_at": "2026-01-13T20:30:10.166981Z"
+        },
+        {
+          "id": "45fb409d-bb3f-46e2-8711-095594726b95",
+          "user_id": "demo-user",
+          "content": "http://secure-bank-verify.xyz/login?user=urgent",
+          "content_type": "url",
+          "risk_level": "critical",
+          "is_threat": true,
+          "threat_types": [
+            "phishing",
+            "suplantaci\u00f3n de identidad",
+            "estafa"
+          ],
+          "recommendation": "No abras el enlace ni ingreses credenciales. Verifica tu cuenta \u00fanicamente desde la app oficial o escribiendo manualmente la URL del banco en el navegador. Si ya ingresaste datos, cambia tu contrase\u00f1a de inmediato, activa 2FA, contacta al banco por canales oficiales y monitorea movimientos.",
+          "analysis": "La URL presenta m\u00faltiples indicadores t\u00edpicos de phishing: (1) Dominio sospechoso y no corporativo: \"secure-bank-verify.xyz\" usa un TLD barato/com\u00fan en fraudes (.xyz) y un nombre que intenta aparentar legitimidad con t\u00e9rminos gen\u00e9ricos (secure/bank/verify) sin ser el dominio real del banco. (2) Uso de HTTP en lugar de HTTPS, lo que sugiere ausencia de cifrado y es impropio para un inicio de sesi\u00f3n bancario. (3) Ruta \"/login\" orientada a capturar credenciales. (4) Par\u00e1metro \"user=urgent\" utiliza un gancho de urgencia, t\u00edpico en campa\u00f1as de suplantaci\u00f3n para inducir acciones r\u00e1pidas. Conjunto de se\u00f1ales consistente con suplantaci\u00f3n de un banco para robo de credenciales y/o datos financieros.",
+          "reported_false_positive": false,
+          "shared_count": 0,
+          "created_at": "2026-01-13T20:14:36.786189Z"
+        },
+        {
+          "id": "ee78dd87-e8e0-4fd3-8626-3c23309c1d6d",
+          "user_id": "demo-user",
+          "content": "Hola mam\u00e1, llegu\u00e9 bien al trabajo. Te llamo luego.",
+          "content_type": "sms",
+          "risk_level": "low",
+          "is_threat": false,
+          "threat_types": [],
+          "recommendation": "No parece una amenaza. Si el mensaje es inesperado o el n\u00famero no coincide con el habitual, verifica por otro canal (llamada al n\u00famero guardado, WhatsApp conocido) antes de responder a cualquier petici\u00f3n futura.",
+          "analysis": "El SMS es breve y cotidiano, no incluye enlaces, solicitudes de dinero, c\u00f3digos de verificaci\u00f3n, datos personales ni instrucciones urgentes, que son se\u00f1ales t\u00edpicas de phishing/smishing. Tampoco hay indicios de suplantaci\u00f3n directa (no pide acciones ni informaci\u00f3n). Aun as\u00ed, como los fraudes de suplantaci\u00f3n de familiares existen, si el remitente no es el n\u00famero habitual o el contexto no encaja, conviene confirmar la identidad por un canal conocido.",
+          "reported_false_positive": false,
+          "shared_count": 0,
+          "created_at": "2026-01-13T20:13:10.880469Z"
+        },
+        {
+          "id": "4e25e7cc-2f08-4a34-8bb0-31fc5a65af65",
+          "user_id": "demo-user",
+          "content": "Hola, soy del banco. Necesito que me confirmes tu n\u00famero de tarjeta urgentemente para evitar el bloqueo.",
+          "content_type": "sms",
+          "risk_level": "high",
+          "is_threat": true,
+          "threat_types": [
+            "smishing",
+            "phishing",
+            "suplantaci\u00f3n de identidad",
+            "intento de robo de datos bancarios"
+          ],
+          "recommendation": "No respondas ni compartas datos (n\u00famero de tarjeta, CVV, claves u OTP). Bloquea y reporta el n\u00famero como spam/phishing. Contacta a tu banco por un canal oficial (app, web oficial o tel\u00e9fono del reverso de tu tarjeta) para verificar si existe alg\u00fan bloqueo o alerta. Si ya compartiste informaci\u00f3n, solicita el bloqueo/cambio de tarjeta y monitorea movimientos.",
+          "analysis": "El SMS afirma ser \u201cdel banco\u201d pero no identifica la entidad ni usa un canal oficial verificable. Solicita un dato altamente sensible (n\u00famero de tarjeta) y lo hace con urgencia (\u201curgentement[e] para evitar el bloqueo\u201d), un patr\u00f3n t\u00edpico de ingenier\u00eda social para presionar a la v\u00edctima. Los bancos no suelen pedir por SMS la confirmaci\u00f3n del n\u00famero de tarjeta para evitar bloqueos; normalmente dirigen a la app o a un proceso de verificaci\u00f3n seguro. Todo esto indica un intento de suplantaci\u00f3n para obtener datos bancarios, compatible con smishing/phishing.",
+          "reported_false_positive": false,
+          "shared_count": 0,
+          "created_at": "2026-01-13T20:13:03.476554Z"
+        },
+        {
+          "id": "bb6680e1-4bc1-48e2-944e-761635ba344b",
+          "user_id": "demo-user",
+          "content": "Hola mam\u00e1, llegu\u00e9 bien al trabajo. Te llamo luego.",
+          "content_type": "sms",
+          "risk_level": "low",
+          "is_threat": false,
+          "threat_types": [],
+          "recommendation": "No parece una amenaza. Si aun as\u00ed quieres confirmar, responde o llama al n\u00famero habitual de tu familiar y evita compartir datos personales o c\u00f3digos por SMS.",
+          "analysis": "El mensaje es breve, cotidiano y coherente (avisa que lleg\u00f3 bien y que llamar\u00e1 luego). No incluye enlaces, solicitudes de dinero, urgencia inusual, petici\u00f3n de c\u00f3digos/credenciales ni instrucciones para actuar, que son indicadores t\u00edpicos de smishing o fraude. Tampoco presenta se\u00f1ales claras de suplantaci\u00f3n (p. ej., cambio de n\u00famero con petici\u00f3n de ayuda econ\u00f3mica). El riesgo se considera bajo, aunque siempre es recomendable verificar por un canal conocido si el n\u00famero no es habitual.",
+          "reported_false_positive": false,
+          "shared_count": 0,
+          "created_at": "2026-01-13T20:12:03.369111Z"
+        },
+        {
+          "id": "9a22d459-b82b-491e-aadb-11d3228a1ffb",
+          "user_id": "demo-user",
+          "content": "Hola, soy del banco. Necesito que me confirmes tu n\u00famero de tarjeta urgentemente.",
+          "content_type": "sms",
+          "risk_level": "high",
+          "is_threat": true,
+          "threat_types": [
+            "smishing",
+            "phishing",
+            "suplantaci\u00f3n de identidad",
+            "estafa"
+          ],
+          "recommendation": "No respondas ni compartas datos. Bloquea y reporta el SMS. Contacta a tu banco por los canales oficiales (n\u00famero de tu tarjeta/app/web oficial) para verificar si existe alguna gesti\u00f3n; si ya compartiste informaci\u00f3n, cancela/ bloquea la tarjeta y cambia claves de inmediato.",
+          "analysis": "El mensaje afirma ser \u201cdel banco\u201d sin identificar entidad, usa urgencia (\u201curgentamente\u201d) para presionar y solicita un dato altamente sensible (n\u00famero de tarjeta). Los bancos no piden por SMS que confirmes el n\u00famero completo de tarjeta. Esto encaja con smishing/phishing orientado a robo de datos financieros y suplantaci\u00f3n de identidad. El objetivo probable es obtener datos para fraude con tarjeta o para continuar el enga\u00f1o con m\u00e1s informaci\u00f3n (CVV, PIN, c\u00f3digos SMS).",
+          "reported_false_positive": false,
+          "shared_count": 0,
+          "created_at": "2026-01-13T20:11:57.578568Z"
+        },
         {
           "id": "4be5ca8c-2b7b-47ab-9906-71922366f037",
           "user_id": "demo-user",
@@ -59,6 +157,8 @@
           ],
           "recommendation": "No hagas clic en el enlace ni compartas datos (usuario, contrase\u00f1a, c\u00f3digos SMS/OTP). Bloquea el n\u00famero y contacta a tu banco por canales oficiales (app oficial, web tecleada manualmente o el n\u00famero de tu tarjeta) para verificar. Si ya entraste o entregaste informaci\u00f3n, cambia tus claves, revoca accesos y solicita al banco el bloqueo/monitoreo de tu cuenta.",
           "analysis": "El mensaje afirma ser \u201ctu banco\u201d y pide \u201cconfirmar tu cuenta\u201d mediante un enlace, una t\u00e1ctica t\u00edpica de phishing para robar credenciales o datos personales. El dominio es altamente sospechoso: \u201cbanco-segur0.xyz\u201d usa sustituci\u00f3n de caracteres (0 en lugar de o) y un TLD .xyz com\u00fan en campa\u00f1as fraudulentas; adem\u00e1s no corresponde a un dominio bancario oficial. La solicitud es gen\u00e9rica y crea urgencia (\u201cnecesitamos que confirmes\u201d), buscando que el usuario act\u00fae sin verificar. Por el canal (llamada/tel\u00e9fono) puede ser parte de una campa\u00f1a de suplantaci\u00f3n que deriva al phishing mediante enlace.",
+          "reported_false_positive": false,
+          "shared_count": 0,
           "created_at": "2026-01-13T20:08:48.721045Z"
         },
         {
@@ -77,6 +177,8 @@
           ],
           "recommendation": "No hagas clic en el enlace ni respondas. Elimina el SMS y bloquea/denuncia el n\u00famero. Si ya abriste el enlace, no ingreses datos, cierra la p\u00e1gina y ejecuta un an\u00e1lisis de seguridad en el tel\u00e9fono; cambia contrase\u00f1as si introdujiste credenciales y contacta a tu operador/banco si diste datos personales o financieros.",
           "analysis": "El mensaje presenta se\u00f1ales claras de smishing/phishing: (1) promesa de premio de alto valor (iPhone 15) sin contexto ni participaci\u00f3n previa, t\u00edpico de estafas; (2) lenguaje de urgencia para \u201creclamarlo ahora\u201d, buscando que la v\u00edctima act\u00fae sin pensar; (3) uso de un enlace acortado (bit.ly), t\u00e9cnica com\u00fan para ocultar el destino real y facilitar redirecciones a p\u00e1ginas de captura de datos o descarga de malware; (4) ausencia de informaci\u00f3n verificable del remitente (empresa, bases legales del concurso, t\u00e9rminos). El objetivo probable es robar datos personales/credenciales, inducir pagos \u2018de env\u00edo\u2019/suscripci\u00f3n o instalar software malicioso. Por estas razones se clasifica como amenaza de riesgo alto.",
+          "reported_false_positive": false,
+          "shared_count": 0,
           "created_at": "2026-01-13T20:08:28.360709Z"
         }
       ],
@@ -90,7 +192,7 @@
       "actual_status": 200,
       "success": true,
       "response_data": {
-        "id": "9a22d459-b82b-491e-aadb-11d3228a1ffb",
+        "id": "7ab5c320-6a1e-4d49-b9d9-ad93a0dec092",
         "user_id": "demo-user",
         "content": "Hola, soy del banco. Necesito que me confirmes tu n\u00famero de tarjeta urgentemente.",
         "content_type": "sms",
@@ -102,9 +204,11 @@
           "suplantaci\u00f3n de identidad",
           "estafa"
         ],
-        "recommendation": "No respondas ni compartas datos. Bloquea y reporta el SMS. Contacta a tu banco por los canales oficiales (n\u00famero de tu tarjeta/app/web oficial) para verificar si existe alguna gesti\u00f3n; si ya compartiste informaci\u00f3n, cancela/ bloquea la tarjeta y cambia claves de inmediato.",
-        "analysis": "El mensaje afirma ser \u201cdel banco\u201d sin identificar entidad, usa urgencia (\u201curgentamente\u201d) para presionar y solicita un dato altamente sensible (n\u00famero de tarjeta). Los bancos no piden por SMS que confirmes el n\u00famero completo de tarjeta. Esto encaja con smishing/phishing orientado a robo de datos financieros y suplantaci\u00f3n de identidad. El objetivo probable es obtener datos para fraude con tarjeta o para continuar el enga\u00f1o con m\u00e1s informaci\u00f3n (CVV, PIN, c\u00f3digos SMS).",
-        "created_at": "2026-01-13T20:11:57.578568Z"
+        "recommendation": "No respondas ni compartas datos. Bloquea y reporta el n\u00famero como spam/estafa. Contacta al banco por canales oficiales (tel\u00e9fono de la web/app o al reverso de tu tarjeta) para verificar si existe alguna gesti\u00f3n real. Si ya compartiste informaci\u00f3n, solicita el bloqueo de la tarjeta, cambia claves asociadas y monitorea movimientos.",
+        "analysis": "El mensaje afirma ser \u201cdel banco\u201d sin identificar entidad ni datos verificables, y solicita informaci\u00f3n extremadamente sensible (n\u00famero de tarjeta) por SMS. Los bancos no piden n\u00fameros completos de tarjeta ni credenciales por mensajes de texto. El uso de urgencia (\u201curgentemente\u201d) es una t\u00e1ctica com\u00fan de ingenier\u00eda social para presionar a la v\u00edctima a actuar sin pensar. Por el canal (SMS) y el objetivo (obtener datos financieros), encaja con smishing/phishing y sugiere suplantaci\u00f3n de identidad del banco con intenci\u00f3n de fraude.",
+        "reported_false_positive": false,
+        "shared_count": 0,
+        "created_at": "2026-01-13T20:42:53.836173Z"
       },
       "error": null
     },
@@ -116,16 +220,18 @@
       "actual_status": 200,
       "success": true,
       "response_data": {
-        "id": "bb6680e1-4bc1-48e2-944e-761635ba344b",
+        "id": "d1d8fdb8-3b99-4da1-8c17-7dd6deaebacf",
         "user_id": "demo-user",
         "content": "Hola mam\u00e1, llegu\u00e9 bien al trabajo. Te llamo luego.",
         "content_type": "sms",
         "risk_level": "low",
         "is_threat": false,
         "threat_types": [],
-        "recommendation": "No parece una amenaza. Si aun as\u00ed quieres confirmar, responde o llama al n\u00famero habitual de tu familiar y evita compartir datos personales o c\u00f3digos por SMS.",
-        "analysis": "El mensaje es breve, cotidiano y coherente (avisa que lleg\u00f3 bien y que llamar\u00e1 luego). No incluye enlaces, solicitudes de dinero, urgencia inusual, petici\u00f3n de c\u00f3digos/credenciales ni instrucciones para actuar, que son indicadores t\u00edpicos de smishing o fraude. Tampoco presenta se\u00f1ales claras de suplantaci\u00f3n (p. ej., cambio de n\u00famero con petici\u00f3n de ayuda econ\u00f3mica). El riesgo se considera bajo, aunque siempre es recomendable verificar por un canal conocido si el n\u00famero no es habitual.",
-        "created_at": "2026-01-13T20:12:03.369111Z"
+        "recommendation": "No se observa una amenaza. Si este tipo de mensaje no coincide con el contexto habitual o el n\u00famero remitente es desconocido, confirma por otro canal antes de responder.",
+        "analysis": "El SMS es breve y de tono familiar, sin enlaces, sin solicitudes de dinero o datos personales, sin urgencia inusual ni instrucciones para realizar acciones. No presenta indicadores t\u00edpicos de phishing/smishing (URLs, premios, verificaci\u00f3n de cuenta), vishing (petici\u00f3n de llamada a un n\u00famero espec\u00edfico) ni estafa. Aunque el texto podr\u00eda usarse como parte de una suplantaci\u00f3n si el remitente no es realmente un familiar, por s\u00ed solo no contiene elementos de enga\u00f1o o explotaci\u00f3n; el riesgo es bajo y se limita a la posibilidad de n\u00famero falsificado o contacto equivocado.",
+        "reported_false_positive": false,
+        "shared_count": 0,
+        "created_at": "2026-01-13T20:43:00.897478Z"
       },
       "error": null
     },
@@ -137,12 +243,13 @@
       "actual_status": 200,
       "success": true,
       "response_data": {
-        "id": "e42ef416-8869-4e7f-a57f-c19228c5609e",
+        "id": "0ad03267-68bd-47be-8108-8c18b6a9b3b3",
         "user_id": "demo-user",
         "name": "Test Contact",
         "phone": "+34666123456",
         "relationship": "family",
-        "created_at": "2026-01-13T20:12:03.428696Z"
+        "is_emergency": false,
+        "created_at": "2026-01-13T20:43:00.953500Z"
       },
       "error": null
     },
@@ -160,9 +267,580 @@
           "name": "Test Contact",
           "phone": "+34666123456",
           "relationship": "family",
+          "is_emergency": false,
           "created_at": "2026-01-13T20:12:03.428696Z"
+        },
+        {
+          "id": "0ad03267-68bd-47be-8108-8c18b6a9b3b3",
+          "user_id": "demo-user",
+          "name": "Test Contact",
+          "phone": "+34666123456",
+          "relationship": "family",
+          "is_emergency": false,
+          "created_at": "2026-01-13T20:43:00.953500Z"
         }
       ],
+      "error": null
+    },
+    {
+      "test_name": "SOS Alert",
+      "method": "POST",
+      "endpoint": "sos",
+      "expected_status": 200,
+      "actual_status": 200,
+      "success": true,
+      "response_data": {
+        "id": "cb9eb684-8fe5-4215-ab8d-b910994bc6b2",
+        "user_id": "demo-user",
+        "location": "Test Location",
+        "message": "Test SOS message",
+        "contacts_notified": [],
+        "created_at": "2026-01-13T20:43:01.037042Z"
+      },
+      "error": null
+    },
+    {
+      "test_name": "Community Alerts",
+      "method": "GET",
+      "endpoint": "community-alerts?limit=10",
+      "expected_status": 200,
+      "actual_status": 200,
+      "success": true,
+      "response_data": [
+        {
+          "id": "c14efeee-8d49-4665-ba44-4bd49d1a8b58",
+          "threat_type": "smishing, phishing",
+          "description": "No respondas ni compartas datos. Bloquea y reporta el n\u00famero como spam/estafa. Contacta al banco por",
+          "affected_users": 1,
+          "severity": "high",
+          "created_at": "2026-01-13T20:42:53.838996Z"
+        }
+      ],
+      "error": null
+    },
+    {
+      "test_name": "Export Threats",
+      "method": "GET",
+      "endpoint": "export/threats?user_id=demo-user&format=csv",
+      "expected_status": 200,
+      "actual_status": 520,
+      "success": false,
+      "response_data": null,
+      "error": "Internal Server Error"
+    },
+    {
+      "test_name": "Knowledge Base",
+      "method": "GET",
+      "endpoint": "knowledge-base",
+      "expected_status": 200,
+      "actual_status": 200,
+      "success": true,
+      "response_data": {
+        "threat_types": [
+          {
+            "id": "phishing",
+            "name": "Phishing",
+            "description": "Correos electr\u00f3nicos fraudulentos que intentan robar informaci\u00f3n personal o credenciales.",
+            "indicators": [
+              "Enlaces sospechosos",
+              "Urgencia artificial",
+              "Errores ortogr\u00e1ficos",
+              "Remitente desconocido"
+            ],
+            "prevention": "Verifica siempre el remitente, no hagas clic en enlaces sospechosos, contacta directamente a la empresa."
+          },
+          {
+            "id": "smishing",
+            "name": "Smishing",
+            "description": "Mensajes SMS fraudulentos que buscan enga\u00f1arte para revelar informaci\u00f3n o hacer clic en enlaces maliciosos.",
+            "indicators": [
+              "Premios falsos",
+              "Enlaces acortados",
+              "Solicitudes urgentes",
+              "N\u00fameros desconocidos"
+            ],
+            "prevention": "No respondas a SMS de n\u00fameros desconocidos, no hagas clic en enlaces, verifica con la entidad oficial."
+          },
+          {
+            "id": "vishing",
+            "name": "Vishing",
+            "description": "Llamadas telef\u00f3nicas fraudulentas que se hacen pasar por entidades leg\u00edtimas para obtener informaci\u00f3n.",
+            "indicators": [
+              "Presi\u00f3n para actuar r\u00e1pido",
+              "Solicitud de datos sensibles",
+              "N\u00fameros ocultos",
+              "Amenazas"
+            ],
+            "prevention": "Cuelga y llama t\u00fa al n\u00famero oficial, nunca des informaci\u00f3n por tel\u00e9fono, desconf\u00eda de la urgencia."
+          },
+          {
+            "id": "identity-theft",
+            "name": "Suplantaci\u00f3n de Identidad",
+            "description": "Cuando alguien se hace pasar por una persona u organizaci\u00f3n leg\u00edtima para enga\u00f1arte.",
+            "indicators": [
+              "Perfiles falsos",
+              "Solicitudes inusuales",
+              "Cambios en servicios",
+              "Transacciones no autorizadas"
+            ],
+            "prevention": "Verifica la identidad por canales oficiales, usa autenticaci\u00f3n de dos factores, monitorea tus cuentas."
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "test_name": "Get User",
+      "method": "GET",
+      "endpoint": "users/demo-user",
+      "expected_status": 200,
+      "actual_status": 200,
+      "success": true,
+      "response_data": {
+        "id": "demo-user",
+        "email": "demo@mano.com",
+        "name": "Usuario Demo",
+        "plan": "free",
+        "dark_mode": false,
+        "notifications_enabled": true,
+        "auto_block": false,
+        "created_at": "2026-01-13T20:43:01.203870Z"
+      },
+      "error": null
+    },
+    {
+      "test_name": "Update User Settings",
+      "method": "PATCH",
+      "endpoint": "users/demo-user",
+      "expected_status": 200,
+      "actual_status": 404,
+      "success": false,
+      "response_data": null,
+      "error": "{\"detail\":\"User not found\"}"
+    },
+    {
+      "test_name": "Get Threats",
+      "method": "GET",
+      "endpoint": "threats?user_id=demo-user",
+      "expected_status": 200,
+      "actual_status": 200,
+      "success": true,
+      "response_data": [
+        {
+          "id": "d1d8fdb8-3b99-4da1-8c17-7dd6deaebacf",
+          "user_id": "demo-user",
+          "content": "Hola mam\u00e1, llegu\u00e9 bien al trabajo. Te llamo luego.",
+          "content_type": "sms",
+          "risk_level": "low",
+          "is_threat": false,
+          "threat_types": [],
+          "recommendation": "No se observa una amenaza. Si este tipo de mensaje no coincide con el contexto habitual o el n\u00famero remitente es desconocido, confirma por otro canal antes de responder.",
+          "analysis": "El SMS es breve y de tono familiar, sin enlaces, sin solicitudes de dinero o datos personales, sin urgencia inusual ni instrucciones para realizar acciones. No presenta indicadores t\u00edpicos de phishing/smishing (URLs, premios, verificaci\u00f3n de cuenta), vishing (petici\u00f3n de llamada a un n\u00famero espec\u00edfico) ni estafa. Aunque el texto podr\u00eda usarse como parte de una suplantaci\u00f3n si el remitente no es realmente un familiar, por s\u00ed solo no contiene elementos de enga\u00f1o o explotaci\u00f3n; el riesgo es bajo y se limita a la posibilidad de n\u00famero falsificado o contacto equivocado.",
+          "reported_false_positive": false,
+          "shared_count": 0,
+          "created_at": "2026-01-13T20:43:00.897478Z"
+        },
+        {
+          "id": "7ab5c320-6a1e-4d49-b9d9-ad93a0dec092",
+          "user_id": "demo-user",
+          "content": "Hola, soy del banco. Necesito que me confirmes tu n\u00famero de tarjeta urgentemente.",
+          "content_type": "sms",
+          "risk_level": "high",
+          "is_threat": true,
+          "threat_types": [
+            "smishing",
+            "phishing",
+            "suplantaci\u00f3n de identidad",
+            "estafa"
+          ],
+          "recommendation": "No respondas ni compartas datos. Bloquea y reporta el n\u00famero como spam/estafa. Contacta al banco por canales oficiales (tel\u00e9fono de la web/app o al reverso de tu tarjeta) para verificar si existe alguna gesti\u00f3n real. Si ya compartiste informaci\u00f3n, solicita el bloqueo de la tarjeta, cambia claves asociadas y monitorea movimientos.",
+          "analysis": "El mensaje afirma ser \u201cdel banco\u201d sin identificar entidad ni datos verificables, y solicita informaci\u00f3n extremadamente sensible (n\u00famero de tarjeta) por SMS. Los bancos no piden n\u00fameros completos de tarjeta ni credenciales por mensajes de texto. El uso de urgencia (\u201curgentemente\u201d) es una t\u00e1ctica com\u00fan de ingenier\u00eda social para presionar a la v\u00edctima a actuar sin pensar. Por el canal (SMS) y el objetivo (obtener datos financieros), encaja con smishing/phishing y sugiere suplantaci\u00f3n de identidad del banco con intenci\u00f3n de fraude.",
+          "reported_false_positive": false,
+          "shared_count": 0,
+          "created_at": "2026-01-13T20:42:53.836173Z"
+        },
+        {
+          "id": "823e1760-a542-4678-9b38-6ac1aefea454",
+          "user_id": "demo-user",
+          "content": "683137873",
+          "content_type": "phone",
+          "risk_level": "low",
+          "is_threat": false,
+          "threat_types": [],
+          "recommendation": "Con solo el n\u00famero no se puede confirmar una amenaza. Si recibiste una llamada/SMS/WhatsApp desde ese n\u00famero solicitando datos, c\u00f3digos o pagos, no compartas informaci\u00f3n, no devuelvas la llamada a n\u00fameros desconocidos y verifica la identidad por canales oficiales. Puedes buscar el n\u00famero en listas de spam, bloquearlo y reportarlo a tu operador si hay acoso o intento de estafa.",
+          "analysis": "El contenido proporcionado es \u00fanicamente un n\u00famero de tel\u00e9fono (683137873) sin contexto adicional (mensaje, enlace, motivo de contacto, supuesto remitente). Un n\u00famero por s\u00ed solo no constituye evidencia suficiente de phishing/smishing/vishing, suplantaci\u00f3n o estafa. Sin embargo, los n\u00fameros pueden usarse en vishing (llamadas fraudulentas) o smishing (SMS/WhatsApp con enlaces maliciosos) si vienen acompa\u00f1ados de solicitudes urgentes, verificaci\u00f3n de cuentas, premios, deudas, cobros o petici\u00f3n de c\u00f3digos OTP. Para evaluar el riesgo real se necesitar\u00eda el texto del mensaje, el enlace (si lo hay), la hora/pa\u00eds, el nombre o entidad que dice representar y qu\u00e9 te pidi\u00f3 exactamente.",
+          "reported_false_positive": false,
+          "shared_count": 0,
+          "created_at": "2026-01-13T20:30:10.166981Z"
+        },
+        {
+          "id": "45fb409d-bb3f-46e2-8711-095594726b95",
+          "user_id": "demo-user",
+          "content": "http://secure-bank-verify.xyz/login?user=urgent",
+          "content_type": "url",
+          "risk_level": "critical",
+          "is_threat": true,
+          "threat_types": [
+            "phishing",
+            "suplantaci\u00f3n de identidad",
+            "estafa"
+          ],
+          "recommendation": "No abras el enlace ni ingreses credenciales. Verifica tu cuenta \u00fanicamente desde la app oficial o escribiendo manualmente la URL del banco en el navegador. Si ya ingresaste datos, cambia tu contrase\u00f1a de inmediato, activa 2FA, contacta al banco por canales oficiales y monitorea movimientos.",
+          "analysis": "La URL presenta m\u00faltiples indicadores t\u00edpicos de phishing: (1) Dominio sospechoso y no corporativo: \"secure-bank-verify.xyz\" usa un TLD barato/com\u00fan en fraudes (.xyz) y un nombre que intenta aparentar legitimidad con t\u00e9rminos gen\u00e9ricos (secure/bank/verify) sin ser el dominio real del banco. (2) Uso de HTTP en lugar de HTTPS, lo que sugiere ausencia de cifrado y es impropio para un inicio de sesi\u00f3n bancario. (3) Ruta \"/login\" orientada a capturar credenciales. (4) Par\u00e1metro \"user=urgent\" utiliza un gancho de urgencia, t\u00edpico en campa\u00f1as de suplantaci\u00f3n para inducir acciones r\u00e1pidas. Conjunto de se\u00f1ales consistente con suplantaci\u00f3n de un banco para robo de credenciales y/o datos financieros.",
+          "reported_false_positive": false,
+          "shared_count": 0,
+          "created_at": "2026-01-13T20:14:36.786189Z"
+        },
+        {
+          "id": "ee78dd87-e8e0-4fd3-8626-3c23309c1d6d",
+          "user_id": "demo-user",
+          "content": "Hola mam\u00e1, llegu\u00e9 bien al trabajo. Te llamo luego.",
+          "content_type": "sms",
+          "risk_level": "low",
+          "is_threat": false,
+          "threat_types": [],
+          "recommendation": "No parece una amenaza. Si el mensaje es inesperado o el n\u00famero no coincide con el habitual, verifica por otro canal (llamada al n\u00famero guardado, WhatsApp conocido) antes de responder a cualquier petici\u00f3n futura.",
+          "analysis": "El SMS es breve y cotidiano, no incluye enlaces, solicitudes de dinero, c\u00f3digos de verificaci\u00f3n, datos personales ni instrucciones urgentes, que son se\u00f1ales t\u00edpicas de phishing/smishing. Tampoco hay indicios de suplantaci\u00f3n directa (no pide acciones ni informaci\u00f3n). Aun as\u00ed, como los fraudes de suplantaci\u00f3n de familiares existen, si el remitente no es el n\u00famero habitual o el contexto no encaja, conviene confirmar la identidad por un canal conocido.",
+          "reported_false_positive": false,
+          "shared_count": 0,
+          "created_at": "2026-01-13T20:13:10.880469Z"
+        },
+        {
+          "id": "4e25e7cc-2f08-4a34-8bb0-31fc5a65af65",
+          "user_id": "demo-user",
+          "content": "Hola, soy del banco. Necesito que me confirmes tu n\u00famero de tarjeta urgentemente para evitar el bloqueo.",
+          "content_type": "sms",
+          "risk_level": "high",
+          "is_threat": true,
+          "threat_types": [
+            "smishing",
+            "phishing",
+            "suplantaci\u00f3n de identidad",
+            "intento de robo de datos bancarios"
+          ],
+          "recommendation": "No respondas ni compartas datos (n\u00famero de tarjeta, CVV, claves u OTP). Bloquea y reporta el n\u00famero como spam/phishing. Contacta a tu banco por un canal oficial (app, web oficial o tel\u00e9fono del reverso de tu tarjeta) para verificar si existe alg\u00fan bloqueo o alerta. Si ya compartiste informaci\u00f3n, solicita el bloqueo/cambio de tarjeta y monitorea movimientos.",
+          "analysis": "El SMS afirma ser \u201cdel banco\u201d pero no identifica la entidad ni usa un canal oficial verificable. Solicita un dato altamente sensible (n\u00famero de tarjeta) y lo hace con urgencia (\u201curgentement[e] para evitar el bloqueo\u201d), un patr\u00f3n t\u00edpico de ingenier\u00eda social para presionar a la v\u00edctima. Los bancos no suelen pedir por SMS la confirmaci\u00f3n del n\u00famero de tarjeta para evitar bloqueos; normalmente dirigen a la app o a un proceso de verificaci\u00f3n seguro. Todo esto indica un intento de suplantaci\u00f3n para obtener datos bancarios, compatible con smishing/phishing.",
+          "reported_false_positive": false,
+          "shared_count": 0,
+          "created_at": "2026-01-13T20:13:03.476554Z"
+        },
+        {
+          "id": "bb6680e1-4bc1-48e2-944e-761635ba344b",
+          "user_id": "demo-user",
+          "content": "Hola mam\u00e1, llegu\u00e9 bien al trabajo. Te llamo luego.",
+          "content_type": "sms",
+          "risk_level": "low",
+          "is_threat": false,
+          "threat_types": [],
+          "recommendation": "No parece una amenaza. Si aun as\u00ed quieres confirmar, responde o llama al n\u00famero habitual de tu familiar y evita compartir datos personales o c\u00f3digos por SMS.",
+          "analysis": "El mensaje es breve, cotidiano y coherente (avisa que lleg\u00f3 bien y que llamar\u00e1 luego). No incluye enlaces, solicitudes de dinero, urgencia inusual, petici\u00f3n de c\u00f3digos/credenciales ni instrucciones para actuar, que son indicadores t\u00edpicos de smishing o fraude. Tampoco presenta se\u00f1ales claras de suplantaci\u00f3n (p. ej., cambio de n\u00famero con petici\u00f3n de ayuda econ\u00f3mica). El riesgo se considera bajo, aunque siempre es recomendable verificar por un canal conocido si el n\u00famero no es habitual.",
+          "reported_false_positive": false,
+          "shared_count": 0,
+          "created_at": "2026-01-13T20:12:03.369111Z"
+        },
+        {
+          "id": "9a22d459-b82b-491e-aadb-11d3228a1ffb",
+          "user_id": "demo-user",
+          "content": "Hola, soy del banco. Necesito que me confirmes tu n\u00famero de tarjeta urgentemente.",
+          "content_type": "sms",
+          "risk_level": "high",
+          "is_threat": true,
+          "threat_types": [
+            "smishing",
+            "phishing",
+            "suplantaci\u00f3n de identidad",
+            "estafa"
+          ],
+          "recommendation": "No respondas ni compartas datos. Bloquea y reporta el SMS. Contacta a tu banco por los canales oficiales (n\u00famero de tu tarjeta/app/web oficial) para verificar si existe alguna gesti\u00f3n; si ya compartiste informaci\u00f3n, cancela/ bloquea la tarjeta y cambia claves de inmediato.",
+          "analysis": "El mensaje afirma ser \u201cdel banco\u201d sin identificar entidad, usa urgencia (\u201curgentamente\u201d) para presionar y solicita un dato altamente sensible (n\u00famero de tarjeta). Los bancos no piden por SMS que confirmes el n\u00famero completo de tarjeta. Esto encaja con smishing/phishing orientado a robo de datos financieros y suplantaci\u00f3n de identidad. El objetivo probable es obtener datos para fraude con tarjeta o para continuar el enga\u00f1o con m\u00e1s informaci\u00f3n (CVV, PIN, c\u00f3digos SMS).",
+          "reported_false_positive": false,
+          "shared_count": 0,
+          "created_at": "2026-01-13T20:11:57.578568Z"
+        },
+        {
+          "id": "4be5ca8c-2b7b-47ab-9906-71922366f037",
+          "user_id": "demo-user",
+          "content": "Hola, soy de tu banco. Necesitamos que confirmes tu cuenta. Entra a este link: https://banco-segur0.xyz/confirmar",
+          "content_type": "phone",
+          "risk_level": "high",
+          "is_threat": true,
+          "threat_types": [
+            "phishing",
+            "suplantaci\u00f3n de identidad",
+            "estafa"
+          ],
+          "recommendation": "No hagas clic en el enlace ni compartas datos (usuario, contrase\u00f1a, c\u00f3digos SMS/OTP). Bloquea el n\u00famero y contacta a tu banco por canales oficiales (app oficial, web tecleada manualmente o el n\u00famero de tu tarjeta) para verificar. Si ya entraste o entregaste informaci\u00f3n, cambia tus claves, revoca accesos y solicita al banco el bloqueo/monitoreo de tu cuenta.",
+          "analysis": "El mensaje afirma ser \u201ctu banco\u201d y pide \u201cconfirmar tu cuenta\u201d mediante un enlace, una t\u00e1ctica t\u00edpica de phishing para robar credenciales o datos personales. El dominio es altamente sospechoso: \u201cbanco-segur0.xyz\u201d usa sustituci\u00f3n de caracteres (0 en lugar de o) y un TLD .xyz com\u00fan en campa\u00f1as fraudulentas; adem\u00e1s no corresponde a un dominio bancario oficial. La solicitud es gen\u00e9rica y crea urgencia (\u201cnecesitamos que confirmes\u201d), buscando que el usuario act\u00fae sin verificar. Por el canal (llamada/tel\u00e9fono) puede ser parte de una campa\u00f1a de suplantaci\u00f3n que deriva al phishing mediante enlace.",
+          "reported_false_positive": false,
+          "shared_count": 0,
+          "created_at": "2026-01-13T20:08:48.721045Z"
+        },
+        {
+          "id": "7247517d-bcd2-423f-9c58-24e9e152a2ed",
+          "user_id": "demo-user",
+          "content": "Felicidades! Has ganado un iPhone 15. Haz clic aqui: bit.ly/gana-iphone-ya para reclamarlo ahora",
+          "content_type": "sms",
+          "risk_level": "high",
+          "is_threat": true,
+          "threat_types": [
+            "smishing",
+            "phishing",
+            "estafa",
+            "enlace malicioso/acortado",
+            "ingenier\u00eda social"
+          ],
+          "recommendation": "No hagas clic en el enlace ni respondas. Elimina el SMS y bloquea/denuncia el n\u00famero. Si ya abriste el enlace, no ingreses datos, cierra la p\u00e1gina y ejecuta un an\u00e1lisis de seguridad en el tel\u00e9fono; cambia contrase\u00f1as si introdujiste credenciales y contacta a tu operador/banco si diste datos personales o financieros.",
+          "analysis": "El mensaje presenta se\u00f1ales claras de smishing/phishing: (1) promesa de premio de alto valor (iPhone 15) sin contexto ni participaci\u00f3n previa, t\u00edpico de estafas; (2) lenguaje de urgencia para \u201creclamarlo ahora\u201d, buscando que la v\u00edctima act\u00fae sin pensar; (3) uso de un enlace acortado (bit.ly), t\u00e9cnica com\u00fan para ocultar el destino real y facilitar redirecciones a p\u00e1ginas de captura de datos o descarga de malware; (4) ausencia de informaci\u00f3n verificable del remitente (empresa, bases legales del concurso, t\u00e9rminos). El objetivo probable es robar datos personales/credenciales, inducir pagos \u2018de env\u00edo\u2019/suscripci\u00f3n o instalar software malicioso. Por estas razones se clasifica como amenaza de riesgo alto.",
+          "reported_false_positive": false,
+          "shared_count": 0,
+          "created_at": "2026-01-13T20:08:28.360709Z"
+        }
+      ],
+      "error": null
+    },
+    {
+      "test_name": "Share Threat",
+      "method": "POST",
+      "endpoint": "threats/d1d8fdb8-3b99-4da1-8c17-7dd6deaebacf/share",
+      "expected_status": 200,
+      "actual_status": 200,
+      "success": true,
+      "response_data": {
+        "message": "Threat shared successfully"
+      },
+      "error": null
+    },
+    {
+      "test_name": "Get Threats",
+      "method": "GET",
+      "endpoint": "threats?user_id=demo-user",
+      "expected_status": 200,
+      "actual_status": 200,
+      "success": true,
+      "response_data": [
+        {
+          "id": "d1d8fdb8-3b99-4da1-8c17-7dd6deaebacf",
+          "user_id": "demo-user",
+          "content": "Hola mam\u00e1, llegu\u00e9 bien al trabajo. Te llamo luego.",
+          "content_type": "sms",
+          "risk_level": "low",
+          "is_threat": false,
+          "threat_types": [],
+          "recommendation": "No se observa una amenaza. Si este tipo de mensaje no coincide con el contexto habitual o el n\u00famero remitente es desconocido, confirma por otro canal antes de responder.",
+          "analysis": "El SMS es breve y de tono familiar, sin enlaces, sin solicitudes de dinero o datos personales, sin urgencia inusual ni instrucciones para realizar acciones. No presenta indicadores t\u00edpicos de phishing/smishing (URLs, premios, verificaci\u00f3n de cuenta), vishing (petici\u00f3n de llamada a un n\u00famero espec\u00edfico) ni estafa. Aunque el texto podr\u00eda usarse como parte de una suplantaci\u00f3n si el remitente no es realmente un familiar, por s\u00ed solo no contiene elementos de enga\u00f1o o explotaci\u00f3n; el riesgo es bajo y se limita a la posibilidad de n\u00famero falsificado o contacto equivocado.",
+          "reported_false_positive": false,
+          "shared_count": 1,
+          "created_at": "2026-01-13T20:43:00.897478Z"
+        },
+        {
+          "id": "7ab5c320-6a1e-4d49-b9d9-ad93a0dec092",
+          "user_id": "demo-user",
+          "content": "Hola, soy del banco. Necesito que me confirmes tu n\u00famero de tarjeta urgentemente.",
+          "content_type": "sms",
+          "risk_level": "high",
+          "is_threat": true,
+          "threat_types": [
+            "smishing",
+            "phishing",
+            "suplantaci\u00f3n de identidad",
+            "estafa"
+          ],
+          "recommendation": "No respondas ni compartas datos. Bloquea y reporta el n\u00famero como spam/estafa. Contacta al banco por canales oficiales (tel\u00e9fono de la web/app o al reverso de tu tarjeta) para verificar si existe alguna gesti\u00f3n real. Si ya compartiste informaci\u00f3n, solicita el bloqueo de la tarjeta, cambia claves asociadas y monitorea movimientos.",
+          "analysis": "El mensaje afirma ser \u201cdel banco\u201d sin identificar entidad ni datos verificables, y solicita informaci\u00f3n extremadamente sensible (n\u00famero de tarjeta) por SMS. Los bancos no piden n\u00fameros completos de tarjeta ni credenciales por mensajes de texto. El uso de urgencia (\u201curgentemente\u201d) es una t\u00e1ctica com\u00fan de ingenier\u00eda social para presionar a la v\u00edctima a actuar sin pensar. Por el canal (SMS) y el objetivo (obtener datos financieros), encaja con smishing/phishing y sugiere suplantaci\u00f3n de identidad del banco con intenci\u00f3n de fraude.",
+          "reported_false_positive": false,
+          "shared_count": 0,
+          "created_at": "2026-01-13T20:42:53.836173Z"
+        },
+        {
+          "id": "823e1760-a542-4678-9b38-6ac1aefea454",
+          "user_id": "demo-user",
+          "content": "683137873",
+          "content_type": "phone",
+          "risk_level": "low",
+          "is_threat": false,
+          "threat_types": [],
+          "recommendation": "Con solo el n\u00famero no se puede confirmar una amenaza. Si recibiste una llamada/SMS/WhatsApp desde ese n\u00famero solicitando datos, c\u00f3digos o pagos, no compartas informaci\u00f3n, no devuelvas la llamada a n\u00fameros desconocidos y verifica la identidad por canales oficiales. Puedes buscar el n\u00famero en listas de spam, bloquearlo y reportarlo a tu operador si hay acoso o intento de estafa.",
+          "analysis": "El contenido proporcionado es \u00fanicamente un n\u00famero de tel\u00e9fono (683137873) sin contexto adicional (mensaje, enlace, motivo de contacto, supuesto remitente). Un n\u00famero por s\u00ed solo no constituye evidencia suficiente de phishing/smishing/vishing, suplantaci\u00f3n o estafa. Sin embargo, los n\u00fameros pueden usarse en vishing (llamadas fraudulentas) o smishing (SMS/WhatsApp con enlaces maliciosos) si vienen acompa\u00f1ados de solicitudes urgentes, verificaci\u00f3n de cuentas, premios, deudas, cobros o petici\u00f3n de c\u00f3digos OTP. Para evaluar el riesgo real se necesitar\u00eda el texto del mensaje, el enlace (si lo hay), la hora/pa\u00eds, el nombre o entidad que dice representar y qu\u00e9 te pidi\u00f3 exactamente.",
+          "reported_false_positive": false,
+          "shared_count": 0,
+          "created_at": "2026-01-13T20:30:10.166981Z"
+        },
+        {
+          "id": "45fb409d-bb3f-46e2-8711-095594726b95",
+          "user_id": "demo-user",
+          "content": "http://secure-bank-verify.xyz/login?user=urgent",
+          "content_type": "url",
+          "risk_level": "critical",
+          "is_threat": true,
+          "threat_types": [
+            "phishing",
+            "suplantaci\u00f3n de identidad",
+            "estafa"
+          ],
+          "recommendation": "No abras el enlace ni ingreses credenciales. Verifica tu cuenta \u00fanicamente desde la app oficial o escribiendo manualmente la URL del banco en el navegador. Si ya ingresaste datos, cambia tu contrase\u00f1a de inmediato, activa 2FA, contacta al banco por canales oficiales y monitorea movimientos.",
+          "analysis": "La URL presenta m\u00faltiples indicadores t\u00edpicos de phishing: (1) Dominio sospechoso y no corporativo: \"secure-bank-verify.xyz\" usa un TLD barato/com\u00fan en fraudes (.xyz) y un nombre que intenta aparentar legitimidad con t\u00e9rminos gen\u00e9ricos (secure/bank/verify) sin ser el dominio real del banco. (2) Uso de HTTP en lugar de HTTPS, lo que sugiere ausencia de cifrado y es impropio para un inicio de sesi\u00f3n bancario. (3) Ruta \"/login\" orientada a capturar credenciales. (4) Par\u00e1metro \"user=urgent\" utiliza un gancho de urgencia, t\u00edpico en campa\u00f1as de suplantaci\u00f3n para inducir acciones r\u00e1pidas. Conjunto de se\u00f1ales consistente con suplantaci\u00f3n de un banco para robo de credenciales y/o datos financieros.",
+          "reported_false_positive": false,
+          "shared_count": 0,
+          "created_at": "2026-01-13T20:14:36.786189Z"
+        },
+        {
+          "id": "ee78dd87-e8e0-4fd3-8626-3c23309c1d6d",
+          "user_id": "demo-user",
+          "content": "Hola mam\u00e1, llegu\u00e9 bien al trabajo. Te llamo luego.",
+          "content_type": "sms",
+          "risk_level": "low",
+          "is_threat": false,
+          "threat_types": [],
+          "recommendation": "No parece una amenaza. Si el mensaje es inesperado o el n\u00famero no coincide con el habitual, verifica por otro canal (llamada al n\u00famero guardado, WhatsApp conocido) antes de responder a cualquier petici\u00f3n futura.",
+          "analysis": "El SMS es breve y cotidiano, no incluye enlaces, solicitudes de dinero, c\u00f3digos de verificaci\u00f3n, datos personales ni instrucciones urgentes, que son se\u00f1ales t\u00edpicas de phishing/smishing. Tampoco hay indicios de suplantaci\u00f3n directa (no pide acciones ni informaci\u00f3n). Aun as\u00ed, como los fraudes de suplantaci\u00f3n de familiares existen, si el remitente no es el n\u00famero habitual o el contexto no encaja, conviene confirmar la identidad por un canal conocido.",
+          "reported_false_positive": false,
+          "shared_count": 0,
+          "created_at": "2026-01-13T20:13:10.880469Z"
+        },
+        {
+          "id": "4e25e7cc-2f08-4a34-8bb0-31fc5a65af65",
+          "user_id": "demo-user",
+          "content": "Hola, soy del banco. Necesito que me confirmes tu n\u00famero de tarjeta urgentemente para evitar el bloqueo.",
+          "content_type": "sms",
+          "risk_level": "high",
+          "is_threat": true,
+          "threat_types": [
+            "smishing",
+            "phishing",
+            "suplantaci\u00f3n de identidad",
+            "intento de robo de datos bancarios"
+          ],
+          "recommendation": "No respondas ni compartas datos (n\u00famero de tarjeta, CVV, claves u OTP). Bloquea y reporta el n\u00famero como spam/phishing. Contacta a tu banco por un canal oficial (app, web oficial o tel\u00e9fono del reverso de tu tarjeta) para verificar si existe alg\u00fan bloqueo o alerta. Si ya compartiste informaci\u00f3n, solicita el bloqueo/cambio de tarjeta y monitorea movimientos.",
+          "analysis": "El SMS afirma ser \u201cdel banco\u201d pero no identifica la entidad ni usa un canal oficial verificable. Solicita un dato altamente sensible (n\u00famero de tarjeta) y lo hace con urgencia (\u201curgentement[e] para evitar el bloqueo\u201d), un patr\u00f3n t\u00edpico de ingenier\u00eda social para presionar a la v\u00edctima. Los bancos no suelen pedir por SMS la confirmaci\u00f3n del n\u00famero de tarjeta para evitar bloqueos; normalmente dirigen a la app o a un proceso de verificaci\u00f3n seguro. Todo esto indica un intento de suplantaci\u00f3n para obtener datos bancarios, compatible con smishing/phishing.",
+          "reported_false_positive": false,
+          "shared_count": 0,
+          "created_at": "2026-01-13T20:13:03.476554Z"
+        },
+        {
+          "id": "bb6680e1-4bc1-48e2-944e-761635ba344b",
+          "user_id": "demo-user",
+          "content": "Hola mam\u00e1, llegu\u00e9 bien al trabajo. Te llamo luego.",
+          "content_type": "sms",
+          "risk_level": "low",
+          "is_threat": false,
+          "threat_types": [],
+          "recommendation": "No parece una amenaza. Si aun as\u00ed quieres confirmar, responde o llama al n\u00famero habitual de tu familiar y evita compartir datos personales o c\u00f3digos por SMS.",
+          "analysis": "El mensaje es breve, cotidiano y coherente (avisa que lleg\u00f3 bien y que llamar\u00e1 luego). No incluye enlaces, solicitudes de dinero, urgencia inusual, petici\u00f3n de c\u00f3digos/credenciales ni instrucciones para actuar, que son indicadores t\u00edpicos de smishing o fraude. Tampoco presenta se\u00f1ales claras de suplantaci\u00f3n (p. ej., cambio de n\u00famero con petici\u00f3n de ayuda econ\u00f3mica). El riesgo se considera bajo, aunque siempre es recomendable verificar por un canal conocido si el n\u00famero no es habitual.",
+          "reported_false_positive": false,
+          "shared_count": 0,
+          "created_at": "2026-01-13T20:12:03.369111Z"
+        },
+        {
+          "id": "9a22d459-b82b-491e-aadb-11d3228a1ffb",
+          "user_id": "demo-user",
+          "content": "Hola, soy del banco. Necesito que me confirmes tu n\u00famero de tarjeta urgentemente.",
+          "content_type": "sms",
+          "risk_level": "high",
+          "is_threat": true,
+          "threat_types": [
+            "smishing",
+            "phishing",
+            "suplantaci\u00f3n de identidad",
+            "estafa"
+          ],
+          "recommendation": "No respondas ni compartas datos. Bloquea y reporta el SMS. Contacta a tu banco por los canales oficiales (n\u00famero de tu tarjeta/app/web oficial) para verificar si existe alguna gesti\u00f3n; si ya compartiste informaci\u00f3n, cancela/ bloquea la tarjeta y cambia claves de inmediato.",
+          "analysis": "El mensaje afirma ser \u201cdel banco\u201d sin identificar entidad, usa urgencia (\u201curgentamente\u201d) para presionar y solicita un dato altamente sensible (n\u00famero de tarjeta). Los bancos no piden por SMS que confirmes el n\u00famero completo de tarjeta. Esto encaja con smishing/phishing orientado a robo de datos financieros y suplantaci\u00f3n de identidad. El objetivo probable es obtener datos para fraude con tarjeta o para continuar el enga\u00f1o con m\u00e1s informaci\u00f3n (CVV, PIN, c\u00f3digos SMS).",
+          "reported_false_positive": false,
+          "shared_count": 0,
+          "created_at": "2026-01-13T20:11:57.578568Z"
+        },
+        {
+          "id": "4be5ca8c-2b7b-47ab-9906-71922366f037",
+          "user_id": "demo-user",
+          "content": "Hola, soy de tu banco. Necesitamos que confirmes tu cuenta. Entra a este link: https://banco-segur0.xyz/confirmar",
+          "content_type": "phone",
+          "risk_level": "high",
+          "is_threat": true,
+          "threat_types": [
+            "phishing",
+            "suplantaci\u00f3n de identidad",
+            "estafa"
+          ],
+          "recommendation": "No hagas clic en el enlace ni compartas datos (usuario, contrase\u00f1a, c\u00f3digos SMS/OTP). Bloquea el n\u00famero y contacta a tu banco por canales oficiales (app oficial, web tecleada manualmente o el n\u00famero de tu tarjeta) para verificar. Si ya entraste o entregaste informaci\u00f3n, cambia tus claves, revoca accesos y solicita al banco el bloqueo/monitoreo de tu cuenta.",
+          "analysis": "El mensaje afirma ser \u201ctu banco\u201d y pide \u201cconfirmar tu cuenta\u201d mediante un enlace, una t\u00e1ctica t\u00edpica de phishing para robar credenciales o datos personales. El dominio es altamente sospechoso: \u201cbanco-segur0.xyz\u201d usa sustituci\u00f3n de caracteres (0 en lugar de o) y un TLD .xyz com\u00fan en campa\u00f1as fraudulentas; adem\u00e1s no corresponde a un dominio bancario oficial. La solicitud es gen\u00e9rica y crea urgencia (\u201cnecesitamos que confirmes\u201d), buscando que el usuario act\u00fae sin verificar. Por el canal (llamada/tel\u00e9fono) puede ser parte de una campa\u00f1a de suplantaci\u00f3n que deriva al phishing mediante enlace.",
+          "reported_false_positive": false,
+          "shared_count": 0,
+          "created_at": "2026-01-13T20:08:48.721045Z"
+        },
+        {
+          "id": "7247517d-bcd2-423f-9c58-24e9e152a2ed",
+          "user_id": "demo-user",
+          "content": "Felicidades! Has ganado un iPhone 15. Haz clic aqui: bit.ly/gana-iphone-ya para reclamarlo ahora",
+          "content_type": "sms",
+          "risk_level": "high",
+          "is_threat": true,
+          "threat_types": [
+            "smishing",
+            "phishing",
+            "estafa",
+            "enlace malicioso/acortado",
+            "ingenier\u00eda social"
+          ],
+          "recommendation": "No hagas clic en el enlace ni respondas. Elimina el SMS y bloquea/denuncia el n\u00famero. Si ya abriste el enlace, no ingreses datos, cierra la p\u00e1gina y ejecuta un an\u00e1lisis de seguridad en el tel\u00e9fono; cambia contrase\u00f1as si introdujiste credenciales y contacta a tu operador/banco si diste datos personales o financieros.",
+          "analysis": "El mensaje presenta se\u00f1ales claras de smishing/phishing: (1) promesa de premio de alto valor (iPhone 15) sin contexto ni participaci\u00f3n previa, t\u00edpico de estafas; (2) lenguaje de urgencia para \u201creclamarlo ahora\u201d, buscando que la v\u00edctima act\u00fae sin pensar; (3) uso de un enlace acortado (bit.ly), t\u00e9cnica com\u00fan para ocultar el destino real y facilitar redirecciones a p\u00e1ginas de captura de datos o descarga de malware; (4) ausencia de informaci\u00f3n verificable del remitente (empresa, bases legales del concurso, t\u00e9rminos). El objetivo probable es robar datos personales/credenciales, inducir pagos \u2018de env\u00edo\u2019/suscripci\u00f3n o instalar software malicioso. Por estas razones se clasifica como amenaza de riesgo alto.",
+          "reported_false_positive": false,
+          "shared_count": 0,
+          "created_at": "2026-01-13T20:08:28.360709Z"
+        }
+      ],
+      "error": null
+    },
+    {
+      "test_name": "Report False Positive",
+      "method": "POST",
+      "endpoint": "threats/d1d8fdb8-3b99-4da1-8c17-7dd6deaebacf/report",
+      "expected_status": 200,
+      "actual_status": 200,
+      "success": true,
+      "response_data": {
+        "message": "False positive reported"
+      },
+      "error": null
+    },
+    {
+      "test_name": "Get Contacts",
+      "method": "GET",
+      "endpoint": "contacts?user_id=demo-user",
+      "expected_status": 200,
+      "actual_status": 200,
+      "success": true,
+      "response_data": [
+        {
+          "id": "e42ef416-8869-4e7f-a57f-c19228c5609e",
+          "user_id": "demo-user",
+          "name": "Test Contact",
+          "phone": "+34666123456",
+          "relationship": "family",
+          "is_emergency": false,
+          "created_at": "2026-01-13T20:12:03.428696Z"
+        },
+        {
+          "id": "0ad03267-68bd-47be-8108-8c18b6a9b3b3",
+          "user_id": "demo-user",
+          "name": "Test Contact",
+          "phone": "+34666123456",
+          "relationship": "family",
+          "is_emergency": false,
+          "created_at": "2026-01-13T20:43:00.953500Z"
+        }
+      ],
+      "error": null
+    },
+    {
+      "test_name": "Delete Contact",
+      "method": "DELETE",
+      "endpoint": "contacts/e42ef416-8869-4e7f-a57f-c19228c5609e",
+      "expected_status": 200,
+      "actual_status": 200,
+      "success": true,
+      "response_data": {
+        "message": "Contact deleted"
+      },
       "error": null
     }
   ]
