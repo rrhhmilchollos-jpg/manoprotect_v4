@@ -24,6 +24,14 @@ const LandingPage = () => {
           >
             Acceder al Dashboard
           </Button>
+          <Button
+            data-testid="header-pricing-btn"
+            onClick={() => navigate('/pricing')}
+            variant="outline"
+            className="border-2 border-indigo-600 text-indigo-600 hover:bg-indigo-50 rounded-lg px-6 h-12"
+          >
+            Ver Precios
+          </Button>
         </div>
       </header>
 
