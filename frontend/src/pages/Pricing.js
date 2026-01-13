@@ -1,14 +1,30 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Shield, Check, Zap, Users, Crown, ArrowRight } from 'lucide-react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { Shield, Check, Zap, Users, Crown, ArrowRight, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
+import { useEffect } from 'react';
+
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+const API = `${BACKEND_URL}/api`;
 
 const Pricing = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [billingCycle, setBillingCycle] = useState('monthly');
+  const [loadingPlan, setLoadingPlan] = useState(null);
+
+  // Check for success/cancel from Stripe redirect
+  useEffect(() => {
+    if (searchParams.get('success') === 'true') {
+      toast.success('¡Pago completado! Tu suscripción está activa.');
+    }
+    if (searchParams.get('canceled') === 'true') {
+      toast.info('Pago cancelado. Puedes intentarlo de nuevo cuando quieras.');
+    }
+  }, [searchParams]);
 
   const plans = {
     free: {
@@ -154,12 +170,47 @@ const Pricing = () => {
     }
   };
 
-  const handleSubscribe = (planType) => {
-    toast.success('Redirigiendo al pago seguro con Stripe...');
-    // Aquí iría la integración con Stripe
-    setTimeout(() => {
-      toast.info('Funcionalidad de pago próximamente');
-    }, 1500);
+  const handleSubscribe = async (planType) => {
+    if (planType === 'free') {
+      navigate('/dashboard');
+      return;
+    }
+
+    setLoadingPlan(planType);
+    toast.info('Conectando con Stripe...');
+
+    try {
+      const response = await fetch(`${API}/create-checkout-session`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          plan_type: planType,
+          user_id: 'demo-user', // En producción, usar ID real del usuario autenticado
+          email: 'usuario@demo.com' // En producción, usar email real
+        }),
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.detail || 'Error al crear sesión de pago');
+      }
+
+      const data = await response.json();
+      
+      if (data.checkout_url) {
+        toast.success('Redirigiendo a Stripe...');
+        window.location.href = data.checkout_url;
+      } else {
+        throw new Error('No se recibió URL de checkout');
+      }
+    } catch (error) {
+      console.error('Stripe checkout error:', error);
+      toast.error(`Error: ${error.message}`);
+    } finally {
+      setLoadingPlan(null);
+    }
   };
 
   return (
@@ -262,10 +313,16 @@ const Pricing = () => {
                   ))}
                 </ul>
                 <Button
+                  data-testid="subscribe-weekly-btn"
                   onClick={() => handleSubscribe('weekly')}
+                  disabled={loadingPlan === 'weekly'}
                   className="w-full bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg h-12"
                 >
-                  Probar 1 Semana
+                  {loadingPlan === 'weekly' ? (
+                    <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Procesando...</>
+                  ) : (
+                    'Probar 1 Semana'
+                  )}
                 </Button>
               </CardContent>
             </Card>
@@ -293,10 +350,16 @@ const Pricing = () => {
                   ))}
                 </ul>
                 <Button
+                  data-testid="subscribe-monthly-btn"
                   onClick={() => handleSubscribe('monthly')}
+                  disabled={loadingPlan === 'monthly'}
                   className="w-full bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg h-12"
                 >
-                  Suscribirse
+                  {loadingPlan === 'monthly' ? (
+                    <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Procesando...</>
+                  ) : (
+                    'Suscribirse'
+                  )}
                 </Button>
               </CardContent>
             </Card>
@@ -325,10 +388,16 @@ const Pricing = () => {
                   ))}
                 </ul>
                 <Button
+                  data-testid="subscribe-quarterly-btn"
                   onClick={() => handleSubscribe('quarterly')}
+                  disabled={loadingPlan === 'quarterly'}
                   className="w-full bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg h-12"
                 >
-                  Ahorrar €{plans.quarterly.savings}
+                  {loadingPlan === 'quarterly' ? (
+                    <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Procesando...</>
+                  ) : (
+                    `Ahorrar €${plans.quarterly.savings}`
+                  )}
                 </Button>
               </CardContent>
             </Card>
@@ -360,11 +429,16 @@ const Pricing = () => {
                   ))}
                 </ul>
                 <Button
+                  data-testid="subscribe-yearly-btn"
                   onClick={() => handleSubscribe('yearly')}
+                  disabled={loadingPlan === 'yearly'}
                   className="w-full bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg h-12 shadow-lg"
                 >
-                  Ahorrar €{plans.yearly.savings}
-                  <ArrowRight className="ml-2 w-5 h-5" />
+                  {loadingPlan === 'yearly' ? (
+                    <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Procesando...</>
+                  ) : (
+                    <>Ahorrar €{plans.yearly.savings}<ArrowRight className="ml-2 w-5 h-5" /></>
+                  )}
                 </Button>
               </CardContent>
             </Card>
@@ -412,10 +486,16 @@ const Pricing = () => {
                     ))}
                   </ul>
                   <Button
+                    data-testid={`subscribe-family-${key}-btn`}
                     onClick={() => handleSubscribe(`family-${key}`)}
+                    disabled={loadingPlan === `family-${key}`}
                     className="w-full bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg h-12"
                   >
-                    {plan.savings ? `Ahorrar €${plan.savings}` : 'Proteger Familia'}
+                    {loadingPlan === `family-${key}` ? (
+                      <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Procesando...</>
+                    ) : (
+                      plan.savings ? `Ahorrar €${plan.savings}` : 'Proteger Familia'
+                    )}
                   </Button>
                 </CardContent>
               </Card>
@@ -572,7 +652,7 @@ const Pricing = () => {
               },
               {
                 q: '¿Qué incluye la garantía de satisfacción?',
-                a: 'Si no estás satisfecho en los primeros 30 días (60 para plan anual familiar), te devolvemos el 100% sin preguntas.'
+                a: 'Si no estás satisfecho en los primeros 15 días, te devolvemos el 100% sin preguntas. Sin letra pequeña.'
               },
               {
                 q: '¿El plan familiar incluye modo senior?',
