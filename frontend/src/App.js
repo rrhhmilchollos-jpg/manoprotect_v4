@@ -1,6 +1,10 @@
 import { BrowserRouter, Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import { Toaster } from 'sonner';
 import { AuthProvider, useAuth } from '@/context/AuthContext';
+import { useEffect } from 'react';
+
+// Firebase Analytics
+import { logAnalyticsEvent, AnalyticsEvents } from '@/services/firebase';
 
 // Pages
 import LandingPage from '@/pages/LandingPage';
@@ -23,6 +27,20 @@ import FamilyAdmin from '@/pages/FamilyAdmin';
 import Rewards from '@/pages/Rewards';
 
 import '@/App.css';
+
+// Analytics Page Tracker
+const AnalyticsTracker = () => {
+  const location = useLocation();
+  
+  useEffect(() => {
+    logAnalyticsEvent(AnalyticsEvents.PAGE_VIEW, {
+      page_path: location.pathname,
+      page_title: document.title
+    });
+  }, [location]);
+  
+  return null;
+};
 
 // Protected Route Component
 const ProtectedRoute = ({ children, requireInvestor = false, requireAdmin = false }) => {
