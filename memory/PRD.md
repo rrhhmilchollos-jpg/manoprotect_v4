@@ -286,6 +286,45 @@ MANO es una aplicación y sistema profesional en tiempo real que protege a perso
 - [x] PWA completa con offline support e instalable en móviles
 - [x] Backend modularizado con servicios separados
 - [x] Dashboard con pestañas: Analizador IA, Banca Segura, Historial
+- [x] **APP MÓVIL REACT NATIVE COMPLETA** - Diciembre 2025
+
+### 📱 App Móvil React Native (NUEVO - Diciembre 2025)
+
+Ubicación: `/app/mobile-app/`
+
+#### Pantallas Implementadas:
+- [x] **Auth:** Login, Register, ForgotPassword
+- [x] **Home:** Dashboard principal con protección activa
+- [x] **Threats:** Lista de amenazas con filtros y búsqueda
+- [x] **ThreatDetail:** Detalle de amenaza con compartir y reportar
+- [x] **Family:** Panel familiar con CRUD de miembros
+- [x] **FamilyMember:** Detalle de miembro con estadísticas
+- [x] **AddFamilyMember:** Formulario para añadir miembros
+- [x] **Banking:** Cuentas bancarias y transacciones
+- [x] **Profile:** Perfil con plan y configuración
+- [x] **Settings:** Ajustes de la app
+- [x] **QRScanner:** Escáner de QR con análisis de amenazas
+- [x] **Notifications:** Centro de notificaciones
+- [x] **ContactsPicker:** Selector de contactos del dispositivo
+
+#### Servicios:
+- [x] **api.ts:** Cliente HTTP con interceptores para auth
+- [x] **biometrics.ts:** Face ID / Touch ID / Huella
+- [x] **notifications.ts:** Firebase Cloud Messaging
+- [x] **contacts.ts:** Acceso a contactos del dispositivo
+- [x] **qrScanner.ts:** Análisis de QR con detección de phishing
+
+#### Componentes Reutilizables:
+- [x] Button, Card, LoadingScreen, NetworkAlert, ProtectionBadge
+
+#### Hooks Personalizados:
+- [x] useDebounce, useNetworkStatus, useAppState
+
+#### Configuración para Producción:
+- [x] Config de Firebase para push notifications
+- [x] Templates de Info.plist (iOS) y build.gradle (Android)
+- [x] Proguard rules para release Android
+- [x] Guía de publicación completa (PUBLISHING_GUIDE.md)
 
 ### 🟡 SIMULADO/MOCK
 - WhatsApp Business API - Mensajes se encolan pero no se envían
