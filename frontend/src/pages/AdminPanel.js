@@ -374,7 +374,13 @@ const AdminPanel = () => {
                             </Badge>
                           </td>
                           <td className="p-3">
-                            <Badge variant="outline">{u.plan || 'free'}</Badge>
+                            <Badge variant="outline" className={
+                              u.plan === 'enterprise' ? 'border-purple-500 text-purple-600' :
+                              u.plan === 'business' ? 'border-amber-500 text-amber-600' :
+                              u.plan === 'family' ? 'border-blue-500 text-blue-600' :
+                              u.plan === 'personal' ? 'border-emerald-500 text-emerald-600' :
+                              ''
+                            }>{u.plan || 'free'}</Badge>
                           </td>
                           <td className="p-3 text-zinc-500">
                             {u.created_at ? new Date(u.created_at).toLocaleDateString('es-ES') : '-'}
@@ -397,6 +403,130 @@ const AdminPanel = () => {
                 </div>
               </CardContent>
             </Card>
+          </TabsContent>
+
+          {/* Subscriptions Tab - Manual Premium Management */}
+          <TabsContent value="subscriptions">
+            <div className="space-y-6">
+              {/* Subscription Stats */}
+              <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+                <Card className="bg-gradient-to-br from-amber-50 to-amber-100 border-amber-200">
+                  <CardContent className="pt-6">
+                    <Crown className="w-8 h-8 text-amber-600 mb-2" />
+                    <div className="text-3xl font-bold text-amber-700">{subscriptions.stats?.total_premium || 0}</div>
+                    <div className="text-sm text-amber-600">Suscriptores Premium</div>
+                  </CardContent>
+                </Card>
+                {Object.entries(subscriptions.stats?.by_plan || {}).map(([plan, count]) => (
+                  <Card key={plan} className="bg-white">
+                    <CardContent className="pt-6">
+                      <div className="text-2xl font-bold text-indigo-600">{count}</div>
+                      <div className="text-sm text-zinc-600 capitalize">{plan}</div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+
+              {/* Manual Plan Management */}
+              <Card className="bg-white">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Crown className="w-5 h-5 text-amber-500" />
+                    Gestión Manual de Suscripciones
+                  </CardTitle>
+                  <CardDescription>
+                    Activa o desactiva planes Premium para usuarios de forma manual. 
+                    Útil para pruebas, promociones o casos especiales.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-sm">
+                      <thead>
+                        <tr className="border-b bg-zinc-50">
+                          <th className="text-left p-3">Usuario</th>
+                          <th className="text-left p-3">Email</th>
+                          <th className="text-left p-3">Plan Actual</th>
+                          <th className="text-left p-3">Estado</th>
+                          <th className="text-left p-3">Cambiar Plan</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {users.map((u) => (
+                          <tr key={u.user_id} className="border-b hover:bg-zinc-50">
+                            <td className="p-3 font-medium">{u.name}</td>
+                            <td className="p-3 text-zinc-600">{u.email}</td>
+                            <td className="p-3">
+                              <Badge className={
+                                u.plan === 'enterprise' ? 'bg-purple-600' :
+                                u.plan === 'business' ? 'bg-amber-600' :
+                                u.plan === 'family' ? 'bg-blue-600' :
+                                u.plan === 'personal' ? 'bg-emerald-600' :
+                                'bg-zinc-400'
+                              }>
+                                {u.plan || 'free'}
+                              </Badge>
+                            </td>
+                            <td className="p-3">
+                              {u.subscription_status === 'active' ? (
+                                <Badge className="bg-emerald-100 text-emerald-700">Activo</Badge>
+                              ) : (
+                                <Badge variant="outline" className="text-zinc-500">Inactivo</Badge>
+                              )}
+                            </td>
+                            <td className="p-3">
+                              <select
+                                value={u.plan || 'free'}
+                                onChange={(e) => handleUpdatePlan(u.user_id, e.target.value)}
+                                disabled={actionLoading === `plan-${u.user_id}`}
+                                className="border rounded px-3 py-1.5 text-sm bg-white focus:ring-2 focus:ring-indigo-500"
+                              >
+                                <option value="free">🆓 Free</option>
+                                <option value="personal">⭐ Personal (9.99€/mes)</option>
+                                <option value="family">👨‍👩‍👧‍👦 Family (19.99€/mes)</option>
+                                <option value="business">🏢 Business (49.99€/mes)</option>
+                                <option value="enterprise">🚀 Enterprise (199.99€/mes)</option>
+                              </select>
+                              {actionLoading === `plan-${u.user_id}` && (
+                                <Loader2 className="w-4 h-4 animate-spin inline ml-2" />
+                              )}
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Recent Changes Log */}
+              {subscriptions.recent_changes?.length > 0 && (
+                <Card className="bg-white">
+                  <CardHeader>
+                    <CardTitle>Historial de Cambios de Plan</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-2">
+                      {subscriptions.recent_changes.map((log, idx) => (
+                        <div key={idx} className="flex items-center justify-between p-3 bg-zinc-50 rounded-lg">
+                          <div>
+                            <span className="font-mono text-xs text-zinc-500">{log.user_id}</span>
+                            <div className="flex items-center gap-2 mt-1">
+                              <Badge variant="outline">{log.old_plan}</Badge>
+                              <span className="text-zinc-400">→</span>
+                              <Badge className="bg-indigo-600">{log.new_plan}</Badge>
+                            </div>
+                          </div>
+                          <span className="text-xs text-zinc-500">
+                            {log.created_at ? new Date(log.created_at).toLocaleString('es-ES') : '-'}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
+            </div>
           </TabsContent>
 
           {/* Payments Tab */}
