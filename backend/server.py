@@ -2190,8 +2190,8 @@ async def get_admin_users(
         "pages": (total + limit - 1) // limit
     }
 
-# Email del único superadmin permitido
-SUPERADMIN_EMAIL = "rrhh.milchollos@gmail.com"
+# Email del único superadmin permitido (desde variable de entorno)
+SUPERADMIN_EMAIL = os.environ.get("SUPERADMIN_EMAIL", "rrhh.milchollos@gmail.com")
 
 @api_router.patch("/admin/users/{user_id}/role")
 async def update_user_role(
