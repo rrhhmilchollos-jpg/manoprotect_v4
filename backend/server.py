@@ -3125,6 +3125,174 @@ async def get_behavior_profile(
     }
 
 # ============================================
+# REWARDS AND GAMIFICATION ROUTES
+# ============================================
+
+from services.rewards_service import rewards_service
+from services.email_service import email_service
+
+@api_router.get("/rewards")
+async def get_user_rewards(
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Get user's rewards, points, badges, and level"""
+    user = await require_auth(request, session_token)
+    rewards = await rewards_service.get_user_rewards(user.user_id)
+    return rewards
+
+@api_router.post("/rewards/claim-daily")
+async def claim_daily_reward(
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Claim daily login reward and update streak"""
+    user = await require_auth(request, session_token)
+    
+    # Update streak
+    streak_result = await rewards_service.update_streak(user.user_id)
+    
+    # Award daily login points
+    points_result = await rewards_service.award_points(user.user_id, 'daily_login')
+    
+    return {
+        "success": True,
+        "daily_points": points_result.get('points_earned', 0),
+        "streak_days": streak_result.get('streak_days', 1),
+        "streak_bonus": streak_result.get('bonus_points', 0),
+        "total_points": points_result.get('total_points', 0),
+        "level": points_result.get('level', {})
+    }
+
+@api_router.get("/rewards/leaderboard")
+async def get_leaderboard(
+    period: str = "weekly",
+    limit: int = 10
+):
+    """Get leaderboard for specified period"""
+    if period not in ['weekly', 'monthly', 'all_time']:
+        period = 'weekly'
+    
+    leaderboard = await rewards_service.get_leaderboard(period, min(limit, 50))
+    return {"period": period, "leaderboard": leaderboard}
+
+@api_router.get("/rewards/badges")
+async def get_all_badges():
+    """Get all available badges"""
+    return {"badges": list(rewards_service.badges.values())}
+
+@api_router.post("/rewards/action/{action}")
+async def reward_action(
+    action: str,
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Award points for a specific action"""
+    user = await require_auth(request, session_token)
+    
+    if action not in rewards_service.point_actions:
+        raise HTTPException(status_code=400, detail="Acción no válida")
+    
+    result = await rewards_service.award_points(user.user_id, action)
+    return result
+
+# ============================================
+# EMAIL NOTIFICATION ROUTES
+# ============================================
+
+@api_router.get("/email/queue")
+async def get_email_queue(
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Get pending emails (admin only)"""
+    user = await require_auth(request, session_token)
+    if user.role != 'admin':
+        raise HTTPException(status_code=403, detail="Solo administradores")
+    
+    emails = await email_service.get_email_queue()
+    return {"emails": emails, "sendgrid_configured": email_service.is_configured}
+
+@api_router.post("/email/test")
+async def send_test_email(
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Send a test email to the current user"""
+    user = await require_auth(request, session_token)
+    
+    result = await email_service.send_daily_summary(
+        user.user_id,
+        user.email,
+        {
+            "analyzed_today": 5,
+            "threats_blocked": 2,
+            "safe_items": 3,
+            "points_earned": 25,
+            "protection_rate": 98.5
+        }
+    )
+    
+    return result
+
+@api_router.get("/email/preferences")
+async def get_email_preferences(
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Get user's email notification preferences"""
+    user = await require_auth(request, session_token)
+    
+    prefs = await db.email_preferences.find_one(
+        {"user_id": user.user_id},
+        {"_id": 0}
+    )
+    
+    if not prefs:
+        prefs = {
+            "user_id": user.user_id,
+            "threat_alerts": True,
+            "transaction_alerts": True,
+            "daily_summary": True,
+            "weekly_summary": False,
+            "reward_notifications": True,
+            "family_alerts": True,
+            "marketing": False
+        }
+        await db.email_preferences.insert_one(prefs)
+    
+    return prefs
+
+class EmailPreferencesUpdate(BaseModel):
+    threat_alerts: Optional[bool] = None
+    transaction_alerts: Optional[bool] = None
+    daily_summary: Optional[bool] = None
+    weekly_summary: Optional[bool] = None
+    reward_notifications: Optional[bool] = None
+    family_alerts: Optional[bool] = None
+    marketing: Optional[bool] = None
+
+@api_router.patch("/email/preferences")
+async def update_email_preferences(
+    data: EmailPreferencesUpdate,
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Update user's email notification preferences"""
+    user = await require_auth(request, session_token)
+    
+    update_data = {k: v for k, v in data.model_dump().items() if v is not None}
+    
+    if update_data:
+        await db.email_preferences.update_one(
+            {"user_id": user.user_id},
+            {"$set": update_data},
+            upsert=True
+        )
+    
+    return {"success": True, "message": "Preferencias actualizadas"}
+
+# ============================================
 # APP SETUP
 # ============================================
 
