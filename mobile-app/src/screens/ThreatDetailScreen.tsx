@@ -45,8 +45,8 @@ const ThreatDetailScreen: React.FC = () => {
   const handleShare = async () => {
     try {
       await Share.share({
-        message: `⚠️ ALERTA MANO: He detectado una amenaza de tipo ${threat.threat_types?.join(', ')}. Ten cuidado con mensajes similares.`,
-        title: 'Alerta de MANO Protect',
+        message: `⚠️ ALERTA Mano: He detectado una amenaza de tipo ${threat.threat_types?.join(', ')}. Ten cuidado con mensajes similares.`,
+        title: 'Alerta de Mano Protect',
       });
       await api.shareThreat(threatId, 'native');
     } catch (error) {

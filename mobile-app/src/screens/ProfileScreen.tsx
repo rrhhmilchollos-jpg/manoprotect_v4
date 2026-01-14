@@ -234,7 +234,7 @@ const ProfileScreen: React.FC = () => {
         </TouchableOpacity>
 
         {/* App Version */}
-        <Text style={styles.versionText}>MANO v1.0.0</Text>
+        <Text style={styles.versionText}>Mano v1.0.0</Text>
       </ScrollView>
     </SafeAreaView>
   );
