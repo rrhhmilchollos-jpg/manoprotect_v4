@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "97231251022",
+    "project_id": "manoprotect-f889b",
+    "storage_bucket": "manoprotect-f889b.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:97231251022:android:54053179f6dfb05d61451f",
+        "android_client_info": {
+          "package_name": "com.Manoprotect.Mano"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAIVRfzdFdG6jmXtOEsKPru467-LU3VuUM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
