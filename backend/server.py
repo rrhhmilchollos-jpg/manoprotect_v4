@@ -44,10 +44,11 @@ class User(BaseModel):
     picture: Optional[str] = None
     auth_provider: str = "email"  # "email" or "google"
     password_hash: Optional[str] = None
-    plan: str = "free"
-    role: str = "user"  # "user", "admin", "investor"
+    plan: str = "free"  # "free", "personal", "family", "business", "enterprise"
+    role: str = "user"  # "user", "premium", "superadmin"
     stripe_customer_id: Optional[str] = None
     subscription_status: Optional[str] = None
+    is_active: bool = True  # Para dar de baja usuarios
     dark_mode: bool = False
     notifications_enabled: bool = True
     auto_block: bool = False
