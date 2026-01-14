@@ -11,6 +11,14 @@ export const FIREBASE_CONFIG = {
   projectId: 'manoprotect-f889b',
   projectNumber: '97231251022',
   storageBucket: 'manoprotect-f889b.firebasestorage.app',
+  authDomain: 'manoprotect-f889b.firebaseapp.com',
+  
+  // Web app config
+  web: {
+    apiKey: 'AIzaSyAV5UQluzgvXfVlnu6hc-nWMVQecQ7Y6uE',
+    appId: '1:97231251022:web:04e039505ef8a3ed61451f',
+    measurementId: 'G-8KECMQS45X',
+  },
   
   // Android configuration
   android: {
@@ -20,7 +28,7 @@ export const FIREBASE_CONFIG = {
   
   // iOS configuration (add when available)
   ios: {
-    bundleId: 'com.Manoprotect.Mano', // Match Android for consistency
+    bundleId: 'com.Manoprotect.Mano',
     appId: '', // Add iOS app ID from Firebase Console
   },
   
