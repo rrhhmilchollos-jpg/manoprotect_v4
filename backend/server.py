@@ -280,10 +280,10 @@ async def require_auth(request: Request, session_token: Optional[str] = Cookie(N
     return user
 
 async def require_admin(request: Request, session_token: Optional[str] = Cookie(None)) -> User:
-    """Require admin role"""
+    """Require superadmin role"""
     user = await require_auth(request, session_token)
-    if user.role != "admin":
-        raise HTTPException(status_code=403, detail="Acceso denegado - Se requiere rol de administrador")
+    if user.role != "superadmin":
+        raise HTTPException(status_code=403, detail="Acceso denegado - Se requiere rol de superadmin")
     return user
 
 async def require_investor(request: Request, session_token: Optional[str] = Cookie(None)) -> User:
