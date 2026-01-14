@@ -21,9 +21,12 @@ export const APP_CONFIG = {
   VERSION: '1.0.0',
   BUILD_NUMBER: 1,
   
-  // Bundle identifiers
-  IOS_BUNDLE_ID: 'com.manoprotect.app',
-  ANDROID_PACKAGE: 'com.manoprotect.app',
+  // Bundle identifiers (matching Firebase config)
+  IOS_BUNDLE_ID: 'com.Manoprotect.Mano',
+  ANDROID_PACKAGE: 'com.Manoprotect.Mano',
+  
+  // Firebase Project
+  FIREBASE_PROJECT_ID: 'manoprotect-f889b',
   
   // Deep linking scheme
   URL_SCHEME: 'manoprotect',
