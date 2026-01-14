@@ -1,114 +1,165 @@
-# MANO Mobile App
+# 📱 MANO Protect - App Móvil
 
-App móvil nativa para iOS y Android - Plataforma de protección contra fraudes digitales.
+Aplicación móvil nativa para iOS y Android de MANO Protect - Plataforma de protección contra fraudes digitales.
 
 ## 🚀 Características
 
-- ✅ **Autenticación biométrica** (Face ID / Touch ID / Huella)
-- ✅ **Escáner QR** para detectar enlaces maliciosos
-- ✅ **Dashboard de protección** en tiempo real
-- ✅ **Panel familiar** para proteger a mayores
-- ✅ **Integración bancaria** para monitorear transacciones
-- ✅ **Notificaciones push** de alertas
-- ✅ **Acceso a contactos** para emergencias
-- ✅ **Botón SOS** de emergencia
+### Seguridad
+- ✅ Autenticación biométrica (Face ID / Touch ID / Huella)
+- ✅ Almacenamiento seguro de credenciales (Keychain)
+- ✅ Sesiones seguras con JWT
 
-## 📱 Requisitos
+### Protección
+- ✅ Análisis de amenazas en tiempo real
+- ✅ Escáner QR para detectar enlaces maliciosos
+- ✅ Detección de phishing, smishing y vishing
+- ✅ Alertas push instantáneas
 
-### iOS
-- macOS con Xcode 14+
-- CocoaPods
-- Apple Developer Account ($99/año para App Store)
+### Familiar
+- ✅ Protección para hasta 5 miembros
+- ✅ Modo simplificado para mayores
+- ✅ Panel de control familiar
+- ✅ Alertas SOS de emergencia
 
-### Android
-- Android Studio
-- JDK 11+
-- Google Play Developer Account ($25 única vez)
+### Bancario
+- ✅ Monitoreo de transacciones
+- ✅ Detección de fraude bancario
+- ✅ Conexión con principales bancos españoles
 
-## 🛠️ Instalación
+## 📋 Requisitos
+
+### Desarrollo
+- Node.js >= 18
+- Yarn
+- React Native CLI
+- Xcode 14+ (para iOS)
+- Android Studio (para Android)
+
+### Cuentas necesarias
+- Apple Developer Account ($99/año) - para iOS
+- Google Play Developer Account ($25 una vez) - para Android
+- Firebase Project (gratis) - para push notifications
+
+## 🛠 Instalación
 
 ```bash
-# Instalar dependencias
+# Clonar el repositorio
+git clone <repo-url>
 cd mobile-app
-npm install
-# o
+
+# Instalar dependencias
 yarn install
 
-# iOS - Instalar pods
+# iOS
 cd ios && pod install && cd ..
 
-# Ejecutar en iOS
-npx react-native run-ios
-
-# Ejecutar en Android
-npx react-native run-android
+# Ejecutar en desarrollo
+yarn ios    # Para iOS
+yarn android    # Para Android
 ```
 
-## 📦 Estructura del Proyecto
+## 📁 Estructura del Proyecto
 
 ```
 mobile-app/
-├── App.tsx                 # Entry point
 ├── src/
-│   ├── components/         # Componentes reutilizables
-│   ├── context/            # Context providers (Auth, Notifications)
-│   ├── hooks/              # Custom hooks
-│   ├── navigation/         # React Navigation setup
-│   ├── screens/            # Pantallas de la app
-│   │   ├── auth/           # Login, Register, ForgotPassword
-│   │   ├── HomeScreen.tsx
-│   │   ├── ThreatsScreen.tsx
-│   │   ├── FamilyScreen.tsx
-│   │   ├── BankingScreen.tsx
-│   │   ├── ProfileScreen.tsx
-│   │   └── QRScannerScreen.tsx
-│   ├── services/           # API y servicios
-│   │   ├── api.ts          # Cliente API
-│   │   ├── biometrics.ts   # Face ID / Touch ID
-│   │   ├── notifications.ts # Push notifications
-│   │   ├── qrScanner.ts    # Análisis de QR
-│   │   └── contacts.ts     # Acceso a contactos
-│   └── utils/              # Utilidades
-├── ios/                    # Proyecto nativo iOS
-└── android/                # Proyecto nativo Android
+│   ├── components/     # Componentes reutilizables
+│   ├── config/         # Configuración de la app
+│   ├── context/        # Contextos de React (Auth, Notifications)
+│   ├── hooks/          # Hooks personalizados
+│   ├── navigation/     # Navegación (React Navigation)
+│   ├── screens/        # Pantallas de la app
+│   │   ├── auth/       # Pantallas de autenticación
+│   │   └── ...         # Otras pantallas
+│   ├── services/       # Servicios (API, biometría, etc.)
+│   ├── types/          # Definiciones de TypeScript
+│   └── utils/          # Utilidades
+├── ios-config/         # Templates de configuración iOS
+├── android-config/     # Templates de configuración Android
+├── App.tsx             # Punto de entrada
+└── package.json
 ```
 
 ## 🔧 Configuración
 
-### API Backend
-Editar `src/services/api.ts`:
+### 1. API Backend
+
+Actualiza la URL del API en `src/services/api.ts`:
+
 ```typescript
-const API_BASE_URL = 'https://tu-dominio.com/api';
+const API_BASE_URL = __DEV__ 
+  ? 'https://tu-url-desarrollo.com/api'  // Desarrollo
+  : 'https://tu-url-produccion.com/api'; // Producción
 ```
 
-### Firebase (Push Notifications)
-1. Crear proyecto en Firebase Console
-2. Añadir `google-services.json` a `android/app/`
-3. Añadir `GoogleService-Info.plist` a `ios/`
+### 2. Firebase (Push Notifications)
 
-### Biometrics
-Los permisos ya están configurados en los proyectos nativos.
+1. Crea un proyecto en [Firebase Console](https://console.firebase.google.com)
+2. Añade las apps iOS y Android
+3. Descarga los archivos de configuración:
+   - `GoogleService-Info.plist` → `ios/MANOProtect/`
+   - `google-services.json` → `android/app/`
 
-## 📤 Publicación
+### 3. Variables de Entorno
 
-### App Store (iOS)
-1. Configurar certificados en Apple Developer Portal
-2. Crear App ID y Provisioning Profile
-3. Build: `npx react-native run-ios --configuration Release`
-4. Archivar en Xcode y subir a App Store Connect
+Copia `.env.example` a `.env` y configura:
 
-### Google Play (Android)
-1. Generar keystore de firma
-2. Build: `cd android && ./gradlew bundleRelease`
-3. Subir AAB a Google Play Console
+```bash
+API_BASE_URL=https://tu-backend.com/api
+```
 
-## 🔐 Seguridad
+## 📱 Pantallas
 
-- Credenciales almacenadas en Keychain (iOS) / Keystore (Android)
-- Comunicación HTTPS obligatoria
-- Tokens de sesión con expiración
-- Validación de certificados SSL
+| Pantalla | Descripción |
+|----------|-------------|
+| Login | Inicio de sesión con email/contraseña y biometría |
+| Register | Registro de nuevos usuarios |
+| Home | Dashboard principal con estado de protección |
+| Threats | Lista de amenazas detectadas |
+| Family | Gestión de miembros familiares |
+| Banking | Monitoreo de cuentas bancarias |
+| Profile | Perfil y configuración del usuario |
+| QRScanner | Escáner de códigos QR sospechosos |
+| Settings | Ajustes de la aplicación |
+
+## 🚀 Publicación
+
+Consulta [PUBLISHING_GUIDE.md](./PUBLISHING_GUIDE.md) para instrucciones detalladas sobre cómo publicar en App Store y Google Play.
+
+### Comandos de Build
+
+```bash
+# iOS - Build para producción
+cd ios
+xcodebuild -workspace MANOProtect.xcworkspace -scheme MANOProtect archive
+
+# Android - Build para producción
+cd android
+./gradlew bundleRelease
+```
+
+## 🔒 Seguridad
+
+- Las credenciales se almacenan en Keychain (iOS) / Keystore (Android)
+- Las comunicaciones usan HTTPS exclusivamente
+- Los tokens de sesión tienen expiración
+- Biometría requerida para operaciones sensibles
+
+## 🧪 Testing
+
+```bash
+# Ejecutar tests
+yarn test
+
+# Linting
+yarn lint
+```
 
 ## 📞 Soporte
 
-Para soporte técnico, contactar: support@mano-protect.com
+- Email: dev@mano-protect.com
+- Documentación: https://docs.mano-protect.com
+
+## 📄 Licencia
+
+Propietaria - MANO Security © 2024
