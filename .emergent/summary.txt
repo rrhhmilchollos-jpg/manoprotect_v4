@@ -13,21 +13,22 @@ MANO es una app y sistema profesional en tiempo real que protege a personas, fam
 -   **Core System:** A central AI that learns from threats and sends collective alerts.
 -   **Business Model:** A Freemium model with a Premium tier offering advanced features. Specific subscription tiers with premium pricing, an Enterprise plan, and Stripe integration.
 -   **Assets:** Creation of business documents: App Store text, commercial dossier, technical roadmap, investor presentation, financial model, and a full business plan.
--   **Recent Requests:** The user has requested a continuous stream of features including a 15-day money-back guarantee, Stripe integration, a secure investor portal with manual admin approval, an admin dashboard, family/enterprise dashboards, real-time push notifications, WhatsApp integration, a real-time metrics dashboard, a public API, an ML-based threat analyzer, banking integration, a rewards system, and PWA functionality. The user has also asked for guidance on deployment, custom domains, and configuring production keys.
+-   **Recent Requests:** The user has requested a continuous stream of features including a 15-day money-back guarantee, Stripe integration, a secure investor portal with manual admin approval, an admin dashboard, family/enterprise dashboards, real-time push notifications, WhatsApp integration, a real-time metrics dashboard, a public API, an ML-based threat analyzer, banking integration, a rewards system, and PWA functionality. The user has also asked for guidance on deployment, custom domains, and configuring production keys. A native mobile app has now been requested.
 
 **User's preferred language**: Spanish
 
 **what currently exists?**
-A comprehensive full-stack application with a React frontend and a FastAPI backend.
--   **Frontend (React):** Features a landing page, pricing, and full user authentication (JWT & Google OAuth). It includes protected routes for a main user Dashboard with multiple tabs (AI Analyzer, Secure Banking, History), a Downloads page, an Admin Panel with extensive management capabilities (Investors, Users, Payments, Real-Time, WhatsApp, API Keys), and dedicated pages for Rewards, Profile, Enterprise, and Family administration. The application is also configured as a Progressive Web App (PWA).
--   **Backend (FastAPI):** A large, monolithic  file contains most API endpoints. However, some logic has been moved into a new  directory (, , , ). The backend supports user/investor management, Stripe LIVE payments, document downloads, Web Push notifications, real-time metrics via WebSockets, a public partner API, ML-based fraud detection, banking integration, and a rewards system.
--   **Integrations:** Stripe is configured with the user's **LIVE** keys. Placeholders for SendGrid and WhatsApp keys are present. Google OAuth is functional.
+A comprehensive full-stack application with a React frontend, a FastAPI backend, and a new React Native mobile app project.
+-   **Frontend (React):** A PWA featuring a landing page, pricing, and full user authentication (JWT & Google OAuth). It includes protected routes for a main user Dashboard, a Downloads page, an Admin Panel with extensive management capabilities (Investors, Users, Payments, Subscriptions), and dedicated pages for Rewards, Profile, Enterprise, and Family administration.
+-   **Backend (FastAPI):** A large, monolithic  file containing most API endpoints. Some logic has been moved into a  directory. A new  directory with empty placeholder files was created to facilitate future refactoring. The backend supports user/investor management, Stripe LIVE payments, real-time metrics via WebSockets, a public partner API, and ML-based fraud detection.
+-   **Mobile App (React Native):** A new project has been initialized in . The complete file structure for a full-featured native app (screens, navigation, services, context) has been scaffolded, but the logic within the files is not yet implemented.
+-   **Integrations:** Stripe is configured with the user's **LIVE** keys. Google OAuth, Web Push, and Socket.IO are functional. SendGrid and WhatsApp integrations are scaffolded but require API keys.
 
 **Last working item**:
--   **Last item agent was working:** The agent was about to add more banks (N26, imagin, Nickel) to the banking integration service, as per the user's latest request.
--   **Status**: NOT STARTED
+-   **Last item agent was working:** The agent was scaffolding the file structure for a new React Native mobile application in the  directory. This includes creating all necessary files for screens, navigation, services, and context, based on the user's request to build a native app for iOS and Android. The user's last instruction was to continue with the creation.
+-   **Status**: IN PROGRESS
 -   **Agent Testing Done**: N
--   **Which testing method agent to use?**: backend testing agent. The agent should verify the  endpoint returns the newly added banks.
+-   **Which testing method agent to use?**: NA (The agent was only creating files. The next step is to implement the logic within these files. Once a basic screen is functional, the testing agent can be used to test mobile functionality.)
 -   **User Testing Done**: N
 
 **All Pending/In progress Issue list**:
@@ -39,19 +40,19 @@ WeasyPrint could not import some external libraries. Please carefully follow the
 https://doc.courtbouillon.org/weasyprint/stable/first_steps.html#installation
 https://doc.courtbouillon.org/weasyprint/stable/first_steps.html#troubleshooting 
 
------ failed because a required system library is not present in the environment.
-    -   **Attempted fixes:** The agent created a functional workaround by replacing the PDF generation with a feature that downloads the documents as styled HTML files. This was accepted by the user as a temporary measure.
+----- failed because a required system library () is not present in the environment.
+    -   **Attempted fixes:** A functional workaround was created to download documents as styled HTML files, which the user accepted.
     -   **Next debug checklist:** This is a low-priority issue as the workaround is functional. If the user insists on PDF, the next agent should attempt to install the missing system dependency: Get:1 http://deb.debian.org/debian bookworm InRelease [151 kB]
 Get:2 http://deb.debian.org/debian bookworm-updates InRelease [55.4 kB]
-Get:3 http://deb.debian.org/debian-security bookworm-security InRelease [48.0 kB]
-Get:4 https://deb.nodesource.com/node_20.x nodistro InRelease [12.1 kB]
-Get:5 https://repo.mongodb.org/apt/ubuntu jammy/mongodb-org/7.0 InRelease [3005 B]
-Get:6 http://deb.debian.org/debian bookworm/main arm64 Packages [8691 kB]
+Get:3 https://repo.mongodb.org/apt/ubuntu jammy/mongodb-org/7.0 InRelease [3005 B]
+Get:4 http://deb.debian.org/debian-security bookworm-security InRelease [48.0 kB]
+Get:5 http://deb.debian.org/debian bookworm/main arm64 Packages [8691 kB]
+Get:6 https://deb.nodesource.com/node_20.x nodistro InRelease [12.1 kB]
 Get:7 http://deb.debian.org/debian-security bookworm-security/main arm64 Packages [287 kB]
-Get:8 https://deb.nodesource.com/node_20.x nodistro/main arm64 Packages [13.5 kB]
-Get:9 https://repo.mongodb.org/apt/ubuntu jammy/mongodb-org/7.0/multiverse amd64 Packages [99.9 kB]
+Get:8 https://repo.mongodb.org/apt/ubuntu jammy/mongodb-org/7.0/multiverse amd64 Packages [99.9 kB]
+Get:9 https://deb.nodesource.com/node_20.x nodistro/main arm64 Packages [13.5 kB]
 Get:10 https://repo.mongodb.org/apt/ubuntu jammy/mongodb-org/7.0/multiverse arm64 Packages [98.6 kB]
-Fetched 9459 kB in 2s (4124 kB/s)
+Fetched 9459 kB in 3s (3519 kB/s)
 Reading package lists...
 Reading package lists...
 Building dependency tree...
@@ -63,7 +64,7 @@ The following NEW packages will be installed:
 Need to get 44.5 kB of archives.
 After this operation, 178 kB of additional disk space will be used.
 Get:1 http://deb.debian.org/debian bookworm/main arm64 libpangoft2-1.0-0 arm64 1.50.12+ds-1 [44.5 kB]
-Fetched 44.5 kB in 0s (865 kB/s)
+Fetched 44.5 kB in 0s (861 kB/s)
 Selecting previously unselected package libpangoft2-1.0-0:arm64.
 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 38353 files and directories currently installed.)
 Preparing to unpack .../libpangoft2-1.0-0_1.50.12+ds-1_arm64.deb ...
@@ -77,41 +78,43 @@ Processing triggers for libc-bin (2.36-9+deb12u13) ....
     -   **Blocked on other issue:** None
 
 **In progress Task List**:
--   **Task 1: Add More Banks to Banking Service (P0)**
-    -   **Where to resume:** Edit  to add N26, Imagin, and Nickel to the  list.
-    -   **What will be achieved with this?** Fulfills the user's direct request to expand the banking integration feature.
-    -   **Status:** NOT STARTED
-    -   **Should Test frontend/backend/both after fix?** Backend
+-   **Task 1: Complete Native Mobile App Implementation (P0)**
+    -   **Where to resume:** The file structure in  is complete. The next step is to populate the created  and  files with code. Start with , , and the authentication screens (, ) to establish the basic app flow and connect to the existing backend authentication endpoints.
+    -   **What will be achieved with this?** A functional cross-platform native mobile app for iOS and Android that can be published to the App Store and Google Play.
+    -   **Status:** IN PROGRESS
+    -   **Should Test frontend/backend/both after fix?** Both (the mobile app itself and its interaction with the backend API).
     -   **Blocked on something:** None.
 
 **Upcoming and Future Tasks**
 -   **Upcoming Tasks:**
-    -   **(P0) Refactor Backend Codebase:** The  file remains dangerously large. It is **critical** to propose and execute a full refactor, moving all endpoint logic from  into separate files under a  directory using FastAPI's . This technical debt is the biggest risk to the project's scalability.
-    -   **(P1) Implement Family Admin Panel:** Connect the existing  page to the backend to allow users to invite/manage family members and view their alerts. Requires creating backend endpoints.
-    -   **(P1) Implement Enterprise Dashboard:** Populate the  page with real data from the backend, showing threat statistics and user management tools for corporate clients.
+    -   **(P0) Refactor Backend Codebase:** This task is **critical**. The  file is over 3,400 lines long. The agent created a  directory with empty files (, , etc.) as a first step. The next agent must propose and execute the migration of endpoint logic from  into these modular  files. This is essential for the project's stability and scalability.
+    -   **(P1) Fully Test Family & Enterprise Panels:** The dashboards were connected to the backend and verified to be loading data. A full end-to-end test of the user flows (e.g., adding a family member and seeing their alerts, exporting an enterprise report) should be performed.
     -   **(P2) Configure SendGrid & WhatsApp:** The user needs to provide API keys for these services. The agent should ask for the  to enable production emails.
 -   **Future Tasks:**
-    -   **(P2) Enhance AI Threat Analysis:** The current  uses a single call to an LLM. This can be evolved into a more complex fraud detection engine with pattern recognition.
-    -   **(P2) Native Mobile App:** The user expressed interest in a native app beyond the current PWA.
-    -   **(P3) Direct Bank API Integration:** Move from a mocked banking service to real Plaid/Stripe Financial Connections integration.
+    -   **(P2) Enhance AI Threat Analysis:** Evolve the current  into a more complex fraud detection engine.
+    -   **(P3) Direct Bank API Integration:** Replace the mocked banking service with a real integration like Plaid or Stripe Financial Connections.
 
 **Completed work in this session**
--   **Real-time Features Frontend:** Implemented UI for Web Push notifications, a real-time metrics dashboard, a notification center, and admin panels for WhatsApp and Partner API keys.
--   **ML Threat Analysis:** Created a backend service () and frontend component () for analyzing text content for fraud using an LLM.
--   **Banking Integration:** Implemented a backend service () and frontend dashboard () to simulate connecting bank accounts and analyzing transactions.
--   **Gamification / Rewards System:** Fully implemented a backend service and frontend dashboard for a user rewards program with points and badges.
--   **Progressive Web App (PWA):** Configured the frontend to be a fully installable PWA with offline support.
--   **Production Preparation:**
-    -   Configured Stripe with the user's **LIVE** API keys.
-    -   Prepared  files for production deployment with the user's custom domain.
-    -   Resolved deployment blockers by fixing dependencies () and  issues.
-    -   Guided the user on how to deploy the app, add a custom domain, and configure production keys.
+-   **Bank Integration Update:** Added N26, Imagin, and Nickel to the list of supported banks in .
+-   **Admin Panel Enhancement:**
+    -   Added a Suscripciones tab to the Admin Panel UI ().
+    -   Implemented a backend endpoint () to allow admins to manually change a user's subscription plan.
+    -   Added a Base de Datos tab with informational content about the database connection.
+-   **Family & Enterprise Dashboards Verified:**
+    -   Corrected a bug in the  endpoint to query the correct collection.
+    -   Verified that both the Family Admin () and Enterprise () dashboards successfully load data from the backend.
+-   **Backend Refactor Scaffolding:** Created the  directory and empty placeholder files for modularizing the backend. **No logic has been moved yet.**
+-   **Mobile App Scaffolding:**
+    -   Created a complete React Native project structure in .
+    -   Installed initial dependencies.
+    -   Created all necessary files for screens, navigation, services, and context.
+    -   Added a  for the user.
 
 **Earlier issues found/mentioned but not fixed**
--   **Monolithic Backend:** The most critical issue. While new services were created in separate files, the routing logic in  was not refactored and has grown even larger, making it extremely difficult to maintain.
+-   **Monolithic Backend:** The most critical issue. The agent only created the file structure for a refactor but did not move any of the 92+ endpoints out of . This technical debt makes the project extremely difficult to maintain and scale.
 
 **Known issue recurrence from previous fork**
--   **MongoDB ObjectId Serialization:** This issue occurred twice during the session when returning data directly from a MongoDB insert/find operation without excluding the  field or converting it to a string. The agent had to fix it in  and in the email preferences endpoint in . The next agent must be extremely careful to handle  correctly to avoid JSON serialization errors.
+-   **MongoDB ObjectId Serialization:** This issue did not recur in this session, but it remains a high-risk area. The next agent must be extremely careful to exclude  fields or convert them to strings before returning data from MongoDB queries to avoid JSON serialization errors.
 
 **Code Architecture**
 
@@ -119,10 +122,9 @@ Processing triggers for libc-bin (2.36-9+deb12u13) ....
 **Key Technical Concepts**
 -   **Backend:** FastAPI, Pydantic, Motor (async MongoDB), Socket.IO
 -   **Frontend:** React, React Router, Tailwind CSS, Shadcn/UI, PWA
+-   **Mobile:** React Native, Expo (implied by )
 -   **Authentication:** JWT with HTTPOnly cookies, Google OAuth
 -   **Integrations:** Stripe (LIVE), Web Push, WhatsApp (scaffolded), SendGrid (scaffolded)
--   **Real-time:** WebSockets for live data streaming.
--   **AI/ML:** LLM-based text analysis for fraud detection (via ).
 
 **key DB schema**
 -   **users:** 
@@ -130,52 +132,47 @@ Processing triggers for libc-bin (2.36-9+deb12u13) ....
 -   **email_preferences:** 
 -   **bank_accounts:** 
 -   **transactions:** 
+-   **family_members:** 
 
 **changes in tech stack**
--    was added to .
--   The frontend was converted into a Progressive Web App (PWA) with a manifest and service worker.
+-   A **React Native** project was initialized in , adding a new mobile development stack to the project.
 
 **All files of reference**
--   : The monolithic backend file. **Needs refactoring.**
--   : Contains the list of supported banks to be updated.
--   : The main user dashboard, now using a tabbed interface.
--   : PWA configuration file.
--   : Now contains LIVE Stripe keys.
--   : The project requirements document, updated with recent progress.
+-   : The entire directory containing the new React Native project scaffold.
+-   : Still the main backend file containing all logic. **Needs refactoring.**
+-   : Directory with new, empty files intended for the backend refactor.
+-   : Updated with new Subscriptions and Database tabs.
+-   : Updated with new banks.
+-   : Updated with recent progress.
 
 **Areas that need refactoring**:
--   **CRITICAL:** The  file is over 3,300 lines. It MUST be broken down into a modular structure using FastAPI's  to ensure maintainability. The current state is unsustainable.
+-   **CRITICAL:** The  file. The placeholder files for refactoring now exist in . The next logical step is to move the endpoint logic from  into these new files. This is the project's most significant piece of technical debt.
 
 **key api endpoints**
--   **Banking:** , , , 
--   **ML Analysis:** 
--   **Rewards:** , 
--   **Email:** , 
+-   **New:**  (to change a user's subscription plan)
+-   **Verified:** , , 
 
 **Critical Info for New Agent**
--   **User's Goal:** The user wants to complete all features and deploy the application. They are non-technical and require clear, step-by-step guidance.
--   **Production Ready:** The app is very close to being ready for a v1 deployment. Stripe is configured with LIVE keys. The main blockers are the pending SendGrid key and the huge technical debt in the backend.
--   **Backend Refactor is P0:** Before adding significant new features, you **must** propose the refactoring of  to the user. Explain it's essential for the stability and future growth of the app.
--   **Recurring Bug:** Be vigilant for  serialization errors when querying MongoDB. Always ensure  is excluded or converted to a string before returning data in an API response.
+-   **User's Goal:** The user's immediate priority is to build the native mobile app. They have approved the React Native approach and expect development to continue on that front.
+-   **Backend Refactor is P0:** Despite the user's focus on the mobile app, the backend refactoring remains the most critical task for the project's long-term health. You should propose doing this in parallel or immediately after an initial version of the mobile app is working, explaining its importance for stability.
+-   **Database Access:** The user asked why they couldn't connect to the MongoDB URL directly. The agent correctly explained that the database is not exposed to the public internet for security reasons and that all data access should happen through the application's admin panel and APIs.
 
 **documents and test reports created in this job**
--   /app/memory/PRD.md (heavily updated)
--   /app/test_reports/iteration_6.json
--   /app/test_reports/iteration_7.json
--   /app/frontend/public/manifest.json
--   /app/frontend/public/offline.html
+-   /app/test_reports/iteration_9.json
+-   /app/test_reports/iteration_10.json
+-   /app/mobile-app/PUBLISHING_GUIDE.md
+-   /app/mobile-app/README.md
+-   /app/memory/PRD.md (updated)
 
 **Last 10 User Messages and any pending HUMAN messages**
-1.  **User:** Asks how to activate servers, download the app, add a custom domain, and configure API keys.
-2.  **Agent:** Provides a comprehensive guide on deployment, GitHub, custom domains, and API keys.
-3.  **User:** Requests to prepare the app for deployment and provides a custom domain: . States they don't have Stripe or SendGrid accounts.
-4.  **Agent:** Guides the user on how to create Stripe and SendGrid accounts for free.
-5.  **User:** Provides **TEST** Stripe keys.
-6.  **Agent:** Configures test keys and confirms Stripe checkout works. Asks for SendGrid key.
-7.  **User:** Asks to switch Stripe to **LIVE** mode.
-8.  **Agent:** Explains that LIVE keys are needed for that.
-9.  **User:** Provides **LIVE** Stripe keys.
-10. **User:** Asks to add nikel (Nickel), N26, and imagin to the supported banks.
+1.  **User:** Asks to proceed with all tasks and also asks why the MongoDB connection string  is not accessible from their local machine.
+2.  **User:** Agrees to the plan which included implementing the Family Panel, Enterprise Dashboard, and starting the backend refactor.
+3.  **User:** Abruptly shifts priority, asking to create a native mobile app immediately.
+4.  **User:** Clarifies the mobile app requirement: needs everything, with separate apps for Android and iOS.
+5.  **Agent:** Recommends React Native as a more efficient approach to get native apps on both stores from a single codebase.
+6.  **User:** Agrees with the React Native recommendation, confirms they want apps for the stores, and tells the agent to proceed.
+7.  **User:** continue with the creation - instruction to continue scaffolding the mobile app files.
+8.  **User:** continue with the creation - second instruction to continue creating the remaining mobile app files.
 
 **Project Health Check:**
 -   **Broken:** None.
@@ -192,15 +189,14 @@ Processing triggers for libc-bin (2.36-9+deb12u13) ....
 -   **OpenAI (via Emergent LLM Key):** Implemented for threat analysis.
 
 **Testing status**
--   **Testing agent used after significant changes:** YES (last run was , all 25 tests passed).
+-   **Testing agent used after significant changes:** YES (last run was , testing the new admin subscription features and family/enterprise endpoints; 23/23 tests passed).
 -   **Troubleshoot agent used after agent stuck in loop:** NO
 -   **Test files created:** None.
 -   **Known regressions:** None.
 
 **Credentials to test flow:**
--   Stripe keys are now **LIVE** keys and are stored in . Be careful not to trigger real charges unnecessarily.
--   New users can be registered through the UI to obtain authentication tokens for testing.
+-   **Admin User:** 
+-   **Admin Password:** 
 
 **What agent forgot to execute**
--   The agent did not start the implementation of adding the new banks requested by the user in the last message.
--   The agent has consistently postponed the critical refactoring of , which is the largest source of technical debt in the project.</analysis>
+-   The agent did not execute the backend refactoring. Despite identifying it as a critical P0 task and creating the file structure for it, the agent pivoted to the user's new request for a mobile app without moving any code out of the monolithic . This remains the project's biggest risk.</analysis>
