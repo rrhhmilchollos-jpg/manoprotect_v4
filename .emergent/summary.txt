@@ -11,73 +11,104 @@ MANO es una app y sistema profesional en tiempo real que protege a personas, fam
 -   **For Banks/Insurance:** Advanced fraud detection to protect customers and reduce claims.
 -   **For Municipalities:** A verified channel for official alerts to citizens.
 -   **Core System:** A central AI that learns from threats and sends collective alerts.
--   **Business Model:** A Freemium model with a Premium tier offering advanced features like automatic blocking and family protection. The user later requested specific subscription tiers (1 week, 1 month, 3 months, 1 year) with premium pricing, an Enterprise plan, and Stripe integration.
--   **Assets:** The user requested the creation of business documents: App Store text, commercial dossier, technical roadmap, investor presentation, financial model, and a full business plan.
-- **Recent Request**: Change the money-back guarantee to 15 days, fix spelling errors, integrate Stripe, and provide download instructions.
+-   **Business Model:** A Freemium model with a Premium tier offering advanced features. Specific subscription tiers (1 week, 1 month, 3 months, 1 year) with premium pricing, an Enterprise plan, and Stripe integration.
+-   **Assets:** Creation of business documents: App Store text, commercial dossier, technical roadmap, investor presentation, financial model, and a full business plan.
+-   **Recent Requests:** The user has requested a continuous stream of features including a 15-day money-back guarantee, Stripe integration, a secure investor portal with manual admin approval, an admin dashboard, family/enterprise dashboards, and most recently, real-time push notifications, WhatsApp integration, a real-time metrics dashboard, and a public API.
 
 **User's preferred language**: Spanish
 
 **what currently exists?**
-A comprehensive full-stack application for MANO has been developed. The frontend, built with React, includes a landing page, a user dashboard, and dedicated pages for How It Works, Contacts, Family Mode, Profile, Knowledge, Community, Pricing, and Downloads. The UI incorporates the user's provided logo and follows a professional design. The FastAPI backend has a mock endpoint for threat analysis () and initial scaffolding for Stripe integration and user management. A suite of professional and strategic documents (business plan, financial model, etc.) has been created in Markdown format and stored in the  directory.
+A comprehensive full-stack application.
+-   **Frontend (React):** Features a landing page, pricing, and a full user authentication system (JWT & Google OAuth). It includes protected routes for a main user Dashboard, a Downloads page, an Admin Panel for managing investors, and placeholder pages for an Enterprise Dashboard and a Family Admin panel.
+-   **Backend (FastAPI):** A single  file contains all endpoints, including user/investor management, Stripe payment integration, document downloads (as HTML), and the newly added logic for Web Push notifications, a real-time metrics dashboard via WebSockets (Socket.IO), WhatsApp integration, and a public partner API.
+-   **Authentication:** A complete and secure authentication system is in place, distinguishing between regular users, admins, and investors, and protecting routes accordingly.
+-   **Documents:** All requested business documents are stored in .
 
 **Last working item**:
--   **Last item agent was working:** The agent was actively implementing a multi-part user request which included:
-    1.  Integrating Stripe for subscription payments.
-    2.  Changing the money-back guarantee from 30/60 days to 15 days across the application.
-    3.  Correcting spelling errors throughout the app.
-    4.  Providing a way for the user to download the generated business plan and app code.
-    The agent had just started, installing the Stripe library, modifying  and  for the backend, and was in the process of finding and replacing the guarantee text on the frontend when the session ended.
+-   **Last item agent was working:** The agent was in the middle of a large feature implementation wave requested by the user. It had just finished adding the entire backend logic for Web Push notifications, a real-time metrics dashboard (with Socket.IO), WhatsApp integration, and a public API into .
 -   **Status**: IN PROGRESS
 -   **Agent Testing Done**: N
--   **Which testing method agent to use?**: both (Backend for Stripe endpoints, Frontend for UI changes and payment flow)
+-   **Which testing method agent to use?**: both. The backend needs testing for the new WebSocket, Push, WhatsApp, and Partner API endpoints. The frontend needs testing to verify the new UI components and their connection to the backend.
 -   **User Testing Done**: N
 
 **All Pending/In progress Issue list**:
--   **Issue 1: The agent was repeatedly interrupted by the user and seemed to restart its thinking process, causing delays. This happened after installing Stripe and again while trying to address the multi-part request. The next agent needs to address the full user request without getting stuck.**
-    -   **Attempted fixes:** The agent acknowledged the user's impatience and stated it would work on all items in parallel, but the session ended before this could be executed.
-    -   **Next debug checklist:** Systematically go through the last user request (Chat Message 177 & 183) and complete each item one by one.
-    -   **Why fix this issue and what will be achieved with the fix?** To fulfill the user's explicit final instructions and complete the application's core payment functionality and final polish.
-    -   **Status:** IN PROGRESS
-    -   **Is recurring issue?** Y
-    -   **Should Test frontend/backend/both after fix?** both
+-   **Issue 1: PDF Generation Fails Due to System Dependency (P2)**
+    -   **Description:** The original implementation for PDF downloads using 
+-----
+
+WeasyPrint could not import some external libraries. Please carefully follow the installation steps before reporting an issue:
+https://doc.courtbouillon.org/weasyprint/stable/first_steps.html#installation
+https://doc.courtbouillon.org/weasyprint/stable/first_steps.html#troubleshooting 
+
+----- failed because a required system library () is not present in the environment.
+    -   **Attempted fixes:** The agent created a functional workaround by replacing the PDF generation with a feature that downloads the documents as styled HTML files. This was accepted by the user as a temporary measure.
+    -   **Next debug checklist:** To implement the original requirement, the next agent should attempt to install the missing system dependency: Get:1 http://deb.debian.org/debian bookworm InRelease [151 kB]
+Get:2 http://deb.debian.org/debian bookworm-updates InRelease [55.4 kB]
+Get:3 http://deb.debian.org/debian-security bookworm-security InRelease [48.0 kB]
+Get:4 https://repo.mongodb.org/apt/ubuntu jammy/mongodb-org/7.0 InRelease [3005 B]
+Get:5 https://deb.nodesource.com/node_20.x nodistro InRelease [12.1 kB]
+Get:6 http://deb.debian.org/debian bookworm/main arm64 Packages [8691 kB]
+Get:7 http://deb.debian.org/debian-security bookworm-security/main arm64 Packages [287 kB]
+Get:8 https://repo.mongodb.org/apt/ubuntu jammy/mongodb-org/7.0/multiverse amd64 Packages [99.9 kB]
+Get:9 https://repo.mongodb.org/apt/ubuntu jammy/mongodb-org/7.0/multiverse arm64 Packages [98.6 kB]
+Get:10 https://deb.nodesource.com/node_20.x nodistro/main arm64 Packages [13.5 kB]
+Fetched 9459 kB in 4s (2419 kB/s)
+Reading package lists...
+Reading package lists...
+Building dependency tree...
+Reading state information...
+libpango-1.0-0 is already the newest version (1.50.12+ds-1).
+The following NEW packages will be installed:
+  libpangoft2-1.0-0
+0 upgraded, 1 newly installed, 0 to remove and 39 not upgraded.
+Need to get 44.5 kB of archives.
+After this operation, 178 kB of additional disk space will be used.
+Get:1 http://deb.debian.org/debian bookworm/main arm64 libpangoft2-1.0-0 arm64 1.50.12+ds-1 [44.5 kB]
+Fetched 44.5 kB in 0s (643 kB/s)
+Selecting previously unselected package libpangoft2-1.0-0:arm64.
+(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 38353 files and directories currently installed.)
+Preparing to unpack .../libpangoft2-1.0-0_1.50.12+ds-1_arm64.deb ...
+Unpacking libpangoft2-1.0-0:arm64 (1.50.12+ds-1) ...
+Setting up libpangoft2-1.0-0:arm64 (1.50.12+ds-1) ...
+Processing triggers for libc-bin (2.36-9+deb12u13) .... If that fails, another Python PDF library without heavy system dependencies (like ) could be explored.
+    -   **Why fix this issue and what will be achieved with the fix?** To fulfill the user's original request for direct, professional-looking PDF downloads instead of the current HTML workaround.
+    -   **Status:** RESOLVED (Workaround in place)
+    -   **Is recurring issue?** N
+    -   **Should Test frontend/backend/both after fix?** Backend
     -   **Blocked on other issue:** None
 
 **In progress Task List**:
--   **Task 1: Complete the multi-part user request (P0)**
-    -   **Where to resume:** The agent was interrupted after stating it would handle multiple changes. The next agent should pick up the entire task list from the user's last major request.
-        1.  **Stripe Integration:** The backend part is partially done (library installed, endpoint scaffolded). Needs frontend implementation on  to trigger the checkout session and robust testing.
-        2.  **Update Guarantee Period:** The agent used  to find instances. The next step is to use  to change all occurrences to 15 días de prueba.
-        3.  **Spelling Correction:** Review all text in  files and  documents for Spanish spelling and grammar errors.
-        4.  **Download Instructions:** Create the  page to link to the markdown documents and provide a concise explanation to the user on how to download the codebase (e.g., as a zip archive from the platform).
-    -   **What will be achieved with this?** The application will have functional payment processing, accurate terms, improved professionalism, and the user will have access to the generated assets.
+-   **Task 1: Implement Frontend for Real-time Features (P0)**
+    -   **Where to resume:** The backend logic in  is complete. The next step is to build the corresponding frontend components.
+        1.  **Web Push:** Create a service worker () and update the frontend (e.g., in the user profile or a settings page) to ask for notification permissions and send the subscription object to the  endpoint.
+        2.  **Real-time Metrics:** Create a new dashboard component or update an existing one ( or ) to connect to the Socket.IO server and display live metrics.
+        3.  **WhatsApp UI:** Add a simple UI in the Admin Panel to send a test message via the WhatsApp API to demonstrate functionality.
+        4.  **Routing:** Update  with any new routes needed for these components.
+    -   **What will be achieved with this?** This will complete the user's latest feature requests, enabling real-time alerts via push notifications and providing live data visualization.
     -   **Status:** IN PROGRESS
     -   **Should Test frontend/backend/both after fix?** both
-    -   **Blocked on something:** None
+    -   **Blocked on something:** None.
 
 **Upcoming and Future Tasks**
 -   **Upcoming Tasks:**
-    -   **(P0) Finalize Download Page:** Implement the  page to provide downloadable links for all documents created in .
-    -   **(P1) Implement Backend Logic:** The majority of the frontend pages (, , , etc.) are placeholders. The backend needs to be built out with corresponding APIs and database logic to make these pages functional.
-    -   **(P1) Connect Dashboard Actions:** The Share, Report, and Export buttons in  are not functional. They need backend endpoints and frontend logic.
+    -   **(P0) Refactor Backend Codebase:** The  file has become extremely large and difficult to maintain. Propose and execute a refactor to split the code into a modular structure (e.g., , , , ). This is a critical step for scalability.
+    -   **(P1) Implement Family Admin Panel:** Connect the existing  page to the backend to allow users to invite/manage family members and view their alerts.
+    -   **(P1) Implement Enterprise Dashboard:** Populate the  page with data from the backend, showing threat statistics and user management tools for corporate clients.
 -   **Future Tasks:**
-    -   **(P2) Enhance AI Threat Analysis:** Replace the mock  endpoint with a real implementation using  to provide genuine threat intelligence.
-    -   **(P2) Implement Panic Button:** Build the Panic Button feature suggested by the agent for the senior-focused mode, which would involve sending alerts to trusted contacts.
-    -   **(P3) PDF Generation:** Implement a feature to convert the Markdown business plan () into a downloadable PDF, as requested by the user.
+    -   **(P2) Enhance AI Threat Analysis:** Replace the mock  endpoint with a real implementation using an LLM via .
+    -   **(P2) Native Mobile App:** Develop a native mobile application.
+    -   **(P3) Direct Bank Integration:** Integrate with banking APIs for advanced fraud detection.
 
 **Completed work in this session**
--   **Application Scaffolding:** Created the complete frontend structure with a landing page, dashboard, and pages for all major features (How It Works, Contacts, Family Mode, Profile, etc.).
--   **UI/UX Refinement:** Integrated the user's logo, implemented a professional hybrid image strategy on the landing page, and fixed initial CSS bugs.
--   **Pricing Model:** Designed and implemented a multi-tier pricing page () including Personal, Family, and a placeholder for an Enterprise plan.
--   **Business Document Generation:** Created a full suite of professional documents in Markdown format:
-    -   App Store Description
-    -   Commercial Dossier
-    -   Technical Roadmap
-    -   Investor Pitch Deck
-    -   Financial Model
-    -   Complete Business Plan
+-   **Stripe Payment Integration:** Fully implemented and tested, enabling subscription payments.
+-   **Full Authentication System:** A complete JWT and Google OAuth system was built, securing the application and creating distinct user roles (user, admin, investor).
+-   **Secure Investor Portal:** A dedicated registration workflow for investors was created, with an admin panel for approving or denying applications.
+-   **Admin & Feature Dashboards:** Implemented an admin panel for user/investor management and created placeholder pages for enterprise and family dashboards.
+-   **Document Downloads:** Created a protected page for downloading business documents (currently as HTML).
+-   **Backend for Real-time Features:** Added all necessary backend logic for Web Push, WebSockets (Socket.IO), and WhatsApp integration.
 
 **Earlier issues found/mentioned but not fixed**
--   None. The agent resolved issues as they arose during the development process.
+-   None.
 
 **Known issue recurrence from previous fork**
 -   None.
@@ -86,85 +117,87 @@ A comprehensive full-stack application for MANO has been developed. The frontend
 
 
 **Key Technical Concepts**
--   **Backend:** FastAPI
--   **Frontend:** React, React Router, Tailwind CSS
--   **Database:** MongoDB (implied, not heavily used yet)
--   **Integrations:** Stripe (in progress), Emergent Integrations (planned)
--   **Styling:** Shadcn/UI components
+-   **Backend:** FastAPI, Pydantic, Motor (async MongoDB), Socket.IO
+-   **Frontend:** React, React Router, Tailwind CSS, Shadcn/UI, Socket.IO Client
+-   **Authentication:** JWT with HTTPOnly cookies, Google OAuth
+-   **Integrations:** Stripe, Web Push, WhatsApp (in progress)
+-   **Real-time:** WebSockets for live data streaming.
 
 **key DB schema**
--   **users:**  (inferred)
--   **threat_history:**  (inferred)
+-   **users:** 
+-   **investor_applications:** 
+-   **threat_history:** 
+-   **web_push_subscriptions:** 
+-   **family_members:** 
 
 **changes in tech stack**
--   None.
+-   Added , , and  to support real-time features.
 
 **All files of reference**
--   : Main backend application file, contains API endpoints including the in-progress Stripe endpoint.
--   : Frontend page for displaying subscription plans. Needs to be connected to the Stripe backend.
--   : Main React router, defines all application routes.
--   : The detailed business plan created for the user.
--   : Contains the Stripe API keys.
+-   : The monolithic backend file containing all API logic.
+-   : The main React router defining all application routes.
+-   : Manages global authentication state.
+-   : UI for administrative tasks.
+-   : Main user dashboard, entry point to other features.
+-   : Contains the up-to-date project requirements and status.
 
-**Areas that need refactoring**
--   Most frontend pages in  are placeholders and need to be implemented with actual functionality and state management.
--   The backend API in  is minimal. It needs to be expanded significantly to support the frontend features.
+**Areas that need refactoring**:
+-   **CRITICAL:** The  file is over 2,200 lines long and contains all backend logic. It must be broken down into a modular structure (e.g., using FastAPI's  in separate files for , , , etc.) to ensure maintainability and prevent future development from becoming slow and error-prone.
 
 **key api endpoints**
--   : Health check.
--   : Mock endpoint to analyze potential threats.
--   : (In progress) Endpoint to create a Stripe payment session.
--   : (To be created) Endpoint to handle Stripe webhook events.
--   : Placeholder for updating user profiles.
+-   **Auth:** , , 
+-   **Admin:** , 
+-   **Downloads:** 
+-   **Push:** , 
+-   **Partner API:** 
+-   **WebSocket:** Connects on  for real-time metric updates.
 
 **Critical Info for New Agent**
--   The user is eager for progress and can be impatient. It is crucial to communicate clearly and execute tasks efficiently.
--   The immediate priority is to finish the multi-part request from the end of the last session: Stripe integration, updating the guarantee period, fixing spelling, and creating the downloads page/instructions. Address this *before* moving to new features.
--   The Stripe secret keys are already in . Use them to complete the integration.
--   The user's language is Spanish. All communication must be in Spanish.
+-   **User's Goal:** The user wants all requested features implemented. The highest priority is to complete the current in-progress task: building the frontend for the real-time features (Web Push, Socket.IO).
+-   **Technical Debt:** The backend  file is now a significant liability. After completing the current feature set, you **must** propose a refactoring of the backend to the user. Explain that this is necessary to continue building the application reliably.
+-   **PDF Workaround:** Be aware that the PDF download feature was intentionally changed to an HTML download due to technical limitations. Communicate this clearly if the user inquires about it.
+-   **Language:** All communication must be in Spanish.
 
 **documents and test reports created in this job**
--   /app/memory/README.md
+-   /app/memory/PRD.md
 -   /app/memory/app-store-description.md
 -   /app/memory/dossier-comercial.md
 -   /app/memory/financial-model.md
 -   /app/memory/pitch-deck-inversores.md
 -   /app/memory/plan-de-negocio-completo.md
 -   /app/memory/roadmap-tecnico.md
--   /app/test_reports/iteration_1.json
--   /app/test_reports/iteration_2.json
+-   /app/test_reports/iteration_3.json
+-   /app/test_reports/iteration_4.json
+-   /app/test_reports/iteration_5.json
 
 **Last 10 User Messages and any pending HUMAN messages**
-1.  **si**: User agrees to add the Enterprise plan.
-2.  **dame el plan de negocio descargable en pdf desde aqui**: User requests a downloadable PDF of the business plan. (IN PROGRESS)
-3.  **modifica que el periodo de garantia...**: User provides a multi-part request: 15-day guarantee, fix spelling, integrate Stripe, and explain download process. (IN PROGRESS)
-4.  **Sigue con lo que estabas haciendo**: User prompts the agent to continue after it seemingly paused.
-5.  **modifica que el periodo de garantia de la devolucion del dinero...**: User repeats the multi-part request.
-6.  **a que estas esperando?**: User expresses impatience with the agent's delay.
-7.  **ya tienes mas credito tienes 105,18 de credito**: User informs the agent about their account credit.
-8.  **a que esperas que sucede?**: User again expresses impatience.
-9.  **Pending**: The last messages are all from the user, pushing the agent to complete the requested tasks. The core pending human message is the multi-part request which is currently in progress.
+-   The user has consistently requested the implementation of all pending tasks and has given a broad mandate to continue building out the platform. The last explicit instructions were to implement Web Push notifications, WhatsApp integration, and a real-time metrics dashboard, followed by prompts to continue after providing more account credit. No human messages are pending; the agent has clear instructions to proceed.
 
 **Project Health Check:**
--   **Broken:** Stripe integration is incomplete. The frontend payment buttons do not work. Most feature pages are non-functional placeholders.
--   **Mocked:** The core threat analysis API () is a mock endpoint returning static data.
+-   **Broken:**
+    -   The PDF download feature does not produce PDFs; it produces HTML as a workaround.
+    -   The new real-time features (Web Push, WhatsApp, Metrics Dashboard) are non-functional as they lack a frontend implementation.
+-   **Mocked:**
+    -   The core threat analysis API () still returns static, mock data.
 
 **3rd Party Integrations**
--   **Stripe (Payments):** In progress. Python library installed, backend endpoint partially created. Requires User API Key (test keys are already present in ).
--   **Emergent LLM Key Applicability:** The core threat analysis feature is a perfect candidate for an LLM integration via  to provide real-time analysis of text/messages. This has been planned but not yet implemented.
+-   **Stripe (Payments):** Implemented via .
+-   **Emergent-managed Google Auth:** Implemented.
+-   **Web Push (pywebpush):** In progress (backend complete).
+-   **WhatsApp Business:** In progress (backend scaffolded). Requires user API Key.
+-   **Socket.IO:** In progress (backend complete).
+-   **Emergent LLM Key Applicability:** The  endpoint is a prime candidate for an LLM integration to provide real-time threat analysis.
 
 **Testing status**
--   **Testing agent used after significant changes:** YES (twice in earlier stages)
+-   **Testing agent used after significant changes:** YES (last run was ).
 -   **Troubleshoot agent used after agent stuck in loop:** NO
--   **Test files created:** None
--   **Known regressions:** None
+-   **Test files created:** None.
+-   **Known regressions:** PDF download functionality was changed to HTML download.
 
 **Credentials to test flow:**
--   Stripe test keys are located in . No user credentials are required for the application's current functionality.
+-   Stripe test keys are available in .
+-   New users (including admins/investors) can be registered through the UI to obtain necessary authentication tokens for testing protected endpoints.
 
 **What agent forgot to execute**
-The agent did not forget but was interrupted while starting a large, multi-part task. The next agent must resume and complete all parts of this task:
-1.  **Finish Stripe Integration:** Implement the frontend logic on the pricing page.
-2.  **Update Guarantee Period:** Systematically find and replace all instances of 30/60 días with 15 días.
-3.  **Perform Spell Check:** Review all user-facing text in both the React app and the markdown documents.
-4.  **Create Downloads Page/Instructions:** Build the  page and explain to the user how to obtain the generated files/code.</analysis>
+-   The agent has not forgotten tasks but has accumulated significant technical debt by not refactoring the monolithic  file. This is the most critical non-feature task that needs to be addressed to ensure the project's health.
+-   The frontend for the latest batch of backend features (Web Push, Socket.IO, WhatsApp) has not been started yet.</analysis>
