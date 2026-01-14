@@ -661,6 +661,104 @@ const AdminPanel = () => {
           <TabsContent value="api">
             <APIKeyManager />
           </TabsContent>
+
+          {/* Database Info Tab */}
+          <TabsContent value="database">
+            <Card className="bg-white">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Database className="w-5 h-5 text-emerald-600" />
+                  Información de Base de Datos
+                </CardTitle>
+                <CardDescription>
+                  Configuración y estado de la base de datos MongoDB de MANO
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-6">
+                  {/* Connection Info */}
+                  <div className="p-4 bg-emerald-50 rounded-lg border border-emerald-200">
+                    <h3 className="font-semibold text-emerald-800 mb-3">📍 Conexión</h3>
+                    <div className="grid md:grid-cols-2 gap-4 text-sm">
+                      <div>
+                        <span className="text-zinc-600">URL:</span>
+                        <code className="ml-2 px-2 py-1 bg-white rounded">mongodb://localhost:27017</code>
+                      </div>
+                      <div>
+                        <span className="text-zinc-600">Base de Datos:</span>
+                        <code className="ml-2 px-2 py-1 bg-white rounded">test_database</code>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Collections */}
+                  <div className="p-4 bg-zinc-50 rounded-lg border">
+                    <h3 className="font-semibold mb-3">📂 Colecciones Principales</h3>
+                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-3">
+                      {[
+                        { name: 'users', desc: 'Usuarios registrados', icon: '👤' },
+                        { name: 'sessions', desc: 'Sesiones activas', icon: '🔐' },
+                        { name: 'payment_transactions', desc: 'Pagos de Stripe', icon: '💳' },
+                        { name: 'bank_accounts', desc: 'Cuentas bancarias', icon: '🏦' },
+                        { name: 'bank_transactions', desc: 'Transacciones', icon: '💸' },
+                        { name: 'threat_analysis', desc: 'Análisis de amenazas', icon: '🛡️' },
+                        { name: 'rewards', desc: 'Sistema de recompensas', icon: '🏆' },
+                        { name: 'notifications', desc: 'Notificaciones', icon: '🔔' },
+                        { name: 'investor_requests', desc: 'Solicitudes inversores', icon: '📋' },
+                        { name: 'admin_logs', desc: 'Logs de admin', icon: '📝' },
+                        { name: 'email_preferences', desc: 'Preferencias email', icon: '📧' },
+                        { name: 'api_keys', desc: 'API Keys partners', icon: '🔑' },
+                      ].map(col => (
+                        <div key={col.name} className="p-3 bg-white rounded border">
+                          <div className="flex items-center gap-2">
+                            <span>{col.icon}</span>
+                            <code className="text-sm font-medium">{col.name}</code>
+                          </div>
+                          <p className="text-xs text-zinc-500 mt-1">{col.desc}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Stats from Dashboard */}
+                  {dashboard && (
+                    <div className="p-4 bg-indigo-50 rounded-lg border border-indigo-200">
+                      <h3 className="font-semibold text-indigo-800 mb-3">📊 Estadísticas en Vivo</h3>
+                      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <div className="text-center p-3 bg-white rounded">
+                          <div className="text-2xl font-bold text-indigo-600">{dashboard.stats?.total_users || 0}</div>
+                          <div className="text-xs text-zinc-500">Usuarios Total</div>
+                        </div>
+                        <div className="text-center p-3 bg-white rounded">
+                          <div className="text-2xl font-bold text-emerald-600">{dashboard.stats?.premium_users || 0}</div>
+                          <div className="text-xs text-zinc-500">Premium</div>
+                        </div>
+                        <div className="text-center p-3 bg-white rounded">
+                          <div className="text-2xl font-bold text-amber-600">{dashboard.stats?.approved_investors || 0}</div>
+                          <div className="text-xs text-zinc-500">Inversores</div>
+                        </div>
+                        <div className="text-center p-3 bg-white rounded">
+                          <div className="text-2xl font-bold text-purple-600">€{dashboard.stats?.total_revenue?.toLocaleString() || 0}</div>
+                          <div className="text-xs text-zinc-500">Ingresos</div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Access Note */}
+                  <div className="p-4 bg-amber-50 rounded-lg border border-amber-200">
+                    <h3 className="font-semibold text-amber-800 mb-2">⚠️ Nota Importante</h3>
+                    <p className="text-sm text-amber-700">
+                      La base de datos MongoDB está alojada en el servidor de Emergent. 
+                      Para acceso directo a la base de datos (consultas avanzadas, exports, etc.), 
+                      puedes usar herramientas como MongoDB Compass conectando a la URL indicada arriba 
+                      cuando la aplicación esté desplegada.
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
         </Tabs>
       </div>
     </div>
