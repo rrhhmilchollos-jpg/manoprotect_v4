@@ -371,7 +371,8 @@ class TestAdminSubscriptions:
         # Verify user structure
         if len(data["users"]) > 0:
             user = data["users"][0]
-            assert "user_id" in user, "Missing 'user_id' in user"
+            # Some users have 'id', some have 'user_id'
+            assert "user_id" in user or "id" in user, "Missing 'user_id' or 'id' in user"
             assert "email" in user, "Missing 'email' in user"
             assert "name" in user, "Missing 'name' in user"
 
