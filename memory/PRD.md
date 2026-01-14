@@ -194,25 +194,51 @@ MANO es una aplicación y sistema profesional en tiempo real que protege a perso
 ---
 
 ## Tests
-- Backend: 24/27 tests pasados
-- Frontend: Verificado visualmente
-- Último reporte: `/app/test_reports/iteration_5.json`
+- Backend: 22/22 tests pasados (Iteración 6)
+- Frontend: Todos los componentes verificados
+- Último reporte: `/app/test_reports/iteration_6.json`
 
 ---
 
 ## Próximos Pasos
 
+### P0 - Crítico
+- [ ] **Refactorizar Backend** - `server.py` tiene +2700 líneas, dividir en módulos (routes/, models/, services/)
+
 ### P1 - Alta Prioridad
-- [ ] Notificaciones push reales (Web Push API)
-- [ ] Integración con WhatsApp Business
-- [ ] Dashboard de métricas en tiempo real
+- [ ] Configurar WhatsApp Business API con credenciales reales
+- [ ] Implementar análisis de amenazas con LLM real (OpenAI GPT-5.2)
+- [ ] App móvil nativa (React Native)
 
 ### P2 - Media Prioridad
-- [ ] App móvil nativa (React Native)
 - [ ] Integración con bancos
-- [ ] API pública para partners
+- [ ] Análisis de patrones con ML
+- [ ] Sistema de recompensas
 
 ### P3 - Baja Prioridad
-- [ ] Sistema de recompensas
 - [ ] Gamificación
 - [ ] Marketplace de integraciones
+- [ ] Multi-idioma
+
+---
+
+## Componentes Frontend Nuevos (Enero 14, 2025)
+
+| Componente | Archivo | Descripción |
+|------------|---------|-------------|
+| NotificationCenter | `/components/NotificationCenter.jsx` | Dropdown con lista de notificaciones y badge |
+| PushNotificationToggle | `/components/PushNotificationToggle.jsx` | Toggle para activar/desactivar push |
+| RealTimeMetrics | `/components/RealTimeMetrics.jsx` | Métricas SSE con reconexión automática |
+| APIKeyManager | `/components/APIKeyManager.jsx` | CRUD de API keys con diálogo de creación |
+| WhatsAppManager | `/components/WhatsAppManager.jsx` | Formulario de envío y cola de mensajes |
+| pushNotifications.js | `/services/pushNotifications.js` | Service para gestión de Web Push |
+
+---
+
+## APIs Mocked (Enero 14, 2025)
+
+| API | Estado | Nota |
+|-----|--------|------|
+| WhatsApp Business | MOCK | Mensajes se encolan pero no se envían sin credenciales |
+| Web Push | MOCK | VAPID keys de desarrollo, notificaciones no se envían realmente |
+| Análisis de Amenazas | MOCK | `/api/analyze` retorna datos estáticos |
