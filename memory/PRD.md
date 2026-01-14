@@ -176,6 +176,25 @@ MANO es una aplicación y sistema profesional en tiempo real que protege a perso
 │       ├── manifest.json   # PWA Manifest
 │       ├── sw.js           # Service Worker PWA
 │       └── offline.html    # Página offline
+├── mobile-app/             # ✅ NUEVO - App React Native
+│   ├── App.tsx             # Punto de entrada
+│   ├── package.json        # Dependencias React Native
+│   ├── app.json            # Configuración iOS/Android
+│   ├── PUBLISHING_GUIDE.md # Guía de publicación
+│   ├── README.md           # Documentación
+│   ├── ios-config/         # Templates iOS
+│   ├── android-config/     # Templates Android
+│   └── src/
+│       ├── components/     # Button, Card, LoadingScreen, etc.
+│       ├── config/         # Configuración app y Firebase
+│       ├── context/        # AuthContext, NotificationContext
+│       ├── hooks/          # useDebounce, useNetworkStatus, useAppState
+│       ├── navigation/     # RootNavigator, MainTabNavigator
+│       ├── screens/        # 14 pantallas completas
+│       │   ├── auth/       # Login, Register, ForgotPassword
+│       │   └── ...
+│       ├── services/       # API, biometrics, notifications, etc.
+│       └── types/          # TypeScript definitions
 └── memory/
     └── PRD.md
 ```
