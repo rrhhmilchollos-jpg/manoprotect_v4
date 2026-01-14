@@ -6,7 +6,7 @@
   "author": "MANO Security",
   "license": "PROPRIETARY",
   "ios": {
-    "bundleIdentifier": "com.manoprotect.app",
+    "bundleIdentifier": "com.Manoprotect.Mano",
     "buildNumber": "1",
     "infoPlist": {
       "NSCameraUsageDescription": "MANO necesita acceso a la cámara para escanear códigos QR sospechosos",
@@ -21,7 +21,7 @@
     }
   },
   "android": {
-    "package": "com.manoprotect.app",
+    "package": "com.Manoprotect.Mano",
     "versionCode": 1,
     "permissions": [
       "android.permission.CAMERA",
@@ -37,7 +37,8 @@
     "adaptiveIcon": {
       "foreground": "./assets/adaptive-icon-foreground.png",
       "background": "#1a1a2e"
-    }
+    },
+    "googleServicesFile": "./android/app/google-services.json"
   },
   "splash": {
     "image": "./assets/splash.png",
