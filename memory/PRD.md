@@ -7,9 +7,38 @@ MANO es una aplicación y sistema profesional en tiempo real que protege a perso
 
 ---
 
+## Sistema de Roles
+
+| Rol | Descripción | Acceso |
+|-----|-------------|--------|
+| **user** | Usuario básico | Dashboard básico, funciones limitadas |
+| **premium** | Usuario de pago | Todas las funciones según su plan |
+| **superadmin** | Propietario | Control total de la plataforma |
+
+**⚠️ IMPORTANTE:** Solo `rrhh.milchollos@gmail.com` puede tener rol de superadmin.
+
+### Credenciales Superadmin
+```
+📧 Email: rrhh.milchollos@gmail.com
+🔑 Password: ManoAdmin2025!
+```
+
+---
+
 ## Estado Actual (Diciembre 2025)
 
 ### ✅ Completado Recientemente (Diciembre 2025)
+
+#### 🔐 Sistema de Roles y Permisos
+- [x] Tres niveles: user, premium, superadmin
+- [x] Protección: Solo email designado puede ser superadmin
+- [x] Panel admin con gestión de usuarios (cambiar roles, dar de baja, eliminar)
+- [x] Landing page con botones "Iniciar Sesión" y "Regístrate"
+
+#### 🔥 Firebase Integrado
+- [x] Firebase Analytics en web
+- [x] Firebase Cloud Messaging configurado
+- [x] Project ID: manoprotect-f889b
 
 #### 📱 App Móvil React Native - COMPLETA
 - [x] **14 pantallas implementadas** con navegación completa
