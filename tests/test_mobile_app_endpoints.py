@@ -213,10 +213,14 @@ class TestBankingSupportedBanks:
         assert "banks" in data, "Missing 'banks' field"
         assert isinstance(data["banks"], list), "Banks should be a list"
         
-        # Verify bank structure if banks exist
+        # Banks are returned as simple strings (bank names)
         if len(data["banks"]) > 0:
             bank = data["banks"][0]
-            assert "id" in bank or "name" in bank, "Bank should have 'id' or 'name'"
+            assert isinstance(bank, str), "Bank should be a string (bank name)"
+            # Verify some expected Spanish banks are present
+            expected_banks = ["Santander", "BBVA", "CaixaBank"]
+            found_banks = [b for b in expected_banks if b in data["banks"]]
+            assert len(found_banks) > 0, f"Expected at least one of {expected_banks} in banks list"
 
 
 class TestBankingAccounts:
