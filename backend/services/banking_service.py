@@ -19,7 +19,8 @@ class BankingService:
     def __init__(self):
         self.supported_banks = [
             "Santander", "BBVA", "CaixaBank", "Sabadell", 
-            "Bankinter", "ING", "Unicaja", "Kutxabank"
+            "Bankinter", "ING", "Unicaja", "Kutxabank",
+            "N26", "Imagin", "Nickel"
         ]
     
     async def connect_bank_account(
