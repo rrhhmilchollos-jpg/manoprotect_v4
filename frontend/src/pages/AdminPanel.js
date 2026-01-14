@@ -26,6 +26,7 @@ const AdminPanel = () => {
   const [users, setUsers] = useState([]);
   const [payments, setPayments] = useState([]);
   const [downloads, setDownloads] = useState([]);
+  const [subscriptions, setSubscriptions] = useState({ subscribers: [], stats: {}, recent_changes: [] });
   const [actionLoading, setActionLoading] = useState(null);
 
   useEffect(() => {
