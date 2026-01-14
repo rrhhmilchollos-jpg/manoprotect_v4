@@ -3,13 +3,17 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import { 
   Shield, Users, CreditCard, FileText, CheckCircle, XCircle, 
-  Clock, ArrowLeft, TrendingUp, Download, Eye, UserCheck, Loader2
+  Clock, ArrowLeft, TrendingUp, Download, Eye, UserCheck, Loader2,
+  MessageCircle, Key, Activity
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { toast } from 'sonner';
+import RealTimeMetrics from '@/components/RealTimeMetrics';
+import WhatsAppManager from '@/components/WhatsAppManager';
+import APIKeyManager from '@/components/APIKeyManager';
 
 const API = process.env.REACT_APP_BACKEND_URL + '/api';
 
@@ -191,7 +195,7 @@ const AdminPanel = () => {
 
         {/* Tabs */}
         <Tabs defaultValue="investors" className="space-y-6">
-          <TabsList className="bg-white border">
+          <TabsList className="bg-white border flex-wrap">
             <TabsTrigger value="investors" className="data-[state=active]:bg-indigo-100">
               <UserCheck className="w-4 h-4 mr-2" />
               Inversores ({pendingInvestors.length} pendientes)
@@ -207,6 +211,18 @@ const AdminPanel = () => {
             <TabsTrigger value="downloads" className="data-[state=active]:bg-indigo-100">
               <Download className="w-4 h-4 mr-2" />
               Descargas
+            </TabsTrigger>
+            <TabsTrigger value="realtime" className="data-[state=active]:bg-indigo-100">
+              <Activity className="w-4 h-4 mr-2" />
+              Tiempo Real
+            </TabsTrigger>
+            <TabsTrigger value="whatsapp" className="data-[state=active]:bg-indigo-100">
+              <MessageCircle className="w-4 h-4 mr-2" />
+              WhatsApp
+            </TabsTrigger>
+            <TabsTrigger value="api" className="data-[state=active]:bg-indigo-100">
+              <Key className="w-4 h-4 mr-2" />
+              API Keys
             </TabsTrigger>
           </TabsList>
 
