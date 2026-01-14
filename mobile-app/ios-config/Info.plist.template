@@ -10,7 +10,7 @@
     <string>es</string>
     
     <key>CFBundleDisplayName</key>
-    <string>MANO Protect</string>
+    <string>Mano</string>
     
     <key>CFBundleExecutable</key>
     <string>$(EXECUTABLE_NAME)</string>
@@ -22,7 +22,7 @@
     <string>6.0</string>
     
     <key>CFBundleName</key>
-    <string>MANO</string>
+    <string>Mano</string>
     
     <key>CFBundlePackageType</key>
     <string>APPL</string>
