@@ -248,6 +248,15 @@ const Dashboard = () => {
               <Book className="w-5 h-5 mr-2" />
               Aprende
             </Button>
+            <Button
+              data-testid="rewards-btn"
+              variant="ghost"
+              onClick={() => navigate('/rewards')}
+              className="rounded-lg hover:bg-yellow-50 hover:text-yellow-700"
+            >
+              <Trophy className="w-5 h-5 mr-2" />
+              Recompensas
+            </Button>
             <PushNotificationToggle variant="compact" />
             <NotificationCenter />
             <Button
