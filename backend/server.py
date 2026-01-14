@@ -2300,6 +2300,140 @@ async def get_admin_subscriptions(
         "recent_changes": recent_logs
     }
 
+
+@api_router.patch("/admin/users/{user_id}/status")
+async def update_user_status(
+    user_id: str,
+    is_active: bool,
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Activate or deactivate a user (superadmin only)"""
+    admin = await require_admin(request, session_token)
+    
+    # Can't deactivate yourself
+    if user_id == admin.user_id:
+        raise HTTPException(status_code=400, detail="No puedes desactivar tu propia cuenta")
+    
+    # Get current user
+    user = await db.users.find_one({"user_id": user_id})
+    if not user:
+        raise HTTPException(status_code=404, detail="Usuario no encontrado")
+    
+    # Can't deactivate other superadmins
+    if user.get("role") == "superadmin" and not is_active:
+        raise HTTPException(status_code=400, detail="No puedes desactivar a otro superadmin")
+    
+    # Update user status
+    result = await db.users.update_one(
+        {"user_id": user_id},
+        {"$set": {"is_active": is_active}}
+    )
+    
+    # Log the action
+    await db.admin_logs.insert_one({
+        "action": "user_status_change",
+        "user_id": user_id,
+        "is_active": is_active,
+        "changed_by": admin.user_id,
+        "created_at": datetime.now(timezone.utc).isoformat()
+    })
+    
+    status_text = "activado" if is_active else "dado de baja"
+    return {
+        "message": f"Usuario {status_text} correctamente",
+        "user_id": user_id,
+        "is_active": is_active
+    }
+
+@api_router.delete("/admin/users/{user_id}")
+async def delete_user(
+    user_id: str,
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Permanently delete a user (superadmin only)"""
+    admin = await require_admin(request, session_token)
+    
+    # Can't delete yourself
+    if user_id == admin.user_id:
+        raise HTTPException(status_code=400, detail="No puedes eliminar tu propia cuenta")
+    
+    # Get current user
+    user = await db.users.find_one({"user_id": user_id})
+    if not user:
+        raise HTTPException(status_code=404, detail="Usuario no encontrado")
+    
+    # Can't delete other superadmins
+    if user.get("role") == "superadmin":
+        raise HTTPException(status_code=400, detail="No puedes eliminar a un superadmin")
+    
+    # Delete user and related data
+    await db.users.delete_one({"user_id": user_id})
+    await db.user_sessions.delete_many({"user_id": user_id})
+    await db.notifications.delete_many({"user_id": user_id})
+    
+    # Log the action
+    await db.admin_logs.insert_one({
+        "action": "user_deleted",
+        "user_id": user_id,
+        "user_email": user.get("email"),
+        "deleted_by": admin.user_id,
+        "created_at": datetime.now(timezone.utc).isoformat()
+    })
+    
+    return {
+        "message": "Usuario eliminado permanentemente",
+        "user_id": user_id
+    }
+
+@api_router.get("/admin/stats")
+async def get_admin_stats(
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Get platform statistics (superadmin only)"""
+    await require_admin(request, session_token)
+    
+    # User stats
+    total_users = await db.users.count_documents({})
+    active_users = await db.users.count_documents({"is_active": {"$ne": False}})
+    premium_users = await db.users.count_documents({"plan": {"$ne": "free"}})
+    
+    # Role distribution
+    user_count = await db.users.count_documents({"role": "user"})
+    premium_count = await db.users.count_documents({"role": "premium"})
+    superadmin_count = await db.users.count_documents({"role": "superadmin"})
+    
+    # Plan distribution
+    plan_stats = {}
+    for plan in ["free", "personal", "family", "business", "enterprise"]:
+        plan_stats[plan] = await db.users.count_documents({"plan": plan})
+    
+    # Recent activity
+    recent_logins = await db.user_sessions.count_documents({
+        "created_at": {"$gte": (datetime.now(timezone.utc) - timedelta(days=7)).isoformat()}
+    })
+    
+    return {
+        "users": {
+            "total": total_users,
+            "active": active_users,
+            "inactive": total_users - active_users,
+            "premium": premium_users
+        },
+        "roles": {
+            "user": user_count,
+            "premium": premium_count,
+            "superadmin": superadmin_count
+        },
+        "plans": plan_stats,
+        "activity": {
+            "logins_last_7_days": recent_logins
+        }
+    }
+
+
 @api_router.get("/admin/payments")
 async def get_admin_payments(
     request: Request,
