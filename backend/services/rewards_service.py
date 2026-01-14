@@ -164,10 +164,16 @@ class RewardsService:
             "created_at": datetime.now(timezone.utc).isoformat()
         }
         
-        await db.user_rewards.insert_one(rewards)
+        await db.user_rewards.insert_one(rewards.copy())
         
         # Award early adopter badge
         await self.award_badge(user_id, 'early_adopter')
+        
+        # Re-fetch to get updated data without _id
+        rewards = await db.user_rewards.find_one(
+            {"user_id": user_id},
+            {"_id": 0}
+        )
         
         return rewards
     
