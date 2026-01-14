@@ -120,7 +120,35 @@ const AdminPanel = () => {
         toast.success(`Rol actualizado a ${newRole}`);
         loadAllData();
       } else {
-        toast.error('Error al actualizar rol');
+        const error = await response.json();
+        toast.error(error.detail || 'Error al actualizar rol');
+      }
+    } catch (error) {
+      toast.error('Error de conexión');
+    }
+  };
+
+  const handleToggleUserStatus = async (userId, currentlyActive) => {
+    const newStatus = !currentlyActive;
+    const action = newStatus ? 'activar' : 'dar de baja';
+    
+    if (!window.confirm(`¿Seguro que quieres ${action} este usuario?`)) {
+      return;
+    }
+    
+    try {
+      const response = await fetch(`${API}/admin/users/${userId}/status?is_active=${newStatus}`, {
+        method: 'PATCH',
+        credentials: 'include'
+      });
+      
+      if (response.ok) {
+        const result = await response.json();
+        toast.success(result.message);
+        loadAllData();
+      } else {
+        const error = await response.json();
+        toast.error(error.detail || 'Error al cambiar estado');
       }
     } catch (error) {
       toast.error('Error de conexión');
