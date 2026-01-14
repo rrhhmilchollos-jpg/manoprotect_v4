@@ -361,16 +361,19 @@ const AdminPanel = () => {
                     </thead>
                     <tbody>
                       {users.map((u) => (
-                        <tr key={u.user_id} className="border-b hover:bg-zinc-50">
-                          <td className="p-3 font-medium">{u.name}</td>
+                        <tr key={u.user_id} className={`border-b hover:bg-zinc-50 ${u.is_active === false ? 'opacity-50 bg-red-50' : ''}`}>
+                          <td className="p-3 font-medium">
+                            {u.name}
+                            {u.is_active === false && <span className="ml-2 text-xs text-red-500">(Baja)</span>}
+                          </td>
                           <td className="p-3">{u.email}</td>
                           <td className="p-3">
                             <Badge className={
-                              u.role === 'admin' ? 'bg-red-600' :
-                              u.role === 'investor' ? 'bg-amber-600' :
+                              u.role === 'superadmin' ? 'bg-red-600' :
+                              u.role === 'premium' ? 'bg-amber-600' :
                               'bg-zinc-600'
                             }>
-                              {u.role}
+                              {u.role === 'superadmin' ? 'Superadmin' : u.role === 'premium' ? 'Premium' : 'Usuario'}
                             </Badge>
                           </td>
                           <td className="p-3">
@@ -386,15 +389,27 @@ const AdminPanel = () => {
                             {u.created_at ? new Date(u.created_at).toLocaleDateString('es-ES') : '-'}
                           </td>
                           <td className="p-3">
-                            <select
-                              value={u.role}
-                              onChange={(e) => handleUpdateRole(u.user_id, e.target.value)}
-                              className="border rounded px-2 py-1 text-sm"
-                            >
-                              <option value="user">Usuario</option>
-                              <option value="investor">Inversor</option>
-                              <option value="admin">Admin</option>
-                            </select>
+                            <div className="flex gap-2">
+                              <select
+                                value={u.role}
+                                onChange={(e) => handleUpdateRole(u.user_id, e.target.value)}
+                                className="border rounded px-2 py-1 text-sm"
+                                disabled={u.role === 'superadmin'}
+                              >
+                                <option value="user">Usuario</option>
+                                <option value="premium">Premium</option>
+                                <option value="superadmin">Superadmin</option>
+                              </select>
+                              {u.role !== 'superadmin' && (
+                                <Button
+                                  size="sm"
+                                  variant={u.is_active === false ? "default" : "destructive"}
+                                  onClick={() => handleToggleUserStatus(u.user_id, u.is_active !== false)}
+                                >
+                                  {u.is_active === false ? 'Activar' : 'Baja'}
+                                </Button>
+                              )}
+                            </div>
                           </td>
                         </tr>
                       ))}
