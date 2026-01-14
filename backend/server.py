@@ -1409,8 +1409,8 @@ async def get_enterprise_dashboard(request: Request, session_token: Optional[str
     """Get enterprise dashboard with advanced metrics"""
     user = await require_auth(request, session_token)
     
-    # Get all threats for the organization
-    threats = await db.threats.find({"user_id": user.user_id}, {"_id": 0}).to_list(1000)
+    # Get all threat analyses for the organization
+    threats = await db.threat_analysis.find({"user_id": user.user_id}, {"_id": 0}).to_list(1000)
     
     # Calculate metrics
     total_threats = len(threats)
@@ -1440,7 +1440,10 @@ async def get_enterprise_dashboard(request: Request, session_token: Optional[str
     for t in threats:
         created = t.get("created_at")
         if isinstance(created, str):
-            created = datetime.fromisoformat(created.replace('Z', '+00:00'))
+            try:
+                created = datetime.fromisoformat(created.replace('Z', '+00:00'))
+            except:
+                continue
         if created and created > thirty_days_ago:
             day_key = created.strftime("%Y-%m-%d")
             daily_threats[day_key] = daily_threats.get(day_key, 0) + 1
