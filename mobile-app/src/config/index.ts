@@ -17,7 +17,7 @@ export const API_CONFIG = {
 
 // App Metadata
 export const APP_CONFIG = {
-  NAME: 'MANO Protect',
+  NAME: 'Mano',
   VERSION: '1.0.0',
   BUILD_NUMBER: 1,
   
@@ -28,8 +28,11 @@ export const APP_CONFIG = {
   // Firebase Project
   FIREBASE_PROJECT_ID: 'manoprotect-f889b',
   
+  // Production domain
+  DOMAIN: 'manoprotect.com',
+  
   // Deep linking scheme
-  URL_SCHEME: 'manoprotect',
+  URL_SCHEME: 'mano',
 };
 
 // Feature Flags

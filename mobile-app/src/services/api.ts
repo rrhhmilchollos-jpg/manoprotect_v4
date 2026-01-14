@@ -10,7 +10,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 // For production: Update to your production domain
 const API_BASE_URL = __DEV__ 
   ? 'https://threatshield-62.preview.emergentagent.com/api'
-  : 'https://mano-protect.com/api';
+  : 'https://manoprotect.com/api';
 
 class ApiService {
   private client: AxiosInstance;

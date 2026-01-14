@@ -1,18 +1,18 @@
 {
-  "name": "MANOProtect",
-  "displayName": "MANO Protect",
+  "name": "Mano",
+  "displayName": "Mano",
   "version": "1.0.0",
   "description": "Protección contra fraudes y estafas digitales",
-  "author": "MANO Security",
+  "author": "Mano Security",
   "license": "PROPRIETARY",
   "ios": {
     "bundleIdentifier": "com.Manoprotect.Mano",
     "buildNumber": "1",
     "infoPlist": {
-      "NSCameraUsageDescription": "MANO necesita acceso a la cámara para escanear códigos QR sospechosos",
-      "NSContactsUsageDescription": "MANO necesita acceso a tus contactos para configurar contactos de emergencia",
-      "NSFaceIDUsageDescription": "Usa Face ID para acceder de forma segura a MANO",
-      "NSLocationWhenInUseUsageDescription": "MANO usa tu ubicación para alertas de emergencia SOS",
+      "NSCameraUsageDescription": "Mano necesita acceso a la cámara para escanear códigos QR sospechosos",
+      "NSContactsUsageDescription": "Mano necesita acceso a tus contactos para configurar contactos de emergencia",
+      "NSFaceIDUsageDescription": "Usa Face ID para acceder de forma segura a Mano",
+      "NSLocationWhenInUseUsageDescription": "Mano usa tu ubicación para alertas de emergencia SOS",
       "UIBackgroundModes": ["fetch", "remote-notification"]
     },
     "capabilities": {
@@ -47,5 +47,5 @@
   },
   "icon": "./assets/icon.png",
   "primaryColor": "#6366f1",
-  "scheme": "manoprotect"
+  "scheme": "mano"
 }
