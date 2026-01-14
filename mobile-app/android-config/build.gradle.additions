@@ -3,7 +3,7 @@
 
 android {
     defaultConfig {
-        applicationId "com.manoprotect.app"
+        applicationId "com.Manoprotect.Mano"
         minSdkVersion 24
         targetSdkVersion 34
         versionCode 1
