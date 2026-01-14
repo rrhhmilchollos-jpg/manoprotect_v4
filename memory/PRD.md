@@ -23,33 +23,58 @@ MANO es una aplicación y sistema profesional en tiempo real que protege a perso
 - [x] Documentos protegidos solo para inversores aprobados
 - [x] Descarga en Markdown y HTML (imprimible a PDF)
 
-#### Dashboard Empresarial (NUEVO)
+#### Dashboard Empresarial
 - [x] Métricas avanzadas de seguridad
 - [x] Distribución de riesgos por nivel
 - [x] Análisis por departamento
 - [x] Tendencia de amenazas (30 días)
 - [x] Cálculo de dinero ahorrado
 - [x] Exportación de informes
+- [x] **NUEVO: Métricas en tiempo real con SSE** (Enero 14, 2025)
 
-#### Panel Familiar (NUEVO)
+#### Panel Familiar
 - [x] Gestión de miembros familiares (hasta 5)
 - [x] Modo simplificado para mayores
 - [x] Configuración de alertas por miembro
 - [x] Historial de amenazas por persona
 - [x] Alertas familiares en tiempo real
 
-#### Panel de Administración (NUEVO)
+#### Panel de Administración
 - [x] Dashboard con estadísticas globales
 - [x] Gestión de usuarios y roles
 - [x] Aprobación/rechazo de inversores
 - [x] Historial de pagos
 - [x] Registro de descargas de documentos
+- [x] **NUEVO: Pestaña WhatsApp** - Envío de mensajes y cola (Enero 14, 2025)
+- [x] **NUEVO: Pestaña API Keys** - Gestión de claves para partners (Enero 14, 2025)
+- [x] **NUEVO: Pestaña Tiempo Real** - Métricas SSE (Enero 14, 2025)
 
-#### Notificaciones (NUEVO)
+#### Notificaciones (ACTUALIZADO Enero 14, 2025)
 - [x] Sistema de notificaciones en app
 - [x] Preferencias de notificación
 - [x] Marcado de leídas
-- [x] Suscripción a push notifications
+- [x] **NUEVO: Web Push Notifications** - VAPID keys, subscribe/unsubscribe
+- [x] **NUEVO: Centro de notificaciones** - Badge con contador, dropdown menu
+- [x] **NUEVO: Toggle de Push en Profile** - Gestión de permisos del navegador
+
+#### WhatsApp Integration (NUEVO - Enero 14, 2025)
+- [x] Endpoint para envío de mensajes
+- [x] Cola de mensajes pendientes
+- [x] UI de gestión en Admin Panel
+- [x] *Nota: Requiere credenciales de WhatsApp Business API para envío real*
+
+#### API Pública para Partners (NUEVO - Enero 14, 2025)
+- [x] Generación de API Keys con permisos
+- [x] Límite de 5 keys por usuario
+- [x] Rate limiting configurado (1000 req/día)
+- [x] Revocación de claves
+- [x] UI de gestión en Admin Panel
+
+#### Métricas en Tiempo Real (NUEVO - Enero 14, 2025)
+- [x] SSE Stream `/api/metrics/stream` - actualiza cada 5 segundos
+- [x] Dashboard metrics `/api/metrics/dashboard`
+- [x] Componente RealTimeMetrics con indicador "En Vivo"
+- [x] Reconexión automática en caso de error
 
 #### Pagos con Stripe
 - [x] 7 planes de suscripción
