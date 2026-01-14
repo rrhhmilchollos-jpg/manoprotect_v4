@@ -230,6 +230,10 @@ const AdminPanel = () => {
               <Users className="w-4 h-4 mr-2" />
               Usuarios
             </TabsTrigger>
+            <TabsTrigger value="subscriptions" className="data-[state=active]:bg-amber-100">
+              <Crown className="w-4 h-4 mr-2" />
+              Suscripciones
+            </TabsTrigger>
             <TabsTrigger value="payments" className="data-[state=active]:bg-indigo-100">
               <CreditCard className="w-4 h-4 mr-2" />
               Pagos
@@ -249,6 +253,10 @@ const AdminPanel = () => {
             <TabsTrigger value="api" className="data-[state=active]:bg-indigo-100">
               <Key className="w-4 h-4 mr-2" />
               API Keys
+            </TabsTrigger>
+            <TabsTrigger value="database" className="data-[state=active]:bg-emerald-100">
+              <Database className="w-4 h-4 mr-2" />
+              Base de Datos
             </TabsTrigger>
           </TabsList>
 
