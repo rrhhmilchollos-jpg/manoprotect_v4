@@ -24,6 +24,7 @@ const Dashboard = () => {
   const [threats, setThreats] = useState([]);
   const [stats, setStats] = useState(null);
   const [lastAnalysis, setLastAnalysis] = useState(null);
+  const [activeTab, setActiveTab] = useState('analyze'); // 'analyze', 'banking', 'history'
 
   useEffect(() => {
     loadThreats();
