@@ -93,14 +93,36 @@ const LandingPage = () => {
               </p>
               
               <div className="flex flex-wrap gap-4">
-                <Button
-                  data-testid="hero-cta-btn"
-                  onClick={() => navigate('/dashboard')}
-                  className="bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg px-8 h-14 text-lg shadow-md hover:shadow-lg active:scale-95 transition-all"
-                >
-                  Probar Ahora
-                  <ArrowRight className="ml-2 w-5 h-5" />
-                </Button>
+                {isAuthenticated ? (
+                  <Button
+                    data-testid="hero-dashboard-btn"
+                    onClick={() => navigate('/dashboard')}
+                    className="bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg px-8 h-14 text-lg shadow-md hover:shadow-lg active:scale-95 transition-all"
+                  >
+                    Mi Dashboard
+                    <ArrowRight className="ml-2 w-5 h-5" />
+                  </Button>
+                ) : (
+                  <>
+                    <Button
+                      data-testid="hero-login-btn"
+                      onClick={() => navigate('/login')}
+                      variant="outline"
+                      className="border-2 border-indigo-600 text-indigo-600 hover:bg-indigo-50 rounded-lg px-8 h-14 text-lg active:scale-95 transition-all"
+                    >
+                      <LogIn className="mr-2 w-5 h-5" />
+                      Iniciar Sesión
+                    </Button>
+                    <Button
+                      data-testid="hero-register-btn"
+                      onClick={() => navigate('/register')}
+                      className="bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg px-8 h-14 text-lg shadow-md hover:shadow-lg active:scale-95 transition-all"
+                    >
+                      Regístrate Gratis
+                      <ArrowRight className="ml-2 w-5 h-5" />
+                    </Button>
+                  </>
+                )}
                 <Button
                   data-testid="hero-learn-more-btn"
                   onClick={() => navigate('/how-it-works')}
