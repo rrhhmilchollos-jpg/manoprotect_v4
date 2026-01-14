@@ -155,11 +155,33 @@ MANO es una aplicación y sistema profesional en tiempo real que protege a perso
 - `POST /api/admin/investors/{id}/approve` - Aprobar
 - `POST /api/admin/investors/{id}/reject` - Rechazar
 
-### Notificaciones
+### Notificaciones (ACTUALIZADO)
 - `GET /api/notifications` - Obtener notificaciones
-- `POST /api/notifications/subscribe` - Suscribirse push
-- `POST /api/notifications/{id}/read` - Marcar leída
+- `POST /api/notifications/read-all` - Marcar todas como leídas
+- `POST /api/notifications/{id}/read` - Marcar leída individual
 - `GET /api/notifications/preferences` - Preferencias
+- `PATCH /api/notifications/preferences` - Actualizar preferencias
+
+### Push Notifications (NUEVO - Enero 14, 2025)
+- `GET /api/push/vapid-public-key` - Clave pública VAPID
+- `POST /api/push/subscribe` - Suscribirse a push
+- `DELETE /api/push/unsubscribe` - Desuscribirse
+
+### WhatsApp (NUEVO - Enero 14, 2025)
+- `POST /api/whatsapp/send` - Enviar mensaje (encola si API no configurada)
+- `GET /api/whatsapp/queue` - Ver cola de mensajes
+
+### Métricas en Tiempo Real (NUEVO - Enero 14, 2025)
+- `GET /api/metrics/dashboard` - Dashboard de métricas
+- `GET /api/metrics/stream` - SSE stream (actualiza cada 5s)
+
+### API Keys para Partners (NUEVO - Enero 14, 2025)
+- `GET /api/api-keys` - Listar API keys del usuario
+- `POST /api/api-keys` - Crear nueva API key
+- `DELETE /api/api-keys/{id}` - Revocar API key
+
+### Partner API (NUEVO - Enero 14, 2025)
+- `GET /api/v1/analyze/status` - Estado del servicio público
 
 ---
 
