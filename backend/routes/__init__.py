@@ -14,6 +14,21 @@ from .profile import router as profile_router
 from .family import router as family_router
 from .enterprise import router as enterprise_router
 
+# List of all routers for easy registration
+all_routers = [
+    auth_router,
+    admin_router,
+    investors_router,
+    threats_router,
+    banking_router,
+    payments_router,
+    rewards_router,
+    notifications_router,
+    profile_router,
+    family_router,
+    enterprise_router
+]
+
 __all__ = [
     'auth_router',
     'admin_router', 
@@ -25,5 +40,6 @@ __all__ = [
     'notifications_router',
     'profile_router',
     'family_router',
-    'enterprise_router'
+    'enterprise_router',
+    'all_routers'
 ]
