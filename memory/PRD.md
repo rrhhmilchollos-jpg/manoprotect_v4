@@ -297,6 +297,8 @@ MANO es una aplicación y sistema profesional en tiempo real que protege a perso
   - Project ID: `manoprotect-f889b`
   - Android Package: `com.Manoprotect.Mano`
   - iOS Bundle: `com.Manoprotect.Mano`
+  - Dominio: `manoprotect.com`
+  - Nombre App: `Mano`
 
 ---
 
