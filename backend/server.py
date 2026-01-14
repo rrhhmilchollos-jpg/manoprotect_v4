@@ -3249,7 +3249,7 @@ async def get_email_preferences(
     )
     
     if not prefs:
-        prefs = {
+        new_prefs = {
             "user_id": user.user_id,
             "threat_alerts": True,
             "transaction_alerts": True,
@@ -3259,7 +3259,8 @@ async def get_email_preferences(
             "family_alerts": True,
             "marketing": False
         }
-        await db.email_preferences.insert_one(prefs)
+        await db.email_preferences.insert_one(new_prefs.copy())
+        prefs = new_prefs
     
     return prefs
 
