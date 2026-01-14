@@ -20,6 +20,7 @@ import InvestorRegister from '@/pages/InvestorRegister';
 import AdminPanel from '@/pages/AdminPanel';
 import EnterpriseDashboard from '@/pages/EnterpriseDashboard';
 import FamilyAdmin from '@/pages/FamilyAdmin';
+import Rewards from '@/pages/Rewards';
 
 import '@/App.css';
 
