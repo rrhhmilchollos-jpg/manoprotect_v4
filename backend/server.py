@@ -2190,6 +2190,9 @@ async def get_admin_users(
         "pages": (total + limit - 1) // limit
     }
 
+# Email del único superadmin permitido
+SUPERADMIN_EMAIL = "rrhh.milchollos@gmail.com"
+
 @api_router.patch("/admin/users/{user_id}/role")
 async def update_user_role(
     user_id: str,
@@ -2197,11 +2200,20 @@ async def update_user_role(
     request: Request,
     session_token: Optional[str] = Cookie(None)
 ):
-    """Update user role (admin only)"""
+    """Update user role (superadmin only)"""
     await require_admin(request, session_token)
     
-    if role not in ["user", "investor", "admin"]:
-        raise HTTPException(status_code=400, detail="Rol inválido")
+    if role not in ["user", "premium", "superadmin"]:
+        raise HTTPException(status_code=400, detail="Rol inválido. Roles válidos: user, premium, superadmin")
+    
+    # Only allow superadmin role for the designated email
+    if role == "superadmin":
+        target_user = await db.users.find_one({"user_id": user_id})
+        if target_user and target_user.get("email") != SUPERADMIN_EMAIL:
+            raise HTTPException(
+                status_code=403, 
+                detail=f"Solo {SUPERADMIN_EMAIL} puede tener el rol de superadmin"
+            )
     
     result = await db.users.update_one(
         {"user_id": user_id},
