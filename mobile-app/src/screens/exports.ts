@@ -8,13 +8,9 @@ export { default as QRScannerScreen } from './QRScannerScreen';
 export { default as LoginScreen } from './auth/LoginScreen';
 export { default as RegisterScreen } from './auth/RegisterScreen';
 export { default as ForgotPasswordScreen } from './auth/ForgotPasswordScreen';
-
-// Placeholder screens (to be implemented)
-export {
-  ThreatDetailScreen,
-  FamilyMemberScreen,
-  AddFamilyMemberScreen,
-  ContactsPickerScreen,
-  SettingsScreen,
-  NotificationsScreen,
-} from './index';
+export { default as ThreatDetailScreen } from './ThreatDetailScreen';
+export { default as AddFamilyMemberScreen } from './AddFamilyMemberScreen';
+export { default as FamilyMemberScreen } from './FamilyMemberScreen';
+export { default as SettingsScreen } from './SettingsScreen';
+export { default as NotificationsScreen } from './NotificationsScreen';
+export { default as ContactsPickerScreen } from './ContactsPickerScreen';
