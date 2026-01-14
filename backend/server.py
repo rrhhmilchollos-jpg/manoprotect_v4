@@ -2195,6 +2195,93 @@ async def update_user_role(
     
     return {"message": f"Rol actualizado a {role}"}
 
+@api_router.patch("/admin/users/{user_id}/plan")
+async def update_user_plan(
+    user_id: str,
+    plan: str,
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Update user subscription plan (admin only) - Manual premium activation"""
+    await require_admin(request, session_token)
+    
+    valid_plans = ["free", "personal", "family", "business", "enterprise"]
+    if plan not in valid_plans:
+        raise HTTPException(status_code=400, detail=f"Plan inválido. Planes válidos: {', '.join(valid_plans)}")
+    
+    # Get current user
+    user = await db.users.find_one({"user_id": user_id})
+    if not user:
+        raise HTTPException(status_code=404, detail="Usuario no encontrado")
+    
+    old_plan = user.get("plan", "free")
+    
+    # Update user plan
+    update_data = {
+        "plan": plan,
+        "subscription_status": "active" if plan != "free" else None,
+        "plan_updated_at": datetime.now(timezone.utc).isoformat(),
+        "plan_updated_by": "admin_manual"
+    }
+    
+    result = await db.users.update_one(
+        {"user_id": user_id},
+        {"$set": update_data}
+    )
+    
+    # Log the plan change
+    await db.admin_logs.insert_one({
+        "action": "plan_change",
+        "user_id": user_id,
+        "old_plan": old_plan,
+        "new_plan": plan,
+        "changed_by": "admin",
+        "created_at": datetime.now(timezone.utc).isoformat()
+    })
+    
+    return {
+        "message": f"Plan actualizado de '{old_plan}' a '{plan}'",
+        "user_id": user_id,
+        "new_plan": plan
+    }
+
+@api_router.get("/admin/subscriptions")
+async def get_admin_subscriptions(
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Get all premium subscriptions with details (admin only)"""
+    await require_admin(request, session_token)
+    
+    # Get all premium users
+    premium_users = await db.users.find(
+        {"plan": {"$ne": "free"}},
+        {"_id": 0, "password_hash": 0}
+    ).to_list(500)
+    
+    # Get subscription stats
+    stats = {
+        "total_premium": len(premium_users),
+        "by_plan": {},
+        "recent_upgrades": []
+    }
+    
+    for user in premium_users:
+        plan = user.get("plan", "unknown")
+        stats["by_plan"][plan] = stats["by_plan"].get(plan, 0) + 1
+    
+    # Get recent plan changes
+    recent_logs = await db.admin_logs.find(
+        {"action": "plan_change"},
+        {"_id": 0}
+    ).sort("created_at", -1).limit(20).to_list(20)
+    
+    return {
+        "subscribers": premium_users,
+        "stats": stats,
+        "recent_changes": recent_logs
+    }
+
 @api_router.get("/admin/payments")
 async def get_admin_payments(
     request: Request,
