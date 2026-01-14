@@ -7,7 +7,27 @@ MANO es una aplicación y sistema profesional en tiempo real que protege a perso
 
 ---
 
-## Estado Actual (Enero 14, 2025)
+## Estado Actual (Enero 14, 2026)
+
+### ✅ Completado Recientemente (14 Enero 2026)
+
+#### Bancos Añadidos
+- [x] N26
+- [x] Imagin
+- [x] Nickel
+
+#### Panel de Admin Mejorado
+- [x] **Nueva pestaña "Suscripciones"** - Gestión manual de planes Premium
+- [x] **Nueva pestaña "Base de Datos"** - Info de conexión MongoDB
+- [x] Dropdown para cambiar plan de usuario (Free → Personal → Family → Business → Enterprise)
+- [x] Vista de estado de suscripción (Activo/Inactivo)
+- [x] Historial de cambios de plan
+
+#### Backend Modularizado (Preparación)
+- [x] Creada estructura `/app/backend/routes/` con módulos separados
+- [x] Archivos de rutas: auth.py, admin.py, investors.py, threats.py, banking.py, payments.py, rewards.py, notifications.py, profile.py, family.py, enterprise.py
+- [x] Modelos centralizados en `/app/backend/models/schemas.py`
+- [x] Funciones de autenticación en `/app/backend/core/config.py`
 
 ### ✅ Completado
 
