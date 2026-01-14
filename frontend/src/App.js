@@ -81,7 +81,9 @@ function AppRouter() {
   }
 
   return (
-    <Routes>
+    <>
+      <AnalyticsTracker />
+      <Routes>
       {/* Public Routes */}
       <Route path="/" element={<LandingPage />} />
       <Route path="/how-it-works" element={<HowItWorks />} />
