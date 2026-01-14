@@ -5,7 +5,11 @@ Central configuration for the entire application
 from motor.motor_asyncio import AsyncIOMotorClient
 from dotenv import load_dotenv
 from pathlib import Path
+from fastapi import Request, HTTPException, Cookie
+from typing import Optional
 import os
+import uuid
+import hashlib
 
 ROOT_DIR = Path(__file__).parent.parent
 load_dotenv(ROOT_DIR / '.env')
@@ -37,7 +41,11 @@ SUBSCRIPTION_PACKAGES = {
     "yearly": {"amount": 249.99, "name": "Premium Anual", "period": "año"},
     "family-monthly": {"amount": 49.99, "name": "Familiar Mensual", "period": "mes"},
     "family-quarterly": {"amount": 129.99, "name": "Familiar Trimestral", "period": "3 meses"},
-    "family-yearly": {"amount": 399.99, "name": "Familiar Anual", "period": "año"}
+    "family-yearly": {"amount": 399.99, "name": "Familiar Anual", "period": "año"},
+    "personal": {"amount": 9.99, "name": "Personal", "period": "mes"},
+    "family": {"amount": 19.99, "name": "Familiar", "period": "mes"},
+    "business": {"amount": 49.99, "name": "Business", "period": "mes"},
+    "enterprise": {"amount": 199.99, "name": "Enterprise", "period": "mes"}
 }
 
 # Risk scoring weights for ML
@@ -63,3 +71,75 @@ THREAT_PATTERNS = {
     "prize_scam": ["ganador", "premio", "sorteo", "lotería", "herencia"],
     "threat": ["bloquear", "suspender", "cancelar", "demanda", "policía", "tribunal"]
 }
+
+
+# ============================================
+# HELPER FUNCTIONS
+# ============================================
+
+def hash_password(password: str) -> str:
+    """Hash password using SHA-256"""
+    return hashlib.sha256(password.encode()).hexdigest()
+
+
+def verify_password(password: str, hashed: str) -> bool:
+    """Verify password against hash"""
+    return hash_password(password) == hashed
+
+
+def generate_session_token() -> str:
+    """Generate a secure session token"""
+    return f"session_{uuid.uuid4().hex}"
+
+
+async def get_current_user(request: Request, session_token: Optional[str] = Cookie(None)):
+    """Get current user from session token (cookie or header)"""
+    from models.schemas import User
+    
+    token = session_token
+    if not token:
+        auth_header = request.headers.get("Authorization")
+        if auth_header and auth_header.startswith("Bearer "):
+            token = auth_header.split(" ")[1]
+    
+    if not token:
+        return None
+    
+    session = await db.sessions.find_one({"session_token": token})
+    if not session:
+        return None
+    
+    from datetime import datetime, timezone
+    if datetime.now(timezone.utc) > session.get("expires_at", datetime.now(timezone.utc)):
+        await db.sessions.delete_one({"session_token": token})
+        return None
+    
+    user_data = await db.users.find_one({"user_id": session["user_id"]}, {"_id": 0})
+    if not user_data:
+        return None
+    
+    return User(**user_data)
+
+
+async def require_auth(request: Request, session_token: Optional[str] = Cookie(None)):
+    """Require authenticated user"""
+    user = await get_current_user(request, session_token)
+    if not user:
+        raise HTTPException(status_code=401, detail="Autenticación requerida")
+    return user
+
+
+async def require_admin(request: Request, session_token: Optional[str] = Cookie(None)):
+    """Require admin role"""
+    user = await require_auth(request, session_token)
+    if user.role != "admin":
+        raise HTTPException(status_code=403, detail="Se requiere rol de administrador")
+    return user
+
+
+async def require_investor(request: Request, session_token: Optional[str] = Cookie(None)):
+    """Require investor role"""
+    user = await require_auth(request, session_token)
+    if user.role not in ["investor", "admin"]:
+        raise HTTPException(status_code=403, detail="Se requiere rol de inversor")
+    return user
