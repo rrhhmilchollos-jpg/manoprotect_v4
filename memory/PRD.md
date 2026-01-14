@@ -7,7 +7,7 @@ MANO es una aplicación y sistema profesional en tiempo real que protege a perso
 
 ---
 
-## Estado Actual (Enero 2025)
+## Estado Actual (Enero 14, 2025)
 
 ### ✅ Completado
 
@@ -30,7 +30,7 @@ MANO es una aplicación y sistema profesional en tiempo real que protege a perso
 - [x] Tendencia de amenazas (30 días)
 - [x] Cálculo de dinero ahorrado
 - [x] Exportación de informes
-- [x] **NUEVO: Métricas en tiempo real con SSE** (Enero 14, 2025)
+- [x] Métricas en tiempo real con SSE
 
 #### Panel Familiar
 - [x] Gestión de miembros familiares (hasta 5)
@@ -45,9 +45,9 @@ MANO es una aplicación y sistema profesional en tiempo real que protege a perso
 - [x] Aprobación/rechazo de inversores
 - [x] Historial de pagos
 - [x] Registro de descargas de documentos
-- [x] **NUEVO: Pestaña WhatsApp** - Envío de mensajes y cola (Enero 14, 2025)
-- [x] **NUEVO: Pestaña API Keys** - Gestión de claves para partners (Enero 14, 2025)
-- [x] **NUEVO: Pestaña Tiempo Real** - Métricas SSE (Enero 14, 2025)
+- [x] Pestaña WhatsApp - Envío de mensajes y cola
+- [x] Pestaña API Keys - Gestión de claves para partners
+- [x] Pestaña Tiempo Real - Métricas SSE
 
 #### Notificaciones (ACTUALIZADO Enero 14, 2025)
 - [x] Sistema de notificaciones en app
