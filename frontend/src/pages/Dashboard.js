@@ -298,24 +298,66 @@ const Dashboard = () => {
             <Card className="card-hover border-zinc-200 bg-white">
               <CardHeader className="pb-3">
                 <CardDescription>Críticas</CardDescription>
-                <CardTitle className="text-3xl text-orange-500">{stats.risk_distribution.critical}</CardTitle>
+                <CardTitle className="text-3xl text-orange-500">{stats.risk_distribution?.critical || 0}</CardTitle>
               </CardHeader>
             </Card>
             <Card className="card-hover border-zinc-200 bg-white">
               <CardHeader className="pb-3">
                 <CardDescription>Altas</CardDescription>
-                <CardTitle className="text-3xl text-yellow-600">{stats.risk_distribution.high}</CardTitle>
+                <CardTitle className="text-3xl text-yellow-600">{stats.risk_distribution?.high || 0}</CardTitle>
               </CardHeader>
             </Card>
           </div>
         )}
 
-        {/* Analyzer */}
+        {/* Tab Navigation */}
+        <div className="flex gap-2 mb-6 border-b border-zinc-200 pb-4">
+          <Button
+            data-testid="tab-analyze"
+            variant={activeTab === 'analyze' ? 'default' : 'ghost'}
+            onClick={() => setActiveTab('analyze')}
+            className={activeTab === 'analyze' ? 'bg-indigo-600' : ''}
+          >
+            <Brain className="w-4 h-4 mr-2" />
+            Analizador IA
+          </Button>
+          <Button
+            data-testid="tab-banking"
+            variant={activeTab === 'banking' ? 'default' : 'ghost'}
+            onClick={() => setActiveTab('banking')}
+            className={activeTab === 'banking' ? 'bg-indigo-600' : ''}
+          >
+            <CreditCard className="w-4 h-4 mr-2" />
+            Banca Segura
+          </Button>
+          <Button
+            data-testid="tab-history"
+            variant={activeTab === 'history' ? 'default' : 'ghost'}
+            onClick={() => setActiveTab('history')}
+            className={activeTab === 'history' ? 'bg-indigo-600' : ''}
+          >
+            <Clock className="w-4 h-4 mr-2" />
+            Historial
+          </Button>
+        </div>
+
+        {/* Tab Content */}
+        {activeTab === 'analyze' && (
+          <ThreatAnalyzer />
+        )}
+
+        {activeTab === 'banking' && (
+          <BankingDashboard />
+        )}
+
+        {activeTab === 'history' && (
+          <>
+        {/* Original Analyzer */}
         <Card className="mb-8 border-zinc-200 shadow-sm bg-white">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Search className="w-5 h-5" />
-              Analizar Contenido en Tiempo Real
+              Análisis Rápido
             </CardTitle>
             <CardDescription>
               Introduce un número de teléfono, mensaje, correo o enlace para verificar si es una amenaza
