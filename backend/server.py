@@ -2946,6 +2946,185 @@ async def add_trusted_merchant(
     return {"message": f"Comercio '{name}' añadido a la lista de confianza"}
 
 # ============================================
+# BANKING INTEGRATION - FULL IMPLEMENTATION
+# ============================================
+
+# Import banking service
+import sys
+sys.path.insert(0, str(ROOT_DIR))
+from services.banking_service import banking_service
+from services.threat_analyzer import threat_analyzer as ta_service
+from services.fraud_detection import fraud_service
+
+class BankAccountConnect(BaseModel):
+    bank_name: str
+    account_type: str = "checking"
+
+class TransactionAnalyze(BaseModel):
+    amount: float
+    description: str
+    merchant: Optional[str] = None
+    account_id: Optional[str] = None
+
+@api_router.get("/banking/accounts")
+async def get_bank_accounts(
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Get all connected bank accounts"""
+    user = await require_auth(request, session_token)
+    accounts = await banking_service.get_accounts(user.user_id)
+    return {"accounts": accounts}
+
+@api_router.post("/banking/connect")
+async def connect_bank_account(
+    data: BankAccountConnect,
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Connect a new bank account (simulated)"""
+    user = await require_auth(request, session_token)
+    result = await banking_service.connect_bank_account(
+        user.user_id, 
+        data.bank_name, 
+        data.account_type
+    )
+    return result
+
+@api_router.get("/banking/transactions")
+async def get_bank_transactions(
+    request: Request,
+    session_token: Optional[str] = Cookie(None),
+    account_id: Optional[str] = None,
+    days: int = 30,
+    suspicious_only: bool = False
+):
+    """Get transaction history"""
+    user = await require_auth(request, session_token)
+    transactions = await banking_service.get_transactions(
+        user.user_id,
+        account_id=account_id,
+        days=days,
+        suspicious_only=suspicious_only
+    )
+    return {"transactions": transactions}
+
+@api_router.post("/banking/analyze-transaction")
+async def analyze_bank_transaction(
+    data: TransactionAnalyze,
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Analyze a transaction for fraud using ML"""
+    user = await require_auth(request, session_token)
+    result = await banking_service.analyze_transaction(
+        user.user_id,
+        data.amount,
+        data.description,
+        data.merchant,
+        data.account_id
+    )
+    return result
+
+@api_router.post("/banking/transactions/{transaction_id}/block")
+async def block_transaction(
+    transaction_id: str,
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Block a suspicious transaction"""
+    user = await require_auth(request, session_token)
+    result = await banking_service.block_transaction(user.user_id, transaction_id)
+    return result
+
+@api_router.post("/banking/transactions/{transaction_id}/approve")
+async def approve_transaction(
+    transaction_id: str,
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Approve a flagged transaction"""
+    user = await require_auth(request, session_token)
+    result = await banking_service.approve_transaction(user.user_id, transaction_id)
+    return result
+
+@api_router.get("/banking/summary")
+async def get_banking_summary(
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Get banking summary with all accounts and stats"""
+    user = await require_auth(request, session_token)
+    summary = await banking_service.get_account_summary(user.user_id)
+    return summary
+
+@api_router.get("/banking/supported-banks")
+async def get_supported_banks():
+    """Get list of supported banks"""
+    return {"banks": banking_service.supported_banks}
+
+# ============================================
+# ML FRAUD DETECTION ROUTES
+# ============================================
+
+@api_router.get("/ml/risk-summary")
+async def get_risk_summary(
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Get user's fraud risk summary"""
+    user = await require_auth(request, session_token)
+    summary = await fraud_service.get_user_risk_summary(user.user_id)
+    return summary
+
+@api_router.post("/ml/analyze-text")
+async def ml_analyze_text(
+    data: AnalyzeRequest,
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Analyze text using ML + LLM hybrid approach"""
+    user = await get_current_user(request, session_token)
+    user_id = user.user_id if user else "anonymous"
+    
+    result = await ta_service.analyze_content(
+        data.content, 
+        data.content_type,
+        user_id
+    )
+    
+    # Save analysis
+    if user:
+        await ta_service.save_analysis(user_id, data.content, data.content_type, result)
+    
+    return result
+
+@api_router.get("/ml/behavior-profile")
+async def get_behavior_profile(
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Get user's behavior profile for ML"""
+    user = await require_auth(request, session_token)
+    profile = await fraud_service._get_user_profile(user.user_id)
+    
+    if not profile:
+        return {
+            "message": "No hay suficientes datos para generar un perfil",
+            "profile": None
+        }
+    
+    return {
+        "profile": {
+            "avg_transaction_amount": profile.get("avg_transaction_amount", 0),
+            "transaction_count": profile.get("transaction_count", 0),
+            "typical_merchants": profile.get("typical_merchants", []),
+            "typical_hours": profile.get("typical_hours", []),
+            "updated_at": profile.get("updated_at")
+        }
+    }
+
+# ============================================
 # APP SETUP
 # ============================================
 
