@@ -127,6 +127,29 @@ const AdminPanel = () => {
     }
   };
 
+  const handleUpdatePlan = async (userId, newPlan) => {
+    setActionLoading(`plan-${userId}`);
+    try {
+      const response = await fetch(`${API}/admin/users/${userId}/plan?plan=${newPlan}`, {
+        method: 'PATCH',
+        credentials: 'include'
+      });
+      
+      if (response.ok) {
+        const result = await response.json();
+        toast.success(result.message);
+        loadAllData();
+      } else {
+        const error = await response.json();
+        toast.error(error.detail || 'Error al actualizar plan');
+      }
+    } catch (error) {
+      toast.error('Error de conexión');
+    } finally {
+      setActionLoading(null);
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-zinc-50 flex items-center justify-center">
