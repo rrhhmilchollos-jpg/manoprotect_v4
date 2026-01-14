@@ -458,6 +458,45 @@ const AdminPanel = () => {
               </CardContent>
             </Card>
           </TabsContent>
+
+          {/* Real-time Metrics Tab */}
+          <TabsContent value="realtime">
+            <div className="space-y-6">
+              <RealTimeMetrics />
+              <Card className="bg-white">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Activity className="w-5 h-5 text-indigo-600" />
+                    Acerca del Dashboard en Tiempo Real
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="prose prose-sm text-zinc-600">
+                    <p>
+                      El dashboard de métricas en tiempo real utiliza Server-Sent Events (SSE) para 
+                      mostrar datos actualizados cada 5 segundos sin necesidad de recargar la página.
+                    </p>
+                    <ul className="mt-3 space-y-1">
+                      <li><strong>Analizados:</strong> Total de contenidos verificados</li>
+                      <li><strong>Bloqueadas:</strong> Amenazas detectadas y neutralizadas</li>
+                      <li><strong>Protección:</strong> Tasa de éxito en detección</li>
+                      <li><strong>Última Hora:</strong> Actividad reciente</li>
+                    </ul>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </TabsContent>
+
+          {/* WhatsApp Tab */}
+          <TabsContent value="whatsapp">
+            <WhatsAppManager />
+          </TabsContent>
+
+          {/* API Keys Tab */}
+          <TabsContent value="api">
+            <APIKeyManager />
+          </TabsContent>
         </Tabs>
       </div>
     </div>
