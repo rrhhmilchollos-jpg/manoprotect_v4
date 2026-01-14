@@ -1,0 +1,50 @@
+// android/app/build.gradle configuration additions
+// Add these configurations to your build.gradle file
+
+android {
+    defaultConfig {
+        applicationId "com.manoprotect.app"
+        minSdkVersion 24
+        targetSdkVersion 34
+        versionCode 1
+        versionName "1.0.0"
+        
+        // MultiDex for large apps
+        multiDexEnabled true
+    }
+    
+    signingConfigs {
+        release {
+            if (project.hasProperty('MANO_RELEASE_STORE_FILE')) {
+                storeFile file(MANO_RELEASE_STORE_FILE)
+                storePassword MANO_RELEASE_STORE_PASSWORD
+                keyAlias MANO_RELEASE_KEY_ALIAS
+                keyPassword MANO_RELEASE_KEY_PASSWORD
+            }
+        }
+    }
+    
+    buildTypes {
+        release {
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+    }
+}
+
+dependencies {
+    // Firebase
+    implementation platform('com.google.firebase:firebase-bom:32.7.0')
+    implementation 'com.google.firebase:firebase-messaging'
+    
+    // Biometrics
+    implementation 'androidx.biometric:biometric:1.1.0'
+    
+    // Camera/QR
+    implementation 'com.google.mlkit:barcode-scanning:17.2.0'
+}
+
+// Add at the bottom of the file
+apply plugin: 'com.google.gms.google-services'
