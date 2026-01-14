@@ -129,6 +129,14 @@ function AppRouter() {
         } 
       />
       <Route 
+        path="/rewards" 
+        element={
+          <ProtectedRoute>
+            <Rewards />
+          </ProtectedRoute>
+        } 
+      />
+      <Route 
         path="/enterprise" 
         element={
           <ProtectedRoute>
