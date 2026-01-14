@@ -293,13 +293,17 @@ MANO es una aplicación y sistema profesional en tiempo real que protege a perso
 - **OpenAI GPT-5.2:** Análisis de amenazas con IA (via Emergent LLM Key)
 - **Google OAuth:** Emergent Auth
 - **MongoDB:** Base de datos
+- **Firebase Cloud Messaging:** Push notifications para app móvil
+  - Project ID: `manoprotect-f889b`
+  - Android Package: `com.Manoprotect.Mano`
+  - iOS Bundle: `com.Manoprotect.Mano`
 
 ---
 
 ## Tests
-- Backend: 25/25 tests pasados (Iteración 7)
+- Backend: 22/22 tests pasados (Iteración 11 - Mobile App Endpoints)
 - Frontend: Todos los componentes verificados
-- Último reporte: `/app/test_reports/iteration_7.json`
+- Último reporte: `/app/test_reports/iteration_11.json`
 
 ---
 
