@@ -10,6 +10,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { toast } from 'sonner';
+import RealTimeMetrics from '@/components/RealTimeMetrics';
 
 const API = process.env.REACT_APP_BACKEND_URL + '/api';
 
@@ -123,6 +124,11 @@ const EnterpriseDashboard = () => {
       </header>
 
       <div className="max-w-7xl mx-auto px-6 py-8">
+        {/* Real-time Metrics */}
+        <div className="mb-8">
+          <RealTimeMetrics />
+        </div>
+
         {/* Main Stats */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
           <Card className="bg-zinc-800 border-zinc-700">
