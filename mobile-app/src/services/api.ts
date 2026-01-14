@@ -2,7 +2,7 @@
  * MANO API Service
  * Handles all communication with the backend
  */
-import axios, { AxiosInstance } from 'axios';
+import axios, { AxiosInstance, AxiosResponse } from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // Production API URL - Configure via environment or build config
@@ -23,6 +23,7 @@ class ApiService {
       headers: {
         'Content-Type': 'application/json',
       },
+      withCredentials: true, // Include cookies in requests
     });
 
     // Request interceptor - add auth token
@@ -33,15 +34,21 @@ class ApiService {
         }
         if (this.sessionToken) {
           config.headers.Authorization = `Bearer ${this.sessionToken}`;
+          // Also send as cookie header for compatibility
+          config.headers.Cookie = `session_token=${this.sessionToken}`;
         }
         return config;
       },
       (error) => Promise.reject(error)
     );
 
-    // Response interceptor - handle errors
+    // Response interceptor - handle errors and extract token from cookies
     this.client.interceptors.response.use(
-      (response) => response,
+      (response) => {
+        // Try to extract session token from Set-Cookie header
+        this.extractTokenFromResponse(response);
+        return response;
+      },
       async (error) => {
         if (error.response?.status === 401) {
           await this.logout();
@@ -49,6 +56,32 @@ class ApiService {
         return Promise.reject(error);
       }
     );
+  }
+
+  /**
+   * Extract session token from response headers or body
+   */
+  private extractTokenFromResponse(response: AxiosResponse): void {
+    // Check body first (some endpoints return it directly)
+    if (response.data?.session_token) {
+      this.sessionToken = response.data.session_token;
+      AsyncStorage.setItem('session_token', this.sessionToken);
+      return;
+    }
+
+    // Try to extract from Set-Cookie header
+    const setCookie = response.headers['set-cookie'];
+    if (setCookie) {
+      const cookies = Array.isArray(setCookie) ? setCookie : [setCookie];
+      for (const cookie of cookies) {
+        const match = cookie.match(/session_token=([^;]+)/);
+        if (match) {
+          this.sessionToken = match[1];
+          AsyncStorage.setItem('session_token', this.sessionToken);
+          break;
+        }
+      }
+    }
   }
 
   // ==================== AUTH ====================
