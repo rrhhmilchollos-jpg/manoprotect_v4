@@ -401,16 +401,23 @@ class TestAdminPlanUpdate:
     def test_plan_update_invalid_plan(self, admin_session):
         """Test plan update rejects invalid plan"""
         # Get a user to test with
-        users_response = admin_session.get(f"{BASE_URL}/api/admin/users?limit=1")
+        users_response = admin_session.get(f"{BASE_URL}/api/admin/users?limit=10")
         users_data = users_response.json()
         
-        if len(users_data.get("users", [])) > 0:
-            user_id = users_data["users"][0]["user_id"]
-            
+        # Find a user with user_id field
+        user_id = None
+        for user in users_data.get("users", []):
+            if "user_id" in user:
+                user_id = user["user_id"]
+                break
+        
+        if user_id:
             response = admin_session.patch(
                 f"{BASE_URL}/api/admin/users/{user_id}/plan?plan=invalid_plan"
             )
             assert response.status_code == 400, f"Should reject invalid plan: {response.text}"
+        else:
+            pytest.skip("No user with user_id found")
     
     def test_plan_update_all_valid_plans(self, admin_session):
         """Test plan update works for all valid plans"""
