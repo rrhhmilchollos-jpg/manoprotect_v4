@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { Activity, Shield, AlertTriangle, Users, TrendingUp, Wifi, WifiOff } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -11,17 +11,7 @@ const RealTimeMetrics = ({ compact = false }) => {
   const [lastUpdate, setLastUpdate] = useState(null);
   const eventSourceRef = useRef(null);
 
-  useEffect(() => {
-    connectToStream();
-
-    return () => {
-      if (eventSourceRef.current) {
-        eventSourceRef.current.close();
-      }
-    };
-  }, []);
-
-  const connectToStream = () => {
+  const connectToStream = useCallback(() => {
     // Close existing connection
     if (eventSourceRef.current) {
       eventSourceRef.current.close();
@@ -60,7 +50,17 @@ const RealTimeMetrics = ({ compact = false }) => {
     };
 
     eventSourceRef.current = eventSource;
-  };
+  }, []);
+
+  useEffect(() => {
+    connectToStream();
+
+    return () => {
+      if (eventSourceRef.current) {
+        eventSourceRef.current.close();
+      }
+    };
+  }, [connectToStream]);
 
   if (compact) {
     return (
