@@ -89,31 +89,40 @@ MANO es una aplicación y sistema profesional en tiempo real que protege a perso
 ```
 /app/
 ├── backend/
-│   └── server.py           # API FastAPI (~2700 líneas)
+│   ├── server.py           # API FastAPI (~3100 líneas)
+│   ├── core/
+│   │   └── config.py       # Configuración central
+│   ├── models/
+│   │   └── schemas.py      # Modelos Pydantic
+│   └── services/
+│       ├── fraud_detection.py    # ML Detección de fraudes
+│       ├── threat_analyzer.py    # Analizador con LLM
+│       └── banking_service.py    # Integración bancaria
 ├── frontend/
 │   ├── src/
 │   │   ├── context/
 │   │   │   └── AuthContext.js
-│   │   ├── components/          # NUEVO
+│   │   ├── components/
 │   │   │   ├── NotificationCenter.jsx
 │   │   │   ├── PushNotificationToggle.jsx
 │   │   │   ├── RealTimeMetrics.jsx
 │   │   │   ├── APIKeyManager.jsx
-│   │   │   └── WhatsAppManager.jsx
-│   │   ├── services/            # NUEVO
+│   │   │   ├── WhatsAppManager.jsx
+│   │   │   ├── BankingDashboard.jsx    # Dashboard de banca
+│   │   │   └── ThreatAnalyzer.jsx      # Analizador IA
+│   │   ├── services/
 │   │   │   └── pushNotifications.js
 │   │   └── pages/
-│   │       ├── AdminPanel.js      # Panel admin (+ pestañas nuevas)
-│   │       ├── EnterpriseDashboard.js  # Dashboard empresas (+ métricas RT)
-│   │       ├── FamilyAdmin.js     # Panel familiar
-│   │       ├── Profile.js         # (+ push toggle)
-│   │       ├── Dashboard.js       # (+ notification center)
-│   │       ├── Login.js / Register.js
-│   │       ├── InvestorRegister.js
-│   │       ├── Downloads.js
+│   │       ├── AdminPanel.js
+│   │       ├── EnterpriseDashboard.js
+│   │       ├── FamilyAdmin.js
+│   │       ├── Profile.js
+│   │       ├── Dashboard.js    # Con pestañas: IA, Banca, Historial
 │   │       └── ...
 │   └── public/
-│       └── sw.js              # Service Worker para Push
+│       ├── manifest.json   # PWA Manifest
+│       ├── sw.js           # Service Worker PWA
+│       └── offline.html    # Página offline
 └── memory/
     └── PRD.md
 ```
@@ -128,6 +137,21 @@ MANO es una aplicación y sistema profesional en tiempo real que protege a perso
 - `POST /api/auth/google/session` - OAuth Google
 - `GET /api/auth/me` - Usuario actual
 - `POST /api/auth/logout` - Logout
+
+### Banking Integration (NUEVO)
+- `GET /api/banking/supported-banks` - Lista de bancos soportados
+- `POST /api/banking/connect` - Conectar cuenta bancaria
+- `GET /api/banking/accounts` - Cuentas conectadas
+- `GET /api/banking/summary` - Resumen de banca
+- `GET /api/banking/transactions` - Historial de transacciones
+- `POST /api/banking/analyze-transaction` - Analizar transacción con ML
+- `POST /api/banking/transactions/{id}/block` - Bloquear transacción
+- `POST /api/banking/transactions/{id}/approve` - Aprobar transacción
+
+### ML Fraud Detection (NUEVO)
+- `POST /api/ml/analyze-text` - Analizar texto con ML + LLM
+- `GET /api/ml/risk-summary` - Resumen de riesgos del usuario
+- `GET /api/ml/behavior-profile` - Perfil de comportamiento ML
 
 ### Enterprise
 - `GET /api/enterprise/dashboard` - Dashboard empresarial
