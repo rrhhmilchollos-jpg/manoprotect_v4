@@ -1501,16 +1501,29 @@ async def get_enterprise_reports(
     else:
         start_date = now - timedelta(days=365)
     
-    # Get threats in period
-    threats = await db.threats.find({"user_id": user.user_id}, {"_id": 0}).to_list(1000)
+    # Get threat analyses in period
+    threats = await db.threat_analysis.find({"user_id": user.user_id}, {"_id": 0}).to_list(1000)
     
     period_threats = []
+    by_type = {}
+    by_risk = {"critical": 0, "high": 0, "medium": 0, "low": 0}
+    
     for t in threats:
         created = t.get("created_at")
         if isinstance(created, str):
-            created = datetime.fromisoformat(created.replace('Z', '+00:00'))
+            try:
+                created = datetime.fromisoformat(created.replace('Z', '+00:00'))
+            except:
+                continue
         if created and created > start_date:
             period_threats.append(t)
+            # Count by type
+            for tt in t.get("threat_types", []):
+                by_type[tt] = by_type.get(tt, 0) + 1
+            # Count by risk
+            risk = t.get("risk_level", "low")
+            if risk in by_risk:
+                by_risk[risk] += 1
     
     return {
         "period": period,
@@ -1518,8 +1531,9 @@ async def get_enterprise_reports(
         "end_date": now.isoformat(),
         "total_threats": len(period_threats),
         "blocked": len([t for t in period_threats if t.get("is_threat")]),
-        "by_type": {},
-        "by_risk": {}
+        "by_type": by_type,
+        "by_risk": by_risk,
+        "generated_at": now.isoformat()
     }
 
 # ============================================
