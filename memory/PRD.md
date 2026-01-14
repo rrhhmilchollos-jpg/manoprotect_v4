@@ -89,20 +89,31 @@ MANO es una aplicación y sistema profesional en tiempo real que protege a perso
 ```
 /app/
 ├── backend/
-│   └── server.py           # API FastAPI (~2100 líneas)
+│   └── server.py           # API FastAPI (~2700 líneas)
 ├── frontend/
 │   ├── src/
 │   │   ├── context/
 │   │   │   └── AuthContext.js
+│   │   ├── components/          # NUEVO
+│   │   │   ├── NotificationCenter.jsx
+│   │   │   ├── PushNotificationToggle.jsx
+│   │   │   ├── RealTimeMetrics.jsx
+│   │   │   ├── APIKeyManager.jsx
+│   │   │   └── WhatsAppManager.jsx
+│   │   ├── services/            # NUEVO
+│   │   │   └── pushNotifications.js
 │   │   └── pages/
-│   │       ├── AdminPanel.js      # Panel admin
-│   │       ├── EnterpriseDashboard.js  # Dashboard empresas
+│   │       ├── AdminPanel.js      # Panel admin (+ pestañas nuevas)
+│   │       ├── EnterpriseDashboard.js  # Dashboard empresas (+ métricas RT)
 │   │       ├── FamilyAdmin.js     # Panel familiar
+│   │       ├── Profile.js         # (+ push toggle)
+│   │       ├── Dashboard.js       # (+ notification center)
 │   │       ├── Login.js / Register.js
 │   │       ├── InvestorRegister.js
 │   │       ├── Downloads.js
-│   │       ├── Dashboard.js
 │   │       └── ...
+│   └── public/
+│       └── sw.js              # Service Worker para Push
 └── memory/
     └── PRD.md
 ```
