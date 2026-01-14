@@ -23,9 +23,8 @@ android/app/build/
 *.apk
 *.aab
 
-# Firebase configuration files (contain project-specific data)
+# Firebase configuration files (iOS only - Android is committed)
 ios/*/GoogleService-Info.plist
-android/app/google-services.json
 
 # IDE
 .idea/
