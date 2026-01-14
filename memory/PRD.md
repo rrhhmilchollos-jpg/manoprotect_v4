@@ -109,15 +109,30 @@ MANO es una aplicación y sistema profesional en tiempo real que protege a perso
 ```
 /app/
 ├── backend/
-│   ├── server.py           # API FastAPI (~3100 líneas)
+│   ├── server.py           # API FastAPI principal (~3400 líneas) - Legacy
 │   ├── core/
-│   │   └── config.py       # Configuración central
+│   │   └── config.py       # Configuración central + funciones auth
 │   ├── models/
-│   │   └── schemas.py      # Modelos Pydantic
+│   │   └── schemas.py      # Modelos Pydantic centralizados
+│   ├── routes/             # NUEVO: Rutas modulares (preparadas)
+│   │   ├── __init__.py
+│   │   ├── auth.py
+│   │   ├── admin.py
+│   │   ├── investors.py
+│   │   ├── threats.py
+│   │   ├── banking.py
+│   │   ├── payments.py
+│   │   ├── rewards.py
+│   │   ├── notifications.py
+│   │   ├── profile.py
+│   │   ├── family.py
+│   │   └── enterprise.py
 │   └── services/
 │       ├── fraud_detection.py    # ML Detección de fraudes
 │       ├── threat_analyzer.py    # Analizador con LLM
-│       └── banking_service.py    # Integración bancaria
+│       ├── banking_service.py    # Integración bancaria (N26, Imagin, Nickel añadidos)
+│       ├── rewards_service.py    # Sistema de recompensas
+│       └── email_service.py      # Servicio de email
 ├── frontend/
 │   ├── src/
 │   │   ├── context/
@@ -133,7 +148,7 @@ MANO es una aplicación y sistema profesional en tiempo real que protege a perso
 │   │   ├── services/
 │   │   │   └── pushNotifications.js
 │   │   └── pages/
-│   │       ├── AdminPanel.js
+│   │       ├── AdminPanel.js    # Con pestañas: Suscripciones, Base de Datos
 │   │       ├── EnterpriseDashboard.js
 │   │       ├── FamilyAdmin.js
 │   │       ├── Profile.js
