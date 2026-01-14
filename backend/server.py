@@ -2225,10 +2225,732 @@ async def get_document_downloads(
     return downloads
 
 # ============================================
+# WEB PUSH NOTIFICATIONS
+# ============================================
+
+from pywebpush import webpush, WebPushException
+import json
+
+# Generate VAPID keys (in production, store these securely)
+VAPID_PRIVATE_KEY = os.environ.get('VAPID_PRIVATE_KEY', 'cMCW8hLpP7Zl4l2n3Vh6_qJmJgwJJA-2VR-SqVGKlzE')
+VAPID_PUBLIC_KEY = os.environ.get('VAPID_PUBLIC_KEY', 'BNbxGYNMhEIi4d00Zc4Y-nLcQ6x8_V9P2z8gYJJ6zyZa0R0vWxyXlB8Gx9LzY8hFJhY0Q3c6BXGz0PjZkL8Jbyo')
+VAPID_CLAIMS = {"sub": "mailto:alerts@mano-protect.com"}
+
+class PushSubscription(BaseModel):
+    endpoint: str
+    keys: Dict[str, str]
+
+@api_router.get("/push/vapid-public-key")
+async def get_vapid_public_key():
+    """Get VAPID public key for push subscription"""
+    return {"public_key": VAPID_PUBLIC_KEY}
+
+@api_router.post("/push/subscribe")
+async def subscribe_to_push(
+    subscription: PushSubscription,
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Subscribe to web push notifications"""
+    user = await require_auth(request, session_token)
+    
+    # Store subscription
+    sub_doc = {
+        "user_id": user.user_id,
+        "endpoint": subscription.endpoint,
+        "keys": subscription.keys,
+        "created_at": datetime.now(timezone.utc).isoformat()
+    }
+    
+    # Upsert to avoid duplicates
+    await db.push_subscriptions.update_one(
+        {"user_id": user.user_id, "endpoint": subscription.endpoint},
+        {"$set": sub_doc},
+        upsert=True
+    )
+    
+    return {"message": "Suscripción activada", "success": True}
+
+@api_router.delete("/push/unsubscribe")
+async def unsubscribe_from_push(
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Unsubscribe from push notifications"""
+    user = await require_auth(request, session_token)
+    
+    await db.push_subscriptions.delete_many({"user_id": user.user_id})
+    
+    return {"message": "Suscripción cancelada"}
+
+async def send_push_notification(user_id: str, title: str, body: str, data: dict = None):
+    """Send push notification to user"""
+    subscriptions = await db.push_subscriptions.find(
+        {"user_id": user_id}
+    ).to_list(10)
+    
+    for sub in subscriptions:
+        try:
+            payload = json.dumps({
+                "title": title,
+                "body": body,
+                "icon": "/logo192.png",
+                "badge": "/logo192.png",
+                "data": data or {},
+                "timestamp": datetime.now(timezone.utc).isoformat()
+            })
+            
+            webpush(
+                subscription_info={
+                    "endpoint": sub["endpoint"],
+                    "keys": sub["keys"]
+                },
+                data=payload,
+                vapid_private_key=VAPID_PRIVATE_KEY,
+                vapid_claims=VAPID_CLAIMS
+            )
+        except WebPushException as e:
+            logging.error(f"Push notification failed: {e}")
+            # Remove invalid subscription
+            if e.response and e.response.status_code in [404, 410]:
+                await db.push_subscriptions.delete_one({"_id": sub["_id"]})
+
+@api_router.post("/push/test")
+async def test_push_notification(
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Send test push notification"""
+    user = await require_auth(request, session_token)
+    
+    await send_push_notification(
+        user.user_id,
+        "🛡️ MANO - Notificación de Prueba",
+        "¡Las notificaciones push están funcionando correctamente!",
+        {"type": "test", "url": "/dashboard"}
+    )
+    
+    return {"message": "Notificación de prueba enviada"}
+
+# ============================================
+# WHATSAPP INTEGRATION
+# ============================================
+
+class WhatsAppMessage(BaseModel):
+    phone_number: str
+    message: str
+
+class WhatsAppAlert(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: f"wa_{uuid.uuid4().hex[:8]}")
+    user_id: str
+    phone_number: str
+    message_type: str  # "threat_alert", "sos", "family_alert", "reminder"
+    message: str
+    status: str = "pending"  # "pending", "sent", "delivered", "failed"
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+# WhatsApp API configuration (using official Cloud API)
+WHATSAPP_API_URL = os.environ.get('WHATSAPP_API_URL', 'https://graph.facebook.com/v17.0')
+WHATSAPP_PHONE_ID = os.environ.get('WHATSAPP_PHONE_ID', '')
+WHATSAPP_ACCESS_TOKEN = os.environ.get('WHATSAPP_ACCESS_TOKEN', '')
+
+@api_router.post("/whatsapp/send")
+async def send_whatsapp_message(
+    data: WhatsAppMessage,
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Send WhatsApp message (requires WhatsApp Business API credentials)"""
+    user = await require_auth(request, session_token)
+    
+    if not WHATSAPP_ACCESS_TOKEN or not WHATSAPP_PHONE_ID:
+        # Log message for later sending when configured
+        alert = WhatsAppAlert(
+            user_id=user.user_id,
+            phone_number=data.phone_number,
+            message_type="manual",
+            message=data.message,
+            status="pending"
+        )
+        doc = alert.model_dump()
+        doc['created_at'] = doc['created_at'].isoformat()
+        await db.whatsapp_queue.insert_one(doc)
+        
+        return {
+            "success": False,
+            "message": "WhatsApp API no configurada. Mensaje en cola.",
+            "queue_id": alert.id
+        }
+    
+    # Send via WhatsApp Cloud API
+    try:
+        async with httpx.AsyncClient() as client:
+            response = await client.post(
+                f"{WHATSAPP_API_URL}/{WHATSAPP_PHONE_ID}/messages",
+                headers={
+                    "Authorization": f"Bearer {WHATSAPP_ACCESS_TOKEN}",
+                    "Content-Type": "application/json"
+                },
+                json={
+                    "messaging_product": "whatsapp",
+                    "to": data.phone_number,
+                    "type": "text",
+                    "text": {"body": data.message}
+                }
+            )
+            
+            if response.status_code == 200:
+                return {"success": True, "message": "Mensaje enviado"}
+            else:
+                return {"success": False, "error": response.text}
+    except Exception as e:
+        logging.error(f"WhatsApp send error: {e}")
+        return {"success": False, "error": str(e)}
+
+@api_router.post("/whatsapp/alert")
+async def send_whatsapp_alert(
+    threat_id: str,
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Send threat alert via WhatsApp to emergency contacts"""
+    user = await require_auth(request, session_token)
+    
+    # Get threat details
+    threat = await db.threats.find_one({"id": threat_id}, {"_id": 0})
+    if not threat:
+        raise HTTPException(status_code=404, detail="Amenaza no encontrada")
+    
+    # Get emergency contacts
+    contacts = await db.contacts.find(
+        {"user_id": user.user_id, "is_emergency": True},
+        {"_id": 0}
+    ).to_list(10)
+    
+    if not contacts:
+        return {"success": False, "message": "No hay contactos de emergencia configurados"}
+    
+    # Build alert message
+    alert_message = f"""🚨 *ALERTA DE SEGURIDAD MANO*
+
+Se ha detectado una amenaza de nivel *{threat.get('risk_level', 'desconocido').upper()}*
+
+Tipos: {', '.join(threat.get('threat_types', ['No especificado']))}
+
+Recomendación: {threat.get('recommendation', 'Mantén precaución')}
+
+_Este mensaje fue enviado automáticamente por MANO._
+"""
+    
+    # Queue messages for each contact
+    sent_count = 0
+    for contact in contacts:
+        if contact.get('phone'):
+            alert = WhatsAppAlert(
+                user_id=user.user_id,
+                phone_number=contact['phone'],
+                message_type="threat_alert",
+                message=alert_message,
+                status="pending"
+            )
+            doc = alert.model_dump()
+            doc['created_at'] = doc['created_at'].isoformat()
+            await db.whatsapp_queue.insert_one(doc)
+            sent_count += 1
+    
+    return {
+        "success": True,
+        "message": f"Alertas en cola para {sent_count} contactos",
+        "contacts_notified": sent_count
+    }
+
+@api_router.get("/whatsapp/queue")
+async def get_whatsapp_queue(
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Get pending WhatsApp messages"""
+    user = await require_auth(request, session_token)
+    
+    messages = await db.whatsapp_queue.find(
+        {"user_id": user.user_id},
+        {"_id": 0}
+    ).sort("created_at", -1).limit(50).to_list(50)
+    
+    return messages
+
+# ============================================
+# REAL-TIME METRICS (Server-Sent Events)
+# ============================================
+
+from starlette.responses import StreamingResponse
+import asyncio
+
+@api_router.get("/metrics/stream")
+async def stream_metrics(
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Stream real-time metrics via Server-Sent Events"""
+    user = await get_current_user(request, session_token)
+    user_id = user.user_id if user else "anonymous"
+    
+    async def event_generator():
+        while True:
+            # Check if client disconnected
+            if await request.is_disconnected():
+                break
+            
+            # Get real-time metrics
+            total_threats = await db.threats.count_documents({"user_id": user_id})
+            blocked = await db.threats.count_documents({"user_id": user_id, "is_threat": True})
+            
+            # Get recent threats (last hour)
+            one_hour_ago = datetime.now(timezone.utc) - timedelta(hours=1)
+            recent = await db.threats.count_documents({
+                "user_id": user_id,
+                "created_at": {"$gte": one_hour_ago.isoformat()}
+            })
+            
+            # Get global stats
+            global_threats_today = await db.threats.count_documents({
+                "created_at": {"$gte": datetime.now(timezone.utc).replace(hour=0, minute=0, second=0).isoformat()}
+            })
+            
+            metrics = {
+                "timestamp": datetime.now(timezone.utc).isoformat(),
+                "user_metrics": {
+                    "total_analyzed": total_threats,
+                    "threats_blocked": blocked,
+                    "recent_hour": recent,
+                    "protection_rate": round((blocked / total_threats * 100) if total_threats > 0 else 100, 1)
+                },
+                "global_metrics": {
+                    "threats_today": global_threats_today,
+                    "active_users": await db.user_sessions.count_documents({}),
+                    "system_status": "operational"
+                }
+            }
+            
+            yield f"data: {json.dumps(metrics)}\n\n"
+            
+            await asyncio.sleep(5)  # Update every 5 seconds
+    
+    return StreamingResponse(
+        event_generator(),
+        media_type="text/event-stream",
+        headers={
+            "Cache-Control": "no-cache",
+            "Connection": "keep-alive",
+            "X-Accel-Buffering": "no"
+        }
+    )
+
+@api_router.get("/metrics/dashboard")
+async def get_dashboard_metrics(
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Get comprehensive dashboard metrics"""
+    user = await get_current_user(request, session_token)
+    user_id = user.user_id if user else "anonymous"
+    
+    now = datetime.now(timezone.utc)
+    today = now.replace(hour=0, minute=0, second=0, microsecond=0)
+    week_ago = now - timedelta(days=7)
+    month_ago = now - timedelta(days=30)
+    
+    # User metrics
+    user_threats = await db.threats.find({"user_id": user_id}, {"_id": 0}).to_list(1000)
+    
+    # Time-based analysis
+    hourly_data = {}
+    daily_data = {}
+    
+    for threat in user_threats:
+        created = threat.get("created_at")
+        if isinstance(created, str):
+            created = datetime.fromisoformat(created.replace('Z', '+00:00'))
+        
+        if created:
+            hour_key = created.strftime("%Y-%m-%d %H:00")
+            day_key = created.strftime("%Y-%m-%d")
+            
+            hourly_data[hour_key] = hourly_data.get(hour_key, 0) + 1
+            daily_data[day_key] = daily_data.get(day_key, 0) + 1
+    
+    # Threat type distribution
+    threat_types = {}
+    for threat in user_threats:
+        for tt in threat.get("threat_types", []):
+            threat_types[tt] = threat_types.get(tt, 0) + 1
+    
+    # Risk level distribution
+    risk_levels = {"critical": 0, "high": 0, "medium": 0, "low": 0}
+    for threat in user_threats:
+        level = threat.get("risk_level", "low")
+        if level in risk_levels:
+            risk_levels[level] += 1
+    
+    return {
+        "summary": {
+            "total_analyzed": len(user_threats),
+            "threats_blocked": len([t for t in user_threats if t.get("is_threat")]),
+            "today": len([t for t in user_threats if t.get("created_at", "") >= today.isoformat()]),
+            "this_week": len([t for t in user_threats if t.get("created_at", "") >= week_ago.isoformat()]),
+            "this_month": len([t for t in user_threats if t.get("created_at", "") >= month_ago.isoformat()])
+        },
+        "threat_types": threat_types,
+        "risk_levels": risk_levels,
+        "hourly_trend": [{"hour": k, "count": v} for k, v in sorted(hourly_data.items())[-24:]],
+        "daily_trend": [{"date": k, "count": v} for k, v in sorted(daily_data.items())[-30:]],
+        "last_updated": now.isoformat()
+    }
+
+# ============================================
+# PUBLIC API FOR PARTNERS
+# ============================================
+
+class APIKey(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: f"key_{uuid.uuid4().hex}")
+    user_id: str
+    key: str = Field(default_factory=lambda: f"mano_pk_{uuid.uuid4().hex}")
+    name: str
+    permissions: List[str] = ["read:threats", "write:analyze"]
+    rate_limit: int = 1000  # requests per day
+    is_active: bool = True
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+class APIKeyCreate(BaseModel):
+    name: str
+    permissions: Optional[List[str]] = ["read:threats", "write:analyze"]
+
+async def validate_api_key(api_key: str) -> Optional[dict]:
+    """Validate API key and return key info"""
+    key_doc = await db.api_keys.find_one({"key": api_key, "is_active": True}, {"_id": 0})
+    return key_doc
+
+@api_router.post("/api-keys")
+async def create_api_key(
+    data: APIKeyCreate,
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Create new API key for partner integration"""
+    user = await require_auth(request, session_token)
+    
+    # Check existing keys limit
+    existing_count = await db.api_keys.count_documents({"user_id": user.user_id})
+    if existing_count >= 5:
+        raise HTTPException(status_code=400, detail="Límite de 5 API keys alcanzado")
+    
+    api_key = APIKey(
+        user_id=user.user_id,
+        name=data.name,
+        permissions=data.permissions
+    )
+    
+    doc = api_key.model_dump()
+    doc['created_at'] = doc['created_at'].isoformat()
+    await db.api_keys.insert_one(doc)
+    
+    return {
+        "id": api_key.id,
+        "key": api_key.key,
+        "name": api_key.name,
+        "permissions": api_key.permissions,
+        "message": "Guarda esta clave, no se mostrará de nuevo"
+    }
+
+@api_router.get("/api-keys")
+async def list_api_keys(
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """List user's API keys"""
+    user = await require_auth(request, session_token)
+    
+    keys = await db.api_keys.find(
+        {"user_id": user.user_id},
+        {"_id": 0, "key": 0}  # Don't return actual key
+    ).to_list(10)
+    
+    return keys
+
+@api_router.delete("/api-keys/{key_id}")
+async def revoke_api_key(
+    key_id: str,
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Revoke API key"""
+    user = await require_auth(request, session_token)
+    
+    result = await db.api_keys.delete_one({
+        "id": key_id,
+        "user_id": user.user_id
+    })
+    
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="API key no encontrada")
+    
+    return {"message": "API key revocada"}
+
+# Public API endpoints (authenticated via API key)
+public_router = APIRouter(prefix="/api/v1", tags=["public-api"])
+
+async def get_api_key_user(request: Request) -> dict:
+    """Get user from API key in header"""
+    api_key = request.headers.get("X-API-Key")
+    if not api_key:
+        raise HTTPException(status_code=401, detail="API key requerida")
+    
+    key_doc = await validate_api_key(api_key)
+    if not key_doc:
+        raise HTTPException(status_code=401, detail="API key inválida")
+    
+    return key_doc
+
+@public_router.get("/analyze/status")
+async def public_api_status(request: Request):
+    """Check API status (no auth required)"""
+    return {
+        "status": "operational",
+        "version": "1.0.0",
+        "endpoints": [
+            "/api/v1/analyze",
+            "/api/v1/threats",
+            "/api/v1/stats"
+        ]
+    }
+
+@public_router.post("/analyze")
+async def public_analyze(
+    data: AnalyzeRequest,
+    request: Request
+):
+    """Analyze content for threats via public API"""
+    key_info = await get_api_key_user(request)
+    
+    if "write:analyze" not in key_info.get("permissions", []):
+        raise HTTPException(status_code=403, detail="Permiso denegado")
+    
+    # Rate limiting check
+    today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    usage_key = f"{key_info['id']}_{today}"
+    
+    usage = await db.api_usage.find_one({"key": usage_key})
+    if usage and usage.get("count", 0) >= key_info.get("rate_limit", 1000):
+        raise HTTPException(status_code=429, detail="Límite de rate alcanzado")
+    
+    # Increment usage
+    await db.api_usage.update_one(
+        {"key": usage_key},
+        {"$inc": {"count": 1}, "$set": {"updated_at": datetime.now(timezone.utc).isoformat()}},
+        upsert=True
+    )
+    
+    # Analyze
+    analysis_result = await analyze_threat(data.content, data.content_type)
+    
+    # Store result
+    threat_obj = ThreatAnalysis(
+        user_id=key_info["user_id"],
+        content=data.content,
+        content_type=data.content_type,
+        risk_level=analysis_result["risk_level"],
+        is_threat=analysis_result["is_threat"],
+        threat_types=analysis_result.get("threat_types", []),
+        recommendation=analysis_result["recommendation"],
+        analysis=analysis_result["analysis"]
+    )
+    
+    doc = threat_obj.model_dump()
+    doc['created_at'] = doc['created_at'].isoformat()
+    doc['source'] = 'api'
+    doc['api_key_id'] = key_info['id']
+    await db.threats.insert_one(doc)
+    
+    return {
+        "id": threat_obj.id,
+        "is_threat": threat_obj.is_threat,
+        "risk_level": threat_obj.risk_level,
+        "threat_types": threat_obj.threat_types,
+        "recommendation": threat_obj.recommendation
+    }
+
+@public_router.get("/threats")
+async def public_get_threats(
+    request: Request,
+    limit: int = 50,
+    offset: int = 0
+):
+    """Get threats via public API"""
+    key_info = await get_api_key_user(request)
+    
+    if "read:threats" not in key_info.get("permissions", []):
+        raise HTTPException(status_code=403, detail="Permiso denegado")
+    
+    threats = await db.threats.find(
+        {"user_id": key_info["user_id"]},
+        {"_id": 0}
+    ).sort("created_at", -1).skip(offset).limit(min(limit, 100)).to_list(100)
+    
+    total = await db.threats.count_documents({"user_id": key_info["user_id"]})
+    
+    return {
+        "data": threats,
+        "total": total,
+        "limit": limit,
+        "offset": offset
+    }
+
+@public_router.get("/stats")
+async def public_get_stats(request: Request):
+    """Get statistics via public API"""
+    key_info = await get_api_key_user(request)
+    
+    if "read:threats" not in key_info.get("permissions", []):
+        raise HTTPException(status_code=403, detail="Permiso denegado")
+    
+    user_id = key_info["user_id"]
+    
+    total = await db.threats.count_documents({"user_id": user_id})
+    blocked = await db.threats.count_documents({"user_id": user_id, "is_threat": True})
+    
+    return {
+        "total_analyzed": total,
+        "threats_blocked": blocked,
+        "protection_rate": round((blocked / total * 100) if total > 0 else 100, 1)
+    }
+
+# ============================================
+# BANK INTEGRATION (Placeholder)
+# ============================================
+
+class BankAlert(BaseModel):
+    transaction_id: str
+    amount: float
+    currency: str = "EUR"
+    merchant: str
+    timestamp: str
+    suspicious_indicators: List[str] = []
+
+@api_router.post("/bank/verify-transaction")
+async def verify_bank_transaction(
+    data: BankAlert,
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Verify bank transaction for fraud indicators"""
+    user = await require_auth(request, session_token)
+    
+    # Analyze transaction
+    risk_score = 0.0
+    risk_factors = []
+    
+    # High amount
+    if data.amount > 1000:
+        risk_score += 0.2
+        risk_factors.append("Transacción de alto valor")
+    
+    # Suspicious indicators
+    if data.suspicious_indicators:
+        risk_score += len(data.suspicious_indicators) * 0.15
+        risk_factors.extend(data.suspicious_indicators)
+    
+    # Unknown merchant
+    known_merchants = await db.trusted_merchants.find(
+        {"user_id": user.user_id}
+    ).to_list(100)
+    if not any(m.get("name") == data.merchant for m in known_merchants):
+        risk_score += 0.1
+        risk_factors.append("Comercio no reconocido")
+    
+    risk_level = "low"
+    if risk_score > 0.7:
+        risk_level = "critical"
+    elif risk_score > 0.5:
+        risk_level = "high"
+    elif risk_score > 0.3:
+        risk_level = "medium"
+    
+    # Log verification
+    verification = {
+        "user_id": user.user_id,
+        "transaction_id": data.transaction_id,
+        "amount": data.amount,
+        "merchant": data.merchant,
+        "risk_score": risk_score,
+        "risk_level": risk_level,
+        "risk_factors": risk_factors,
+        "verified_at": datetime.now(timezone.utc).isoformat()
+    }
+    await db.bank_verifications.insert_one(verification)
+    
+    # Alert if high risk
+    if risk_level in ["high", "critical"]:
+        await create_notification(
+            user.user_id,
+            "⚠️ Alerta de Transacción Sospechosa",
+            f"Transacción de €{data.amount} en {data.merchant} marcada como {risk_level}",
+            "bank",
+            {"transaction_id": data.transaction_id, "risk_level": risk_level}
+        )
+    
+    return {
+        "transaction_id": data.transaction_id,
+        "risk_score": round(risk_score, 2),
+        "risk_level": risk_level,
+        "risk_factors": risk_factors,
+        "recommendation": "Bloquear transacción" if risk_level in ["high", "critical"] else "Aprobar con precaución" if risk_level == "medium" else "Aprobar"
+    }
+
+@api_router.get("/bank/verifications")
+async def get_bank_verifications(
+    request: Request,
+    session_token: Optional[str] = Cookie(None),
+    limit: int = 50
+):
+    """Get bank verification history"""
+    user = await require_auth(request, session_token)
+    
+    verifications = await db.bank_verifications.find(
+        {"user_id": user.user_id},
+        {"_id": 0}
+    ).sort("verified_at", -1).limit(limit).to_list(limit)
+    
+    return verifications
+
+@api_router.post("/bank/trusted-merchants")
+async def add_trusted_merchant(
+    name: str,
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Add trusted merchant"""
+    user = await require_auth(request, session_token)
+    
+    await db.trusted_merchants.update_one(
+        {"user_id": user.user_id, "name": name},
+        {"$set": {
+            "user_id": user.user_id,
+            "name": name,
+            "added_at": datetime.now(timezone.utc).isoformat()
+        }},
+        upsert=True
+    )
+    
+    return {"message": f"Comercio '{name}' añadido a la lista de confianza"}
+
+# ============================================
 # APP SETUP
 # ============================================
 
 app.include_router(api_router)
+app.include_router(public_router)
 
 app.add_middleware(
     CORSMiddleware,
