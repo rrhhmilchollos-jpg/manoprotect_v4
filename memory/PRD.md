@@ -334,9 +334,10 @@ Ubicación: `/app/mobile-app/`
 ### 🔴 Próximos Pasos
 
 #### P1 - Alta Prioridad
+- [x] **App móvil nativa (React Native)** - ✅ COMPLETADA
 - [ ] Configurar WhatsApp Business API con credenciales reales
 - [ ] Conectar Open Banking real con bancos españoles
-- [ ] App móvil nativa (React Native) - PWA ya funciona
+- [ ] Configurar Firebase para la app móvil (push notifications)
 
 #### P2 - Media Prioridad
 - [ ] Sistema de recompensas por reportar amenazas
