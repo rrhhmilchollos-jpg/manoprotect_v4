@@ -1,0 +1,50 @@
+{
+  "name": "MANOProtect",
+  "displayName": "MANO Protect",
+  "version": "1.0.0",
+  "description": "Protección contra fraudes y estafas digitales",
+  "author": "MANO Security",
+  "license": "PROPRIETARY",
+  "ios": {
+    "bundleIdentifier": "com.manoprotect.app",
+    "buildNumber": "1",
+    "infoPlist": {
+      "NSCameraUsageDescription": "MANO necesita acceso a la cámara para escanear códigos QR sospechosos",
+      "NSContactsUsageDescription": "MANO necesita acceso a tus contactos para configurar contactos de emergencia",
+      "NSFaceIDUsageDescription": "Usa Face ID para acceder de forma segura a MANO",
+      "NSLocationWhenInUseUsageDescription": "MANO usa tu ubicación para alertas de emergencia SOS",
+      "UIBackgroundModes": ["fetch", "remote-notification"]
+    },
+    "capabilities": {
+      "push": true,
+      "backgroundFetch": true
+    }
+  },
+  "android": {
+    "package": "com.manoprotect.app",
+    "versionCode": 1,
+    "permissions": [
+      "android.permission.CAMERA",
+      "android.permission.READ_CONTACTS",
+      "android.permission.USE_BIOMETRIC",
+      "android.permission.USE_FINGERPRINT",
+      "android.permission.ACCESS_FINE_LOCATION",
+      "android.permission.VIBRATE",
+      "android.permission.RECEIVE_BOOT_COMPLETED",
+      "android.permission.INTERNET",
+      "android.permission.ACCESS_NETWORK_STATE"
+    ],
+    "adaptiveIcon": {
+      "foreground": "./assets/adaptive-icon-foreground.png",
+      "background": "#1a1a2e"
+    }
+  },
+  "splash": {
+    "image": "./assets/splash.png",
+    "backgroundColor": "#1a1a2e",
+    "resizeMode": "contain"
+  },
+  "icon": "./assets/icon.png",
+  "primaryColor": "#6366f1",
+  "scheme": "manoprotect"
+}
