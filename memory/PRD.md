@@ -195,58 +195,70 @@ MANO es una aplicación y sistema profesional en tiempo real que protege a perso
 - `POST /api/whatsapp/send` - Enviar mensaje (encola si API no configurada)
 - `GET /api/whatsapp/queue` - Ver cola de mensajes
 
-### Métricas en Tiempo Real (NUEVO - Enero 14, 2025)
+### Métricas en Tiempo Real
 - `GET /api/metrics/dashboard` - Dashboard de métricas
 - `GET /api/metrics/stream` - SSE stream (actualiza cada 5s)
 
-### API Keys para Partners (NUEVO - Enero 14, 2025)
+### API Keys para Partners
 - `GET /api/api-keys` - Listar API keys del usuario
 - `POST /api/api-keys` - Crear nueva API key
 - `DELETE /api/api-keys/{id}` - Revocar API key
 
-### Partner API (NUEVO - Enero 14, 2025)
+### Partner API
 - `GET /api/v1/analyze/status` - Estado del servicio público
 
 ---
 
 ## Integraciones
 - **Stripe:** emergentintegrations.payments.stripe.checkout
-- **OpenAI GPT-4o:** Análisis de amenazas
+- **OpenAI GPT-5.2:** Análisis de amenazas con IA (via Emergent LLM Key)
 - **Google OAuth:** Emergent Auth
 - **MongoDB:** Base de datos
 
 ---
 
 ## Tests
-- Backend: 22/22 tests pasados (Iteración 6)
+- Backend: 25/25 tests pasados (Iteración 7)
 - Frontend: Todos los componentes verificados
-- Último reporte: `/app/test_reports/iteration_6.json`
+- Último reporte: `/app/test_reports/iteration_7.json`
 
 ---
 
-## Próximos Pasos
+## Estado de Desarrollo (Enero 14, 2025)
 
-### P0 - Crítico
-- [ ] **Refactorizar Backend** - `server.py` tiene +2700 líneas, dividir en módulos (routes/, models/, services/)
+### ✅ COMPLETADO
+- [x] Sistema ML de detección de fraudes con scoring y patrones
+- [x] Integración bancaria simulada (Open Banking demo)
+- [x] Analizador de amenazas con IA híbrido (ML + LLM)
+- [x] PWA completa con offline support e instalable en móviles
+- [x] Backend modularizado con servicios separados
+- [x] Dashboard con pestañas: Analizador IA, Banca Segura, Historial
 
-### P1 - Alta Prioridad
+### 🟡 SIMULADO/MOCK
+- WhatsApp Business API - Mensajes se encolan pero no se envían
+- Banking API - Conexión simulada, no Open Banking real
+- LLM Analysis - Usa ML cuando no hay EMERGENT_LLM_KEY
+
+### 🔴 Próximos Pasos
+
+#### P1 - Alta Prioridad
 - [ ] Configurar WhatsApp Business API con credenciales reales
-- [ ] Implementar análisis de amenazas con LLM real (OpenAI GPT-5.2)
-- [ ] App móvil nativa (React Native)
+- [ ] Conectar Open Banking real con bancos españoles
+- [ ] App móvil nativa (React Native) - PWA ya funciona
 
-### P2 - Media Prioridad
-- [ ] Integración con bancos
-- [ ] Análisis de patrones con ML
-- [ ] Sistema de recompensas
-
-### P3 - Baja Prioridad
+#### P2 - Media Prioridad
+- [ ] Sistema de recompensas por reportar amenazas
+- [ ] Alertas por email automatizadas
 - [ ] Gamificación
+
+#### P3 - Baja Prioridad
+- [ ] Multi-idioma (inglés, catalán, euskera, gallego)
 - [ ] Marketplace de integraciones
-- [ ] Multi-idioma
+- [ ] Dashboard para municipios
 
 ---
 
-## Componentes Frontend Nuevos (Enero 14, 2025)
+## Componentes Frontend Nuevos
 
 | Componente | Archivo | Descripción |
 |------------|---------|-------------|
@@ -255,7 +267,8 @@ MANO es una aplicación y sistema profesional en tiempo real que protege a perso
 | RealTimeMetrics | `/components/RealTimeMetrics.jsx` | Métricas SSE con reconexión automática |
 | APIKeyManager | `/components/APIKeyManager.jsx` | CRUD de API keys con diálogo de creación |
 | WhatsAppManager | `/components/WhatsAppManager.jsx` | Formulario de envío y cola de mensajes |
-| pushNotifications.js | `/services/pushNotifications.js` | Service para gestión de Web Push |
+| BankingDashboard | `/components/BankingDashboard.jsx` | Dashboard de cuentas y transacciones |
+| ThreatAnalyzer | `/components/ThreatAnalyzer.jsx` | Analizador de amenazas con IA |
 
 ---
 
