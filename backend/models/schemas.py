@@ -1,9 +1,9 @@
 """
-MANO - Pydantic Models
-All data models for the application
+MANO - Pydantic Models / Schemas
+All shared data models for the application
 """
 from pydantic import BaseModel, Field, ConfigDict, EmailStr, field_validator
-from typing import List, Optional, Dict, Any
+from typing import List, Optional, Dict
 from datetime import datetime, timezone
 import uuid
 import re
@@ -105,7 +105,7 @@ class InvestorRegisterRequest(BaseModel):
 
 
 # ============================================
-# THREAT ANALYSIS MODELS
+# THREAT MODELS
 # ============================================
 
 class ThreatAnalysis(BaseModel):
@@ -115,15 +115,12 @@ class ThreatAnalysis(BaseModel):
     content: str
     content_type: str
     risk_level: str
-    risk_score: float = 0.0  # ML risk score 0-100
     is_threat: bool
     threat_types: List[str]
     recommendation: str
     analysis: str
     reported_false_positive: bool = False
     shared_count: int = 0
-    ml_confidence: float = 0.0  # ML model confidence
-    patterns_detected: List[str] = []  # Detected threat patterns
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
 
@@ -145,7 +142,7 @@ class ShareRequest(BaseModel):
 
 
 # ============================================
-# CONTACTS & SOS MODELS
+# CONTACT & FAMILY MODELS
 # ============================================
 
 class TrustedContact(BaseModel):
@@ -184,18 +181,10 @@ class SOSRequest(BaseModel):
     message: Optional[str] = None
 
 
-# ============================================
-# COMMUNITY & ALERTS MODELS
-# ============================================
-
-class CommunityAlert(BaseModel):
-    model_config = ConfigDict(extra="ignore")
-    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
-    threat_type: str
-    description: str
-    affected_users: int = 0
-    severity: str
-    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+class FamilyMemberInvite(BaseModel):
+    email: EmailStr
+    name: str
+    relationship: str
 
 
 # ============================================
@@ -224,165 +213,44 @@ class PaymentTransaction(BaseModel):
 
 
 # ============================================
-# FAMILY MODELS
+# COMMUNITY MODELS
 # ============================================
 
-class FamilyMember(BaseModel):
+class CommunityAlert(BaseModel):
     model_config = ConfigDict(extra="ignore")
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
-    user_id: str  # Primary user
-    name: str
-    email: Optional[EmailStr] = None
-    phone: Optional[str] = None
-    relationship: str
-    is_senior: bool = False
-    simplified_mode: bool = False
-    alert_level: str = "all"  # "all", "critical", "none"
-    protection_enabled: bool = True
-    last_activity: Optional[datetime] = None
+    threat_type: str
+    description: str
+    affected_users: int = 0
+    severity: str
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+
+# ============================================
+# ENTERPRISE MODELS
+# ============================================
+
+class EnterpriseStats(BaseModel):
+    total_employees: int = 0
     threats_blocked: int = 0
-    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
-
-
-class FamilyMemberCreate(BaseModel):
-    name: str
-    email: Optional[EmailStr] = None
-    phone: Optional[str] = None
-    relationship: str
-    is_senior: Optional[bool] = False
-    simplified_mode: Optional[bool] = False
-    alert_level: Optional[str] = "all"
+    protection_rate: float = 0.0
+    active_alerts: int = 0
 
 
 # ============================================
-# NOTIFICATION MODELS
+# CONSTANTS
 # ============================================
 
-class Notification(BaseModel):
-    model_config = ConfigDict(extra="ignore")
-    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
-    user_id: str
-    title: str
-    body: str
-    notification_type: str  # "threat", "family", "sos", "system", "bank"
-    data: Dict = {}
-    is_read: bool = False
-    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
-
-
-class PushSubscription(BaseModel):
-    endpoint: str
-    keys: Dict[str, str]
-
-
-# ============================================
-# WHATSAPP MODELS
-# ============================================
-
-class WhatsAppMessage(BaseModel):
-    model_config = ConfigDict(extra="ignore")
-    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
-    user_id: str
-    phone_number: str
-    message: str
-    message_type: str = "alert"  # "alert", "notification", "custom"
-    status: str = "pending"  # "pending", "sent", "failed"
-    error_message: Optional[str] = None
-    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
-
-
-class WhatsAppSendRequest(BaseModel):
-    phone_number: str
-    message: str
-
-
-# ============================================
-# API KEY MODELS
-# ============================================
-
-class APIKey(BaseModel):
-    model_config = ConfigDict(extra="ignore")
-    id: str = Field(default_factory=lambda: f"key_{uuid.uuid4().hex}")
-    user_id: str
-    name: str
-    key: str = Field(default_factory=lambda: f"mano_pk_{uuid.uuid4().hex}")
-    permissions: List[str] = ["read:threats", "write:analyze"]
-    rate_limit: int = 1000  # requests per day
-    is_active: bool = True
-    last_used: Optional[datetime] = None
-    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
-
-
-class APIKeyCreate(BaseModel):
-    name: str
-    permissions: Optional[List[str]] = None
-
-
-# ============================================
-# BANKING INTEGRATION MODELS
-# ============================================
-
-class BankAccount(BaseModel):
-    model_config = ConfigDict(extra="ignore")
-    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
-    user_id: str
-    bank_name: str
-    account_type: str  # "checking", "savings", "credit"
-    last_four: str  # Last 4 digits
-    is_monitored: bool = True
-    alert_threshold: float = 500.0  # Alert for transactions above this
-    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
-
-
-class BankTransaction(BaseModel):
-    model_config = ConfigDict(extra="ignore")
-    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
-    user_id: str
-    account_id: str
-    amount: float
-    description: str
-    merchant: Optional[str] = None
-    category: str = "other"
-    is_suspicious: bool = False
-    risk_score: float = 0.0
-    risk_factors: List[str] = []
-    status: str = "pending"  # "pending", "approved", "blocked", "flagged"
-    reviewed_at: Optional[datetime] = None
-    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
-
-
-class BankTransactionAnalyze(BaseModel):
-    amount: float
-    description: str
-    merchant: Optional[str] = None
-    account_id: Optional[str] = None
-
-
-# ============================================
-# ML/FRAUD DETECTION MODELS
-# ============================================
-
-class FraudScore(BaseModel):
-    model_config = ConfigDict(extra="ignore")
-    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
-    user_id: str
-    entity_type: str  # "message", "transaction", "call", "email"
-    entity_id: str
-    risk_score: float  # 0-100
-    confidence: float  # 0-1
-    risk_factors: List[str]
-    recommendation: str
-    model_version: str = "1.0"
-    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
-
-
-class UserBehaviorProfile(BaseModel):
-    model_config = ConfigDict(extra="ignore")
-    user_id: str
-    avg_transaction_amount: float = 0.0
-    typical_merchants: List[str] = []
-    typical_hours: List[int] = []  # Hours when user is typically active
-    typical_locations: List[str] = []
-    risk_tolerance: str = "medium"  # "low", "medium", "high"
-    anomaly_threshold: float = 2.0  # Standard deviations for anomaly
-    updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+SUBSCRIPTION_PACKAGES = {
+    "weekly": {"amount": 9.99, "name": "Premium Semanal", "period": "semana"},
+    "monthly": {"amount": 29.99, "name": "Premium Mensual", "period": "mes"},
+    "quarterly": {"amount": 74.99, "name": "Premium Trimestral", "period": "3 meses"},
+    "yearly": {"amount": 249.99, "name": "Premium Anual", "period": "año"},
+    "family-monthly": {"amount": 49.99, "name": "Familiar Mensual", "period": "mes"},
+    "family-quarterly": {"amount": 129.99, "name": "Familiar Trimestral", "period": "3 meses"},
+    "family-yearly": {"amount": 399.99, "name": "Familiar Anual", "period": "año"},
+    "personal": {"amount": 9.99, "name": "Personal", "period": "mes"},
+    "family": {"amount": 19.99, "name": "Familiar", "period": "mes"},
+    "business": {"amount": 49.99, "name": "Business", "period": "mes"},
+    "enterprise": {"amount": 199.99, "name": "Enterprise", "period": "mes"}
+}
