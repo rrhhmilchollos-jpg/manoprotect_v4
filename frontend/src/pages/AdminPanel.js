@@ -40,12 +40,13 @@ const AdminPanel = () => {
   const loadAllData = async () => {
     setLoading(true);
     try {
-      const [dashRes, invRes, usersRes, paymentsRes, downloadsRes] = await Promise.all([
+      const [dashRes, invRes, usersRes, paymentsRes, downloadsRes, subsRes] = await Promise.all([
         fetch(`${API}/admin/dashboard`, { credentials: 'include' }),
         fetch(`${API}/admin/investors`, { credentials: 'include' }),
         fetch(`${API}/admin/users?limit=50`, { credentials: 'include' }),
         fetch(`${API}/admin/payments`, { credentials: 'include' }),
-        fetch(`${API}/admin/document-downloads`, { credentials: 'include' })
+        fetch(`${API}/admin/document-downloads`, { credentials: 'include' }),
+        fetch(`${API}/admin/subscriptions`, { credentials: 'include' })
       ]);
 
       if (dashRes.ok) setDashboard(await dashRes.json());
@@ -56,6 +57,7 @@ const AdminPanel = () => {
       }
       if (paymentsRes.ok) setPayments(await paymentsRes.json());
       if (downloadsRes.ok) setDownloads(await downloadsRes.json());
+      if (subsRes.ok) setSubscriptions(await subsRes.json());
     } catch (error) {
       console.error('Error loading admin data:', error);
       toast.error('Error al cargar datos');
