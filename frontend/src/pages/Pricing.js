@@ -524,35 +524,35 @@ const Pricing = () => {
             <h2 className="text-3xl font-bold mb-4">Planes Familiares Premium</h2>
             <p className="text-lg text-zinc-600 mb-6">Protege a toda tu familia con un solo plan</p>
             
-            {/* SOS + GPS Feature Highlight */}
-            <Card className="max-w-2xl mx-auto bg-gradient-to-r from-red-50 to-orange-50 border-red-200 mb-8">
+            {/* Child Tracking Feature Highlight - ANNUAL ONLY */}
+            <Card className="max-w-3xl mx-auto bg-gradient-to-r from-indigo-50 via-purple-50 to-pink-50 border-indigo-300 mb-8">
               <CardContent className="p-6">
-                <div className="flex items-center justify-center gap-4 mb-4">
-                  <div className="w-12 h-12 rounded-full bg-red-500 flex items-center justify-center">
-                    <AlertTriangle className="w-6 h-6 text-white" />
-                  </div>
-                  <div className="w-12 h-12 rounded-full bg-blue-500 flex items-center justify-center">
-                    <MapPin className="w-6 h-6 text-white" />
-                  </div>
+                <div className="flex items-center justify-center gap-2 mb-4">
+                  <Badge className="bg-indigo-600 text-white px-4 py-2">
+                    ⭐ EXCLUSIVO PLAN ANUAL
+                  </Badge>
                 </div>
-                <h3 className="text-xl font-bold text-red-600 mb-2">🆘 Botón SOS + Localización GPS</h3>
-                <p className="text-zinc-700">
-                  <strong>Función exclusiva planes Familiares:</strong> Al pulsar el botón SOS de emergencia, 
-                  la app envía <strong>automáticamente la ubicación GPS precisa</strong> del familiar 
-                  que necesita ayuda a todos los demás miembros de la familia.
+                <h3 className="text-xl font-bold text-indigo-700 mb-3">👶 Localización de Niños por Teléfono</h3>
+                <p className="text-zinc-700 mb-4">
+                  <strong>Solo en el Plan Familiar Anual:</strong> Localiza a tus hijos en cualquier momento 
+                  desde su número de teléfono. Incluye historial de ubicaciones y modo silencioso opcional.
                 </p>
-                <div className="mt-4 grid grid-cols-3 gap-4 text-center text-sm">
-                  <div className="bg-white p-3 rounded-lg border border-red-200">
-                    <AlertTriangle className="w-5 h-5 text-red-500 mx-auto mb-1" />
-                    <div className="font-medium">Pulsar SOS</div>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-center text-sm">
+                  <div className="bg-white p-3 rounded-lg border border-indigo-200">
+                    <MapPin className="w-5 h-5 text-indigo-500 mx-auto mb-1" />
+                    <div className="font-medium">Bajo demanda</div>
                   </div>
-                  <div className="bg-white p-3 rounded-lg border border-blue-200">
-                    <MapPin className="w-5 h-5 text-blue-500 mx-auto mb-1" />
-                    <div className="font-medium">Envía GPS</div>
+                  <div className="bg-white p-3 rounded-lg border border-purple-200">
+                    <Users className="w-5 h-5 text-purple-500 mx-auto mb-1" />
+                    <div className="font-medium">Historial</div>
+                  </div>
+                  <div className="bg-white p-3 rounded-lg border border-pink-200">
+                    <AlertTriangle className="w-5 h-5 text-pink-500 mx-auto mb-1" />
+                    <div className="font-medium">Modo silencioso</div>
                   </div>
                   <div className="bg-white p-3 rounded-lg border border-emerald-200">
-                    <Users className="w-5 h-5 text-emerald-500 mx-auto mb-1" />
-                    <div className="font-medium">Avisa familia</div>
+                    <Check className="w-5 h-5 text-emerald-500 mx-auto mb-1" />
+                    <div className="font-medium">App en niño</div>
                   </div>
                 </div>
               </CardContent>
@@ -564,52 +564,88 @@ const Pricing = () => {
               <Card 
                 key={key}
                 className={`border-2 hover:border-emerald-500 transition-all relative ${
-                  plan.popular ? 'border-emerald-400 shadow-xl scale-105' : 'border-emerald-200'
+                  plan.popular ? 'border-indigo-500 shadow-2xl scale-105 bg-gradient-to-b from-white to-indigo-50' : 'border-emerald-200'
                 }`}
               >
                 {plan.badge && (
-                  <Badge className="absolute top-4 right-4 bg-emerald-600 text-white">
+                  <Badge className={`absolute top-4 right-4 ${plan.popular ? 'bg-indigo-600' : 'bg-emerald-600'} text-white`}>
                     {plan.badge}
                   </Badge>
                 )}
                 <CardHeader>
-                  <plan.icon className="w-10 h-10 text-emerald-600 mb-3" />
+                  <plan.icon className={`w-10 h-10 ${plan.popular ? 'text-indigo-600' : 'text-emerald-600'} mb-3`} />
                   <CardTitle className="text-xl">{plan.name}</CardTitle>
                   <div className="text-sm text-emerald-600 font-semibold">{plan.users}</div>
                   <div className="mt-4">
                     {plan.originalPrice && (
                       <div className="text-sm text-zinc-500 line-through">€{plan.originalPrice}</div>
                     )}
-                    <span className="text-4xl font-bold text-emerald-600">€{plan.price}</span>
+                    <span className={`text-4xl font-bold ${plan.popular ? 'text-indigo-600' : 'text-emerald-600'}`}>€{plan.price}</span>
                     <span className="text-zinc-600">{plan.period}</span>
                   </div>
                 </CardHeader>
                 <CardContent>
-                  <ul className="space-y-3 mb-4">
+                  {/* Features */}
+                  <ul className="space-y-2 mb-4">
                     {plan.features.map((feature, idx) => (
                       <li key={idx} className="flex items-start gap-2 text-sm">
                         <Check className="w-4 h-4 text-emerald-500 flex-shrink-0 mt-0.5" />
-                        <span className={feature.includes('SOS') || feature.includes('GPS') ? 'font-semibold text-red-600' : ''}>{feature}</span>
+                        <span className={
+                          feature.includes('LOCALIZAR') || feature.includes('Tracking') || feature.includes('Historial') || feature.includes('silencioso')
+                            ? 'font-bold text-indigo-600' 
+                            : feature.includes('SOS') || feature.includes('GPS') 
+                              ? 'font-semibold text-red-600' 
+                              : ''
+                        }>{feature}</span>
                       </li>
                     ))}
                   </ul>
                   
-                  {/* SOS Info Badge */}
-                  <div className="bg-red-50 border border-red-200 rounded-lg p-3 mb-4">
-                    <div className="flex items-center gap-2 text-xs text-red-700">
-                      <MapPin className="w-4 h-4" />
-                      <span>GPS automático al pulsar SOS</span>
+                  {/* Limitations for non-annual plans */}
+                  {plan.limitations && (
+                    <div className="mb-4 p-3 bg-zinc-50 rounded-lg border border-zinc-200">
+                      <p className="text-xs text-zinc-500 font-medium mb-2">No incluye:</p>
+                      <ul className="space-y-1">
+                        {plan.limitations.map((limit, idx) => (
+                          <li key={idx} className="flex items-center gap-2 text-xs text-zinc-500">
+                            <span className="text-zinc-400">✗</span>
+                            <span>{limit}</span>
+                          </li>
+                        ))}
+                      </ul>
                     </div>
-                  </div>
+                  )}
+                  
+                  {/* Child Tracking Badge - ANNUAL ONLY */}
+                  {plan.isComplete && (
+                    <div className="bg-indigo-100 border border-indigo-300 rounded-lg p-3 mb-4">
+                      <div className="flex items-center gap-2 text-xs text-indigo-700 font-medium">
+                        <MapPin className="w-4 h-4" />
+                        <span>👶 Localización de niños incluida</span>
+                      </div>
+                    </div>
+                  )}
+                  
+                  {/* SOS Info Badge */}
+                  {!plan.limitations?.includes('Sin localización GPS') && (
+                    <div className="bg-red-50 border border-red-200 rounded-lg p-3 mb-4">
+                      <div className="flex items-center gap-2 text-xs text-red-700">
+                        <AlertTriangle className="w-4 h-4" />
+                        <span>GPS automático al pulsar SOS</span>
+                      </div>
+                    </div>
+                  )}
                   
                   <Button
                     data-testid={`subscribe-family-${key}-btn`}
                     onClick={() => handleSubscribe(`family-${key}`)}
                     disabled={loadingPlan === `family-${key}`}
-                    className="w-full bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg h-12"
+                    className={`w-full ${plan.popular ? 'bg-indigo-600 hover:bg-indigo-700' : 'bg-emerald-600 hover:bg-emerald-700'} text-white rounded-lg h-12`}
                   >
                     {loadingPlan === `family-${key}` ? (
                       <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Procesando...</>
+                    ) : plan.popular ? (
+                      <>⭐ Obtener Plan Completo</>
                     ) : (
                       plan.savings ? `Ahorrar €${plan.savings}` : 'Proteger Familia'
                     )}
@@ -617,6 +653,14 @@ const Pricing = () => {
                 </CardContent>
               </Card>
             ))}
+          </div>
+          
+          {/* Comparison note */}
+          <div className="text-center mt-8">
+            <p className="text-sm text-zinc-500">
+              💡 <strong>Consejo:</strong> El Plan Familiar Anual incluye TODAS las funciones de localización y tracking. 
+              ¡Ahorra €199.89 y obtén la protección más completa para tu familia!
+            </p>
           </div>
         </div>
 
