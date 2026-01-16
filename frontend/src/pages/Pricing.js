@@ -511,9 +511,44 @@ const Pricing = () => {
         {/* Family Plans */}
         <div className="mb-20">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">Planes Familiares</h2>
-            <p className="text-lg text-zinc-600">Protege a toda tu familia con un solo plan</p>
+            <h2 className="text-3xl font-bold mb-4">Planes Familiares Premium</h2>
+            <p className="text-lg text-zinc-600 mb-6">Protege a toda tu familia con un solo plan</p>
+            
+            {/* SOS + GPS Feature Highlight */}
+            <Card className="max-w-2xl mx-auto bg-gradient-to-r from-red-50 to-orange-50 border-red-200 mb-8">
+              <CardContent className="p-6">
+                <div className="flex items-center justify-center gap-4 mb-4">
+                  <div className="w-12 h-12 rounded-full bg-red-500 flex items-center justify-center">
+                    <AlertTriangle className="w-6 h-6 text-white" />
+                  </div>
+                  <div className="w-12 h-12 rounded-full bg-blue-500 flex items-center justify-center">
+                    <MapPin className="w-6 h-6 text-white" />
+                  </div>
+                </div>
+                <h3 className="text-xl font-bold text-red-600 mb-2">🆘 Botón SOS + Localización GPS</h3>
+                <p className="text-zinc-700">
+                  <strong>Función exclusiva planes Familiares:</strong> Al pulsar el botón SOS de emergencia, 
+                  la app envía <strong>automáticamente la ubicación GPS precisa</strong> del familiar 
+                  que necesita ayuda a todos los demás miembros de la familia.
+                </p>
+                <div className="mt-4 grid grid-cols-3 gap-4 text-center text-sm">
+                  <div className="bg-white p-3 rounded-lg border border-red-200">
+                    <AlertTriangle className="w-5 h-5 text-red-500 mx-auto mb-1" />
+                    <div className="font-medium">Pulsar SOS</div>
+                  </div>
+                  <div className="bg-white p-3 rounded-lg border border-blue-200">
+                    <MapPin className="w-5 h-5 text-blue-500 mx-auto mb-1" />
+                    <div className="font-medium">Envía GPS</div>
+                  </div>
+                  <div className="bg-white p-3 rounded-lg border border-emerald-200">
+                    <Users className="w-5 h-5 text-emerald-500 mx-auto mb-1" />
+                    <div className="font-medium">Avisa familia</div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
           </div>
+          
           <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
             {Object.entries(familyPlans).map(([key, plan]) => (
               <Card 
@@ -540,14 +575,23 @@ const Pricing = () => {
                   </div>
                 </CardHeader>
                 <CardContent>
-                  <ul className="space-y-3 mb-6">
+                  <ul className="space-y-3 mb-4">
                     {plan.features.map((feature, idx) => (
                       <li key={idx} className="flex items-start gap-2 text-sm">
                         <Check className="w-4 h-4 text-emerald-500 flex-shrink-0 mt-0.5" />
-                        <span>{feature}</span>
+                        <span className={feature.includes('SOS') || feature.includes('GPS') ? 'font-semibold text-red-600' : ''}>{feature}</span>
                       </li>
                     ))}
                   </ul>
+                  
+                  {/* SOS Info Badge */}
+                  <div className="bg-red-50 border border-red-200 rounded-lg p-3 mb-4">
+                    <div className="flex items-center gap-2 text-xs text-red-700">
+                      <MapPin className="w-4 h-4" />
+                      <span>GPS automático al pulsar SOS</span>
+                    </div>
+                  </div>
+                  
                   <Button
                     data-testid={`subscribe-family-${key}-btn`}
                     onClick={() => handleSubscribe(`family-${key}`)}
