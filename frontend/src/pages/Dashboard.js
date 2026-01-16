@@ -268,9 +268,7 @@ const Dashboard = () => {
             >
               <User className="w-5 h-5" />
             </Button>
-            <Badge className={`${user?.plan?.includes('family') ? 'bg-emerald-600' : user?.plan !== 'free' ? 'bg-indigo-600' : 'bg-zinc-500'} text-white px-3 py-1`}>
-              {user?.plan?.includes('family') ? 'Familiar' : user?.plan !== 'free' ? 'Premium' : 'Gratis'}
-            </Badge>
+            <SubscriptionBadge plan={user?.plan || 'free'} size="small" showName={false} />
             <Button
               data-testid="logout-btn"
               variant="ghost"
