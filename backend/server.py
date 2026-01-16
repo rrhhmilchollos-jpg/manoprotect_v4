@@ -1841,51 +1841,150 @@ async def get_knowledge_base():
 
 @api_router.get("/plans")
 async def get_available_plans():
-    """Get all available subscription plans with features"""
-    plans = [
+    """Get all available subscription plans with features - SINCRONIZADO CON FRONTEND"""
+    # Planes individuales Premium
+    individual_plans = [
         {
             "id": "free",
-            "name": "Gratis",
+            "name": "Básico",
             "price": 0,
             "period": "mes",
             "max_users": 1,
             "features": [
-                "Análisis básico de amenazas",
-                "Alertas limitadas (5/día)",
-                "Protección para 1 usuario"
+                "10 análisis por mes",
+                "Alertas básicas",
+                "Historial 7 días",
+                "Base de conocimiento",
+                "Soporte por email"
             ],
-            "limitations": ["Sin IA avanzada", "Sin GPS", "Sin SOS"]
+            "limitations": ["Sin bloqueo automático", "Sin modo familiar", "Sin exportación"]
         },
         {
-            "id": "personal",
-            "name": "Personal",
+            "id": "weekly",
+            "name": "Premium Semanal",
             "price": 9.99,
+            "period": "semana",
+            "max_users": 2,
+            "badge": "Prueba",
+            "features": [
+                "Protección hasta 2 familiares",
+                "Análisis ilimitados",
+                "Bloqueo automático IA",
+                "Historial completo",
+                "Exportación de datos",
+                "Soporte prioritario"
+            ]
+        },
+        {
+            "id": "monthly",
+            "name": "Premium Mensual",
+            "price": 29.99,
             "period": "mes",
             "max_users": 2,
+            "badge": "Popular",
             "features": [
-                "Análisis ilimitado con IA",
-                "Alertas en tiempo real",
-                "Protección para hasta 2 usuarios",
-                "Soporte prioritario"
-            ],
-            "popular": False
+                "Protección hasta 2 familiares",
+                "Todo de Premium Semanal",
+                "Protección 24/7",
+                "Análisis avanzado IA",
+                "Reportes personalizados"
+            ]
         },
         {
-            "id": "family",
-            "name": "Familiar",
-            "price": 19.99,
+            "id": "quarterly",
+            "name": "Premium Trimestral",
+            "price": 74.99,
+            "originalPrice": 89.97,
+            "period": "3 meses",
+            "max_users": 2,
+            "badge": "Ahorro 17%",
+            "savings": 15,
+            "features": [
+                "Protección hasta 2 familiares",
+                "Todo de Premium Mensual",
+                "Equivale a €25/mes",
+                "Sin interrupciones"
+            ]
+        },
+        {
+            "id": "yearly",
+            "name": "Premium Anual",
+            "price": 249.99,
+            "originalPrice": 359.88,
+            "period": "año",
+            "max_users": 2,
+            "badge": "Mejor Valor - 31% OFF",
+            "popular": True,
+            "savings": 109.89,
+            "features": [
+                "Protección hasta 2 familiares",
+                "Todo de Premium Mensual",
+                "Equivale a €20.83/mes",
+                "2 meses GRATIS",
+                "Garantía satisfacción 15 días"
+            ]
+        }
+    ]
+    
+    # Planes familiares
+    family_plans = [
+        {
+            "id": "family-monthly",
+            "name": "Familiar Mensual",
+            "price": 49.99,
             "period": "mes",
             "max_users": 5,
             "features": [
-                "Todo de Personal",
-                "Protección para hasta 5 usuarios",
-                "📍 GPS y ubicación en tiempo real",
-                "🆘 Botón SOS de emergencia",
-                "👴 Modo simplificado para mayores",
-                "Panel de control familiar"
+                "Hasta 5 miembros familia",
+                "Todo Premium incluido",
+                "Modo Familiar Senior",
+                "🆘 Botón SOS de Emergencia",
+                "Panel administración familiar"
             ],
-            "popular": True
+            "limitations": ["Sin localización GPS", "Sin tracking de niños"]
         },
+        {
+            "id": "family-quarterly",
+            "name": "Familiar Trimestral",
+            "price": 129.99,
+            "originalPrice": 149.97,
+            "period": "3 meses",
+            "max_users": 5,
+            "badge": "Ahorro 13%",
+            "savings": 19.98,
+            "features": [
+                "Todo Familiar Mensual",
+                "🆘 Botón SOS + GPS incluido",
+                "📍 Localización bajo demanda",
+                "Equivale a €43.33/mes"
+            ],
+            "limitations": ["Sin tracking continuo de niños"]
+        },
+        {
+            "id": "family-yearly",
+            "name": "Familiar Anual",
+            "price": 399.99,
+            "originalPrice": 599.88,
+            "period": "año",
+            "max_users": 5,
+            "badge": "⭐ MÁS COMPLETO - 33% OFF",
+            "popular": True,
+            "savings": 199.89,
+            "features": [
+                "TODO de planes inferiores",
+                "🆘 Botón SOS + GPS completo",
+                "👶 LOCALIZAR NIÑOS por teléfono",
+                "📍 Tracking bajo demanda",
+                "📊 Historial de ubicaciones",
+                "🔕 Modo silencioso opcional",
+                "Equivale a €33.33/mes",
+                "Garantía satisfacción 15 días"
+            ]
+        }
+    ]
+    
+    # Planes Business y Enterprise
+    business_plans = [
         {
             "id": "business",
             "name": "Business",
@@ -1898,8 +1997,7 @@ async def get_available_plans():
                 "Reportes de amenazas",
                 "API básica de integración",
                 "Soporte dedicado"
-            ],
-            "popular": False
+            ]
         },
         {
             "id": "enterprise",
@@ -1915,18 +2013,19 @@ async def get_available_plans():
                 "Soporte 24/7",
                 "Personalización completa",
                 "Account manager dedicado"
-            ],
-            "popular": False
+            ]
         }
     ]
     
     return {
-        "plans": plans,
+        "individual_plans": individual_plans,
+        "family_plans": family_plans,
+        "business_plans": business_plans,
         "currency": "EUR",
-        "billing_options": ["monthly", "quarterly", "yearly"],
+        "billing_options": ["weekly", "monthly", "quarterly", "yearly"],
         "discounts": {
-            "quarterly": 15,
-            "yearly": 30
+            "quarterly": 17,
+            "yearly": 31
         }
     }
 
