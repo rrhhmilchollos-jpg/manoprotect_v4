@@ -98,7 +98,9 @@ const Pricing = () => {
       icon: Zap,
       color: 'indigo',
       badge: 'Prueba',
+      users: '2 usuarios',
       features: [
+        '👥 Protección para 2 personas',
         'Análisis ilimitados',
         'Bloqueo automático IA',
         'Historial completo',
@@ -115,7 +117,9 @@ const Pricing = () => {
       icon: Shield,
       color: 'indigo',
       badge: 'Popular',
+      users: '2 usuarios',
       features: [
+        '👥 Protección para 2 personas',
         'Todo de Premium Semanal',
         'Protección 24/7',
         'Análisis avanzado IA',
@@ -132,7 +136,9 @@ const Pricing = () => {
       icon: Crown,
       color: 'emerald',
       badge: 'Ahorro 17%',
+      users: '2 usuarios',
       features: [
+        '👥 Protección para 2 personas',
         'Todo de Premium Mensual',
         'Equivale a €25/mes',
         'Ahorra €15',
@@ -149,7 +155,9 @@ const Pricing = () => {
       color: 'indigo',
       badge: 'Mejor Valor - 31% OFF',
       popular: true,
+      users: '2 usuarios',
       features: [
+        '👥 Protección para 2 personas',
         'Todo de Premium Mensual',
         'Equivale a €20.83/mes',
         'Ahorra €109.89/año',
