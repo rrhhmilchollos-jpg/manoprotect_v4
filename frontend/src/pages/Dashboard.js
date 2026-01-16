@@ -11,6 +11,7 @@ import NotificationCenter from '@/components/NotificationCenter';
 import PushNotificationToggle from '@/components/PushNotificationToggle';
 import ThreatAnalyzer from '@/components/ThreatAnalyzer';
 import BankingDashboard from '@/components/BankingDashboard';
+import { SubscriptionBadge, SubscriptionBadgeCard } from '@/components/SubscriptionBadge';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
