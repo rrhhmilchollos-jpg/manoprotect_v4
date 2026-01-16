@@ -223,9 +223,20 @@ MANO es una plataforma de seguridad digital multi-plataforma que protege a usuar
 |-----------|-------|-----------|
 | Iteration 12 | 17 tests | 100% pasados |
 | Iteration 13 | 23 tests | 100% pasados |
+| Iteration 14 | 36 tests | 100% pasados |
 
 **Archivos de test:** `/app/tests/test_iteration_*.py`
 **Reportes:** `/app/test_reports/iteration_*.json`
+
+---
+
+## 13. Documentación Creada
+
+| Documento | Descripción |
+|-----------|-------------|
+| `/app/docs/GUIA_DESPLIEGUE_IONOS.md` | Despliegue web en Firebase/IONOS |
+| `/app/docs/GUIA_COMPILACION_MOVIL.md` | Compilar APK con Expo EAS |
+| `/app/docs/GUIA_API_KEYS.md` | Obtener API keys para integraciones |
 
 ---
 
