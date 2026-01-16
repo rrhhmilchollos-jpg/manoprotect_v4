@@ -361,7 +361,8 @@ const FamilyAdmin = () => {
                           <Button 
                             variant="ghost" 
                             size="sm"
-                            onClick={() => openEditDialog(member)}
+                            onClick={(e) => { e.stopPropagation(); openEditDialog(member); }}
+                            data-testid={`edit-member-${member.id}`}
                           >
                             <Edit2 className="w-4 h-4" />
                           </Button>
@@ -369,7 +370,8 @@ const FamilyAdmin = () => {
                             variant="ghost" 
                             size="sm"
                             className="text-red-600 hover:text-red-700"
-                            onClick={() => handleDeleteMember(member.id)}
+                            onClick={(e) => { e.stopPropagation(); handleDeleteMember(member.id); }}
+                            data-testid={`delete-member-${member.id}`}
                           >
                             <Trash2 className="w-4 h-4" />
                           </Button>
