@@ -4775,6 +4775,28 @@ async def update_email_preferences(
 app.include_router(api_router)
 app.include_router(public_router)
 
+# Import and include modular routes
+try:
+    from routes.banking_routes import router as banking_router
+    api_router.include_router(banking_router)
+    print("✅ Banking routes loaded")
+except ImportError as e:
+    print(f"⚠️ Banking routes not loaded: {e}")
+
+try:
+    from routes.email_routes import router as email_router
+    api_router.include_router(email_router)
+    print("✅ Email routes loaded")
+except ImportError as e:
+    print(f"⚠️ Email routes not loaded: {e}")
+
+try:
+    from routes.whatsapp_routes import router as whatsapp_router
+    api_router.include_router(whatsapp_router)
+    print("✅ WhatsApp routes loaded")
+except ImportError as e:
+    print(f"⚠️ WhatsApp routes not loaded: {e}")
+
 app.add_middleware(
     CORSMiddleware,
     allow_credentials=True,
