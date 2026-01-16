@@ -391,7 +391,7 @@ const Pricing = () => {
                   {plans.weekly.features.map((feature, idx) => (
                     <li key={idx} className="flex items-start gap-2 text-sm">
                       <Check className="w-4 h-4 text-emerald-500 flex-shrink-0 mt-0.5" />
-                      <span className={feature.includes('2 personas') ? 'font-semibold text-indigo-600' : ''}>{feature}</span>
+                      <span className={feature.includes('2 familiares') ? 'font-semibold text-indigo-600' : ''}>{feature}</span>
                     </li>
                   ))}
                 </ul>
