@@ -696,10 +696,11 @@ async def list_investor_documents(request: Request, session_token: Optional[str]
     
     return {
         "documents": [
-            {"id": "business-plan", "title": "Plan de Negocio 2025-2028", "pages": "15 páginas", "format": "PDF/MD"},
-            {"id": "financial-model", "title": "Modelo Financiero Detallado", "pages": "8 páginas", "format": "PDF/MD"},
-            {"id": "pitch-deck", "title": "Presentación para Inversores", "pages": "15 slides", "format": "PDF/MD"},
-            {"id": "terms", "title": "Términos de Inversión", "pages": "5 páginas", "format": "PDF/MD"}
+            {"id": "business-plan", "title": "Plan de Negocio 2025-2028", "pages": "15 páginas", "format": "PDF", "size": "54 KB"},
+            {"id": "financial-model", "title": "Modelo Financiero Detallado", "pages": "8 páginas", "format": "PDF", "size": "42 KB"},
+            {"id": "pitch-deck", "title": "Presentación para Inversores", "pages": "15 slides", "format": "PDF", "size": "39 KB"},
+            {"id": "terms", "title": "Términos de Inversión", "pages": "5 páginas", "format": "PDF", "size": "37 KB"},
+            {"id": "enterprise-plan", "title": "Plan Enterprise para Bancos", "pages": "12 páginas", "format": "PDF", "size": "48 KB"}
         ]
     }
 
@@ -707,19 +708,40 @@ async def list_investor_documents(request: Request, session_token: Optional[str]
 async def download_investor_document(
     doc_type: str,
     request: Request,
+    format: str = "pdf",
     session_token: Optional[str] = Cookie(None)
 ):
-    """Download document (investor only)"""
+    """Download document (investor only) - supports PDF and MD formats"""
     user = await require_investor(request, session_token)
     
-    doc_map = {
+    # PDF files mapping
+    pdf_map = {
+        "business-plan": "/app/docs/pdf/PLAN_DE_NEGOCIO.pdf",
+        "financial-model": "/app/docs/pdf/MODELO_FINANCIERO.pdf",
+        "pitch-deck": "/app/docs/pdf/PRESENTACION_INVERSORES.pdf",
+        "terms": "/app/docs/pdf/TERMINOS_INVERSION.pdf",
+        "enterprise-plan": "/app/docs/pdf/MANO_ENTERPRISE_BUSINESS_PLAN.pdf"
+    }
+    
+    # Markdown files mapping (fallback)
+    md_map = {
         "business-plan": "/app/docs/PLAN_DE_NEGOCIO.md",
         "financial-model": "/app/docs/MODELO_FINANCIERO.md",
         "pitch-deck": "/app/docs/PRESENTACION_INVERSORES.md",
-        "terms": "/app/docs/TERMINOS_INVERSION.md"
+        "terms": "/app/docs/TERMINOS_INVERSION.md",
+        "enterprise-plan": "/app/docs/MANO_Enterprise_Business_Plan.md"
     }
     
-    file_path = doc_map.get(doc_type)
+    # Choose format
+    if format.lower() == "pdf":
+        file_path = pdf_map.get(doc_type)
+        media_type = "application/pdf"
+        ext = "pdf"
+    else:
+        file_path = md_map.get(doc_type)
+        media_type = "text/markdown"
+        ext = "md"
+    
     if not file_path or not Path(file_path).exists():
         raise HTTPException(status_code=404, detail="Documento no encontrado")
     
@@ -727,17 +749,23 @@ async def download_investor_document(
     await db.document_downloads.insert_one({
         "user_id": user.user_id,
         "doc_type": doc_type,
+        "format": format,
         "downloaded_at": datetime.now(timezone.utc).isoformat()
     })
     
-    with open(file_path, 'r', encoding='utf-8') as f:
-        content = f.read()
+    # Read file (binary for PDF, text for MD)
+    if format.lower() == "pdf":
+        with open(file_path, 'rb') as f:
+            content = f.read()
+    else:
+        with open(file_path, 'r', encoding='utf-8') as f:
+            content = f.read()
     
-    filename = f"MANO_{doc_type.replace('-', '_')}_CONFIDENCIAL_2025.md"
+    filename = f"MANO_{doc_type.replace('-', '_')}_CONFIDENCIAL_2025.{ext}"
     
     return Response(
         content=content,
-        media_type="text/markdown",
+        media_type=media_type,
         headers={
             "Content-Disposition": f'attachment; filename="{filename}"'
         }
