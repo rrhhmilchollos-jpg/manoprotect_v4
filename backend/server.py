@@ -2292,10 +2292,8 @@ async def get_family_dashboard(request: Request, session_token: Optional[str] = 
     """Get family protection dashboard"""
     user = await require_auth(request, session_token)
     
-    # Check if user has family plan
-    if not user.plan or not user.plan.startswith("family"):
-        # Allow access but show upgrade prompt
-        pass
+    # Check if user has family plan or enterprise plan (both have family features)
+    has_family_features = user.plan and (user.plan.startswith("family") or user.plan in ["enterprise", "business"])
     
     # Get family members
     members = await db.family_members.find(
@@ -2324,7 +2322,8 @@ async def get_family_dashboard(request: Request, session_token: Optional[str] = 
             "unread_alerts": unread_alerts,
             "protection_active": True
         },
-        "has_family_plan": user.plan and user.plan.startswith("family")
+        "has_family_plan": has_family_features,
+        "user_plan": user.plan
     }
 
 @api_router.post("/family/members")
