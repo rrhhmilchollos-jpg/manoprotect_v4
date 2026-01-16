@@ -559,10 +559,12 @@ const AdminPanel = () => {
                       {users.map((u) => (
                         <tr key={u.user_id || u.id} className={`border-b hover:bg-zinc-50 ${u.is_active === false ? 'opacity-50 bg-red-50' : ''}`}>
                           <td className="p-3 font-medium">
-                            {u.name || 'Sin nombre'}
-                            {u.is_active === false && <span className="ml-2 text-xs text-red-500">(Baja)</span>}
+                            <div className="flex items-center gap-2">
+                              <span>{u.name || 'Sin nombre'}</span>
+                              {u.is_active === false && <span className="text-xs text-red-500">(Baja)</span>}
+                            </div>
                           </td>
-                          <td className="p-3 text-zinc-600">{u.email}</td>
+                          <td className="p-3 text-zinc-600 text-xs">{u.email}</td>
                           <td className="p-3">
                             <SubscriptionBadge plan={u.plan || 'free'} size="small" />
                           </td>
@@ -572,7 +574,7 @@ const AdminPanel = () => {
                               onValueChange={(value) => handleChangePlan(u.user_id || u.id, value)}
                               disabled={u.role === 'superadmin' || actionLoading === (u.user_id || u.id)}
                             >
-                              <SelectTrigger className="w-48 h-8 text-xs">
+                              <SelectTrigger className="w-44 h-8 text-xs">
                                 <SelectValue />
                               </SelectTrigger>
                               <SelectContent>
@@ -598,22 +600,60 @@ const AdminPanel = () => {
                             {u.created_at ? new Date(u.created_at).toLocaleDateString('es-ES') : '-'}
                           </td>
                           <td className="p-3">
-                            <div className="flex gap-1">
+                            <div className="flex gap-1 flex-wrap">
+                              {/* View Details Button */}
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={() => handleViewUserDetails(u)}
+                                className="h-7 text-xs"
+                                title="Ver detalles"
+                              >
+                                <Eye className="w-3 h-3" />
+                              </Button>
+                              
                               {u.role !== 'superadmin' && (
                                 <>
+                                  {/* Activate/Deactivate Button */}
                                   <Button
                                     size="sm"
                                     variant={u.is_active === false ? "default" : "outline"}
                                     onClick={() => handleToggleUserStatus(u.user_id || u.id, u.is_active !== false)}
-                                    className="h-7 text-xs"
+                                    className={`h-7 text-xs ${u.is_active === false ? 'bg-emerald-600' : ''}`}
+                                    disabled={actionLoading === (u.user_id || u.id)}
+                                    title={u.is_active === false ? 'Activar usuario' : 'Dar de baja'}
                                   >
-                                    {u.is_active === false ? 'Activar' : 'Baja'}
+                                    {actionLoading === (u.user_id || u.id) ? (
+                                      <Loader2 className="w-3 h-3 animate-spin" />
+                                    ) : u.is_active === false ? (
+                                      '✓ Activar'
+                                    ) : (
+                                      '⏸ Baja'
+                                    )}
                                   </Button>
+                                  
+                                  {/* Cancel Subscription Button (only for paid plans) */}
+                                  {u.plan && u.plan !== 'free' && (
+                                    <Button
+                                      size="sm"
+                                      variant="outline"
+                                      onClick={() => handleCancelSubscription(u.user_id || u.id, u.email)}
+                                      className="h-7 text-xs text-amber-600 border-amber-300 hover:bg-amber-50"
+                                      disabled={actionLoading === (u.user_id || u.id)}
+                                      title="Cancelar suscripción"
+                                    >
+                                      ✕ Cancelar
+                                    </Button>
+                                  )}
+                                  
+                                  {/* Delete Button */}
                                   <Button
                                     size="sm"
                                     variant="ghost"
                                     onClick={() => handleDeleteUser(u.user_id || u.id, u.email)}
                                     className="h-7 text-xs text-red-600 hover:bg-red-50"
+                                    disabled={actionLoading === (u.user_id || u.id)}
+                                    title="Eliminar permanentemente"
                                   >
                                     <Trash2 className="w-3 h-3" />
                                   </Button>
