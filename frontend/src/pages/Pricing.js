@@ -172,11 +172,13 @@ const Pricing = () => {
         'Hasta 5 miembros familia',
         'Todo Premium incluido',
         'Modo Familiar Senior',
-        'Botón SOS para todos',
-        'Panel administración',
-        'Alertas familiares',
+        '🆘 Botón SOS de Emergencia',
+        '📍 Localización GPS automática',
+        'Panel administración familiar',
+        'Alertas a todos los miembros',
         'Soporte VIP 24/7'
-      ]
+      ],
+      sosDescription: 'Al pulsar el botón SOS, se envía automáticamente la ubicación GPS precisa a todos los familiares'
     },
     quarterly: {
       name: 'Familiar Trimestral',
@@ -189,11 +191,14 @@ const Pricing = () => {
       badge: 'Ahorro 13%',
       features: [
         'Todo Familiar Mensual',
+        '🆘 Botón SOS + GPS incluido',
         'Equivale a €43.33/mes',
         'Ahorra €19.98',
-        '5 personas protegidas'
+        '5 personas protegidas',
+        'Localización en emergencias'
       ],
-      savings: 19.98
+      savings: 19.98,
+      sosDescription: 'Al pulsar el botón SOS, se envía automáticamente la ubicación GPS precisa a todos los familiares'
     },
     yearly: {
       name: 'Familiar Anual',
@@ -207,12 +212,15 @@ const Pricing = () => {
       popular: true,
       features: [
         'Todo Familiar Mensual',
+        '🆘 Botón SOS + GPS incluido',
         'Equivale a €33.33/mes',
         'Ahorra €199.89/año',
         'Protección completa familia',
+        'Localización GPS en emergencias',
         'Garantía satisfacción 15 días'
       ],
-      savings: 199.89
+      savings: 199.89,
+      sosDescription: 'Al pulsar el botón SOS, se envía automáticamente la ubicación GPS precisa a todos los familiares'
     }
   };
 
