@@ -173,12 +173,15 @@ const Pricing = () => {
         'Todo Premium incluido',
         'Modo Familiar Senior',
         '🆘 Botón SOS de Emergencia',
-        '📍 Localización GPS automática',
         'Panel administración familiar',
-        'Alertas a todos los miembros',
-        'Soporte VIP 24/7'
+        'Soporte prioritario'
       ],
-      sosDescription: 'Al pulsar el botón SOS, se envía automáticamente la ubicación GPS precisa a todos los familiares'
+      limitations: [
+        'Sin localización GPS',
+        'Sin tracking de niños',
+        'Sin historial ubicaciones'
+      ],
+      sosDescription: 'Botón SOS básico sin localización GPS'
     },
     quarterly: {
       name: 'Familiar Trimestral',
@@ -192,13 +195,17 @@ const Pricing = () => {
       features: [
         'Todo Familiar Mensual',
         '🆘 Botón SOS + GPS incluido',
+        '📍 Localización bajo demanda',
         'Equivale a €43.33/mes',
         'Ahorra €19.98',
-        '5 personas protegidas',
-        'Localización en emergencias'
+        '5 personas protegidas'
+      ],
+      limitations: [
+        'Sin tracking continuo de niños',
+        'Sin historial de ubicaciones'
       ],
       savings: 19.98,
-      sosDescription: 'Al pulsar el botón SOS, se envía automáticamente la ubicación GPS precisa a todos los familiares'
+      sosDescription: 'SOS con GPS pero sin tracking de niños'
     },
     yearly: {
       name: 'Familiar Anual',
@@ -208,19 +215,22 @@ const Pricing = () => {
       users: '5 usuarios',
       icon: Users,
       color: 'emerald',
-      badge: 'Mejor Valor - 33% OFF',
+      badge: '⭐ MÁS COMPLETO - 33% OFF',
       popular: true,
       features: [
-        'Todo Familiar Mensual',
-        '🆘 Botón SOS + GPS incluido',
+        'TODO de planes inferiores',
+        '🆘 Botón SOS + GPS completo',
+        '👶 LOCALIZAR NIÑOS por teléfono',
+        '📍 Tracking bajo demanda',
+        '📊 Historial de ubicaciones',
+        '🔕 Modo silencioso opcional',
         'Equivale a €33.33/mes',
         'Ahorra €199.89/año',
-        'Protección completa familia',
-        'Localización GPS en emergencias',
         'Garantía satisfacción 15 días'
       ],
       savings: 199.89,
-      sosDescription: 'Al pulsar el botón SOS, se envía automáticamente la ubicación GPS precisa a todos los familiares'
+      sosDescription: 'Plan COMPLETO: SOS + GPS + Localización de niños + Historial',
+      isComplete: true
     }
   };
 
