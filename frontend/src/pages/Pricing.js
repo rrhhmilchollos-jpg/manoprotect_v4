@@ -497,6 +497,7 @@ const Pricing = () => {
               <CardHeader>
                 <plans.yearly.icon className="w-10 h-10 text-indigo-600 mb-3" />
                 <CardTitle className="text-xl">{plans.yearly.name}</CardTitle>
+                <div className="text-sm text-indigo-600 font-semibold">{plans.yearly.users}</div>
                 <div className="mt-4">
                   <div className="text-sm text-zinc-500 line-through">€{plans.yearly.originalPrice}</div>
                   <span className="text-4xl font-bold text-indigo-600">€{plans.yearly.price}</span>
@@ -509,7 +510,7 @@ const Pricing = () => {
                   {plans.yearly.features.map((feature, idx) => (
                     <li key={idx} className="flex items-start gap-2 text-sm">
                       <Check className="w-4 h-4 text-emerald-500 flex-shrink-0 mt-0.5" />
-                      <span className="font-medium">{feature}</span>
+                      <span className={feature.includes('2 personas') ? 'font-bold text-indigo-600' : 'font-medium'}>{feature}</span>
                     </li>
                   ))}
                 </ul>
