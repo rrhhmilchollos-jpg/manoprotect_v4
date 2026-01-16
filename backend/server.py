@@ -1478,6 +1478,297 @@ async def get_trusted_contacts(
     return contacts
 
 # ============================================
+# CHILD TRACKING ROUTES (Family Yearly Plan Only)
+# ============================================
+
+class ChildMember(BaseModel):
+    name: str
+    phone: str
+    is_child: bool = True
+    silent_mode: bool = False  # If True, child won't be notified when tracked
+
+class LocationRequest(BaseModel):
+    child_id: str
+    silent: Optional[bool] = None  # Override silent_mode for this request
+
+def get_plan_features_for_user(user: User) -> dict:
+    """Get features based on user's specific plan"""
+    plan = user.plan
+    # Check for specific plan like family-yearly
+    if plan in PLAN_FEATURES:
+        return PLAN_FEATURES[plan]
+    # Fallback to base plan type
+    base_plan = plan.split('-')[0] if '-' in plan else plan
+    return PLAN_FEATURES.get(base_plan, PLAN_FEATURES["free"])
+
+@api_router.post("/family/children/add")
+async def add_child_member(
+    data: ChildMember,
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Add a child to the family for tracking (Family Yearly only)"""
+    user = await require_auth(request, session_token)
+    features = get_plan_features_for_user(user)
+    
+    if not features.get("child_tracking"):
+        raise HTTPException(
+            status_code=403, 
+            detail="La localización de niños requiere el Plan Familiar Anual. Actualiza tu plan para acceder a esta función."
+        )
+    
+    child = {
+        "child_id": f"child_{uuid.uuid4().hex[:12]}",
+        "family_owner_id": user.user_id,
+        "name": data.name,
+        "phone": data.phone,
+        "is_child": True,
+        "silent_mode": data.silent_mode,
+        "device_linked": False,
+        "last_location": None,
+        "created_at": datetime.now(timezone.utc).isoformat()
+    }
+    
+    await db.family_children.insert_one(child)
+    
+    return {
+        "success": True, 
+        "child": {k: v for k, v in child.items() if k != "_id"},
+        "message": f"Niño '{data.name}' añadido. Instala la app MANO en su teléfono para completar la vinculación."
+    }
+
+@api_router.get("/family/children")
+async def get_family_children(
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Get all children in the family"""
+    user = await require_auth(request, session_token)
+    features = get_plan_features_for_user(user)
+    
+    if not features.get("child_tracking"):
+        return {
+            "children": [],
+            "feature_available": False,
+            "upgrade_message": "Actualiza al Plan Familiar Anual para localizar a tus hijos"
+        }
+    
+    children = await db.family_children.find(
+        {"family_owner_id": user.user_id},
+        {"_id": 0}
+    ).to_list(10)
+    
+    return {
+        "children": children,
+        "feature_available": True
+    }
+
+@api_router.post("/family/children/{child_id}/locate")
+async def locate_child(
+    child_id: str,
+    request: Request,
+    silent: bool = False,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Request location of a child (Family Yearly only)"""
+    user = await require_auth(request, session_token)
+    features = get_plan_features_for_user(user)
+    
+    if not features.get("child_tracking"):
+        raise HTTPException(
+            status_code=403, 
+            detail="La localización de niños requiere el Plan Familiar Anual"
+        )
+    
+    # Find child
+    child = await db.family_children.find_one(
+        {"child_id": child_id, "family_owner_id": user.user_id},
+        {"_id": 0}
+    )
+    
+    if not child:
+        raise HTTPException(status_code=404, detail="Niño no encontrado en tu familia")
+    
+    # Determine if notification should be sent
+    use_silent = silent if silent is not None else child.get("silent_mode", False)
+    
+    # Create location request
+    location_request = {
+        "request_id": f"locreq_{uuid.uuid4().hex[:12]}",
+        "child_id": child_id,
+        "requester_id": user.user_id,
+        "requester_name": user.name,
+        "silent_mode": use_silent,
+        "status": "pending",
+        "created_at": datetime.now(timezone.utc).isoformat()
+    }
+    
+    await db.location_requests.insert_one(location_request)
+    
+    # If not silent, create notification for child's device
+    if not use_silent:
+        notification = {
+            "notification_id": f"notif_{uuid.uuid4().hex[:12]}",
+            "target_phone": child.get("phone"),
+            "type": "location_request",
+            "title": "📍 Solicitud de ubicación",
+            "message": f"{user.name} ha solicitado ver tu ubicación",
+            "read": False,
+            "created_at": datetime.now(timezone.utc).isoformat()
+        }
+        await db.notifications.insert_one(notification)
+    
+    # In a real app, this would send a push notification to the child's device
+    # For now, we simulate getting the location
+    
+    return {
+        "success": True,
+        "request_id": location_request["request_id"],
+        "child_name": child.get("name"),
+        "silent_mode": use_silent,
+        "message": "Solicitud de ubicación enviada" if not use_silent else "Solicitud de ubicación enviada (modo silencioso)",
+        "note": "La ubicación aparecerá cuando el dispositivo del niño responda"
+    }
+
+@api_router.post("/family/children/{child_id}/update-location")
+async def update_child_location(
+    child_id: str,
+    latitude: float,
+    longitude: float,
+    accuracy: float = 0,
+    request: Request = None,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Update child's location (called from child's device)"""
+    # This endpoint would be called by the child's app
+    
+    # Update child's last location
+    location_data = {
+        "latitude": latitude,
+        "longitude": longitude,
+        "accuracy": accuracy,
+        "google_maps_url": f"https://maps.google.com/?q={latitude},{longitude}",
+        "timestamp": datetime.now(timezone.utc).isoformat()
+    }
+    
+    await db.family_children.update_one(
+        {"child_id": child_id},
+        {"$set": {"last_location": location_data, "device_linked": True}}
+    )
+    
+    # Add to location history
+    history_entry = {
+        "history_id": f"hist_{uuid.uuid4().hex[:12]}",
+        "child_id": child_id,
+        "location": location_data,
+        "created_at": datetime.now(timezone.utc).isoformat()
+    }
+    await db.location_history.insert_one(history_entry)
+    
+    # Mark any pending requests as completed
+    await db.location_requests.update_many(
+        {"child_id": child_id, "status": "pending"},
+        {"$set": {"status": "completed", "location": location_data}}
+    )
+    
+    return {"success": True}
+
+@api_router.get("/family/children/{child_id}/history")
+async def get_child_location_history(
+    child_id: str,
+    request: Request,
+    days: int = 7,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Get location history of a child (Family Yearly only)"""
+    user = await require_auth(request, session_token)
+    features = get_plan_features_for_user(user)
+    
+    if not features.get("location_history"):
+        raise HTTPException(
+            status_code=403, 
+            detail="El historial de ubicaciones requiere el Plan Familiar Anual"
+        )
+    
+    # Verify child belongs to user
+    child = await db.family_children.find_one(
+        {"child_id": child_id, "family_owner_id": user.user_id},
+        {"_id": 0}
+    )
+    
+    if not child:
+        raise HTTPException(status_code=404, detail="Niño no encontrado en tu familia")
+    
+    # Get history from the last N days
+    from_date = (datetime.now(timezone.utc) - timedelta(days=days)).isoformat()
+    
+    history = await db.location_history.find(
+        {"child_id": child_id, "created_at": {"$gte": from_date}},
+        {"_id": 0}
+    ).sort("created_at", -1).to_list(100)
+    
+    return {
+        "child": child,
+        "history": history,
+        "days_requested": days
+    }
+
+@api_router.patch("/family/children/{child_id}/settings")
+async def update_child_settings(
+    child_id: str,
+    request: Request,
+    silent_mode: Optional[bool] = None,
+    name: Optional[str] = None,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Update child tracking settings"""
+    user = await require_auth(request, session_token)
+    
+    update_data = {}
+    if silent_mode is not None:
+        update_data["silent_mode"] = silent_mode
+    if name:
+        update_data["name"] = name
+    
+    if not update_data:
+        return {"success": True, "message": "No hay cambios"}
+    
+    result = await db.family_children.update_one(
+        {"child_id": child_id, "family_owner_id": user.user_id},
+        {"$set": update_data}
+    )
+    
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Niño no encontrado")
+    
+    return {
+        "success": True, 
+        "message": "Configuración actualizada",
+        "silent_mode": silent_mode
+    }
+
+@api_router.delete("/family/children/{child_id}")
+async def remove_child(
+    child_id: str,
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Remove a child from the family"""
+    user = await require_auth(request, session_token)
+    
+    result = await db.family_children.delete_one(
+        {"child_id": child_id, "family_owner_id": user.user_id}
+    )
+    
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Niño no encontrado")
+    
+    # Also delete their location history
+    await db.location_history.delete_many({"child_id": child_id})
+    
+    return {"success": True, "message": "Niño eliminado del seguimiento familiar"}
+
+# ============================================
 # COMMUNITY ROUTES
 # ============================================
 
