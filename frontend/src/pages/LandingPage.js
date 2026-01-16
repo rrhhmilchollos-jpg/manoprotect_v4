@@ -86,6 +86,7 @@ const LandingPage = () => {
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight leading-tight">
                 Tu mano protectora contra
                 <span className="block text-indigo-600 mt-2">fraudes digitales</span>
+                <span className="block text-emerald-600 text-3xl sm:text-4xl mt-3">y protección familiar avanzada</span>
               </h1>
               
               <p className="text-lg text-zinc-600 leading-relaxed max-w-xl">
