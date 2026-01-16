@@ -183,7 +183,7 @@ MANO es una plataforma de seguridad digital multi-plataforma que protege a usuar
 ## 10. Tareas Pendientes
 
 ### P0 - Crítico
-- [ ] Refactorizar server.py en rutas modulares (URGENTE - archivo muy grande)
+- [ ] Continuar refactorización server.py en rutas modulares (se inició con all_schemas.py)
 
 ### P1 - Alta Prioridad
 - [ ] Despliegue Firebase Hosting (manoprotect.com)
