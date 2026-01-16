@@ -460,74 +460,123 @@ const AdminPanel = () => {
           {/* Users Tab */}
           <TabsContent value="users">
             <Card className="bg-white">
-              <CardHeader>
-                <CardTitle>Gestión de Usuarios</CardTitle>
-                <CardDescription>Ver y gestionar todos los usuarios registrados</CardDescription>
+              <CardHeader className="flex flex-row items-center justify-between">
+                <div>
+                  <CardTitle>Gestión de Usuarios</CardTitle>
+                  <CardDescription>Ver y gestionar todos los usuarios registrados ({users.length})</CardDescription>
+                </div>
+                <div className="flex gap-2">
+                  <Button
+                    onClick={loadAllData}
+                    variant="outline"
+                    size="sm"
+                  >
+                    <RefreshCw className="w-4 h-4 mr-2" />
+                    Actualizar
+                  </Button>
+                  <Button
+                    onClick={handleCleanupTestUsers}
+                    variant="outline"
+                    size="sm"
+                    className="text-red-600 border-red-300 hover:bg-red-50"
+                    disabled={actionLoading === 'cleanup'}
+                  >
+                    {actionLoading === 'cleanup' ? (
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                    ) : (
+                      <><Trash2 className="w-4 h-4 mr-2" />Limpiar Test</>
+                    )}
+                  </Button>
+                </div>
               </CardHeader>
               <CardContent>
                 <div className="overflow-x-auto">
                   <table className="w-full text-sm">
                     <thead>
-                      <tr className="border-b">
+                      <tr className="border-b bg-zinc-50">
                         <th className="text-left p-3">Usuario</th>
                         <th className="text-left p-3">Email</th>
-                        <th className="text-left p-3">Rol</th>
+                        <th className="text-left p-3">Insignia</th>
                         <th className="text-left p-3">Plan</th>
+                        <th className="text-left p-3">Rol</th>
                         <th className="text-left p-3">Fecha</th>
                         <th className="text-left p-3">Acciones</th>
                       </tr>
                     </thead>
                     <tbody>
                       {users.map((u) => (
-                        <tr key={u.user_id} className={`border-b hover:bg-zinc-50 ${u.is_active === false ? 'opacity-50 bg-red-50' : ''}`}>
+                        <tr key={u.user_id || u.id} className={`border-b hover:bg-zinc-50 ${u.is_active === false ? 'opacity-50 bg-red-50' : ''}`}>
                           <td className="p-3 font-medium">
-                            {u.name}
+                            {u.name || 'Sin nombre'}
                             {u.is_active === false && <span className="ml-2 text-xs text-red-500">(Baja)</span>}
                           </td>
-                          <td className="p-3">{u.email}</td>
+                          <td className="p-3 text-zinc-600">{u.email}</td>
+                          <td className="p-3">
+                            <SubscriptionBadge plan={u.plan || 'free'} size="small" />
+                          </td>
+                          <td className="p-3">
+                            <Select
+                              value={u.plan || 'free'}
+                              onValueChange={(value) => handleChangePlan(u.user_id || u.id, value)}
+                              disabled={u.role === 'superadmin' || actionLoading === (u.user_id || u.id)}
+                            >
+                              <SelectTrigger className="w-48 h-8 text-xs">
+                                <SelectValue />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {AVAILABLE_PLANS.map((plan) => (
+                                  <SelectItem key={plan.value} value={plan.value} className="text-xs">
+                                    {plan.label}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                          </td>
                           <td className="p-3">
                             <Badge className={
                               u.role === 'superadmin' ? 'bg-red-600' :
-                              u.role === 'premium' ? 'bg-amber-600' :
-                              'bg-zinc-600'
+                              u.role === 'admin' ? 'bg-amber-600' :
+                              'bg-zinc-500'
                             }>
-                              {u.role === 'superadmin' ? 'Superadmin' : u.role === 'premium' ? 'Premium' : 'Usuario'}
+                              {u.role === 'superadmin' ? '👑 Super' : 
+                               u.role === 'admin' ? '⭐ Admin' : '👤 User'}
                             </Badge>
                           </td>
-                          <td className="p-3">
-                            <Badge variant="outline" className={
-                              u.plan === 'enterprise' ? 'border-purple-500 text-purple-600' :
-                              u.plan === 'business' ? 'border-amber-500 text-amber-600' :
-                              u.plan === 'family' ? 'border-blue-500 text-blue-600' :
-                              u.plan === 'personal' ? 'border-emerald-500 text-emerald-600' :
-                              ''
-                            }>{u.plan || 'free'}</Badge>
-                          </td>
-                          <td className="p-3 text-zinc-500">
+                          <td className="p-3 text-zinc-500 text-xs">
                             {u.created_at ? new Date(u.created_at).toLocaleDateString('es-ES') : '-'}
                           </td>
                           <td className="p-3">
-                            <div className="flex gap-2">
-                              <select
-                                value={u.role}
-                                onChange={(e) => handleUpdateRole(u.user_id, e.target.value)}
-                                className="border rounded px-2 py-1 text-sm"
-                                disabled={u.role === 'superadmin'}
-                              >
-                                <option value="user">Usuario</option>
-                                <option value="premium">Premium</option>
-                                <option value="superadmin">Superadmin</option>
-                              </select>
+                            <div className="flex gap-1">
                               {u.role !== 'superadmin' && (
-                                <Button
-                                  size="sm"
-                                  variant={u.is_active === false ? "default" : "destructive"}
-                                  onClick={() => handleToggleUserStatus(u.user_id, u.is_active !== false)}
-                                >
-                                  {u.is_active === false ? 'Activar' : 'Baja'}
-                                </Button>
+                                <>
+                                  <Button
+                                    size="sm"
+                                    variant={u.is_active === false ? "default" : "outline"}
+                                    onClick={() => handleToggleUserStatus(u.user_id || u.id, u.is_active !== false)}
+                                    className="h-7 text-xs"
+                                  >
+                                    {u.is_active === false ? 'Activar' : 'Baja'}
+                                  </Button>
+                                  <Button
+                                    size="sm"
+                                    variant="ghost"
+                                    onClick={() => handleDeleteUser(u.user_id || u.id, u.email)}
+                                    className="h-7 text-xs text-red-600 hover:bg-red-50"
+                                  >
+                                    <Trash2 className="w-3 h-3" />
+                                  </Button>
+                                </>
                               )}
                             </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
                           </td>
                         </tr>
                       ))}
