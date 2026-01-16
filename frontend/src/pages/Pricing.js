@@ -369,7 +369,8 @@ const Pricing = () => {
 
         {/* Premium Plans */}
         <div className="mb-20">
-          <h2 className="text-3xl font-bold text-center mb-12">Planes Premium Individual</h2>
+          <h2 className="text-3xl font-bold text-center mb-4">Planes Premium Individual</h2>
+          <p className="text-center text-lg text-indigo-600 font-medium mb-12">👥 Todos incluyen protección para 2 personas</p>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {/* Weekly */}
             <Card className="border-2 border-indigo-200 hover:border-indigo-400 transition-all relative">
@@ -379,6 +380,7 @@ const Pricing = () => {
                 </Badge>
                 <plans.weekly.icon className="w-10 h-10 text-indigo-600 mb-3" />
                 <CardTitle className="text-xl">{plans.weekly.name}</CardTitle>
+                <div className="text-sm text-indigo-600 font-semibold">{plans.weekly.users}</div>
                 <div className="mt-4">
                   <span className="text-4xl font-bold">€{plans.weekly.price}</span>
                   <span className="text-zinc-600">{plans.weekly.period}</span>
@@ -389,7 +391,7 @@ const Pricing = () => {
                   {plans.weekly.features.map((feature, idx) => (
                     <li key={idx} className="flex items-start gap-2 text-sm">
                       <Check className="w-4 h-4 text-emerald-500 flex-shrink-0 mt-0.5" />
-                      <span>{feature}</span>
+                      <span className={feature.includes('2 personas') ? 'font-semibold text-indigo-600' : ''}>{feature}</span>
                     </li>
                   ))}
                 </ul>
@@ -416,6 +418,7 @@ const Pricing = () => {
                 </Badge>
                 <plans.monthly.icon className="w-10 h-10 text-indigo-600 mb-3" />
                 <CardTitle className="text-xl">{plans.monthly.name}</CardTitle>
+                <div className="text-sm text-indigo-600 font-semibold">{plans.monthly.users}</div>
                 <div className="mt-4">
                   <span className="text-4xl font-bold">€{plans.monthly.price}</span>
                   <span className="text-zinc-600">{plans.monthly.period}</span>
