@@ -226,6 +226,7 @@ const AdminPanel = () => {
       return;
     }
     
+    setActionLoading(userId);
     try {
       const response = await fetch(`${API}/admin/users/${userId}/status?is_active=${newStatus}`, {
         method: 'PATCH',
@@ -242,6 +243,57 @@ const AdminPanel = () => {
       }
     } catch (error) {
       toast.error('Error de conexión');
+    } finally {
+      setActionLoading(null);
+    }
+  };
+
+  const handleCancelSubscription = async (userId, email) => {
+    if (!window.confirm(`¿Cancelar suscripción de ${email}? Se degradará a plan gratuito.`)) {
+      return;
+    }
+    
+    setActionLoading(userId);
+    try {
+      const response = await fetch(`${API}/admin/users/${userId}/cancel-subscription`, {
+        method: 'POST',
+        credentials: 'include'
+      });
+      
+      if (response.ok) {
+        const result = await response.json();
+        toast.success(result.message);
+        loadAllData();
+      } else {
+        const error = await response.json();
+        toast.error(error.detail || 'Error al cancelar suscripción');
+      }
+    } catch (error) {
+      toast.error('Error de conexión');
+    } finally {
+      setActionLoading(null);
+    }
+  };
+
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [userDetails, setUserDetails] = useState(null);
+  const [showUserModal, setShowUserModal] = useState(false);
+
+  const handleViewUserDetails = async (user) => {
+    setSelectedUser(user);
+    setShowUserModal(true);
+    
+    try {
+      const response = await fetch(`${API}/admin/users/${user.user_id || user.id}/details`, {
+        credentials: 'include'
+      });
+      
+      if (response.ok) {
+        const data = await response.json();
+        setUserDetails(data);
+      }
+    } catch (error) {
+      toast.error('Error al cargar detalles');
     }
   };
 
