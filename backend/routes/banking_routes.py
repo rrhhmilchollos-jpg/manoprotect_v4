@@ -32,6 +32,30 @@ def get_db():
     return _db
 
 
+async def get_current_user_simple(request: Request, session_token: Optional[str] = None):
+    """Simple auth check - get user from session"""
+    db = get_db()
+    token = session_token
+    
+    if not token:
+        auth_header = request.headers.get("Authorization")
+        if auth_header and auth_header.startswith("Bearer "):
+            token = auth_header.split(" ")[1]
+    
+    if not token:
+        raise HTTPException(status_code=401, detail="No autenticado")
+    
+    session = await db.user_sessions.find_one({"session_token": token}, {"_id": 0})
+    if not session:
+        raise HTTPException(status_code=401, detail="Sesión inválida")
+    
+    user = await db.users.find_one({"user_id": session["user_id"]}, {"_id": 0})
+    if not user:
+        raise HTTPException(status_code=401, detail="Usuario no encontrado")
+    
+    return user
+
+
 class NordigenClient:
     """Client for Nordigen Open Banking API"""
     
