@@ -6,6 +6,7 @@ from fastapi import APIRouter, HTTPException, Request, Cookie
 from typing import Optional, Dict, Any, List
 from datetime import datetime, timezone, timedelta
 from pydantic import BaseModel
+from motor.motor_asyncio import AsyncIOMotorClient
 import httpx
 import os
 import uuid
@@ -16,6 +17,19 @@ router = APIRouter(prefix="/banking", tags=["Open Banking"])
 NORDIGEN_SECRET_ID = os.environ.get('NORDIGEN_SECRET_ID')
 NORDIGEN_SECRET_KEY = os.environ.get('NORDIGEN_SECRET_KEY')
 NORDIGEN_BASE_URL = "https://bankaccountdata.gocardless.com/api/v2"
+
+# Database connection (reuse from environment)
+_mongo_client = None
+_db = None
+
+def get_db():
+    global _mongo_client, _db
+    if _db is None:
+        mongo_url = os.environ.get('MONGO_URL', 'mongodb://localhost:27017')
+        db_name = os.environ.get('DB_NAME', 'test_database')
+        _mongo_client = AsyncIOMotorClient(mongo_url)
+        _db = _mongo_client[db_name]
+    return _db
 
 
 class NordigenClient:
