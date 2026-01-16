@@ -259,7 +259,7 @@ async def link_bank_account(
         )
         
         # Store requisition in database
-        await db.bank_requisitions.insert_one({
+        await get_db().bank_requisitions.insert_one({
             "requisition_id": requisition["id"],
             "reference_id": reference_id,
             "user_id": user.user_id,
@@ -295,7 +295,7 @@ async def check_account_status(
         requisition = await nordigen_client.get_requisition(requisition_id)
         
         # Update status in database
-        await db.bank_requisitions.update_one(
+        await get_db().bank_requisitions.update_one(
             {"requisition_id": requisition_id, "user_id": user.user_id},
             {"$set": {
                 "status": requisition.get("status"),
@@ -310,7 +310,7 @@ async def check_account_status(
         if status == "LN":  # Linked
             # Store linked accounts
             for account_id in accounts:
-                await db.bank_accounts.update_one(
+                await get_db().bank_accounts.update_one(
                     {"account_id": account_id},
                     {"$set": {
                         "account_id": account_id,
@@ -350,7 +350,7 @@ async def get_linked_accounts(
     """Get all linked bank accounts for user"""
     user = await require_auth(request, session_token)
     
-    accounts = await db.bank_accounts.find(
+    accounts = await get_db().bank_accounts.find(
         {"user_id": user.user_id},
         {"_id": 0}
     ).to_list(20)
@@ -369,7 +369,7 @@ async def get_account_transactions(
     user = await require_auth(request, session_token)
     
     # Verify user owns this account
-    account = await db.bank_accounts.find_one({
+    account = await get_db().bank_accounts.find_one({
         "account_id": account_id,
         "user_id": user.user_id
     })
@@ -419,7 +419,7 @@ async def get_account_balances(
     user = await require_auth(request, session_token)
     
     # Verify user owns this account
-    account = await db.bank_accounts.find_one({
+    account = await get_db().bank_accounts.find_one({
         "account_id": account_id,
         "user_id": user.user_id
     })
@@ -489,7 +489,7 @@ async def analyze_transactions_for_fraud(
                 alert["account_id"] = account_id
                 alert["created_at"] = datetime.now(timezone.utc).isoformat()
                 alert["status"] = "open"
-                await db.bank_fraud_alerts.insert_one(alert)
+                await get_db().bank_fraud_alerts.insert_one(alert)
                 
         except (ValueError, TypeError):
             continue
