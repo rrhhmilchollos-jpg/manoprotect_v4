@@ -210,13 +210,29 @@ class PaymentTransaction(BaseModel):
 
 # Fixed subscription pricing packages (amounts in EUR)
 SUBSCRIPTION_PACKAGES = {
-    "weekly": {"amount": 9.99, "name": "Premium Semanal", "period": "semana"},
-    "monthly": {"amount": 29.99, "name": "Premium Mensual", "period": "mes"},
-    "quarterly": {"amount": 74.99, "name": "Premium Trimestral", "period": "3 meses"},
-    "yearly": {"amount": 249.99, "name": "Premium Anual", "period": "año"},
-    "family-monthly": {"amount": 49.99, "name": "Familiar Mensual", "period": "mes"},
-    "family-quarterly": {"amount": 129.99, "name": "Familiar Trimestral", "period": "3 meses"},
-    "family-yearly": {"amount": 399.99, "name": "Familiar Anual", "period": "año"}
+    # Planes básicos (hasta 2 usuarios)
+    "personal-monthly": {"amount": 9.99, "name": "Personal Mensual", "period": "mes", "max_users": 2},
+    "personal-quarterly": {"amount": 24.99, "name": "Personal Trimestral", "period": "3 meses", "max_users": 2},
+    "personal-yearly": {"amount": 89.99, "name": "Personal Anual", "period": "año", "max_users": 2},
+    # Planes familiares (hasta 5 usuarios + GPS + SOS)
+    "family-monthly": {"amount": 19.99, "name": "Familiar Mensual", "period": "mes", "max_users": 5, "gps": True, "sos": True},
+    "family-quarterly": {"amount": 49.99, "name": "Familiar Trimestral", "period": "3 meses", "max_users": 5, "gps": True, "sos": True},
+    "family-yearly": {"amount": 179.99, "name": "Familiar Anual", "period": "año", "max_users": 5, "gps": True, "sos": True},
+    # Planes business
+    "business-monthly": {"amount": 49.99, "name": "Business Mensual", "period": "mes", "max_users": 25},
+    "business-yearly": {"amount": 479.99, "name": "Business Anual", "period": "año", "max_users": 25},
+    # Plan enterprise
+    "enterprise-monthly": {"amount": 199.99, "name": "Enterprise Mensual", "period": "mes", "max_users": -1},
+    "enterprise-yearly": {"amount": 1999.99, "name": "Enterprise Anual", "period": "año", "max_users": -1},
+}
+
+# Plan features
+PLAN_FEATURES = {
+    "free": {"max_users": 1, "gps": False, "sos": False, "ai_analysis": False},
+    "personal": {"max_users": 2, "gps": False, "sos": False, "ai_analysis": True},
+    "family": {"max_users": 5, "gps": True, "sos": True, "ai_analysis": True, "senior_mode": True},
+    "business": {"max_users": 25, "gps": False, "sos": False, "ai_analysis": True, "dashboard": True},
+    "enterprise": {"max_users": -1, "gps": True, "sos": True, "ai_analysis": True, "dashboard": True, "api": True},
 }
 
 # ============================================
