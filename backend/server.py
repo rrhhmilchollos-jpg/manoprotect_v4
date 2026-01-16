@@ -3709,6 +3709,42 @@ async def public_download_single_pdf(doc_name: str, key: str = ""):
         filename=f"MANO_{doc_name}_CONFIDENCIAL.pdf"
     )
 
+# Download endpoints for deployable packages
+@public_router.get("/downloads/{package_name}")
+async def download_package(package_name: str, key: str = ""):
+    """Download deployment packages"""
+    if key != OWNER_DOWNLOAD_KEY:
+        raise HTTPException(status_code=403, detail="Clave de acceso inválida")
+    
+    packages = {
+        "web": "/app/downloads/MANO_Web_IONOS.zip",
+        "mobile": "/app/downloads/MANO_Mobile_App.zip",
+        "backend": "/app/downloads/MANO_Backend_Server.zip",
+        "docs": "/app/downloads/MANO_Documentos_Inversores.zip",
+        "todo": "/app/downloads/MANO_Completo_Todo.zip"
+    }
+    
+    if package_name not in packages:
+        raise HTTPException(status_code=404, detail="Paquete no encontrado")
+    
+    file_path = packages[package_name]
+    if not Path(file_path).exists():
+        raise HTTPException(status_code=404, detail="Archivo no encontrado")
+    
+    filenames = {
+        "web": "MANO_Web_IONOS.zip",
+        "mobile": "MANO_Mobile_App_PlayStore.zip",
+        "backend": "MANO_Backend_Server.zip",
+        "docs": "MANO_Documentos_Inversores.zip",
+        "todo": "MANO_Completo_Todo.zip"
+    }
+    
+    return FileResponse(
+        path=file_path,
+        media_type="application/zip",
+        filename=filenames[package_name]
+    )
+
 async def get_api_key_user(request: Request) -> dict:
     """Get user from API key in header"""
     api_key = request.headers.get("X-API-Key")
