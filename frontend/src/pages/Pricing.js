@@ -370,7 +370,7 @@ const Pricing = () => {
         {/* Premium Plans */}
         <div className="mb-20">
           <h2 className="text-3xl font-bold text-center mb-4">Planes Premium Individual</h2>
-          <p className="text-center text-lg text-indigo-600 font-medium mb-12">👥 Todos incluyen protección para 2 personas</p>
+          <p className="text-center text-lg text-indigo-600 font-medium mb-12">👥 Todos incluyen protección hasta 2 familiares</p>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {/* Weekly */}
             <Card className="border-2 border-indigo-200 hover:border-indigo-400 transition-all relative">
