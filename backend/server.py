@@ -3109,6 +3109,89 @@ async def delete_user(
         "user_id": user_id
     }
 
+@api_router.delete("/admin/users/cleanup/test-users")
+async def delete_test_users(
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Delete all test users (superadmin only)"""
+    admin = await require_admin(request, session_token)
+    
+    # Find test users
+    test_patterns = ["test_", "demo@", "test@", "testuser@", "admin@mano"]
+    deleted_count = 0
+    deleted_emails = []
+    
+    async for user in db.users.find():
+        email = user.get("email", "")
+        user_id = user.get("user_id", user.get("id", ""))
+        
+        # Skip superadmins
+        if user.get("role") == "superadmin":
+            continue
+            
+        # Check if it's a test user
+        is_test = any(pattern in email.lower() for pattern in test_patterns)
+        if is_test:
+            await db.users.delete_one({"_id": user["_id"]})
+            await db.user_sessions.delete_many({"user_id": user_id})
+            deleted_emails.append(email)
+            deleted_count += 1
+    
+    return {
+        "message": f"Eliminados {deleted_count} usuarios de test",
+        "deleted_count": deleted_count,
+        "deleted_emails": deleted_emails
+    }
+
+# Subscription badge system
+SUBSCRIPTION_BADGES = {
+    "free": {"name": "Bronce", "icon": "🥉", "color": "#CD7F32", "level": 1},
+    "personal": {"name": "Plata", "icon": "🥈", "color": "#C0C0C0", "level": 2},
+    "personal-monthly": {"name": "Plata", "icon": "🥈", "color": "#C0C0C0", "level": 2},
+    "personal-quarterly": {"name": "Oro", "icon": "🥇", "color": "#FFD700", "level": 3},
+    "personal-yearly": {"name": "Oro", "icon": "🥇", "color": "#FFD700", "level": 3},
+    "family": {"name": "Platino", "icon": "💎", "color": "#E5E4E2", "level": 4},
+    "family-monthly": {"name": "Platino", "icon": "💎", "color": "#E5E4E2", "level": 4},
+    "family-quarterly": {"name": "Platino", "icon": "💎", "color": "#E5E4E2", "level": 4},
+    "family-yearly": {"name": "Diamante", "icon": "💠", "color": "#B9F2FF", "level": 5},
+    "business": {"name": "Diamante", "icon": "💠", "color": "#B9F2FF", "level": 5},
+    "enterprise": {"name": "Élite", "icon": "👑", "color": "#9400D3", "level": 6},
+}
+
+@api_router.get("/user/badge")
+async def get_user_badge(
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Get user's subscription badge"""
+    user = await require_auth(request, session_token)
+    plan = user.plan or "free"
+    
+    badge = SUBSCRIPTION_BADGES.get(plan, SUBSCRIPTION_BADGES["free"])
+    
+    return {
+        "plan": plan,
+        "badge": badge,
+        "next_level": get_next_badge_level(plan)
+    }
+
+def get_next_badge_level(current_plan: str) -> dict:
+    """Get next badge level for upgrade suggestion"""
+    current = SUBSCRIPTION_BADGES.get(current_plan, SUBSCRIPTION_BADGES["free"])
+    current_level = current["level"]
+    
+    upgrade_path = {
+        1: {"plan": "personal", "badge": SUBSCRIPTION_BADGES["personal"]},
+        2: {"plan": "personal-yearly", "badge": SUBSCRIPTION_BADGES["personal-yearly"]},
+        3: {"plan": "family-monthly", "badge": SUBSCRIPTION_BADGES["family-monthly"]},
+        4: {"plan": "family-yearly", "badge": SUBSCRIPTION_BADGES["family-yearly"]},
+        5: {"plan": "enterprise", "badge": SUBSCRIPTION_BADGES["enterprise"]},
+        6: None  # Already at max
+    }
+    
+    return upgrade_path.get(current_level)
+
 @api_router.get("/admin/stats")
 async def get_admin_stats(
     request: Request,
