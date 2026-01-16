@@ -4,18 +4,34 @@ import { useAuth } from '@/context/AuthContext';
 import { 
   Shield, Users, CreditCard, FileText, CheckCircle, XCircle, 
   Clock, ArrowLeft, TrendingUp, Download, Eye, UserCheck, Loader2,
-  MessageCircle, Key, Activity, Crown, Database
+  MessageCircle, Key, Activity, Crown, Database, Trash2, Edit, RefreshCw
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { toast } from 'sonner';
 import RealTimeMetrics from '@/components/RealTimeMetrics';
 import WhatsAppManager from '@/components/WhatsAppManager';
 import APIKeyManager from '@/components/APIKeyManager';
+import { SubscriptionBadge } from '@/components/SubscriptionBadge';
 
 const API = process.env.REACT_APP_BACKEND_URL + '/api';
+
+// Available plans
+const AVAILABLE_PLANS = [
+  { value: 'free', label: '🥉 Gratis (Bronce)' },
+  { value: 'personal', label: '🥈 Personal (Plata)' },
+  { value: 'personal-monthly', label: '🥈 Personal Mensual (Plata)' },
+  { value: 'personal-quarterly', label: '🥇 Personal Trimestral (Oro)' },
+  { value: 'personal-yearly', label: '🥇 Personal Anual (Oro)' },
+  { value: 'family-monthly', label: '💎 Familiar Mensual (Platino)' },
+  { value: 'family-quarterly', label: '💎 Familiar Trimestral (Platino)' },
+  { value: 'family-yearly', label: '💠 Familiar Anual (Diamante)' },
+  { value: 'business', label: '💠 Business (Diamante)' },
+  { value: 'enterprise', label: '👑 Enterprise (Élite)' },
+];
 
 const AdminPanel = () => {
   const navigate = useNavigate();
