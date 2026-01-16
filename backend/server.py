@@ -3367,6 +3367,53 @@ async def revoke_api_key(
 # Public API endpoints (authenticated via API key)
 public_router = APIRouter(prefix="/api/v1", tags=["public-api"])
 
+# Simple access key for downloading documents (owner access)
+OWNER_DOWNLOAD_KEY = "mano2025investor"
+
+@public_router.get("/documents/download-zip")
+async def public_download_documents(key: str = ""):
+    """Download all investor documents with access key"""
+    if key != OWNER_DOWNLOAD_KEY:
+        raise HTTPException(status_code=403, detail="Clave de acceso inválida")
+    
+    zip_path = "/app/MANO_Documentos_Inversores.zip"
+    if not Path(zip_path).exists():
+        raise HTTPException(status_code=404, detail="Archivo ZIP no encontrado")
+    
+    return FileResponse(
+        path=zip_path,
+        media_type="application/zip",
+        filename="MANO_Documentos_Inversores_CONFIDENCIAL.zip"
+    )
+
+@public_router.get("/documents/download-pdf/{doc_name}")
+async def public_download_single_pdf(doc_name: str, key: str = ""):
+    """Download a single PDF document with access key"""
+    if key != OWNER_DOWNLOAD_KEY:
+        raise HTTPException(status_code=403, detail="Clave de acceso inválida")
+    
+    # Map of allowed document names
+    allowed_docs = {
+        "plan-negocio": "PLAN_DE_NEGOCIO.pdf",
+        "presentacion": "PRESENTACION_INVERSORES.pdf",
+        "modelo-financiero": "MODELO_FINANCIERO.pdf",
+        "terminos": "TERMINOS_INVERSION.pdf",
+        "enterprise": "MANO_ENTERPRISE_BUSINESS_PLAN.pdf"
+    }
+    
+    if doc_name not in allowed_docs:
+        raise HTTPException(status_code=404, detail="Documento no encontrado")
+    
+    pdf_path = f"/app/docs/pdf/{allowed_docs[doc_name]}"
+    if not Path(pdf_path).exists():
+        raise HTTPException(status_code=404, detail="Archivo PDF no encontrado")
+    
+    return FileResponse(
+        path=pdf_path,
+        media_type="application/pdf",
+        filename=f"MANO_{doc_name}_CONFIDENCIAL.pdf"
+    )
+
 async def get_api_key_user(request: Request) -> dict:
     """Get user from API key in header"""
     api_key = request.headers.get("X-API-Key")
