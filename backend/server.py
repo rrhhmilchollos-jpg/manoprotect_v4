@@ -696,10 +696,10 @@ async def list_investor_documents(request: Request, session_token: Optional[str]
     
     return {
         "documents": [
-            {"id": "business-plan", "title": "Plan de Negocio Completo", "pages": "120 páginas"},
-            {"id": "financial-model", "title": "Modelo Financiero Detallado", "pages": "25 páginas"},
-            {"id": "pitch-deck", "title": "Pitch Deck Inversores", "pages": "11 slides"},
-            {"id": "dossier-b2b", "title": "Dossier Comercial B2B", "pages": "47 páginas"}
+            {"id": "business-plan", "title": "Plan de Negocio 2025-2028", "pages": "15 páginas", "format": "PDF/MD"},
+            {"id": "financial-model", "title": "Modelo Financiero Detallado", "pages": "8 páginas", "format": "PDF/MD"},
+            {"id": "pitch-deck", "title": "Presentación para Inversores", "pages": "15 slides", "format": "PDF/MD"},
+            {"id": "terms", "title": "Términos de Inversión", "pages": "5 páginas", "format": "PDF/MD"}
         ]
     }
 
@@ -713,10 +713,10 @@ async def download_investor_document(
     user = await require_investor(request, session_token)
     
     doc_map = {
-        "business-plan": "/app/memory/plan-de-negocio-completo.md",
-        "financial-model": "/app/memory/financial-model.md",
-        "pitch-deck": "/app/memory/pitch-deck-inversores.md",
-        "dossier-b2b": "/app/memory/dossier-comercial-b2b.md"
+        "business-plan": "/app/docs/PLAN_DE_NEGOCIO.md",
+        "financial-model": "/app/docs/MODELO_FINANCIERO.md",
+        "pitch-deck": "/app/docs/PRESENTACION_INVERSORES.md",
+        "terms": "/app/docs/TERMINOS_INVERSION.md"
     }
     
     file_path = doc_map.get(doc_type)
