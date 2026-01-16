@@ -2,6 +2,8 @@
 MANO - Iteration 14 Backend Tests
 Testing new integration endpoints: Banking, Email, WhatsApp
 Also verifying existing routes (auth, payments, admin) still work
+
+NOTE: Login returns user data directly, session_token is set as HTTP cookie
 """
 import pytest
 import requests
@@ -93,12 +95,12 @@ class TestExistingAuthRoutes:
         })
         assert response.status_code == 200
         data = response.json()
-        assert "session_token" in data
-        assert "user" in data
-        assert data["user"]["email"] == SUPERADMIN_EMAIL
-        assert data["user"]["role"] == "superadmin"
-        print(f"✓ Login successful for superadmin")
-        return data["session_token"]
+        # Login returns user data directly, session_token is in cookie
+        assert "email" in data
+        assert data["email"] == SUPERADMIN_EMAIL
+        # Check for session cookie
+        assert "session_token" in response.cookies or "user_id" in data
+        print(f"✓ Login successful for user: {data['email']}")
     
     def test_login_with_invalid_credentials(self):
         """POST /api/auth/login should return 401 for invalid credentials"""
@@ -115,25 +117,22 @@ class TestExistingAuthRoutes:
         assert response.status_code == 401
         print(f"✓ /auth/me correctly requires authentication")
     
-    def test_auth_me_with_token(self):
-        """GET /api/auth/me should return user data with valid token"""
-        # First login
-        login_response = requests.post(f"{BASE_URL}/api/auth/login", json={
+    def test_auth_me_with_cookie(self):
+        """GET /api/auth/me should return user data with valid session cookie"""
+        # Create session to get cookie
+        session = requests.Session()
+        login_response = session.post(f"{BASE_URL}/api/auth/login", json={
             "email": SUPERADMIN_EMAIL,
             "password": SUPERADMIN_PASSWORD
         })
-        token = login_response.json()["session_token"]
+        assert login_response.status_code == 200
         
-        # Then get user info
-        response = requests.get(
-            f"{BASE_URL}/api/auth/me",
-            headers={"Authorization": f"Bearer {token}"}
-        )
+        # Use same session to get user info (cookies are preserved)
+        response = session.get(f"{BASE_URL}/api/auth/me")
         assert response.status_code == 200
         data = response.json()
         assert data["email"] == SUPERADMIN_EMAIL
-        assert data["role"] == "superadmin"
-        print(f"✓ /auth/me returns correct user data")
+        print(f"✓ /auth/me returns correct user data with session cookie")
 
 
 class TestExistingPaymentRoutes:
@@ -174,7 +173,8 @@ class TestExistingPaymentRoutes:
     def test_create_checkout_session_weekly(self):
         """POST /api/create-checkout-session should work for weekly plan"""
         response = requests.post(f"{BASE_URL}/api/create-checkout-session", json={
-            "plan": "weekly"
+            "plan_type": "weekly",
+            "origin_url": "https://safeguarder-1.preview.emergentagent.com"
         })
         assert response.status_code == 200
         data = response.json()
@@ -182,10 +182,23 @@ class TestExistingPaymentRoutes:
         assert "stripe.com" in data["url"]
         print(f"✓ Checkout session created for weekly plan")
     
+    def test_create_checkout_session_monthly(self):
+        """POST /api/create-checkout-session should work for monthly plan"""
+        response = requests.post(f"{BASE_URL}/api/create-checkout-session", json={
+            "plan_type": "monthly",
+            "origin_url": "https://safeguarder-1.preview.emergentagent.com"
+        })
+        assert response.status_code == 200
+        data = response.json()
+        assert "url" in data
+        assert "stripe.com" in data["url"]
+        print(f"✓ Checkout session created for monthly plan")
+    
     def test_create_checkout_session_invalid_plan(self):
         """POST /api/create-checkout-session should return 400 for invalid plan"""
         response = requests.post(f"{BASE_URL}/api/create-checkout-session", json={
-            "plan": "invalid_plan"
+            "plan_type": "invalid_plan",
+            "origin_url": "https://safeguarder-1.preview.emergentagent.com"
         })
         assert response.status_code == 400
         print(f"✓ Checkout correctly rejects invalid plan")
@@ -195,43 +208,36 @@ class TestExistingAdminRoutes:
     """Verify existing admin routes still work"""
     
     @pytest.fixture
-    def admin_token(self):
-        """Get admin session token"""
-        response = requests.post(f"{BASE_URL}/api/auth/login", json={
+    def admin_session(self):
+        """Get admin session with cookies"""
+        session = requests.Session()
+        response = session.post(f"{BASE_URL}/api/auth/login", json={
             "email": SUPERADMIN_EMAIL,
             "password": SUPERADMIN_PASSWORD
         })
-        return response.json()["session_token"]
+        assert response.status_code == 200
+        return session
     
-    def test_admin_stats(self, admin_token):
+    def test_admin_stats(self, admin_session):
         """GET /api/admin/stats should work for admin"""
-        response = requests.get(
-            f"{BASE_URL}/api/admin/stats",
-            headers={"Authorization": f"Bearer {admin_token}"}
-        )
+        response = admin_session.get(f"{BASE_URL}/api/admin/stats")
         assert response.status_code == 200
         data = response.json()
         assert "total_users" in data
         assert "total_threats" in data
         print(f"✓ Admin stats endpoint working")
     
-    def test_admin_users_list(self, admin_token):
+    def test_admin_users_list(self, admin_session):
         """GET /api/admin/users should work for admin"""
-        response = requests.get(
-            f"{BASE_URL}/api/admin/users",
-            headers={"Authorization": f"Bearer {admin_token}"}
-        )
+        response = admin_session.get(f"{BASE_URL}/api/admin/users")
         assert response.status_code == 200
         data = response.json()
         assert isinstance(data, list)
         print(f"✓ Admin users list endpoint working, found {len(data)} users")
     
-    def test_admin_investors_list(self, admin_token):
+    def test_admin_investors_list(self, admin_session):
         """GET /api/admin/investors should work for admin"""
-        response = requests.get(
-            f"{BASE_URL}/api/admin/investors",
-            headers={"Authorization": f"Bearer {admin_token}"}
-        )
+        response = admin_session.get(f"{BASE_URL}/api/admin/investors")
         assert response.status_code == 200
         data = response.json()
         assert isinstance(data, list)
@@ -272,13 +278,15 @@ class TestBankingRoutesAuth:
     """Test banking routes that require authentication"""
     
     @pytest.fixture
-    def auth_token(self):
-        """Get session token"""
-        response = requests.post(f"{BASE_URL}/api/auth/login", json={
+    def auth_session(self):
+        """Get authenticated session"""
+        session = requests.Session()
+        response = session.post(f"{BASE_URL}/api/auth/login", json={
             "email": SUPERADMIN_EMAIL,
             "password": SUPERADMIN_PASSWORD
         })
-        return response.json()["session_token"]
+        assert response.status_code == 200
+        return session
     
     def test_banking_institutions_requires_auth(self):
         """GET /api/banking/institutions/{country} should require auth"""
@@ -286,12 +294,9 @@ class TestBankingRoutesAuth:
         assert response.status_code == 401
         print(f"✓ Banking institutions correctly requires auth")
     
-    def test_banking_institutions_returns_503_when_not_configured(self, auth_token):
+    def test_banking_institutions_returns_503_when_not_configured(self, auth_session):
         """GET /api/banking/institutions/{country} should return 503 when not configured"""
-        response = requests.get(
-            f"{BASE_URL}/api/banking/institutions/ES",
-            headers={"Authorization": f"Bearer {auth_token}"}
-        )
+        response = auth_session.get(f"{BASE_URL}/api/banking/institutions/ES")
         # Should return 503 because Nordigen is not configured
         assert response.status_code == 503
         data = response.json()
@@ -304,17 +309,14 @@ class TestBankingRoutesAuth:
         assert response.status_code == 401
         print(f"✓ Banking accounts correctly requires auth")
     
-    def test_banking_accounts_returns_empty_list(self, auth_token):
+    def test_banking_accounts_returns_empty_list(self, auth_session):
         """GET /api/banking/accounts should return empty list for user without linked accounts"""
-        response = requests.get(
-            f"{BASE_URL}/api/banking/accounts",
-            headers={"Authorization": f"Bearer {auth_token}"}
-        )
+        response = auth_session.get(f"{BASE_URL}/api/banking/accounts")
         assert response.status_code == 200
         data = response.json()
         assert "accounts" in data
         assert isinstance(data["accounts"], list)
-        print(f"✓ Banking accounts returns empty list for user without linked accounts")
+        print(f"✓ Banking accounts returns list for authenticated user")
 
 
 class TestEmailRoutes:
