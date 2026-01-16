@@ -762,8 +762,12 @@ const Pricing = () => {
                 a: 'Si no estás satisfecho en los primeros 15 días, te devolvemos el 100% sin preguntas. Sin letra pequeña.'
               },
               {
+                q: '¿Cómo funciona el botón SOS con GPS en el plan familiar?',
+                a: 'Cuando cualquier miembro de la familia pulsa el botón SOS de emergencia, la aplicación captura automáticamente su ubicación GPS precisa y la envía instantáneamente a todos los demás miembros del grupo familiar. Así pueden ver exactamente dónde está y acudir en su ayuda. La ubicación solo se comparte cuando se pulsa el botón SOS, respetando la privacidad del usuario.'
+              },
+              {
                 q: '¿El plan familiar incluye modo senior?',
-                a: 'Sí, todos los miembros pueden activar el Modo Familiar Senior con botón SOS y alertas automáticas a otros miembros.'
+                a: 'Sí, todos los miembros pueden activar el Modo Familiar Senior con interfaz simplificada, botón SOS grande con localización GPS, y alertas automáticas a otros miembros de la familia.'
               }
             ].map((faq, idx) => (
               <Card key={idx} className="border-zinc-200">
