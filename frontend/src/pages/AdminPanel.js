@@ -577,15 +577,6 @@ const AdminPanel = () => {
               </CardContent>
             </Card>
           </TabsContent>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
 
           {/* Subscriptions Tab - Manual Premium Management */}
           <TabsContent value="subscriptions">
