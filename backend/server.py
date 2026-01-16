@@ -1465,6 +1465,97 @@ async def get_knowledge_base():
         ]
     }
 
+@api_router.get("/plans")
+async def get_available_plans():
+    """Get all available subscription plans with features"""
+    plans = [
+        {
+            "id": "free",
+            "name": "Gratis",
+            "price": 0,
+            "period": "mes",
+            "max_users": 1,
+            "features": [
+                "Análisis básico de amenazas",
+                "Alertas limitadas (5/día)",
+                "Protección para 1 usuario"
+            ],
+            "limitations": ["Sin IA avanzada", "Sin GPS", "Sin SOS"]
+        },
+        {
+            "id": "personal",
+            "name": "Personal",
+            "price": 9.99,
+            "period": "mes",
+            "max_users": 2,
+            "features": [
+                "Análisis ilimitado con IA",
+                "Alertas en tiempo real",
+                "Protección para hasta 2 usuarios",
+                "Soporte prioritario"
+            ],
+            "popular": False
+        },
+        {
+            "id": "family",
+            "name": "Familiar",
+            "price": 19.99,
+            "period": "mes",
+            "max_users": 5,
+            "features": [
+                "Todo de Personal",
+                "Protección para hasta 5 usuarios",
+                "📍 GPS y ubicación en tiempo real",
+                "🆘 Botón SOS de emergencia",
+                "👴 Modo simplificado para mayores",
+                "Panel de control familiar"
+            ],
+            "popular": True
+        },
+        {
+            "id": "business",
+            "name": "Business",
+            "price": 49.99,
+            "period": "mes",
+            "max_users": 25,
+            "features": [
+                "Protección para hasta 25 empleados",
+                "Dashboard empresarial",
+                "Reportes de amenazas",
+                "API básica de integración",
+                "Soporte dedicado"
+            ],
+            "popular": False
+        },
+        {
+            "id": "enterprise",
+            "name": "Enterprise",
+            "price": 199.99,
+            "period": "mes",
+            "max_users": -1,
+            "features": [
+                "Usuarios ilimitados",
+                "Todo incluido",
+                "API completa",
+                "GPS y SOS",
+                "Soporte 24/7",
+                "Personalización completa",
+                "Account manager dedicado"
+            ],
+            "popular": False
+        }
+    ]
+    
+    return {
+        "plans": plans,
+        "currency": "EUR",
+        "billing_options": ["monthly", "quarterly", "yearly"],
+        "discounts": {
+            "quarterly": 15,
+            "yearly": 30
+        }
+    }
+
 # ============================================
 # STRIPE PAYMENT ROUTES
 # ============================================
