@@ -226,13 +226,17 @@ SUBSCRIPTION_PACKAGES = {
     "enterprise-yearly": {"amount": 1999.99, "name": "Enterprise Anual", "period": "año", "max_users": -1},
 }
 
-# Plan features
+# Plan features - detailed by billing period for family plans
 PLAN_FEATURES = {
-    "free": {"max_users": 1, "gps": False, "sos": False, "ai_analysis": False},
-    "personal": {"max_users": 2, "gps": False, "sos": False, "ai_analysis": True},
-    "family": {"max_users": 5, "gps": True, "sos": True, "ai_analysis": True, "senior_mode": True},
-    "business": {"max_users": 25, "gps": False, "sos": False, "ai_analysis": True, "dashboard": True},
-    "enterprise": {"max_users": -1, "gps": True, "sos": True, "ai_analysis": True, "dashboard": True, "api": True},
+    "free": {"max_users": 1, "gps": False, "sos": False, "ai_analysis": False, "child_tracking": False, "location_history": False},
+    "personal": {"max_users": 2, "gps": False, "sos": False, "ai_analysis": True, "child_tracking": False, "location_history": False},
+    # Family plans with tiered features
+    "family": {"max_users": 5, "gps": True, "sos": True, "ai_analysis": True, "senior_mode": True, "child_tracking": False, "location_history": False},
+    "family-monthly": {"max_users": 5, "gps": False, "sos": True, "ai_analysis": True, "senior_mode": True, "child_tracking": False, "location_history": False},
+    "family-quarterly": {"max_users": 5, "gps": True, "sos": True, "ai_analysis": True, "senior_mode": True, "child_tracking": False, "location_history": False},
+    "family-yearly": {"max_users": 5, "gps": True, "sos": True, "ai_analysis": True, "senior_mode": True, "child_tracking": True, "location_history": True, "silent_mode": True},
+    "business": {"max_users": 25, "gps": False, "sos": False, "ai_analysis": True, "dashboard": True, "child_tracking": False, "location_history": False},
+    "enterprise": {"max_users": -1, "gps": True, "sos": True, "ai_analysis": True, "dashboard": True, "api": True, "child_tracking": True, "location_history": True},
 }
 
 # ============================================
