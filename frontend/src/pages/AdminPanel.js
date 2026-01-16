@@ -608,6 +608,7 @@ const AdminPanel = () => {
                                 onClick={() => handleViewUserDetails(u)}
                                 className="h-7 text-xs"
                                 title="Ver detalles"
+                                data-testid={`view-user-${u.user_id || u.id}`}
                               >
                                 <Eye className="w-3 h-3" />
                               </Button>
@@ -622,6 +623,7 @@ const AdminPanel = () => {
                                     className={`h-7 text-xs ${u.is_active === false ? 'bg-emerald-600' : ''}`}
                                     disabled={actionLoading === (u.user_id || u.id)}
                                     title={u.is_active === false ? 'Activar usuario' : 'Dar de baja'}
+                                    data-testid={`toggle-status-${u.user_id || u.id}`}
                                   >
                                     {actionLoading === (u.user_id || u.id) ? (
                                       <Loader2 className="w-3 h-3 animate-spin" />
@@ -641,6 +643,7 @@ const AdminPanel = () => {
                                       className="h-7 text-xs text-amber-600 border-amber-300 hover:bg-amber-50"
                                       disabled={actionLoading === (u.user_id || u.id)}
                                       title="Cancelar suscripción"
+                                      data-testid={`cancel-subscription-${u.user_id || u.id}`}
                                     >
                                       ✕ Cancelar
                                     </Button>
@@ -654,6 +657,7 @@ const AdminPanel = () => {
                                     className="h-7 text-xs text-red-600 hover:bg-red-50"
                                     disabled={actionLoading === (u.user_id || u.id)}
                                     title="Eliminar permanentemente"
+                                    data-testid={`delete-user-${u.user_id || u.id}`}
                                   >
                                     <Trash2 className="w-3 h-3" />
                                   </Button>
