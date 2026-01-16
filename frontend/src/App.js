@@ -134,6 +134,14 @@ function AppRouter() {
         } 
       />
       <Route 
+        path="/child-tracking" 
+        element={
+          <ProtectedRoute>
+            <ChildTracking />
+          </ProtectedRoute>
+        } 
+      />
+      <Route 
         path="/contacts" 
         element={
           <ProtectedRoute>
