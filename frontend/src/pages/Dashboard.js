@@ -284,10 +284,24 @@ const Dashboard = () => {
       </header>
 
       <div className="max-w-7xl mx-auto px-6 py-8">
-        {/* Welcome */}
-        <div className="mb-6">
-          <h1 className="text-2xl font-bold text-zinc-900">Hola, {user?.name || 'Usuario'}</h1>
-          <p className="text-zinc-600">Tu protección está activa. Analiza contenido sospechoso abajo.</p>
+        {/* Welcome with Badge */}
+        <div className="mb-6 flex items-center justify-between">
+          <div>
+            <h1 className="text-2xl font-bold text-zinc-900">Hola, {user?.name || 'Usuario'}</h1>
+            <p className="text-zinc-600">Tu protección está activa. Analiza contenido sospechoso abajo.</p>
+          </div>
+          <div className="flex items-center gap-3">
+            <SubscriptionBadge plan={user?.plan || 'free'} size="large" />
+            {user?.plan === 'free' && (
+              <Button
+                onClick={() => navigate('/pricing')}
+                size="sm"
+                className="bg-indigo-600 hover:bg-indigo-700 text-white"
+              >
+                Mejorar Plan
+              </Button>
+            )}
+          </div>
         </div>
 
         {/* Stats */}
