@@ -2,15 +2,13 @@
 MANO - Nordigen Open Banking Integration
 Connects to European banks for transaction analysis and fraud detection
 """
-from fastapi import APIRouter, HTTPException, Request, Cookie, Depends
+from fastapi import APIRouter, HTTPException, Request, Cookie
 from typing import Optional, Dict, Any, List
 from datetime import datetime, timezone, timedelta
 from pydantic import BaseModel
 import httpx
 import os
 import uuid
-
-from core.database import db, require_auth
 
 router = APIRouter(prefix="/banking", tags=["Open Banking"])
 
