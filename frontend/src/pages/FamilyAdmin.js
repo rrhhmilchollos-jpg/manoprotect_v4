@@ -274,6 +274,35 @@ const FamilyAdmin = () => {
           </Card>
         </div>
 
+        {/* Child Tracking Card - Premium Feature */}
+        <Card 
+          className="mb-8 bg-gradient-to-r from-indigo-50 to-purple-50 border-2 border-indigo-200 cursor-pointer hover:border-indigo-400 transition-all"
+          onClick={() => navigate('/child-tracking')}
+        >
+          <CardContent className="py-6">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-4">
+                <div className="w-14 h-14 rounded-full bg-indigo-600 flex items-center justify-center">
+                  <MapPin className="w-7 h-7 text-white" />
+                </div>
+                <div>
+                  <div className="flex items-center gap-2 mb-1">
+                    <h3 className="text-xl font-bold text-indigo-800">👶 Localizar Niños</h3>
+                    <Badge className="bg-indigo-600 text-white">
+                      <Crown className="w-3 h-3 mr-1" />
+                      Plan Anual
+                    </Badge>
+                  </div>
+                  <p className="text-indigo-600">Localiza a tus hijos bajo demanda • Historial de ubicaciones • Modo silencioso</p>
+                </div>
+              </div>
+              <Button className="bg-indigo-600 hover:bg-indigo-700 text-white">
+                Acceder
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+
         <div className="grid lg:grid-cols-3 gap-6">
           {/* Members List */}
           <div className="lg:col-span-2">
