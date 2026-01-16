@@ -154,7 +154,7 @@ const LandingPage = () => {
             <div className="relative">
               <div className="aspect-square rounded-2xl overflow-hidden border border-zinc-200 shadow-2xl">
                 <img
-                  src="https://customer-assets.emergentagent.com/job_5c97b24f-9a55-4567-9954-bd76179fb951/artifacts/1nwr2vau_dashboard.png"
+                  src="https://static.prod-images.emergentagent.com/jobs/fa8350ac-4103-442a-8e22-a986a8837bc7/images/312208fa281c70105d0cd9dabedca638b25f17b4db91b16d03b6380639999401.png"
                   alt="MANO Dashboard - Protección contra fraudes"
                   className="w-full h-full object-cover"
                 />
