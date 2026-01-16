@@ -161,22 +161,35 @@ MANO es una plataforma de seguridad digital multi-plataforma que protege a usuar
 
 ---
 
-## 9. Tareas Pendientes
+## 9. Tareas Completadas Recientemente
+
+### 16 Enero 2025
+- [x] Panel Admin - Botones Activar/Desactivar usuarios
+- [x] Panel Admin - Botón Cancelar suscripción (solo planes de pago)
+- [x] Panel Admin - Selector de planes actualizado con badges
+- [x] Panel Familiar - Clic en tarjeta de miembro abre editor
+- [x] Panel Familiar - No muestra banner de upgrade para Enterprise/Business
+- [x] Testing: 17/17 tests pasados (backend y frontend)
+
+---
+
+## 10. Tareas Pendientes
 
 ### P0 - Crítico
-- [ ] Refactorizar server.py en rutas modulares
+- [ ] Refactorizar server.py en rutas modulares (URGENTE - archivo muy grande)
 
 ### P1 - Alta Prioridad
 - [ ] Despliegue Firebase Hosting (manoprotect.com)
-- [ ] Completar compilación Expo EAS
+- [ ] Completar compilación Expo EAS (bloqueado en máquina del usuario)
 
 ### P2 - Media Prioridad
-- [ ] Configurar SendGrid para emails
-- [ ] Configurar WhatsApp Business API
+- [ ] Configurar SendGrid para emails (requiere API Key)
+- [ ] Configurar WhatsApp Business API (requiere API Key)
+- [ ] Integración Open Banking (esperando decisión del usuario)
 
 ### P3 - Backlog
 - [ ] Mejorar análisis IA de amenazas
-- [ ] Integración bancaria real (actualmente mocked)
+- [ ] Integración bancaria real (actualmente MOCKED)
 
 ---
 
