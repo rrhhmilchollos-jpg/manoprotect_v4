@@ -43,19 +43,27 @@ MANO es una plataforma de seguridad digital multi-plataforma que protege a usuar
 | Personal | €9.99/mes | 2 | IA avanzada, alertas ilimitadas |
 | Premium Anual | €249.99/año | 1 | Todo incluido + 31% descuento |
 
-### 3.2 Planes Familiares (con GPS + SOS)
-| Plan | Precio | Usuarios | Características Exclusivas |
-|------|--------|----------|---------------------------|
-| Familiar Mensual | €49.99/mes | 5 | 🆘 Botón SOS + 📍 GPS automático |
-| Familiar Trimestral | €129.99/3m | 5 | 🆘 Botón SOS + 📍 GPS automático |
-| Familiar Anual | €399.99/año | 5 | 🆘 Botón SOS + 📍 GPS automático |
+### 3.2 Planes Familiares (DIFERENCIADOS)
+| Plan | Precio | Usuarios | Características |
+|------|--------|----------|-----------------|
+| Familiar Mensual | €49.99/mes | 5 | 🆘 Solo botón SOS básico (sin GPS) |
+| Familiar Trimestral | €129.99/3m | 5 | 🆘 SOS + 📍 GPS bajo demanda |
+| Familiar Anual | €399.99/año | 5 | ⭐ TODO: SOS + GPS + 👶 Localizar niños + Historial + Modo silencioso |
 
-### 3.3 Función GPS + SOS (Solo Plan Familiar)
+### 3.3 Función Localización de Niños (SOLO PLAN ANUAL)
+**Características:**
+- Añadir niños por número de teléfono
+- Localización bajo demanda (cuando el padre solicita)
+- Historial de ubicaciones (últimos 7 días)
+- Modo silencioso configurable (opción para que el niño NO reciba notificación)
+- El niño debe tener app MANO instalada
+
 **Funcionamiento:**
-1. Usuario pulsa botón SOS de emergencia
-2. App captura ubicación GPS precisa automáticamente
-3. Ubicación se envía a todos los contactos de emergencia familiar
-4. Contactos reciben notificación con enlace a Google Maps
+1. Padre añade niño con nombre y teléfono
+2. Se instala app MANO en teléfono del niño
+3. Padre puede solicitar ubicación cuando quiera
+4. Ubicación se muestra con enlace a Google Maps
+5. Historial disponible de los últimos 7 días
 
 ### 3.4 Planes Business/Enterprise
 | Plan | Precio | Usuarios |
