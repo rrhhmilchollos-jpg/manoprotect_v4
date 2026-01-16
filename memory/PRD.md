@@ -163,20 +163,26 @@ MANO es una plataforma de seguridad digital multi-plataforma que protege a usuar
 
 ## 9. Tareas Completadas Recientemente
 
+### 16 Enero 2025 - Sesión 3 (Integraciones)
+- [x] Nordigen Open Banking - Rutas implementadas en `/api/banking/*`
+- [x] SendGrid Email - Rutas implementadas en `/api/email/*`
+- [x] WhatsApp Cloud API - Rutas implementadas en `/api/whatsapp/*`
+- [x] Componente BankingIntegration.jsx creado
+- [x] Variables de entorno añadidas al .env
+- [x] Guía de despliegue IONOS/Firebase creada
+- [x] Guía de compilación móvil creada
+
 ### 16 Enero 2025 - Sesión 2
-- [x] Precios sincronizados frontend/backend (weekly €9.99, monthly €29.99, quarterly €74.99, yearly €249.99, family-monthly €49.99, family-quarterly €129.99, family-yearly €399.99)
+- [x] Precios sincronizados frontend/backend
 - [x] Nueva página PaymentSuccess.js con mensaje "Gracias por tu pedido"
-- [x] Mensaje de confirmación: "En breve recibirás tu recibo e instrucciones por correo electrónico"
 - [x] Checkout redirige a /payment-success
-- [x] Creado archivo de modelos consolidado: /app/backend/models/all_schemas.py
-- [x] Testing: 23/23 tests pasados (100%)
+- [x] Testing: 23/23 tests pasados
 
 ### 16 Enero 2025 - Sesión 1
 - [x] Panel Admin - Botones Activar/Desactivar usuarios
-- [x] Panel Admin - Botón Cancelar suscripción (solo planes de pago)
+- [x] Panel Admin - Botón Cancelar suscripción
 - [x] Panel Familiar - Clic en tarjeta de miembro abre editor
-- [x] Panel Familiar - No muestra banner de upgrade para Enterprise/Business
-- [x] Testing: 17/17 tests pasados (backend y frontend)
+- [x] Testing: 17/17 tests pasados
 
 ---
 
