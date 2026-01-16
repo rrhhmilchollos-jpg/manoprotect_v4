@@ -2945,44 +2945,76 @@ async def update_user_plan(
     """Update user subscription plan (admin only) - Manual premium activation"""
     await require_admin(request, session_token)
     
-    valid_plans = ["free", "personal", "family", "business", "enterprise"]
+    valid_plans = [
+        "free", 
+        "personal", "personal-monthly", "personal-quarterly", "personal-yearly",
+        "family", "family-monthly", "family-quarterly", "family-yearly",
+        "business", "business-monthly", "business-yearly",
+        "enterprise", "enterprise-monthly", "enterprise-yearly"
+    ]
+    
     if plan not in valid_plans:
         raise HTTPException(status_code=400, detail=f"Plan inválido. Planes válidos: {', '.join(valid_plans)}")
     
     # Get current user
     user = await db.users.find_one({"user_id": user_id})
     if not user:
+        # Try with 'id' field
+        user = await db.users.find_one({"id": user_id})
+    if not user:
         raise HTTPException(status_code=404, detail="Usuario no encontrado")
     
     old_plan = user.get("plan", "free")
     
+    # Determine subscription status and expiry based on plan
+    now = datetime.now(timezone.utc)
+    if plan == "free":
+        subscription_status = None
+        subscription_expiry = None
+    else:
+        subscription_status = "active"
+        # Set expiry based on plan period
+        if "yearly" in plan:
+            subscription_expiry = (now + timedelta(days=365)).isoformat()
+        elif "quarterly" in plan:
+            subscription_expiry = (now + timedelta(days=90)).isoformat()
+        else:  # monthly
+            subscription_expiry = (now + timedelta(days=30)).isoformat()
+    
     # Update user plan
     update_data = {
         "plan": plan,
-        "subscription_status": "active" if plan != "free" else None,
-        "plan_updated_at": datetime.now(timezone.utc).isoformat(),
-        "plan_updated_by": "admin_manual"
+        "subscription_status": subscription_status,
+        "subscription_expiry": subscription_expiry,
+        "plan_updated_at": now.isoformat(),
+        "plan_updated_by": "admin_manual",
+        "is_active": True
     }
     
-    result = await db.users.update_one(
-        {"user_id": user_id},
-        {"$set": update_data}
-    )
+    # Update using the correct ID field
+    query = {"user_id": user_id} if "user_id" in user else {"id": user_id}
+    result = await db.users.update_one(query, {"$set": update_data})
     
     # Log the plan change
     await db.admin_logs.insert_one({
         "action": "plan_change",
         "user_id": user_id,
+        "user_email": user.get("email"),
         "old_plan": old_plan,
         "new_plan": plan,
         "changed_by": "admin",
-        "created_at": datetime.now(timezone.utc).isoformat()
+        "subscription_expiry": subscription_expiry,
+        "created_at": now.isoformat()
     })
     
     return {
+        "success": True,
         "message": f"Plan actualizado de '{old_plan}' a '{plan}'",
         "user_id": user_id,
-        "new_plan": plan
+        "old_plan": old_plan,
+        "new_plan": plan,
+        "subscription_status": subscription_status,
+        "subscription_expiry": subscription_expiry
     }
 
 @api_router.get("/admin/subscriptions")
