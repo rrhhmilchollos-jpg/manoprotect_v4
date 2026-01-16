@@ -214,9 +214,10 @@ MANO es una plataforma de seguridad digital multi-plataforma que protege a usuar
 | Iteración | Tests | Resultado |
 |-----------|-------|-----------|
 | Iteration 12 | 17 tests | 100% pasados |
+| Iteration 13 | 23 tests | 100% pasados |
 
-**Archivos de test:** `/app/tests/test_iteration_12.py`
-**Reportes:** `/app/test_reports/iteration_12.json`
+**Archivos de test:** `/app/tests/test_iteration_*.py`
+**Reportes:** `/app/test_reports/iteration_*.json`
 
 ---
 
