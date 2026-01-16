@@ -225,7 +225,7 @@ async def get_banking_status():
 @router.get("/institutions/{country}")
 async def get_banks(country: str, request: Request, session_token: Optional[str] = Cookie(None)):
     """Get list of supported banks in a country (ES, DE, FR, etc.)"""
-    await require_auth(request, session_token)
+    await get_current_user_simple(request, session_token)
     
     if not NORDIGEN_SECRET_ID or not NORDIGEN_SECRET_KEY:
         raise HTTPException(
@@ -265,7 +265,7 @@ async def link_bank_account(
     session_token: Optional[str] = Cookie(None)
 ):
     """Initialize bank account linking process"""
-    user = await require_auth(request, session_token)
+    user = await get_current_user_simple(request, session_token)
     
     if not NORDIGEN_SECRET_ID or not NORDIGEN_SECRET_KEY:
         raise HTTPException(
@@ -313,7 +313,7 @@ async def check_account_status(
     session_token: Optional[str] = Cookie(None)
 ):
     """Check if bank account linking is complete"""
-    user = await require_auth(request, session_token)
+    user = await get_current_user_simple(request, session_token)
     
     try:
         requisition = await nordigen_client.get_requisition(requisition_id)
@@ -372,7 +372,7 @@ async def get_linked_accounts(
     session_token: Optional[str] = Cookie(None)
 ):
     """Get all linked bank accounts for user"""
-    user = await require_auth(request, session_token)
+    user = await get_current_user_simple(request, session_token)
     
     accounts = await get_db().bank_accounts.find(
         {"user_id": user.user_id},
@@ -390,7 +390,7 @@ async def get_account_transactions(
     session_token: Optional[str] = Cookie(None)
 ):
     """Fetch and analyze transactions for fraud detection"""
-    user = await require_auth(request, session_token)
+    user = await get_current_user_simple(request, session_token)
     
     # Verify user owns this account
     account = await get_db().bank_accounts.find_one({
@@ -440,7 +440,7 @@ async def get_account_balances(
     session_token: Optional[str] = Cookie(None)
 ):
     """Get account balances"""
-    user = await require_auth(request, session_token)
+    user = await get_current_user_simple(request, session_token)
     
     # Verify user owns this account
     account = await get_db().bank_accounts.find_one({
