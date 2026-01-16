@@ -189,20 +189,22 @@ MANO es una plataforma de seguridad digital multi-plataforma que protege a usuar
 ## 10. Tareas Pendientes
 
 ### P0 - Crítico
-- [ ] Continuar refactorización server.py en rutas modulares (se inició con all_schemas.py)
+- [x] ~~Continuar refactorización server.py~~ - Rutas modulares creadas
 
 ### P1 - Alta Prioridad
-- [ ] Despliegue Firebase Hosting (manoprotect.com)
-- [ ] Completar compilación Expo EAS (bloqueado en máquina del usuario)
+- [ ] Despliegue Firebase Hosting (manoprotect.com) - Guía creada
+- [ ] Completar compilación Expo EAS (bloqueado en máquina del usuario) - Guía creada
+- [ ] Obtener API Keys para integraciones:
+  - [ ] NORDIGEN_SECRET_ID y NORDIGEN_SECRET_KEY (https://gocardless.com/bank-account-data/)
+  - [ ] SENDGRID_API_KEY (https://sendgrid.com/)
+  - [ ] WHATSAPP_TOKEN y WHATSAPP_PHONE_ID (https://developers.facebook.com/docs/whatsapp)
 
 ### P2 - Media Prioridad
-- [ ] Configurar SendGrid para emails (requiere API Key)
-- [ ] Configurar WhatsApp Business API (requiere API Key)
-- [ ] Integración Open Banking (esperando decisión del usuario)
+- [ ] Integrar componente BankingIntegration en Dashboard
+- [ ] Crear página de configuración de integraciones en Admin Panel
 
 ### P3 - Backlog
 - [ ] Mejorar análisis IA de amenazas
-- [ ] Integración bancaria real (actualmente MOCKED)
 
 ---
 
