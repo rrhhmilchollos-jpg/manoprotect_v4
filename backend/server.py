@@ -1155,8 +1155,10 @@ async def get_family_members(request: Request, session_token: Optional[str] = Co
     """Get family members (for family plans)"""
     user = await require_auth(request, session_token)
     
-    if not user.plan.startswith("family"):
-        raise HTTPException(status_code=403, detail="Se requiere plan familiar")
+    # Allow family and enterprise plans
+    plan_features = PLAN_FEATURES.get(user.plan.split('-')[0], PLAN_FEATURES["free"])
+    if plan_features["max_users"] < 2:
+        raise HTTPException(status_code=403, detail="Se requiere plan familiar o superior")
     
     members = await db.family_members.find(
         {"family_owner_id": user.user_id},
@@ -1164,6 +1166,254 @@ async def get_family_members(request: Request, session_token: Optional[str] = Co
     ).to_list(10)
     
     return members
+
+# ============================================
+# SOS & GPS ROUTES (Family Plan)
+# ============================================
+
+class SOSAlertRequest(BaseModel):
+    latitude: float
+    longitude: float
+    accuracy: Optional[float] = None
+    message: Optional[str] = "¡Necesito ayuda!"
+
+class LocationUpdate(BaseModel):
+    latitude: float
+    longitude: float
+    accuracy: Optional[float] = None
+    battery_level: Optional[int] = None
+
+@api_router.post("/sos/alert")
+async def send_sos_alert(
+    data: SOSAlertRequest,
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Send SOS alert with GPS location (family plan only)"""
+    user = await require_auth(request, session_token)
+    
+    # Check if user has SOS feature
+    plan_key = user.plan.split('-')[0] if '-' in user.plan else user.plan
+    plan_features = PLAN_FEATURES.get(plan_key, PLAN_FEATURES["free"])
+    
+    if not plan_features.get("sos"):
+        raise HTTPException(status_code=403, detail="La función SOS requiere plan familiar o superior")
+    
+    # Create SOS alert
+    alert_id = f"sos_{uuid.uuid4().hex[:12]}"
+    sos_alert = {
+        "alert_id": alert_id,
+        "user_id": user.user_id,
+        "user_email": user.email,
+        "user_name": user.name,
+        "location": {
+            "latitude": data.latitude,
+            "longitude": data.longitude,
+            "accuracy": data.accuracy,
+            "google_maps_url": f"https://maps.google.com/?q={data.latitude},{data.longitude}",
+            "timestamp": datetime.now(timezone.utc).isoformat()
+        },
+        "message": data.message,
+        "status": "active",
+        "created_at": datetime.now(timezone.utc).isoformat()
+    }
+    
+    await db.sos_alerts.insert_one(sos_alert)
+    
+    # Get family contacts to notify
+    family_members = await db.family_members.find(
+        {"family_owner_id": user.user_id, "emergency_contact": True},
+        {"_id": 0}
+    ).to_list(10)
+    
+    # Get trusted contacts
+    trusted_contacts = await db.trusted_contacts.find(
+        {"user_id": user.user_id},
+        {"_id": 0}
+    ).to_list(10)
+    
+    # Create notifications for all contacts
+    notifications_sent = []
+    all_contacts = family_members + trusted_contacts
+    
+    for contact in all_contacts:
+        notification = {
+            "notification_id": f"notif_{uuid.uuid4().hex[:12]}",
+            "user_id": contact.get("user_id") or contact.get("contact_id"),
+            "type": "sos_alert",
+            "title": "🆘 ALERTA SOS",
+            "message": f"{user.name} ha enviado una alerta de emergencia: {data.message}",
+            "data": {
+                "alert_id": alert_id,
+                "sender_name": user.name,
+                "location": sos_alert["location"]
+            },
+            "read": False,
+            "created_at": datetime.now(timezone.utc).isoformat()
+        }
+        await db.notifications.insert_one(notification)
+        notifications_sent.append(contact.get("name") or contact.get("email"))
+    
+    return {
+        "success": True,
+        "alert_id": alert_id,
+        "message": "Alerta SOS enviada correctamente",
+        "location": sos_alert["location"],
+        "contacts_notified": len(notifications_sent),
+        "contacts": notifications_sent
+    }
+
+@api_router.post("/location/update")
+async def update_location(
+    data: LocationUpdate,
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Update user's current location (for family tracking)"""
+    user = await require_auth(request, session_token)
+    
+    # Check if user has GPS feature
+    plan_key = user.plan.split('-')[0] if '-' in user.plan else user.plan
+    plan_features = PLAN_FEATURES.get(plan_key, PLAN_FEATURES["free"])
+    
+    if not plan_features.get("gps"):
+        raise HTTPException(status_code=403, detail="La función GPS requiere plan familiar o superior")
+    
+    # Update location
+    location_data = {
+        "user_id": user.user_id,
+        "latitude": data.latitude,
+        "longitude": data.longitude,
+        "accuracy": data.accuracy,
+        "battery_level": data.battery_level,
+        "google_maps_url": f"https://maps.google.com/?q={data.latitude},{data.longitude}",
+        "updated_at": datetime.now(timezone.utc).isoformat()
+    }
+    
+    await db.user_locations.update_one(
+        {"user_id": user.user_id},
+        {"$set": location_data},
+        upsert=True
+    )
+    
+    return {"success": True, "message": "Ubicación actualizada"}
+
+@api_router.get("/location/family")
+async def get_family_locations(
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Get locations of all family members (family plan owner only)"""
+    user = await require_auth(request, session_token)
+    
+    # Check if user has GPS feature
+    plan_key = user.plan.split('-')[0] if '-' in user.plan else user.plan
+    plan_features = PLAN_FEATURES.get(plan_key, PLAN_FEATURES["free"])
+    
+    if not plan_features.get("gps"):
+        raise HTTPException(status_code=403, detail="La función GPS requiere plan familiar o superior")
+    
+    # Get family members
+    family_members = await db.family_members.find(
+        {"family_owner_id": user.user_id},
+        {"_id": 0}
+    ).to_list(10)
+    
+    # Get locations for each member
+    locations = []
+    for member in family_members:
+        member_location = await db.user_locations.find_one(
+            {"user_id": member.get("user_id")},
+            {"_id": 0}
+        )
+        if member_location:
+            locations.append({
+                "member_id": member.get("member_id"),
+                "name": member.get("name"),
+                "relationship": member.get("relationship"),
+                "location": member_location
+            })
+    
+    return {
+        "family_owner": user.name,
+        "members_count": len(family_members),
+        "locations": locations
+    }
+
+@api_router.get("/sos/history")
+async def get_sos_history(
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Get SOS alert history"""
+    user = await require_auth(request, session_token)
+    
+    alerts = await db.sos_alerts.find(
+        {"user_id": user.user_id},
+        {"_id": 0}
+    ).sort("created_at", -1).limit(50).to_list(50)
+    
+    return alerts
+
+@api_router.post("/sos/cancel/{alert_id}")
+async def cancel_sos_alert(
+    alert_id: str,
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Cancel an active SOS alert"""
+    user = await require_auth(request, session_token)
+    
+    result = await db.sos_alerts.update_one(
+        {"alert_id": alert_id, "user_id": user.user_id},
+        {"$set": {"status": "cancelled", "cancelled_at": datetime.now(timezone.utc).isoformat()}}
+    )
+    
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Alerta no encontrada")
+    
+    return {"success": True, "message": "Alerta cancelada"}
+
+@api_router.post("/contacts/trusted")
+async def add_trusted_contact(
+    request: Request,
+    session_token: Optional[str] = Cookie(None),
+    name: str = "",
+    phone: str = "",
+    email: str = "",
+    relationship: str = ""
+):
+    """Add a trusted contact for SOS alerts"""
+    user = await require_auth(request, session_token)
+    
+    contact = {
+        "contact_id": f"contact_{uuid.uuid4().hex[:12]}",
+        "user_id": user.user_id,
+        "name": name,
+        "phone": phone,
+        "email": email,
+        "relationship": relationship,
+        "created_at": datetime.now(timezone.utc).isoformat()
+    }
+    
+    await db.trusted_contacts.insert_one(contact)
+    
+    return {"success": True, "contact": contact}
+
+@api_router.get("/contacts/trusted")
+async def get_trusted_contacts(
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Get user's trusted contacts"""
+    user = await require_auth(request, session_token)
+    
+    contacts = await db.trusted_contacts.find(
+        {"user_id": user.user_id},
+        {"_id": 0}
+    ).to_list(20)
+    
+    return contacts
 
 # ============================================
 # COMMUNITY ROUTES
