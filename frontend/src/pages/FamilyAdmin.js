@@ -326,7 +326,9 @@ const FamilyAdmin = () => {
                     {(data?.members || []).map((member) => (
                       <div 
                         key={member.id}
-                        className="flex items-center justify-between p-4 rounded-lg border-2 border-zinc-100 hover:border-emerald-200 transition-colors"
+                        className="flex items-center justify-between p-4 rounded-lg border-2 border-zinc-100 hover:border-emerald-200 transition-colors cursor-pointer"
+                        onClick={() => openEditDialog(member)}
+                        data-testid={`member-card-${member.id}`}
                       >
                         <div className="flex items-center gap-4">
                           <div className={`w-12 h-12 rounded-full flex items-center justify-center ${
