@@ -771,6 +771,36 @@ async def download_investor_document(
         }
     )
 
+@api_router.get("/investor/download-all")
+async def download_all_investor_documents(
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Download all investor documents as ZIP (investor only)"""
+    user = await require_investor(request, session_token)
+    
+    zip_path = "/app/MANO_Documentos_Inversores.zip"
+    if not Path(zip_path).exists():
+        raise HTTPException(status_code=404, detail="Archivo ZIP no encontrado")
+    
+    # Log download
+    await db.document_downloads.insert_one({
+        "user_id": user.user_id,
+        "doc_type": "all-documents-zip",
+        "downloaded_at": datetime.now(timezone.utc).isoformat()
+    })
+    
+    with open(zip_path, 'rb') as f:
+        content = f.read()
+    
+    return Response(
+        content=content,
+        media_type="application/zip",
+        headers={
+            "Content-Disposition": 'attachment; filename="MANO_Documentos_Inversores_CONFIDENCIAL.zip"'
+        }
+    )
+
 # ============================================
 # USER PROFILE ROUTES
 # ============================================
