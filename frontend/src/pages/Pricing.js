@@ -456,6 +456,7 @@ const Pricing = () => {
                 </Badge>
                 <plans.quarterly.icon className="w-10 h-10 text-emerald-600 mb-3" />
                 <CardTitle className="text-xl">{plans.quarterly.name}</CardTitle>
+                <div className="text-sm text-emerald-600 font-semibold">{plans.quarterly.users}</div>
                 <div className="mt-4">
                   <div className="text-sm text-zinc-500 line-through">€{plans.quarterly.originalPrice}</div>
                   <span className="text-4xl font-bold text-emerald-600">€{plans.quarterly.price}</span>
@@ -467,7 +468,7 @@ const Pricing = () => {
                   {plans.quarterly.features.map((feature, idx) => (
                     <li key={idx} className="flex items-start gap-2 text-sm">
                       <Check className="w-4 h-4 text-emerald-500 flex-shrink-0 mt-0.5" />
-                      <span>{feature}</span>
+                      <span className={feature.includes('2 personas') ? 'font-semibold text-indigo-600' : ''}>{feature}</span>
                     </li>
                   ))}
                 </ul>
