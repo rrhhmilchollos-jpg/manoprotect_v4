@@ -125,6 +125,80 @@ const AdminPanel = () => {
     }
   };
 
+  const handleChangePlan = async (userId, newPlan) => {
+    setActionLoading(userId);
+    try {
+      const response = await fetch(`${API}/admin/users/${userId}/plan?plan=${newPlan}`, {
+        method: 'PATCH',
+        credentials: 'include'
+      });
+      
+      if (response.ok) {
+        toast.success(`Plan actualizado a ${newPlan}`);
+        loadAllData();
+      } else {
+        const error = await response.json();
+        toast.error(error.detail || 'Error al actualizar plan');
+      }
+    } catch (error) {
+      toast.error('Error de conexión');
+    } finally {
+      setActionLoading(null);
+    }
+  };
+
+  const handleDeleteUser = async (userId, email) => {
+    if (!window.confirm(`¿Estás seguro de eliminar permanentemente a ${email}?`)) {
+      return;
+    }
+    
+    setActionLoading(userId);
+    try {
+      const response = await fetch(`${API}/admin/users/${userId}`, {
+        method: 'DELETE',
+        credentials: 'include'
+      });
+      
+      if (response.ok) {
+        toast.success('Usuario eliminado');
+        loadAllData();
+      } else {
+        const error = await response.json();
+        toast.error(error.detail || 'Error al eliminar');
+      }
+    } catch (error) {
+      toast.error('Error de conexión');
+    } finally {
+      setActionLoading(null);
+    }
+  };
+
+  const handleCleanupTestUsers = async () => {
+    if (!window.confirm('¿Eliminar TODOS los usuarios de test?')) {
+      return;
+    }
+    
+    setActionLoading('cleanup');
+    try {
+      const response = await fetch(`${API}/admin/users/cleanup/test-users`, {
+        method: 'DELETE',
+        credentials: 'include'
+      });
+      
+      if (response.ok) {
+        const data = await response.json();
+        toast.success(data.message);
+        loadAllData();
+      } else {
+        toast.error('Error al limpiar usuarios');
+      }
+    } catch (error) {
+      toast.error('Error de conexión');
+    } finally {
+      setActionLoading(null);
+    }
+  };
+
   const handleUpdateRole = async (userId, newRole) => {
     try {
       const response = await fetch(`${API}/admin/users/${userId}/role?role=${newRole}`, {
