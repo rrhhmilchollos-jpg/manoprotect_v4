@@ -208,20 +208,28 @@ class PaymentTransaction(BaseModel):
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
-# Fixed subscription pricing packages (amounts in EUR)
+# Fixed subscription pricing packages (amounts in EUR) - SINCRONIZADO CON FRONTEND
 SUBSCRIPTION_PACKAGES = {
-    # Planes básicos (hasta 2 usuarios)
-    "personal-monthly": {"amount": 9.99, "name": "Personal Mensual", "period": "mes", "max_users": 2},
-    "personal-quarterly": {"amount": 24.99, "name": "Personal Trimestral", "period": "3 meses", "max_users": 2},
-    "personal-yearly": {"amount": 89.99, "name": "Personal Anual", "period": "año", "max_users": 2},
+    # Planes individuales Premium (hasta 2 usuarios)
+    "weekly": {"amount": 9.99, "name": "Premium Semanal", "period": "semana", "max_users": 2},
+    "monthly": {"amount": 29.99, "name": "Premium Mensual", "period": "mes", "max_users": 2},
+    "quarterly": {"amount": 74.99, "name": "Premium Trimestral", "period": "3 meses", "max_users": 2},
+    "yearly": {"amount": 249.99, "name": "Premium Anual", "period": "año", "max_users": 2},
+    # Alias para compatibilidad con planes personales
+    "personal": {"amount": 29.99, "name": "Personal", "period": "mes", "max_users": 2},
+    "personal-monthly": {"amount": 29.99, "name": "Personal Mensual", "period": "mes", "max_users": 2},
+    "personal-quarterly": {"amount": 74.99, "name": "Personal Trimestral", "period": "3 meses", "max_users": 2},
+    "personal-yearly": {"amount": 249.99, "name": "Personal Anual", "period": "año", "max_users": 2},
     # Planes familiares (hasta 5 usuarios + GPS + SOS)
-    "family-monthly": {"amount": 19.99, "name": "Familiar Mensual", "period": "mes", "max_users": 5, "gps": True, "sos": True},
-    "family-quarterly": {"amount": 49.99, "name": "Familiar Trimestral", "period": "3 meses", "max_users": 5, "gps": True, "sos": True},
-    "family-yearly": {"amount": 179.99, "name": "Familiar Anual", "period": "año", "max_users": 5, "gps": True, "sos": True},
+    "family-monthly": {"amount": 49.99, "name": "Familiar Mensual", "period": "mes", "max_users": 5, "gps": False, "sos": True},
+    "family-quarterly": {"amount": 129.99, "name": "Familiar Trimestral", "period": "3 meses", "max_users": 5, "gps": True, "sos": True},
+    "family-yearly": {"amount": 399.99, "name": "Familiar Anual", "period": "año", "max_users": 5, "gps": True, "sos": True, "child_tracking": True},
     # Planes business
+    "business": {"amount": 49.99, "name": "Business", "period": "mes", "max_users": 25},
     "business-monthly": {"amount": 49.99, "name": "Business Mensual", "period": "mes", "max_users": 25},
     "business-yearly": {"amount": 479.99, "name": "Business Anual", "period": "año", "max_users": 25},
     # Plan enterprise
+    "enterprise": {"amount": 199.99, "name": "Enterprise", "period": "mes", "max_users": -1},
     "enterprise-monthly": {"amount": 199.99, "name": "Enterprise Mensual", "period": "mes", "max_users": -1},
     "enterprise-yearly": {"amount": 1999.99, "name": "Enterprise Anual", "period": "año", "max_users": -1},
 }
