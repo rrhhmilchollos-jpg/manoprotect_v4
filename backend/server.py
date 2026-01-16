@@ -3100,6 +3100,202 @@ async def update_user_status(
         "is_active": is_active
     }
 
+@api_router.post("/admin/users/{user_id}/cancel-subscription")
+async def cancel_user_subscription(
+    user_id: str,
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Cancel user subscription - downgrade to free plan (admin only)"""
+    admin = await require_admin(request, session_token)
+    
+    # Get current user
+    user = await db.users.find_one({"user_id": user_id})
+    if not user:
+        user = await db.users.find_one({"id": user_id})
+    if not user:
+        raise HTTPException(status_code=404, detail="Usuario no encontrado")
+    
+    old_plan = user.get("plan", "free")
+    
+    # Update to free plan
+    query = {"user_id": user_id} if "user_id" in user else {"id": user_id}
+    await db.users.update_one(query, {"$set": {
+        "plan": "free",
+        "subscription_status": "cancelled",
+        "subscription_cancelled_at": datetime.now(timezone.utc).isoformat(),
+        "subscription_cancelled_by": admin.user_id
+    }})
+    
+    # Log the cancellation
+    await db.admin_logs.insert_one({
+        "action": "subscription_cancelled",
+        "user_id": user_id,
+        "user_email": user.get("email"),
+        "old_plan": old_plan,
+        "cancelled_by": admin.user_id,
+        "created_at": datetime.now(timezone.utc).isoformat()
+    })
+    
+    return {
+        "success": True,
+        "message": f"Suscripción cancelada. Usuario degradado de '{old_plan}' a 'free'",
+        "user_id": user_id
+    }
+
+@api_router.get("/admin/users/{user_id}/details")
+async def get_user_details(
+    user_id: str,
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Get detailed user information including family members (admin only)"""
+    await require_admin(request, session_token)
+    
+    # Get user
+    user = await db.users.find_one({"user_id": user_id}, {"_id": 0, "password_hash": 0})
+    if not user:
+        user = await db.users.find_one({"id": user_id}, {"_id": 0, "password_hash": 0})
+    if not user:
+        raise HTTPException(status_code=404, detail="Usuario no encontrado")
+    
+    # Get family members if family plan
+    family_members = []
+    if user.get("plan", "").startswith("family"):
+        family_members = await db.family_members.find(
+            {"owner_id": user_id},
+            {"_id": 0}
+        ).to_list(10)
+    
+    # Get children for tracking
+    children = await db.family_children.find(
+        {"family_owner_id": user_id},
+        {"_id": 0}
+    ).to_list(10)
+    
+    # Get activity log
+    activity = await db.admin_logs.find(
+        {"user_id": user_id},
+        {"_id": 0}
+    ).sort("created_at", -1).limit(20).to_list(20)
+    
+    # Get subscription history
+    sub_history = await db.admin_logs.find(
+        {"user_id": user_id, "action": {"$in": ["plan_change", "subscription_cancelled"]}},
+        {"_id": 0}
+    ).sort("created_at", -1).limit(10).to_list(10)
+    
+    return {
+        "user": user,
+        "family_members": family_members,
+        "children_tracking": children,
+        "activity": activity,
+        "subscription_history": sub_history,
+        "badge": SUBSCRIPTION_BADGES.get(user.get("plan", "free"), SUBSCRIPTION_BADGES["free"])
+    }
+
+@api_router.get("/admin/users/{user_id}/family-members")
+async def get_user_family_members(
+    user_id: str,
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Get family members for a user (admin only)"""
+    await require_admin(request, session_token)
+    
+    # Get user
+    user = await db.users.find_one({"user_id": user_id}, {"_id": 0})
+    if not user:
+        user = await db.users.find_one({"id": user_id}, {"_id": 0})
+    if not user:
+        raise HTTPException(status_code=404, detail="Usuario no encontrado")
+    
+    # Get family members
+    family_members = await db.family_members.find(
+        {"owner_id": user_id},
+        {"_id": 0}
+    ).to_list(10)
+    
+    # Get children for tracking
+    children = await db.family_children.find(
+        {"family_owner_id": user_id},
+        {"_id": 0}
+    ).to_list(10)
+    
+    return {
+        "user_email": user.get("email"),
+        "user_plan": user.get("plan"),
+        "family_members": family_members,
+        "children_tracking": children,
+        "max_members": 5 if user.get("plan", "").startswith("family") else 2
+    }
+
+@api_router.post("/admin/users/{user_id}/add-family-member")
+async def admin_add_family_member(
+    user_id: str,
+    name: str,
+    email: str,
+    relationship: str = "familiar",
+    request: Request = None,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Add family member to a user (admin only)"""
+    await require_admin(request, session_token)
+    
+    # Verify user exists and has family plan
+    user = await db.users.find_one({"user_id": user_id})
+    if not user:
+        user = await db.users.find_one({"id": user_id})
+    if not user:
+        raise HTTPException(status_code=404, detail="Usuario no encontrado")
+    
+    if not user.get("plan", "").startswith("family"):
+        raise HTTPException(status_code=400, detail="El usuario no tiene plan familiar")
+    
+    # Check member limit
+    existing_members = await db.family_members.count_documents({"owner_id": user_id})
+    if existing_members >= 5:
+        raise HTTPException(status_code=400, detail="Límite de 5 miembros alcanzado")
+    
+    # Add member
+    member = {
+        "member_id": f"member_{uuid.uuid4().hex[:12]}",
+        "owner_id": user_id,
+        "name": name,
+        "email": email,
+        "relationship": relationship,
+        "added_at": datetime.now(timezone.utc).isoformat(),
+        "added_by": "admin"
+    }
+    
+    await db.family_members.insert_one(member)
+    
+    return {
+        "success": True,
+        "message": f"Miembro '{name}' añadido",
+        "member": {k: v for k, v in member.items() if k != "_id"}
+    }
+
+@api_router.delete("/admin/users/{user_id}/family-member/{member_id}")
+async def admin_remove_family_member(
+    user_id: str,
+    member_id: str,
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Remove family member from a user (admin only)"""
+    await require_admin(request, session_token)
+    
+    result = await db.family_members.delete_one({
+        "member_id": member_id,
+        "owner_id": user_id
+    })
+    
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Miembro no encontrado")
+    
+    return {"success": True, "message": "Miembro eliminado"}
+
 @api_router.delete("/admin/users/{user_id}")
 async def delete_user(
     user_id: str,
