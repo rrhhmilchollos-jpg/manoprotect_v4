@@ -18,7 +18,7 @@ const API = `${BACKEND_URL}/api`;
 
 const Dashboard = () => {
   const navigate = useNavigate();
-  const { user, isAdmin, logout } = useAuth();
+  const { user, isAdmin, isInvestor, logout } = useAuth();
   const [analyzing, setAnalyzing] = useState(false);
   const [content, setContent] = useState('');
   const [contentType, setContentType] = useState('phone');
