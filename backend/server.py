@@ -4469,15 +4469,6 @@ async def get_email_preferences(
     
     return prefs
 
-class EmailPreferencesUpdate(BaseModel):
-    threat_alerts: Optional[bool] = None
-    transaction_alerts: Optional[bool] = None
-    daily_summary: Optional[bool] = None
-    weekly_summary: Optional[bool] = None
-    reward_notifications: Optional[bool] = None
-    family_alerts: Optional[bool] = None
-    marketing: Optional[bool] = None
-
 @api_router.patch("/email/preferences")
 async def update_email_preferences(
     data: EmailPreferencesUpdate,
