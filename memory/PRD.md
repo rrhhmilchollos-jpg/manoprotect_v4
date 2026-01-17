@@ -163,6 +163,12 @@ MANO es una plataforma de seguridad digital multi-plataforma que protege a usuar
 
 ## 9. Tareas Completadas Recientemente
 
+### 17 Enero 2025 - Sesión 5 (Refactorización Backend - Fase 1)
+- [x] Extraídos modelos Pydantic a `/app/backend/models/all_schemas.py`
+- [x] server.py reducido de 4848 a 4537 líneas (~311 líneas, 6.4% reducción)
+- [x] Eliminados 21 modelos duplicados del server.py
+- [x] Backend verificado y funcionando correctamente
+
 ### 16 Enero 2025 - Sesión 4 (Bug Fix Inversores)
 - [x] **CORREGIDO:** Flujo de aprobación de inversores ahora muestra acceso a descargas
 - [x] Añadido botón "Descargas" en el header del Dashboard para inversores
