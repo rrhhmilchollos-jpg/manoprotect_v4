@@ -1365,16 +1365,6 @@ async def get_trusted_contacts(
 # CHILD TRACKING ROUTES (Family Yearly Plan Only)
 # ============================================
 
-class ChildMember(BaseModel):
-    name: str
-    phone: str
-    is_child: bool = True
-    silent_mode: bool = False  # If True, child won't be notified when tracked
-
-class LocationRequest(BaseModel):
-    child_id: str
-    silent: Optional[bool] = None  # Override silent_mode for this request
-
 def get_plan_features_for_user(user: User) -> dict:
     """Get features based on user's specific plan"""
     plan = user.plan
