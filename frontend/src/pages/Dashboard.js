@@ -343,6 +343,38 @@ const Dashboard = () => {
           </div>
         )}
 
+        {/* Investor Access Banner */}
+        {isInvestor && (
+          <Card className="mb-8 border-2 border-amber-400 bg-gradient-to-r from-amber-50 to-yellow-50 shadow-lg">
+            <CardContent className="py-6">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                  <div className="w-14 h-14 rounded-full bg-amber-100 flex items-center justify-center">
+                    <Download className="w-7 h-7 text-amber-600" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-bold text-amber-900 flex items-center gap-2">
+                      Acceso de Inversor Verificado
+                      <Badge className="bg-amber-600 text-white">ACTIVO</Badge>
+                    </h3>
+                    <p className="text-amber-700">
+                      Tienes acceso a la documentación confidencial: Plan de Negocio, Modelo Financiero, Pitch Deck y Dossier B2B.
+                    </p>
+                  </div>
+                </div>
+                <Button
+                  data-testid="investor-banner-downloads-btn"
+                  onClick={() => navigate('/downloads')}
+                  className="bg-amber-600 hover:bg-amber-700 text-white px-6 py-3 h-auto"
+                >
+                  <Download className="w-5 h-5 mr-2" />
+                  Ir a Descargas
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
         {/* Tab Navigation */}
         <div className="flex gap-2 mb-6 border-b border-zinc-200 pb-4">
           <Button
