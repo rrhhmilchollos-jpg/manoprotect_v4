@@ -1,6 +1,8 @@
 """
 MANO - Core Authentication Helpers
 Shared authentication functions for all routes
+
+These functions are initialized with database connection on import.
 """
 from fastapi import HTTPException, Request, Cookie
 from typing import Optional
@@ -9,6 +11,15 @@ import hashlib
 import uuid
 
 from models.all_schemas import User
+
+# Database reference - set during initialization
+_db = None
+
+
+def init_auth(db):
+    """Initialize auth module with database connection"""
+    global _db
+    _db = db
 
 
 def hash_password(password: str) -> str:
@@ -26,8 +37,11 @@ def generate_session_token() -> str:
     return f"session_{uuid.uuid4().hex}"
 
 
-async def get_current_user(db, request: Request, session_token: Optional[str] = Cookie(None)) -> Optional[User]:
+async def get_current_user(request: Request, session_token: Optional[str] = Cookie(None)) -> Optional[User]:
     """Get current user from session token (cookie or header)"""
+    if _db is None:
+        raise RuntimeError("Auth module not initialized. Call init_auth(db) first.")
+    
     token = session_token
     
     # Fallback to Authorization header
@@ -40,7 +54,7 @@ async def get_current_user(db, request: Request, session_token: Optional[str] = 
         return None
     
     # Find session
-    session = await db.user_sessions.find_one({"session_token": token}, {"_id": 0})
+    session = await _db.user_sessions.find_one({"session_token": token}, {"_id": 0})
     if not session:
         return None
     
@@ -54,7 +68,7 @@ async def get_current_user(db, request: Request, session_token: Optional[str] = 
         return None
     
     # Get user
-    user = await db.users.find_one({"user_id": session["user_id"]}, {"_id": 0})
+    user = await _db.users.find_one({"user_id": session["user_id"]}, {"_id": 0})
     if not user:
         return None
     
@@ -64,25 +78,25 @@ async def get_current_user(db, request: Request, session_token: Optional[str] = 
     return User(**user)
 
 
-async def require_auth(db, request: Request, session_token: Optional[str] = Cookie(None)) -> User:
+async def require_auth(request: Request, session_token: Optional[str] = Cookie(None)) -> User:
     """Require authentication - raises 401 if not authenticated"""
-    user = await get_current_user(db, request, session_token)
+    user = await get_current_user(request, session_token)
     if not user:
         raise HTTPException(status_code=401, detail="No autenticado")
     return user
 
 
-async def require_admin(db, request: Request, session_token: Optional[str] = Cookie(None)) -> User:
+async def require_admin(request: Request, session_token: Optional[str] = Cookie(None)) -> User:
     """Require superadmin role"""
-    user = await require_auth(db, request, session_token)
+    user = await require_auth(request, session_token)
     if user.role != "superadmin":
         raise HTTPException(status_code=403, detail="Acceso denegado - Se requiere rol de superadmin")
     return user
 
 
-async def require_investor(db, request: Request, session_token: Optional[str] = Cookie(None)) -> User:
+async def require_investor(request: Request, session_token: Optional[str] = Cookie(None)) -> User:
     """Require investor role"""
-    user = await require_auth(db, request, session_token)
+    user = await require_auth(request, session_token)
     if user.role not in ["investor", "admin", "superadmin"]:
         raise HTTPException(status_code=403, detail="Acceso denegado - Se requiere acceso de inversor aprobado")
     return user
