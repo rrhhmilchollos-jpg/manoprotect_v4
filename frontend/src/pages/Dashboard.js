@@ -213,6 +213,17 @@ const Dashboard = () => {
                 Admin
               </Button>
             )}
+            {isInvestor && (
+              <Button
+                data-testid="investor-downloads-btn"
+                variant="ghost"
+                onClick={() => navigate('/downloads')}
+                className="rounded-lg text-amber-600 hover:bg-amber-50"
+              >
+                <Download className="w-5 h-5 mr-2" />
+                Descargas
+              </Button>
+            )}
             <Button
               data-testid="enterprise-btn"
               variant="ghost"
