@@ -2383,37 +2383,6 @@ async def mark_alert_read(
 # NOTIFICATIONS ROUTES
 # ============================================
 
-class NotificationSubscription(BaseModel):
-    model_config = ConfigDict(extra="ignore")
-    id: str = Field(default_factory=lambda: f"sub_{uuid.uuid4().hex[:8]}")
-    user_id: str
-    endpoint: str
-    keys: Dict[str, str]
-    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
-
-class Notification(BaseModel):
-    model_config = ConfigDict(extra="ignore")
-    id: str = Field(default_factory=lambda: f"notif_{uuid.uuid4().hex[:8]}")
-    user_id: str
-    title: str
-    body: str
-    notification_type: str  # "threat", "sos", "family", "system"
-    data: Dict = {}
-    is_read: bool = False
-    is_sent: bool = False
-    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
-
-class SubscriptionRequest(BaseModel):
-    endpoint: str
-    keys: Dict[str, str]
-
-class NotificationPreferences(BaseModel):
-    email_notifications: bool = True
-    push_notifications: bool = True
-    threat_alerts: bool = True
-    family_alerts: bool = True
-    marketing: bool = False
-
 @api_router.post("/notifications/subscribe")
 async def subscribe_push(
     data: SubscriptionRequest,
