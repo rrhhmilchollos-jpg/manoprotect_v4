@@ -1,38 +1,37 @@
 """
 MANO - Authentication Routes
-Handles user registration, login, logout, and Google OAuth
+User registration, login, logout, and session management
 """
 from fastapi import APIRouter, HTTPException, Request, Response, Cookie
 from typing import Optional
 from datetime import datetime, timezone, timedelta
 import httpx
-import hashlib
 
-from core.database import db, generate_session_token, get_current_user
 from models.all_schemas import User, UserRegister, UserLogin, SessionData
+from core.auth import (
+    hash_password, verify_password, generate_session_token,
+    get_current_user
+)
 
-router = APIRouter(prefix="/auth", tags=["Authentication"])
+router = APIRouter(tags=["Authentication"])
 
-
-def hash_password(password: str) -> str:
-    """Hash password using SHA-256"""
-    return hashlib.sha256(password.encode()).hexdigest()
-
-
-def verify_password(password: str, password_hash: str) -> bool:
-    """Verify password against hash"""
-    return hash_password(password) == password_hash
+# Database reference - set during initialization
+_db = None
 
 
-@router.post("/register")
+def init_auth_routes(db):
+    """Initialize routes with database connection"""
+    global _db
+    _db = db
+
+
+@router.post("/auth/register")
 async def register_user(data: UserRegister, response: Response):
     """Register new user with email/password"""
-    # Check if email exists
-    existing = await db.users.find_one({"email": data.email}, {"_id": 0})
+    existing = await _db.users.find_one({"email": data.email}, {"_id": 0})
     if existing:
         raise HTTPException(status_code=400, detail="El email ya está registrado")
     
-    # Create user
     user = User(
         email=data.email,
         name=data.name,
@@ -42,9 +41,8 @@ async def register_user(data: UserRegister, response: Response):
     
     user_doc = user.model_dump()
     user_doc['created_at'] = user_doc['created_at'].isoformat()
-    await db.users.insert_one(user_doc)
+    await _db.users.insert_one(user_doc)
     
-    # Create session
     session_token = generate_session_token()
     session = SessionData(
         user_id=user.user_id,
@@ -55,9 +53,8 @@ async def register_user(data: UserRegister, response: Response):
     session_doc = session.model_dump()
     session_doc['expires_at'] = session_doc['expires_at'].isoformat()
     session_doc['created_at'] = session_doc['created_at'].isoformat()
-    await db.user_sessions.insert_one(session_doc)
+    await _db.user_sessions.insert_one(session_doc)
     
-    # Set cookie
     response.set_cookie(
         key="session_token",
         value=session_token,
@@ -77,10 +74,10 @@ async def register_user(data: UserRegister, response: Response):
     }
 
 
-@router.post("/login")
+@router.post("/auth/login")
 async def login_user(data: UserLogin, response: Response):
     """Login with email/password"""
-    user = await db.users.find_one({"email": data.email}, {"_id": 0})
+    user = await _db.users.find_one({"email": data.email}, {"_id": 0})
     
     if not user or not user.get("password_hash"):
         raise HTTPException(status_code=401, detail="Credenciales inválidas")
@@ -88,11 +85,6 @@ async def login_user(data: UserLogin, response: Response):
     if not verify_password(data.password, user["password_hash"]):
         raise HTTPException(status_code=401, detail="Credenciales inválidas")
     
-    # Check if user is active
-    if user.get("is_active") == False:
-        raise HTTPException(status_code=403, detail="Cuenta desactivada. Contacta con soporte.")
-    
-    # Create session
     session_token = generate_session_token()
     session = SessionData(
         user_id=user["user_id"],
@@ -103,9 +95,8 @@ async def login_user(data: UserLogin, response: Response):
     session_doc = session.model_dump()
     session_doc['expires_at'] = session_doc['expires_at'].isoformat()
     session_doc['created_at'] = session_doc['created_at'].isoformat()
-    await db.user_sessions.insert_one(session_doc)
+    await _db.user_sessions.insert_one(session_doc)
     
-    # Set cookie
     response.set_cookie(
         key="session_token",
         value=session_token,
@@ -126,7 +117,7 @@ async def login_user(data: UserLogin, response: Response):
     }
 
 
-@router.post("/google/session")
+@router.post("/auth/google/session")
 async def google_session(request: Request, response: Response):
     """Exchange Google OAuth session_id for local session"""
     body = await request.json()
@@ -135,7 +126,6 @@ async def google_session(request: Request, response: Response):
     if not session_id:
         raise HTTPException(status_code=400, detail="session_id requerido")
     
-    # Fetch user data from Emergent Auth
     async with httpx.AsyncClient() as client:
         auth_response = await client.get(
             "https://demobackend.emergentagent.com/auth/v1/env/oauth/session-data",
@@ -150,16 +140,10 @@ async def google_session(request: Request, response: Response):
     name = google_data.get("name")
     picture = google_data.get("picture")
     
-    # Check if user exists
-    existing_user = await db.users.find_one({"email": email}, {"_id": 0})
+    existing_user = await _db.users.find_one({"email": email}, {"_id": 0})
     
     if existing_user:
-        # Check if user is active
-        if existing_user.get("is_active") == False:
-            raise HTTPException(status_code=403, detail="Cuenta desactivada. Contacta con soporte.")
-        
-        # Update existing user
-        await db.users.update_one(
+        await _db.users.update_one(
             {"email": email},
             {"$set": {
                 "name": name,
@@ -171,7 +155,6 @@ async def google_session(request: Request, response: Response):
         role = existing_user.get("role", "user")
         plan = existing_user.get("plan", "free")
     else:
-        # Create new user
         user = User(
             email=email,
             name=name,
@@ -180,12 +163,11 @@ async def google_session(request: Request, response: Response):
         )
         user_doc = user.model_dump()
         user_doc['created_at'] = user_doc['created_at'].isoformat()
-        await db.users.insert_one(user_doc)
+        await _db.users.insert_one(user_doc)
         user_id = user.user_id
         role = user.role
         plan = user.plan
     
-    # Create local session
     session_token = generate_session_token()
     session = SessionData(
         user_id=user_id,
@@ -196,9 +178,8 @@ async def google_session(request: Request, response: Response):
     session_doc = session.model_dump()
     session_doc['expires_at'] = session_doc['expires_at'].isoformat()
     session_doc['created_at'] = session_doc['created_at'].isoformat()
-    await db.user_sessions.insert_one(session_doc)
+    await _db.user_sessions.insert_one(session_doc)
     
-    # Set cookie
     response.set_cookie(
         key="session_token",
         value=session_token,
@@ -220,7 +201,7 @@ async def google_session(request: Request, response: Response):
     }
 
 
-@router.get("/me")
+@router.get("/auth/me")
 async def get_me(request: Request, session_token: Optional[str] = Cookie(None)):
     """Get current authenticated user"""
     user = await get_current_user(request, session_token)
@@ -241,7 +222,7 @@ async def get_me(request: Request, session_token: Optional[str] = Cookie(None)):
     }
 
 
-@router.post("/logout")
+@router.post("/auth/logout")
 async def logout(request: Request, response: Response, session_token: Optional[str] = Cookie(None)):
     """Logout - clear session"""
     token = session_token
@@ -251,7 +232,7 @@ async def logout(request: Request, response: Response, session_token: Optional[s
             token = auth_header.split(" ")[1]
     
     if token:
-        await db.user_sessions.delete_one({"session_token": token})
+        await _db.user_sessions.delete_one({"session_token": token})
     
     response.delete_cookie(key="session_token", path="/")
     return {"message": "Sesión cerrada correctamente"}
