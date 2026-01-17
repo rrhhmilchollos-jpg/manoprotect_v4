@@ -3699,6 +3699,14 @@ print("✅ Investor routes loaded")
 api_router.include_router(threat_router)
 print("✅ Threat routes loaded")
 
+# Profile & Contacts routes
+api_router.include_router(profile_contacts_router)
+print("✅ Profile & Contacts routes loaded")
+
+# Family & SOS routes
+api_router.include_router(family_sos_router)
+print("✅ Family & SOS routes loaded")
+
 try:
     from routes.banking_routes import router as banking_router
     api_router.include_router(banking_router)
