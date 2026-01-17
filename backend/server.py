@@ -59,6 +59,9 @@ init_auth(db)
 from routes.auth_routes import router as auth_router, init_auth_routes
 init_auth_routes(db)
 
+from routes.investor_routes import router as investor_router, init_investor_routes
+init_investor_routes(db)
+
 # ============================================
 # CONFIGURATION
 # ============================================
