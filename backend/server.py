@@ -1129,18 +1129,6 @@ async def get_family_members(request: Request, session_token: Optional[str] = Co
 # SOS & GPS ROUTES (Family Plan)
 # ============================================
 
-class SOSAlertRequest(BaseModel):
-    latitude: float
-    longitude: float
-    accuracy: Optional[float] = None
-    message: Optional[str] = "¡Necesito ayuda!"
-
-class LocationUpdate(BaseModel):
-    latitude: float
-    longitude: float
-    accuracy: Optional[float] = None
-    battery_level: Optional[int] = None
-
 @api_router.post("/sos/alert")
 async def send_sos_alert(
     data: SOSAlertRequest,
