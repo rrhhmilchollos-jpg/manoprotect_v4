@@ -18,6 +18,21 @@ import httpx
 import hashlib
 import re
 
+# Import models from centralized schema file
+from models.all_schemas import (
+    User, UserRegister, UserLogin, UserUpdate, SessionData,
+    InvestorRequest, InvestorRegisterRequest,
+    ThreatAnalysis, AnalyzeRequest, FalsePositiveReport, ShareRequest, CommunityAlert,
+    TrustedContact, TrustedContactCreate,
+    SOSAlert, SOSRequest, SOSAlertRequest, LocationUpdate,
+    CheckoutRequest, PaymentTransaction,
+    FamilyMember, FamilyMemberCreate, FamilyAlert, ChildMember, LocationRequest,
+    NotificationSubscription, Notification, SubscriptionRequest, NotificationPreferences, PushSubscription,
+    APIKey, APIKeyCreate,
+    WhatsAppMessage, WhatsAppAlert,
+    BankAlert, BankAccountConnect, TransactionAnalyze
+)
+
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
 
