@@ -48,6 +48,13 @@ EMERGENT_LLM_KEY = os.environ.get('EMERGENT_LLM_KEY')
 STRIPE_API_KEY = os.environ.get('STRIPE_API_KEY')
 JWT_SECRET = os.environ.get('JWT_SECRET', 'mano-secure-jwt-secret-2025')
 
+# Initialize auth module with database
+from core.auth import (
+    init_auth, hash_password, verify_password, generate_session_token,
+    get_current_user, require_auth, require_admin, require_investor
+)
+init_auth(db)
+
 # ============================================
 # CONFIGURATION
 # ============================================
