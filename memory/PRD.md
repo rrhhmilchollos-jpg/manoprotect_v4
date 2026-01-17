@@ -163,14 +163,12 @@ MANO es una plataforma de seguridad digital multi-plataforma que protege a usuar
 
 ## 9. Tareas Completadas Recientemente
 
-### 17 Enero 2025 - Sesión 5 (Refactorización Backend - Completa)
+### 17 Enero 2025 - Sesión 5 (Refactorización Backend + SendGrid)
 - [x] **Fase 1:** Extraídos modelos Pydantic a `/app/backend/models/all_schemas.py`
 - [x] **Fase 2:** Extraídas funciones de autenticación a `/app/backend/core/auth.py`
-- [x] **Fase 3:** Extraídas rutas a archivos modulares:
-  - `auth_routes.py` - Autenticación (register, login, logout, Google OAuth)
-  - `investor_routes.py` - Gestión de inversores y documentos
-  - `threat_routes.py` - Análisis de amenazas con IA
-- [x] server.py reducido de **4848 → 3736 líneas** (~23% reducción, 1112 líneas menos)
+- [x] **Fase 3-4:** Extraídas rutas a archivos modulares (auth, investors, threats, profile, contacts, family, sos)
+- [x] server.py reducido de **4848 → 3042 líneas** (~37% reducción, 1806 líneas menos)
+- [x] **SendGrid configurado** con API Key real - emails funcionando
 - [x] Backend verificado y funcionando correctamente
 
 ### 16 Enero 2025 - Sesión 4 (Bug Fix Inversores)
