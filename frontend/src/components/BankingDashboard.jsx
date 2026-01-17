@@ -1,28 +1,37 @@
 import { useState, useEffect } from 'react';
 import { 
   Building2, CreditCard, Plus, TrendingUp, TrendingDown, 
-  AlertTriangle, CheckCircle, XCircle, Loader2, Shield, 
-  Eye, RefreshCcw, Ban, Check, Clock, Activity
+  AlertTriangle, CheckCircle, Loader2, Shield, 
+  Eye, EyeOff, RefreshCcw, Ban, Check, Clock, Activity, FlaskConical, Trash2
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Label } from '@/components/ui/label';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
 import { toast } from 'sonner';
 
 const API = process.env.REACT_APP_BACKEND_URL + '/api';
 
 const BankingDashboard = () => {
-  const [summary, setSummary] = useState(null);
+  const [accounts, setAccounts] = useState([]);
   const [transactions, setTransactions] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [showConnectDialog, setShowConnectDialog] = useState(false);
-  const [selectedBank, setSelectedBank] = useState('');
-  const [accountType, setAccountType] = useState('checking');
-  const [connecting, setConnecting] = useState(false);
-  const [supportedBanks, setSupportedBanks] = useState([]);
+  const [showAddDialog, setShowAddDialog] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [showIban, setShowIban] = useState({});
+  
+  const [formData, setFormData] = useState({
+    bank_name: '',
+    account_holder: '',
+    iban: '',
+    swift_bic: '',
+    account_number: '',
+    currency: 'EUR',
+    account_type: 'checking',
+    alias: ''
+  });
 
   useEffect(() => {
     loadData();
@@ -31,100 +40,96 @@ const BankingDashboard = () => {
   const loadData = async () => {
     setLoading(true);
     try {
-      // Load summary
-      const summaryRes = await fetch(`${API}/banking/summary`, { credentials: 'include' });
-      if (summaryRes.ok) {
-        const data = await summaryRes.json();
-        setSummary(data);
-        setSupportedBanks(data.supported_banks || []);
-      }
-
-      // Load transactions
-      const txRes = await fetch(`${API}/banking/transactions?days=30`, { credentials: 'include' });
-      if (txRes.ok) {
-        const data = await txRes.json();
-        setTransactions(data.transactions || []);
+      const response = await fetch(`${API}/banking/manual-accounts`, { credentials: 'include' });
+      if (response.ok) {
+        const data = await response.json();
+        setAccounts(data.accounts || []);
       }
     } catch (error) {
-      console.error('Error loading banking data:', error);
+      console.error('Error loading accounts:', error);
     } finally {
       setLoading(false);
     }
   };
 
-  const connectBank = async () => {
-    if (!selectedBank) {
-      toast.error('Selecciona un banco');
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    
+    const cleanIban = formData.iban.replace(/\s/g, '').toUpperCase();
+    
+    if (cleanIban.length < 15) {
+      toast.error('El IBAN es demasiado corto');
       return;
     }
 
-    setConnecting(true);
+    setSaving(true);
     try {
-      const response = await fetch(`${API}/banking/connect`, {
+      const response = await fetch(`${API}/banking/manual-accounts`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
         body: JSON.stringify({
-          bank_name: selectedBank,
-          account_type: accountType
+          ...formData,
+          iban: cleanIban,
+          swift_bic: formData.swift_bic.toUpperCase()
         })
       });
 
-      const data = await response.json();
-      if (data.success) {
-        toast.success(data.message);
-        setShowConnectDialog(false);
-        setSelectedBank('');
+      if (response.ok) {
+        toast.success('Cuenta bancaria añadida correctamente');
+        setShowAddDialog(false);
+        resetForm();
         loadData();
       } else {
-        toast.error(data.error || 'Error al conectar cuenta');
+        const error = await response.json();
+        toast.error(error.detail || 'Error al añadir cuenta');
       }
     } catch (error) {
       toast.error('Error de conexión');
     } finally {
-      setConnecting(false);
+      setSaving(false);
     }
   };
 
-  const handleTransaction = async (txId, action) => {
+  const resetForm = () => {
+    setFormData({
+      bank_name: '',
+      account_holder: '',
+      iban: '',
+      swift_bic: '',
+      account_number: '',
+      currency: 'EUR',
+      account_type: 'checking',
+      alias: ''
+    });
+  };
+
+  const deleteAccount = async (accountId) => {
+    if (!window.confirm('¿Estás seguro de eliminar esta cuenta?')) return;
+    
     try {
-      const response = await fetch(`${API}/banking/transactions/${txId}/${action}`, {
-        method: 'POST',
+      const response = await fetch(`${API}/banking/manual-accounts/${accountId}`, {
+        method: 'DELETE',
         credentials: 'include'
       });
 
-      const data = await response.json();
-      if (data.success) {
-        toast.success(data.message);
+      if (response.ok) {
+        toast.success('Cuenta eliminada');
         loadData();
       } else {
-        toast.error(data.error);
+        toast.error('Error al eliminar cuenta');
       }
     } catch (error) {
-      toast.error('Error al procesar transacción');
+      toast.error('Error de conexión');
     }
   };
 
-  const getRiskBadge = (riskScore, status) => {
-    if (status === 'blocked') {
-      return <Badge className="bg-red-500"><Ban className="w-3 h-3 mr-1" /> Bloqueada</Badge>;
-    }
-    if (status === 'approved') {
-      return <Badge className="bg-emerald-500"><Check className="w-3 h-3 mr-1" /> Aprobada</Badge>;
-    }
-    if (status === 'flagged') {
-      return <Badge className="bg-amber-500"><AlertTriangle className="w-3 h-3 mr-1" /> En revisión</Badge>;
-    }
-    
-    if (riskScore >= 70) {
-      return <Badge className="bg-red-500">Crítico</Badge>;
-    } else if (riskScore >= 50) {
-      return <Badge className="bg-amber-500">Alto</Badge>;
-    } else if (riskScore >= 30) {
-      return <Badge className="bg-yellow-500">Medio</Badge>;
-    }
-    return <Badge className="bg-emerald-500">Bajo</Badge>;
+  const toggleShowIban = (accountId) => {
+    setShowIban(prev => ({ ...prev, [accountId]: !prev[accountId] }));
   };
+
+  const maskIban = (iban) => iban ? iban.slice(0, 4) + ' **** **** ' + iban.slice(-4) : '';
+  const formatIban = (iban) => iban ? iban.match(/.{1,4}/g)?.join(' ') || iban : '';
 
   if (loading) {
     return (
@@ -136,6 +141,28 @@ const BankingDashboard = () => {
 
   return (
     <div className="space-y-6" data-testid="banking-dashboard">
+      {/* Testing Phase Banner */}
+      <div className="bg-gradient-to-r from-amber-50 to-orange-50 border-2 border-amber-300 rounded-xl p-4">
+        <div className="flex items-start gap-3">
+          <div className="w-12 h-12 bg-amber-100 rounded-full flex items-center justify-center flex-shrink-0">
+            <FlaskConical className="w-6 h-6 text-amber-600" />
+          </div>
+          <div className="flex-1">
+            <div className="flex items-center gap-2 flex-wrap">
+              <h3 className="font-bold text-amber-800">🔒 En fase de pruebas de seguridad</h3>
+              <Badge variant="outline" className="bg-amber-100 text-amber-700 border-amber-300">
+                BETA
+              </Badge>
+            </div>
+            <p className="text-sm text-amber-700 mt-1">
+              Esta función está siendo probada para garantizar la máxima seguridad de tus datos bancarios. 
+              Por ahora, puedes añadir tus cuentas manualmente. La conexión automática con bancos (Open Banking) 
+              estará disponible próximamente.
+            </p>
+          </div>
+        </div>
+      </div>
+
       {/* Summary Cards */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <Card className="bg-gradient-to-br from-indigo-600 to-indigo-700 text-white border-0">
@@ -143,7 +170,7 @@ const BankingDashboard = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-indigo-200 text-sm">Cuentas</p>
-                <p className="text-2xl font-bold">{summary?.accounts_connected || 0}</p>
+                <p className="text-2xl font-bold">{accounts.length}</p>
               </div>
               <Building2 className="w-8 h-8 text-indigo-300" />
             </div>
@@ -154,10 +181,10 @@ const BankingDashboard = () => {
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-emerald-200 text-sm">Protección</p>
-                <p className="text-2xl font-bold">{summary?.protection_rate || 100}%</p>
+                <p className="text-emerald-200 text-sm">Verificadas</p>
+                <p className="text-2xl font-bold">{accounts.filter(a => a.verified).length}</p>
               </div>
-              <Shield className="w-8 h-8 text-emerald-300" />
+              <CheckCircle className="w-8 h-8 text-emerald-300" />
             </div>
           </CardContent>
         </Card>
@@ -166,10 +193,10 @@ const BankingDashboard = () => {
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-amber-200 text-sm">Sospechosas</p>
-                <p className="text-2xl font-bold">{summary?.suspicious_transactions || 0}</p>
+                <p className="text-amber-200 text-sm">Pendientes</p>
+                <p className="text-2xl font-bold">{accounts.filter(a => !a.verified).length}</p>
               </div>
-              <AlertTriangle className="w-8 h-8 text-amber-300" />
+              <Clock className="w-8 h-8 text-amber-300" />
             </div>
           </CardContent>
         </Card>
@@ -178,10 +205,10 @@ const BankingDashboard = () => {
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-zinc-400 text-sm">Total Analizado</p>
-                <p className="text-2xl font-bold">€{(summary?.total_amount_monitored || 0).toLocaleString()}</p>
+                <p className="text-zinc-400 text-sm">Protección</p>
+                <p className="text-2xl font-bold">100%</p>
               </div>
-              <Activity className="w-8 h-8 text-zinc-500" />
+              <Shield className="w-8 h-8 text-zinc-500" />
             </div>
           </CardContent>
         </Card>
@@ -194,145 +221,88 @@ const BankingDashboard = () => {
             <div>
               <CardTitle className="flex items-center gap-2">
                 <CreditCard className="w-5 h-5 text-indigo-600" />
-                Cuentas Conectadas
+                Mis Cuentas Bancarias
               </CardTitle>
-              <CardDescription>Cuentas bancarias monitorizadas por MANO</CardDescription>
+              <CardDescription>Cuentas registradas para monitorización de fraude</CardDescription>
             </div>
-            <Button onClick={() => setShowConnectDialog(true)} className="bg-indigo-600 hover:bg-indigo-700">
+            <Button onClick={() => setShowAddDialog(true)} className="bg-indigo-600 hover:bg-indigo-700">
               <Plus className="w-4 h-4 mr-2" />
-              Conectar Cuenta
+              Añadir Cuenta
             </Button>
           </div>
         </CardHeader>
         <CardContent>
-          {summary?.accounts?.length === 0 ? (
+          {accounts.length === 0 ? (
             <div className="text-center py-8 text-zinc-500">
               <Building2 className="w-12 h-12 mx-auto mb-3 opacity-50" />
-              <p>No hay cuentas conectadas</p>
-              <p className="text-sm mt-1">Conecta una cuenta para comenzar a monitorizar</p>
-            </div>
-          ) : (
-            <div className="grid gap-3">
-              {summary?.accounts?.map((account) => (
-                <div 
-                  key={account.id}
-                  className="flex items-center justify-between p-4 rounded-lg border border-zinc-200 hover:border-indigo-200 transition-colors"
-                >
-                  <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-lg bg-indigo-100 flex items-center justify-center">
-                      <Building2 className="w-6 h-6 text-indigo-600" />
-                    </div>
-                    <div>
-                      <div className="font-semibold">{account.bank_name}</div>
-                      <div className="text-sm text-zinc-500">
-                        ****{account.last_four} • {account.account_type === 'checking' ? 'Corriente' : 'Ahorro'}
-                      </div>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    {account.is_monitored ? (
-                      <Badge className="bg-emerald-500">
-                        <Shield className="w-3 h-3 mr-1" /> Protegida
-                      </Badge>
-                    ) : (
-                      <Badge variant="outline">Pausada</Badge>
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </CardContent>
-      </Card>
-
-      {/* Recent Transactions */}
-      <Card className="bg-white">
-        <CardHeader>
-          <div className="flex items-center justify-between">
-            <div>
-              <CardTitle className="flex items-center gap-2">
-                <Activity className="w-5 h-5 text-indigo-600" />
-                Transacciones Recientes
-              </CardTitle>
-              <CardDescription>Últimas 30 días de actividad</CardDescription>
-            </div>
-            <Button variant="outline" onClick={loadData} size="sm">
-              <RefreshCcw className="w-4 h-4 mr-2" />
-              Actualizar
-            </Button>
-          </div>
-        </CardHeader>
-        <CardContent>
-          {transactions.length === 0 ? (
-            <div className="text-center py-8 text-zinc-500">
-              <Clock className="w-12 h-12 mx-auto mb-3 opacity-50" />
-              <p>No hay transacciones recientes</p>
+              <p>No hay cuentas registradas</p>
+              <p className="text-sm mt-1">Añade una cuenta para comenzar a detectar fraudes</p>
+              <Button 
+                onClick={() => setShowAddDialog(true)} 
+                className="mt-4 bg-indigo-600 hover:bg-indigo-700"
+              >
+                <Plus className="w-4 h-4 mr-2" />
+                Añadir mi primera cuenta
+              </Button>
             </div>
           ) : (
             <div className="space-y-3">
-              {transactions.map((tx) => (
+              {accounts.map((account) => (
                 <div 
-                  key={tx.id}
-                  className={`flex items-center justify-between p-4 rounded-lg border ${
-                    tx.is_suspicious ? 'border-amber-300 bg-amber-50' : 'border-zinc-200'
-                  }`}
+                  key={account.id}
+                  className="flex items-center justify-between p-4 rounded-xl border-2 border-zinc-100 hover:border-indigo-200 transition-colors"
                 >
                   <div className="flex items-center gap-4">
-                    <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                      tx.is_suspicious ? 'bg-amber-100' : 'bg-zinc-100'
-                    }`}>
-                      {tx.amount > 0 ? (
-                        <TrendingUp className={`w-5 h-5 ${tx.is_suspicious ? 'text-amber-600' : 'text-emerald-600'}`} />
-                      ) : (
-                        <TrendingDown className={`w-5 h-5 ${tx.is_suspicious ? 'text-amber-600' : 'text-red-600'}`} />
-                      )}
+                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold">
+                      {account.bank_name?.slice(0, 2).toUpperCase()}
                     </div>
                     <div>
-                      <div className="font-medium">{tx.merchant || tx.description}</div>
-                      <div className="text-sm text-zinc-500">
-                        {new Date(tx.created_at).toLocaleDateString('es-ES')} • {tx.category}
+                      <div className="flex items-center gap-2">
+                        <span className="font-semibold">{account.alias || account.bank_name}</span>
+                        <Badge variant="outline" className="text-xs">
+                          {account.account_type === 'checking' ? 'Corriente' : 
+                           account.account_type === 'savings' ? 'Ahorro' : 'Empresa'}
+                        </Badge>
                       </div>
-                      {tx.risk_factors?.length > 0 && (
-                        <div className="flex gap-1 mt-1">
-                          {tx.risk_factors.slice(0, 2).map((factor, idx) => (
-                            <Badge key={idx} variant="outline" className="text-xs">
-                              {factor}
-                            </Badge>
-                          ))}
-                        </div>
-                      )}
+                      <div className="flex items-center gap-2 mt-1">
+                        <span className="text-sm text-zinc-600 font-mono">
+                          {showIban[account.id] ? formatIban(account.iban) : maskIban(account.iban)}
+                        </span>
+                        <button 
+                          onClick={() => toggleShowIban(account.id)}
+                          className="text-zinc-400 hover:text-zinc-600"
+                        >
+                          {showIban[account.id] ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                        </button>
+                      </div>
+                      <div className="flex items-center gap-2 mt-1">
+                        <span className="text-xs text-zinc-500">{account.bank_name}</span>
+                        {account.swift_bic && (
+                          <span className="text-xs text-zinc-400">• SWIFT: {account.swift_bic}</span>
+                        )}
+                        <span className="text-xs text-zinc-400">• {account.currency}</span>
+                      </div>
                     </div>
                   </div>
-                  <div className="flex items-center gap-4">
-                    <div className="text-right">
-                      <div className={`font-bold ${tx.amount > 0 ? 'text-emerald-600' : ''}`}>
-                        €{Math.abs(tx.amount).toLocaleString()}
-                      </div>
-                      <div className="text-xs text-zinc-500">
-                        Riesgo: {tx.risk_score?.toFixed(0) || 0}%
-                      </div>
-                    </div>
-                    {getRiskBadge(tx.risk_score, tx.status)}
-                    {tx.status === 'flagged' && (
-                      <div className="flex gap-1">
-                        <Button 
-                          size="sm" 
-                          variant="outline"
-                          className="text-emerald-600 border-emerald-200"
-                          onClick={() => handleTransaction(tx.id, 'approve')}
-                        >
-                          <Check className="w-4 h-4" />
-                        </Button>
-                        <Button 
-                          size="sm" 
-                          variant="outline"
-                          className="text-red-600 border-red-200"
-                          onClick={() => handleTransaction(tx.id, 'block')}
-                        >
-                          <Ban className="w-4 h-4" />
-                        </Button>
-                      </div>
-                    )}
+                  <div className="flex items-center gap-3">
+                    <Badge 
+                      variant="outline" 
+                      className={account.verified ? 'text-emerald-600 border-emerald-300 bg-emerald-50' : 'text-amber-600 border-amber-300 bg-amber-50'}
+                    >
+                      {account.verified ? (
+                        <><CheckCircle className="w-3 h-3 mr-1" /> Verificada</>
+                      ) : (
+                        <><Clock className="w-3 h-3 mr-1" /> Pendiente</>
+                      )}
+                    </Badge>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                      onClick={() => deleteAccount(account.id)}
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </Button>
                   </div>
                 </div>
               ))}
@@ -341,73 +311,174 @@ const BankingDashboard = () => {
         </CardContent>
       </Card>
 
-      {/* Connect Bank Dialog */}
-      <Dialog open={showConnectDialog} onOpenChange={setShowConnectDialog}>
-        <DialogContent className="bg-white">
+      {/* Add Account Dialog */}
+      <Dialog open={showAddDialog} onOpenChange={setShowAddDialog}>
+        <DialogContent className="bg-white max-w-2xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle>Conectar Cuenta Bancaria</DialogTitle>
+            <DialogTitle className="flex items-center gap-2">
+              <Building2 className="w-5 h-5 text-indigo-600" />
+              Añadir Cuenta Bancaria
+            </DialogTitle>
             <DialogDescription>
-              Conecta tu cuenta para que MANO monitorice tus transacciones en busca de fraudes
+              Introduce los datos de tu cuenta para monitorizar transacciones sospechosas
             </DialogDescription>
           </DialogHeader>
           
-          <div className="space-y-4 py-4">
-            <div>
-              <label className="text-sm font-medium">Banco</label>
-              <Select value={selectedBank} onValueChange={setSelectedBank}>
-                <SelectTrigger className="mt-1">
-                  <SelectValue placeholder="Selecciona tu banco" />
-                </SelectTrigger>
-                <SelectContent>
-                  {supportedBanks.map((bank) => (
-                    <SelectItem key={bank} value={bank}>{bank}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-            
-            <div>
-              <label className="text-sm font-medium">Tipo de Cuenta</label>
-              <Select value={accountType} onValueChange={setAccountType}>
-                <SelectTrigger className="mt-1">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="checking">Cuenta Corriente</SelectItem>
-                  <SelectItem value="savings">Cuenta de Ahorro</SelectItem>
-                  <SelectItem value="credit">Tarjeta de Crédito</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 text-sm">
-              <p className="font-medium text-amber-800 flex items-center gap-2">
-                <AlertTriangle className="w-4 h-4" />
-                Modo Demo
-              </p>
-              <p className="text-amber-700 mt-1">
-                Esta es una simulación. En producción, se utilizaría Open Banking API para conectar con tu banco real de forma segura.
+          <form onSubmit={handleSubmit} className="space-y-4 py-4">
+            {/* Testing Notice */}
+            <div className="bg-amber-50 border border-amber-200 rounded-lg p-3">
+              <p className="text-sm text-amber-800 flex items-center gap-2">
+                <FlaskConical className="w-4 h-4" />
+                <strong>Fase de pruebas:</strong> Tus datos están protegidos y cifrados.
               </p>
             </div>
-          </div>
 
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setShowConnectDialog(false)}>
-              Cancelar
-            </Button>
-            <Button 
-              onClick={connectBank} 
-              disabled={connecting || !selectedBank}
-              className="bg-indigo-600 hover:bg-indigo-700"
-            >
-              {connecting ? (
-                <Loader2 className="w-4 h-4 animate-spin mr-2" />
-              ) : (
-                <Plus className="w-4 h-4 mr-2" />
-              )}
-              Conectar
-            </Button>
-          </DialogFooter>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {/* Bank Name */}
+              <div>
+                <Label htmlFor="bank_name">Nombre del banco *</Label>
+                <Input
+                  id="bank_name"
+                  placeholder="Ej: Santander, BBVA, CaixaBank..."
+                  value={formData.bank_name}
+                  onChange={(e) => setFormData({...formData, bank_name: e.target.value})}
+                  required
+                />
+              </div>
+
+              {/* Account Holder */}
+              <div>
+                <Label htmlFor="account_holder">Titular de la cuenta *</Label>
+                <Input
+                  id="account_holder"
+                  placeholder="Nombre completo del titular"
+                  value={formData.account_holder}
+                  onChange={(e) => setFormData({...formData, account_holder: e.target.value})}
+                  required
+                />
+              </div>
+
+              {/* IBAN */}
+              <div className="md:col-span-2">
+                <Label htmlFor="iban">IBAN *</Label>
+                <Input
+                  id="iban"
+                  placeholder="ES00 0000 0000 0000 0000 0000"
+                  value={formData.iban}
+                  onChange={(e) => setFormData({...formData, iban: e.target.value.toUpperCase()})}
+                  required
+                  className="font-mono text-lg tracking-wider"
+                />
+                <p className="text-xs text-zinc-500 mt-1">
+                  Formato español: ES + 22 dígitos (ej: ES91 2100 0418 4502 0005 1332)
+                </p>
+              </div>
+
+              {/* SWIFT/BIC */}
+              <div>
+                <Label htmlFor="swift_bic">Código SWIFT/BIC</Label>
+                <Input
+                  id="swift_bic"
+                  placeholder="XXXXESMMXXX"
+                  value={formData.swift_bic}
+                  onChange={(e) => setFormData({...formData, swift_bic: e.target.value.toUpperCase()})}
+                  className="font-mono"
+                  maxLength={11}
+                />
+                <p className="text-xs text-zinc-500 mt-1">8 u 11 caracteres</p>
+              </div>
+
+              {/* Account Number */}
+              <div>
+                <Label htmlFor="account_number">Número de cuenta (CCC)</Label>
+                <Input
+                  id="account_number"
+                  placeholder="0000 0000 00 0000000000"
+                  value={formData.account_number}
+                  onChange={(e) => setFormData({...formData, account_number: e.target.value})}
+                  className="font-mono"
+                />
+              </div>
+
+              {/* Currency */}
+              <div>
+                <Label htmlFor="currency">Moneda</Label>
+                <select
+                  id="currency"
+                  value={formData.currency}
+                  onChange={(e) => setFormData({...formData, currency: e.target.value})}
+                  className="w-full p-2 border rounded-lg"
+                >
+                  <option value="EUR">🇪🇺 EUR - Euro</option>
+                  <option value="USD">🇺🇸 USD - Dólar estadounidense</option>
+                  <option value="GBP">🇬🇧 GBP - Libra esterlina</option>
+                  <option value="CHF">🇨🇭 CHF - Franco suizo</option>
+                </select>
+              </div>
+
+              {/* Account Type */}
+              <div>
+                <Label htmlFor="account_type">Tipo de cuenta</Label>
+                <select
+                  id="account_type"
+                  value={formData.account_type}
+                  onChange={(e) => setFormData({...formData, account_type: e.target.value})}
+                  className="w-full p-2 border rounded-lg"
+                >
+                  <option value="checking">💳 Cuenta corriente</option>
+                  <option value="savings">🏦 Cuenta de ahorro</option>
+                  <option value="business">🏢 Cuenta empresa</option>
+                </select>
+              </div>
+
+              {/* Alias */}
+              <div className="md:col-span-2">
+                <Label htmlFor="alias">Alias (opcional)</Label>
+                <Input
+                  id="alias"
+                  placeholder="Ej: Cuenta nómina, Ahorros vacaciones, Empresa..."
+                  value={formData.alias}
+                  onChange={(e) => setFormData({...formData, alias: e.target.value})}
+                />
+              </div>
+            </div>
+
+            {/* Security Notice */}
+            <div className="flex items-center gap-3 p-3 bg-emerald-50 rounded-lg border border-emerald-200">
+              <Shield className="w-5 h-5 text-emerald-600 flex-shrink-0" />
+              <p className="text-sm text-emerald-700">
+                Tus datos bancarios están cifrados con AES-256 y solo se usarán para detectar transacciones fraudulentas. 
+                Nunca compartimos tu información con terceros.
+              </p>
+            </div>
+
+            <DialogFooter className="gap-2">
+              <Button 
+                type="button" 
+                variant="outline"
+                onClick={() => { setShowAddDialog(false); resetForm(); }}
+              >
+                Cancelar
+              </Button>
+              <Button 
+                type="submit"
+                disabled={saving}
+                className="bg-emerald-600 hover:bg-emerald-700"
+              >
+                {saving ? (
+                  <>
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    Guardando...
+                  </>
+                ) : (
+                  <>
+                    <CheckCircle className="w-4 h-4 mr-2" />
+                    Guardar Cuenta
+                  </>
+                )}
+              </Button>
+            </DialogFooter>
+          </form>
         </DialogContent>
       </Dialog>
     </div>
