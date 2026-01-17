@@ -2,7 +2,7 @@
 
 ## Plataforma Integral de Protección contra Fraudes Digitales
 
-**Última actualización:** 16 Enero 2025
+**Última actualización:** 17 Enero 2025
 
 ---
 
