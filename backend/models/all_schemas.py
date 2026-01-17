@@ -414,6 +414,10 @@ class TransactionAnalyze(BaseModel):
 # ============================================
 
 class EmailPreferencesUpdate(BaseModel):
-    email_threats: Optional[bool] = None
-    email_weekly_summary: Optional[bool] = None
-    email_promotions: Optional[bool] = None
+    threat_alerts: Optional[bool] = None
+    transaction_alerts: Optional[bool] = None
+    daily_summary: Optional[bool] = None
+    weekly_summary: Optional[bool] = None
+    reward_notifications: Optional[bool] = None
+    family_alerts: Optional[bool] = None
+    marketing: Optional[bool] = None
