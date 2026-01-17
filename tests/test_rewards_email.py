@@ -10,7 +10,7 @@ import requests
 import os
 from datetime import datetime
 
-BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', 'https://threatdefender-12.preview.emergentagent.com')
+BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', 'https://digital-guard-1.preview.emergentagent.com')
 
 # Test credentials
 TEST_EMAIL = "testuser@mano.com"

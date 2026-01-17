@@ -229,7 +229,7 @@ MANO es una plataforma de seguridad digital multi-plataforma que protege a usuar
 
 | Servicio | URL |
 |----------|-----|
-| Preview Web | https://threatdefender-12.preview.emergentagent.com |
+| Preview Web | https://digital-guard-1.preview.emergentagent.com |
 | Dominio Custom | https://manoprotect.com (pendiente DNS) |
 
 ---
