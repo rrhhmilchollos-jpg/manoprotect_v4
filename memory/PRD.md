@@ -163,6 +163,12 @@ MANO es una plataforma de seguridad digital multi-plataforma que protege a usuar
 
 ## 9. Tareas Completadas Recientemente
 
+### 16 Enero 2025 - Sesión 4 (Bug Fix Inversores)
+- [x] **CORREGIDO:** Flujo de aprobación de inversores ahora muestra acceso a descargas
+- [x] Añadido botón "Descargas" en el header del Dashboard para inversores
+- [x] Añadido banner prominente "Acceso de Inversor Verificado" en Dashboard
+- [x] Navegación directa a página /downloads funcional
+
 ### 16 Enero 2025 - Sesión 3 (Integraciones)
 - [x] Nordigen Open Banking - Rutas implementadas en `/api/banking/*`
 - [x] SendGrid Email - Rutas implementadas en `/api/email/*`
