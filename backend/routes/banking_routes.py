@@ -532,3 +532,125 @@ async def analyze_transactions_for_fraud(
         },
         "summary": f"Se encontraron {len(alerts)} alertas de posible fraude" if alerts else "No se detectaron patrones sospechosos"
     }
+
+
+# ============================================
+# MANUAL BANK ACCOUNTS (IBAN, SWIFT, etc.)
+# ============================================
+
+class ManualBankAccount(BaseModel):
+    bank_name: str
+    account_holder: str
+    iban: str
+    swift_bic: Optional[str] = None
+    account_number: Optional[str] = None
+    sort_code: Optional[str] = None
+    currency: str = "EUR"
+    account_type: str = "checking"
+    alias: Optional[str] = None
+
+
+@router.get("/manual-accounts")
+async def get_manual_accounts(
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Get all manually added bank accounts for user"""
+    user = await get_current_user_simple(request, session_token)
+    
+    accounts = await get_db().manual_bank_accounts.find(
+        {"user_id": user["user_id"]},
+        {"_id": 0}
+    ).to_list(20)
+    
+    return {"accounts": accounts}
+
+
+@router.post("/manual-accounts")
+async def add_manual_account(
+    data: ManualBankAccount,
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Add a bank account manually with IBAN, SWIFT, etc."""
+    user = await get_current_user_simple(request, session_token)
+    
+    # Validate IBAN format (basic validation)
+    iban = data.iban.replace(" ", "").upper()
+    if len(iban) < 15 or len(iban) > 34:
+        raise HTTPException(status_code=400, detail="IBAN inválido: longitud incorrecta")
+    
+    # Check if IBAN already exists for this user
+    existing = await get_db().manual_bank_accounts.find_one({
+        "user_id": user["user_id"],
+        "iban": iban
+    })
+    
+    if existing:
+        raise HTTPException(status_code=400, detail="Esta cuenta ya está registrada")
+    
+    account_id = f"manual_{uuid.uuid4().hex[:12]}"
+    
+    account_doc = {
+        "id": account_id,
+        "user_id": user["user_id"],
+        "bank_name": data.bank_name,
+        "account_holder": data.account_holder,
+        "iban": iban,
+        "swift_bic": data.swift_bic.upper() if data.swift_bic else None,
+        "account_number": data.account_number,
+        "sort_code": data.sort_code,
+        "currency": data.currency,
+        "account_type": data.account_type,
+        "alias": data.alias,
+        "verified": False,
+        "created_at": datetime.now(timezone.utc).isoformat()
+    }
+    
+    await get_db().manual_bank_accounts.insert_one(account_doc)
+    
+    return {
+        "message": "Cuenta bancaria añadida correctamente",
+        "account_id": account_id,
+        "iban_masked": iban[:4] + " **** **** " + iban[-4:]
+    }
+
+
+@router.delete("/manual-accounts/{account_id}")
+async def delete_manual_account(
+    account_id: str,
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Delete a manually added bank account"""
+    user = await get_current_user_simple(request, session_token)
+    
+    result = await get_db().manual_bank_accounts.delete_one({
+        "id": account_id,
+        "user_id": user["user_id"]
+    })
+    
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Cuenta no encontrada")
+    
+    return {"message": "Cuenta eliminada correctamente"}
+
+
+@router.get("/manual-accounts/{account_id}")
+async def get_manual_account_details(
+    account_id: str,
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Get details of a specific manual bank account"""
+    user = await get_current_user_simple(request, session_token)
+    
+    account = await get_db().manual_bank_accounts.find_one(
+        {"id": account_id, "user_id": user["user_id"]},
+        {"_id": 0}
+    )
+    
+    if not account:
+        raise HTTPException(status_code=404, detail="Cuenta no encontrada")
+    
+    return account
