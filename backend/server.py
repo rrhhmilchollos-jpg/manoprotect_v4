@@ -62,6 +62,10 @@ init_auth_routes(db)
 from routes.investor_routes import router as investor_router, init_investor_routes
 init_investor_routes(db)
 
+from routes.threat_routes import router as threat_router, init_threat_routes
+from emergentintegrations.llm.chat import LlmChat, UserMessage
+init_threat_routes(db, EMERGENT_LLM_KEY, LlmChat, UserMessage)
+
 # ============================================
 # CONFIGURATION
 # ============================================
