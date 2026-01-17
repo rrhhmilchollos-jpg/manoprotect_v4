@@ -3954,6 +3954,10 @@ print("✅ Auth routes loaded")
 api_router.include_router(investor_router)
 print("✅ Investor routes loaded")
 
+# Threat routes
+api_router.include_router(threat_router)
+print("✅ Threat routes loaded")
+
 try:
     from routes.banking_routes import router as banking_router
     api_router.include_router(banking_router)
