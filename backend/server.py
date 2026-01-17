@@ -111,6 +111,23 @@ PLAN_FEATURES = {
     "enterprise-yearly": {"max_users": -1, "gps": True, "sos": True, "ai_analysis": True, "dashboard": True, "api": True, "child_tracking": True, "location_history": True},
 }
 
+# Import and initialize modular routes
+from routes.auth_routes import router as auth_router, init_auth_routes
+init_auth_routes(db)
+
+from routes.investor_routes import router as investor_router, init_investor_routes
+init_investor_routes(db)
+
+from routes.threat_routes import router as threat_router, init_threat_routes
+from emergentintegrations.llm.chat import LlmChat, UserMessage
+init_threat_routes(db, EMERGENT_LLM_KEY, LlmChat, UserMessage)
+
+from routes.profile_contacts_routes import router as profile_contacts_router, init_profile_routes
+init_profile_routes(db)
+
+from routes.family_sos_routes import router as family_sos_router, init_family_routes
+init_family_routes(db, PLAN_FEATURES)
+
 # ============================================
 # COMMUNITY ROUTES
 # ============================================
