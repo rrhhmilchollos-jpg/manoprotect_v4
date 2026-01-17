@@ -3504,20 +3504,6 @@ async def test_push_notification(
 # WHATSAPP INTEGRATION
 # ============================================
 
-class WhatsAppMessage(BaseModel):
-    phone_number: str
-    message: str
-
-class WhatsAppAlert(BaseModel):
-    model_config = ConfigDict(extra="ignore")
-    id: str = Field(default_factory=lambda: f"wa_{uuid.uuid4().hex[:8]}")
-    user_id: str
-    phone_number: str
-    message_type: str  # "threat_alert", "sos", "family_alert", "reminder"
-    message: str
-    status: str = "pending"  # "pending", "sent", "delivered", "failed"
-    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
-
 # WhatsApp API configuration (using official Cloud API)
 WHATSAPP_API_URL = os.environ.get('WHATSAPP_API_URL', 'https://graph.facebook.com/v17.0')
 WHATSAPP_PHONE_ID = os.environ.get('WHATSAPP_PHONE_ID', '')
