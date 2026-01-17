@@ -4207,6 +4207,10 @@ async def update_email_preferences(
 # ============================================
 
 # Import and include modular routes BEFORE registering api_router
+# Auth routes (already initialized at the top)
+api_router.include_router(auth_router)
+print("✅ Auth routes loaded")
+
 try:
     from routes.banking_routes import router as banking_router
     api_router.include_router(banking_router)
