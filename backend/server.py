@@ -66,6 +66,12 @@ from routes.threat_routes import router as threat_router, init_threat_routes
 from emergentintegrations.llm.chat import LlmChat, UserMessage
 init_threat_routes(db, EMERGENT_LLM_KEY, LlmChat, UserMessage)
 
+from routes.profile_contacts_routes import router as profile_contacts_router, init_profile_routes
+init_profile_routes(db)
+
+from routes.family_sos_routes import router as family_sos_router, init_family_routes
+init_family_routes(db, PLAN_FEATURES)
+
 # ============================================
 # CONFIGURATION
 # ============================================
