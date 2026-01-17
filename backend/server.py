@@ -4052,14 +4052,6 @@ async def public_get_stats(request: Request):
 # BANK INTEGRATION (Placeholder)
 # ============================================
 
-class BankAlert(BaseModel):
-    transaction_id: str
-    amount: float
-    currency: str = "EUR"
-    merchant: str
-    timestamp: str
-    suspicious_indicators: List[str] = []
-
 @api_router.post("/bank/verify-transaction")
 async def verify_bank_transaction(
     data: BankAlert,
