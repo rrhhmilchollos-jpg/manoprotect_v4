@@ -55,6 +55,10 @@ from core.auth import (
 )
 init_auth(db)
 
+# Import and initialize modular routes
+from routes.auth_routes import router as auth_router, init_auth_routes
+init_auth_routes(db)
+
 # ============================================
 # CONFIGURATION
 # ============================================
