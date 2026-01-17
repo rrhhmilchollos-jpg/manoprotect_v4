@@ -2219,42 +2219,6 @@ async def get_enterprise_reports(
 # FAMILY ADMIN ROUTES
 # ============================================
 
-class FamilyMember(BaseModel):
-    model_config = ConfigDict(extra="ignore")
-    id: str = Field(default_factory=lambda: f"member_{uuid.uuid4().hex[:8]}")
-    family_owner_id: str
-    name: str
-    email: Optional[str] = None
-    phone: Optional[str] = None
-    relationship: str  # "hijo", "hija", "padre", "madre", "abuelo", "abuela", etc.
-    is_senior: bool = False
-    simplified_mode: bool = False
-    alert_level: str = "all"  # "all", "high", "critical"
-    threats_count: int = 0
-    last_activity: Optional[datetime] = None
-    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
-
-class FamilyMemberCreate(BaseModel):
-    name: str
-    email: Optional[str] = None
-    phone: Optional[str] = None
-    relationship: str
-    is_senior: Optional[bool] = False
-    simplified_mode: Optional[bool] = False
-    alert_level: Optional[str] = "all"
-
-class FamilyAlert(BaseModel):
-    model_config = ConfigDict(extra="ignore")
-    id: str = Field(default_factory=lambda: f"falert_{uuid.uuid4().hex[:8]}")
-    family_owner_id: str
-    member_id: str
-    member_name: str
-    alert_type: str  # "threat_detected", "sos_triggered", "suspicious_activity"
-    severity: str
-    message: str
-    is_read: bool = False
-    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
-
 @api_router.get("/family/dashboard")
 async def get_family_dashboard(request: Request, session_token: Optional[str] = Cookie(None)):
     """Get family protection dashboard"""
