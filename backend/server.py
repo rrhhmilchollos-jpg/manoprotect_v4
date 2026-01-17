@@ -4170,16 +4170,6 @@ from services.banking_service import banking_service
 from services.threat_analyzer import threat_analyzer as ta_service
 from services.fraud_detection import fraud_service
 
-class BankAccountConnect(BaseModel):
-    bank_name: str
-    account_type: str = "checking"
-
-class TransactionAnalyze(BaseModel):
-    amount: float
-    description: str
-    merchant: Optional[str] = None
-    account_id: Optional[str] = None
-
 @api_router.get("/banking/accounts")
 async def get_bank_accounts(
     request: Request,
