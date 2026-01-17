@@ -3408,10 +3408,6 @@ VAPID_PRIVATE_KEY = os.environ.get('VAPID_PRIVATE_KEY', 'cMCW8hLpP7Zl4l2n3Vh6_qJ
 VAPID_PUBLIC_KEY = os.environ.get('VAPID_PUBLIC_KEY', 'BNbxGYNMhEIi4d00Zc4Y-nLcQ6x8_V9P2z8gYJJ6zyZa0R0vWxyXlB8Gx9LzY8hFJhY0Q3c6BXGz0PjZkL8Jbyo')
 VAPID_CLAIMS = {"sub": "mailto:alerts@mano-protect.com"}
 
-class PushSubscription(BaseModel):
-    endpoint: str
-    keys: Dict[str, str]
-
 @api_router.get("/push/vapid-public-key")
 async def get_vapid_public_key():
     """Get VAPID public key for push subscription"""
