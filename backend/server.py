@@ -2083,12 +2083,6 @@ async def create_admin_user(email: str, name: str, password: str):
 # ENTERPRISE DASHBOARD ROUTES
 # ============================================
 
-class EnterpriseDepartment(BaseModel):
-    name: str
-    employee_count: int = 0
-    threats_blocked: int = 0
-    risk_score: float = 0.0
-
 @api_router.get("/enterprise/dashboard")
 async def get_enterprise_dashboard(request: Request, session_token: Optional[str] = Cookie(None)):
     """Get enterprise dashboard with advanced metrics"""
