@@ -4214,6 +4214,10 @@ async def update_email_preferences(
 api_router.include_router(auth_router)
 print("✅ Auth routes loaded")
 
+# Investor routes
+api_router.include_router(investor_router)
+print("✅ Investor routes loaded")
+
 try:
     from routes.banking_routes import router as banking_router
     api_router.include_router(banking_router)
