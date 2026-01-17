@@ -3766,21 +3766,6 @@ async def get_dashboard_metrics(
 # PUBLIC API FOR PARTNERS
 # ============================================
 
-class APIKey(BaseModel):
-    model_config = ConfigDict(extra="ignore")
-    id: str = Field(default_factory=lambda: f"key_{uuid.uuid4().hex}")
-    user_id: str
-    key: str = Field(default_factory=lambda: f"mano_pk_{uuid.uuid4().hex}")
-    name: str
-    permissions: List[str] = ["read:threats", "write:analyze"]
-    rate_limit: int = 1000  # requests per day
-    is_active: bool = True
-    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
-
-class APIKeyCreate(BaseModel):
-    name: str
-    permissions: Optional[List[str]] = ["read:threats", "write:analyze"]
-
 async def validate_api_key(api_key: str) -> Optional[dict]:
     """Validate API key and return key info"""
     key_doc = await db.api_keys.find_one({"key": api_key, "is_active": True}, {"_id": 0})
