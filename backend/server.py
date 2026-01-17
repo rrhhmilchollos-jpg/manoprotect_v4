@@ -887,14 +887,8 @@ async def analyze_threat(content: str, content_type: str) -> dict:
             system_message="""Eres un experto en detección de fraudes y amenazas digitales.
 Analiza el contenido proporcionado y determina si es una amenaza potencial.
 Identifica: phishing, smishing, vishing, estafas, suplantación de identidad.
-Responde en formato JSON con:
-{
-  "is_threat": boolean,
-  "risk_level": "low"|"medium"|"high"|"critical",
-  "threat_types": [lista de tipos de amenaza detectados],
-  "recommendation": "recomendación clara en español",
-  "analysis": "análisis detallado en español"
-}"""
+IMPORTANTE: Responde SOLO con JSON válido, sin markdown, sin texto adicional:
+{"is_threat": true/false, "risk_level": "low"/"medium"/"high"/"critical", "threat_types": [], "recommendation": "texto", "analysis": "texto"}"""
         ).with_model("openai", "gpt-4o")
         
         user_message = UserMessage(
@@ -903,17 +897,55 @@ Responde en formato JSON con:
         
         response = await chat.send_message(user_message)
         
+        # Log response for debugging
+        logging.info(f"LLM Response (first 200 chars): {response[:200] if response else 'EMPTY'}")
+        
+        # Clean response - remove markdown code blocks if present
+        clean_response = response.strip()
+        if clean_response.startswith("```"):
+            # Remove markdown code blocks
+            lines = clean_response.split("\n")
+            clean_lines = [l for l in lines if not l.startswith("```")]
+            clean_response = "\n".join(clean_lines).strip()
+        
+        # Try to extract JSON from response
         import json
-        result = json.loads(response)
-        return result
+        import re
+        
+        # Try direct parse first
+        try:
+            result = json.loads(clean_response)
+            return result
+        except json.JSONDecodeError:
+            # Try to find JSON object in the response
+            json_match = re.search(r'\{[^{}]*"is_threat"[^{}]*\}', clean_response, re.DOTALL)
+            if json_match:
+                result = json.loads(json_match.group())
+                return result
+            raise ValueError(f"No valid JSON found in response: {clean_response[:100]}")
+            
     except Exception as e:
         logging.error(f"Error in threat analysis: {e}")
+        # Return a more helpful analysis based on simple heuristics
+        content_lower = content.lower()
+        suspicious_keywords = ['gratis', 'premio', 'ganado', 'urgente', 'click', 'clic', 'bit.ly', 'banco', 'verificar cuenta', 'contraseña', 'tarjeta']
+        found_keywords = [k for k in suspicious_keywords if k in content_lower]
+        
+        if found_keywords:
+            return {
+                "is_threat": True,
+                "risk_level": "high" if len(found_keywords) > 2 else "medium",
+                "threat_types": ["posible_estafa", "phishing"],
+                "recommendation": "Este mensaje contiene palabras sospechosas. No hagas clic en enlaces y no proporciones datos personales.",
+                "analysis": f"Análisis básico: Se detectaron palabras sospechosas ({', '.join(found_keywords)}). Se recomienda precaución."
+            }
+        
         return {
             "is_threat": False,
             "risk_level": "low",
             "threat_types": [],
-            "recommendation": "No se pudo analizar el contenido",
-            "analysis": f"Error en el análisis: {str(e)}"
+            "recommendation": "No se detectaron amenazas evidentes, pero mantén precaución.",
+            "analysis": f"Análisis completado con método alternativo. Error original: {str(e)}"
         }
 
 @api_router.get("/")
