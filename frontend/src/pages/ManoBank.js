@@ -109,6 +109,16 @@ const ManoBank = () => {
   const handleTransfer = async (e) => {
     e.preventDefault();
     try {
+      const payload = {
+        ...transferData,
+        amount: parseFloat(transferData.amount)
+      };
+      
+      // Only include scheduled_date if transfer is scheduled
+      if (transferData.transfer_type !== 'scheduled') {
+        delete payload.scheduled_date;
+      }
+      
       const response = await fetch(`${API_URL}/api/manobank/transfer`, {
         method: 'POST',
         credentials: 'include',
@@ -116,18 +126,22 @@ const ManoBank = () => {
           'Content-Type': 'application/json',
           ...(token && { 'Authorization': `Bearer ${token}` })
         },
-        body: JSON.stringify({
-          ...transferData,
-          amount: parseFloat(transferData.amount)
-        })
+        body: JSON.stringify(payload)
       });
       
       const data = await response.json();
       if (!response.ok) throw new Error(data.detail);
       
-      toast.success('Transferencia realizada correctamente');
+      const messages = {
+        'normal': 'Transferencia realizada (llegará en 24-48h)',
+        'immediate': 'Transferencia inmediata realizada',
+        'scheduled': `Transferencia programada para ${transferData.scheduled_date}`,
+        'internal': 'Transferencia interna realizada al instante'
+      };
+      
+      toast.success(data.message || messages[data.transfer?.transfer_type] || 'Transferencia procesada');
       setShowTransfer(false);
-      setTransferData({ from_account_id: '', to_iban: '', to_name: '', amount: '', concept: '' });
+      setTransferData({ from_account_id: '', to_iban: '', to_name: '', amount: '', concept: '', transfer_type: 'normal', scheduled_date: '' });
       fetchBankData();
     } catch (error) {
       toast.error(error.message || 'Error en la transferencia');
