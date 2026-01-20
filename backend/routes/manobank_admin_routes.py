@@ -85,10 +85,19 @@ class AccountOpeningRequest(BaseModel):
     customer_email: str
     customer_phone: str
     customer_dni: str
+    # Dirección completa
+    address_street: str  # Calle y número
+    address_city: str  # Ciudad/Población
+    address_postal_code: str  # Código postal
+    address_province: str  # Provincia
+    address_country: str = "España"
+    # Otros datos
     account_type: str = "corriente"  # corriente, ahorro, nomina, empresa
     initial_deposit: float = 0
     occupation: Optional[str] = None
     monthly_income: Optional[float] = None
+    date_of_birth: Optional[str] = None
+    nationality: Optional[str] = "Española"
 
 class LoanApplication(BaseModel):
     customer_id: str
