@@ -900,13 +900,146 @@ const BancoSistema = () => {
                 <Video className="w-6 h-6 text-indigo-600" />
                 Verificación KYC por Videollamada
               </h2>
+              <Button 
+                size="sm" 
+                variant="outline"
+                onClick={fetchPendingVideoSessions}
+              >
+                <RefreshCw className="w-4 h-4 mr-1" />
+                Actualizar
+              </Button>
             </div>
+
+            {/* Live Video Sessions - NEW */}
+            {pendingVideoSessions.length > 0 && (
+              <div className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl p-6 border-2 border-green-400 animate-pulse">
+                <h3 className="font-semibold mb-4 flex items-center gap-2 text-green-700">
+                  <span className="w-3 h-3 bg-green-500 rounded-full animate-ping" />
+                  <Video className="w-5 h-5" />
+                  Clientes Esperando Videoverificación EN VIVO
+                </h3>
+                <div className="space-y-3">
+                  {pendingVideoSessions.map((session) => (
+                    <div key={session.session_id} className="bg-white rounded-lg p-4 flex items-center justify-between shadow-md">
+                      <div>
+                        <p className="font-medium text-lg">{session.customer_name}</p>
+                        <p className="text-sm text-zinc-500">DNI: {session.customer_dni} | Tel: {session.customer_phone}</p>
+                        <p className="text-xs text-green-600 mt-1">
+                          {session.status === 'customer_joined' ? '🟢 Cliente conectado y esperando' : '⏳ Iniciando sesión...'}
+                        </p>
+                      </div>
+                      <Button 
+                        onClick={() => handleJoinVideoSession(session.session_id)}
+                        className="bg-green-600 hover:bg-green-700 text-white"
+                        data-testid="join-video-session-btn"
+                      >
+                        <Video className="w-4 h-4 mr-2" />
+                        Unirse a Videollamada
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Active Video Session Modal */}
+            {activeVideoSession && (
+              <div className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4">
+                <div className="bg-slate-900 rounded-xl w-full max-w-6xl h-[90vh] flex flex-col">
+                  {/* Header */}
+                  <div className="flex items-center justify-between p-4 border-b border-slate-700">
+                    <div className="flex items-center gap-3">
+                      <div className="w-3 h-3 bg-red-500 rounded-full animate-pulse" />
+                      <span className="text-white font-semibold">Videoverificación KYC en Curso</span>
+                    </div>
+                    <Button 
+                      variant="destructive" 
+                      size="sm"
+                      onClick={handleEndVideoSession}
+                    >
+                      <X className="w-4 h-4 mr-1" />
+                      Finalizar
+                    </Button>
+                  </div>
+                  
+                  {/* Video Area */}
+                  <div className="flex-1 grid grid-cols-3 gap-4 p-4">
+                    {/* Main Video (Customer) */}
+                    <div className="col-span-2 bg-black rounded-lg relative">
+                      <div className="absolute inset-0 flex items-center justify-center text-white text-lg">
+                        Video del Cliente
+                      </div>
+                    </div>
+                    
+                    {/* Sidebar */}
+                    <div className="space-y-4">
+                      {/* Customer Data */}
+                      <div className="bg-slate-800 rounded-lg p-4 text-white">
+                        <h4 className="font-semibold text-blue-400 mb-3">Datos del Cliente</h4>
+                        <div className="space-y-2 text-sm">
+                          <p><span className="text-slate-400">Nombre:</span> {activeVideoSession.customer_data?.name}</p>
+                          <p><span className="text-slate-400">DNI:</span> {activeVideoSession.customer_data?.dni}</p>
+                          <p><span className="text-slate-400">Teléfono:</span> {activeVideoSession.customer_data?.phone}</p>
+                          {activeVideoSession.customer_data?.request_data && (
+                            <>
+                              <p><span className="text-slate-400">Email:</span> {activeVideoSession.customer_data.request_data.customer_email}</p>
+                              <p><span className="text-slate-400">Dirección:</span> {activeVideoSession.customer_data.request_data.address_street}</p>
+                              <p><span className="text-slate-400">Ciudad:</span> {activeVideoSession.customer_data.request_data.address_city}</p>
+                            </>
+                          )}
+                        </div>
+                      </div>
+                      
+                      {/* Verification Actions */}
+                      <div className="bg-slate-800 rounded-lg p-4">
+                        <h4 className="font-semibold text-white mb-3">Verificación</h4>
+                        <div className="space-y-2">
+                          <Button 
+                            className="w-full bg-green-600 hover:bg-green-700"
+                            onClick={() => handleCompleteVideoVerification({
+                              verification_status: 'approved',
+                              identity_verified: true,
+                              document_type: 'DNI',
+                              document_number: activeVideoSession.customer_data?.dni || '',
+                              document_matches_data: true,
+                              face_matches_document: true,
+                              notes: 'Verificación completada satisfactoriamente'
+                            })}
+                            data-testid="approve-kyc-btn"
+                          >
+                            <CheckCircle className="w-4 h-4 mr-2" />
+                            Aprobar Verificación
+                          </Button>
+                          <Button 
+                            variant="destructive"
+                            className="w-full"
+                            onClick={() => handleCompleteVideoVerification({
+                              verification_status: 'rejected',
+                              identity_verified: false,
+                              document_type: 'DNI',
+                              document_number: '',
+                              document_matches_data: false,
+                              face_matches_document: false,
+                              rejection_reason: 'Documento no coincide con datos proporcionados'
+                            })}
+                            data-testid="reject-kyc-btn"
+                          >
+                            <XCircle className="w-4 h-4 mr-2" />
+                            Rechazar
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
 
             {/* Pending Account Requests needing KYC */}
             <div className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl p-6 border border-indigo-200">
               <h3 className="font-semibold mb-4 flex items-center gap-2">
                 <Calendar className="w-5 h-5 text-indigo-600" />
-                Solicitudes Pendientes de Verificación
+                Solicitudes Pendientes de Verificación (Método Manual)
               </h3>
               <div className="space-y-3">
                 {accountRequests.filter(r => r.status === 'pending' || r.status === 'kyc_scheduled').map((req) => (
@@ -948,7 +1081,7 @@ const BancoSistema = () => {
                   </div>
                 ))}
                 {accountRequests.filter(r => r.status === 'pending' || r.status === 'kyc_scheduled').length === 0 && (
-                  <p className="text-center text-zinc-500 py-4">No hay solicitudes pendientes de verificación</p>
+                  <p className="text-center text-zinc-500 py-4">No hay solicitudes pendientes de verificación manual</p>
                 )}
               </div>
             </div>
