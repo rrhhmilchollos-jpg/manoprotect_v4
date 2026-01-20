@@ -98,9 +98,10 @@ const ManoBank = () => {
     try {
       const response = await fetch(`${API_URL}/api/manobank/accounts`, {
         method: 'POST',
+        credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
+          ...(token && { 'Authorization': `Bearer ${token}` })
         },
         body: JSON.stringify(newAccount)
       });
@@ -123,9 +124,10 @@ const ManoBank = () => {
     try {
       const response = await fetch(`${API_URL}/api/manobank/transfers/sepa`, {
         method: 'POST',
+        credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
+          ...(token && { 'Authorization': `Bearer ${token}` })
         },
         body: JSON.stringify({
           ...transferData,
