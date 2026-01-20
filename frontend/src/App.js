@@ -187,6 +187,14 @@ function AppRouter() {
           </ProtectedRoute>
         } 
       />
+      <Route 
+        path="/manobank" 
+        element={
+          <ProtectedRoute>
+            <ManoBank />
+          </ProtectedRoute>
+        } 
+      />
       
       {/* Admin Routes */}
       <Route 
