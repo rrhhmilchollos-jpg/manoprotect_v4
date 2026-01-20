@@ -77,7 +77,7 @@ const LandingPage = () => {
               <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-indigo-50 border border-indigo-200">
                 <img 
                   src="https://customer-assets.emergentagent.com/job_5c97b24f-9a55-4567-9954-bd76179fb951/artifacts/8y6ab2pd_logo%20App%20Mano.png" 
-                  alt="MANO" 
+                  alt="ManoProtect" 
                   className="h-5 w-auto"
                 />
                 <span className="text-sm font-medium text-indigo-700">Protección en Tiempo Real</span>
@@ -217,7 +217,7 @@ const LandingPage = () => {
                 <div className="flex-1">
                   <img 
                     src="https://customer-assets.emergentagent.com/job_5c97b24f-9a55-4567-9954-bd76179fb951/artifacts/8y6ab2pd_logo%20App%20Mano.png" 
-                    alt="MANO" 
+                    alt="ManoProtect" 
                     className="h-10 w-auto mb-4"
                   />
                   <h3 className="text-2xl font-bold mb-3">Para Personas</h3>
