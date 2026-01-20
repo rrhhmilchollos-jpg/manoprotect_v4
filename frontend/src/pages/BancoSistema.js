@@ -72,7 +72,9 @@ const BancoSistema = () => {
   
   const [newAccountRequest, setNewAccountRequest] = useState({
     customer_name: '', customer_email: '', customer_phone: '', customer_dni: '',
-    account_type: 'corriente', initial_deposit: '', occupation: '', monthly_income: ''
+    address_street: '', address_city: '', address_postal_code: '', address_province: '',
+    address_country: 'España', account_type: 'corriente', initial_deposit: '', 
+    occupation: '', monthly_income: '', date_of_birth: '', nationality: 'Española'
   });
   
   const [newLoanRequest, setNewLoanRequest] = useState({
@@ -82,7 +84,7 @@ const BancoSistema = () => {
   });
   
   const [newCardRequest, setNewCardRequest] = useState({
-    customer_id: '', account_id: '', card_type: 'debito', credit_limit: ''
+    customer_id: '', card_type: 'debito', credit_limit: ''
   });
   
   const [loanDecision, setLoanDecision] = useState({
