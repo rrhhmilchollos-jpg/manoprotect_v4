@@ -363,9 +363,6 @@ const ManoBank = () => {
                 <Zap className="w-5 h-5 mr-2" />
                 Abrir Cuenta Gratis
               </Button>
-              <p className="text-xs text-indigo-300 text-center mt-4">
-                * Licencia bancaria en trámite. Servicio en fase beta.
-              </p>
             </div>
             
             {/* Connect External Bank */}
