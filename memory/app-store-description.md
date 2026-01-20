@@ -1,4 +1,4 @@
-# MANO - Protección Total Contra Fraudes
+# Manoprotect Contra Fraudes
 
 ## Descripción Corta (80 caracteres)
 Protección IA contra fraudes: detecta estafas, bloquea amenazas 24/7
@@ -7,9 +7,9 @@ Protección IA contra fraudes: detecta estafas, bloquea amenazas 24/7
 
 ### Tu Escudo Digital Personal
 
-¿Cansado de llamadas sospechosas, SMS fraudulentos y correos de phishing? **MANO** es tu mano protectora contra todas las amenazas digitales.
+¿Cansado de llamadas sospechosas, SMS fraudulentos y correos de phishing? **Manoprotect tu  mano protectora contra todas las amenazas digitales.
 
-### ✨ Lo Que Hace MANO Por Ti
+### ✨ Lo Que Hace Manoprotect Por Ti?
 
 **🛡️ Análisis en Tiempo Real con IA**
 • Detecta fraudes antes de que te afecten
@@ -70,13 +70,13 @@ Tus datos son tuyos. MANO solo analiza lo que tú quieres y nunca comparte infor
 • 99.8% precisión en detección
 • 24/7 protección continua
 
-### 🏆 Diferencial MANO
+### 🏆 Diferencial Manoprotect
 
-Otras apps solo **avisan**. MANO **detecta, bloquea, avisa, acompaña** e involucra a tu familia y comunidad.
+Otras apps solo **avisan**. Manoprotect **detecta, bloquea, avisa, acompaña** e involucra a tu familia y comunidad.
 
 ---
 
-**Descarga MANO hoy y duerme tranquilo.**
+**Descarga Manoprotect hoy y duerme tranquilo.**
 
 ## Keywords (Palabras Clave)
 

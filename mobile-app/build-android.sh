@@ -1,44 +1,44 @@
 #!/bin/bash
-# Build script for Mano Android app
+set -e
 
-echo "🔨 Building Mano Android App..."
+echo "🔨 Building Mano Android App"
 echo ""
 
-# Navigate to mobile app directory
-cd /app/mobile-app
+APP_DIR="/app/mobile-app"
+APK_PATH="android/app/build/outputs/apk/debug/app-debug.apk"
+
+# Check app directory
+if [ ! -d "$APP_DIR" ]; then
+  echo "❌ App directory not found: $APP_DIR"
+  exit 1
+fi
+
+cd "$APP_DIR"
 
 # Install dependencies
 echo "📦 Installing dependencies..."
-yarn install
+yarn install --frozen-lockfile
 
-# Navigate to android folder
+# Android build
 cd android
 
-# Clean previous builds
 echo "🧹 Cleaning previous builds..."
 ./gradlew clean
 
-# Build debug APK
 echo "🏗️ Building debug APK..."
 ./gradlew assembleDebug
 
-# Check if build was successful
-if [ -f "app/build/outputs/apk/debug/app-debug.apk" ]; then
-    echo ""
-    echo "✅ Build successful!"
-    echo "📱 APK location: /app/mobile-app/android/app/build/outputs/apk/debug/app-debug.apk"
-    
-    # Get APK size
-    size=$(du -h app/build/outputs/apk/debug/app-debug.apk | cut -f1)
-    echo "📊 APK size: $size"
+# Verify APK
+if [ -f "$APK_PATH" ]; then
+  echo ""
+  echo "✅ Build successful"
+  echo "📱 APK: $APP_DIR/$APK_PATH"
+  echo "📊 Size: $(du -h "$APK_PATH" | cut -f1)"
 else
-    echo ""
-    echo "❌ Build failed!"
-    exit 1
+  echo "❌ APK not generated"
+  exit 1
 fi
 
 echo ""
 echo "📋 Next steps:"
-echo "1. Transfer the APK to your Android device"
-echo "2. Enable 'Install from unknown sources' in settings"
-echo "3. Install and test the app"
+echo "adb install $APK_PATH"
