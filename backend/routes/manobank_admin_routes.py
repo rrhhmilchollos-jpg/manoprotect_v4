@@ -104,7 +104,7 @@ class LoanApplication(BaseModel):
 
 class CardRequest(BaseModel):
     customer_id: str
-    account_id: str
+    account_id: Optional[str] = None  # Optional - will use primary account if not provided
     card_type: CardType
     credit_limit: Optional[float] = None  # Solo para crédito
 
