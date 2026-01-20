@@ -566,7 +566,7 @@ async def create_sepa_transfer(
     request: Request,
     session_token: Optional[str] = Cookie(None)
 ):
-    """Create a SEPA transfer"""
+    """Create a SEPA transfer - supports normal, immediate, and internal transfers"""
     user = await require_auth(request, session_token)
     db = get_db()
     
@@ -587,10 +587,34 @@ async def create_sepa_transfer(
     if len(to_iban) < 15 or len(to_iban) > 34:
         raise HTTPException(status_code=400, detail="IBAN destino inválido")
     
+    # Check if destination is a ManoBank account (internal transfer)
+    dest_account = await db.manobank_accounts.find_one({"iban": to_iban})
+    is_internal = dest_account is not None
+    
+    # Determine transfer type and timing
+    transfer_type = data.transfer_type or "normal"
+    if is_internal:
+        transfer_type = "internal"
+        estimated_arrival = datetime.now(timezone.utc).isoformat()  # Instant for internal
+    elif transfer_type == "immediate":
+        estimated_arrival = datetime.now(timezone.utc).isoformat()
+    elif transfer_type == "scheduled" and data.scheduled_date:
+        estimated_arrival = data.scheduled_date
+    else:
+        estimated_arrival = (datetime.now(timezone.utc) + timedelta(days=1)).isoformat()
+    
     # Check for fraud patterns
     fraud_check = await _check_transfer_fraud(db, user.user_id, data.amount, to_iban)
     
     transfer_id = f"tr_{uuid.uuid4().hex[:12]}"
+    
+    # Determine initial status
+    if transfer_type == "scheduled" and data.scheduled_date:
+        status = "scheduled"
+    elif fraud_check["is_suspicious"]:
+        status = "pending_verification"
+    else:
+        status = "completed"
     
     transfer = {
         "id": transfer_id,
@@ -600,43 +624,85 @@ async def create_sepa_transfer(
         "to_iban": to_iban,
         "to_iban_masked": to_iban[:4] + " **** " + to_iban[-4:],
         "to_name": data.to_name,
+        "to_account_id": dest_account["id"] if dest_account else None,
         "amount": data.amount,
         "currency": account.get("currency", "EUR"),
         "concept": data.concept,
-        "transfer_type": data.transfer_type,
-        "status": "pending" if fraud_check["is_suspicious"] else "completed",
+        "transfer_type": transfer_type,
+        "is_internal": is_internal,
+        "status": status,
         "fraud_score": fraud_check["risk_score"],
         "requires_verification": fraud_check["is_suspicious"],
+        "scheduled_date": data.scheduled_date if transfer_type == "scheduled" else None,
         "created_at": datetime.now(timezone.utc).isoformat(),
-        "estimated_arrival": (datetime.now(timezone.utc) + timedelta(days=1)).isoformat()
+        "estimated_arrival": estimated_arrival
     }
     
     await db.manobank_transfers.insert_one(transfer)
     
-    # If not suspicious, process immediately
-    if not fraud_check["is_suspicious"]:
-        # Deduct from account
+    # Process transfer if not pending or scheduled
+    if status == "completed":
+        # Deduct from source account
+        new_source_balance = account.get("balance", 0) - data.amount
         await db.manobank_accounts.update_one(
             {"id": data.from_account_id},
-            {"$inc": {"balance": -data.amount, "available_balance": -data.amount}}
+            {"$set": {
+                "balance": new_source_balance,
+                "available_balance": new_source_balance
+            }}
         )
         
-        # Create transaction record
+        # Create outgoing transaction record
         await db.manobank_transactions.insert_one({
             "id": f"tx_{uuid.uuid4().hex[:12]}",
             "user_id": user.user_id,
             "account_id": data.from_account_id,
             "transfer_id": transfer_id,
-            "amount": -data.amount,
-            "description": f"Transferencia a {data.to_name}",
-            "category": "transferencias",
+            "type": "debit",
+            "amount": data.amount,
+            "balance_after": new_source_balance,
+            "concept": data.concept or f"Transferencia a {data.to_name}",
             "to_name": data.to_name,
             "to_iban": to_iban,
-            "concept": data.concept,
+            "transaction_type": "transfer_out",
             "status": "completed",
             "created_at": datetime.now(timezone.utc).isoformat()
         })
-    else:
+        
+        # If internal transfer, credit the destination account
+        if is_internal and dest_account:
+            new_dest_balance = dest_account.get("balance", 0) + data.amount
+            await db.manobank_accounts.update_one(
+                {"id": dest_account["id"]},
+                {"$set": {
+                    "balance": new_dest_balance,
+                    "available_balance": new_dest_balance
+                }}
+            )
+            
+            # Create incoming transaction for destination
+            await db.manobank_transactions.insert_one({
+                "id": f"tx_{uuid.uuid4().hex[:12]}",
+                "user_id": dest_account.get("user_id"),
+                "account_id": dest_account["id"],
+                "transfer_id": transfer_id,
+                "type": "credit",
+                "amount": data.amount,
+                "balance_after": new_dest_balance,
+                "concept": data.concept or f"Transferencia de {account.get('account_holder', 'ManoBank')}",
+                "from_name": account.get("account_holder", user.name),
+                "from_iban": account["iban"],
+                "transaction_type": "transfer_in",
+                "status": "completed",
+                "created_at": datetime.now(timezone.utc).isoformat()
+            })
+            
+            # Update transfer as credited
+            await db.manobank_transfers.update_one(
+                {"id": transfer_id},
+                {"$set": {"credited_at": datetime.now(timezone.utc).isoformat()}}
+            )
+    elif status == "pending_verification":
         # Create fraud alert
         await db.manobank_alerts.insert_one({
             "id": f"alert_{uuid.uuid4().hex[:12]}",
@@ -652,9 +718,17 @@ async def create_sepa_transfer(
         })
     
     transfer.pop("_id", None)
+    
+    message = {
+        "completed": "Transferencia realizada correctamente",
+        "scheduled": f"Transferencia programada para {data.scheduled_date}",
+        "pending_verification": "Transferencia pendiente de verificación por seguridad"
+    }.get(status, "Transferencia procesada")
+    
     return {
-        "message": "Transferencia procesada" if not fraud_check["is_suspicious"] else "Transferencia pendiente de verificación",
+        "message": message,
         "transfer": transfer,
+        "is_internal": is_internal,
         "fraud_check": fraud_check
     }
 
