@@ -1665,6 +1665,108 @@ const BancoSistema = () => {
           </div>
         </div>
       )}
+
+      {/* Issue New Card Modal */}
+      {showNewCard && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl max-w-md w-full p-6">
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-xl font-bold flex items-center gap-2">
+                <CreditCard className="w-6 h-6 text-indigo-600" />
+                Emitir Nueva Tarjeta
+              </h3>
+              <button onClick={() => setShowNewCard(false)}>
+                <X className="w-6 h-6 text-zinc-400" />
+              </button>
+            </div>
+            
+            <form onSubmit={handleIssueCard} className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-zinc-700 mb-1">
+                  Seleccionar Cliente *
+                </label>
+                <select
+                  value={newCardRequest.customer_id}
+                  onChange={(e) => setNewCardRequest({ ...newCardRequest, customer_id: e.target.value })}
+                  className="w-full px-4 py-3 border border-zinc-300 rounded-lg"
+                  required
+                >
+                  <option value="">-- Seleccionar cliente --</option>
+                  {customers.map((c) => (
+                    <option key={c.id} value={c.id}>{c.name} - {c.dni}</option>
+                  ))}
+                </select>
+                <p className="text-xs text-zinc-500 mt-1">
+                  Si no ves clientes, ve a la pestaña "Clientes" primero
+                </p>
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-zinc-700 mb-1">
+                  Tipo de Tarjeta *
+                </label>
+                <div className="grid grid-cols-2 gap-2">
+                  {[
+                    { value: 'debito', label: '💳 Débito', desc: 'Sin crédito' },
+                    { value: 'credito', label: '💳 Crédito', desc: 'Línea de crédito' },
+                    { value: 'prepago', label: '💳 Prepago', desc: 'Recargable' },
+                    { value: 'platinum', label: '💎 Platinum', desc: 'Premium' },
+                    { value: 'black', label: '🖤 Black', desc: 'Exclusiva' },
+                    { value: 'business', label: '🏢 Business', desc: 'Empresas' }
+                  ].map((type) => (
+                    <button
+                      key={type.value}
+                      type="button"
+                      onClick={() => setNewCardRequest({ ...newCardRequest, card_type: type.value })}
+                      className={`p-3 rounded-lg border-2 text-left transition-all ${
+                        newCardRequest.card_type === type.value 
+                          ? 'border-indigo-500 bg-indigo-50' 
+                          : 'border-zinc-200 hover:border-zinc-300'
+                      }`}
+                    >
+                      <p className="font-medium text-sm">{type.label}</p>
+                      <p className="text-xs text-zinc-500">{type.desc}</p>
+                    </button>
+                  ))}
+                </div>
+              </div>
+              
+              {['credito', 'platinum', 'black', 'business'].includes(newCardRequest.card_type) && (
+                <div>
+                  <label className="block text-sm font-medium text-zinc-700 mb-1">
+                    Límite de Crédito (€) *
+                  </label>
+                  <input
+                    type="number"
+                    value={newCardRequest.credit_limit}
+                    onChange={(e) => setNewCardRequest({ ...newCardRequest, credit_limit: e.target.value })}
+                    placeholder="3000"
+                    className="w-full px-4 py-3 border border-zinc-300 rounded-lg"
+                    min="500"
+                    max="100000"
+                    required
+                  />
+                  <p className="text-xs text-zinc-500 mt-1">
+                    Límite sugerido: Débito=0€, Crédito=3.000€, Platinum=15.000€, Black=50.000€
+                  </p>
+                </div>
+              )}
+              
+              <div className="bg-amber-50 p-3 rounded-lg border border-amber-200">
+                <p className="text-sm text-amber-800">
+                  <strong>Nota:</strong> La tarjeta se vinculará a la cuenta principal del cliente.
+                  El cliente recibirá los datos de la tarjeta por email.
+                </p>
+              </div>
+              
+              <Button type="submit" className="w-full h-12 bg-indigo-600 hover:bg-indigo-700">
+                <CreditCard className="w-4 h-4 mr-2" />
+                Emitir Tarjeta {newCardRequest.card_type?.toUpperCase() || ''}
+              </Button>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
