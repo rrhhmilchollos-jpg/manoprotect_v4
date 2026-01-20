@@ -207,7 +207,7 @@ const LandingPage = () => {
                 </span>
                 <span className="flex items-center gap-2">
                   <Check className="w-4 h-4 text-emerald-400" />
-                  Licencia en trámite
+                  100% Digital
                 </span>
               </div>
             </div>
