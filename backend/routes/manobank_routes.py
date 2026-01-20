@@ -118,19 +118,19 @@ async def get_manobank_dashboard(
     
     # Get pending transfers
     pending = await db.manobank_transfers.find(
-        {"user_id": user["user_id"], "status": "pending"},
+        {"user_id": user.user_id, "status": "pending"},
         {"_id": 0}
     ).to_list(10)
     
     # Get scheduled payments
     scheduled = await db.manobank_scheduled.find(
-        {"user_id": user["user_id"], "is_active": True},
+        {"user_id": user.user_id, "is_active": True},
         {"_id": 0}
     ).to_list(10)
     
     # Get fraud alerts
     alerts = await db.manobank_alerts.find(
-        {"user_id": user["user_id"], "is_resolved": False},
+        {"user_id": user.user_id, "is_resolved": False},
         {"_id": 0}
     ).sort("created_at", -1).limit(5).to_list(5)
     
@@ -192,7 +192,7 @@ async def get_accounts(
     db = get_db()
     
     accounts = await db.manobank_accounts.find(
-        {"user_id": user["user_id"]},
+        {"user_id": user.user_id},
         {"_id": 0}
     ).to_list(20)
     
@@ -215,7 +215,7 @@ async def add_account(
     
     # Check for duplicates
     existing = await db.manobank_accounts.find_one({
-        "user_id": user["user_id"],
+        "user_id": user.user_id,
         "iban": iban
     })
     if existing:
@@ -227,7 +227,7 @@ async def add_account(
     
     account = {
         "id": account_id,
-        "user_id": user["user_id"],
+        "user_id": user.user_id,
         "bank_name": data.bank_name,
         "account_holder": data.account_holder,
         "iban": iban,
@@ -244,14 +244,14 @@ async def add_account(
     }
     
     # Set as primary if first account
-    existing_count = await db.manobank_accounts.count_documents({"user_id": user["user_id"]})
+    existing_count = await db.manobank_accounts.count_documents({"user_id": user.user_id})
     if existing_count == 0:
         account["is_primary"] = True
     
     await db.manobank_accounts.insert_one(account)
     
     # Generate some sample transactions
-    await _generate_sample_transactions(db, user["user_id"], account_id)
+    await _generate_sample_transactions(db, user.user_id, account_id)
     
     account.pop("_id", None)
     return {
@@ -271,7 +271,7 @@ async def delete_account(
     
     result = await db.manobank_accounts.delete_one({
         "id": account_id,
-        "user_id": user["user_id"]
+        "user_id": user.user_id
     })
     
     if result.deleted_count == 0:
@@ -291,13 +291,13 @@ async def set_primary_account(
     
     # Remove primary from all accounts
     await db.manobank_accounts.update_many(
-        {"user_id": user["user_id"]},
+        {"user_id": user.user_id},
         {"$set": {"is_primary": False}}
     )
     
     # Set new primary
     result = await db.manobank_accounts.update_one(
-        {"id": account_id, "user_id": user["user_id"]},
+        {"id": account_id, "user_id": user.user_id},
         {"$set": {"is_primary": True}}
     )
     
@@ -322,7 +322,7 @@ async def get_transactions(
     user = await require_auth(request, session_token)
     db = get_db()
     
-    query = {"user_id": user["user_id"]}
+    query = {"user_id": user.user_id}
     if account_id:
         query["account_id"] = account_id
     
@@ -357,7 +357,7 @@ async def get_transaction_details(
     db = get_db()
     
     transaction = await db.manobank_transactions.find_one(
-        {"id": transaction_id, "user_id": user["user_id"]},
+        {"id": transaction_id, "user_id": user.user_id},
         {"_id": 0}
     )
     
@@ -383,7 +383,7 @@ async def create_sepa_transfer(
     # Verify source account
     account = await db.manobank_accounts.find_one({
         "id": data.from_account_id,
-        "user_id": user["user_id"]
+        "user_id": user.user_id
     })
     
     if not account:
@@ -398,13 +398,13 @@ async def create_sepa_transfer(
         raise HTTPException(status_code=400, detail="IBAN destino inválido")
     
     # Check for fraud patterns
-    fraud_check = await _check_transfer_fraud(db, user["user_id"], data.amount, to_iban)
+    fraud_check = await _check_transfer_fraud(db, user.user_id, data.amount, to_iban)
     
     transfer_id = f"tr_{uuid.uuid4().hex[:12]}"
     
     transfer = {
         "id": transfer_id,
-        "user_id": user["user_id"],
+        "user_id": user.user_id,
         "from_account_id": data.from_account_id,
         "from_iban": account["iban"],
         "to_iban": to_iban,
@@ -434,7 +434,7 @@ async def create_sepa_transfer(
         # Create transaction record
         await db.manobank_transactions.insert_one({
             "id": f"tx_{uuid.uuid4().hex[:12]}",
-            "user_id": user["user_id"],
+            "user_id": user.user_id,
             "account_id": data.from_account_id,
             "transfer_id": transfer_id,
             "amount": -data.amount,
@@ -450,7 +450,7 @@ async def create_sepa_transfer(
         # Create fraud alert
         await db.manobank_alerts.insert_one({
             "id": f"alert_{uuid.uuid4().hex[:12]}",
-            "user_id": user["user_id"],
+            "user_id": user.user_id,
             "transfer_id": transfer_id,
             "alert_type": "suspicious_transfer",
             "severity": "high" if fraud_check["risk_score"] > 70 else "medium",
@@ -481,7 +481,7 @@ async def send_bizum(
     # Verify source account
     account = await db.manobank_accounts.find_one({
         "id": data.from_account_id,
-        "user_id": user["user_id"]
+        "user_id": user.user_id
     })
     
     if not account:
@@ -510,7 +510,7 @@ async def send_bizum(
     # Create transaction
     transaction = {
         "id": f"tx_{uuid.uuid4().hex[:12]}",
-        "user_id": user["user_id"],
+        "user_id": user.user_id,
         "account_id": data.from_account_id,
         "transfer_id": transfer_id,
         "amount": -data.amount,
@@ -528,7 +528,7 @@ async def send_bizum(
     # Save Bizum record
     bizum = {
         "id": transfer_id,
-        "user_id": user["user_id"],
+        "user_id": user.user_id,
         "from_account_id": data.from_account_id,
         "to_phone": data.to_phone,
         "to_name": data.to_name,
@@ -558,7 +558,7 @@ async def verify_transfer(
     
     transfer = await db.manobank_transfers.find_one({
         "id": transfer_id,
-        "user_id": user["user_id"],
+        "user_id": user.user_id,
         "status": "pending"
     })
     
@@ -580,7 +580,7 @@ async def verify_transfer(
     # Create transaction record
     await db.manobank_transactions.insert_one({
         "id": f"tx_{uuid.uuid4().hex[:12]}",
-        "user_id": user["user_id"],
+        "user_id": user.user_id,
         "account_id": transfer["from_account_id"],
         "transfer_id": transfer_id,
         "amount": -transfer["amount"],
@@ -610,7 +610,7 @@ async def cancel_transfer(
     db = get_db()
     
     result = await db.manobank_transfers.update_one(
-        {"id": transfer_id, "user_id": user["user_id"], "status": "pending"},
+        {"id": transfer_id, "user_id": user.user_id, "status": "pending"},
         {"$set": {"status": "cancelled", "cancelled_at": datetime.now(timezone.utc).isoformat()}}
     )
     
@@ -639,7 +639,7 @@ async def get_scheduled_payments(
     db = get_db()
     
     scheduled = await db.manobank_scheduled.find(
-        {"user_id": user["user_id"]},
+        {"user_id": user.user_id},
         {"_id": 0}
     ).to_list(50)
     
@@ -658,7 +658,7 @@ async def create_scheduled_payment(
     # Verify account
     account = await db.manobank_accounts.find_one({
         "id": data.from_account_id,
-        "user_id": user["user_id"]
+        "user_id": user.user_id
     })
     
     if not account:
@@ -668,7 +668,7 @@ async def create_scheduled_payment(
     
     scheduled = {
         "id": scheduled_id,
-        "user_id": user["user_id"],
+        "user_id": user.user_id,
         "from_account_id": data.from_account_id,
         "to_iban": data.to_iban.replace(" ", "").upper(),
         "to_name": data.to_name,
@@ -702,7 +702,7 @@ async def delete_scheduled_payment(
     
     result = await db.manobank_scheduled.delete_one({
         "id": scheduled_id,
-        "user_id": user["user_id"]
+        "user_id": user.user_id
     })
     
     if result.deleted_count == 0:
@@ -722,7 +722,7 @@ async def toggle_scheduled_payment(
     
     scheduled = await db.manobank_scheduled.find_one({
         "id": scheduled_id,
-        "user_id": user["user_id"]
+        "user_id": user.user_id
     })
     
     if not scheduled:
@@ -754,7 +754,7 @@ async def get_alerts(
     user = await require_auth(request, session_token)
     db = get_db()
     
-    query = {"user_id": user["user_id"]}
+    query = {"user_id": user.user_id}
     if not include_resolved:
         query["is_resolved"] = False
     
@@ -776,7 +776,7 @@ async def resolve_alert(
     db = get_db()
     
     result = await db.manobank_alerts.update_one(
-        {"id": alert_id, "user_id": user["user_id"]},
+        {"id": alert_id, "user_id": user.user_id},
         {"$set": {"is_resolved": True, "resolved_at": datetime.now(timezone.utc).isoformat()}}
     )
     
@@ -795,13 +795,13 @@ async def get_alert_settings(
     db = get_db()
     
     settings = await db.manobank_settings.find_one(
-        {"user_id": user["user_id"]},
+        {"user_id": user.user_id},
         {"_id": 0}
     )
     
     if not settings:
         settings = {
-            "user_id": user["user_id"],
+            "user_id": user.user_id,
             "high_amount_threshold": 500,
             "notify_all_transactions": False,
             "notify_international": True,
@@ -822,10 +822,10 @@ async def update_alert_settings(
     db = get_db()
     
     update_data = {k: v for k, v in data.model_dump().items() if v is not None}
-    update_data["user_id"] = user["user_id"]
+    update_data["user_id"] = user.user_id
     
     await db.manobank_settings.update_one(
-        {"user_id": user["user_id"]},
+        {"user_id": user.user_id},
         {"$set": update_data},
         upsert=True
     )
@@ -846,7 +846,7 @@ async def get_saved_recipients(
     db = get_db()
     
     recipients = await db.manobank_recipients.find(
-        {"user_id": user["user_id"]},
+        {"user_id": user.user_id},
         {"_id": 0}
     ).to_list(50)
     
@@ -867,7 +867,7 @@ async def add_recipient(
     
     recipient = {
         "id": f"rec_{uuid.uuid4().hex[:12]}",
-        "user_id": user["user_id"],
+        "user_id": user.user_id,
         "name": name,
         "iban": iban,
         "iban_masked": iban[:4] + " **** " + iban[-4:],
@@ -890,7 +890,7 @@ async def delete_recipient(
     
     result = await db.manobank_recipients.delete_one({
         "id": recipient_id,
-        "user_id": user["user_id"]
+        "user_id": user.user_id
     })
     
     if result.deleted_count == 0:
