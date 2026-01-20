@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
+import { useAuth } from '@/context/AuthContext';
 import {
   Landmark,
   Lock,
@@ -16,6 +17,7 @@ const API_URL = process.env.REACT_APP_BACKEND_URL;
 
 const BancoEmpleados = () => {
   const navigate = useNavigate();
+  const { checkAuth } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -62,6 +64,9 @@ const BancoEmpleados = () => {
       if (!dashboardResponse.ok) {
         throw new Error(dashboardData.detail || 'No tienes acceso al sistema bancario. Contacta con tu supervisor.');
       }
+      
+      // Update auth context to recognize the logged-in user
+      await checkAuth();
       
       toast.success(`Bienvenido al Sistema ManoBank, ${loginData.name || 'Usuario'}`);
       navigate('/banco/sistema');
