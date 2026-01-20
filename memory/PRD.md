@@ -1,33 +1,52 @@
-# MANO - Plataforma Integral de Protección contra Fraudes
+# ManoProtect - Plataforma Integral de Protección contra Fraudes
 
 ## Problema Original
 Crear una plataforma integral de seguridad digital multi-plataforma (web + móvil) con diferentes niveles para individuos, familias y empresas.
 
-## Estado del Proyecto - 17 Enero 2026
+## Estado del Proyecto - 20 Enero 2026
 
-### ✅ COMPLETADO HOY
+### ✅ COMPLETADO HOY (20 Enero 2026)
 
-#### 1. App Móvil Android - APKs Generados
+#### Páginas Legales Integradas
+- **Cookie Banner** - Componente funcional con opciones de configuración (RGPD compliant)
+- **Política de Privacidad** (`/privacy-policy`) - Completa con derechos RGPD
+- **Términos y Condiciones** (`/terms-of-service`) - Planes, precios, responsabilidades
+- **Política de Reembolsos** (`/refund-policy`) - 14 días garantía, proceso detallado
+- **Aviso Legal** (`/legal-notice`) - LSSI-CE compliant para España/EU
+- **Footer mejorado** - Con secciones "Producto" y "Legal" con todos los enlaces
+
+### ✅ COMPLETADO ANTERIORMENTE
+
+#### App Móvil Android - APKs Generados (17 Enero)
 - **ManoProtect-debug.apk** (168 MB) - Para pruebas internas
 - **ManoProtect-release.apk** (54 MB) - **LISTO para Google Play Store**
 - Ubicación: `C:\Users\rrhhm\OneDrive\Desktop\`
 
-#### 2. Keystore de Producción Creado
+#### Keystore de Producción Creado
 - Archivo: `android\app\mano-release-key.keystore`
 - Alias: `mano-key`
 - Contraseña: `19862210Des`
 - Validez: 10,000 días
 - ⚠️ **GUARDAR EN LUGAR SEGURO** - Sin esto no se puede actualizar la app
 
-### 🔄 EN PROGRESO
+#### Web Desplegada
+- Dominio personalizado: **manoprotect.com** ✅
+- ⚠️ **IMPORTANTE:** Presionar "Re-Deploy" en Emergent para publicar cambios recientes
 
-#### 3. Despliegue Web en Firebase
-- Frontend descargado en: `C:\Users\rrhhm\OneDrive\Desktop\frontend`
-- Dependencias instaladas
-- **Pendiente:** Resolver error de build con `ajv` y completar despliegue
-- Proyecto Firebase: `Manoprotect`
+### 📋 PENDIENTE (P0/P1)
 
-### 📋 PENDIENTE
+#### Re-Deploy Web (P0)
+- Los cambios de páginas legales y footer están en preview
+- Usuario debe presionar **"Re-Deploy"** en Emergent para publicarlos en manoprotect.com
+
+#### Build EAS Móvil (P0 - BLOQUEADO)
+- Build cloud falló durante "Install dependencies"
+- Logs: https://expo.dev/accounts/ivanrubioapps/projects/manoprotect/builds/760f0f41-4f7d-4e5d-b057-09f53bc91e0a
+
+#### Compilación iOS (P1)
+- Requiere servicio cloud (Codemagic/MacStadium) - usuario sin Mac
+
+### 📋 BACKLOG (P2/P3)
 
 #### Backend
 - Continuar refactorización de `server.py` (actualmente ~3000 líneas)
@@ -35,7 +54,7 @@ Crear una plataforma integral de seguridad digital multi-plataforma (web + móvi
 
 #### Integraciones
 - WhatsApp Business (scaffolded, necesita credenciales de Meta)
-- Open Banking (bloqueado por Nordigen)
+- Open Banking (bloqueado por Nordigen - no acepta nuevos registros)
 
 ## Arquitectura del Proyecto
 
