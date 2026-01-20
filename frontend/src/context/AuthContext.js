@@ -171,6 +171,7 @@ export const AuthProvider = ({ children }) => {
     } catch (err) {
       console.error('Logout error:', err);
     }
+    localStorage.removeItem('mano_user');
     setUser(null);
   };
 
