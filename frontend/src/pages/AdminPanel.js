@@ -1033,6 +1033,126 @@ const AdminPanel = () => {
               </CardContent>
             </Card>
           </TabsContent>
+
+          {/* ManoBank Tab */}
+          <TabsContent value="manobank">
+            <Card className="bg-white">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Landmark className="w-5 h-5 text-purple-600" />
+                  Sistema Bancario ManoBank
+                </CardTitle>
+                <CardDescription>
+                  Acceso al portal de administración bancaria
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-6">
+                  {/* Quick Access */}
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div className="p-6 bg-gradient-to-br from-purple-50 to-indigo-50 rounded-xl border-2 border-purple-200">
+                      <div className="flex items-center gap-3 mb-4">
+                        <div className="w-12 h-12 bg-purple-600 rounded-xl flex items-center justify-center">
+                          <Landmark className="w-6 h-6 text-white" />
+                        </div>
+                        <div>
+                          <h3 className="font-bold text-lg">Portal de Empleados</h3>
+                          <p className="text-sm text-zinc-600">Sistema interno del banco</p>
+                        </div>
+                      </div>
+                      <p className="text-sm text-zinc-600 mb-4">
+                        Accede al sistema de gestión bancaria completo: clientes, cuentas, préstamos, tarjetas y empleados.
+                      </p>
+                      <Button 
+                        onClick={() => navigate('/banco/sistema')}
+                        className="w-full bg-purple-600 hover:bg-purple-700"
+                      >
+                        <Landmark className="w-4 h-4 mr-2" />
+                        Ir al Sistema Bancario
+                      </Button>
+                    </div>
+
+                    <div className="p-6 bg-gradient-to-br from-emerald-50 to-teal-50 rounded-xl border-2 border-emerald-200">
+                      <div className="flex items-center gap-3 mb-4">
+                        <div className="w-12 h-12 bg-emerald-600 rounded-xl flex items-center justify-center">
+                          <Users className="w-6 h-6 text-white" />
+                        </div>
+                        <div>
+                          <h3 className="font-bold text-lg">Portal de Clientes</h3>
+                          <p className="text-sm text-zinc-600">Área de usuarios</p>
+                        </div>
+                      </div>
+                      <p className="text-sm text-zinc-600 mb-4">
+                        Vista del cliente: crear cuenta ManoBank, ver saldo, transferencias y tarjeta virtual.
+                      </p>
+                      <Button 
+                        onClick={() => navigate('/manobank')}
+                        variant="outline"
+                        className="w-full border-emerald-600 text-emerald-600 hover:bg-emerald-50"
+                      >
+                        <ExternalLink className="w-4 h-4 mr-2" />
+                        Ver Portal Clientes
+                      </Button>
+                    </div>
+                  </div>
+
+                  {/* Info */}
+                  <div className="p-4 bg-zinc-50 rounded-lg border">
+                    <h3 className="font-semibold mb-3">📋 Funcionalidades del Sistema Bancario</h3>
+                    <div className="grid md:grid-cols-2 gap-4 text-sm">
+                      <div className="space-y-2">
+                        <div className="flex items-center gap-2">
+                          <CheckCircle className="w-4 h-4 text-emerald-500" />
+                          <span>Gestión de empleados con roles</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <CheckCircle className="w-4 h-4 text-emerald-500" />
+                          <span>Apertura de cuentas (KYC)</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <CheckCircle className="w-4 h-4 text-emerald-500" />
+                          <span>Sistema de préstamos completo</span>
+                        </div>
+                      </div>
+                      <div className="space-y-2">
+                        <div className="flex items-center gap-2">
+                          <CheckCircle className="w-4 h-4 text-emerald-500" />
+                          <span>Emisión de tarjetas</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <CheckCircle className="w-4 h-4 text-emerald-500" />
+                          <span>Dashboard con KPIs en tiempo real</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <CheckCircle className="w-4 h-4 text-emerald-500" />
+                          <span>Alertas de fraude</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Access URLs */}
+                  <div className="p-4 bg-indigo-50 rounded-lg border border-indigo-200">
+                    <h3 className="font-semibold text-indigo-800 mb-3">🔗 URLs de Acceso (después del Deploy)</h3>
+                    <div className="space-y-2 text-sm">
+                      <div className="flex items-center justify-between p-2 bg-white rounded">
+                        <span className="text-zinc-600">Portal Empleados:</span>
+                        <code className="px-2 py-1 bg-indigo-100 rounded">manoprotect.com/banco</code>
+                      </div>
+                      <div className="flex items-center justify-between p-2 bg-white rounded">
+                        <span className="text-zinc-600">Sistema Interno:</span>
+                        <code className="px-2 py-1 bg-indigo-100 rounded">manoprotect.com/banco/sistema</code>
+                      </div>
+                      <div className="flex items-center justify-between p-2 bg-white rounded">
+                        <span className="text-zinc-600">Portal Clientes:</span>
+                        <code className="px-2 py-1 bg-indigo-100 rounded">manoprotect.com/manobank</code>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
         </Tabs>
       </div>
     </div>
