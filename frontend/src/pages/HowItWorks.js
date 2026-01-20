@@ -22,7 +22,7 @@ const HowItWorks = () => {
     {
       number: 3,
       title: "Recibe Protección",
-      description: "MANO te muestra si es seguro o peligroso, qué tipo de amenaza es y qué hacer exactamente.",
+      description: "ManoProtect te muestra si es seguro o peligroso, qué tipo de amenaza es y qué hacer exactamente.",
       icon: Shield
     },
     {
@@ -51,7 +51,7 @@ const HowItWorks = () => {
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-2 cursor-pointer" onClick={() => navigate('/')}>
             <img src="https://customer-assets.emergentagent.com/job_5c97b24f-9a55-4567-9954-bd76179fb951/artifacts/8y6ab2pd_logo%20App%20Mano.png" alt="ManoProtect Logo" className="h-8 w-auto" />
-            <span className="text-2xl font-bold tracking-tight">MANO</span>
+            <span className="text-2xl font-bold tracking-tight">ManoProtect</span>
           </div>
           <Button
             data-testid="header-dashboard-btn"
@@ -67,7 +67,7 @@ const HowItWorks = () => {
         {/* Hero */}
         <div className="text-center mb-16">
           <h1 className="text-4xl sm:text-5xl font-bold mb-6">
-            ¿Cómo funciona <span className="text-indigo-600">MANO</span>?
+            ¿Cómo funciona <span className="text-indigo-600">ManoProtect</span>?
           </h1>
           <p className="text-xl text-zinc-600 max-w-2xl mx-auto">
             Protección contra fraudes digitales en 4 simples pasos

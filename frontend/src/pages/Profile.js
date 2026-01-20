@@ -214,7 +214,7 @@ const Profile = () => {
                   Preferencias y Seguridad
                 </CardTitle>
                 <CardDescription>
-                  Configura cómo MANO te protege
+                  Configura cómo ManoProtect te protege
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
