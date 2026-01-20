@@ -98,8 +98,8 @@ const BancoSistema = () => {
       
       if (!response.ok) {
         if (response.status === 403) {
-          toast.error('No tienes acceso al panel de administración');
-          navigate('/manobank');
+          toast.error('No tienes acceso al sistema bancario');
+          navigate('/banco');
           return;
         }
         throw new Error('Error loading dashboard');
@@ -109,7 +109,8 @@ const BancoSistema = () => {
       setDashboard(data);
     } catch (error) {
       console.error('Error:', error);
-      toast.error('Error al cargar el panel');
+      toast.error('Error al cargar el sistema');
+      navigate('/banco');
     } finally {
       setLoading(false);
     }
