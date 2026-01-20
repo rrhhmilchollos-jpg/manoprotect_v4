@@ -925,11 +925,22 @@ const BancoSistema = () => {
           <div className="space-y-4">
             <div className="flex justify-between items-center">
               <h2 className="text-xl font-bold">Empleados del Banco</h2>
-              <Button onClick={() => setShowAddEmployee(true)} className="bg-indigo-600 hover:bg-indigo-700">
-                <UserPlus className="w-4 h-4 mr-2" />
-                Añadir Empleado
-              </Button>
+              {/* Solo Director/Superadmin puede crear empleados */}
+              {(dashboard?.employee?.role === 'director' || dashboard?.employee?.is_superadmin) && (
+                <Button onClick={() => setShowAddEmployee(true)} className="bg-indigo-600 hover:bg-indigo-700">
+                  <UserPlus className="w-4 h-4 mr-2" />
+                  Añadir Empleado
+                </Button>
+              )}
             </div>
+            
+            {/* Mensaje para empleados sin permiso */}
+            {dashboard?.employee?.role !== 'director' && !dashboard?.employee?.is_superadmin && (
+              <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 text-sm text-amber-700">
+                <Shield className="w-5 h-5 inline mr-2" />
+                Solo el Director General puede crear nuevos empleados.
+              </div>
+            )}
             
             <div className="bg-white rounded-xl shadow-sm divide-y">
               {employees.map((emp) => (
