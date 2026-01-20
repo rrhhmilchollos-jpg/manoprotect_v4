@@ -199,12 +199,26 @@ const BancoSistema = () => {
     }
   };
 
+  const fetchKYCVerifications = async () => {
+    try {
+      const response = await fetch(`${API_URL}/api/manobank/admin/kyc-verifications`, {
+        credentials: 'include',
+        headers: token ? { 'Authorization': `Bearer ${token}` } : {}
+      });
+      const data = await response.json();
+      setKycVerifications(data.verifications || []);
+    } catch (error) {
+      toast.error('Error al cargar verificaciones KYC');
+    }
+  };
+
   useEffect(() => {
     if (activeTab === 'employees') fetchEmployees();
     if (activeTab === 'accounts') fetchAccountRequests();
     if (activeTab === 'customers') fetchCustomers();
     if (activeTab === 'loans') fetchLoans();
     if (activeTab === 'cards') fetchCards();
+    if (activeTab === 'kyc') fetchKYCVerifications();
   }, [activeTab]);
 
   // API Handlers
