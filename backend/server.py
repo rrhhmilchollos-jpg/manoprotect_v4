@@ -3044,6 +3044,15 @@ try:
 except ImportError as e:
     print(f"⚠️ SMS routes not loaded: {e}")
 
+# KYC Video Verification routes (Zoom Video SDK)
+try:
+    from routes.kyc_video_routes import router as kyc_router, init_kyc_routes
+    init_kyc_routes(db)
+    api_router.include_router(kyc_router)
+    print("✅ KYC Video Verification routes loaded")
+except ImportError as e:
+    print(f"⚠️ KYC routes not loaded: {e}")
+
 app.include_router(api_router)
 app.include_router(public_router)
 
