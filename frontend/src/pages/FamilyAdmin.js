@@ -455,7 +455,7 @@ const FamilyAdmin = () => {
           <DialogHeader>
             <DialogTitle>{editingMember ? 'Editar Miembro' : 'Añadir Miembro Familiar'}</DialogTitle>
             <DialogDescription>
-              {editingMember ? 'Actualiza la información del miembro' : 'Añade un familiar para protegerlo con MANO'}
+              {editingMember ? 'Actualiza la información del miembro' : 'Añade un familiar para protegerlo con ManoProtect'}
             </DialogDescription>
           </DialogHeader>
 
