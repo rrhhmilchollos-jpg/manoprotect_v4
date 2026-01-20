@@ -66,16 +66,14 @@ Crear una plataforma integral de seguridad digital multi-plataforma (web + móvi
 
 ### 📋 PENDIENTE (P0/P1)
 
-#### Re-Deploy Web (P0)
-- Los cambios de ManoBank, páginas legales y footer están en preview
-- Usuario debe presionar **"Re-Deploy"** en Emergent para publicarlos en manoprotect.com
+#### Re-Deploy Web (P0) ⚠️ CRÍTICO
+- Los cambios de ManoBank, portal de empleados y páginas legales están en preview
+- **Usuario debe presionar "Re-Deploy"** en Emergent para publicarlos en manoprotect.com
+- La web actual en producción está desactualizada
 
-#### App WebView en proceso
-- Usuario está creando app WebView simplificada en `C:\ManoProtect-Build\ManoProtect-WebApp`
-- Build EAS en proceso - pendiente resultado
-
-#### Compilación iOS (P1)
-- Requiere servicio cloud (Codemagic/MacStadium) - usuario sin Mac
+#### Funcionalidad Real del Admin Panel (P1)
+- La UI del panel admin existe pero la lógica de algunas funciones es placeholder
+- Implementar: crear préstamos reales, gestionar líneas de crédito, customer management detallado
 
 ### 📋 BACKLOG (P2/P3)
 
