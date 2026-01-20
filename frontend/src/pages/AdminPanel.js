@@ -4,7 +4,8 @@ import { useAuth } from '@/context/AuthContext';
 import { 
   Shield, Users, CreditCard, FileText, CheckCircle, XCircle, 
   Clock, ArrowLeft, TrendingUp, Download, Eye, UserCheck, Loader2,
-  MessageCircle, Key, Activity, Crown, Database, Trash2, Edit, RefreshCw
+  MessageCircle, Key, Activity, Crown, Database, Trash2, Edit, RefreshCw,
+  Landmark, ExternalLink
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
