@@ -336,17 +336,90 @@ const LandingPage = () => {
 
       {/* Footer */}
       <footer className="px-6 py-12 bg-zinc-900 text-zinc-400">
-        <div className="max-w-7xl mx-auto text-center">
-          <div className="flex items-center justify-center gap-3 mb-4">
-            <img 
-              src="https://customer-assets.emergentagent.com/job_5c97b24f-9a55-4567-9954-bd76179fb951/artifacts/8y6ab2pd_logo%20App%20Mano.png" 
-              alt="ManoProtect Logo" 
-              className="h-8 w-auto"
-            />
+        <div className="max-w-7xl mx-auto">
+          <div className="grid md:grid-cols-4 gap-8 mb-8">
+            {/* Logo y descripción */}
+            <div className="md:col-span-2">
+              <div className="flex items-center gap-3 mb-4">
+                <img 
+                  src="https://customer-assets.emergentagent.com/job_5c97b24f-9a55-4567-9954-bd76179fb951/artifacts/8y6ab2pd_logo%20App%20Mano.png" 
+                  alt="ManoProtect Logo" 
+                  className="h-8 w-auto"
+                />
+              </div>
+              <p className="text-sm text-zinc-500 max-w-md">
+                ManoProtect es tu escudo digital contra fraudes. Protegemos a personas, familias y empresas con tecnología de inteligencia artificial avanzada.
+              </p>
+            </div>
+
+            {/* Enlaces rápidos */}
+            <div>
+              <h4 className="font-semibold text-white mb-4">Producto</h4>
+              <ul className="space-y-2 text-sm">
+                <li>
+                  <button onClick={() => navigate('/how-it-works')} className="hover:text-white transition-colors">
+                    Cómo Funciona
+                  </button>
+                </li>
+                <li>
+                  <button onClick={() => navigate('/pricing')} className="hover:text-white transition-colors">
+                    Precios
+                  </button>
+                </li>
+                <li>
+                  <button onClick={() => navigate('/family-mode')} className="hover:text-white transition-colors">
+                    Modo Familiar
+                  </button>
+                </li>
+                <li>
+                  <button onClick={() => navigate('/investor/register')} className="hover:text-white transition-colors">
+                    Inversores
+                  </button>
+                </li>
+              </ul>
+            </div>
+
+            {/* Legal */}
+            <div>
+              <h4 className="font-semibold text-white mb-4">Legal</h4>
+              <ul className="space-y-2 text-sm">
+                <li>
+                  <button onClick={() => navigate('/privacy-policy')} className="hover:text-white transition-colors">
+                    Política de Privacidad
+                  </button>
+                </li>
+                <li>
+                  <button onClick={() => navigate('/terms-of-service')} className="hover:text-white transition-colors">
+                    Términos y Condiciones
+                  </button>
+                </li>
+                <li>
+                  <button onClick={() => navigate('/refund-policy')} className="hover:text-white transition-colors">
+                    Política de Reembolsos
+                  </button>
+                </li>
+                <li>
+                  <button onClick={() => navigate('/legal-notice')} className="hover:text-white transition-colors">
+                    Aviso Legal
+                  </button>
+                </li>
+              </ul>
+            </div>
           </div>
-          <p className="text-sm">
-            Protección integral contra fraudes digitales © 2025
-          </p>
+
+          {/* Línea divisoria y copyright */}
+          <div className="border-t border-zinc-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+            <p className="text-sm text-zinc-500">
+              © 2025 ManoProtect S.L. Todos los derechos reservados.
+            </p>
+            <div className="flex items-center gap-4 text-sm">
+              <span className="text-zinc-600">Xàtiva, Valencia, España</span>
+              <span className="text-zinc-700">|</span>
+              <a href="mailto:info@manoprotect.com" className="hover:text-white transition-colors">
+                info@manoprotect.com
+              </a>
+            </div>
+          </div>
         </div>
       </footer>
     </div>

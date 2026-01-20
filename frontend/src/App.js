@@ -27,6 +27,11 @@ import EnterpriseDashboard from '@/pages/EnterpriseDashboard';
 import FamilyAdmin from '@/pages/FamilyAdmin';
 import ChildTracking from '@/pages/ChildTracking';
 import Rewards from '@/pages/Rewards';
+import PrivacyPolicy from '@/pages/PrivacyPolicy';
+import TermsOfService from '@/pages/TermsOfService';
+import RefundPolicy from '@/pages/RefundPolicy';
+import LegalNotice from '@/pages/LegalNotice';
+import CookieConsent from '@/components/CookieConsent';
 
 import '@/App.css';
 
@@ -93,6 +98,12 @@ function AppRouter() {
       <Route path="/payment-success" element={<PaymentSuccess />} />
       <Route path="/knowledge" element={<Knowledge />} />
       <Route path="/community" element={<Community />} />
+      
+      {/* Legal Pages */}
+      <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+      <Route path="/terms-of-service" element={<TermsOfService />} />
+      <Route path="/refund-policy" element={<RefundPolicy />} />
+      <Route path="/legal-notice" element={<LegalNotice />} />
       
       {/* Auth Routes */}
       <Route path="/login" element={<Login />} />
@@ -200,6 +211,7 @@ function App() {
         <AuthProvider>
           <Toaster position="top-center" richColors />
           <AppRouter />
+          <CookieConsent />
         </AuthProvider>
       </BrowserRouter>
     </div>
