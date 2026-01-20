@@ -190,7 +190,8 @@ const LandingPage = () => {
                 <Button
                   variant="outline"
                   onClick={() => navigate('/manobank')}
-                  className="border-2 border-white/30 text-white hover:bg-white/10 rounded-xl px-8 h-14 text-lg active:scale-95 transition-all"
+                  className="border-2 border-white/50 bg-white/10 text-white hover:bg-white/20 rounded-xl px-8 h-14 text-lg font-semibold active:scale-95 transition-all"
+                  style={{ color: 'white' }}
                 >
                   Ver Características
                 </Button>
