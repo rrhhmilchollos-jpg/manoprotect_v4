@@ -7,6 +7,19 @@ Crear una plataforma integral de seguridad digital multi-plataforma (web + móvi
 
 ### ✅ COMPLETADO HOY (20 Enero 2026)
 
+#### ManoBank - Módulo Bancario Integrado
+- **Dashboard bancario completo** (`/manobank`) - Saldos, resumen mensual, alertas
+- **Gestión de cuentas** - Añadir, ver, eliminar cuentas bancarias (múltiples bancos)
+- **Transferencias SEPA** - Con validación IBAN y detección de fraude
+- **Bizum** - Envío instantáneo por teléfono (límite 1.000€)
+- **Detección de fraude** - Análisis de riesgo automático (destinatarios nuevos, importes altos, internacional)
+- **Alertas de seguridad** - Sistema de alertas para transferencias sospechosas
+- **Pagos programados** - Crear y gestionar pagos recurrentes
+- **Historial de transacciones** - Con categorización automática
+- **Backend**: `/app/backend/routes/manobank_routes.py` (600+ líneas)
+- **Frontend**: `/app/frontend/src/pages/ManoBank.js` (700+ líneas)
+- **Acceso**: Usuarios con plan Family Premium o Enterprise
+
 #### Páginas Legales Integradas
 - **Cookie Banner** - Componente funcional con opciones de configuración (RGPD compliant)
 - **Política de Privacidad** (`/privacy-policy`) - Completa con derechos RGPD
@@ -36,17 +49,22 @@ Crear una plataforma integral de seguridad digital multi-plataforma (web + móvi
 ### 📋 PENDIENTE (P0/P1)
 
 #### Re-Deploy Web (P0)
-- Los cambios de páginas legales y footer están en preview
+- Los cambios de ManoBank, páginas legales y footer están en preview
 - Usuario debe presionar **"Re-Deploy"** en Emergent para publicarlos en manoprotect.com
 
-#### Build EAS Móvil (P0 - BLOQUEADO)
-- Build cloud falló durante "Install dependencies"
-- Logs: https://expo.dev/accounts/ivanrubioapps/projects/manoprotect/builds/760f0f41-4f7d-4e5d-b057-09f53bc91e0a
+#### App WebView en proceso
+- Usuario está creando app WebView simplificada en `C:\ManoProtect-Build\ManoProtect-WebApp`
+- Build EAS en proceso - pendiente resultado
 
 #### Compilación iOS (P1)
 - Requiere servicio cloud (Codemagic/MacStadium) - usuario sin Mac
 
 ### 📋 BACKLOG (P2/P3)
+
+#### ManoBank Expansión
+- Multi-banco real con TrueLayer / Token.io (requiere API keys)
+- Multi-moneda internacional
+- Integración Open Banking real
 
 #### Backend
 - Continuar refactorización de `server.py` (actualmente ~3000 líneas)
@@ -63,16 +81,38 @@ Crear una plataforma integral de seguridad digital multi-plataforma (web + móvi
 ├── backend/           # FastAPI + MongoDB
 │   ├── server.py      # API principal (~3000 líneas)
 │   ├── routes/        # Rutas modularizadas
+│   │   ├── manobank_routes.py  # NEW: Módulo bancario
+│   │   └── ...
 │   └── models/        # Schemas Pydantic
 ├── frontend/          # React PWA
 │   └── src/
+│       └── pages/
+│           ├── ManoBank.js     # NEW: Dashboard bancario
+│           └── ...
 └── mobile-app/        # React Native (código fuente)
 
 LOCAL (Windows):
+├── C:\ManoProtect-Build\ManoProtect-WebApp\  # App WebView en construcción
 ├── C:\Users\rrhhm\OneDrive\Desktop\mobile-app\  # Proyecto móvil compilado
-├── C:\Users\rrhhm\OneDrive\Desktop\frontend\    # Frontend para Firebase
 └── C:\Users\rrhhm\OneDrive\Desktop\ManoProtect-*.apk  # APKs generados
 ```
+
+## API Endpoints ManoBank
+
+| Método | Endpoint | Descripción |
+|--------|----------|-------------|
+| GET | `/api/manobank/dashboard` | Dashboard con cuentas, saldos, transacciones |
+| GET | `/api/manobank/accounts` | Listar cuentas bancarias |
+| POST | `/api/manobank/accounts` | Añadir cuenta bancaria |
+| DELETE | `/api/manobank/accounts/{id}` | Eliminar cuenta |
+| GET | `/api/manobank/transactions` | Historial de transacciones |
+| POST | `/api/manobank/transfers/sepa` | Transferencia SEPA |
+| POST | `/api/manobank/transfers/bizum` | Envío Bizum |
+| POST | `/api/manobank/transfers/{id}/verify` | Verificar transferencia sospechosa |
+| POST | `/api/manobank/transfers/{id}/cancel` | Cancelar transferencia |
+| GET | `/api/manobank/scheduled` | Pagos programados |
+| POST | `/api/manobank/scheduled` | Crear pago programado |
+| GET | `/api/manobank/alerts` | Alertas de fraude |
 
 ## Credenciales
 
