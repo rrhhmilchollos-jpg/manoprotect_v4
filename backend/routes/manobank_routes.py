@@ -109,7 +109,10 @@ async def get_manobank_dashboard(
     
     # Check if user has premium access
     user_plan = user.get("plan", "free")
-    has_manobank_access = user_plan in [
+    user_role = user.get("role", "")
+    
+    # Admins and superadmins always have access
+    has_manobank_access = user_role in ["admin", "superadmin"] or user_plan in [
         "family-monthly", "family-quarterly", "family-yearly",
         "enterprise", "enterprise-monthly", "enterprise-yearly"
     ]
