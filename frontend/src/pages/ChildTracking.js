@@ -334,6 +334,105 @@ const ChildTracking = () => {
       </header>
 
       <div className="max-w-4xl mx-auto px-6 py-8">
+        {/* 🆘 BIG SOS BUTTON - EMERGENCY */}
+        <Card className={`mb-8 border-4 ${
+          sosTriggered ? 'border-emerald-500 bg-emerald-50' : isGettingLocation ? 'border-amber-400 bg-amber-50' : 'border-rose-400 bg-gradient-to-br from-rose-50 to-red-50'
+        } transition-all duration-300 shadow-xl`}>
+          <CardContent className="p-8">
+            <div className="text-center mb-6">
+              <h2 className="text-2xl font-bold text-rose-800 mb-2 flex items-center justify-center gap-2">
+                <AlertOctagon className="w-8 h-8" />
+                EMERGENCIA FAMILIAR
+              </h2>
+              <p className="text-rose-600">
+                Pulsa el botón para enviar tu ubicación exacta a todos tus familiares
+              </p>
+            </div>
+            
+            <div className="flex justify-center mb-6">
+              <Button
+                data-testid="family-sos-button"
+                onClick={triggerFamilySOS}
+                disabled={sosTriggered || isGettingLocation}
+                className={`w-48 h-48 rounded-full text-3xl font-bold shadow-2xl active:scale-95 transition-all ${
+                  sosTriggered 
+                    ? 'bg-emerald-500 cursor-not-allowed' 
+                    : isGettingLocation
+                      ? 'bg-amber-500 cursor-wait'
+                      : 'bg-gradient-to-br from-rose-500 to-red-600 hover:from-rose-600 hover:to-red-700 animate-pulse'
+                }`}
+              >
+                <div className="flex flex-col items-center gap-2">
+                  {sosTriggered ? (
+                    <>
+                      <CheckCircle2 className="w-16 h-16" />
+                      <span className="text-xl">ENVIADO</span>
+                    </>
+                  ) : isGettingLocation ? (
+                    <>
+                      <Loader2 className="w-16 h-16 animate-spin" />
+                      <span className="text-lg">GPS...</span>
+                    </>
+                  ) : (
+                    <>
+                      <AlertOctagon className="w-16 h-16" />
+                      <span>SOS</span>
+                    </>
+                  )}
+                </div>
+              </Button>
+            </div>
+
+            {/* SOS Status Message */}
+            <p className="text-center text-lg font-semibold mb-4">
+              {sosTriggered 
+                ? '✅ ¡Todos tus familiares han recibido tu ubicación!' 
+                : isGettingLocation
+                  ? '📍 Obteniendo tu ubicación GPS precisa...'
+                  : '⚠️ Pulsa si necesitas ayuda urgente'
+              }
+            </p>
+
+            {/* Location sent info */}
+            {sosTriggered && lastSosLocation && (
+              <div className="bg-emerald-100 rounded-lg p-4 border border-emerald-300">
+                <p className="font-semibold text-emerald-800 mb-2 flex items-center gap-2">
+                  <MapPin className="w-5 h-5" />
+                  Ubicación enviada:
+                </p>
+                <div className="grid grid-cols-2 gap-2 text-sm text-emerald-700">
+                  <span>Lat: {lastSosLocation.latitude.toFixed(6)}</span>
+                  <span>Long: {lastSosLocation.longitude.toFixed(6)}</span>
+                </div>
+                <a 
+                  href={`https://maps.google.com/?q=${lastSosLocation.latitude},${lastSosLocation.longitude}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-600 hover:text-blue-800 text-sm flex items-center gap-1 mt-2"
+                >
+                  Ver en Google Maps <ExternalLink className="w-4 h-4" />
+                </a>
+              </div>
+            )}
+
+            {/* Features */}
+            <div className="grid grid-cols-3 gap-4 mt-6 text-center text-sm">
+              <div className="p-3 bg-white/50 rounded-lg">
+                <MapPin className="w-6 h-6 mx-auto text-rose-600 mb-1" />
+                <span className="text-zinc-700">GPS Preciso</span>
+              </div>
+              <div className="p-3 bg-white/50 rounded-lg">
+                <Users className="w-6 h-6 mx-auto text-rose-600 mb-1" />
+                <span className="text-zinc-700">Toda la Familia</span>
+              </div>
+              <div className="p-3 bg-white/50 rounded-lg">
+                <Send className="w-6 h-6 mx-auto text-rose-600 mb-1" />
+                <span className="text-zinc-700">Instantáneo</span>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
         {/* Info Card */}
         <Card className="mb-6 bg-blue-50 border-blue-200">
           <CardContent className="p-4">
@@ -343,7 +442,7 @@ const ChildTracking = () => {
                 <p className="font-medium text-blue-800">¿Cómo funciona?</p>
                 <p className="text-sm text-blue-600">
                   1. Añade a tus hijos con su número de teléfono<br/>
-                  2. Instala la app MANO en sus dispositivos<br/>
+                  2. Instala la app ManoProtect en sus dispositivos<br/>
                   3. Solicita su ubicación cuando quieras (bajo demanda)<br/>
                   4. Configura si quieres que reciban notificación o no
                 </p>
