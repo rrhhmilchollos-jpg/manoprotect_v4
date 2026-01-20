@@ -167,6 +167,211 @@ async def get_manobank_dashboard(
 # ACCOUNT MANAGEMENT
 # ============================================
 
+@router.post("/create-account")
+async def create_manobank_account(
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Create a ManoBank account with Spanish IBAN"""
+    user = await require_auth(request, session_token)
+    db = get_db()
+    
+    # Check if user already has a ManoBank account
+    existing = await db.manobank_accounts.find_one({
+        "user_id": user.user_id,
+        "bank_name": "ManoBank"
+    })
+    
+    if existing:
+        raise HTTPException(status_code=400, detail="Ya tienes una cuenta ManoBank")
+    
+    # Generate Spanish IBAN (ES + 2 check digits + 4 bank code + 4 branch + 2 check + 10 account)
+    import random
+    bank_code = "9999"  # ManoBank code
+    branch_code = "0001"
+    check_digits = str(random.randint(10, 99))
+    account_number = ''.join([str(random.randint(0, 9)) for _ in range(10)])
+    
+    # Calculate IBAN check digits
+    base_number = f"{bank_code}{branch_code}{check_digits}{account_number}ES00"
+    # Convert letters to numbers (E=14, S=28)
+    numeric_string = base_number.replace('E', '14').replace('S', '28')
+    remainder = int(numeric_string) % 97
+    iban_check = str(98 - remainder).zfill(2)
+    
+    iban = f"ES{iban_check}{bank_code}{branch_code}{check_digits}{account_number}"
+    
+    account_id = f"mano_{uuid.uuid4().hex[:12]}"
+    
+    account = {
+        "id": account_id,
+        "user_id": user.user_id,
+        "bank_name": "ManoBank",
+        "account_holder": user.name or user.email.split('@')[0],
+        "iban": iban,
+        "iban_masked": iban[:4] + " **** **** " + iban[-4:],
+        "swift_bic": "MANOES2X",
+        "currency": "EUR",
+        "alias": "Cuenta ManoBank",
+        "balance": 0.0,
+        "available_balance": 0.0,
+        "is_primary": True,
+        "is_manobank": True,
+        "is_verified": True,
+        "created_at": datetime.now(timezone.utc).isoformat(),
+        "last_sync": datetime.now(timezone.utc).isoformat()
+    }
+    
+    # Make other accounts non-primary
+    await db.manobank_accounts.update_many(
+        {"user_id": user.user_id},
+        {"$set": {"is_primary": False}}
+    )
+    
+    await db.manobank_accounts.insert_one(account)
+    
+    # Create welcome bonus transaction
+    welcome_tx = {
+        "id": f"tx_{uuid.uuid4().hex[:12]}",
+        "user_id": user.user_id,
+        "account_id": account_id,
+        "amount": 10.00,
+        "description": "Bono de bienvenida ManoBank",
+        "category": "promociones",
+        "status": "completed",
+        "created_at": datetime.now(timezone.utc).isoformat()
+    }
+    await db.manobank_transactions.insert_one(welcome_tx)
+    
+    # Update balance with welcome bonus
+    await db.manobank_accounts.update_one(
+        {"id": account_id},
+        {"$set": {"balance": 10.00, "available_balance": 10.00}}
+    )
+    
+    account.pop("_id", None)
+    account["balance"] = 10.00
+    account["available_balance"] = 10.00
+    
+    return {
+        "message": "Cuenta ManoBank creada correctamente",
+        "account": account,
+        "iban": iban,
+        "welcome_bonus": 10.00
+    }
+
+@router.get("/card")
+async def get_virtual_card(
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Get user's virtual card"""
+    user = await require_auth(request, session_token)
+    db = get_db()
+    
+    card = await db.manobank_cards.find_one(
+        {"user_id": user.user_id},
+        {"_id": 0}
+    )
+    
+    if not card:
+        return {"card": None}
+    
+    # Mask sensitive data
+    card["card_number_masked"] = card["card_number"][:4] + " •••• •••• " + card["card_number"][-4:]
+    card.pop("cvv", None)  # Never expose CVV
+    
+    return {"card": card}
+
+@router.post("/card/create")
+async def create_virtual_card(
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Create a virtual debit card"""
+    user = await require_auth(request, session_token)
+    db = get_db()
+    
+    # Check if user has a ManoBank account
+    mano_account = await db.manobank_accounts.find_one({
+        "user_id": user.user_id,
+        "bank_name": "ManoBank"
+    })
+    
+    if not mano_account:
+        raise HTTPException(status_code=400, detail="Necesitas una cuenta ManoBank para crear una tarjeta")
+    
+    # Check if user already has a card
+    existing = await db.manobank_cards.find_one({"user_id": user.user_id})
+    if existing:
+        raise HTTPException(status_code=400, detail="Ya tienes una tarjeta virtual")
+    
+    import random
+    
+    # Generate card number (Visa starts with 4)
+    card_number = "4" + ''.join([str(random.randint(0, 9)) for _ in range(15)])
+    cvv = ''.join([str(random.randint(0, 9)) for _ in range(3)])
+    
+    # Expiry: 5 years from now
+    expiry_month = datetime.now().month
+    expiry_year = datetime.now().year + 5
+    expiry = f"{str(expiry_month).zfill(2)}/{str(expiry_year)[-2:]}"
+    
+    card = {
+        "id": f"card_{uuid.uuid4().hex[:12]}",
+        "user_id": user.user_id,
+        "account_id": mano_account["id"],
+        "card_number": card_number,
+        "card_number_masked": card_number[:4] + " •••• •••• " + card_number[-4:],
+        "cvv": cvv,
+        "expiry": expiry,
+        "holder_name": (user.name or user.email.split('@')[0]).upper(),
+        "card_type": "virtual",
+        "card_brand": "Visa",
+        "status": "active",
+        "daily_limit": 2500.00,
+        "monthly_limit": 10000.00,
+        "is_frozen": False,
+        "created_at": datetime.now(timezone.utc).isoformat()
+    }
+    
+    await db.manobank_cards.insert_one(card)
+    
+    # Don't return CVV in response
+    response_card = {**card}
+    response_card.pop("_id", None)
+    response_card.pop("cvv", None)
+    
+    return {
+        "message": "Tarjeta virtual creada correctamente",
+        "card": response_card
+    }
+
+@router.patch("/card/freeze")
+async def toggle_card_freeze(
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Freeze/unfreeze virtual card"""
+    user = await require_auth(request, session_token)
+    db = get_db()
+    
+    card = await db.manobank_cards.find_one({"user_id": user.user_id})
+    if not card:
+        raise HTTPException(status_code=404, detail="Tarjeta no encontrada")
+    
+    new_status = not card.get("is_frozen", False)
+    
+    await db.manobank_cards.update_one(
+        {"user_id": user.user_id},
+        {"$set": {"is_frozen": new_status}}
+    )
+    
+    return {
+        "message": f"Tarjeta {'congelada' if new_status else 'activada'}",
+        "is_frozen": new_status
+    }
+
 @router.get("/accounts")
 async def get_accounts(
     request: Request,
