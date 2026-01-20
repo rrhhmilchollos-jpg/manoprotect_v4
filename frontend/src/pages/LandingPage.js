@@ -137,6 +137,147 @@ const LandingPage = () => {
         </div>
       </section>
 
+      {/* ManoBank Section - NEW */}
+      <section className="px-6 py-20 bg-gradient-to-br from-indigo-900 via-purple-900 to-indigo-900 text-white relative overflow-hidden">
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute top-20 left-20 w-72 h-72 bg-purple-500 rounded-full blur-3xl" />
+          <div className="absolute bottom-20 right-20 w-96 h-96 bg-indigo-500 rounded-full blur-3xl" />
+        </div>
+        
+        <div className="max-w-7xl mx-auto relative z-10">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            <div className="space-y-8">
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur border border-white/20">
+                <Sparkles className="w-4 h-4 text-yellow-400" />
+                <span className="text-sm font-medium">Nuevo: Tu banco digital seguro</span>
+              </div>
+              
+              <h2 className="text-4xl sm:text-5xl font-bold leading-tight">
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-300 to-indigo-300">ManoBank</span>
+                <span className="block mt-2">Tu dinero, protegido</span>
+              </h2>
+              
+              <p className="text-lg text-indigo-200 leading-relaxed max-w-xl">
+                El primer banco digital con protección antifraude integrada. Cuenta propia, tarjeta virtual, transferencias SEPA y Bizum. Todo con la seguridad de ManoProtect.
+              </p>
+              
+              <div className="grid grid-cols-2 gap-4">
+                {[
+                  { icon: CreditCard, label: 'Tarjeta Virtual', desc: 'Visa/Mastercard gratis' },
+                  { icon: Send, label: 'Transferencias', desc: 'SEPA y Bizum incluidos' },
+                  { icon: Shield, label: 'Antifraude', desc: 'Protección en tiempo real' },
+                  { icon: Smartphone, label: '100% Digital', desc: 'Sin comisiones ocultas' }
+                ].map((item, idx) => (
+                  <div key={idx} className="flex items-start gap-3 p-4 rounded-xl bg-white/5 backdrop-blur border border-white/10">
+                    <item.icon className="w-6 h-6 text-purple-300 flex-shrink-0" />
+                    <div>
+                      <p className="font-semibold text-white">{item.label}</p>
+                      <p className="text-sm text-indigo-300">{item.desc}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              
+              <div className="flex flex-wrap gap-4 pt-4">
+                <Button
+                  data-testid="manobank-cta-btn"
+                  onClick={() => navigate('/manobank')}
+                  className="bg-white text-indigo-900 hover:bg-indigo-100 rounded-xl px-8 h-14 text-lg font-semibold shadow-lg hover:shadow-xl active:scale-95 transition-all"
+                >
+                  <Wallet className="w-5 h-5 mr-2" />
+                  Abrir Cuenta Gratis
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={() => navigate('/manobank')}
+                  className="border-2 border-white/30 text-white hover:bg-white/10 rounded-xl px-8 h-14 text-lg active:scale-95 transition-all"
+                >
+                  Ver Características
+                </Button>
+              </div>
+              
+              <div className="flex items-center gap-6 pt-4 text-sm text-indigo-300">
+                <span className="flex items-center gap-2">
+                  <Check className="w-4 h-4 text-emerald-400" />
+                  Sin comisiones de apertura
+                </span>
+                <span className="flex items-center gap-2">
+                  <Check className="w-4 h-4 text-emerald-400" />
+                  IBAN español
+                </span>
+                <span className="flex items-center gap-2">
+                  <Check className="w-4 h-4 text-emerald-400" />
+                  Licencia en trámite
+                </span>
+              </div>
+            </div>
+            
+            {/* Bank Card Preview */}
+            <div className="relative">
+              <div className="relative mx-auto max-w-sm">
+                {/* Virtual Card */}
+                <div className="relative bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 rounded-3xl p-8 shadow-2xl transform hover:scale-105 transition-transform">
+                  <div className="absolute top-0 left-0 right-0 bottom-0 bg-white/10 rounded-3xl backdrop-blur-sm" />
+                  <div className="relative z-10">
+                    <div className="flex justify-between items-start mb-12">
+                      <img 
+                        src="https://customer-assets.emergentagent.com/job_5c97b24f-9a55-4567-9954-bd76179fb951/artifacts/8y6ab2pd_logo%20App%20Mano.png" 
+                        alt="ManoBank" 
+                        className="h-8 w-auto brightness-0 invert"
+                      />
+                      <div className="text-right">
+                        <p className="text-xs text-white/70">Virtual Card</p>
+                        <p className="font-semibold">ManoBank</p>
+                      </div>
+                    </div>
+                    <div className="mb-8">
+                      <p className="font-mono text-2xl tracking-wider">•••• •••• •••• 4821</p>
+                    </div>
+                    <div className="flex justify-between items-end">
+                      <div>
+                        <p className="text-xs text-white/70">Titular</p>
+                        <p className="font-semibold">TU NOMBRE</p>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-xs text-white/70">Válida hasta</p>
+                        <p className="font-semibold">12/29</p>
+                      </div>
+                    </div>
+                  </div>
+                  {/* Chip */}
+                  <div className="absolute top-24 left-8 w-12 h-10 bg-yellow-300/80 rounded-lg" />
+                </div>
+                
+                {/* Floating Stats */}
+                <div className="absolute -right-4 top-1/4 bg-white rounded-xl shadow-xl p-4 transform rotate-3">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-emerald-100 rounded-full flex items-center justify-center">
+                      <TrendingUp className="w-5 h-5 text-emerald-600" />
+                    </div>
+                    <div>
+                      <p className="text-xs text-zinc-500">Este mes</p>
+                      <p className="font-bold text-zinc-900">+2.450€</p>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="absolute -left-4 bottom-1/4 bg-white rounded-xl shadow-xl p-4 transform -rotate-3">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center">
+                      <Shield className="w-5 h-5 text-purple-600" />
+                    </div>
+                    <div>
+                      <p className="text-xs text-zinc-500">Protección</p>
+                      <p className="font-bold text-zinc-900">Activa 24/7</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Threat Types */}
       <section className="px-6 py-20 bg-white">
         <div className="max-w-7xl mx-auto">
