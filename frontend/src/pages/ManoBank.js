@@ -75,7 +75,8 @@ const ManoBank = () => {
   const fetchDashboard = async () => {
     try {
       const response = await fetch(`${API_URL}/api/manobank/dashboard`, {
-        headers: { 'Authorization': `Bearer ${token}` }
+        credentials: 'include',
+        headers: token ? { 'Authorization': `Bearer ${token}` } : {}
       });
       const data = await response.json();
       setDashboard(data);
