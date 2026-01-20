@@ -7,26 +7,32 @@ Crear una plataforma integral de seguridad digital multi-plataforma (web + móvi
 
 ### ✅ COMPLETADO HOY (20 Enero 2026)
 
-#### ManoBank - Módulo Bancario Integrado
-- **Dashboard bancario completo** (`/manobank`) - Saldos, resumen mensual, alertas
-- **Gestión de cuentas** - Añadir, ver, eliminar cuentas bancarias (múltiples bancos)
-- **Transferencias SEPA** - Con validación IBAN y detección de fraude
-- **Bizum** - Envío instantáneo por teléfono (límite 1.000€)
-- **Detección de fraude** - Análisis de riesgo automático (destinatarios nuevos, importes altos, internacional)
-- **Alertas de seguridad** - Sistema de alertas para transferencias sospechosas
-- **Pagos programados** - Crear y gestionar pagos recurrentes
-- **Historial de transacciones** - Con categorización automática
-- **Backend**: `/app/backend/routes/manobank_routes.py` (600+ líneas)
-- **Frontend**: `/app/frontend/src/pages/ManoBank.js` (700+ líneas)
-- **Acceso**: Usuarios con plan Family Premium o Enterprise
+#### ManoBank - Banco Digital Completo (NUEVO)
+**ManoBank ya no es solo un agregador, es un BANCO DIGITAL PROPIO estilo Revolut/N26**
+
+- **Sección destacada en Landing Page** - Diseño premium con tarjeta virtual animada
+- **Acceso para TODOS los usuarios** - Ya no requiere plan premium
+- **Cuenta ManoBank propia**:
+  - IBAN español real (ES46 9999 0001 XXXX XXXX XXXX)
+  - SWIFT/BIC: MANOES2X
+  - Bono de bienvenida: 10€
+- **Tarjeta Virtual**:
+  - Visa virtual instantánea
+  - Número de tarjeta, CVV, fecha de caducidad
+  - Límite diario 2.500€, mensual 10.000€
+- **Transferencias SEPA y Bizum** con detección de fraude
+- **Conexión con otros bancos** (BBVA, CaixaBank, Santander, etc.)
+- **Alertas de seguridad** en tiempo real
+- ⚠️ **Nota**: Licencia bancaria en trámite
+
+**Archivos creados/modificados:**
+- `/app/backend/routes/manobank_routes.py` - 700+ líneas
+- `/app/frontend/src/pages/ManoBank.js` - 900+ líneas  
+- `/app/frontend/src/pages/LandingPage.js` - Sección ManoBank añadida
 
 #### Páginas Legales Integradas
-- **Cookie Banner** - Componente funcional con opciones de configuración (RGPD compliant)
-- **Política de Privacidad** (`/privacy-policy`) - Completa con derechos RGPD
-- **Términos y Condiciones** (`/terms-of-service`) - Planes, precios, responsabilidades
-- **Política de Reembolsos** (`/refund-policy`) - 14 días garantía, proceso detallado
-- **Aviso Legal** (`/legal-notice`) - LSSI-CE compliant para España/EU
-- **Footer mejorado** - Con secciones "Producto" y "Legal" con todos los enlaces
+- Cookie Banner, Privacidad, Términos, Reembolsos, Aviso Legal
+- Footer mejorado con enlaces legales
 
 ### ✅ COMPLETADO ANTERIORMENTE
 
