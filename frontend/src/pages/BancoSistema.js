@@ -53,6 +53,7 @@ const BancoSistema = () => {
   const [customers, setCustomers] = useState([]);
   const [loans, setLoans] = useState([]);
   const [cards, setCards] = useState([]);
+  const [kycVerifications, setKycVerifications] = useState([]);
   
   // Modal states
   const [showAddEmployee, setShowAddEmployee] = useState(false);
@@ -61,6 +62,8 @@ const BancoSistema = () => {
   const [showNewCard, setShowNewCard] = useState(false);
   const [showLoanDecision, setShowLoanDecision] = useState(null);
   const [showCustomerDetail, setShowCustomerDetail] = useState(null);
+  const [showScheduleKYC, setShowScheduleKYC] = useState(null);
+  const [showCompleteKYC, setShowCompleteKYC] = useState(null);
   
   // Form states
   const [newEmployee, setNewEmployee] = useState({
