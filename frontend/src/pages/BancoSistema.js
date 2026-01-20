@@ -54,6 +54,8 @@ const BancoSistema = () => {
   const [loans, setLoans] = useState([]);
   const [cards, setCards] = useState([]);
   const [kycVerifications, setKycVerifications] = useState([]);
+  const [pendingVideoSessions, setPendingVideoSessions] = useState([]);
+  const [activeVideoSession, setActiveVideoSession] = useState(null);
   
   // Modal states
   const [showAddEmployee, setShowAddEmployee] = useState(false);
