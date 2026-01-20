@@ -139,6 +139,7 @@ export const AuthProvider = ({ children }) => {
   // Process Google OAuth session
   const processGoogleSession = async (sessionId) => {
     setError(null);
+    setLoading(true);
     try {
       const response = await fetch(`${API}/auth/google/session`, {
         method: 'POST',
@@ -153,10 +154,13 @@ export const AuthProvider = ({ children }) => {
         throw new Error(data.detail || 'Error en autenticación Google');
       }
 
+      localStorage.setItem('mano_user', JSON.stringify(data));
       setUser(data);
+      setLoading(false);
       return { success: true, user: data };
     } catch (err) {
       setError(err.message);
+      setLoading(false);
       return { success: false, error: err.message };
     }
   };
