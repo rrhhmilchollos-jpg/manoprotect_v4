@@ -319,6 +319,7 @@ const BancoSistema = () => {
     if (activeTab === 'kyc') {
       fetchKYCVerifications();
       fetchAccountRequests(); // Need pending requests
+      fetchPendingVideoSessions(); // Load pending video sessions
     }
   }, [activeTab]);
 
