@@ -37,12 +37,14 @@ const Login = () => {
     
     if (result.success) {
       toast.success('¡Bienvenido de vuelta!');
-      navigate('/dashboard');
+      // Small delay to ensure state is updated before navigation
+      setTimeout(() => {
+        navigate('/dashboard', { replace: true });
+      }, 100);
     } else {
       toast.error(result.error);
+      setLoading(false);
     }
-    
-    setLoading(false);
   };
 
   const handleGoogleLogin = () => {
