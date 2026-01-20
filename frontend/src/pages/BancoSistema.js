@@ -442,6 +442,67 @@ const BancoSistema = () => {
     }
   };
 
+  // KYC Handlers
+  const handleScheduleKYC = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await fetch(`${API_URL}/api/manobank/admin/kyc-verifications/schedule`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token && { 'Authorization': `Bearer ${token}` })
+        },
+        body: JSON.stringify({
+          request_id: showScheduleKYC.id,
+          ...kycSchedule
+        })
+      });
+      
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.detail);
+      
+      toast.success('Videollamada programada correctamente');
+      setShowScheduleKYC(null);
+      setKycSchedule({ meeting_link: '', scheduled_time: '', notes: '' });
+      fetchAccountRequests();
+      fetchKYCVerifications();
+    } catch (error) {
+      toast.error(error.message || 'Error al programar verificación');
+    }
+  };
+
+  const handleCompleteKYC = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await fetch(`${API_URL}/api/manobank/admin/kyc-verifications/${showCompleteKYC.id}/complete`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token && { 'Authorization': `Bearer ${token}` })
+        },
+        body: JSON.stringify(kycComplete)
+      });
+      
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.detail);
+      
+      toast.success(kycComplete.verification_status === 'approved' 
+        ? 'Cliente verificado correctamente' 
+        : 'Verificación procesada');
+      setShowCompleteKYC(null);
+      setKycComplete({
+        verification_status: 'approved', identity_verified: true,
+        document_type: 'DNI', document_number: '', notes: '', rejection_reason: ''
+      });
+      fetchKYCVerifications();
+      fetchAccountRequests();
+    } catch (error) {
+      toast.error(error.message || 'Error al completar verificación');
+    }
+  };
+
   const getRoleLabel = (role) => {
     const labels = {
       director: 'Director General',
