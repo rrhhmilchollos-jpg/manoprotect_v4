@@ -846,14 +846,24 @@ async def issue_card(
     user, employee = await require_bank_employee(request, session_token)
     db = get_db()
     
-    # Verify customer and account
+    # Verify customer
     customer = await db.manobank_customers.find_one({"id": data.customer_id})
     if not customer:
         raise HTTPException(status_code=404, detail="Cliente no encontrado")
     
-    account = await db.manobank_accounts.find_one({"id": data.account_id, "customer_id": data.customer_id})
-    if not account:
-        raise HTTPException(status_code=404, detail="Cuenta no encontrada o no pertenece al cliente")
+    # Get account - use provided or find primary account
+    if data.account_id:
+        account = await db.manobank_accounts.find_one({"id": data.account_id, "customer_id": data.customer_id})
+        if not account:
+            raise HTTPException(status_code=404, detail="Cuenta no encontrada o no pertenece al cliente")
+    else:
+        # Find primary account for customer
+        account = await db.manobank_accounts.find_one({"customer_id": data.customer_id, "is_primary": True})
+        if not account:
+            # Try any account
+            account = await db.manobank_accounts.find_one({"customer_id": data.customer_id})
+        if not account:
+            raise HTTPException(status_code=404, detail="El cliente no tiene cuenta bancaria. Crea una cuenta primero.")
     
     # Generate card
     card_prefix = "4" if data.card_type in [CardType.DEBITO, CardType.PREPAGO] else "5"  # Visa vs Mastercard
