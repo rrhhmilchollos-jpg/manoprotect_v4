@@ -940,7 +940,7 @@ const AdminPanel = () => {
                   Información de Base de Datos
                 </CardTitle>
                 <CardDescription>
-                  Configuración y estado de la base de datos MongoDB de MANO
+                  Configuración y estado de la base de datos MongoDB de ManoProtect
                 </CardDescription>
               </CardHeader>
               <CardContent>

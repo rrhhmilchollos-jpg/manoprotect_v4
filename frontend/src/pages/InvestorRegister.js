@@ -168,7 +168,7 @@ const InvestorRegister = () => {
           </Badge>
           <h1 className="text-3xl font-bold mb-2">Solicitud de Acceso</h1>
           <p className="text-zinc-600">
-            Complete el formulario para solicitar acceso a la documentación confidencial de MANO
+            Complete el formulario para solicitar acceso a la documentación confidencial de ManoProtect
           </p>
         </div>
 
@@ -321,7 +321,7 @@ const InvestorRegister = () => {
                   <FileText className="absolute left-3 top-3 w-5 h-5 text-zinc-400" />
                   <Textarea
                     name="reason"
-                    placeholder="Describa brevemente su interés en invertir en MANO y qué documentación le gustaría revisar..."
+                    placeholder="Describa brevemente su interés en invertir en ManoProtect y qué documentación le gustaría revisar..."
                     value={formData.reason}
                     onChange={handleChange}
                     className={`pl-10 min-h-[120px] ${errors.reason ? 'border-red-500' : ''}`}
