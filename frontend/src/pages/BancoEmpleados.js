@@ -36,33 +36,22 @@ const BancoEmpleados = () => {
         body: JSON.stringify({ email, password })
       });
       
-      // Parse login response only once
-      let loginData;
-      try {
-        loginData = await loginResponse.json();
-      } catch (parseError) {
-        throw new Error('Error al procesar la respuesta del servidor');
+      // Check if response is ok before parsing
+      if (!loginResponse.ok) {
+        const errorData = await loginResponse.json().catch(() => ({}));
+        throw new Error(errorData.detail || 'Credenciales incorrectas');
       }
       
-      if (!loginResponse.ok) {
-        throw new Error(loginData.detail || 'Credenciales incorrectas');
-      }
+      const loginData = await loginResponse.json();
       
       // Check if user is bank employee
       const dashboardResponse = await fetch(`${API_URL}/api/manobank/admin/dashboard`, {
         credentials: 'include'
       });
       
-      // Parse dashboard response safely
-      let dashboardData;
-      try {
-        dashboardData = await dashboardResponse.json();
-      } catch (parseError) {
-        throw new Error('Error al verificar permisos de empleado');
-      }
-      
       if (!dashboardResponse.ok) {
-        throw new Error(dashboardData.detail || 'No tienes acceso al sistema bancario. Contacta con tu supervisor.');
+        const errorData = await dashboardResponse.json().catch(() => ({}));
+        throw new Error(errorData.detail || 'No tienes acceso al sistema bancario. Contacta con tu supervisor.');
       }
       
       // Update auth context to recognize the logged-in user
@@ -72,6 +61,7 @@ const BancoEmpleados = () => {
       navigate('/banco/sistema');
       
     } catch (error) {
+      console.error('Login error:', error);
       toast.error(error.message || 'Error de autenticación');
     } finally {
       setLoading(false);
