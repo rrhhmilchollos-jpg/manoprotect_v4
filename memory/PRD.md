@@ -17,6 +17,23 @@ Crear una plataforma integral de seguridad digital multi-plataforma (web + móvi
 - **Archivos:** `/app/frontend/src/pages/BancoEmpleados.js`
 - **Testing:** 100% tests pasados (backend + frontend)
 
+#### 🆕 Sistema de Registro de Empleados (Solo Director)
+- Solo el Director General puede crear nuevos empleados
+- Roles disponibles: Director, Gerente, Subdirector, Analista de Riesgos, Gestor Comercial, Cajero, Atención al Cliente
+- Los empleados sin rol de Director ven mensaje informativo
+
+#### 🆕 Verificación KYC por Videollamada (Zoom)
+- Nuevo tab "Verificación KYC" en el sistema bancario
+- Flujo completo:
+  1. Solicitud de cuenta → Programar videollamada Zoom
+  2. Completar verificación con datos del documento
+  3. Aprobar/Rechazar/Solicitar más documentos
+- Estados: pendiente, kyc_scheduled, kyc_verified, kyc_rejected
+
+#### 🆕 Acceso ManoBank desde AdminPanel
+- Nuevo tab "ManoBank" en el Panel de Administración
+- Acceso directo al sistema bancario y portal de clientes
+
 #### ManoBank - Portal de Empleados Separado
 - **Login:** `/banco` - Portal exclusivo para empleados del banco
 - **Sistema:** `/banco/sistema` - Panel de administración completo
@@ -35,10 +52,11 @@ Crear una plataforma integral de seguridad digital multi-plataforma (web + móvi
   - Flujo: Solicitud → Evaluación → Aprobación → Desembolso
 - Emisión de tarjetas (Débito, Crédito, Platinum, Black)
 - Gestión de clientes con KYC
+- **NUEVO:** Sistema de verificación KYC por videollamada
 
 **Frontend** (`/app/frontend/src/pages/BancoSistema.js`):
 - Dashboard con estadísticas en tiempo real (Clientes, Cuentas, Depósitos, Préstamos)
-- Tabs: Dashboard, Aperturas, Clientes, Préstamos, Tarjetas, Empleados
+- Tabs: Dashboard, Aperturas, **Verificación KYC**, Clientes, Préstamos, Tarjetas, Empleados
 - Header con nombre y rol del empleado (ej: "Ivan Rubio Cano - Director General")
 - Flujos completos para gestión bancaria
 
