@@ -81,23 +81,8 @@ async def get_manobank_dashboard(
     user = await require_auth(request, session_token)
     db = get_db()
     
-    # Check if user has premium access
-    user_plan = getattr(user, "plan", "free") or "free"
-    user_role = getattr(user, "role", "") or ""
+    # ManoBank is now available to ALL users
     user_id = user.user_id
-    
-    # Admins and superadmins always have access
-    has_manobank_access = user_role in ["admin", "superadmin"] or user_plan in [
-        "family-monthly", "family-quarterly", "family-yearly",
-        "enterprise", "enterprise-monthly", "enterprise-yearly"
-    ]
-    
-    if not has_manobank_access:
-        return {
-            "has_access": False,
-            "message": "ManoBank está disponible para planes Familiar Premium y Enterprise",
-            "upgrade_url": "/pricing"
-        }
     
     # Get user's bank accounts
     accounts = await db.manobank_accounts.find(
