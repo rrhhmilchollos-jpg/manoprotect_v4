@@ -1309,7 +1309,7 @@ const BancoSistema = () => {
       {/* New Account Request Modal */}
       {showNewAccount && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 overflow-y-auto">
-          <div className="bg-white rounded-2xl max-w-lg w-full p-6 my-8">
+          <div className="bg-white rounded-2xl max-w-2xl w-full p-6 my-8 max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between mb-6">
               <h3 className="text-xl font-bold">Nueva Apertura de Cuenta</h3>
               <button onClick={() => setShowNewAccount(false)}>
@@ -1317,92 +1317,186 @@ const BancoSistema = () => {
               </button>
             </div>
             <form onSubmit={handleCreateAccountRequest} className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div className="col-span-2">
-                  <label className="block text-sm font-medium text-zinc-700 mb-1">Nombre completo</label>
-                  <input
-                    type="text"
-                    value={newAccountRequest.customer_name}
-                    onChange={(e) => setNewAccountRequest({ ...newAccountRequest, customer_name: e.target.value })}
-                    className="w-full px-4 py-3 border border-zinc-300 rounded-lg"
-                    required
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-zinc-700 mb-1">DNI/NIE</label>
-                  <input
-                    type="text"
-                    value={newAccountRequest.customer_dni}
-                    onChange={(e) => setNewAccountRequest({ ...newAccountRequest, customer_dni: e.target.value })}
-                    className="w-full px-4 py-3 border border-zinc-300 rounded-lg"
-                    required
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-zinc-700 mb-1">Teléfono</label>
-                  <input
-                    type="tel"
-                    value={newAccountRequest.customer_phone}
-                    onChange={(e) => setNewAccountRequest({ ...newAccountRequest, customer_phone: e.target.value })}
-                    className="w-full px-4 py-3 border border-zinc-300 rounded-lg"
-                    required
-                  />
-                </div>
-                <div className="col-span-2">
-                  <label className="block text-sm font-medium text-zinc-700 mb-1">Email</label>
-                  <input
-                    type="email"
-                    value={newAccountRequest.customer_email}
-                    onChange={(e) => setNewAccountRequest({ ...newAccountRequest, customer_email: e.target.value })}
-                    className="w-full px-4 py-3 border border-zinc-300 rounded-lg"
-                    required
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-zinc-700 mb-1">Tipo de cuenta</label>
-                  <select
-                    value={newAccountRequest.account_type}
-                    onChange={(e) => setNewAccountRequest({ ...newAccountRequest, account_type: e.target.value })}
-                    className="w-full px-4 py-3 border border-zinc-300 rounded-lg"
-                  >
-                    <option value="corriente">Cuenta Corriente</option>
-                    <option value="ahorro">Cuenta Ahorro</option>
-                    <option value="nomina">Cuenta Nómina</option>
-                    <option value="empresa">Cuenta Empresa</option>
-                    <option value="joven">Cuenta Joven</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-zinc-700 mb-1">Depósito inicial (€)</label>
-                  <input
-                    type="number"
-                    value={newAccountRequest.initial_deposit}
-                    onChange={(e) => setNewAccountRequest({ ...newAccountRequest, initial_deposit: e.target.value })}
-                    className="w-full px-4 py-3 border border-zinc-300 rounded-lg"
-                    placeholder="0"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-zinc-700 mb-1">Ocupación</label>
-                  <input
-                    type="text"
-                    value={newAccountRequest.occupation}
-                    onChange={(e) => setNewAccountRequest({ ...newAccountRequest, occupation: e.target.value })}
-                    className="w-full px-4 py-3 border border-zinc-300 rounded-lg"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-zinc-700 mb-1">Ingresos mensuales (€)</label>
-                  <input
-                    type="number"
-                    value={newAccountRequest.monthly_income}
-                    onChange={(e) => setNewAccountRequest({ ...newAccountRequest, monthly_income: e.target.value })}
-                    className="w-full px-4 py-3 border border-zinc-300 rounded-lg"
-                  />
+              {/* Datos personales */}
+              <div className="bg-zinc-50 p-4 rounded-lg">
+                <h4 className="font-semibold mb-3 text-indigo-700">Datos Personales</h4>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="col-span-2">
+                    <label className="block text-sm font-medium text-zinc-700 mb-1">Nombre completo *</label>
+                    <input
+                      type="text"
+                      value={newAccountRequest.customer_name}
+                      onChange={(e) => setNewAccountRequest({ ...newAccountRequest, customer_name: e.target.value })}
+                      className="w-full px-4 py-3 border border-zinc-300 rounded-lg"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-zinc-700 mb-1">DNI/NIE *</label>
+                    <input
+                      type="text"
+                      value={newAccountRequest.customer_dni}
+                      onChange={(e) => setNewAccountRequest({ ...newAccountRequest, customer_dni: e.target.value })}
+                      className="w-full px-4 py-3 border border-zinc-300 rounded-lg"
+                      placeholder="12345678A"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-zinc-700 mb-1">Fecha de nacimiento</label>
+                    <input
+                      type="date"
+                      value={newAccountRequest.date_of_birth}
+                      onChange={(e) => setNewAccountRequest({ ...newAccountRequest, date_of_birth: e.target.value })}
+                      className="w-full px-4 py-3 border border-zinc-300 rounded-lg"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-zinc-700 mb-1">Teléfono móvil *</label>
+                    <input
+                      type="tel"
+                      value={newAccountRequest.customer_phone}
+                      onChange={(e) => setNewAccountRequest({ ...newAccountRequest, customer_phone: e.target.value })}
+                      className="w-full px-4 py-3 border border-zinc-300 rounded-lg"
+                      placeholder="+34 600 000 000"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-zinc-700 mb-1">Nacionalidad</label>
+                    <input
+                      type="text"
+                      value={newAccountRequest.nationality}
+                      onChange={(e) => setNewAccountRequest({ ...newAccountRequest, nationality: e.target.value })}
+                      className="w-full px-4 py-3 border border-zinc-300 rounded-lg"
+                    />
+                  </div>
+                  <div className="col-span-2">
+                    <label className="block text-sm font-medium text-zinc-700 mb-1">Email *</label>
+                    <input
+                      type="email"
+                      value={newAccountRequest.customer_email}
+                      onChange={(e) => setNewAccountRequest({ ...newAccountRequest, customer_email: e.target.value })}
+                      className="w-full px-4 py-3 border border-zinc-300 rounded-lg"
+                      required
+                    />
+                  </div>
                 </div>
               </div>
+
+              {/* Dirección */}
+              <div className="bg-blue-50 p-4 rounded-lg">
+                <h4 className="font-semibold mb-3 text-blue-700">Dirección de Residencia</h4>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="col-span-2">
+                    <label className="block text-sm font-medium text-zinc-700 mb-1">Calle y número *</label>
+                    <input
+                      type="text"
+                      value={newAccountRequest.address_street}
+                      onChange={(e) => setNewAccountRequest({ ...newAccountRequest, address_street: e.target.value })}
+                      className="w-full px-4 py-3 border border-zinc-300 rounded-lg"
+                      placeholder="Calle Mayor, 123, 2º B"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-zinc-700 mb-1">Ciudad/Población *</label>
+                    <input
+                      type="text"
+                      value={newAccountRequest.address_city}
+                      onChange={(e) => setNewAccountRequest({ ...newAccountRequest, address_city: e.target.value })}
+                      className="w-full px-4 py-3 border border-zinc-300 rounded-lg"
+                      placeholder="Madrid"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-zinc-700 mb-1">Código Postal *</label>
+                    <input
+                      type="text"
+                      value={newAccountRequest.address_postal_code}
+                      onChange={(e) => setNewAccountRequest({ ...newAccountRequest, address_postal_code: e.target.value })}
+                      className="w-full px-4 py-3 border border-zinc-300 rounded-lg"
+                      placeholder="28001"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-zinc-700 mb-1">Provincia *</label>
+                    <input
+                      type="text"
+                      value={newAccountRequest.address_province}
+                      onChange={(e) => setNewAccountRequest({ ...newAccountRequest, address_province: e.target.value })}
+                      className="w-full px-4 py-3 border border-zinc-300 rounded-lg"
+                      placeholder="Madrid"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-zinc-700 mb-1">País</label>
+                    <input
+                      type="text"
+                      value={newAccountRequest.address_country}
+                      onChange={(e) => setNewAccountRequest({ ...newAccountRequest, address_country: e.target.value })}
+                      className="w-full px-4 py-3 border border-zinc-300 rounded-lg"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Datos de cuenta */}
+              <div className="bg-emerald-50 p-4 rounded-lg">
+                <h4 className="font-semibold mb-3 text-emerald-700">Información de Cuenta</h4>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-zinc-700 mb-1">Tipo de cuenta</label>
+                    <select
+                      value={newAccountRequest.account_type}
+                      onChange={(e) => setNewAccountRequest({ ...newAccountRequest, account_type: e.target.value })}
+                      className="w-full px-4 py-3 border border-zinc-300 rounded-lg"
+                    >
+                      <option value="corriente">Cuenta Corriente</option>
+                      <option value="ahorro">Cuenta Ahorro</option>
+                      <option value="nomina">Cuenta Nómina</option>
+                      <option value="empresa">Cuenta Empresa</option>
+                      <option value="joven">Cuenta Joven</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-zinc-700 mb-1">Depósito inicial (€)</label>
+                    <input
+                      type="number"
+                      value={newAccountRequest.initial_deposit}
+                      onChange={(e) => setNewAccountRequest({ ...newAccountRequest, initial_deposit: e.target.value })}
+                      className="w-full px-4 py-3 border border-zinc-300 rounded-lg"
+                      placeholder="0"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-zinc-700 mb-1">Ocupación</label>
+                    <input
+                      type="text"
+                      value={newAccountRequest.occupation}
+                      onChange={(e) => setNewAccountRequest({ ...newAccountRequest, occupation: e.target.value })}
+                      className="w-full px-4 py-3 border border-zinc-300 rounded-lg"
+                      placeholder="Empleado, Autónomo, Estudiante..."
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-zinc-700 mb-1">Ingresos mensuales (€)</label>
+                    <input
+                      type="number"
+                      value={newAccountRequest.monthly_income}
+                      onChange={(e) => setNewAccountRequest({ ...newAccountRequest, monthly_income: e.target.value })}
+                      className="w-full px-4 py-3 border border-zinc-300 rounded-lg"
+                      placeholder="2000"
+                    />
+                  </div>
+                </div>
+              </div>
+
               <Button type="submit" className="w-full bg-indigo-600 hover:bg-indigo-700 h-12">
-                Crear Solicitud
+                Crear Solicitud de Apertura
               </Button>
             </form>
           </div>
