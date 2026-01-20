@@ -216,6 +216,97 @@ const BancoSistema = () => {
     }
   };
 
+  const fetchPendingVideoSessions = async () => {
+    try {
+      const response = await fetch(`${API_URL}/api/kyc/agent/pending-sessions`, {
+        credentials: 'include',
+        headers: token ? { 'Authorization': `Bearer ${token}` } : {}
+      });
+      const data = await response.json();
+      setPendingVideoSessions(data.pending_sessions || []);
+    } catch (error) {
+      console.error('Error al cargar sesiones de video:', error);
+    }
+  };
+
+  const handleJoinVideoSession = async (sessionId) => {
+    try {
+      const response = await fetch(`${API_URL}/api/kyc/agent/join`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token && { 'Authorization': `Bearer ${token}` })
+        },
+        body: JSON.stringify({ session_id: sessionId })
+      });
+      
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.detail || 'Error al unirse a la sesión');
+      }
+      
+      const data = await response.json();
+      setActiveVideoSession(data);
+      toast.success('Conectando a la videollamada...');
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+
+  const handleCompleteVideoVerification = async (result) => {
+    try {
+      const response = await fetch(`${API_URL}/api/kyc/agent/complete-verification`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token && { 'Authorization': `Bearer ${token}` })
+        },
+        body: JSON.stringify({
+          session_id: activeVideoSession.session_id,
+          ...result
+        })
+      });
+      
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.detail || 'Error al completar verificación');
+      }
+      
+      const data = await response.json();
+      
+      if (data.fraud_alert) {
+        toast.error('⚠️ ALERTA: Cliente ya existe en el sistema. Verificación rechazada.');
+      } else if (result.verification_status === 'approved') {
+        toast.success('✅ Verificación completada. Cliente verificado correctamente.');
+      } else {
+        toast.warning('Verificación rechazada.');
+      }
+      
+      setActiveVideoSession(null);
+      fetchPendingVideoSessions();
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+
+  const handleEndVideoSession = async () => {
+    if (!activeVideoSession) return;
+    
+    try {
+      await fetch(`${API_URL}/api/kyc/agent/end-session/${activeVideoSession.session_id}`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: token ? { 'Authorization': `Bearer ${token}` } : {}
+      });
+      setActiveVideoSession(null);
+      fetchPendingVideoSessions();
+    } catch (error) {
+      console.error('Error ending session:', error);
+    }
+  };
+
   useEffect(() => {
     if (activeTab === 'employees') fetchEmployees();
     if (activeTab === 'accounts') fetchAccountRequests();
