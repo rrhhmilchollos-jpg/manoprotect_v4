@@ -493,6 +493,7 @@ const BancoSistema = () => {
           {[
             { id: 'dashboard', label: 'Dashboard', icon: TrendingUp },
             { id: 'accounts', label: 'Aperturas', icon: FileText },
+            { id: 'kyc', label: 'Verificación KYC', icon: Video },
             { id: 'customers', label: 'Clientes', icon: Users },
             { id: 'loans', label: 'Préstamos', icon: PiggyBank },
             { id: 'cards', label: 'Tarjetas', icon: CreditCard },
