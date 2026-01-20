@@ -89,6 +89,15 @@ const BancoSistema = () => {
     decision: 'approved', interest_rate: '', notes: ''
   });
   
+  const [kycSchedule, setKycSchedule] = useState({
+    meeting_link: '', scheduled_time: '', notes: ''
+  });
+  
+  const [kycComplete, setKycComplete] = useState({
+    verification_status: 'approved', identity_verified: true,
+    document_type: 'DNI', document_number: '', notes: '', rejection_reason: ''
+  });
+  
   const [searchCustomer, setSearchCustomer] = useState('');
 
   useEffect(() => {
