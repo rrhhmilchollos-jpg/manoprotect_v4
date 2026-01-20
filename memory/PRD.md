@@ -1,11 +1,26 @@
-# ManoProtect - Plataforma Integral de Protección contra Fraudes
+# ManoProtect - Plataforma Integral de Protección contra Fraudes + ManoBank
 
 ## Problema Original
 Crear una plataforma integral de seguridad digital multi-plataforma (web + móvil) con diferentes niveles para individuos, familias y empresas.
 
+**ACTUALIZACIÓN:** El proyecto ha evolucionado para incluir **ManoBank**, un sistema bancario digital completo estilo BBVA con portal separado para empleados.
+
 ## Estado del Proyecto - 20 Enero 2026
 
 ### ✅ COMPLETADO HOY (20 Enero 2026)
+
+#### 🔧 Bug Fix: Portal de Empleados Login Corregido
+- **Problema:** Error "body stream already read" al hacer login en `/banco`
+- **Solución:** 
+  1. Mejorado manejo de respuestas JSON con try-catch
+  2. Añadido `checkAuth()` del AuthContext para actualizar estado de autenticación
+- **Archivos:** `/app/frontend/src/pages/BancoEmpleados.js`
+- **Testing:** 100% tests pasados (backend + frontend)
+
+#### ManoBank - Portal de Empleados Separado
+- **Login:** `/banco` - Portal exclusivo para empleados del banco
+- **Sistema:** `/banco/sistema` - Panel de administración completo
+- **Acceso protegido:** Solo empleados autorizados pueden acceder
 
 #### ManoBank - Sistema Bancario Completo (Estilo BBVA)
 
@@ -21,17 +36,15 @@ Crear una plataforma integral de seguridad digital multi-plataforma (web + móvi
 - Emisión de tarjetas (Débito, Crédito, Platinum, Black)
 - Gestión de clientes con KYC
 
-**Frontend** (`/app/frontend/src/pages/ManoBankAdmin.js`):
-- Dashboard con estadísticas en tiempo real
+**Frontend** (`/app/frontend/src/pages/BancoSistema.js`):
+- Dashboard con estadísticas en tiempo real (Clientes, Cuentas, Depósitos, Préstamos)
 - Tabs: Dashboard, Aperturas, Clientes, Préstamos, Tarjetas, Empleados
-- Flujos completos para:
-  - Añadir empleados con roles
-  - Crear solicitudes de apertura de cuenta
-  - Aprobar/rechazar cuentas
-  - Crear y evaluar préstamos
-  - Emitir y bloquear tarjetas
+- Header con nombre y rol del empleado (ej: "Ivan Rubio Cano - Director General")
+- Flujos completos para gestión bancaria
 
-**Acceso**: `/manobank/admin` (Solo empleados del banco o superadmins)
+**Accesos**:
+- Portal Empleados: `/banco` → `/banco/sistema`
+- Portal Clientes: `/manobank`
 
 ### ✅ COMPLETADO ANTERIORMENTE
 
