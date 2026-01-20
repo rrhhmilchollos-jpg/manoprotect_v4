@@ -261,7 +261,8 @@ const BancoSistema = () => {
   const handleCreateAccountRequest = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch(`${API_URL}/api/manobank/admin/account-requests`, {
+      // Open account directly instead of creating a request
+      const response = await fetch(`${API_URL}/api/manobank/admin/open-account-direct`, {
         method: 'POST',
         credentials: 'include',
         headers: {
@@ -278,15 +279,27 @@ const BancoSistema = () => {
       const data = await response.json();
       if (!response.ok) throw new Error(data.detail);
       
-      toast.success('Solicitud de cuenta creada');
+      // Show success and offer to download contract
+      toast.success(`¡Cuenta abierta! IBAN: ${data.iban}`);
+      
+      // Open contract PDF in new tab
+      if (data.contract_id) {
+        const contractUrl = `${API_URL}/api/manobank/admin/contracts/${data.contract_id}/pdf`;
+        window.open(contractUrl, '_blank');
+        toast.info('Descargando contrato para firma...');
+      }
+      
       setShowNewAccount(false);
       setNewAccountRequest({
         customer_name: '', customer_email: '', customer_phone: '', customer_dni: '',
-        account_type: 'corriente', initial_deposit: '', occupation: '', monthly_income: ''
+        address_street: '', address_city: '', address_postal_code: '', address_province: '',
+        address_country: 'España', account_type: 'corriente', initial_deposit: '', 
+        occupation: '', monthly_income: '', date_of_birth: '', nationality: 'Española'
       });
       fetchAccountRequests();
+      fetchDashboard();
     } catch (error) {
-      toast.error(error.message || 'Error al crear solicitud');
+      toast.error(error.message || 'Error al abrir cuenta');
     }
   };
 
