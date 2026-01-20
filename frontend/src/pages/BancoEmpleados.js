@@ -34,7 +34,13 @@ const BancoEmpleados = () => {
         body: JSON.stringify({ email, password })
       });
       
-      const loginData = await loginResponse.json();
+      // Parse login response only once
+      let loginData;
+      try {
+        loginData = await loginResponse.json();
+      } catch (parseError) {
+        throw new Error('Error al procesar la respuesta del servidor');
+      }
       
       if (!loginResponse.ok) {
         throw new Error(loginData.detail || 'Credenciales incorrectas');
@@ -45,11 +51,19 @@ const BancoEmpleados = () => {
         credentials: 'include'
       });
       
-      if (!dashboardResponse.ok) {
-        throw new Error('No tienes acceso al sistema bancario. Contacta con tu supervisor.');
+      // Parse dashboard response safely
+      let dashboardData;
+      try {
+        dashboardData = await dashboardResponse.json();
+      } catch (parseError) {
+        throw new Error('Error al verificar permisos de empleado');
       }
       
-      toast.success('Bienvenido al Sistema ManoBank');
+      if (!dashboardResponse.ok) {
+        throw new Error(dashboardData.detail || 'No tienes acceso al sistema bancario. Contacta con tu supervisor.');
+      }
+      
+      toast.success(`Bienvenido al Sistema ManoBank, ${loginData.name || 'Usuario'}`);
       navigate('/banco/sistema');
       
     } catch (error) {
