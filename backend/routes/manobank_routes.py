@@ -82,8 +82,9 @@ async def get_manobank_dashboard(
     db = get_db()
     
     # Check if user has premium access
-    user_plan = user.get("plan", "free")
-    user_role = user.get("role", "")
+    user_plan = getattr(user, "plan", "free") or "free"
+    user_role = getattr(user, "role", "") or ""
+    user_id = user.user_id
     
     # Admins and superadmins always have access
     has_manobank_access = user_role in ["admin", "superadmin"] or user_plan in [
@@ -100,13 +101,13 @@ async def get_manobank_dashboard(
     
     # Get user's bank accounts
     accounts = await db.manobank_accounts.find(
-        {"user_id": user["user_id"]},
+        {"user_id": user_id},
         {"_id": 0}
     ).to_list(10)
     
     # Get recent transactions
     transactions = await db.manobank_transactions.find(
-        {"user_id": user["user_id"]}
+        {"user_id": user_id}
     ).sort("created_at", -1).limit(20).to_list(20)
     
     # Clean transactions for response
