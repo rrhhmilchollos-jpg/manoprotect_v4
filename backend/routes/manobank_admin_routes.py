@@ -1055,3 +1055,170 @@ def _calculate_risk_score(loan: LoanApplication) -> int:
         score += 30
     
     return max(0, min(100, score))
+
+
+
+# ============================================
+# SISTEMA DE VERIFICACIÓN KYC POR VIDEOLLAMADA
+# ============================================
+
+class KYCVerificationRequest(BaseModel):
+    request_id: str
+    meeting_link: str  # Zoom meeting link
+    scheduled_time: str  # ISO datetime
+    notes: Optional[str] = None
+
+class KYCVerificationComplete(BaseModel):
+    verification_status: str  # "approved", "rejected", "pending_documents"
+    identity_verified: bool
+    document_type: str  # DNI, Pasaporte, NIE
+    document_number: str
+    notes: Optional[str] = None
+    rejection_reason: Optional[str] = None
+
+@router.get("/kyc-verifications")
+async def get_kyc_verifications(
+    request: Request,
+    session_token: Optional[str] = Cookie(None),
+    status: Optional[str] = None
+):
+    """Listar verificaciones KYC pendientes y completadas"""
+    user, employee = await require_bank_employee(request, session_token)
+    db = get_db()
+    
+    query = {}
+    if status:
+        query["status"] = status
+    
+    verifications = await db.manobank_kyc_verifications.find(
+        query,
+        {"_id": 0}
+    ).sort("scheduled_time", -1).to_list(100)
+    
+    return {"verifications": verifications}
+
+@router.post("/kyc-verifications/schedule")
+async def schedule_kyc_verification(
+    data: KYCVerificationRequest,
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Programar verificación KYC por videollamada"""
+    user, employee = await require_bank_employee(request, session_token)
+    db = get_db()
+    
+    # Get the account request
+    acc_request = await db.manobank_account_requests.find_one({"id": data.request_id})
+    if not acc_request:
+        raise HTTPException(status_code=404, detail="Solicitud no encontrada")
+    
+    verification_id = f"kyc_{uuid.uuid4().hex[:12]}"
+    
+    verification = {
+        "id": verification_id,
+        "request_id": data.request_id,
+        "customer_name": acc_request["customer_name"],
+        "customer_email": acc_request["customer_email"],
+        "customer_phone": acc_request["customer_phone"],
+        "customer_dni": acc_request["customer_dni"],
+        "meeting_link": data.meeting_link,
+        "scheduled_time": data.scheduled_time,
+        "notes": data.notes,
+        "status": "scheduled",
+        "scheduled_by": user.user_id,
+        "scheduled_by_name": employee.get("name", user.name),
+        "created_at": datetime.now(timezone.utc).isoformat()
+    }
+    
+    await db.manobank_kyc_verifications.insert_one(verification)
+    
+    # Update account request status
+    await db.manobank_account_requests.update_one(
+        {"id": data.request_id},
+        {"$set": {
+            "status": "kyc_scheduled",
+            "kyc_verification_id": verification_id,
+            "kyc_meeting_link": data.meeting_link,
+            "kyc_scheduled_time": data.scheduled_time
+        }}
+    )
+    
+    verification.pop("_id", None)
+    
+    return {
+        "message": "Verificación KYC programada",
+        "verification": verification
+    }
+
+@router.post("/kyc-verifications/{verification_id}/complete")
+async def complete_kyc_verification(
+    verification_id: str,
+    data: KYCVerificationComplete,
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Completar verificación KYC después de la videollamada"""
+    user, employee = await require_bank_employee(request, session_token)
+    db = get_db()
+    
+    verification = await db.manobank_kyc_verifications.find_one({"id": verification_id})
+    if not verification:
+        raise HTTPException(status_code=404, detail="Verificación no encontrada")
+    
+    update_data = {
+        "status": data.verification_status,
+        "identity_verified": data.identity_verified,
+        "document_type": data.document_type,
+        "document_number": data.document_number,
+        "verification_notes": data.notes,
+        "rejection_reason": data.rejection_reason,
+        "completed_by": user.user_id,
+        "completed_by_name": employee.get("name", user.name),
+        "completed_at": datetime.now(timezone.utc).isoformat()
+    }
+    
+    await db.manobank_kyc_verifications.update_one(
+        {"id": verification_id},
+        {"$set": update_data}
+    )
+    
+    # Update account request based on verification result
+    if data.verification_status == "approved":
+        await db.manobank_account_requests.update_one(
+            {"id": verification["request_id"]},
+            {"$set": {
+                "status": "kyc_verified",
+                "kyc_verified": True,
+                "kyc_document_type": data.document_type,
+                "kyc_document_number": data.document_number
+            }}
+        )
+        message = "Verificación KYC completada - Cliente verificado"
+    else:
+        await db.manobank_account_requests.update_one(
+            {"id": verification["request_id"]},
+            {"$set": {
+                "status": "kyc_rejected" if data.verification_status == "rejected" else "pending_documents",
+                "kyc_rejection_reason": data.rejection_reason
+            }}
+        )
+        message = f"Verificación KYC: {data.verification_status}"
+    
+    return {"message": message}
+
+@router.get("/kyc-verifications/pending")
+async def get_pending_kyc_verifications(
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Obtener verificaciones KYC pendientes para hoy"""
+    user, employee = await require_bank_employee(request, session_token)
+    db = get_db()
+    
+    # Get scheduled verifications
+    verifications = await db.manobank_kyc_verifications.find(
+        {"status": "scheduled"},
+        {"_id": 0}
+    ).sort("scheduled_time", 1).to_list(50)
+    
+    return {"pending_verifications": verifications}
