@@ -203,7 +203,7 @@ function AppRouter() {
       <Route 
         path="/banco/sistema" 
         element={
-          <ProtectedRoute>
+          <ProtectedRoute redirectTo="/banco">
             <BancoSistema />
           </ProtectedRoute>
         } 
