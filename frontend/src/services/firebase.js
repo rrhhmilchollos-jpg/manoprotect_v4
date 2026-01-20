@@ -7,13 +7,13 @@ import { getAnalytics, logEvent } from 'firebase/analytics';
 import { getMessaging, getToken, onMessage } from 'firebase/messaging';
 
 const firebaseConfig = {
-  apiKey: process.env.REACT_APP_FIREBASE_API_KEY || "AIzaSyAV5UQluzgvXfVlnu6hc-nWMVQecQ7Y6uE",
-  authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN || "manoprotect-f889b.firebaseapp.com",
-  projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID || "manoprotect-f889b",
-  storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET || "manoprotect-f889b.firebasestorage.app",
-  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID || "97231251022",
-  appId: process.env.REACT_APP_FIREBASE_APP_ID || "1:97231251022:web:04e039505ef8a3ed61451f",
-  measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID || "G-8KECMQS45X"
+  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+  authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.REACT_APP_FIREBASE_APP_ID,
+  measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID
 };
 
 // Initialize Firebase
