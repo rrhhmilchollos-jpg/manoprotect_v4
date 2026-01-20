@@ -253,7 +253,121 @@ async def get_sos_history(
         {"_id": 0}
     ).sort("created_at", -1).limit(50).to_list(50)
     
-    return alerts
+    return {"alerts": alerts}
+
+
+@router.post("/sos/family-emergency")
+async def send_family_emergency_sos(
+    request: Request,
+    session_token: Optional[str] = Cookie(None),
+    latitude: float = 0,
+    longitude: float = 0,
+    accuracy: float = 0,
+    message: str = "",
+    include_children: bool = True
+):
+    """Send emergency SOS to ALL family members with precise GPS location"""
+    user = await require_auth(request, session_token)
+    
+    # Parse request body
+    try:
+        body = await request.json()
+        latitude = body.get("latitude", latitude)
+        longitude = body.get("longitude", longitude)
+        accuracy = body.get("accuracy", accuracy)
+        message = body.get("message", message) or "🆘 ¡EMERGENCIA FAMILIAR! Necesito ayuda urgente."
+        include_children = body.get("include_children", include_children)
+    except:
+        pass
+    
+    alert_id = f"family_sos_{uuid.uuid4().hex[:12]}"
+    google_maps_url = f"https://maps.google.com/?q={latitude},{longitude}"
+    
+    sos_alert = {
+        "alert_id": alert_id,
+        "user_id": user.user_id,
+        "user_email": user.email,
+        "user_name": user.name,
+        "type": "family_emergency",
+        "location": {
+            "latitude": latitude,
+            "longitude": longitude,
+            "accuracy": accuracy,
+            "google_maps_url": google_maps_url,
+            "timestamp": datetime.now(timezone.utc).isoformat()
+        },
+        "message": message,
+        "status": "active",
+        "created_at": datetime.now(timezone.utc).isoformat()
+    }
+    
+    await _db.sos_alerts.insert_one(sos_alert)
+    
+    # Get all family members
+    family_members = await _db.family_members.find(
+        {"family_owner_id": user.user_id},
+        {"_id": 0}
+    ).to_list(20)
+    
+    # Get emergency contacts
+    emergency_contacts = await _db.contacts.find(
+        {"user_id": user.user_id, "is_emergency": True},
+        {"_id": 0}
+    ).to_list(20)
+    
+    # Get trusted contacts
+    trusted_contacts = await _db.trusted_contacts.find(
+        {"user_id": user.user_id},
+        {"_id": 0}
+    ).to_list(20)
+    
+    # Get children if included
+    children_contacts = []
+    if include_children:
+        children = await _db.family_children.find(
+            {"family_owner_id": user.user_id, "device_linked": True},
+            {"_id": 0}
+        ).to_list(10)
+        children_contacts = children
+    
+    # Combine all contacts
+    all_contacts = family_members + emergency_contacts + trusted_contacts + children_contacts
+    notifications_sent = []
+    
+    # Send notification to each contact
+    for contact in all_contacts:
+        contact_name = contact.get("name", contact.get("email", "Familiar"))
+        notification = {
+            "notification_id": f"notif_{uuid.uuid4().hex[:12]}",
+            "user_id": contact.get("user_id") or contact.get("contact_id") or contact.get("child_id"),
+            "target_phone": contact.get("phone"),
+            "target_email": contact.get("email"),
+            "type": "family_emergency_sos",
+            "priority": "critical",
+            "title": "🆘 ¡EMERGENCIA FAMILIAR!",
+            "message": f"{user.name} necesita ayuda urgente. Ubicación: {google_maps_url}",
+            "data": {
+                "alert_id": alert_id,
+                "sender_name": user.name,
+                "sender_phone": user.phone if hasattr(user, 'phone') else None,
+                "location": sos_alert["location"],
+                "google_maps_url": google_maps_url
+            },
+            "read": False,
+            "created_at": datetime.now(timezone.utc).isoformat()
+        }
+        await _db.notifications.insert_one(notification)
+        notifications_sent.append(contact_name)
+    
+    return {
+        "success": True,
+        "alert_id": alert_id,
+        "message": "🆘 Alerta de emergencia familiar enviada",
+        "location": sos_alert["location"],
+        "google_maps_url": google_maps_url,
+        "contacts_notified": len(notifications_sent),
+        "contacts": notifications_sent
+    }
 
 
 @router.post("/sos/cancel/{alert_id}")
