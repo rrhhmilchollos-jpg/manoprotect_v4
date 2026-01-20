@@ -38,7 +38,8 @@ const ManoBank = () => {
   
   // Form states
   const [transferData, setTransferData] = useState({
-    from_account_id: '', to_iban: '', to_name: '', amount: '', concept: ''
+    from_account_id: '', to_iban: '', to_name: '', amount: '', concept: '',
+    transfer_type: 'normal', scheduled_date: ''
   });
   const [bizumData, setBizumData] = useState({
     from_account_id: '', to_phone: '', amount: '', concept: ''
