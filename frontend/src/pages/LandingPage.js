@@ -94,16 +94,6 @@ const LandingPage = () => {
               </p>
               
               <div className="flex flex-wrap gap-4">
-                {isAuthenticated && (
-                  <Button
-                    data-testid="hero-dashboard-btn"
-                    onClick={() => navigate('/dashboard')}
-                    className="bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg px-8 h-14 text-lg shadow-md hover:shadow-lg active:scale-95 transition-all"
-                  >
-                    Mi Dashboard
-                    <ArrowRight className="ml-2 w-5 h-5" />
-                  </Button>
-                )}
                 <Button
                   data-testid="hero-learn-more-btn"
                   onClick={() => navigate('/how-it-works')}
