@@ -1469,6 +1469,202 @@ const BancoSistema = () => {
           </div>
         </div>
       )}
+
+      {/* Schedule KYC Modal */}
+      {showScheduleKYC && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl max-w-md w-full p-6">
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-xl font-bold flex items-center gap-2">
+                <Video className="w-6 h-6 text-indigo-600" />
+                Programar Verificación Zoom
+              </h3>
+              <button onClick={() => setShowScheduleKYC(null)}>
+                <X className="w-6 h-6 text-zinc-400" />
+              </button>
+            </div>
+            
+            <div className="mb-4 p-3 bg-indigo-50 rounded-lg">
+              <p className="font-medium">{showScheduleKYC.customer_name}</p>
+              <p className="text-sm text-zinc-600">DNI: {showScheduleKYC.customer_dni}</p>
+              <p className="text-sm text-zinc-600">{showScheduleKYC.customer_email}</p>
+            </div>
+            
+            <form onSubmit={handleScheduleKYC} className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-zinc-700 mb-1">
+                  Enlace de Zoom Meeting *
+                </label>
+                <input
+                  type="url"
+                  value={kycSchedule.meeting_link}
+                  onChange={(e) => setKycSchedule({ ...kycSchedule, meeting_link: e.target.value })}
+                  placeholder="https://zoom.us/j/xxxxxxxxx"
+                  className="w-full px-4 py-3 border border-zinc-300 rounded-lg"
+                  required
+                />
+                <p className="text-xs text-zinc-500 mt-1">
+                  Crea una reunión en zoom.us y pega el enlace aquí
+                </p>
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-zinc-700 mb-1">
+                  Fecha y Hora *
+                </label>
+                <input
+                  type="datetime-local"
+                  value={kycSchedule.scheduled_time}
+                  onChange={(e) => setKycSchedule({ ...kycSchedule, scheduled_time: e.target.value })}
+                  className="w-full px-4 py-3 border border-zinc-300 rounded-lg"
+                  required
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-zinc-700 mb-1">
+                  Notas (opcional)
+                </label>
+                <textarea
+                  value={kycSchedule.notes}
+                  onChange={(e) => setKycSchedule({ ...kycSchedule, notes: e.target.value })}
+                  placeholder="Instrucciones para el cliente..."
+                  className="w-full px-4 py-3 border border-zinc-300 rounded-lg"
+                  rows={2}
+                />
+              </div>
+              
+              <Button type="submit" className="w-full h-12 bg-indigo-600 hover:bg-indigo-700">
+                <Calendar className="w-4 h-4 mr-2" />
+                Programar Videollamada
+              </Button>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Complete KYC Modal */}
+      {showCompleteKYC && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl max-w-md w-full p-6">
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-xl font-bold flex items-center gap-2">
+                <BadgeCheck className="w-6 h-6 text-emerald-600" />
+                Completar Verificación KYC
+              </h3>
+              <button onClick={() => setShowCompleteKYC(null)}>
+                <X className="w-6 h-6 text-zinc-400" />
+              </button>
+            </div>
+            
+            <div className="mb-4 p-3 bg-emerald-50 rounded-lg">
+              <p className="font-medium">{showCompleteKYC.customer_name}</p>
+              <p className="text-sm text-zinc-600">DNI esperado: {showCompleteKYC.customer_dni}</p>
+            </div>
+            
+            <form onSubmit={handleCompleteKYC} className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-zinc-700 mb-1">
+                  Resultado de la Verificación
+                </label>
+                <select
+                  value={kycComplete.verification_status}
+                  onChange={(e) => setKycComplete({ ...kycComplete, verification_status: e.target.value })}
+                  className="w-full px-4 py-3 border border-zinc-300 rounded-lg"
+                >
+                  <option value="approved">✅ Aprobado - Identidad Verificada</option>
+                  <option value="pending_documents">⏳ Pendiente - Documentos Adicionales</option>
+                  <option value="rejected">❌ Rechazado</option>
+                </select>
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-zinc-700 mb-1">
+                  Tipo de Documento
+                </label>
+                <select
+                  value={kycComplete.document_type}
+                  onChange={(e) => setKycComplete({ ...kycComplete, document_type: e.target.value })}
+                  className="w-full px-4 py-3 border border-zinc-300 rounded-lg"
+                >
+                  <option value="DNI">DNI Español</option>
+                  <option value="NIE">NIE (Extranjero)</option>
+                  <option value="Pasaporte">Pasaporte</option>
+                </select>
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-zinc-700 mb-1">
+                  Número de Documento Verificado *
+                </label>
+                <input
+                  type="text"
+                  value={kycComplete.document_number}
+                  onChange={(e) => setKycComplete({ ...kycComplete, document_number: e.target.value })}
+                  placeholder="12345678A"
+                  className="w-full px-4 py-3 border border-zinc-300 rounded-lg"
+                  required
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-zinc-700 mb-1">
+                  Notas de Verificación
+                </label>
+                <textarea
+                  value={kycComplete.notes}
+                  onChange={(e) => setKycComplete({ ...kycComplete, notes: e.target.value })}
+                  placeholder="Observaciones de la videollamada..."
+                  className="w-full px-4 py-3 border border-zinc-300 rounded-lg"
+                  rows={2}
+                />
+              </div>
+              
+              {kycComplete.verification_status === 'rejected' && (
+                <div>
+                  <label className="block text-sm font-medium text-zinc-700 mb-1">
+                    Motivo del Rechazo *
+                  </label>
+                  <textarea
+                    value={kycComplete.rejection_reason}
+                    onChange={(e) => setKycComplete({ ...kycComplete, rejection_reason: e.target.value })}
+                    placeholder="Explica el motivo del rechazo..."
+                    className="w-full px-4 py-3 border border-zinc-300 rounded-lg"
+                    rows={2}
+                    required
+                  />
+                </div>
+              )}
+              
+              <Button 
+                type="submit" 
+                className={`w-full h-12 ${
+                  kycComplete.verification_status === 'approved' ? 'bg-emerald-600 hover:bg-emerald-700' :
+                  kycComplete.verification_status === 'rejected' ? 'bg-red-600 hover:bg-red-700' :
+                  'bg-amber-600 hover:bg-amber-700'
+                }`}
+              >
+                {kycComplete.verification_status === 'approved' ? (
+                  <>
+                    <CheckCircle className="w-4 h-4 mr-2" />
+                    Verificar Cliente
+                  </>
+                ) : kycComplete.verification_status === 'rejected' ? (
+                  <>
+                    <XCircle className="w-4 h-4 mr-2" />
+                    Rechazar Verificación
+                  </>
+                ) : (
+                  <>
+                    <Clock className="w-4 h-4 mr-2" />
+                    Solicitar Más Documentos
+                  </>
+                )}
+              </Button>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
