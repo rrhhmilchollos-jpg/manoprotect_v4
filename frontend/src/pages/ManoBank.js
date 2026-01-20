@@ -808,8 +808,8 @@ const ManoBank = () => {
 
       {/* Transfer Modal */}
       {showTransfer && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl max-w-md w-full p-6">
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 overflow-y-auto">
+          <div className="bg-white rounded-2xl max-w-md w-full p-6 my-8">
             <div className="flex items-center justify-between mb-6">
               <h3 className="text-xl font-bold">Nueva transferencia</h3>
               <button onClick={() => setShowTransfer(false)}>
@@ -817,6 +817,48 @@ const ManoBank = () => {
               </button>
             </div>
             <form onSubmit={handleTransfer} className="space-y-4">
+              {/* Transfer Type Selection */}
+              <div>
+                <label className="block text-sm font-medium mb-2">Tipo de transferencia</label>
+                <div className="grid grid-cols-3 gap-2">
+                  {[
+                    { value: 'normal', label: 'Normal', desc: '24-48h', icon: '📤' },
+                    { value: 'immediate', label: 'Inmediata', desc: 'Al instante', icon: '⚡' },
+                    { value: 'scheduled', label: 'Programada', desc: 'Elige fecha', icon: '📅' },
+                  ].map((type) => (
+                    <button
+                      key={type.value}
+                      type="button"
+                      onClick={() => setTransferData({ ...transferData, transfer_type: type.value })}
+                      className={`p-3 rounded-lg border-2 text-center transition-all ${
+                        transferData.transfer_type === type.value 
+                          ? 'border-blue-500 bg-blue-50' 
+                          : 'border-zinc-200 hover:border-zinc-300'
+                      }`}
+                    >
+                      <span className="text-xl">{type.icon}</span>
+                      <p className="font-medium text-sm mt-1">{type.label}</p>
+                      <p className="text-xs text-zinc-500">{type.desc}</p>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Scheduled Date (only if scheduled) */}
+              {transferData.transfer_type === 'scheduled' && (
+                <div>
+                  <label className="block text-sm font-medium mb-1">Fecha de envío</label>
+                  <input
+                    type="date"
+                    value={transferData.scheduled_date}
+                    onChange={(e) => setTransferData({ ...transferData, scheduled_date: e.target.value })}
+                    min={new Date().toISOString().split('T')[0]}
+                    className="w-full px-4 py-3 border rounded-lg"
+                    required
+                  />
+                </div>
+              )}
+
               <div>
                 <label className="block text-sm font-medium mb-1">Desde cuenta</label>
                 <select
@@ -878,10 +920,29 @@ const ManoBank = () => {
                   onChange={(e) => setTransferData({ ...transferData, concept: e.target.value })}
                   placeholder="Ej: Alquiler enero"
                   className="w-full px-4 py-3 border rounded-lg"
+                  required
                 />
               </div>
+              
+              {/* Info box */}
+              <div className={`p-3 rounded-lg text-sm ${
+                transferData.transfer_type === 'immediate' ? 'bg-amber-50 text-amber-800' :
+                transferData.transfer_type === 'scheduled' ? 'bg-blue-50 text-blue-800' :
+                'bg-zinc-50 text-zinc-600'
+              }`}>
+                {transferData.transfer_type === 'normal' && (
+                  <p>💡 Las transferencias normales llegan en 24-48 horas laborables.</p>
+                )}
+                {transferData.transfer_type === 'immediate' && (
+                  <p>⚡ Las transferencias inmediatas llegan en segundos. Comisión: 0€ entre cuentas ManoBank.</p>
+                )}
+                {transferData.transfer_type === 'scheduled' && (
+                  <p>📅 La transferencia se ejecutará automáticamente en la fecha seleccionada.</p>
+                )}
+              </div>
+
               <Button type="submit" className="w-full h-12 bg-blue-600 hover:bg-blue-700">
-                Enviar transferencia
+                {transferData.transfer_type === 'scheduled' ? 'Programar transferencia' : 'Enviar transferencia'}
               </Button>
             </form>
           </div>
