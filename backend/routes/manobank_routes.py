@@ -78,7 +78,7 @@ async def get_manobank_dashboard(
     session_token: Optional[str] = Cookie(None)
 ):
     """Get ManoBank dashboard with accounts, balances and recent activity"""
-    user = await get_current_user_simple(request, session_token)
+    user = await require_auth(request, session_token)
     db = get_db()
     
     # Check if user has premium access
@@ -187,7 +187,7 @@ async def get_accounts(
     session_token: Optional[str] = Cookie(None)
 ):
     """Get all connected bank accounts"""
-    user = await get_current_user_simple(request, session_token)
+    user = await require_auth(request, session_token)
     db = get_db()
     
     accounts = await db.manobank_accounts.find(
@@ -204,7 +204,7 @@ async def add_account(
     session_token: Optional[str] = Cookie(None)
 ):
     """Add a new bank account"""
-    user = await get_current_user_simple(request, session_token)
+    user = await require_auth(request, session_token)
     db = get_db()
     
     # Validate IBAN
@@ -265,7 +265,7 @@ async def delete_account(
     session_token: Optional[str] = Cookie(None)
 ):
     """Delete a bank account"""
-    user = await get_current_user_simple(request, session_token)
+    user = await require_auth(request, session_token)
     db = get_db()
     
     result = await db.manobank_accounts.delete_one({
@@ -285,7 +285,7 @@ async def set_primary_account(
     session_token: Optional[str] = Cookie(None)
 ):
     """Set account as primary"""
-    user = await get_current_user_simple(request, session_token)
+    user = await require_auth(request, session_token)
     db = get_db()
     
     # Remove primary from all accounts
@@ -318,7 +318,7 @@ async def get_transactions(
     limit: int = 50
 ):
     """Get transaction history"""
-    user = await get_current_user_simple(request, session_token)
+    user = await require_auth(request, session_token)
     db = get_db()
     
     query = {"user_id": user["user_id"]}
@@ -352,7 +352,7 @@ async def get_transaction_details(
     session_token: Optional[str] = Cookie(None)
 ):
     """Get transaction details"""
-    user = await get_current_user_simple(request, session_token)
+    user = await require_auth(request, session_token)
     db = get_db()
     
     transaction = await db.manobank_transactions.find_one(
@@ -376,7 +376,7 @@ async def create_sepa_transfer(
     session_token: Optional[str] = Cookie(None)
 ):
     """Create a SEPA transfer"""
-    user = await get_current_user_simple(request, session_token)
+    user = await require_auth(request, session_token)
     db = get_db()
     
     # Verify source account
@@ -474,7 +474,7 @@ async def send_bizum(
     session_token: Optional[str] = Cookie(None)
 ):
     """Send money via Bizum"""
-    user = await get_current_user_simple(request, session_token)
+    user = await require_auth(request, session_token)
     db = get_db()
     
     # Verify source account
@@ -552,7 +552,7 @@ async def verify_transfer(
     session_token: Optional[str] = Cookie(None)
 ):
     """Verify a pending transfer (for suspicious ones)"""
-    user = await get_current_user_simple(request, session_token)
+    user = await require_auth(request, session_token)
     db = get_db()
     
     transfer = await db.manobank_transfers.find_one({
@@ -605,7 +605,7 @@ async def cancel_transfer(
     session_token: Optional[str] = Cookie(None)
 ):
     """Cancel a pending transfer"""
-    user = await get_current_user_simple(request, session_token)
+    user = await require_auth(request, session_token)
     db = get_db()
     
     result = await db.manobank_transfers.update_one(
@@ -634,7 +634,7 @@ async def get_scheduled_payments(
     session_token: Optional[str] = Cookie(None)
 ):
     """Get all scheduled payments"""
-    user = await get_current_user_simple(request, session_token)
+    user = await require_auth(request, session_token)
     db = get_db()
     
     scheduled = await db.manobank_scheduled.find(
@@ -651,7 +651,7 @@ async def create_scheduled_payment(
     session_token: Optional[str] = Cookie(None)
 ):
     """Create a scheduled/recurring payment"""
-    user = await get_current_user_simple(request, session_token)
+    user = await require_auth(request, session_token)
     db = get_db()
     
     # Verify account
@@ -696,7 +696,7 @@ async def delete_scheduled_payment(
     session_token: Optional[str] = Cookie(None)
 ):
     """Delete a scheduled payment"""
-    user = await get_current_user_simple(request, session_token)
+    user = await require_auth(request, session_token)
     db = get_db()
     
     result = await db.manobank_scheduled.delete_one({
@@ -716,7 +716,7 @@ async def toggle_scheduled_payment(
     session_token: Optional[str] = Cookie(None)
 ):
     """Activate/deactivate a scheduled payment"""
-    user = await get_current_user_simple(request, session_token)
+    user = await require_auth(request, session_token)
     db = get_db()
     
     scheduled = await db.manobank_scheduled.find_one({
@@ -750,7 +750,7 @@ async def get_alerts(
     include_resolved: bool = False
 ):
     """Get fraud alerts"""
-    user = await get_current_user_simple(request, session_token)
+    user = await require_auth(request, session_token)
     db = get_db()
     
     query = {"user_id": user["user_id"]}
@@ -771,7 +771,7 @@ async def resolve_alert(
     session_token: Optional[str] = Cookie(None)
 ):
     """Mark an alert as resolved"""
-    user = await get_current_user_simple(request, session_token)
+    user = await require_auth(request, session_token)
     db = get_db()
     
     result = await db.manobank_alerts.update_one(
@@ -790,7 +790,7 @@ async def get_alert_settings(
     session_token: Optional[str] = Cookie(None)
 ):
     """Get user's alert settings"""
-    user = await get_current_user_simple(request, session_token)
+    user = await require_auth(request, session_token)
     db = get_db()
     
     settings = await db.manobank_settings.find_one(
@@ -817,7 +817,7 @@ async def update_alert_settings(
     session_token: Optional[str] = Cookie(None)
 ):
     """Update alert settings"""
-    user = await get_current_user_simple(request, session_token)
+    user = await require_auth(request, session_token)
     db = get_db()
     
     update_data = {k: v for k, v in data.model_dump().items() if v is not None}
@@ -841,7 +841,7 @@ async def get_saved_recipients(
     session_token: Optional[str] = Cookie(None)
 ):
     """Get saved recipients for quick transfers"""
-    user = await get_current_user_simple(request, session_token)
+    user = await require_auth(request, session_token)
     db = get_db()
     
     recipients = await db.manobank_recipients.find(
@@ -859,7 +859,7 @@ async def add_recipient(
     session_token: Optional[str] = Cookie(None)
 ):
     """Save a new recipient"""
-    user = await get_current_user_simple(request, session_token)
+    user = await require_auth(request, session_token)
     db = get_db()
     
     iban = iban.replace(" ", "").upper()
@@ -884,7 +884,7 @@ async def delete_recipient(
     session_token: Optional[str] = Cookie(None)
 ):
     """Delete a saved recipient"""
-    user = await get_current_user_simple(request, session_token)
+    user = await require_auth(request, session_token)
     db = get_db()
     
     result = await db.manobank_recipients.delete_one({
