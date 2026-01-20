@@ -1260,3 +1260,332 @@ async def get_pending_kyc_verifications(
     ).sort("scheduled_time", 1).to_list(50)
     
     return {"pending_verifications": verifications}
+
+
+# ============================================
+# GESTIÓN DE CUENTAS (BLOQUEAR/DESBLOQUEAR)
+# ============================================
+
+class AccountStatusUpdate(BaseModel):
+    status: str  # active, blocked, frozen, closed
+    reason: str
+    notify_customer: bool = True
+
+@router.get("/accounts")
+async def list_accounts(
+    request: Request,
+    session_token: Optional[str] = Cookie(None),
+    status: Optional[str] = None,
+    customer_id: Optional[str] = None
+):
+    """Listar todas las cuentas del banco"""
+    user, employee = await require_bank_employee(request, session_token)
+    db = get_db()
+    
+    query = {}
+    if status:
+        query["status"] = status
+    if customer_id:
+        query["customer_id"] = customer_id
+    
+    accounts = await db.manobank_accounts.find(
+        query,
+        {"_id": 0}
+    ).sort("created_at", -1).to_list(500)
+    
+    return {"accounts": accounts}
+
+@router.get("/accounts/{account_id}")
+async def get_account_details(
+    account_id: str,
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Obtener detalles completos de una cuenta"""
+    user, employee = await require_bank_employee(request, session_token)
+    db = get_db()
+    
+    account = await db.manobank_accounts.find_one({"id": account_id}, {"_id": 0})
+    if not account:
+        raise HTTPException(status_code=404, detail="Cuenta no encontrada")
+    
+    # Get customer info
+    customer = await db.manobank_customers.find_one(
+        {"id": account["customer_id"]}, 
+        {"_id": 0}
+    )
+    
+    # Get recent transactions
+    transactions = await db.manobank_transactions.find(
+        {"$or": [{"from_account_id": account_id}, {"to_account_id": account_id}]},
+        {"_id": 0}
+    ).sort("created_at", -1).limit(20).to_list(20)
+    
+    # Get cards linked to account
+    cards = await db.manobank_cards.find(
+        {"account_id": account_id},
+        {"_id": 0, "card_number": 0, "cvv": 0}
+    ).to_list(10)
+    
+    return {
+        "account": account,
+        "customer": customer,
+        "recent_transactions": transactions,
+        "cards": cards
+    }
+
+@router.patch("/accounts/{account_id}/status")
+async def update_account_status(
+    account_id: str,
+    data: AccountStatusUpdate,
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Bloquear, desbloquear o congelar una cuenta"""
+    user, employee = await require_bank_employee(request, session_token)
+    db = get_db()
+    
+    account = await db.manobank_accounts.find_one({"id": account_id})
+    if not account:
+        raise HTTPException(status_code=404, detail="Cuenta no encontrada")
+    
+    old_status = account.get("status", "active")
+    
+    # Update account status
+    await db.manobank_accounts.update_one(
+        {"id": account_id},
+        {"$set": {
+            "status": data.status,
+            "status_reason": data.reason,
+            "status_updated_by": user.user_id,
+            "status_updated_by_name": employee.get("name", user.name),
+            "status_updated_at": datetime.now(timezone.utc).isoformat()
+        }}
+    )
+    
+    # Log the action
+    log_entry = {
+        "id": f"log_{uuid.uuid4().hex[:12]}",
+        "account_id": account_id,
+        "action": f"status_change_{data.status}",
+        "old_status": old_status,
+        "new_status": data.status,
+        "reason": data.reason,
+        "performed_by": user.user_id,
+        "performed_by_name": employee.get("name", user.name),
+        "created_at": datetime.now(timezone.utc).isoformat()
+    }
+    await db.manobank_account_logs.insert_one(log_entry)
+    
+    status_labels = {
+        "active": "Activada",
+        "blocked": "Bloqueada",
+        "frozen": "Congelada",
+        "closed": "Cerrada"
+    }
+    
+    return {
+        "message": f"Cuenta {status_labels.get(data.status, data.status)}",
+        "account_id": account_id,
+        "new_status": data.status
+    }
+
+# ============================================
+# ENVÍO DE TARJETAS A DOMICILIO
+# ============================================
+
+class CardShipmentRequest(BaseModel):
+    shipping_address: Optional[str] = None  # Use customer address if not provided
+    shipping_method: str = "standard"  # standard, express, urgent
+    notes: Optional[str] = None
+
+@router.post("/cards/{card_id}/ship")
+async def ship_card_to_customer(
+    card_id: str,
+    data: CardShipmentRequest,
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Enviar tarjeta física al domicilio del cliente"""
+    user, employee = await require_bank_employee(request, session_token)
+    db = get_db()
+    
+    # Get card
+    card = await db.manobank_cards.find_one({"id": card_id})
+    if not card:
+        raise HTTPException(status_code=404, detail="Tarjeta no encontrada")
+    
+    # Get customer
+    customer = await db.manobank_customers.find_one({"id": card["customer_id"]})
+    if not customer:
+        raise HTTPException(status_code=404, detail="Cliente no encontrado")
+    
+    # Determine shipping address
+    if data.shipping_address:
+        shipping_address = data.shipping_address
+    else:
+        # Use customer's registered address
+        shipping_address = f"{customer.get('address_street', '')}, {customer.get('address_postal_code', '')} {customer.get('address_city', '')}, {customer.get('address_province', '')}, {customer.get('address_country', 'España')}"
+    
+    # Calculate delivery dates based on shipping method
+    delivery_days = {"standard": 7, "express": 3, "urgent": 1}
+    days = delivery_days.get(data.shipping_method, 7)
+    estimated_delivery = (datetime.now(timezone.utc) + timedelta(days=days)).isoformat()
+    
+    shipment_id = f"ship_{uuid.uuid4().hex[:12]}"
+    tracking_number = f"MB{random.randint(100000000, 999999999)}"
+    
+    shipment = {
+        "id": shipment_id,
+        "card_id": card_id,
+        "customer_id": card["customer_id"],
+        "customer_name": customer["name"],
+        "card_type": card["card_type"],
+        "card_masked": card["card_number_masked"],
+        "shipping_address": shipping_address,
+        "shipping_method": data.shipping_method,
+        "tracking_number": tracking_number,
+        "status": "preparing",  # preparing, shipped, in_transit, delivered
+        "notes": data.notes,
+        "estimated_delivery": estimated_delivery,
+        "created_by": user.user_id,
+        "created_by_name": employee.get("name", user.name),
+        "created_at": datetime.now(timezone.utc).isoformat()
+    }
+    
+    await db.manobank_card_shipments.insert_one(shipment)
+    
+    # Update card status
+    await db.manobank_cards.update_one(
+        {"id": card_id},
+        {"$set": {
+            "physical_card_status": "shipping",
+            "shipment_id": shipment_id,
+            "tracking_number": tracking_number
+        }}
+    )
+    
+    shipment.pop("_id", None)
+    
+    return {
+        "message": "Envío de tarjeta programado",
+        "shipment": shipment
+    }
+
+@router.get("/card-shipments")
+async def list_card_shipments(
+    request: Request,
+    session_token: Optional[str] = Cookie(None),
+    status: Optional[str] = None
+):
+    """Listar todos los envíos de tarjetas"""
+    user, employee = await require_bank_employee(request, session_token)
+    db = get_db()
+    
+    query = {}
+    if status:
+        query["status"] = status
+    
+    shipments = await db.manobank_card_shipments.find(
+        query,
+        {"_id": 0}
+    ).sort("created_at", -1).to_list(100)
+    
+    return {"shipments": shipments}
+
+@router.patch("/card-shipments/{shipment_id}/status")
+async def update_shipment_status(
+    shipment_id: str,
+    status: str,
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Actualizar estado del envío de tarjeta"""
+    user, employee = await require_bank_employee(request, session_token)
+    db = get_db()
+    
+    valid_statuses = ["preparing", "shipped", "in_transit", "out_for_delivery", "delivered", "returned"]
+    if status not in valid_statuses:
+        raise HTTPException(status_code=400, detail=f"Estado inválido. Usar: {', '.join(valid_statuses)}")
+    
+    shipment = await db.manobank_card_shipments.find_one({"id": shipment_id})
+    if not shipment:
+        raise HTTPException(status_code=404, detail="Envío no encontrado")
+    
+    update_data = {
+        "status": status,
+        f"status_{status}_at": datetime.now(timezone.utc).isoformat(),
+        "updated_by": user.user_id
+    }
+    
+    if status == "delivered":
+        update_data["delivered_at"] = datetime.now(timezone.utc).isoformat()
+        # Activate the card
+        await db.manobank_cards.update_one(
+            {"id": shipment["card_id"]},
+            {"$set": {"physical_card_status": "delivered", "is_active": True}}
+        )
+    
+    await db.manobank_card_shipments.update_one(
+        {"id": shipment_id},
+        {"$set": update_data}
+    )
+    
+    status_labels = {
+        "preparing": "Preparando",
+        "shipped": "Enviado",
+        "in_transit": "En tránsito",
+        "out_for_delivery": "En reparto",
+        "delivered": "Entregado",
+        "returned": "Devuelto"
+    }
+    
+    return {"message": f"Estado actualizado: {status_labels.get(status, status)}"}
+
+# ============================================
+# GESTIÓN DE CLIENTES
+# ============================================
+
+@router.patch("/customers/{customer_id}")
+async def update_customer(
+    customer_id: str,
+    request: Request,
+    session_token: Optional[str] = Cookie(None),
+    name: Optional[str] = None,
+    phone: Optional[str] = None,
+    email: Optional[str] = None,
+    address_street: Optional[str] = None,
+    address_city: Optional[str] = None,
+    address_postal_code: Optional[str] = None,
+    address_province: Optional[str] = None,
+    status: Optional[str] = None
+):
+    """Actualizar datos de un cliente"""
+    user, employee = await require_bank_employee(request, session_token)
+    db = get_db()
+    
+    update_data = {}
+    if name: update_data["name"] = name
+    if phone: update_data["phone"] = phone
+    if email: update_data["email"] = email
+    if address_street: update_data["address_street"] = address_street
+    if address_city: update_data["address_city"] = address_city
+    if address_postal_code: update_data["address_postal_code"] = address_postal_code
+    if address_province: update_data["address_province"] = address_province
+    if status: update_data["status"] = status
+    
+    if not update_data:
+        raise HTTPException(status_code=400, detail="No hay datos para actualizar")
+    
+    update_data["updated_at"] = datetime.now(timezone.utc).isoformat()
+    update_data["updated_by"] = user.user_id
+    
+    result = await db.manobank_customers.update_one(
+        {"id": customer_id},
+        {"$set": update_data}
+    )
+    
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Cliente no encontrado")
+    
+    return {"message": "Cliente actualizado correctamente"}
