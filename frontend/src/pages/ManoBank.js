@@ -119,7 +119,7 @@ const ManoBank = () => {
         delete payload.scheduled_date;
       }
       
-      const response = await fetch(`${API_URL}/api/manobank/transfer`, {
+      const response = await fetch(`${API_URL}/api/manobank/transfers/sepa`, {
         method: 'POST',
         credentials: 'include',
         headers: {
