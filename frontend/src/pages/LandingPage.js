@@ -90,7 +90,7 @@ const LandingPage = () => {
               </h1>
               
               <p className="text-lg text-zinc-600 leading-relaxed max-w-xl">
-                MANO detecta y bloquea amenazas antes de que lleguen a ti. Protege a tu familia, tu empresa y tu tranquilidad con inteligencia artificial avanzada.
+                ManoProtect detecta y bloquea amenazas antes de que lleguen a ti. Protege a tu familia, tu empresa y tu tranquilidad con inteligencia artificial avanzada.
               </p>
               
               <div className="flex flex-wrap gap-4">
@@ -171,7 +171,7 @@ const LandingPage = () => {
       <section className="px-6 py-20 bg-white">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-bold mb-4">¿Qué detecta MANO?</h2>
+            <h2 className="text-3xl sm:text-4xl font-bold mb-4">¿Qué detecta ManoProtect?</h2>
             <p className="text-lg text-zinc-600 max-w-2xl mx-auto">
               Protección completa contra todas las amenazas digitales modernas
             </p>
@@ -206,7 +206,7 @@ const LandingPage = () => {
           <div className="text-center mb-16">
             <h2 className="text-3xl sm:text-4xl font-bold mb-4">Protección para todos</h2>
             <p className="text-lg text-zinc-600 max-w-2xl mx-auto">
-              Desde personas hasta grandes empresas, MANO se adapta a tus necesidades
+              Desde personas hasta grandes empresas, ManoProtect se adapta a tus necesidades
             </p>
           </div>
 
@@ -320,7 +320,7 @@ const LandingPage = () => {
                 Miles de familias ya están protegidas
               </h2>
               <p className="text-lg text-zinc-600">
-                MANO no solo protege a personas individuales. Protege a familias completas, 
+                ManoProtect no solo protege a personas individuales. Protege a familias completas, 
                 especialmente a los más vulnerables: nuestros mayores.
               </p>
               <div className="space-y-4">
@@ -351,7 +351,7 @@ const LandingPage = () => {
             Protégete ahora. Es gratis.
           </h2>
           <p className="text-lg text-indigo-100 mb-8 max-w-2xl mx-auto">
-            Únete a miles de personas que ya confían en MANO para su seguridad digital
+            Únete a miles de personas que ya confían en ManoProtect para su seguridad digital
           </p>
           <Button
             data-testid="final-cta-btn"
