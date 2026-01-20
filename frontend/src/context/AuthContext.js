@@ -75,6 +75,7 @@ export const AuthProvider = ({ children }) => {
   // Login with email/password
   const login = async (email, password) => {
     setError(null);
+    setLoading(true);
     try {
       const response = await fetch(`${API}/auth/login`, {
         method: 'POST',
@@ -94,10 +95,14 @@ export const AuthProvider = ({ children }) => {
         throw new Error(data.detail || 'Credenciales inválidas');
       }
 
+      // Store user data in localStorage as backup
+      localStorage.setItem('mano_user', JSON.stringify(data));
       setUser(data);
+      setLoading(false);
       return { success: true, user: data };
     } catch (err) {
       setError(err.message);
+      setLoading(false);
       return { success: false, error: err.message };
     }
   };
