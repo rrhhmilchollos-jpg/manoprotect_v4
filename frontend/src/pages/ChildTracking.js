@@ -28,6 +28,11 @@ const ChildTracking = () => {
   const [showHistory, setShowHistory] = useState(null);
   const [historyData, setHistoryData] = useState([]);
   
+  // SOS State
+  const [sosTriggered, setSosTriggered] = useState(false);
+  const [isGettingLocation, setIsGettingLocation] = useState(false);
+  const [lastSosLocation, setLastSosLocation] = useState(null);
+  
   // Form state
   const [newChild, setNewChild] = useState({
     name: '',
