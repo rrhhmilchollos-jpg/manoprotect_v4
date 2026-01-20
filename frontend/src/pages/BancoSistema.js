@@ -777,6 +777,155 @@ const BancoSistema = () => {
           </div>
         )}
 
+        {/* KYC Verification Tab */}
+        {activeTab === 'kyc' && (
+          <div className="space-y-4">
+            <div className="flex justify-between items-center">
+              <h2 className="text-xl font-bold flex items-center gap-2">
+                <Video className="w-6 h-6 text-indigo-600" />
+                Verificación KYC por Videollamada
+              </h2>
+            </div>
+
+            {/* Pending Account Requests needing KYC */}
+            <div className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl p-6 border border-indigo-200">
+              <h3 className="font-semibold mb-4 flex items-center gap-2">
+                <Calendar className="w-5 h-5 text-indigo-600" />
+                Solicitudes Pendientes de Verificación
+              </h3>
+              <div className="space-y-3">
+                {accountRequests.filter(r => r.status === 'pending' || r.status === 'kyc_scheduled').map((req) => (
+                  <div key={req.id} className="bg-white rounded-lg p-4 flex items-center justify-between">
+                    <div>
+                      <p className="font-medium">{req.customer_name}</p>
+                      <p className="text-sm text-zinc-500">DNI: {req.customer_dni} | Email: {req.customer_email}</p>
+                      {req.kyc_scheduled_time && (
+                        <p className="text-xs text-indigo-600 mt-1">
+                          Programado: {new Date(req.kyc_scheduled_time).toLocaleString('es-ES')}
+                        </p>
+                      )}
+                    </div>
+                    <div className="flex gap-2">
+                      {req.status === 'pending' && (
+                        <Button 
+                          size="sm" 
+                          onClick={() => setShowScheduleKYC(req)}
+                          className="bg-indigo-600 hover:bg-indigo-700"
+                        >
+                          <Video className="w-4 h-4 mr-1" />
+                          Programar Zoom
+                        </Button>
+                      )}
+                      {req.status === 'kyc_scheduled' && req.kyc_meeting_link && (
+                        <>
+                          <Button 
+                            size="sm" 
+                            variant="outline"
+                            onClick={() => window.open(req.kyc_meeting_link, '_blank')}
+                            className="border-indigo-300 text-indigo-600"
+                          >
+                            <ExternalLink className="w-4 h-4 mr-1" />
+                            Abrir Zoom
+                          </Button>
+                        </>
+                      )}
+                    </div>
+                  </div>
+                ))}
+                {accountRequests.filter(r => r.status === 'pending' || r.status === 'kyc_scheduled').length === 0 && (
+                  <p className="text-center text-zinc-500 py-4">No hay solicitudes pendientes de verificación</p>
+                )}
+              </div>
+            </div>
+
+            {/* Scheduled KYC Verifications */}
+            <div className="bg-white rounded-xl shadow-sm">
+              <div className="p-4 border-b">
+                <h3 className="font-semibold">Verificaciones Programadas</h3>
+              </div>
+              <div className="divide-y">
+                {kycVerifications.filter(v => v.status === 'scheduled').map((verification) => (
+                  <div key={verification.id} className="p-4 flex items-center justify-between">
+                    <div className="flex items-center gap-4">
+                      <div className="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center">
+                        <Video className="w-5 h-5 text-purple-600" />
+                      </div>
+                      <div>
+                        <p className="font-medium">{verification.customer_name}</p>
+                        <p className="text-sm text-zinc-500">
+                          {new Date(verification.scheduled_time).toLocaleString('es-ES')}
+                        </p>
+                        <p className="text-xs text-zinc-400">DNI: {verification.customer_dni}</p>
+                      </div>
+                    </div>
+                    <div className="flex gap-2">
+                      <Button 
+                        size="sm" 
+                        variant="outline"
+                        onClick={() => window.open(verification.meeting_link, '_blank')}
+                      >
+                        <ExternalLink className="w-4 h-4 mr-1" />
+                        Abrir Zoom
+                      </Button>
+                      <Button 
+                        size="sm" 
+                        onClick={() => setShowCompleteKYC(verification)}
+                        className="bg-emerald-600 hover:bg-emerald-700"
+                      >
+                        <CheckCircle className="w-4 h-4 mr-1" />
+                        Completar
+                      </Button>
+                    </div>
+                  </div>
+                ))}
+                {kycVerifications.filter(v => v.status === 'scheduled').length === 0 && (
+                  <p className="text-center text-zinc-500 py-8">No hay verificaciones programadas</p>
+                )}
+              </div>
+            </div>
+
+            {/* Completed Verifications */}
+            <div className="bg-white rounded-xl shadow-sm">
+              <div className="p-4 border-b">
+                <h3 className="font-semibold">Verificaciones Completadas</h3>
+              </div>
+              <div className="divide-y">
+                {kycVerifications.filter(v => v.status !== 'scheduled').map((verification) => (
+                  <div key={verification.id} className="p-4 flex items-center justify-between">
+                    <div className="flex items-center gap-4">
+                      <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
+                        verification.status === 'approved' ? 'bg-emerald-100' : 'bg-red-100'
+                      }`}>
+                        {verification.status === 'approved' ? 
+                          <CheckCircle className="w-5 h-5 text-emerald-600" /> :
+                          <XCircle className="w-5 h-5 text-red-600" />
+                        }
+                      </div>
+                      <div>
+                        <p className="font-medium">{verification.customer_name}</p>
+                        <p className="text-sm text-zinc-500">
+                          {verification.document_type}: {verification.document_number}
+                        </p>
+                        <p className="text-xs text-zinc-400">
+                          Verificado: {verification.completed_at ? new Date(verification.completed_at).toLocaleDateString('es-ES') : '-'}
+                        </p>
+                      </div>
+                    </div>
+                    <span className={`px-3 py-1 rounded-full text-sm ${
+                      verification.status === 'approved' ? 'bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-700'
+                    }`}>
+                      {verification.status === 'approved' ? 'Verificado' : 'Rechazado'}
+                    </span>
+                  </div>
+                ))}
+                {kycVerifications.filter(v => v.status !== 'scheduled').length === 0 && (
+                  <p className="text-center text-zinc-500 py-8">No hay verificaciones completadas</p>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Customers Tab */}
         {activeTab === 'customers' && (
           <div className="space-y-4">
