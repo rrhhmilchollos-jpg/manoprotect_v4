@@ -197,11 +197,14 @@ function AppRouter() {
           </ProtectedRoute>
         } 
       />
+      
+      {/* ManoBank Employee Portal - Separate System */}
+      <Route path="/banco" element={<BancoEmpleados />} />
       <Route 
-        path="/manobank/admin" 
+        path="/banco/sistema" 
         element={
           <ProtectedRoute>
-            <ManoBankAdmin />
+            <BancoSistema />
           </ProtectedRoute>
         } 
       />
