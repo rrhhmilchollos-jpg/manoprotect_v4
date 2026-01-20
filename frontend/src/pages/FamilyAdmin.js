@@ -309,7 +309,7 @@ const FamilyAdmin = () => {
             <Card className="bg-white">
               <CardHeader>
                 <CardTitle>Miembros Familiares</CardTitle>
-                <CardDescription>Gestiona quién está protegido por MANO</CardDescription>
+                <CardDescription>Gestiona quién está protegido por ManoProtect</CardDescription>
               </CardHeader>
               <CardContent>
                 {(data?.members || []).length === 0 ? (
