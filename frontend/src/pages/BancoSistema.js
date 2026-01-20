@@ -37,7 +37,7 @@ import {
 
 const API_URL = process.env.REACT_APP_BACKEND_URL;
 
-const ManoBankAdmin = () => {
+const BancoSistema = () => {
   const navigate = useNavigate();
   const { user, token } = useAuth();
   const [loading, setLoading] = useState(true);
@@ -1211,4 +1211,4 @@ const ManoBankAdmin = () => {
   );
 };
 
-export default ManoBankAdmin;
+export default BancoSistema;
