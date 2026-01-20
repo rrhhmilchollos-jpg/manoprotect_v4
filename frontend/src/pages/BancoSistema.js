@@ -446,30 +446,40 @@ const BancoSistema = () => {
     );
   }
 
+  const handleLogout = () => {
+    // Clear session and redirect to employee login
+    document.cookie = 'session_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+    navigate('/banco');
+  };
+
   return (
     <div className="min-h-screen bg-zinc-100">
       {/* Header */}
       <header className="bg-zinc-900 text-white px-6 py-4">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <Button variant="ghost" onClick={() => navigate('/manobank')} className="text-white hover:bg-white/10">
-              <ArrowLeft className="w-5 h-5" />
-            </Button>
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-lg flex items-center justify-center">
                 <Landmark className="w-6 h-6" />
               </div>
               <div>
-                <h1 className="text-xl font-bold">ManoBank Admin</h1>
-                <p className="text-sm text-zinc-400">Panel de Administración Bancaria</p>
+                <h1 className="text-xl font-bold">Sistema ManoBank</h1>
+                <p className="text-sm text-zinc-400">Gestión Bancaria Interna</p>
               </div>
             </div>
           </div>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-6">
             <div className="text-right">
               <p className="font-medium">{dashboard?.employee?.name}</p>
               <p className="text-sm text-zinc-400">{getRoleLabel(dashboard?.employee?.role)}</p>
             </div>
+            <Button 
+              variant="ghost" 
+              onClick={handleLogout}
+              className="text-zinc-400 hover:text-white hover:bg-white/10"
+            >
+              <LogOut className="w-5 h-5" />
+            </Button>
           </div>
         </div>
       </header>
