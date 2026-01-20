@@ -137,7 +137,7 @@ const Downloads = () => {
             <div className="flex items-center gap-3">
               <img 
                 src="https://customer-assets.emergentagent.com/job_5c97b24f-9a55-4567-9954-bd76179fb951/artifacts/8y6ab2pd_logo%20App%20Mano.png" 
-                alt="MANO Logo" 
+                alt="ManoProtect Logo" 
                 className="h-8 w-auto"
               />
             </div>
