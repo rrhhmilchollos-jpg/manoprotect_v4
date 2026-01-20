@@ -31,6 +31,7 @@ import PrivacyPolicy from '@/pages/PrivacyPolicy';
 import TermsOfService from '@/pages/TermsOfService';
 import RefundPolicy from '@/pages/RefundPolicy';
 import LegalNotice from '@/pages/LegalNotice';
+import ManoBank from '@/pages/ManoBank';
 import CookieConsent from '@/components/CookieConsent';
 
 import '@/App.css';
