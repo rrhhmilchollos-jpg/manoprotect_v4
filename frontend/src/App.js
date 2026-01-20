@@ -32,6 +32,7 @@ import TermsOfService from '@/pages/TermsOfService';
 import RefundPolicy from '@/pages/RefundPolicy';
 import LegalNotice from '@/pages/LegalNotice';
 import ManoBank from '@/pages/ManoBank';
+import ManoBankAdmin from '@/pages/ManoBankAdmin';
 import CookieConsent from '@/components/CookieConsent';
 
 import '@/App.css';
