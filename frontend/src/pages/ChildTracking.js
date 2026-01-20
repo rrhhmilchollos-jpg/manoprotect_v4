@@ -44,6 +44,109 @@ const ChildTracking = () => {
     loadChildren();
   }, []);
 
+  // Function to get GPS location
+  const getGPSLocation = () => {
+    return new Promise((resolve, reject) => {
+      if (!navigator.geolocation) {
+        reject(new Error('Geolocalización no soportada por tu navegador'));
+        return;
+      }
+
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          resolve({
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+            accuracy: position.coords.accuracy
+          });
+        },
+        (error) => {
+          let errorMessage = 'Error obteniendo ubicación';
+          switch (error.code) {
+            case error.PERMISSION_DENIED:
+              errorMessage = 'Permiso de ubicación denegado. Por favor, habilita el GPS.';
+              break;
+            case error.POSITION_UNAVAILABLE:
+              errorMessage = 'Información de ubicación no disponible.';
+              break;
+            case error.TIMEOUT:
+              errorMessage = 'Tiempo de espera agotado al obtener ubicación.';
+              break;
+            default:
+              errorMessage = 'Error desconocido al obtener ubicación.';
+          }
+          reject(new Error(errorMessage));
+        },
+        {
+          enableHighAccuracy: true,
+          timeout: 15000,
+          maximumAge: 0
+        }
+      );
+    });
+  };
+
+  // Trigger Family SOS with GPS
+  const triggerFamilySOS = async () => {
+    setIsGettingLocation(true);
+    toast.info('🔍 Obteniendo tu ubicación GPS...');
+
+    try {
+      // Step 1: Get GPS location
+      const location = await getGPSLocation();
+      setLastSosLocation(location);
+      
+      toast.success(`📍 Ubicación obtenida (precisión: ${Math.round(location.accuracy)}m)`);
+      
+      // Step 2: Send SOS alert with GPS coordinates to all family members
+      const response = await axios.post(`${API}/sos/family-emergency`, {
+        latitude: location.latitude,
+        longitude: location.longitude,
+        accuracy: location.accuracy,
+        message: '🆘 ¡EMERGENCIA FAMILIAR! Necesito ayuda urgente. Mi ubicación exacta está adjunta.',
+        include_children: true
+      }, {
+        withCredentials: true
+      });
+      
+      setSosTriggered(true);
+      
+      if (response.data.success) {
+        toast.success(`🆘 ¡ALERTA SOS ENVIADA! ${response.data.contacts_notified} familiares notificados con tu ubicación exacta.`);
+      }
+      
+      // Reset after 15 seconds
+      setTimeout(() => {
+        setSosTriggered(false);
+      }, 15000);
+      
+    } catch (error) {
+      console.error('SOS Error:', error);
+      
+      if (error.message && error.message.includes('ubicación')) {
+        toast.error(error.message);
+      } else {
+        // Try to send SOS without GPS as fallback
+        try {
+          await axios.post(`${API}/sos/alert`, {
+            latitude: 0,
+            longitude: 0,
+            accuracy: 0,
+            message: '🆘 ¡EMERGENCIA FAMILIAR! Necesito ayuda urgente. (GPS no disponible)'
+          }, { withCredentials: true });
+          
+          setSosTriggered(true);
+          toast.warning('⚠️ Alerta enviada SIN ubicación exacta. Activa el GPS para mayor precisión.');
+          setTimeout(() => setSosTriggered(false), 10000);
+        } catch (fallbackError) {
+          toast.error('Error al enviar alerta SOS. Inténtalo de nuevo.');
+        }
+      }
+    } finally {
+      setIsGettingLocation(false);
+    }
+  };
+
   const loadChildren = async () => {
     try {
       const response = await axios.get(`${API}/family/children`, {
