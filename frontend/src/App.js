@@ -53,7 +53,7 @@ const AnalyticsTracker = () => {
 };
 
 // Protected Route Component
-const ProtectedRoute = ({ children, requireInvestor = false, requireAdmin = false }) => {
+const ProtectedRoute = ({ children, requireInvestor = false, requireAdmin = false, redirectTo = "/login" }) => {
   const { isAuthenticated, isInvestor, isAdmin, loading } = useAuth();
   const location = useLocation();
 
@@ -66,7 +66,7 @@ const ProtectedRoute = ({ children, requireInvestor = false, requireAdmin = fals
   }
 
   if (!isAuthenticated) {
-    return <Navigate to="/login" state={{ from: location }} replace />;
+    return <Navigate to={redirectTo} state={{ from: location }} replace />;
   }
 
   if (requireAdmin && !isAdmin) {
