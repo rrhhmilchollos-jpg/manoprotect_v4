@@ -3,14 +3,17 @@ ManoBank Admin - Sistema de Administración Bancaria Completo
 Similar a BBVA/CaixaBank para gestión interna del banco
 """
 from fastapi import APIRouter, HTTPException, Request, Cookie
+from fastapi.responses import StreamingResponse
 from typing import Optional, Dict, Any, List
 from datetime import datetime, timezone, timedelta
 from pydantic import BaseModel, Field
 from enum import Enum
 import uuid
 import random
+import io
 
 from core.auth import require_auth
+from services.contract_generator import generate_account_contract, generate_card_contract
 
 router = APIRouter(prefix="/manobank/admin", tags=["ManoBank Admin"])
 
