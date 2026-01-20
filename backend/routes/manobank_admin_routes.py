@@ -890,7 +890,7 @@ async def issue_card(
         "id": card_id,
         "customer_id": data.customer_id,
         "customer_name": customer["name"],
-        "account_id": data.account_id,
+        "account_id": account["id"],  # Use resolved account ID
         "card_number": card_number,
         "card_number_masked": card_number[:4] + " •••• •••• " + card_number[-4:],
         "cvv": cvv,
