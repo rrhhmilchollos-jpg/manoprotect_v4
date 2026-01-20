@@ -4,7 +4,7 @@ import { useAuth } from '@/context/AuthContext';
 import { 
   Users, Shield, AlertTriangle, Bell, Plus, Trash2, Edit2, 
   ArrowLeft, UserPlus, Heart, Eye, Settings, Check, X, Loader2,
-  MapPin, Crown
+  MapPin, Crown, Phone, Link2
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
