@@ -158,9 +158,10 @@ const ManoBank = () => {
     try {
       const response = await fetch(`${API_URL}/api/manobank/transfers/bizum`, {
         method: 'POST',
+        credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
+          ...(token && { 'Authorization': `Bearer ${token}` })
         },
         body: JSON.stringify({
           ...bizumData,
@@ -185,7 +186,8 @@ const ManoBank = () => {
     try {
       const response = await fetch(`${API_URL}/api/manobank/transfers/${transferId}/verify`, {
         method: 'POST',
-        headers: { 'Authorization': `Bearer ${token}` }
+        credentials: 'include',
+        headers: token ? { 'Authorization': `Bearer ${token}` } : {}
       });
       
       if (!response.ok) throw new Error('Error al verificar');
@@ -201,7 +203,8 @@ const ManoBank = () => {
     try {
       const response = await fetch(`${API_URL}/api/manobank/transfers/${transferId}/cancel`, {
         method: 'POST',
-        headers: { 'Authorization': `Bearer ${token}` }
+        credentials: 'include',
+        headers: token ? { 'Authorization': `Bearer ${token}` } : {}
       });
       
       if (!response.ok) throw new Error('Error al cancelar');
