@@ -152,7 +152,7 @@ const ManoBank = () => {
   const handleBizum = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch(`${API_URL}/api/manobank/bizum`, {
+      const response = await fetch(`${API_URL}/api/manobank/transfers/bizum`, {
         method: 'POST',
         credentials: 'include',
         headers: {
