@@ -4,7 +4,6 @@ import { useAuth } from '@/context/AuthContext';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import {
-  ArrowLeft,
   Building2,
   Users,
   CreditCard,
@@ -28,6 +27,7 @@ import {
   BadgeCheck,
   XCircle,
   Wallet,
+  LogOut,
   PiggyBank,
   Home,
   Car,
