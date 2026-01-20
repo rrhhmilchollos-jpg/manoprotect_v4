@@ -3036,6 +3036,14 @@ try:
 except ImportError as e:
     print(f"⚠️ WhatsApp routes not loaded: {e}")
 
+try:
+    from routes.sms_routes import router as sms_router, init_sms_routes
+    init_sms_routes(db)
+    api_router.include_router(sms_router)
+    print("✅ SMS/Twilio routes loaded")
+except ImportError as e:
+    print(f"⚠️ SMS routes not loaded: {e}")
+
 app.include_router(api_router)
 app.include_router(public_router)
 
