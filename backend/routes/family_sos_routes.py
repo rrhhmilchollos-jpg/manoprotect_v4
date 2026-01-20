@@ -256,6 +256,183 @@ async def get_sos_history(
     return {"alerts": alerts}
 
 
+@router.get("/family/contacts-shared")
+async def get_family_shared_contacts(
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """
+    Get shared contact information for family members.
+    Only returns non-sensitive data: name, phone, relationship.
+    NO bank data, documents, passwords, etc.
+    """
+    user = await require_auth(request, session_token)
+    
+    # Get all family members for this subscription
+    family_members = await _db.family_members.find(
+        {"family_owner_id": user.user_id},
+        {
+            "_id": 0,
+            "id": 1,
+            "name": 1,
+            "phone": 1,
+            "email": 1,
+            "relationship": 1,
+            "emergency_contact": 1,
+            "is_senior": 1
+        }
+    ).to_list(50)
+    
+    # Get children
+    children = await _db.family_children.find(
+        {"family_owner_id": user.user_id},
+        {
+            "_id": 0,
+            "child_id": 1,
+            "name": 1,
+            "phone": 1,
+            "relationship": 1,
+            "device_linked": 1
+        }
+    ).to_list(20)
+    
+    # Get emergency contacts
+    emergency_contacts = await _db.trusted_contacts.find(
+        {"user_id": user.user_id, "is_emergency": True},
+        {
+            "_id": 0,
+            "id": 1,
+            "name": 1,
+            "phone": 1,
+            "relationship": 1
+        }
+    ).to_list(20)
+    
+    # Build the shared contacts response (NO SENSITIVE DATA)
+    shared_contacts = {
+        "family_owner": {
+            "name": user.name,
+            "phone": user.phone if hasattr(user, 'phone') else None,
+            "email": user.email,
+            "role": "owner"
+        },
+        "family_members": [
+            {
+                "id": m.get("id"),
+                "name": m.get("name"),
+                "phone": m.get("phone"),
+                "relationship": m.get("relationship"),
+                "is_emergency_contact": m.get("emergency_contact", False),
+                "is_senior": m.get("is_senior", False)
+            }
+            for m in family_members
+        ],
+        "children": [
+            {
+                "id": c.get("child_id"),
+                "name": c.get("name"),
+                "phone": c.get("phone"),
+                "relationship": c.get("relationship", "hijo/a"),
+                "device_linked": c.get("device_linked", False)
+            }
+            for c in children
+        ],
+        "emergency_contacts": [
+            {
+                "id": e.get("id"),
+                "name": e.get("name"),
+                "phone": e.get("phone"),
+                "relationship": e.get("relationship")
+            }
+            for e in emergency_contacts
+        ],
+        "total_members": len(family_members) + len(children) + 1,  # +1 for owner
+        "subscription_owner_id": user.user_id
+    }
+    
+    return shared_contacts
+
+
+@router.post("/family/link-member-phone")
+async def link_family_member_by_phone(
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """
+    Link a family member to the subscription by their phone number.
+    This allows them to receive SOS alerts and see family contacts.
+    """
+    user = await require_auth(request, session_token)
+    
+    try:
+        body = await request.json()
+        phone = body.get("phone")
+        name = body.get("name")
+        relationship = body.get("relationship", "familiar")
+        is_emergency = body.get("is_emergency", True)
+    except:
+        return {"success": False, "message": "Datos inválidos"}
+    
+    if not phone:
+        return {"success": False, "message": "Número de teléfono requerido"}
+    
+    # Check if already linked
+    existing = await _db.family_members.find_one({
+        "family_owner_id": user.user_id,
+        "phone": phone
+    })
+    
+    if existing:
+        return {"success": False, "message": "Este número ya está vinculado a tu familia"}
+    
+    # Create family member link
+    member_id = f"member_{uuid.uuid4().hex[:8]}"
+    family_link = {
+        "id": member_id,
+        "family_owner_id": user.user_id,
+        "name": name,
+        "phone": phone,
+        "relationship": relationship,
+        "emergency_contact": is_emergency,
+        "is_senior": False,
+        "simplified_mode": False,
+        "alert_level": "all",
+        "linked_at": datetime.now(timezone.utc).isoformat(),
+        "created_at": datetime.now(timezone.utc).isoformat()
+    }
+    
+    await _db.family_members.insert_one(family_link)
+    
+    # Create notification for the linked member (if they have the app)
+    notification = {
+        "notification_id": f"notif_{uuid.uuid4().hex[:12]}",
+        "target_phone": phone,
+        "type": "family_link",
+        "title": "👨‍👩‍👧‍👦 Te han añadido a una familia",
+        "message": f"{user.name} te ha añadido como {relationship} en ManoProtect. Ahora recibirás alertas SOS de tu familia.",
+        "data": {
+            "family_owner_id": user.user_id,
+            "family_owner_name": user.name
+        },
+        "read": False,
+        "created_at": datetime.now(timezone.utc).isoformat()
+    }
+    await _db.notifications.insert_one(notification)
+    
+    return {
+        "success": True,
+        "message": f"{name} vinculado a tu familia correctamente",
+        "member_id": member_id,
+        "member": {
+            "id": member_id,
+            "name": name,
+            "phone": phone,
+            "relationship": relationship,
+            "is_emergency": is_emergency
+        }
+    }
+
+
 @router.post("/sos/family-emergency")
 async def send_family_emergency_sos(
     request: Request,
