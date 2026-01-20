@@ -217,8 +217,14 @@ const BancoSistema = () => {
     if (activeTab === 'accounts') fetchAccountRequests();
     if (activeTab === 'customers') fetchCustomers();
     if (activeTab === 'loans') fetchLoans();
-    if (activeTab === 'cards') fetchCards();
-    if (activeTab === 'kyc') fetchKYCVerifications();
+    if (activeTab === 'cards') {
+      fetchCards();
+      fetchCustomers(); // Need customers to issue new cards
+    }
+    if (activeTab === 'kyc') {
+      fetchKYCVerifications();
+      fetchAccountRequests(); // Need pending requests
+    }
   }, [activeTab]);
 
   // API Handlers
