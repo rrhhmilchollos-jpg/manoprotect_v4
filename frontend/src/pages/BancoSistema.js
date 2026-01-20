@@ -1509,7 +1509,7 @@ const BancoSistema = () => {
               </div>
 
               <Button type="submit" className="w-full bg-indigo-600 hover:bg-indigo-700 h-12">
-                Crear Solicitud de Apertura
+                Abrir Cuenta y Generar Contrato
               </Button>
             </form>
           </div>
