@@ -42,7 +42,8 @@ class TransferRequest(BaseModel):
     to_name: str
     amount: float = Field(..., gt=0, le=50000)
     concept: str
-    transfer_type: str = "sepa"  # sepa, bizum, instant
+    transfer_type: str = "normal"  # normal, immediate, scheduled, internal
+    scheduled_date: Optional[str] = None  # ISO date for scheduled transfers
 
 class BizumRequest(BaseModel):
     from_account_id: str
