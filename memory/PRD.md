@@ -77,6 +77,10 @@ Crear una plataforma integral de seguridad digital multi-plataforma (web + móvi
 
 ### 📋 BACKLOG (P2/P3)
 
+#### App Móvil
+- App WebView en proceso en máquina local del usuario
+- Compilación iOS requiere Mac o servicio cloud
+
 #### ManoBank Expansión
 - Multi-banco real con TrueLayer / Token.io (requiere API keys)
 - Multi-moneda internacional
@@ -89,6 +93,12 @@ Crear una plataforma integral de seguridad digital multi-plataforma (web + móvi
 #### Integraciones
 - WhatsApp Business (scaffolded, necesita credenciales de Meta)
 - Open Banking (bloqueado por Nordigen - no acepta nuevos registros)
+
+## Credenciales de Test
+
+| Rol | Email | Password |
+|-----|-------|----------|
+| Director/Superadmin | rrhh.milchollos@gmail.com | ManoAdmin2025! |
 
 ## Arquitectura del Proyecto
 
