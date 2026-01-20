@@ -445,10 +445,20 @@ async def approve_account_request(
             "email": acc_request["customer_email"],
             "phone": acc_request["customer_phone"],
             "dni": acc_request["customer_dni"],
+            # Dirección completa
+            "address_street": acc_request.get("address_street"),
+            "address_city": acc_request.get("address_city"),
+            "address_postal_code": acc_request.get("address_postal_code"),
+            "address_province": acc_request.get("address_province"),
+            "address_country": acc_request.get("address_country", "España"),
+            # Otros datos
             "occupation": acc_request.get("occupation"),
             "monthly_income": acc_request.get("monthly_income"),
+            "date_of_birth": acc_request.get("date_of_birth"),
+            "nationality": acc_request.get("nationality", "Española"),
             "kyc_verified": True,
             "risk_level": "bajo",
+            "status": "active",
             "created_at": datetime.now(timezone.utc).isoformat()
         }
         await db.manobank_customers.insert_one(customer)
