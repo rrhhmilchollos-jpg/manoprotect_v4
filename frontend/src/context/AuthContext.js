@@ -26,13 +26,35 @@ export const AuthProvider = ({ children }) => {
       
       if (response.ok) {
         const userData = await response.json();
+        localStorage.setItem('mano_user', JSON.stringify(userData));
         setUser(userData);
       } else {
-        setUser(null);
+        // Try localStorage backup
+        const storedUser = localStorage.getItem('mano_user');
+        if (storedUser) {
+          // Verify the stored session is still valid
+          const verifyResponse = await fetch(`${API}/auth/me`, {
+            credentials: 'include'
+          });
+          if (verifyResponse.ok) {
+            setUser(JSON.parse(storedUser));
+          } else {
+            localStorage.removeItem('mano_user');
+            setUser(null);
+          }
+        } else {
+          setUser(null);
+        }
       }
     } catch (err) {
       console.error('Auth check error:', err);
-      setUser(null);
+      // On network error, try localStorage
+      const storedUser = localStorage.getItem('mano_user');
+      if (storedUser) {
+        setUser(JSON.parse(storedUser));
+      } else {
+        setUser(null);
+      }
     } finally {
       setLoading(false);
     }
