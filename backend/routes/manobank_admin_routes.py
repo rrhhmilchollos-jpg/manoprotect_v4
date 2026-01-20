@@ -1059,22 +1059,38 @@ async def disburse_loan(
 async def get_all_cards(
     request: Request,
     session_token: Optional[str] = Cookie(None),
-    card_type: Optional[str] = None
+    card_type: Optional[str] = None,
+    page: int = 1,
+    limit: int = 50
 ):
-    """Listar todas las tarjetas emitidas"""
+    """Listar todas las tarjetas emitidas con paginación"""
     user, employee = await require_bank_employee(request, session_token)
     db = get_db()
+    
+    # Limit max to 100 for performance
+    limit = min(limit, 100)
+    skip = (page - 1) * limit
     
     query = {}
     if card_type:
         query["card_type"] = card_type
     
+    total_count = await db.manobank_cards.count_documents(query)
+    
     cards = await db.manobank_cards.find(
         query,
         {"_id": 0, "cvv": 0}  # Never expose CVV
-    ).to_list(200)
+    ).skip(skip).limit(limit).to_list(limit)
     
-    return {"cards": cards}
+    return {
+        "cards": cards,
+        "pagination": {
+            "page": page,
+            "limit": limit,
+            "total": total_count,
+            "total_pages": (total_count + limit - 1) // limit
+        }
+    }
 
 @router.post("/cards")
 async def issue_card(
@@ -1488,11 +1504,17 @@ async def list_accounts(
     request: Request,
     session_token: Optional[str] = Cookie(None),
     status: Optional[str] = None,
-    customer_id: Optional[str] = None
+    customer_id: Optional[str] = None,
+    page: int = 1,
+    limit: int = 50
 ):
-    """Listar todas las cuentas del banco"""
+    """Listar todas las cuentas del banco con paginación"""
     user, employee = await require_bank_employee(request, session_token)
     db = get_db()
+    
+    # Limit max to 100 for performance
+    limit = min(limit, 100)
+    skip = (page - 1) * limit
     
     query = {}
     if status:
@@ -1500,12 +1522,23 @@ async def list_accounts(
     if customer_id:
         query["customer_id"] = customer_id
     
+    # Get total count for pagination info
+    total_count = await db.manobank_accounts.count_documents(query)
+    
     accounts = await db.manobank_accounts.find(
         query,
         {"_id": 0}
-    ).sort("created_at", -1).to_list(500)
+    ).sort("created_at", -1).skip(skip).limit(limit).to_list(limit)
     
-    return {"accounts": accounts}
+    return {
+        "accounts": accounts,
+        "pagination": {
+            "page": page,
+            "limit": limit,
+            "total": total_count,
+            "total_pages": (total_count + limit - 1) // limit
+        }
+    }
 
 @router.get("/accounts/{account_id}")
 async def get_account_details(
