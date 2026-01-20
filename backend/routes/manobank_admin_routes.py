@@ -522,6 +522,215 @@ async def approve_account_request(
         "iban": iban
     }
 
+@router.post("/open-account-direct")
+async def open_account_directly(
+    data: AccountOpeningRequest,
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Apertura directa de cuenta (sin pasar por solicitud) - genera contrato PDF"""
+    user, employee = await require_bank_employee(request, session_token)
+    db = get_db()
+    
+    # Check if customer already exists
+    existing_customer = await db.manobank_customers.find_one({"dni": data.customer_dni})
+    
+    if existing_customer:
+        customer_id = existing_customer["id"]
+    else:
+        # Create new customer
+        customer_id = f"cust_{uuid.uuid4().hex[:12]}"
+        customer = {
+            "id": customer_id,
+            "name": data.customer_name,
+            "email": data.customer_email,
+            "phone": data.customer_phone,
+            "dni": data.customer_dni,
+            "address_street": data.address_street,
+            "address_city": data.address_city,
+            "address_postal_code": data.address_postal_code,
+            "address_province": data.address_province,
+            "address_country": data.address_country,
+            "occupation": data.occupation,
+            "monthly_income": data.monthly_income,
+            "date_of_birth": data.date_of_birth,
+            "nationality": data.nationality,
+            "kyc_verified": True,
+            "risk_level": "bajo",
+            "status": "active",
+            "created_by": user.user_id,
+            "created_at": datetime.now(timezone.utc).isoformat()
+        }
+        await db.manobank_customers.insert_one(customer)
+    
+    # Generate IBAN
+    bank_code = "9999"
+    branch_code = "0001"
+    check_digits = str(random.randint(10, 99))
+    account_number = ''.join([str(random.randint(0, 9)) for _ in range(10)])
+    iban = f"ES{random.randint(10, 99)}{bank_code}{branch_code}{check_digits}{account_number}"
+    
+    # Create account
+    account_id = f"acc_{uuid.uuid4().hex[:12]}"
+    account = {
+        "id": account_id,
+        "customer_id": customer_id,
+        "user_id": None,  # Will be linked when customer creates user account
+        "iban": iban,
+        "iban_masked": iban[:4] + " **** **** " + iban[-4:],
+        "account_type": data.account_type,
+        "currency": "EUR",
+        "balance": data.initial_deposit + 10.0,  # Welcome bonus
+        "available_balance": data.initial_deposit + 10.0,
+        "account_holder": data.customer_name,
+        "alias": f"Cuenta {data.account_type.title()}",
+        "status": "active",
+        "is_primary": True,
+        "opened_by": user.user_id,
+        "opened_by_name": employee.get("name", user.name),
+        "contract_signed": True,
+        "contract_date": datetime.now(timezone.utc).isoformat(),
+        "created_at": datetime.now(timezone.utc).isoformat()
+    }
+    await db.manobank_accounts.insert_one(account)
+    
+    # Generate welcome transaction
+    await db.manobank_transactions.insert_one({
+        "id": f"tx_{uuid.uuid4().hex[:12]}",
+        "account_id": account_id,
+        "customer_id": customer_id,
+        "type": "credit",
+        "amount": 10.0,
+        "balance_after": data.initial_deposit + 10.0,
+        "concept": "Bono de bienvenida ManoBank",
+        "transaction_type": "bonus",
+        "status": "completed",
+        "created_at": datetime.now(timezone.utc).isoformat()
+    })
+    
+    if data.initial_deposit > 0:
+        await db.manobank_transactions.insert_one({
+            "id": f"tx_{uuid.uuid4().hex[:12]}",
+            "account_id": account_id,
+            "customer_id": customer_id,
+            "type": "credit",
+            "amount": data.initial_deposit,
+            "balance_after": data.initial_deposit + 10.0,
+            "concept": "Depósito inicial apertura de cuenta",
+            "transaction_type": "deposit",
+            "status": "completed",
+            "created_at": datetime.now(timezone.utc).isoformat()
+        })
+    
+    # Store customer data and account data for response
+    customer_data = {
+        "customer_name": data.customer_name,
+        "customer_email": data.customer_email,
+        "customer_phone": data.customer_phone,
+        "customer_dni": data.customer_dni,
+        "address_street": data.address_street,
+        "address_city": data.address_city,
+        "address_postal_code": data.address_postal_code,
+        "address_province": data.address_province,
+        "address_country": data.address_country,
+        "occupation": data.occupation,
+        "nationality": data.nationality,
+        "date_of_birth": data.date_of_birth
+    }
+    
+    account_data = {
+        "id": account_id,
+        "iban": iban,
+        "account_type": data.account_type,
+        "initial_deposit": data.initial_deposit,
+        "balance": data.initial_deposit + 10.0
+    }
+    
+    employee_data = {
+        "name": employee.get("name", user.name),
+        "role": employee.get("role", "Empleado")
+    }
+    
+    # Store contract info in database
+    contract_id = f"cont_{uuid.uuid4().hex[:12]}"
+    await db.manobank_contracts.insert_one({
+        "id": contract_id,
+        "customer_id": customer_id,
+        "account_id": account_id,
+        "contract_type": "account_opening",
+        "customer_data": customer_data,
+        "account_data": account_data,
+        "employee_data": employee_data,
+        "signed": False,
+        "created_by": user.user_id,
+        "created_at": datetime.now(timezone.utc).isoformat()
+    })
+    
+    return {
+        "message": "Cuenta abierta correctamente",
+        "customer_id": customer_id,
+        "account_id": account_id,
+        "iban": iban,
+        "contract_id": contract_id,
+        "balance": data.initial_deposit + 10.0
+    }
+
+@router.get("/contracts/{contract_id}/pdf")
+async def get_contract_pdf(
+    contract_id: str,
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Descargar contrato en PDF"""
+    user, employee = await require_bank_employee(request, session_token)
+    db = get_db()
+    
+    contract = await db.manobank_contracts.find_one({"id": contract_id})
+    if not contract:
+        raise HTTPException(status_code=404, detail="Contrato no encontrado")
+    
+    # Generate PDF
+    if contract.get("contract_type") == "card":
+        pdf_bytes = generate_card_contract(contract.get("customer_data", {}), contract.get("card_data", {}))
+    else:
+        pdf_bytes = generate_account_contract(
+            contract.get("customer_data", {}),
+            contract.get("account_data", {}),
+            contract.get("employee_data", {})
+        )
+    
+    filename = f"contrato_{contract_id}.pdf"
+    
+    return StreamingResponse(
+        io.BytesIO(pdf_bytes),
+        media_type="application/pdf",
+        headers={"Content-Disposition": f"attachment; filename={filename}"}
+    )
+
+@router.post("/contracts/{contract_id}/sign")
+async def sign_contract(
+    contract_id: str,
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Marcar contrato como firmado"""
+    user, employee = await require_bank_employee(request, session_token)
+    db = get_db()
+    
+    result = await db.manobank_contracts.update_one(
+        {"id": contract_id},
+        {"$set": {
+            "signed": True,
+            "signed_at": datetime.now(timezone.utc).isoformat(),
+            "signed_by_employee": user.user_id
+        }}
+    )
+    
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Contrato no encontrado")
+    
+    return {"message": "Contrato firmado correctamente"}
+
 @router.post("/account-requests/{request_id}/reject")
 async def reject_account_request(
     request_id: str,
