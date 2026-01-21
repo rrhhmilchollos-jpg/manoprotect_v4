@@ -2434,7 +2434,7 @@ const BancoSistema = () => {
               </button>
             </div>
             
-            <form onSubmit={handleNewLoanRequest} className="space-y-4">
+            <form onSubmit={handleCreateLoan} className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-zinc-700 mb-1">
                   Cliente *
