@@ -424,6 +424,337 @@ async def deactivate_employee(
     
     return {"message": "Empleado desactivado"}
 
+
+@router.delete("/employees/{employee_id}/permanent")
+async def delete_employee_permanent(
+    employee_id: str,
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Eliminar empleado permanentemente - Solo Director General"""
+    user, employee = await require_bank_director(request, session_token)
+    db = get_db()
+    
+    # Verify only Director General can permanently delete
+    if employee.get("role") != "director" and not employee.get("is_superadmin"):
+        raise HTTPException(
+            status_code=403, 
+            detail="Solo el Director General puede eliminar empleados permanentemente"
+        )
+    
+    # Don't allow deleting yourself
+    target = await db.manobank_employees.find_one({"id": employee_id})
+    if target and target.get("email") == user.email:
+        raise HTTPException(status_code=400, detail="No puedes eliminarte a ti mismo")
+    
+    result = await db.manobank_employees.delete_one({"id": employee_id})
+    
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Empleado no encontrado")
+    
+    # Log the action
+    await db.security_audit_log.insert_one({
+        "event_type": "employee_deleted",
+        "employee_id": employee_id,
+        "deleted_by": user.user_id,
+        "deleted_by_name": employee.get("name"),
+        "timestamp": datetime.now(timezone.utc).isoformat()
+    })
+    
+    return {"message": "Empleado eliminado permanentemente"}
+
+
+# ============================================
+# ALERTAS DE FRAUDE
+# ============================================
+
+@router.get("/fraud-alerts")
+async def get_fraud_alerts(
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Obtener alertas de fraude"""
+    user, employee = await require_bank_employee(request, session_token)
+    db = get_db()
+    
+    alerts = await db.manobank_alerts.find(
+        {},
+        {"_id": 0}
+    ).sort("created_at", -1).limit(100).to_list(100)
+    
+    return {"alerts": alerts}
+
+
+@router.post("/fraud-alerts")
+async def create_fraud_alert(
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Crear alerta de fraude - Solo Director o Compliance"""
+    user, employee = await require_bank_employee(request, session_token)
+    db = get_db()
+    
+    body = await request.json()
+    
+    alert = {
+        "id": f"alert_{uuid.uuid4().hex[:12]}",
+        "type": body.get("type", "suspicious_activity"),
+        "severity": body.get("severity", "medium"),  # low, medium, high, critical
+        "customer_id": body.get("customer_id"),
+        "customer_name": body.get("customer_name"),
+        "account_id": body.get("account_id"),
+        "description": body.get("description", ""),
+        "amount": body.get("amount"),
+        "is_resolved": False,
+        "created_by": user.user_id,
+        "created_by_name": employee.get("name", user.name),
+        "created_at": datetime.now(timezone.utc).isoformat()
+    }
+    
+    await db.manobank_alerts.insert_one(alert)
+    alert.pop("_id", None)
+    
+    return {"message": "Alerta creada", "alert": alert}
+
+
+@router.patch("/fraud-alerts/{alert_id}")
+async def update_fraud_alert(
+    alert_id: str,
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Actualizar/Resolver alerta de fraude"""
+    user, employee = await require_bank_employee(request, session_token)
+    db = get_db()
+    
+    body = await request.json()
+    
+    update_data = {
+        "updated_at": datetime.now(timezone.utc).isoformat(),
+        "updated_by": user.user_id
+    }
+    
+    if "is_resolved" in body:
+        update_data["is_resolved"] = body["is_resolved"]
+        if body["is_resolved"]:
+            update_data["resolved_at"] = datetime.now(timezone.utc).isoformat()
+            update_data["resolved_by"] = employee.get("name", user.name)
+    
+    if "notes" in body:
+        update_data["notes"] = body["notes"]
+    
+    if "severity" in body:
+        update_data["severity"] = body["severity"]
+    
+    result = await db.manobank_alerts.update_one(
+        {"id": alert_id},
+        {"$set": update_data}
+    )
+    
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Alerta no encontrada")
+    
+    return {"message": "Alerta actualizada"}
+
+
+@router.delete("/fraud-alerts/{alert_id}")
+async def delete_fraud_alert(
+    alert_id: str,
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Eliminar alerta de fraude - Solo Director"""
+    user, employee = await require_bank_director(request, session_token)
+    db = get_db()
+    
+    result = await db.manobank_alerts.delete_one({"id": alert_id})
+    
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Alerta no encontrada")
+    
+    return {"message": "Alerta eliminada"}
+
+
+# ============================================
+# DIRECTOR GENERAL - SUPER POWERS
+# ============================================
+
+@router.post("/director/modify-customer")
+async def director_modify_customer(
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Director General - Modificar cualquier dato de cliente"""
+    user, employee = await require_bank_director(request, session_token)
+    db = get_db()
+    
+    if employee.get("role") != "director" and not employee.get("is_superadmin"):
+        raise HTTPException(status_code=403, detail="Solo Director General")
+    
+    body = await request.json()
+    customer_id = body.get("customer_id")
+    updates = body.get("updates", {})
+    
+    if not customer_id or not updates:
+        raise HTTPException(status_code=400, detail="customer_id y updates requeridos")
+    
+    # Remove protected fields
+    protected = ["id", "created_at", "_id"]
+    for field in protected:
+        updates.pop(field, None)
+    
+    updates["updated_at"] = datetime.now(timezone.utc).isoformat()
+    updates["updated_by_director"] = user.user_id
+    
+    result = await db.manobank_customers.update_one(
+        {"id": customer_id},
+        {"$set": updates}
+    )
+    
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Cliente no encontrado")
+    
+    # Audit log
+    await db.security_audit_log.insert_one({
+        "event_type": "director_customer_modify",
+        "customer_id": customer_id,
+        "changes": updates,
+        "modified_by": user.user_id,
+        "timestamp": datetime.now(timezone.utc).isoformat()
+    })
+    
+    return {"message": "Cliente modificado por Director General"}
+
+
+@router.post("/director/modify-account")
+async def director_modify_account(
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Director General - Modificar cualquier cuenta"""
+    user, employee = await require_bank_director(request, session_token)
+    db = get_db()
+    
+    if employee.get("role") != "director" and not employee.get("is_superadmin"):
+        raise HTTPException(status_code=403, detail="Solo Director General")
+    
+    body = await request.json()
+    account_id = body.get("account_id")
+    updates = body.get("updates", {})
+    
+    if not account_id or not updates:
+        raise HTTPException(status_code=400, detail="account_id y updates requeridos")
+    
+    updates["updated_at"] = datetime.now(timezone.utc).isoformat()
+    updates["updated_by_director"] = user.user_id
+    
+    result = await db.manobank_accounts.update_one(
+        {"id": account_id},
+        {"$set": updates}
+    )
+    
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Cuenta no encontrada")
+    
+    await db.security_audit_log.insert_one({
+        "event_type": "director_account_modify",
+        "account_id": account_id,
+        "changes": updates,
+        "modified_by": user.user_id,
+        "timestamp": datetime.now(timezone.utc).isoformat()
+    })
+    
+    return {"message": "Cuenta modificada por Director General"}
+
+
+@router.delete("/director/delete-customer/{customer_id}")
+async def director_delete_customer(
+    customer_id: str,
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Director General - Eliminar cliente"""
+    user, employee = await require_bank_director(request, session_token)
+    db = get_db()
+    
+    if employee.get("role") != "director" and not employee.get("is_superadmin"):
+        raise HTTPException(status_code=403, detail="Solo Director General")
+    
+    # Get customer info before deletion
+    customer = await db.manobank_customers.find_one({"id": customer_id})
+    
+    if not customer:
+        raise HTTPException(status_code=404, detail="Cliente no encontrado")
+    
+    # Delete all related data
+    await db.manobank_accounts.delete_many({"customer_id": customer_id})
+    await db.manobank_cards.delete_many({"customer_id": customer_id})
+    await db.manobank_transactions.delete_many({"customer_id": customer_id})
+    await db.manobank_customers.delete_one({"id": customer_id})
+    
+    await db.security_audit_log.insert_one({
+        "event_type": "director_customer_delete",
+        "customer_id": customer_id,
+        "customer_name": customer.get("name"),
+        "deleted_by": user.user_id,
+        "timestamp": datetime.now(timezone.utc).isoformat()
+    })
+    
+    return {"message": "Cliente y todos sus datos eliminados"}
+
+
+@router.post("/director/update-phone")
+async def director_update_customer_phone(
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Director General - Cambiar teléfono de cliente (para 2FA)"""
+    user, employee = await require_bank_director(request, session_token)
+    db = get_db()
+    
+    if employee.get("role") != "director" and not employee.get("is_superadmin"):
+        raise HTTPException(status_code=403, detail="Solo Director General puede cambiar teléfonos")
+    
+    body = await request.json()
+    customer_id = body.get("customer_id")
+    new_phone = body.get("new_phone")
+    reason = body.get("reason", "")
+    
+    if not customer_id or not new_phone:
+        raise HTTPException(status_code=400, detail="customer_id y new_phone requeridos")
+    
+    # Update customer phone
+    result = await db.manobank_customers.update_one(
+        {"id": customer_id},
+        {
+            "$set": {
+                "phone": new_phone,
+                "phone_updated_at": datetime.now(timezone.utc).isoformat(),
+                "phone_updated_by": user.user_id
+            }
+        }
+    )
+    
+    # Also update in users collection if exists
+    customer = await db.manobank_customers.find_one({"id": customer_id})
+    if customer and customer.get("email"):
+        await db.users.update_one(
+            {"email": customer["email"]},
+            {"$set": {"phone": new_phone}}
+        )
+    
+    await db.security_audit_log.insert_one({
+        "event_type": "director_phone_change",
+        "customer_id": customer_id,
+        "new_phone": new_phone,
+        "reason": reason,
+        "changed_by": user.user_id,
+        "timestamp": datetime.now(timezone.utc).isoformat()
+    })
+    
+    return {"message": f"Teléfono actualizado a {new_phone}"}
+
+
 # ============================================
 # APERTURA DE CUENTAS (CLIENTES)
 # ============================================
