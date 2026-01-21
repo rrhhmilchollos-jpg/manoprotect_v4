@@ -113,6 +113,8 @@ PLAN_FEATURES = {
 
 # Import and initialize modular routes
 from routes.auth_routes import router as auth_router, init_auth_routes
+from services.security_service import init_security_service
+init_security_service(db)
 init_auth_routes(db)
 
 from routes.investor_routes import router as investor_router, init_investor_routes
