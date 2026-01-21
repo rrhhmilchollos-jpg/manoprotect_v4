@@ -9,7 +9,8 @@ import {
   Settings, Wallet, Copy, Landmark, Home, Receipt, PiggyBank, User,
   ChevronRight, MoreHorizontal, Filter, Download, Search, QrCode,
   Banknote, ArrowRightLeft, Phone, Mail, MapPin, HelpCircle, LogOut,
-  Menu, X, TrendingUp, Calendar, CreditCard as CardIcon, Building2
+  Menu, X, TrendingUp, Calendar, CreditCard as CardIcon, Building2,
+  Lock, Wifi, WifiOff, Globe, GlobeOff, Key
 } from 'lucide-react';
 
 const API_URL = process.env.REACT_APP_BACKEND_URL;
