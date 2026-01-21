@@ -141,11 +141,15 @@ async def require_bank_employee(request: Request, session_token: Optional[str] =
     user = await require_auth(request, session_token)
     db = get_db()
     
+    print(f"[DEBUG] Looking for employee with email: {user.email}")
+    
     # First try to find employee by email (most reliable)
     employee = await db.manobank_employees.find_one(
         {"email": user.email, "is_active": True},
         {"_id": 0}
     )
+    
+    print(f"[DEBUG] Found employee by email: {employee}")
     
     # If not found by email, try by user_id
     if not employee:
@@ -153,9 +157,11 @@ async def require_bank_employee(request: Request, session_token: Optional[str] =
             {"user_id": user.user_id, "is_active": True},
             {"_id": 0}
         )
+        print(f"[DEBUG] Found employee by user_id: {employee}")
     
     # If still not found and user is superadmin, allow access with minimal data
     if not employee:
+        print(f"[DEBUG] No employee found, user role: {getattr(user, 'role', 'none')}")
         if getattr(user, "role", "") == "superadmin":
             return user, {
                 "role": "director", 
