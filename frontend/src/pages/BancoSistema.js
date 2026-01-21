@@ -1735,7 +1735,7 @@ const BancoSistema = () => {
             
             <div className="bg-white rounded-xl shadow-sm divide-y">
               {employees.map((emp) => (
-                <div key={emp.id} className="p-4 flex items-center justify-between">
+                <div key={emp.id || emp.email} className="p-4 flex items-center justify-between">
                   <div className="flex items-center gap-4">
                     <div className={`w-12 h-12 rounded-full flex items-center justify-center ${
                       emp.role === 'director' ? 'bg-purple-100' :
@@ -1753,6 +1753,9 @@ const BancoSistema = () => {
                     <div>
                       <p className="font-medium">{emp.name}</p>
                       <p className="text-sm text-zinc-500">{getRoleLabel(emp.role)}</p>
+                      {emp.roles && emp.roles.length > 1 && (
+                        <p className="text-xs text-indigo-600">+{emp.roles.length - 1} roles adicionales</p>
+                      )}
                       <p className="text-xs text-zinc-400">{emp.email}</p>
                     </div>
                   </div>
@@ -1763,6 +1766,17 @@ const BancoSistema = () => {
                     }`}>
                       {emp.is_active ? 'Activo' : 'Inactivo'}
                     </span>
+                    {/* Solo Director puede eliminar */}
+                    {(dashboard?.employee?.role === 'director' || dashboard?.employee?.is_superadmin) && 
+                     emp.email !== dashboard?.employee?.email && (
+                      <button
+                        onClick={() => handleDeleteEmployee(emp.id)}
+                        className="p-2 text-red-500 hover:bg-red-50 rounded-lg"
+                        title="Eliminar empleado"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    )}
                   </div>
                 </div>
               ))}
