@@ -213,7 +213,9 @@ async def get_admin_dashboard(
         "employee": {
             "name": employee.get("name", user.name),
             "role": employee.get("role", "director"),
-            "department": employee.get("department")
+            "department": employee.get("department"),
+            "phone": employee.get("phone", "+34600000000"),
+            "email": employee.get("email", user.email)
         },
         "stats": {
             "total_customers": total_customers,
