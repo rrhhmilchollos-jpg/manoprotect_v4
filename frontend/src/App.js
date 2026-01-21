@@ -34,6 +34,7 @@ import LegalNotice from '@/pages/LegalNotice';
 import ManoBank from '@/pages/ManoBank';
 import BancoEmpleados from '@/pages/BancoEmpleados';
 import BancoSistema from '@/pages/BancoSistema';
+import SolicitarCuenta from '@/pages/SolicitarCuenta';
 import CookieConsent from '@/components/CookieConsent';
 
 import '@/App.css';
