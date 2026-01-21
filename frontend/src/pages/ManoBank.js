@@ -736,35 +736,67 @@ const ManoBank = () => {
                 </div>
 
                 <div className="grid md:grid-cols-2 gap-6">
-                  {cards.map((card) => (
+                  {cards.map((card) => {
+                    // Determine card gradient based on type
+                    const getCardGradient = (cardType) => {
+                      if (cardType?.includes('gold')) return 'bg-gradient-to-br from-amber-400 via-yellow-500 to-amber-600';
+                      if (cardType?.includes('platinum')) return 'bg-gradient-to-br from-slate-300 via-slate-400 to-slate-500';
+                      if (cardType?.includes('mastercard')) return 'bg-gradient-to-br from-red-500 via-orange-500 to-red-600';
+                      if (cardType?.includes('visa')) return 'bg-gradient-to-br from-blue-500 via-blue-600 to-blue-700';
+                      if (cardType === 'business') return 'bg-gradient-to-br from-zinc-700 to-zinc-900';
+                      if (cardType === 'prepago') return 'bg-gradient-to-br from-green-500 to-teal-600';
+                      return 'bg-gradient-to-br from-blue-600 to-blue-800';
+                    };
+                    
+                    return (
                     <div key={card.id} className="bg-white rounded-2xl shadow-sm overflow-hidden">
-                      {/* Card Visual */}
-                      <div className={`h-48 p-6 text-white relative ${
-                        card.card_type === 'credito' ? 'bg-gradient-to-br from-amber-500 to-orange-600' :
-                        card.card_type === 'platinum' ? 'bg-gradient-to-br from-zinc-700 to-zinc-900' :
-                        card.card_type === 'black' ? 'bg-gradient-to-br from-zinc-900 to-black' :
-                        'bg-gradient-to-br from-blue-600 to-blue-800'
-                      }`}>
-                        <div className="flex justify-between items-start mb-6">
-                          <Landmark className="w-10 h-10" />
-                          <span className="text-sm uppercase tracking-wider font-medium">{card.card_type}</span>
+                      {/* Card Visual - Elegant Design */}
+                      <div className={`h-52 p-6 text-white relative overflow-hidden ${getCardGradient(card.card_type)}`}>
+                        {/* Background pattern */}
+                        <div className="absolute inset-0 opacity-10">
+                          <div className="absolute top-0 right-0 w-64 h-64 rounded-full bg-white/20 -translate-y-1/2 translate-x-1/2" />
+                          <div className="absolute bottom-0 left-0 w-48 h-48 rounded-full bg-white/10 translate-y-1/2 -translate-x-1/2" />
                         </div>
-                        <p className="font-mono text-xl tracking-wider mb-4">
+                        
+                        {/* Header */}
+                        <div className="flex justify-between items-start mb-4 relative z-10">
+                          <div>
+                            <p className="text-lg font-bold tracking-wider">ManoBank</p>
+                            <p className="text-xs text-white/70">S.A.</p>
+                          </div>
+                          <div className="text-right">
+                            <span className="text-sm font-bold">{card.card_brand || 'VISA'}</span>
+                            {card.card_type_display && (
+                              <p className="text-xs text-white/80">{card.card_type_display}</p>
+                            )}
+                          </div>
+                        </div>
+                        
+                        {/* Chip */}
+                        <div className="w-12 h-9 bg-gradient-to-br from-yellow-300 to-yellow-500 rounded-md mb-4 flex items-center justify-center">
+                          <div className="w-8 h-6 border border-yellow-600/30 rounded-sm" />
+                        </div>
+                        
+                        {/* Card Number */}
+                        <p className="font-mono text-xl tracking-[0.2em] mb-4 relative z-10">
                           {showBalance ? card.card_number_masked : '•••• •••• •••• ••••'}
                         </p>
-                        <div className="flex justify-between items-end">
+                        
+                        {/* Footer */}
+                        <div className="flex justify-between items-end relative z-10">
                           <div>
-                            <p className="text-xs text-white/70">TITULAR</p>
-                            <p className="font-medium">{card.holder_name || user?.name?.toUpperCase()}</p>
+                            <p className="text-[10px] text-white/60 uppercase tracking-wider">Titular</p>
+                            <p className="font-medium text-sm">{card.holder_name || user?.name?.toUpperCase()}</p>
                           </div>
-                          <div>
-                            <p className="text-xs text-white/70">VÁLIDA HASTA</p>
-                            <p className="font-medium">{card.expiry || card.expiry_date || 'N/A'}</p>
+                          <div className="text-right">
+                            <p className="text-[10px] text-white/60 uppercase tracking-wider">Válida hasta</p>
+                            <p className="font-medium">{card.expiry || 'N/A'}</p>
                           </div>
                         </div>
-                        {/* Card brand logo */}
-                        <div className="absolute top-4 right-4">
-                          <span className="text-xs font-bold">{card.card_brand || 'VISA'}</span>
+                        
+                        {/* Contactless icon */}
+                        <div className="absolute bottom-6 right-6">
+                          <Wifi className="w-6 h-6 text-white/60" />
                         </div>
                       </div>
                       
