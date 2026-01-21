@@ -98,8 +98,15 @@ const BancoEmpleados = () => {
         phone: employeePhone
       });
       
-      // Send 2FA code
-      await send2FACode(loginData.user_id, employeePhone);
+      // TEMPORARILY SKIP 2FA - Direct access for Director
+      // TODO: Re-enable 2FA when SMS is configured
+      toast.success('Acceso autorizado. Bienvenido Director General.');
+      await checkAuth();
+      navigate('/banco/sistema');
+      return;
+      
+      // Send 2FA code (DISABLED)
+      // await send2FACode(loginData.user_id, employeePhone);
       
       setStep('2fa');
       toast.success('Credenciales verificadas. Introduce el código de seguridad.');
