@@ -1125,10 +1125,12 @@ async def issue_card(
     card_prefix = "4" if data.card_type in [CardType.DEBITO, CardType.PREPAGO] else "5"  # Visa vs Mastercard
     card_number = card_prefix + ''.join([str(random.randint(0, 9)) for _ in range(15)])
     cvv = ''.join([str(random.randint(0, 9)) for _ in range(3)])
+    pin = ''.join([str(random.randint(0, 9)) for _ in range(4)])  # PIN de 4 dígitos
     
     expiry_month = datetime.now().month
     expiry_year = datetime.now().year + 5
     expiry = f"{str(expiry_month).zfill(2)}/{str(expiry_year)[-2:]}"
+    expiry_full = f"{str(expiry_month).zfill(2)}/{expiry_year}"  # Fecha completa para mostrar
     
     # Set credit limit based on card type
     credit_limits = {
