@@ -90,6 +90,7 @@ class EmployeeCreate(BaseModel):
     email: str
     name: str
     role: EmployeeRole
+    roles: Optional[list[str]] = None  # Multiple roles support
     department: Optional[str] = None
     phone: Optional[str] = None
     salary: Optional[float] = None
