@@ -64,12 +64,19 @@ class LoanType(str, Enum):
     RAPIDO = "rapido"
 
 class CardType(str, Enum):
-    DEBITO = "debito"
-    CREDITO = "credito"
+    # Débito
+    VISA_DEBITO = "visa_debito"
+    MASTERCARD_DEBITO = "mastercard_debito"
+    VISA_GOLD_DEBITO = "visa_gold_debito"
+    VISA_PLATINUM_DEBITO = "visa_platinum_debito"
+    # Crédito
+    VISA_CREDITO = "visa_credito"
+    MASTERCARD_CREDITO = "mastercard_credito"
+    VISA_GOLD_CREDITO = "visa_gold_credito"
+    VISA_PLATINUM_CREDITO = "visa_platinum_credito"
+    # Otros
     PREPAGO = "prepago"
     BUSINESS = "business"
-    PLATINUM = "platinum"
-    BLACK = "black"
 
 # ============================================
 # PYDANTIC MODELS
