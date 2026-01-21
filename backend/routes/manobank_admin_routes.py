@@ -2395,3 +2395,189 @@ async def update_customer(
         raise HTTPException(status_code=404, detail="Cliente no encontrado")
     
     return {"message": "Cliente actualizado correctamente"}
+
+
+# ============================================
+# BASE DE DATOS DE ESTAFAS Y FRAUDES
+# Sistema de verificación pública de números/emails fraudulentos
+# ============================================
+
+class ScamReportType(str, Enum):
+    PHONE = "phone"
+    EMAIL = "email"
+    WEBSITE = "website"
+    IBAN = "iban"
+
+class ScamSeverity(str, Enum):
+    LOW = "low"
+    MEDIUM = "medium"
+    HIGH = "high"
+    CRITICAL = "critical"
+
+@router.get("/scam-database")
+async def get_scam_reports(
+    request: Request,
+    session_token: Optional[str] = Cookie(None),
+    report_type: Optional[str] = None,
+    status: Optional[str] = None
+):
+    """Obtener reportes de estafas - Solo empleados"""
+    user, employee = await require_bank_employee(request, session_token)
+    db = get_db()
+    
+    query = {}
+    if report_type:
+        query["type"] = report_type
+    if status:
+        query["status"] = status
+    
+    reports = await db.scam_database.find(
+        query,
+        {"_id": 0}
+    ).sort("created_at", -1).limit(500).to_list(500)
+    
+    # Stats
+    total = await db.scam_database.count_documents({})
+    phones = await db.scam_database.count_documents({"type": "phone"})
+    emails = await db.scam_database.count_documents({"type": "email"})
+    verified = await db.scam_database.count_documents({"status": "verified"})
+    
+    return {
+        "reports": reports,
+        "stats": {
+            "total": total,
+            "phones": phones,
+            "emails": emails,
+            "verified": verified
+        }
+    }
+
+
+@router.post("/scam-database")
+async def add_scam_report(
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Añadir reporte de estafa - Solo empleados"""
+    user, employee = await require_bank_employee(request, session_token)
+    db = get_db()
+    
+    body = await request.json()
+    
+    report_type = body.get("type", "phone")
+    value = body.get("value", "").strip()
+    
+    if not value:
+        raise HTTPException(status_code=400, detail="El valor es requerido")
+    
+    # Normalize value
+    if report_type == "phone":
+        # Remove spaces and ensure +34 prefix for Spanish numbers
+        value = value.replace(" ", "").replace("-", "")
+        if not value.startswith("+"):
+            value = "+34" + value.lstrip("0")
+    elif report_type == "email":
+        value = value.lower()
+    
+    # Check if already exists
+    existing = await db.scam_database.find_one({"value": value, "type": report_type})
+    if existing:
+        # Update report count
+        await db.scam_database.update_one(
+            {"value": value, "type": report_type},
+            {
+                "$inc": {"report_count": 1},
+                "$push": {
+                    "reports": {
+                        "reported_by": employee.get("name", user.name),
+                        "reason": body.get("reason", ""),
+                        "date": datetime.now(timezone.utc).isoformat()
+                    }
+                },
+                "$set": {"updated_at": datetime.now(timezone.utc).isoformat()}
+            }
+        )
+        return {"message": "Reporte actualizado - Ya existía en la base de datos", "existing": True}
+    
+    report = {
+        "id": f"scam_{uuid.uuid4().hex[:12]}",
+        "type": report_type,
+        "value": value,
+        "severity": body.get("severity", "medium"),
+        "category": body.get("category", "phishing"),  # phishing, smishing, vishing, scam, fraud
+        "description": body.get("description", ""),
+        "source": body.get("source", "manual"),  # manual, customer_report, external
+        "status": "pending",  # pending, verified, false_positive
+        "report_count": 1,
+        "reports": [{
+            "reported_by": employee.get("name", user.name),
+            "reason": body.get("reason", ""),
+            "date": datetime.now(timezone.utc).isoformat()
+        }],
+        "created_by": user.user_id,
+        "created_by_name": employee.get("name", user.name),
+        "created_at": datetime.now(timezone.utc).isoformat()
+    }
+    
+    await db.scam_database.insert_one(report)
+    report.pop("_id", None)
+    
+    return {"message": "Reporte de estafa añadido correctamente", "report": report}
+
+
+@router.patch("/scam-database/{report_id}")
+async def update_scam_report(
+    report_id: str,
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Actualizar estado de reporte - Solo Director o Compliance"""
+    user, employee = await require_bank_employee(request, session_token)
+    db = get_db()
+    
+    body = await request.json()
+    
+    update_data = {
+        "updated_at": datetime.now(timezone.utc).isoformat(),
+        "updated_by": employee.get("name", user.name)
+    }
+    
+    if "status" in body:
+        update_data["status"] = body["status"]
+        if body["status"] == "verified":
+            update_data["verified_at"] = datetime.now(timezone.utc).isoformat()
+            update_data["verified_by"] = employee.get("name", user.name)
+    
+    if "severity" in body:
+        update_data["severity"] = body["severity"]
+    
+    if "notes" in body:
+        update_data["notes"] = body["notes"]
+    
+    result = await db.scam_database.update_one(
+        {"id": report_id},
+        {"$set": update_data}
+    )
+    
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Reporte no encontrado")
+    
+    return {"message": "Reporte actualizado"}
+
+
+@router.delete("/scam-database/{report_id}")
+async def delete_scam_report(
+    report_id: str,
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Eliminar reporte - Solo Director"""
+    user, employee = await require_bank_director(request, session_token)
+    db = get_db()
+    
+    result = await db.scam_database.delete_one({"id": report_id})
+    
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Reporte no encontrado")
+    
+    return {"message": "Reporte eliminado"}
