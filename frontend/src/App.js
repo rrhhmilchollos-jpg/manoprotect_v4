@@ -196,10 +196,23 @@ function AppRouter() {
         path="/manobank" 
         element={
           <ProtectedRoute>
+            <ManoBankDashboard />
+          </ProtectedRoute>
+        } 
+      />
+      
+      {/* ManoBank Classic View */}
+      <Route 
+        path="/manobank-clasico" 
+        element={
+          <ProtectedRoute>
             <ManoBank />
           </ProtectedRoute>
         } 
       />
+      
+      {/* Login Seguro */}
+      <Route path="/login-seguro" element={<LoginSeguro />} />
       
       {/* ManoBank Public Account Request - No Auth Required */}
       <Route path="/abrir-cuenta" element={<SolicitarCuenta />} />
