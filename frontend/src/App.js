@@ -39,6 +39,7 @@ import BancoSistema from '@/pages/BancoSistema';
 import SolicitarCuenta from '@/pages/SolicitarCuenta';
 import LandingPromo from '@/pages/LandingPromo';
 import RecuperarPassword from '@/pages/RecuperarPassword';
+import VerificarEstafa from '@/pages/VerificarEstafa';
 import CookieConsent from '@/components/CookieConsent';
 
 import '@/App.css';
