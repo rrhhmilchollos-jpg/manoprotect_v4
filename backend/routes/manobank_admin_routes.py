@@ -285,22 +285,65 @@ async def create_employee(
     request: Request,
     session_token: Optional[str] = Cookie(None)
 ):
-    """Crear nuevo empleado del banco"""
+    """Crear nuevo empleado del banco - Solo Director General"""
     user, employee = await require_bank_director(request, session_token)
     db = get_db()
     
-    # Check if email already exists
+    # Verify only Director General can create employees
+    if employee.get("role") != "director" and not employee.get("is_superadmin"):
+        raise HTTPException(
+            status_code=403, 
+            detail="Solo el Director General puede crear nuevos empleados"
+        )
+    
+    # Check if email already exists - allow update if same person with different role
     existing = await db.manobank_employees.find_one({"email": data.email})
-    if existing:
-        raise HTTPException(status_code=400, detail="Ya existe un empleado con este email")
     
     employee_id = f"emp_{uuid.uuid4().hex[:12]}"
+    
+    # Build roles list (primary role + additional roles)
+    all_roles = [data.role.value]
+    if data.roles:
+        for r in data.roles:
+            if r not in all_roles:
+                all_roles.append(r)
+    
+    if existing:
+        # Update existing employee with new/additional roles
+        existing_roles = existing.get("roles", [existing.get("role", "")])
+        if isinstance(existing_roles, str):
+            existing_roles = [existing_roles]
+        
+        # Merge roles
+        merged_roles = list(set(existing_roles + all_roles))
+        
+        await db.manobank_employees.update_one(
+            {"email": data.email},
+            {
+                "$set": {
+                    "roles": merged_roles,
+                    "role": data.role.value,  # Primary role
+                    "department": data.department or existing.get("department"),
+                    "phone": data.phone or existing.get("phone"),
+                    "salary": data.salary or existing.get("salary"),
+                    "updated_at": datetime.now(timezone.utc).isoformat(),
+                    "updated_by": user.user_id
+                }
+            }
+        )
+        
+        updated = await db.manobank_employees.find_one({"email": data.email}, {"_id": 0})
+        return {
+            "message": f"Empleado actualizado con roles: {', '.join(merged_roles)}", 
+            "employee": updated
+        }
     
     new_employee = {
         "id": employee_id,
         "email": data.email,
         "name": data.name,
         "role": data.role.value,
+        "roles": all_roles,
         "department": data.department or _get_department_for_role(data.role.value),
         "phone": data.phone,
         "salary": data.salary,
@@ -308,13 +351,14 @@ async def create_employee(
         "is_active": True,
         "hired_date": datetime.now(timezone.utc).isoformat(),
         "created_by": user.user_id,
+        "authorized_by": employee.get("name", user.name),
         "created_at": datetime.now(timezone.utc).isoformat()
     }
     
     await db.manobank_employees.insert_one(new_employee)
     new_employee.pop("_id", None)
     
-    return {"message": "Empleado creado correctamente", "employee": new_employee}
+    return {"message": "Empleado creado y autorizado correctamente", "employee": new_employee}
 
 @router.patch("/employees/{employee_id}")
 async def update_employee(
