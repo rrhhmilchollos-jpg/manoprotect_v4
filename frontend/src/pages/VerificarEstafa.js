@@ -136,10 +136,32 @@ const VerificarEstafa = () => {
           <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
             Verificador de Estafas
           </h1>
-          <p className="text-xl text-slate-300 max-w-2xl mx-auto">
+          <p className="text-xl text-slate-300 max-w-2xl mx-auto mb-4">
             Comprueba si un número de teléfono o email está en nuestra base de datos 
             de fraudes conocidos. Protégete contra estafas.
           </p>
+          
+          {/* Cloud Badge - Firebase Connected */}
+          <div className="inline-flex items-center gap-2 bg-gradient-to-r from-emerald-500/20 to-green-500/20 border border-emerald-500/50 rounded-full px-4 py-2 mt-2">
+            <Cloud className="w-5 h-5 text-emerald-400" />
+            <span className="text-emerald-300 text-sm font-medium">Conectado a Firebase Cloud</span>
+            <span className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse" />
+          </div>
+          
+          <div className="flex items-center justify-center gap-6 mt-4 text-sm text-slate-400">
+            <div className="flex items-center gap-1">
+              <Database className="w-4 h-4" />
+              <span>Google Firestore</span>
+            </div>
+            <div className="flex items-center gap-1">
+              <Zap className="w-4 h-4 text-yellow-400" />
+              <span>Tiempo Real</span>
+            </div>
+            <div className="flex items-center gap-1">
+              <Globe className="w-4 h-4" />
+              <span>Público</span>
+            </div>
+          </div>
         </div>
 
         {/* Stats */}
