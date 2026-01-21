@@ -164,6 +164,11 @@ async def login_user(data: UserLogin, request: Request, response: Response):
     
     user = await _db.users.find_one({"email": data.email}, {"_id": 0})
     
+    # Debug logging
+    if user:
+        ph = user.get("password_hash", "")
+        print(f"[DEBUG AUTH] User found, password_hash length={len(ph)}, has_dollar={'$' in ph}")
+    
     if not user or not user.get("password_hash"):
         # Record failed attempt
         await record_login_attempt(data.email, ip_address, user_agent, False, "user_not_found")
