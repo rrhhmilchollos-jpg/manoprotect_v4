@@ -1870,13 +1870,14 @@ async def update_shipment_status(
     shipment_id: str,
     status: str,
     request: Request,
-    session_token: Optional[str] = Cookie(None)
+    session_token: Optional[str] = Cookie(None),
+    note: Optional[str] = None
 ):
     """Actualizar estado del envío de tarjeta"""
     user, employee = await require_bank_employee(request, session_token)
     db = get_db()
     
-    valid_statuses = ["preparing", "shipped", "in_transit", "out_for_delivery", "delivered", "returned"]
+    valid_statuses = ["pending", "preparing", "ready", "shipped", "in_transit", "out_for_delivery", "delivered", "failed", "returned"]
     if status not in valid_statuses:
         raise HTTPException(status_code=400, detail=f"Estado inválido. Usar: {', '.join(valid_statuses)}")
     
@@ -1884,35 +1885,72 @@ async def update_shipment_status(
     if not shipment:
         raise HTTPException(status_code=404, detail="Envío no encontrado")
     
-    update_data = {
+    # Add to status history
+    status_entry = {
         "status": status,
-        f"status_{status}_at": datetime.now(timezone.utc).isoformat(),
-        "updated_by": user.user_id
+        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "note": note or "",
+        "updated_by": employee.get("name", user.name)
     }
     
-    if status == "delivered":
+    update_data = {
+        "status": status,
+        "updated_by": user.user_id,
+        "updated_at": datetime.now(timezone.utc).isoformat()
+    }
+    
+    # Update specific dates based on status
+    if status == "shipped":
+        update_data["shipped_at"] = datetime.now(timezone.utc).isoformat()
+    elif status == "delivered":
         update_data["delivered_at"] = datetime.now(timezone.utc).isoformat()
         # Activate the card
         await db.manobank_cards.update_one(
             {"id": shipment["card_id"]},
-            {"$set": {"physical_card_status": "delivered", "is_active": True}}
+            {"$set": {"physical_card_status": "delivered", "status": "active"}}
+        )
+    elif status == "failed" or status == "returned":
+        await db.manobank_cards.update_one(
+            {"id": shipment["card_id"]},
+            {"$set": {"physical_card_status": status}}
         )
     
     await db.manobank_card_shipments.update_one(
         {"id": shipment_id},
-        {"$set": update_data}
+        {
+            "$set": update_data,
+            "$push": {"status_history": status_entry}
+        }
     )
     
+    # Send SMS notification for important status changes
+    sms_statuses = ["shipped", "out_for_delivery", "delivered", "failed"]
+    if status in sms_statuses and shipment.get("sms_notifications_enabled") and shipment.get("customer_phone"):
+        try:
+            from services.twilio_sms import send_sms
+            sms_messages = {
+                "shipped": f"ManoBank: Tu tarjeta ha sido enviada. Tracking: {shipment['tracking_number']}. Entrega estimada: {shipment.get('estimated_delivery', 'próximos días')[:10]}",
+                "out_for_delivery": f"ManoBank: Tu tarjeta está en reparto hoy. Tracking: {shipment['tracking_number']}",
+                "delivered": f"ManoBank: Tu tarjeta ha sido entregada. ¡Actívala en tu área de cliente!",
+                "failed": f"ManoBank: No pudimos entregar tu tarjeta. Contacta con nosotros: 900 123 456"
+            }
+            await send_sms(shipment["customer_phone"], sms_messages.get(status, ""))
+        except Exception as e:
+            print(f"Error sending SMS: {e}")
+    
     status_labels = {
+        "pending": "Pendiente",
         "preparing": "Preparando",
+        "ready": "Listo para enviar",
         "shipped": "Enviado",
         "in_transit": "En tránsito",
         "out_for_delivery": "En reparto",
         "delivered": "Entregado",
+        "failed": "Fallido",
         "returned": "Devuelto"
     }
     
-    return {"message": f"Estado actualizado: {status_labels.get(status, status)}"}
+    return {"message": f"Estado actualizado: {status_labels.get(status, status)}", "status": status}
 
 # ============================================
 # GESTIÓN DE CLIENTES
