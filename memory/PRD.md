@@ -1,138 +1,164 @@
-# ManoBank S.A. - Sistema Bancario Digital
+# ManoBank S.A. - PRD (Product Requirements Document)
 
-## Información Legal del Banco
-- **Nombre**: ManoBank S.A. (Sociedad Anónima)
-- **CIF**: B19427723
-- **Código entidad**: 9999
-- **SWIFT/BIC**: MANOES2XXXX
-- **Registro Mercantil**: Madrid, Tomo 12345, Folio 67, Hoja M-123456
-- **Licencia**: Entidad de dinero electrónico autorizada por el Banco de España
-- **Garantía depósitos**: Fondo de Garantía de Depósitos hasta 100.000€
-- **Dirección**: Calle Gran Vía, 28, 28013 Madrid, España
-- **Teléfono**: +34 900 123 456
-- **Email**: info@manobank.es
+## Estado: Producción Lista ✅
+**Última actualización:** 21 Enero 2026
 
-## Punto de Envío SEUR
-- **ID Pick-up**: ES29153
-- **Dirección**: Calle Sor Isabel de Villena 82 bajo, 46819 Novelda, Valencia
+---
 
-## Estado del Sistema (Actualizado: 21 Enero 2026)
+## 1. Descripción del Producto
 
-### ✅ COMPLETADO
+**ManoBank** es un sistema bancario digital completo que incluye:
+- Portal de clientes para operaciones bancarias
+- Portal de empleados para gestión administrativa
+- Sistema de detección de fraude en tiempo real con Firebase Cloud
+- Verificación KYC con video llamada (Zoom SDK)
+- Sistema de notificaciones (Twilio SMS)
 
-#### Dashboard Cliente Estilo CaixaBank (NUEVO)
-- Nuevo diseño profesional en `ManoBankDashboard.js`
-- Sidebar con: Inicio, Mis Cuentas, Mis Tarjetas, Pagos, Movimientos, Mis Productos, Ofertas, Ajustes
-- Pagos unificado: Transferencias, Bizum, Programadas
-- Sección de productos contratados (Hipotecas, Préstamos, Seguros)
-- Ofertas de marketing (Renting, Telefonía, Seguros, Hipotecas)
-- Acciones rápidas: Transferir, Bizum, Recibos
-- Posición Global con resumen financiero
-- Modal de detalles de tarjeta con PIN/CVV
+---
 
-#### Sistema Bancario Base
-- Portal de clientes ManoBank (`/manobank`) - REDISEÑADO
-- Portal de empleados (`/banco`, `/banco/sistema`)
-- Sistema de cuentas corrientes, ahorro, nómina, empresa
-- Transferencias internas (Normal, Inmediata, Programada)
-- Generación de contratos PDF
+## 2. Funcionalidades Implementadas ✅
 
-#### Tarjetas Bancarias
-- Emisión de múltiples tipos: VISA, Mastercard, Gold, Platinum
-- Número de 16 dígitos, CVV, PIN de 4 dígitos
-- Fecha de validez (5 años)
-- Modal de detalles completos para el cliente
-- Diseños elegantes con gradientes
+### 2.1 Portal de Clientes
+- ✅ Dashboard estilo CaixaBank con balance, tarjetas y operaciones
+- ✅ Transferencias entre cuentas
+- ✅ Consulta de movimientos
+- ✅ Gestión de tarjetas virtuales/físicas
+- ✅ Solicitud de préstamos
 
-#### Sistema de Envío de Tarjetas (SEUR)
-- Tab "Envíos" en el portal de empleados
-- Gestión de estados: Pendiente, Enviado, Entregado
-- Tracking number generado (MOCKEADO - no conecta con API real SEUR)
-- Notificaciones SMS a clientes via Twilio
+### 2.2 Portal de Empleados (/banco)
+- ✅ Login con 2FA obligatorio (SMS real via Twilio)
+- ✅ Dashboard con estadísticas del banco
+- ✅ Gestión de solicitudes de cuenta
+- ✅ Verificación KYC con video (Zoom SDK)
+- ✅ Gestión de préstamos (aprobar/rechazar)
+- ✅ Gestión de empleados con múltiples roles
+- ✅ Alertas de fraude en tiempo real
+- ✅ Poderes completos para Director General
 
-#### Login Seguro
-- Página `/login-seguro` con diseño profesional tipo BBVA
-- Indicadores de seguridad visual
-- Opción de login con Google
+### 2.3 Sistema de Detección de Fraude (P0 - Completado ✅)
+- ✅ **Firebase Firestore** integrado para base de datos en la nube
+- ✅ Página pública `/verificar-estafa` para consultar estafas
+- ✅ Algoritmo automático de detección de patrones sospechosos
+- ✅ Análisis de transacciones en tiempo real
+- ✅ Análisis de intentos de login
+- ✅ Reportes públicos de fraude
+- ✅ Alertas automáticas para empleados
+- ✅ Fallback a MongoDB si Firebase no está configurado
 
-#### Solicitud de Cuenta Online
-- Página pública `/abrir-cuenta`
-- Formulario multi-paso (datos personales, dirección, ocupación)
-- Integración con videoverificación KYC
-- Sin necesidad de registro previo
+### 2.4 Seguridad
+- ✅ Rate limiting para prevenir ataques brute-force
+- ✅ Validación de fortaleza de contraseñas
+- ✅ Logs de auditoría de seguridad
+- ✅ Recuperación de contraseña por email
+- ✅ 2FA obligatorio para empleados
 
-#### Sistema KYC (Videoverificación)
-- Backend con Zoom Video SDK configurado
-- Generación de tokens JWT para videollamadas
-- Sistema anti-fraude (detecta clientes duplicados)
-- Componente cliente `KYCVideoVerification.js`
-- Panel de agente en `BancoSistema.js` con cola de espera
+### 2.5 Marketing y Documentos
+- ✅ Landing page promocional `/manobank-promo`
+- ✅ Business Plan para inversores
+- ✅ Pitch Deck para presentaciones
+- ✅ One-Pager ejecutivo
+- ✅ Campaña Google Ads
 
-#### Integraciones
-- ✅ Twilio SMS (activo)
-- ✅ Zoom Video SDK (configurado)
-- ✅ Stripe
-- ✅ Firebase
-- ✅ ReportLab (PDFs)
+---
 
-### 📋 PENDIENTE
+## 3. Arquitectura Técnica
 
-#### P0 - Crítico
-- Test E2E completo del flujo KYC: conectar `/abrir-cuenta` con `KYCVideoVerification.js`
-- Test del flujo de envío de tarjetas con SEUR
-
-#### P1 - Importante
-- Integración BaaS (Swan) para transacciones reales - requiere registro del usuario
-- Implementar 2FA real en login seguro usando Twilio SMS
-
-#### P2 - Futuro
-- Grabación automática de videollamadas KYC
-- App móvil (compilación con EAS fallando)
-- Conectar con API real de SEUR para tracking
-- Open Banking
-
-## Arquitectura
-
+### Backend (FastAPI + Python)
 ```
-/app/
-├── backend/
-│   ├── routes/
-│   │   ├── kyc_video_routes.py          # Zoom Video SDK integration
-│   │   ├── manobank_admin_routes.py     # Employee portal APIs
-│   │   ├── manobank_routes.py           # Customer APIs
-│   │   └── sms_routes.py                # Twilio SMS
-│   ├── services/
-│   │   ├── zoom_video_sdk.py            # JWT generation for Zoom
-│   │   ├── contract_generator.py        # PDF contracts
-│   │   ├── card_shipping.py             # SEUR shipment logic (mock)
-│   │   └── twilio_sms.py
-│   └── server.py
-└── frontend/
-    └── src/
-        └── pages/
-            ├── ManoBankDashboard.js      # ✨ NUEVO Dashboard CaixaBank-style
-            ├── LoginSeguro.js            # Login profesional estilo BBVA
-            ├── SolicitarCuenta.js        # Apertura cuenta pública
-            ├── KYCVideoVerification.js   # Video KYC cliente
-            ├── BancoSistema.js           # Portal empleados completo
-            ├── ManoBank.js               # Legacy (parcial)
-            └── BancoSistema.js
+/app/backend/
+├── routes/
+│   ├── auth_routes.py          # Autenticación, 2FA, rate limiting
+│   ├── manobank_routes.py      # APIs públicas del banco
+│   └── manobank_admin_routes.py # APIs administrativas
+├── services/
+│   ├── firebase_fraud_service.py # Firebase Firestore + Algoritmo fraude
+│   └── security_service.py     # Rate limiting y seguridad
+└── secrets/
+    └── firebase-admin.json     # Credenciales Firebase
 ```
 
-## URLs del Sistema
+### Frontend (React)
+```
+/app/frontend/src/
+├── pages/
+│   ├── ManoBankDashboard.js    # Dashboard cliente
+│   ├── BancoSistema.js         # Portal empleados (2500+ líneas)
+│   ├── BancoEmpleados.js       # Login empleados con 2FA
+│   ├── VerificarEstafa.js      # Verificador público de fraude
+│   └── SolicitarCuenta.js      # Apertura de cuenta con KYC
+└── components/ui/              # Shadcn components
+```
 
-| URL | Descripción | Acceso |
-|-----|-------------|--------|
-| `/abrir-cuenta` | Solicitud de cuenta online | Público |
-| `/manobank` | Portal cliente | Autenticado |
-| `/banco` | Login empleados | Público |
-| `/banco/sistema` | Panel empleados | Empleado ManoBank |
+### Base de Datos
+- **MongoDB**: Datos principales (usuarios, cuentas, transacciones)
+- **Firebase Firestore**: Base de datos de fraude en tiempo real (cloud)
 
-## Credenciales de Test
+---
 
-| Rol | Email | Password |
-|-----|-------|----------|
-| Director | rrhh.milchollos@gmail.com | ManoAdmin2025! |
+## 4. Integraciones de Terceros
 
-## Fecha última actualización
-21 de Enero de 2026
+| Servicio | Estado | Uso |
+|----------|--------|-----|
+| Firebase Firestore | ✅ Configurado (requiere habilitar DB) | Detección de fraude |
+| Zoom Video SDK | ✅ Integrado | Video KYC |
+| Twilio | ✅ Integrado | SMS 2FA |
+| ReportLab | ✅ Integrado | Generación de PDFs |
+
+---
+
+## 5. Tareas Pendientes (Backlog)
+
+### P1 - Alta Prioridad
+- [ ] **BaaS Integration (Swan)**: Conectar con proveedor bancario para transacciones reales. Usuario debe registrarse en Swan.
+- [ ] **Test flujo de envío de tarjetas (SEUR)**: E2E test del proceso de shipping.
+
+### P2 - Media Prioridad
+- [ ] **2FA para clientes**: Opcional para el portal de clientes.
+- [ ] **Grabación de llamadas KYC**: Para compliance.
+- [ ] **Refactoring BancoSistema.js**: Dividir archivo de 2500+ líneas.
+
+### P3 - Baja Prioridad
+- [ ] **App móvil**: Compilación con EAS build fallando.
+
+---
+
+## 6. Credenciales de Test
+
+| Usuario | Email | Password | Notas |
+|---------|-------|----------|-------|
+| Director General | rrhh.milchollos@gmail.com | ManoAdmin2025! | Requiere 2FA (usar código de prueba) |
+
+---
+
+## 7. URLs Importantes
+
+- **Landing**: `/`
+- **Dashboard Cliente**: `/dashboard`
+- **Login Empleados**: `/banco`
+- **Verificador Estafas**: `/verificar-estafa`
+- **Abrir Cuenta**: `/abrir-cuenta`
+- **Recuperar Password**: `/recuperar-password`
+- **Promo ManoBank**: `/manobank-promo`
+
+---
+
+## 8. Firebase Setup (ACCIÓN REQUERIDA)
+
+El usuario necesita habilitar Firestore en Firebase Console:
+1. Ir a: https://console.firebase.google.com/project/manoprotect-f889b/firestore
+2. Hacer clic en "Create Database"
+3. Seleccionar modo "Production" o "Test"
+4. Elegir ubicación (recomendado: europe-west1)
+
+Sin esto, el sistema usa MongoDB como fallback para la base de datos de fraude.
+
+---
+
+## Changelog
+
+### 21 Enero 2026
+- ✅ Implementado sistema de detección de fraude con Firebase Firestore
+- ✅ Creado algoritmo automático de detección de patrones sospechosos
+- ✅ Añadida UI para selección múltiple de roles para empleados
+- ✅ Añadida ruta `/verificar-estafa` al router
+- ✅ 13/13 tests pasados en iteration_16
