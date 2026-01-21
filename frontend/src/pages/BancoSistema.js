@@ -2044,36 +2044,43 @@ const BancoSistema = () => {
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-zinc-700 mb-1">
+                <label className="block text-sm font-medium text-zinc-700 mb-2">
                   Tipo de Tarjeta *
                 </label>
-                <div className="grid grid-cols-2 gap-2">
+                <div className="grid grid-cols-2 gap-3">
                   {[
-                    { value: 'debito', label: '💳 Débito', desc: 'Sin crédito' },
-                    { value: 'credito', label: '💳 Crédito', desc: 'Línea de crédito' },
-                    { value: 'prepago', label: '💳 Prepago', desc: 'Recargable' },
-                    { value: 'platinum', label: '💎 Platinum', desc: 'Premium' },
-                    { value: 'black', label: '🖤 Black', desc: 'Exclusiva' },
-                    { value: 'business', label: '🏢 Business', desc: 'Empresas' }
+                    { value: 'visa_debito', label: 'VISA Débito', brand: 'VISA', color: 'from-blue-500 to-blue-700' },
+                    { value: 'visa_credito', label: 'VISA Crédito', brand: 'VISA', color: 'from-blue-600 to-blue-800' },
+                    { value: 'mastercard_debito', label: 'Mastercard Débito', brand: 'MC', color: 'from-red-500 to-orange-500' },
+                    { value: 'mastercard_credito', label: 'Mastercard Crédito', brand: 'MC', color: 'from-red-600 to-orange-600' },
+                    { value: 'visa_gold_debito', label: 'VISA Gold Débito', brand: 'VISA', color: 'from-amber-400 to-yellow-600' },
+                    { value: 'visa_gold_credito', label: 'VISA Gold Crédito', brand: 'VISA', color: 'from-amber-500 to-yellow-700' },
+                    { value: 'visa_platinum_debito', label: 'VISA Platinum Débito', brand: 'VISA', color: 'from-slate-400 to-slate-600' },
+                    { value: 'visa_platinum_credito', label: 'VISA Platinum Crédito', brand: 'VISA', color: 'from-slate-500 to-slate-700' },
+                    { value: 'prepago', label: 'Prepago', brand: 'VISA', color: 'from-green-500 to-teal-600' },
+                    { value: 'business', label: 'Business', brand: 'MC', color: 'from-zinc-700 to-zinc-900' }
                   ].map((type) => (
                     <button
                       key={type.value}
                       type="button"
                       onClick={() => setNewCardRequest({ ...newCardRequest, card_type: type.value })}
-                      className={`p-3 rounded-lg border-2 text-left transition-all ${
+                      className={`p-3 rounded-xl border-2 text-left transition-all ${
                         newCardRequest.card_type === type.value 
-                          ? 'border-indigo-500 bg-indigo-50' 
+                          ? 'border-indigo-500 ring-2 ring-indigo-200' 
                           : 'border-zinc-200 hover:border-zinc-300'
                       }`}
                     >
+                      <div className={`h-12 rounded-lg bg-gradient-to-r ${type.color} mb-2 flex items-center justify-between px-3`}>
+                        <span className="text-white text-xs font-bold">ManoBank</span>
+                        <span className="text-white text-xs font-bold">{type.brand}</span>
+                      </div>
                       <p className="font-medium text-sm">{type.label}</p>
-                      <p className="text-xs text-zinc-500">{type.desc}</p>
                     </button>
                   ))}
                 </div>
               </div>
               
-              {['credito', 'platinum', 'black', 'business'].includes(newCardRequest.card_type) && (
+              {['visa_credito', 'mastercard_credito', 'visa_gold_credito', 'visa_platinum_credito', 'business'].includes(newCardRequest.card_type) && (
                 <div>
                   <label className="block text-sm font-medium text-zinc-700 mb-1">
                     Límite de Crédito (€) *
