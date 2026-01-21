@@ -124,6 +124,7 @@ def hash_password_secure(password: str) -> str:
 
 def verify_password_secure(password: str, stored_hash: str) -> bool:
     """Verify password against secure hash"""
+    print(f"[DEBUG] verify_password_secure called with hash length={len(stored_hash)}, has_dollar={'$' in stored_hash}")
     try:
         # Handle legacy SHA-256 hashes (no salt)
         if '$' not in stored_hash:
