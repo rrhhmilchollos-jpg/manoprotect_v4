@@ -97,22 +97,25 @@
 /app/
 ├── backend/
 │   ├── routes/
-│   │   ├── kyc_video_routes.py
-│   │   ├── manobank_admin_routes.py
-│   │   ├── manobank_routes.py
-│   │   └── sms_routes.py
+│   │   ├── kyc_video_routes.py          # Zoom Video SDK integration
+│   │   ├── manobank_admin_routes.py     # Employee portal APIs
+│   │   ├── manobank_routes.py           # Customer APIs
+│   │   └── sms_routes.py                # Twilio SMS
 │   ├── services/
-│   │   ├── zoom_video_sdk.py
-│   │   ├── contract_generator.py
+│   │   ├── zoom_video_sdk.py            # JWT generation for Zoom
+│   │   ├── contract_generator.py        # PDF contracts
+│   │   ├── card_shipping.py             # SEUR shipment logic (mock)
 │   │   └── twilio_sms.py
 │   └── server.py
 └── frontend/
     └── src/
         └── pages/
-            ├── SolicitarCuenta.js   # Nueva página pública
-            ├── KYCVideoVerification.js
-            ├── ManoBank.js
-            ├── BancoEmpleados.js
+            ├── ManoBankDashboard.js      # ✨ NUEVO Dashboard CaixaBank-style
+            ├── LoginSeguro.js            # Login profesional estilo BBVA
+            ├── SolicitarCuenta.js        # Apertura cuenta pública
+            ├── KYCVideoVerification.js   # Video KYC cliente
+            ├── BancoSistema.js           # Portal empleados completo
+            ├── ManoBank.js               # Legacy (parcial)
             └── BancoSistema.js
 ```
 
