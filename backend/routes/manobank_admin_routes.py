@@ -1152,7 +1152,11 @@ async def issue_card(
         "card_number": card_number,
         "card_number_masked": card_number[:4] + " •••• •••• " + card_number[-4:],
         "cvv": cvv,
+        "pin": pin,  # PIN de 4 dígitos
         "expiry": expiry,
+        "expiry_full": expiry_full,
+        "expiry_month": str(expiry_month).zfill(2),
+        "expiry_year": str(expiry_year),
         "holder_name": customer["name"].upper(),
         "card_type": data.card_type.value,
         "card_brand": "Visa" if card_prefix == "4" else "Mastercard",
@@ -1162,7 +1166,7 @@ async def issue_card(
         "monthly_limit": 10000 if data.card_type == CardType.DEBITO else 25000,
         "status": "active",
         "is_frozen": False,
-        "pin_set": False,
+        "pin_set": True,  # PIN ya está generado
         "contactless_enabled": True,
         "online_purchases_enabled": True,
         "issued_by": user.user_id,
