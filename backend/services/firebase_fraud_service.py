@@ -234,7 +234,8 @@ async def get_scam_stats() -> Dict[str, Any]:
                 "verified": verified,
                 "critical_threats": critical,
                 "last_24h": recent,
-                "last_updated": datetime.now(timezone.utc).isoformat()
+                "last_updated": datetime.now(timezone.utc).isoformat(),
+                "source": "firebase_cloud"
             }
         
         loop = asyncio.get_event_loop()
@@ -242,8 +243,23 @@ async def get_scam_stats() -> Dict[str, Any]:
         return stats
         
     except Exception as e:
+        error_msg = str(e)
         print(f"[Firebase] Error getting stats: {e}")
-        return {"total_reports": 0, "error": str(e)}
+        # Return helpful error for database not created
+        if "does not exist" in error_msg:
+            return {
+                "total_reports": 0,
+                "phone_scams": 0,
+                "email_scams": 0,
+                "verified": 0,
+                "critical_threats": 0,
+                "last_24h": 0,
+                "last_updated": datetime.now(timezone.utc).isoformat(),
+                "error": error_msg,
+                "setup_required": True,
+                "setup_url": "https://console.firebase.google.com/project/manoprotect-f889b/firestore"
+            }
+        return {"total_reports": 0, "error": error_msg}
 
 
 # ============================================
