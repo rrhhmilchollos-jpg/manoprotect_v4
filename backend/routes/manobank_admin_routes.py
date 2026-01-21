@@ -1128,25 +1128,67 @@ async def issue_card(
         if not account:
             raise HTTPException(status_code=404, detail="El cliente no tiene cuenta bancaria. Crea una cuenta primero.")
     
-    # Generate card
-    card_prefix = "4" if data.card_type in [CardType.DEBITO, CardType.PREPAGO] else "5"  # Visa vs Mastercard
+    # Generate card - Determine if VISA (4) or Mastercard (5)
+    visa_types = [CardType.VISA_DEBITO, CardType.VISA_CREDITO, CardType.VISA_GOLD_DEBITO, 
+                  CardType.VISA_GOLD_CREDITO, CardType.VISA_PLATINUM_DEBITO, CardType.VISA_PLATINUM_CREDITO, CardType.PREPAGO]
+    mastercard_types = [CardType.MASTERCARD_DEBITO, CardType.MASTERCARD_CREDITO, CardType.BUSINESS]
+    
+    card_prefix = "4" if data.card_type in visa_types else "5"
+    card_brand = "VISA" if data.card_type in visa_types else "Mastercard"
+    
     card_number = card_prefix + ''.join([str(random.randint(0, 9)) for _ in range(15)])
     cvv = ''.join([str(random.randint(0, 9)) for _ in range(3)])
-    pin = ''.join([str(random.randint(0, 9)) for _ in range(4)])  # PIN de 4 dígitos
+    pin = ''.join([str(random.randint(0, 9)) for _ in range(4)])
     
     expiry_month = datetime.now().month
     expiry_year = datetime.now().year + 5
     expiry = f"{str(expiry_month).zfill(2)}/{str(expiry_year)[-2:]}"
-    expiry_full = f"{str(expiry_month).zfill(2)}/{expiry_year}"  # Fecha completa para mostrar
+    expiry_full = f"{str(expiry_month).zfill(2)}/{expiry_year}"
     
-    # Set credit limit based on card type
+    # Determine card category (debit/credit) and set limits
+    debit_types = [CardType.VISA_DEBITO, CardType.MASTERCARD_DEBITO, CardType.VISA_GOLD_DEBITO, CardType.VISA_PLATINUM_DEBITO, CardType.PREPAGO]
+    is_debit = data.card_type in debit_types
+    
+    # Credit limits based on card type
     credit_limits = {
-        "debito": 0,
-        "credito": data.credit_limit or 3000,
+        "visa_debito": 0, "mastercard_debito": 0, "visa_gold_debito": 0, "visa_platinum_debito": 0,
+        "visa_credito": data.credit_limit or 3000,
+        "mastercard_credito": data.credit_limit or 3000,
+        "visa_gold_credito": data.credit_limit or 10000,
+        "visa_platinum_credito": data.credit_limit or 25000,
         "prepago": 0,
-        "business": data.credit_limit or 10000,
-        "platinum": data.credit_limit or 15000,
-        "black": data.credit_limit or 50000
+        "business": data.credit_limit or 15000
+    }
+    
+    # Daily/Monthly limits
+    daily_limits = {
+        "visa_debito": 2500, "mastercard_debito": 2500, "prepago": 1000,
+        "visa_credito": 3000, "mastercard_credito": 3000,
+        "visa_gold_debito": 5000, "visa_gold_credito": 7500,
+        "visa_platinum_debito": 10000, "visa_platinum_credito": 15000,
+        "business": 20000
+    }
+    
+    monthly_limits = {
+        "visa_debito": 10000, "mastercard_debito": 10000, "prepago": 3000,
+        "visa_credito": 15000, "mastercard_credito": 15000,
+        "visa_gold_debito": 25000, "visa_gold_credito": 35000,
+        "visa_platinum_debito": 50000, "visa_platinum_credito": 75000,
+        "business": 100000
+    }
+    
+    # Card display name
+    card_display_names = {
+        "visa_debito": "VISA Débito",
+        "mastercard_debito": "Mastercard Débito",
+        "visa_credito": "VISA Crédito",
+        "mastercard_credito": "Mastercard Crédito",
+        "visa_gold_debito": "VISA Gold Débito",
+        "visa_gold_credito": "VISA Gold Crédito",
+        "visa_platinum_debito": "VISA Platinum Débito",
+        "visa_platinum_credito": "VISA Platinum Crédito",
+        "prepago": "Prepago",
+        "business": "Business"
     }
     
     card_id = f"card_{uuid.uuid4().hex[:12]}"
@@ -1155,25 +1197,28 @@ async def issue_card(
         "id": card_id,
         "customer_id": data.customer_id,
         "customer_name": customer["name"],
-        "account_id": account["id"],  # Use resolved account ID
+        "customer_email": customer.get("email"),
+        "account_id": account["id"],
         "card_number": card_number,
         "card_number_masked": card_number[:4] + " •••• •••• " + card_number[-4:],
         "cvv": cvv,
-        "pin": pin,  # PIN de 4 dígitos
+        "pin": pin,
         "expiry": expiry,
         "expiry_full": expiry_full,
         "expiry_month": str(expiry_month).zfill(2),
         "expiry_year": str(expiry_year),
         "holder_name": customer["name"].upper(),
         "card_type": data.card_type.value,
-        "card_brand": "Visa" if card_prefix == "4" else "Mastercard",
+        "card_type_display": card_display_names.get(data.card_type.value, data.card_type.value),
+        "card_brand": card_brand,
+        "card_category": "debito" if is_debit else "credito",
         "credit_limit": credit_limits.get(data.card_type.value, 0),
         "available_credit": credit_limits.get(data.card_type.value, 0),
-        "daily_limit": 2500 if data.card_type == CardType.DEBITO else 5000,
-        "monthly_limit": 10000 if data.card_type == CardType.DEBITO else 25000,
+        "daily_limit": daily_limits.get(data.card_type.value, 2500),
+        "monthly_limit": monthly_limits.get(data.card_type.value, 10000),
         "status": "active",
         "is_frozen": False,
-        "pin_set": True,  # PIN ya está generado
+        "pin_set": True,
         "contactless_enabled": True,
         "online_purchases_enabled": True,
         "issued_by": user.user_id,
