@@ -32,6 +32,8 @@ import TermsOfService from '@/pages/TermsOfService';
 import RefundPolicy from '@/pages/RefundPolicy';
 import LegalNotice from '@/pages/LegalNotice';
 import ManoBank from '@/pages/ManoBank';
+import ManoBankDashboard from '@/pages/ManoBankDashboard';
+import LoginSeguro from '@/pages/LoginSeguro';
 import BancoEmpleados from '@/pages/BancoEmpleados';
 import BancoSistema from '@/pages/BancoSistema';
 import SolicitarCuenta from '@/pages/SolicitarCuenta';
