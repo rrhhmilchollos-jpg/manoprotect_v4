@@ -549,6 +549,117 @@ async def toggle_online_purchases(
     return {"message": f"Compras online {'activadas' if new_status else 'desactivadas'}", "online_purchases_enabled": new_status}
 
 
+# ============================================
+# SOLICITUD PÚBLICA DE CUENTA (SIN AUTH)
+# ============================================
+
+class PublicAccountRequest(BaseModel):
+    customer_name: str
+    customer_email: str
+    customer_phone: str
+    customer_dni: str
+    address_street: str
+    address_city: str
+    address_postal_code: str
+    address_province: str
+    address_country: str = "España"
+    account_type: str = "corriente"
+    initial_deposit: float = 0
+    occupation: Optional[str] = None
+    monthly_income: Optional[float] = None
+    date_of_birth: Optional[str] = None
+    nationality: str = "Española"
+
+
+@router.post("/public/request-account")
+async def public_request_account(data: PublicAccountRequest):
+    """
+    Endpoint público para solicitar apertura de cuenta
+    NO requiere autenticación - es para nuevos clientes
+    Después de esto, el cliente debe pasar por videoverificación KYC
+    """
+    db = get_db()
+    
+    # Validar DNI único
+    existing = await db.manobank_customers.find_one({"dni": data.customer_dni})
+    if existing:
+        raise HTTPException(status_code=400, detail="Ya existe una cuenta con este DNI")
+    
+    existing_request = await db.manobank_account_requests.find_one({
+        "customer_dni": data.customer_dni,
+        "status": {"$in": ["pending", "kyc_video_pending"]}
+    })
+    if existing_request:
+        raise HTTPException(status_code=400, detail="Ya existe una solicitud pendiente con este DNI")
+    
+    # Validar email único
+    existing_email = await db.manobank_customers.find_one({"email": data.customer_email})
+    if existing_email:
+        raise HTTPException(status_code=400, detail="Ya existe una cuenta con este email")
+    
+    # Crear solicitud
+    request_id = f"req_{uuid.uuid4().hex[:12]}"
+    
+    account_request = {
+        "id": request_id,
+        "customer_name": data.customer_name,
+        "customer_email": data.customer_email,
+        "customer_phone": data.customer_phone,
+        "customer_dni": data.customer_dni,
+        "address_street": data.address_street,
+        "address_city": data.address_city,
+        "address_postal_code": data.address_postal_code,
+        "address_province": data.address_province,
+        "address_country": data.address_country,
+        "account_type": data.account_type,
+        "initial_deposit": data.initial_deposit,
+        "occupation": data.occupation,
+        "monthly_income": data.monthly_income,
+        "date_of_birth": data.date_of_birth,
+        "nationality": data.nationality,
+        "status": "pending",  # pending -> kyc_video_pending -> kyc_verified -> account_created OR kyc_rejected
+        "kyc_verified": False,
+        "created_at": datetime.now(timezone.utc).isoformat(),
+        "source": "online_public_form"
+    }
+    
+    await db.manobank_account_requests.insert_one(account_request)
+    
+    return {
+        "request_id": request_id,
+        "message": "Solicitud recibida. Proceda con la videoverificación para activar su cuenta.",
+        "next_step": "kyc_video_verification"
+    }
+
+
+@router.get("/public/bank-info")
+async def get_public_bank_info():
+    """Información pública del banco"""
+    db = get_db()
+    
+    bank_info = await db.manobank_config.find_one({"type": "bank_info"}, {"_id": 0})
+    
+    if not bank_info:
+        return {
+            "bank_name": "ManoBank S.A.",
+            "legal_name": "ManoBank Sociedad Anónima",
+            "cif": "A12345678",
+            "bank_code": "9999",
+            "swift_bic": "MANOES2XXXX",
+            "address": "Calle Gran Vía, 28, 28013 Madrid, España",
+            "phone": "+34 900 123 456",
+            "email": "info@manobank.es",
+            "license": "Entidad de dinero electrónico autorizada por el Banco de España",
+            "deposit_guarantee": "Fondo de Garantía de Depósitos hasta 100.000€"
+        }
+    
+    # Remove internal fields
+    bank_info.pop("type", None)
+    bank_info.pop("updated_at", None)
+    
+    return bank_info
+
+
 @router.get("/accounts")
 async def get_accounts(
     request: Request,
