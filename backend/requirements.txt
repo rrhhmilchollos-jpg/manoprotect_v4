@@ -148,3 +148,4 @@ zipp==3.23.0
 zopfli==0.4.0
 twilio==9.9.1
 reportlab==4.4.9
+firebase_admin==7.1.0
