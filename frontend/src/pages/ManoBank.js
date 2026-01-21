@@ -839,7 +839,7 @@ const ManoBank = () => {
                         </div>
                       </div>
                     </div>
-                  ))}
+                  )})}
 
                   {cards.length === 0 && (
                     <div className="col-span-2 bg-white rounded-2xl p-12 text-center">
