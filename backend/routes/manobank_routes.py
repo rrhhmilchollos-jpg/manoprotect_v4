@@ -1524,3 +1524,179 @@ async def _generate_sample_transactions(db, user_id: str, account_id: str):
             "created_at": (datetime.now(timezone.utc) - timedelta(days=days_ago)).isoformat()
         }
         await db.manobank_transactions.insert_one(tx)
+
+
+# ============================================
+# VERIFICACIÓN PÚBLICA DE ESTAFAS
+# Cualquier usuario puede verificar si un número/email está reportado
+# ============================================
+
+@router.get("/public/verify-scam")
+async def verify_scam_public(
+    value: str,
+    type: str = "phone"
+):
+    """
+    Verificar si un número de teléfono o email está en la base de datos de estafas.
+    Este endpoint es PÚBLICO - no requiere autenticación.
+    """
+    db = get_db()
+    
+    if not value:
+        raise HTTPException(status_code=400, detail="El valor es requerido")
+    
+    # Normalize value
+    search_value = value.strip()
+    if type == "phone":
+        search_value = search_value.replace(" ", "").replace("-", "")
+        if not search_value.startswith("+"):
+            search_value = "+34" + search_value.lstrip("0")
+    elif type == "email":
+        search_value = search_value.lower()
+    
+    # Search in database
+    report = await db.scam_database.find_one(
+        {"value": search_value, "type": type},
+        {"_id": 0, "reports": 0, "created_by": 0}
+    )
+    
+    if report:
+        return {
+            "found": True,
+            "is_scam": True,
+            "severity": report.get("severity", "unknown"),
+            "category": report.get("category", "unknown"),
+            "status": report.get("status", "pending"),
+            "report_count": report.get("report_count", 1),
+            "first_reported": report.get("created_at"),
+            "warning": "⚠️ ATENCIÓN: Este número/email ha sido reportado como posible estafa. NO proporcione datos personales ni realice pagos.",
+            "advice": [
+                "No responda a llamadas o mensajes de este número/email",
+                "No proporcione datos bancarios ni personales",
+                "No realice ningún tipo de pago o transferencia",
+                "Denuncie a las autoridades si ha sido víctima",
+                "Contacte con ManoBank si tiene dudas: 900 123 456"
+            ]
+        }
+    
+    return {
+        "found": False,
+        "is_scam": False,
+        "message": "Este número/email NO está en nuestra base de datos de estafas conocidas.",
+        "disclaimer": "Esto no garantiza que sea seguro. Siempre verifique la identidad de quien le contacta.",
+        "tips": [
+            "ManoBank nunca le pedirá contraseñas por teléfono o email",
+            "Verifique siempre la URL oficial: manobank.es",
+            "En caso de duda, contacte directamente con nosotros"
+        ]
+    }
+
+
+@router.post("/public/report-scam")
+async def report_scam_public(request: Request):
+    """
+    Reportar un posible número/email fraudulento - PÚBLICO
+    Los reportes públicos quedan pendientes de verificación
+    """
+    db = get_db()
+    
+    body = await request.json()
+    
+    report_type = body.get("type", "phone")
+    value = body.get("value", "").strip()
+    description = body.get("description", "")
+    reporter_email = body.get("reporter_email", "")
+    
+    if not value:
+        raise HTTPException(status_code=400, detail="El valor es requerido")
+    
+    # Normalize
+    if report_type == "phone":
+        value = value.replace(" ", "").replace("-", "")
+        if not value.startswith("+"):
+            value = "+34" + value.lstrip("0")
+    elif report_type == "email":
+        value = value.lower()
+    
+    # Check if exists
+    existing = await db.scam_database.find_one({"value": value, "type": report_type})
+    
+    if existing:
+        await db.scam_database.update_one(
+            {"value": value, "type": report_type},
+            {
+                "$inc": {"report_count": 1, "public_reports": 1},
+                "$push": {
+                    "reports": {
+                        "reported_by": "Usuario público",
+                        "reporter_email": reporter_email,
+                        "reason": description,
+                        "source": "public",
+                        "date": datetime.now(timezone.utc).isoformat()
+                    }
+                },
+                "$set": {"updated_at": datetime.now(timezone.utc).isoformat()}
+            }
+        )
+        return {
+            "success": True,
+            "message": "Gracias por tu reporte. Este número/email ya estaba en nuestra base de datos.",
+            "already_reported": True
+        }
+    
+    report = {
+        "id": f"scam_{uuid.uuid4().hex[:12]}",
+        "type": report_type,
+        "value": value,
+        "severity": "medium",
+        "category": body.get("category", "unknown"),
+        "description": description,
+        "source": "public",
+        "status": "pending",
+        "report_count": 1,
+        "public_reports": 1,
+        "reports": [{
+            "reported_by": "Usuario público",
+            "reporter_email": reporter_email,
+            "reason": description,
+            "source": "public",
+            "date": datetime.now(timezone.utc).isoformat()
+        }],
+        "created_at": datetime.now(timezone.utc).isoformat()
+    }
+    
+    await db.scam_database.insert_one(report)
+    
+    return {
+        "success": True,
+        "message": "Gracias por tu reporte. Nuestro equipo lo revisará pronto.",
+        "already_reported": False
+    }
+
+
+@router.get("/public/scam-stats")
+async def get_scam_stats_public():
+    """Estadísticas públicas de la base de datos de estafas"""
+    db = get_db()
+    
+    total = await db.scam_database.count_documents({})
+    phones = await db.scam_database.count_documents({"type": "phone"})
+    emails = await db.scam_database.count_documents({"type": "email"})
+    verified = await db.scam_database.count_documents({"status": "verified"})
+    critical = await db.scam_database.count_documents({"severity": "critical"})
+    
+    # Recent (last 24h)
+    yesterday = datetime.now(timezone.utc) - timedelta(days=1)
+    recent = await db.scam_database.count_documents({
+        "created_at": {"$gte": yesterday.isoformat()}
+    })
+    
+    return {
+        "total_reports": total,
+        "phone_scams": phones,
+        "email_scams": emails,
+        "verified": verified,
+        "critical_threats": critical,
+        "last_24h": recent,
+        "last_updated": datetime.now(timezone.utc).isoformat()
+    }
