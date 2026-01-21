@@ -16,27 +16,48 @@
 - **ID Pick-up**: ES29153
 - **Dirección**: Calle Sor Isabel de Villena 82 bajo, 46819 Novelda, Valencia
 
-## Estado del Sistema
+## Estado del Sistema (Actualizado: 21 Enero 2026)
 
 ### ✅ COMPLETADO
 
+#### Dashboard Cliente Estilo CaixaBank (NUEVO)
+- Nuevo diseño profesional en `ManoBankDashboard.js`
+- Sidebar con: Inicio, Mis Cuentas, Mis Tarjetas, Pagos, Movimientos, Mis Productos, Ofertas, Ajustes
+- Pagos unificado: Transferencias, Bizum, Programadas
+- Sección de productos contratados (Hipotecas, Préstamos, Seguros)
+- Ofertas de marketing (Renting, Telefonía, Seguros, Hipotecas)
+- Acciones rápidas: Transferir, Bizum, Recibos
+- Posición Global con resumen financiero
+- Modal de detalles de tarjeta con PIN/CVV
+
 #### Sistema Bancario Base
-- Portal de clientes ManoBank (`/manobank`)
+- Portal de clientes ManoBank (`/manobank`) - REDISEÑADO
 - Portal de empleados (`/banco`, `/banco/sistema`)
 - Sistema de cuentas corrientes, ahorro, nómina, empresa
 - Transferencias internas (Normal, Inmediata, Programada)
 - Generación de contratos PDF
 
 #### Tarjetas Bancarias
-- Emisión de 6 tipos de tarjetas (débito, crédito, prepago, virtual, platinum, black)
+- Emisión de múltiples tipos: VISA, Mastercard, Gold, Platinum
 - Número de 16 dígitos, CVV, PIN de 4 dígitos
 - Fecha de validez (5 años)
 - Modal de detalles completos para el cliente
-- Control de contactless y compras online
+- Diseños elegantes con gradientes
+
+#### Sistema de Envío de Tarjetas (SEUR)
+- Tab "Envíos" en el portal de empleados
+- Gestión de estados: Pendiente, Enviado, Entregado
+- Tracking number generado (MOCKEADO - no conecta con API real SEUR)
+- Notificaciones SMS a clientes via Twilio
+
+#### Login Seguro
+- Página `/login-seguro` con diseño profesional tipo BBVA
+- Indicadores de seguridad visual
+- Opción de login con Google
 
 #### Solicitud de Cuenta Online
 - Página pública `/abrir-cuenta`
-- Formulario completo (datos personales, dirección, ocupación)
+- Formulario multi-paso (datos personales, dirección, ocupación)
 - Integración con videoverificación KYC
 - Sin necesidad de registro previo
 
@@ -45,35 +66,29 @@
 - Generación de tokens JWT para videollamadas
 - Sistema anti-fraude (detecta clientes duplicados)
 - Componente cliente `KYCVideoVerification.js`
-- Panel de agente en `BancoSistema.js`
+- Panel de agente en `BancoSistema.js` con cola de espera
 
 #### Integraciones
-- ✅ Twilio SMS
-- ✅ Zoom Video SDK
+- ✅ Twilio SMS (activo)
+- ✅ Zoom Video SDK (configurado)
 - ✅ Stripe
 - ✅ Firebase
-- ✅ SendGrid (pendiente API key)
-
-### 🔄 EN PROGRESO
-
-#### Videollamadas KYC en Tiempo Real
-- Backend configurado
-- Frontend preparado
-- Pendiente: Pruebas de conexión real Zoom
+- ✅ ReportLab (PDFs)
 
 ### 📋 PENDIENTE
 
 #### P0 - Crítico
-- Finalizar pruebas de videollamada KYC real
-- Deployment a producción
+- Test E2E completo del flujo KYC: conectar `/abrir-cuenta` con `KYCVideoVerification.js`
+- Test del flujo de envío de tarjetas con SEUR
 
 #### P1 - Importante
-- Gestión de envío de tarjetas físicas (UI)
-- Integración BaaS para operaciones reales
+- Integración BaaS (Swan) para transacciones reales - requiere registro del usuario
+- Implementar 2FA real en login seguro usando Twilio SMS
 
 #### P2 - Futuro
-- App móvil WebView
-- Grabación automática KYC
+- Grabación automática de videollamadas KYC
+- App móvil (compilación con EAS fallando)
+- Conectar con API real de SEUR para tracking
 - Open Banking
 
 ## Arquitectura
