@@ -38,6 +38,10 @@ class EmployeeRole(str, Enum):
     GESTOR_COMERCIAL = "gestor_comercial"
     CAJERO = "cajero"
     ATENCION_CLIENTE = "atencion_cliente"
+    COMPLIANCE = "compliance"
+    TESORERIA = "tesoreria"
+    RRHH = "rrhh"
+    IT = "it"
 
 class AccountStatus(str, Enum):
     PENDING = "pending"
