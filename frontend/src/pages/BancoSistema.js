@@ -1816,7 +1816,7 @@ const BancoSistema = () => {
       {/* Add Employee Modal */}
       {showAddEmployee && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl max-w-md w-full p-6">
+          <div className="bg-white rounded-2xl max-w-md w-full p-6 max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between mb-6">
               <h3 className="text-xl font-bold">Añadir Empleado</h3>
               <button onClick={() => setShowAddEmployee(false)}>
@@ -1832,6 +1832,7 @@ const BancoSistema = () => {
                   onChange={(e) => setNewEmployee({ ...newEmployee, name: e.target.value })}
                   className="w-full px-4 py-3 border border-zinc-300 rounded-lg"
                   required
+                  data-testid="employee-name-input"
                 />
               </div>
               <div>
@@ -1842,14 +1843,16 @@ const BancoSistema = () => {
                   onChange={(e) => setNewEmployee({ ...newEmployee, email: e.target.value })}
                   className="w-full px-4 py-3 border border-zinc-300 rounded-lg"
                   required
+                  data-testid="employee-email-input"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-zinc-700 mb-1">Rol</label>
+                <label className="block text-sm font-medium text-zinc-700 mb-1">Rol Principal</label>
                 <select
                   value={newEmployee.role}
                   onChange={(e) => setNewEmployee({ ...newEmployee, role: e.target.value })}
                   className="w-full px-4 py-3 border border-zinc-300 rounded-lg"
+                  data-testid="employee-role-select"
                 >
                   <option value="director">Director General</option>
                   <option value="gerente">Gerente</option>
@@ -1858,8 +1861,56 @@ const BancoSistema = () => {
                   <option value="gestor_comercial">Gestor Comercial</option>
                   <option value="cajero">Cajero</option>
                   <option value="atencion_cliente">Atención al Cliente</option>
+                  <option value="compliance">Compliance</option>
+                  <option value="tesoreria">Tesorería</option>
+                  <option value="rrhh">Recursos Humanos</option>
+                  <option value="it">IT / Sistemas</option>
                 </select>
               </div>
+              
+              {/* Multiple Roles Selection */}
+              <div>
+                <label className="block text-sm font-medium text-zinc-700 mb-2">Roles Adicionales (opcional)</label>
+                <div className="grid grid-cols-2 gap-2 p-3 bg-zinc-50 rounded-lg border border-zinc-200">
+                  {[
+                    { value: 'director', label: 'Director' },
+                    { value: 'gerente', label: 'Gerente' },
+                    { value: 'subdirector', label: 'Subdirector' },
+                    { value: 'analista_riesgos', label: 'Analista Riesgos' },
+                    { value: 'gestor_comercial', label: 'Gestor Comercial' },
+                    { value: 'cajero', label: 'Cajero' },
+                    { value: 'atencion_cliente', label: 'Atención Cliente' },
+                    { value: 'compliance', label: 'Compliance' },
+                    { value: 'tesoreria', label: 'Tesorería' },
+                    { value: 'rrhh', label: 'RRHH' },
+                    { value: 'it', label: 'IT' }
+                  ].filter(r => r.value !== newEmployee.role).map((role) => (
+                    <label key={role.value} className="flex items-center gap-2 text-sm cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={newEmployee.additionalRoles?.includes(role.value)}
+                        onChange={(e) => {
+                          const roles = newEmployee.additionalRoles || [];
+                          if (e.target.checked) {
+                            setNewEmployee({ ...newEmployee, additionalRoles: [...roles, role.value] });
+                          } else {
+                            setNewEmployee({ ...newEmployee, additionalRoles: roles.filter(r => r !== role.value) });
+                          }
+                        }}
+                        className="rounded border-zinc-300 text-indigo-600"
+                        data-testid={`role-checkbox-${role.value}`}
+                      />
+                      <span className="text-zinc-700">{role.label}</span>
+                    </label>
+                  ))}
+                </div>
+                {newEmployee.additionalRoles?.length > 0 && (
+                  <p className="mt-2 text-xs text-indigo-600">
+                    {newEmployee.additionalRoles.length} rol(es) adicional(es) seleccionado(s)
+                  </p>
+                )}
+              </div>
+              
               <div>
                 <label className="block text-sm font-medium text-zinc-700 mb-1">Teléfono</label>
                 <input
@@ -1867,6 +1918,7 @@ const BancoSistema = () => {
                   value={newEmployee.phone}
                   onChange={(e) => setNewEmployee({ ...newEmployee, phone: e.target.value })}
                   className="w-full px-4 py-3 border border-zinc-300 rounded-lg"
+                  data-testid="employee-phone-input"
                 />
               </div>
               <div>
@@ -1876,9 +1928,10 @@ const BancoSistema = () => {
                   value={newEmployee.salary}
                   onChange={(e) => setNewEmployee({ ...newEmployee, salary: e.target.value })}
                   className="w-full px-4 py-3 border border-zinc-300 rounded-lg"
+                  data-testid="employee-salary-input"
                 />
               </div>
-              <Button type="submit" className="w-full bg-indigo-600 hover:bg-indigo-700 h-12">
+              <Button type="submit" className="w-full bg-indigo-600 hover:bg-indigo-700 h-12" data-testid="submit-employee-btn">
                 Añadir Empleado
               </Button>
             </form>
