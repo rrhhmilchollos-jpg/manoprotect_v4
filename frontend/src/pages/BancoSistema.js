@@ -209,6 +209,67 @@ const BancoSistema = () => {
     }
   };
 
+  const fetchShipments = async () => {
+    try {
+      const response = await fetch(`${API_URL}/api/manobank/admin/card-shipments`, {
+        credentials: 'include',
+        headers: token ? { 'Authorization': `Bearer ${token}` } : {}
+      });
+      const data = await response.json();
+      setShipments(data.shipments || []);
+    } catch (error) {
+      toast.error('Error al cargar envíos');
+    }
+  };
+
+  const handleCreateShipment = async (cardId, shippingData) => {
+    try {
+      const response = await fetch(`${API_URL}/api/manobank/admin/cards/${cardId}/ship`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token && { 'Authorization': `Bearer ${token}` })
+        },
+        body: JSON.stringify(shippingData)
+      });
+      
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.detail || 'Error al crear envío');
+      }
+      
+      const data = await response.json();
+      toast.success(`Envío creado. Tracking: ${data.tracking_number}`);
+      setShowShipCardModal(null);
+      fetchShipments();
+      fetchCards();
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+
+  const handleUpdateShipmentStatus = async (shipmentId, newStatus, note = '') => {
+    try {
+      const response = await fetch(`${API_URL}/api/manobank/admin/card-shipments/${shipmentId}/status?status=${newStatus}&note=${encodeURIComponent(note)}`, {
+        method: 'PATCH',
+        credentials: 'include',
+        headers: token ? { 'Authorization': `Bearer ${token}` } : {}
+      });
+      
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.detail || 'Error al actualizar estado');
+      }
+      
+      const data = await response.json();
+      toast.success(data.message);
+      fetchShipments();
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+
   const fetchKYCVerifications = async () => {
     try {
       const response = await fetch(`${API_URL}/api/manobank/admin/kyc-verifications`, {
