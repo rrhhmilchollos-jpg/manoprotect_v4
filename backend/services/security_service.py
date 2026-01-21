@@ -127,7 +127,9 @@ def verify_password_secure(password: str, stored_hash: str) -> bool:
     try:
         # Handle legacy SHA-256 hashes (no salt)
         if '$' not in stored_hash:
-            return hashlib.sha256(password.encode()).hexdigest() == stored_hash
+            result = hashlib.sha256(password.encode()).hexdigest() == stored_hash
+            print(f"[DEBUG] Legacy hash verification: {result}")
+            return result
         
         # New secure format
         salt, pwd_hash = stored_hash.split('$')
@@ -137,8 +139,11 @@ def verify_password_secure(password: str, stored_hash: str) -> bool:
             salt.encode('utf-8'),
             100000
         ).hex()
-        return secrets.compare_digest(check_hash, pwd_hash)
-    except Exception:
+        result = secrets.compare_digest(check_hash, pwd_hash)
+        print(f"[DEBUG] PBKDF2 verification: {result}, salt_len={len(salt)}, hash_len={len(pwd_hash)}")
+        return result
+    except Exception as e:
+        print(f"[DEBUG] Password verification error: {e}")
         return False
 
 
