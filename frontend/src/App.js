@@ -118,6 +118,7 @@ function AppRouter() {
       <Route path="/manobank-promo" element={<LandingPromo />} />
       <Route path="/manoprotect" element={<LandingPromo />} />
       <Route path="/recuperar-password" element={<RecuperarPassword />} />
+      <Route path="/verificar-estafa" element={<VerificarEstafa />} />
       
       {/* Auth Routes */}
       <Route path="/login" element={<Login />} />
