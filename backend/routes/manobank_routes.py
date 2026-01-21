@@ -1527,9 +1527,24 @@ async def _generate_sample_transactions(db, user_id: str, account_id: str):
 
 
 # ============================================
-# VERIFICACIÓN PÚBLICA DE ESTAFAS
+# VERIFICACIÓN PÚBLICA DE ESTAFAS (FIREBASE FIRESTORE - CLOUD)
+# Base de datos en tiempo real conectada a Google Cloud
 # Cualquier usuario puede verificar si un número/email está reportado
 # ============================================
+
+# Import Firebase fraud service
+try:
+    from services.firebase_fraud_service import (
+        verify_scam, report_scam, get_scam_stats,
+        get_fraud_algorithm, init_firebase
+    )
+    # Initialize Firebase on module load
+    init_firebase()
+    FIREBASE_AVAILABLE = True
+except ImportError as e:
+    print(f"[ManoBank] Firebase service not available: {e}")
+    FIREBASE_AVAILABLE = False
+
 
 @router.get("/public/verify-scam")
 async def verify_scam_public(
@@ -1539,11 +1554,18 @@ async def verify_scam_public(
     """
     Verificar si un número de teléfono o email está en la base de datos de estafas.
     Este endpoint es PÚBLICO - no requiere autenticación.
+    AHORA CON FIREBASE FIRESTORE - Base de datos en tiempo real en la nube.
     """
-    db = get_db()
-    
     if not value:
         raise HTTPException(status_code=400, detail="El valor es requerido")
+    
+    # Use Firebase Firestore if available
+    if FIREBASE_AVAILABLE:
+        result = await verify_scam(value, type)
+        return result
+    
+    # Fallback to MongoDB if Firebase not available
+    db = get_db()
     
     # Normalize value
     search_value = value.strip()
@@ -1596,19 +1618,34 @@ async def verify_scam_public(
 async def report_scam_public(request: Request):
     """
     Reportar un posible número/email fraudulento - PÚBLICO
-    Los reportes públicos quedan pendientes de verificación
+    Los reportes públicos quedan pendientes de verificación.
+    AHORA CON FIREBASE FIRESTORE - Datos guardados en la nube en tiempo real.
     """
-    db = get_db()
-    
     body = await request.json()
     
     report_type = body.get("type", "phone")
     value = body.get("value", "").strip()
     description = body.get("description", "")
     reporter_email = body.get("reporter_email", "")
+    category = body.get("category", "unknown")
     
     if not value:
         raise HTTPException(status_code=400, detail="El valor es requerido")
+    
+    # Use Firebase Firestore if available
+    if FIREBASE_AVAILABLE:
+        result = await report_scam(
+            value=value,
+            scam_type=report_type,
+            description=description,
+            category=category,
+            reporter_email=reporter_email,
+            source="public"
+        )
+        return result
+    
+    # Fallback to MongoDB
+    db = get_db()
     
     # Normalize
     if report_type == "phone":
@@ -1649,7 +1686,7 @@ async def report_scam_public(request: Request):
         "type": report_type,
         "value": value,
         "severity": "medium",
-        "category": body.get("category", "unknown"),
+        "category": category,
         "description": description,
         "source": "public",
         "status": "pending",
@@ -1676,7 +1713,16 @@ async def report_scam_public(request: Request):
 
 @router.get("/public/scam-stats")
 async def get_scam_stats_public():
-    """Estadísticas públicas de la base de datos de estafas"""
+    """
+    Estadísticas públicas de la base de datos de estafas.
+    AHORA CON FIREBASE FIRESTORE - Estadísticas en tiempo real de la nube.
+    """
+    # Use Firebase Firestore if available
+    if FIREBASE_AVAILABLE:
+        stats = await get_scam_stats()
+        return stats
+    
+    # Fallback to MongoDB
     db = get_db()
     
     total = await db.scam_database.count_documents({})
@@ -1700,3 +1746,86 @@ async def get_scam_stats_public():
         "last_24h": recent,
         "last_updated": datetime.now(timezone.utc).isoformat()
     }
+
+
+# ============================================
+# ALGORITMO DE DETECCIÓN DE FRAUDE AUTOMÁTICO
+# Analiza patrones sospechosos en tiempo real
+# ============================================
+
+@router.post("/fraud/analyze-transaction")
+async def analyze_transaction_fraud(
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """
+    Analizar una transacción para detectar fraude automáticamente.
+    Usa el algoritmo de detección de fraude con Firebase.
+    """
+    user = await require_auth(request, session_token)
+    
+    if not FIREBASE_AVAILABLE:
+        return {"risk_score": 0, "risk_factors": [], "action": "allow", "error": "Firebase not available"}
+    
+    body = await request.json()
+    
+    fraud_algo = get_fraud_algorithm()
+    result = await fraud_algo.analyze_transaction(
+        user_id=user.user_id,
+        amount=body.get("amount", 0),
+        destination=body.get("destination", ""),
+        ip_address=request.client.host if request.client else "unknown",
+        transaction_type=body.get("transaction_type", "transfer")
+    )
+    
+    return result
+
+
+@router.get("/fraud/alerts")
+async def get_fraud_alerts_endpoint(
+    request: Request,
+    session_token: Optional[str] = Cookie(None),
+    limit: int = 50
+):
+    """
+    Obtener alertas de fraude automáticas (para empleados del banco).
+    """
+    user = await require_auth(request, session_token)
+    
+    if not FIREBASE_AVAILABLE:
+        return {"alerts": [], "error": "Firebase not available"}
+    
+    fraud_algo = get_fraud_algorithm()
+    alerts = await fraud_algo.get_fraud_alerts(limit=limit)
+    
+    return {"alerts": alerts}
+
+
+@router.post("/fraud/alerts/{alert_id}/resolve")
+async def resolve_fraud_alert_endpoint(
+    alert_id: str,
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """
+    Resolver una alerta de fraude.
+    """
+    user = await require_auth(request, session_token)
+    
+    if not FIREBASE_AVAILABLE:
+        raise HTTPException(status_code=503, detail="Firebase not available")
+    
+    body = await request.json()
+    resolution = body.get("resolution", "resolved")
+    
+    fraud_algo = get_fraud_algorithm()
+    success = await fraud_algo.resolve_alert(
+        alert_id=alert_id,
+        resolution=resolution,
+        resolved_by=user.user_id
+    )
+    
+    if success:
+        return {"message": "Alerta resuelta correctamente"}
+    else:
+        raise HTTPException(status_code=500, detail="Error al resolver alerta")
