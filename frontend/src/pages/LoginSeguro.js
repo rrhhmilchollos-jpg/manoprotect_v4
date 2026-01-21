@@ -94,6 +94,12 @@ const LoginSeguro = () => {
 
       if (!response.ok) {
         const error = await response.json();
+        // Handle password validation errors
+        if (error.detail?.feedback) {
+          toast.error(error.detail.message);
+          error.detail.feedback.forEach(fb => toast.error(fb));
+          return;
+        }
         throw new Error(error.detail || 'Error en el registro');
       }
 
@@ -105,6 +111,39 @@ const LoginSeguro = () => {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  // Password strength indicator
+  const [passwordStrength, setPasswordStrength] = useState({ score: 0, feedback: [] });
+  
+  const checkPasswordStrength = async (password) => {
+    if (password.length < 3) {
+      setPasswordStrength({ score: 0, feedback: [] });
+      return;
+    }
+    try {
+      const response = await fetch(`${API_URL}/api/auth/validate-password`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password })
+      });
+      const data = await response.json();
+      setPasswordStrength(data);
+    } catch (e) {
+      console.log('Password validation error');
+    }
+  };
+
+  const getStrengthColor = (score) => {
+    if (score < 40) return 'bg-red-500';
+    if (score < 70) return 'bg-yellow-500';
+    return 'bg-green-500';
+  };
+
+  const getStrengthText = (score) => {
+    if (score < 40) return 'Débil';
+    if (score < 70) return 'Media';
+    return 'Fuerte';
   };
 
   return (
