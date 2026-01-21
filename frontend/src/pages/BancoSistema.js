@@ -383,6 +383,9 @@ const BancoSistema = () => {
       fetchCards();
       fetchCustomers(); // Need customers to issue new cards
     }
+    if (activeTab === 'shipments') {
+      fetchShipments();
+    }
     if (activeTab === 'kyc') {
       fetchKYCVerifications();
       fetchAccountRequests(); // Need pending requests
