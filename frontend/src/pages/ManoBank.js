@@ -755,12 +755,16 @@ const ManoBank = () => {
                         <div className="flex justify-between items-end">
                           <div>
                             <p className="text-xs text-white/70">TITULAR</p>
-                            <p className="font-medium">{user?.name?.toUpperCase()}</p>
+                            <p className="font-medium">{card.holder_name || user?.name?.toUpperCase()}</p>
                           </div>
                           <div>
-                            <p className="text-xs text-white/70">VÁLIDA</p>
-                            <p className="font-medium">{card.expiry_date}</p>
+                            <p className="text-xs text-white/70">VÁLIDA HASTA</p>
+                            <p className="font-medium">{card.expiry || card.expiry_date || 'N/A'}</p>
                           </div>
+                        </div>
+                        {/* Card brand logo */}
+                        <div className="absolute top-4 right-4">
+                          <span className="text-xs font-bold">{card.card_brand || 'VISA'}</span>
                         </div>
                       </div>
                       
@@ -769,23 +773,34 @@ const ManoBank = () => {
                         <div className="flex items-center justify-between">
                           <span className="text-zinc-500">Estado</span>
                           <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                            card.is_active ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
+                            card.status === 'active' && !card.is_frozen ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
                           }`}>
-                            {card.is_active ? 'Activa' : 'Bloqueada'}
+                            {card.is_frozen ? 'Congelada' : card.status === 'active' ? 'Activa' : 'Bloqueada'}
                           </span>
                         </div>
-                        {card.credit_limit && (
+                        {card.credit_limit > 0 && (
                           <div className="flex items-center justify-between">
-                            <span className="text-zinc-500">Límite</span>
+                            <span className="text-zinc-500">Límite crédito</span>
                             <span className="font-medium">{formatCurrency(card.credit_limit)}</span>
                           </div>
                         )}
                         <div className="flex gap-2 pt-2">
-                          <Button variant="outline" size="sm" className="flex-1">
+                          <Button 
+                            variant="outline" 
+                            size="sm" 
+                            className="flex-1"
+                            onClick={() => fetchCardDetails(card.id)}
+                            data-testid={`view-card-details-${card.id}`}
+                          >
                             <Eye className="w-4 h-4 mr-1" />
-                            Ver PIN
+                            Ver detalles
                           </Button>
-                          <Button variant="outline" size="sm" className="flex-1">
+                          <Button 
+                            variant="outline" 
+                            size="sm" 
+                            className="flex-1"
+                            onClick={() => fetchCardDetails(card.id)}
+                          >
                             <Settings className="w-4 h-4 mr-1" />
                             Ajustes
                           </Button>
@@ -804,6 +819,153 @@ const ManoBank = () => {
                       </Button>
                     </div>
                   )}
+                </div>
+              </div>
+            )}
+
+            {/* Card Details Modal */}
+            {showCardDetails && (
+              <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+                <div className="bg-white rounded-2xl w-full max-w-lg overflow-hidden">
+                  {/* Card Visual in Modal */}
+                  <div className={`p-6 text-white ${
+                    showCardDetails.card_type === 'credito' ? 'bg-gradient-to-br from-amber-500 to-orange-600' :
+                    showCardDetails.card_type === 'platinum' ? 'bg-gradient-to-br from-zinc-700 to-zinc-900' :
+                    showCardDetails.card_type === 'black' ? 'bg-gradient-to-br from-zinc-900 to-black' :
+                    'bg-gradient-to-br from-blue-600 to-blue-800'
+                  }`}>
+                    <div className="flex justify-between items-start mb-4">
+                      <div>
+                        <Landmark className="w-8 h-8 mb-2" />
+                        <p className="text-xs text-white/70">ManoBank</p>
+                      </div>
+                      <span className="text-sm uppercase tracking-wider font-medium">{showCardDetails.card_brand}</span>
+                    </div>
+                    
+                    {/* Full Card Number */}
+                    <div className="mb-4">
+                      <p className="text-xs text-white/70 mb-1">NÚMERO DE TARJETA</p>
+                      <div className="flex items-center gap-2">
+                        <p className="font-mono text-xl tracking-widest">{showCardDetails.card_number_formatted}</p>
+                        <button 
+                          onClick={() => copyToClipboard(showCardDetails.card_number, 'Número de tarjeta')}
+                          className="text-white/70 hover:text-white"
+                        >
+                          <Copy className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </div>
+                    
+                    <div className="grid grid-cols-3 gap-4">
+                      <div>
+                        <p className="text-xs text-white/70">TITULAR</p>
+                        <p className="font-medium text-sm">{showCardDetails.holder_name}</p>
+                      </div>
+                      <div>
+                        <p className="text-xs text-white/70">VÁLIDA HASTA</p>
+                        <p className="font-medium">{showCardDetails.expiry}</p>
+                      </div>
+                      <div>
+                        <p className="text-xs text-white/70">CVV</p>
+                        <div className="flex items-center gap-1">
+                          <p className="font-mono font-bold text-lg">{showCardDetails.cvv}</p>
+                          <button 
+                            onClick={() => copyToClipboard(showCardDetails.cvv, 'CVV')}
+                            className="text-white/70 hover:text-white"
+                          >
+                            <Copy className="w-3 h-3" />
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {/* Card Details */}
+                  <div className="p-6 space-y-4">
+                    {/* PIN Section */}
+                    <div className="bg-amber-50 border border-amber-200 rounded-xl p-4">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 bg-amber-100 rounded-full flex items-center justify-center">
+                            <Key className="w-5 h-5 text-amber-600" />
+                          </div>
+                          <div>
+                            <p className="text-sm text-amber-800 font-medium">PIN de la tarjeta</p>
+                            <p className="text-2xl font-mono font-bold text-amber-900">{showCardDetails.pin || '****'}</p>
+                          </div>
+                        </div>
+                        <button 
+                          onClick={() => copyToClipboard(showCardDetails.pin, 'PIN')}
+                          className="text-amber-600 hover:text-amber-800"
+                        >
+                          <Copy className="w-5 h-5" />
+                        </button>
+                      </div>
+                      <p className="text-xs text-amber-600 mt-2">⚠️ No compartas tu PIN con nadie</p>
+                    </div>
+                    
+                    {/* Settings */}
+                    <div className="space-y-3">
+                      <h4 className="font-semibold text-zinc-700">Configuración</h4>
+                      
+                      {/* Contactless */}
+                      <div className="flex items-center justify-between p-3 bg-zinc-50 rounded-lg">
+                        <div className="flex items-center gap-3">
+                          <Wifi className="w-5 h-5 text-zinc-600" />
+                          <span>Pago contactless</span>
+                        </div>
+                        <button 
+                          onClick={() => toggleContactless(showCardDetails.id)}
+                          className={`w-12 h-6 rounded-full transition-colors ${
+                            showCardDetails.contactless_enabled ? 'bg-green-500' : 'bg-zinc-300'
+                          }`}
+                        >
+                          <div className={`w-5 h-5 bg-white rounded-full shadow transition-transform ${
+                            showCardDetails.contactless_enabled ? 'translate-x-6' : 'translate-x-0.5'
+                          }`} />
+                        </button>
+                      </div>
+                      
+                      {/* Online purchases */}
+                      <div className="flex items-center justify-between p-3 bg-zinc-50 rounded-lg">
+                        <div className="flex items-center gap-3">
+                          <Globe className="w-5 h-5 text-zinc-600" />
+                          <span>Compras online</span>
+                        </div>
+                        <button 
+                          onClick={() => toggleOnlinePurchases(showCardDetails.id)}
+                          className={`w-12 h-6 rounded-full transition-colors ${
+                            showCardDetails.online_purchases_enabled ? 'bg-green-500' : 'bg-zinc-300'
+                          }`}
+                        >
+                          <div className={`w-5 h-5 bg-white rounded-full shadow transition-transform ${
+                            showCardDetails.online_purchases_enabled ? 'translate-x-6' : 'translate-x-0.5'
+                          }`} />
+                        </button>
+                      </div>
+                    </div>
+                    
+                    {/* Limits */}
+                    <div className="grid grid-cols-2 gap-3">
+                      <div className="bg-zinc-50 rounded-lg p-3">
+                        <p className="text-xs text-zinc-500">Límite diario</p>
+                        <p className="font-semibold">{formatCurrency(showCardDetails.daily_limit || 2500)}</p>
+                      </div>
+                      <div className="bg-zinc-50 rounded-lg p-3">
+                        <p className="text-xs text-zinc-500">Límite mensual</p>
+                        <p className="font-semibold">{formatCurrency(showCardDetails.monthly_limit || 10000)}</p>
+                      </div>
+                    </div>
+                    
+                    {/* Close button */}
+                    <Button 
+                      className="w-full" 
+                      variant="outline"
+                      onClick={() => setShowCardDetails(null)}
+                    >
+                      Cerrar
+                    </Button>
+                  </div>
                 </div>
               </div>
             )}
