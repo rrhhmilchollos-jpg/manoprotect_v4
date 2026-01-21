@@ -64,41 +64,61 @@ def get_client_info(request: Request) -> tuple:
 async def register_user(data: UserRegister, request: Request, response: Response):
     """Register new user with email/password - Enhanced security"""
     ip_address, user_agent = get_client_info(request)
+    
+    # Validate password strength
+    password_check = validate_password_strength(data.password)
+    if not password_check.is_valid:
+        raise HTTPException(
+            status_code=400, 
+            detail={
+                "message": "La contraseña no cumple los requisitos de seguridad",
+                "feedback": password_check.feedback,
+                "score": password_check.score
+            }
+        )
+    
     existing = await _db.users.find_one({"email": data.email}, {"_id": 0})
     if existing:
         raise HTTPException(status_code=400, detail="El email ya está registrado")
     
+    # Use secure password hashing
     user = User(
         email=data.email,
         name=data.name,
         auth_provider="email",
-        password_hash=hash_password(data.password)
+        password_hash=hash_password_secure(data.password)
     )
     
     user_doc = user.model_dump()
     user_doc['created_at'] = user_doc['created_at'].isoformat()
+    user_doc['security_settings'] = {
+        "two_factor_enabled": False,
+        "login_notifications": True,
+        "trusted_devices": []
+    }
     await _db.users.insert_one(user_doc)
     
-    session_token = generate_session_token()
-    session = SessionData(
-        user_id=user.user_id,
-        session_token=session_token,
-        expires_at=datetime.now(timezone.utc) + timedelta(days=7)
-    )
+    # Create secure session
+    session = await create_secure_session(user.user_id, ip_address, user_agent)
     
-    session_doc = session.model_dump()
-    session_doc['expires_at'] = session_doc['expires_at'].isoformat()
-    session_doc['created_at'] = session_doc['created_at'].isoformat()
-    await _db.user_sessions.insert_one(session_doc)
+    # Log security event
+    await log_security_event(
+        SecurityEventTypes.SESSION_CREATED,
+        user.user_id,
+        user.email,
+        ip_address,
+        user_agent,
+        {"registration": True}
+    )
     
     response.set_cookie(
         key="session_token",
-        value=session_token,
+        value=session["session_token"],
         httponly=True,
         secure=True,
         samesite="none",
         path="/",
-        max_age=7 * 24 * 60 * 60
+        max_age=24 * 60 * 60  # 24 hours for new registrations
     )
     
     return {
@@ -110,16 +130,128 @@ async def register_user(data: UserRegister, request: Request, response: Response
     }
 
 
+# ============================================
+# ENHANCED LOGIN WITH SECURITY
+# ============================================
+
+class SecureLoginRequest(BaseModel):
+    email: str
+    password: str
+    remember_device: bool = False
+    otp_code: Optional[str] = None
+
 @router.post("/auth/login")
-async def login_user(data: UserLogin, response: Response):
-    """Login with email/password"""
+async def login_user(data: UserLogin, request: Request, response: Response):
+    """Login with email/password - Enhanced with rate limiting and 2FA"""
+    ip_address, user_agent = get_client_info(request)
+    
+    # Check if account is locked
+    is_locked, minutes_remaining = await is_account_locked(data.email)
+    if is_locked:
+        await log_security_event(
+            SecurityEventTypes.LOGIN_BLOCKED,
+            None,
+            data.email,
+            ip_address,
+            user_agent,
+            {"reason": "account_locked", "minutes_remaining": minutes_remaining},
+            severity="warning"
+        )
+        raise HTTPException(
+            status_code=429, 
+            detail=f"Cuenta bloqueada temporalmente. Intente de nuevo en {minutes_remaining} minutos."
+        )
+    
     user = await _db.users.find_one({"email": data.email}, {"_id": 0})
     
     if not user or not user.get("password_hash"):
-        raise HTTPException(status_code=401, detail="Credenciales inválidas")
+        # Record failed attempt
+        await record_login_attempt(data.email, ip_address, user_agent, False, "user_not_found")
+        
+        # Check if should lock account
+        failed_count = await get_failed_attempts(data.email)
+        remaining = MAX_LOGIN_ATTEMPTS - failed_count
+        
+        if remaining <= 0:
+            await log_security_event(
+                SecurityEventTypes.ACCOUNT_LOCKED,
+                None,
+                data.email,
+                ip_address,
+                user_agent,
+                {"reason": "max_attempts_reached"},
+                severity="critical"
+            )
+        
+        raise HTTPException(
+            status_code=401, 
+            detail=f"Credenciales inválidas. {max(0, remaining)} intentos restantes."
+        )
     
-    if not verify_password(data.password, user["password_hash"]):
-        raise HTTPException(status_code=401, detail="Credenciales inválidas")
+    # Verify password (support both old and new hash formats)
+    password_valid = verify_password_secure(data.password, user["password_hash"])
+    
+    if not password_valid:
+        # Record failed attempt
+        await record_login_attempt(data.email, ip_address, user_agent, False, "wrong_password")
+        
+        failed_count = await get_failed_attempts(data.email)
+        remaining = MAX_LOGIN_ATTEMPTS - failed_count
+        
+        await log_security_event(
+            SecurityEventTypes.LOGIN_FAILED,
+            user.get("user_id"),
+            data.email,
+            ip_address,
+            user_agent,
+            {"attempts_remaining": remaining},
+            severity="warning"
+        )
+        
+        if remaining <= 0:
+            await log_security_event(
+                SecurityEventTypes.ACCOUNT_LOCKED,
+                user.get("user_id"),
+                data.email,
+                ip_address,
+                user_agent,
+                {"reason": "max_attempts_reached"},
+                severity="critical"
+            )
+        
+        raise HTTPException(
+            status_code=401, 
+            detail=f"Credenciales inválidas. {max(0, remaining)} intentos restantes."
+        )
+    
+    # Check for suspicious activity
+    is_suspicious, suspicious_reason = await is_suspicious_login(
+        user["user_id"], ip_address, user_agent
+    )
+    
+    # Clear failed attempts on successful login
+    await clear_failed_attempts(data.email)
+    
+    # Record successful login
+    await record_login_attempt(data.email, ip_address, user_agent, True)
+    
+    # Create secure session
+    session = await create_secure_session(
+        user["user_id"], 
+        ip_address, 
+        user_agent,
+        remember_device=getattr(data, 'remember_device', False)
+    )
+    
+    # Log successful login
+    await log_security_event(
+        SecurityEventTypes.LOGIN_SUCCESS,
+        user["user_id"],
+        data.email,
+        ip_address,
+        user_agent,
+        {"suspicious": is_suspicious, "suspicious_reason": suspicious_reason}
+    )
     
     session_token = generate_session_token()
     session = SessionData(
