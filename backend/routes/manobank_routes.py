@@ -373,6 +373,182 @@ async def toggle_card_freeze(
         "is_frozen": new_status
     }
 
+
+# ============================================
+# GESTIÓN DE TARJETAS DEL CLIENTE
+# ============================================
+
+@router.get("/my-cards")
+async def get_my_cards(
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Obtener todas las tarjetas del cliente (datos básicos)"""
+    user = await require_auth(request, session_token)
+    db = get_db()
+    
+    # Buscar por user_id o por customer asociado
+    cards = await db.manobank_cards.find(
+        {"$or": [
+            {"user_id": user.user_id},
+            {"customer_email": user.email}
+        ]},
+        {"_id": 0, "card_number": 0, "cvv": 0, "pin": 0}  # Ocultar datos sensibles
+    ).to_list(10)
+    
+    return {"cards": cards}
+
+
+@router.get("/my-cards/{card_id}/details")
+async def get_card_full_details(
+    card_id: str,
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Obtener detalles completos de una tarjeta (incluye número, CVV, PIN)
+    Solo el titular puede ver estos datos"""
+    user = await require_auth(request, session_token)
+    db = get_db()
+    
+    # Buscar tarjeta que pertenezca al usuario
+    card = await db.manobank_cards.find_one({
+        "id": card_id,
+        "$or": [
+            {"user_id": user.user_id},
+            {"customer_email": user.email}
+        ]
+    })
+    
+    if not card:
+        raise HTTPException(status_code=404, detail="Tarjeta no encontrada o no tienes acceso")
+    
+    # Formatear número de tarjeta para mostrar
+    card_number = card.get("card_number", "")
+    card_number_formatted = " ".join([card_number[i:i+4] for i in range(0, len(card_number), 4)])
+    
+    # Devolver todos los detalles
+    return {
+        "card": {
+            "id": card.get("id"),
+            "card_number": card_number,
+            "card_number_formatted": card_number_formatted,
+            "card_number_masked": card.get("card_number_masked"),
+            "cvv": card.get("cvv"),
+            "pin": card.get("pin"),
+            "expiry": card.get("expiry"),
+            "expiry_month": card.get("expiry_month"),
+            "expiry_year": card.get("expiry_year"),
+            "holder_name": card.get("holder_name"),
+            "card_type": card.get("card_type"),
+            "card_brand": card.get("card_brand"),
+            "status": card.get("status"),
+            "is_frozen": card.get("is_frozen", False),
+            "credit_limit": card.get("credit_limit"),
+            "available_credit": card.get("available_credit"),
+            "daily_limit": card.get("daily_limit"),
+            "monthly_limit": card.get("monthly_limit"),
+            "contactless_enabled": card.get("contactless_enabled"),
+            "online_purchases_enabled": card.get("online_purchases_enabled"),
+            "created_at": card.get("created_at")
+        }
+    }
+
+
+@router.post("/my-cards/{card_id}/change-pin")
+async def change_card_pin(
+    card_id: str,
+    request: Request,
+    session_token: Optional[str] = Cookie(None),
+    new_pin: str = None
+):
+    """Cambiar PIN de la tarjeta"""
+    user = await require_auth(request, session_token)
+    db = get_db()
+    
+    # Validar PIN
+    if not new_pin or len(new_pin) != 4 or not new_pin.isdigit():
+        raise HTTPException(status_code=400, detail="El PIN debe ser de 4 dígitos numéricos")
+    
+    # Buscar tarjeta
+    card = await db.manobank_cards.find_one({
+        "id": card_id,
+        "$or": [
+            {"user_id": user.user_id},
+            {"customer_email": user.email}
+        ]
+    })
+    
+    if not card:
+        raise HTTPException(status_code=404, detail="Tarjeta no encontrada")
+    
+    # Actualizar PIN
+    await db.manobank_cards.update_one(
+        {"id": card_id},
+        {"$set": {
+            "pin": new_pin,
+            "pin_changed_at": datetime.now(timezone.utc).isoformat()
+        }}
+    )
+    
+    return {"message": "PIN actualizado correctamente"}
+
+
+@router.post("/my-cards/{card_id}/toggle-contactless")
+async def toggle_contactless(
+    card_id: str,
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Activar/desactivar pagos contactless"""
+    user = await require_auth(request, session_token)
+    db = get_db()
+    
+    card = await db.manobank_cards.find_one({
+        "id": card_id,
+        "$or": [{"user_id": user.user_id}, {"customer_email": user.email}]
+    })
+    
+    if not card:
+        raise HTTPException(status_code=404, detail="Tarjeta no encontrada")
+    
+    new_status = not card.get("contactless_enabled", True)
+    
+    await db.manobank_cards.update_one(
+        {"id": card_id},
+        {"$set": {"contactless_enabled": new_status}}
+    )
+    
+    return {"message": f"Contactless {'activado' if new_status else 'desactivado'}", "contactless_enabled": new_status}
+
+
+@router.post("/my-cards/{card_id}/toggle-online")
+async def toggle_online_purchases(
+    card_id: str,
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Activar/desactivar compras online"""
+    user = await require_auth(request, session_token)
+    db = get_db()
+    
+    card = await db.manobank_cards.find_one({
+        "id": card_id,
+        "$or": [{"user_id": user.user_id}, {"customer_email": user.email}]
+    })
+    
+    if not card:
+        raise HTTPException(status_code=404, detail="Tarjeta no encontrada")
+    
+    new_status = not card.get("online_purchases_enabled", True)
+    
+    await db.manobank_cards.update_one(
+        {"id": card_id},
+        {"$set": {"online_purchases_enabled": new_status}}
+    )
+    
+    return {"message": f"Compras online {'activadas' if new_status else 'desactivadas'}", "online_purchases_enabled": new_status}
+
+
 @router.get("/accounts")
 async def get_accounts(
     request: Request,
