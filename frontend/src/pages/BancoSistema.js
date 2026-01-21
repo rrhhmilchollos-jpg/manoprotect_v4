@@ -2419,6 +2419,189 @@ const BancoSistema = () => {
           </div>
         </div>
       )}
+
+      {/* New Loan Request Modal */}
+      {showNewLoan && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 overflow-y-auto">
+          <div className="bg-white rounded-2xl max-w-lg w-full p-6 my-8">
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-xl font-bold flex items-center gap-2">
+                <PiggyBank className="w-6 h-6 text-indigo-600" />
+                Nueva Solicitud de Préstamo
+              </h3>
+              <button onClick={() => setShowNewLoan(false)}>
+                <X className="w-6 h-6 text-zinc-400" />
+              </button>
+            </div>
+            
+            <form onSubmit={handleNewLoanRequest} className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-zinc-700 mb-1">
+                  Cliente *
+                </label>
+                <select
+                  value={newLoanRequest.customer_id}
+                  onChange={(e) => {
+                    const customer = customers.find(c => c.id === e.target.value);
+                    setNewLoanRequest({ 
+                      ...newLoanRequest, 
+                      customer_id: e.target.value,
+                      customer_name: customer?.name || '',
+                      customer_email: customer?.email || ''
+                    });
+                  }}
+                  className="w-full px-4 py-3 border border-zinc-300 rounded-lg"
+                  required
+                >
+                  <option value="">Seleccionar cliente</option>
+                  {customers.map((c) => (
+                    <option key={c.id} value={c.id}>{c.name} - {c.dni}</option>
+                  ))}
+                </select>
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-zinc-700 mb-2">
+                  Tipo de Préstamo *
+                </label>
+                <div className="grid grid-cols-2 gap-2">
+                  {[
+                    { value: 'personal', label: 'Personal', icon: DollarSign, desc: 'Hasta 50.000€' },
+                    { value: 'hipotecario', label: 'Hipotecario', icon: Home, desc: 'Para vivienda' },
+                    { value: 'vehiculo', label: 'Vehículo', icon: Car, desc: 'Coche o moto' },
+                    { value: 'empresarial', label: 'Empresarial', icon: Briefcase, desc: 'Para negocios' },
+                    { value: 'estudios', label: 'Estudios', icon: GraduationCap, desc: 'Formación' },
+                    { value: 'rapido', label: 'Rápido', icon: Zap, desc: 'Hasta 5.000€' }
+                  ].map((type) => (
+                    <button
+                      key={type.value}
+                      type="button"
+                      onClick={() => setNewLoanRequest({ ...newLoanRequest, loan_type: type.value })}
+                      className={`p-3 rounded-xl border-2 text-left transition-all ${
+                        newLoanRequest.loan_type === type.value 
+                          ? 'border-indigo-500 bg-indigo-50' 
+                          : 'border-zinc-200 hover:border-zinc-300'
+                      }`}
+                    >
+                      <type.icon className={`w-5 h-5 mb-1 ${newLoanRequest.loan_type === type.value ? 'text-indigo-600' : 'text-zinc-400'}`} />
+                      <p className="font-medium text-sm">{type.label}</p>
+                      <p className="text-xs text-zinc-500">{type.desc}</p>
+                    </button>
+                  ))}
+                </div>
+              </div>
+              
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-zinc-700 mb-1">Importe (€) *</label>
+                  <input
+                    type="number"
+                    value={newLoanRequest.amount}
+                    onChange={(e) => setNewLoanRequest({ ...newLoanRequest, amount: e.target.value })}
+                    className="w-full px-4 py-3 border border-zinc-300 rounded-lg"
+                    placeholder="10000"
+                    min="1000"
+                    max="500000"
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-zinc-700 mb-1">Plazo (meses) *</label>
+                  <select
+                    value={newLoanRequest.term_months}
+                    onChange={(e) => setNewLoanRequest({ ...newLoanRequest, term_months: e.target.value })}
+                    className="w-full px-4 py-3 border border-zinc-300 rounded-lg"
+                    required
+                  >
+                    <option value="12">12 meses</option>
+                    <option value="24">24 meses</option>
+                    <option value="36">36 meses</option>
+                    <option value="48">48 meses</option>
+                    <option value="60">60 meses</option>
+                    <option value="84">84 meses</option>
+                    <option value="120">120 meses</option>
+                    <option value="180">180 meses (hipoteca)</option>
+                    <option value="240">240 meses (hipoteca)</option>
+                    <option value="300">300 meses (hipoteca)</option>
+                    <option value="360">360 meses (hipoteca)</option>
+                  </select>
+                </div>
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-zinc-700 mb-1">Finalidad del préstamo *</label>
+                <input
+                  type="text"
+                  value={newLoanRequest.purpose}
+                  onChange={(e) => setNewLoanRequest({ ...newLoanRequest, purpose: e.target.value })}
+                  className="w-full px-4 py-3 border border-zinc-300 rounded-lg"
+                  placeholder="Reforma del hogar, compra de vehículo..."
+                  required
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-zinc-700 mb-1">Ingresos mensuales netos (€) *</label>
+                <input
+                  type="number"
+                  value={newLoanRequest.monthly_income}
+                  onChange={(e) => setNewLoanRequest({ ...newLoanRequest, monthly_income: e.target.value })}
+                  className="w-full px-4 py-3 border border-zinc-300 rounded-lg"
+                  placeholder="2500"
+                  required
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-zinc-700 mb-1">Situación laboral</label>
+                <select
+                  value={newLoanRequest.employment_status || 'empleado'}
+                  onChange={(e) => setNewLoanRequest({ ...newLoanRequest, employment_status: e.target.value })}
+                  className="w-full px-4 py-3 border border-zinc-300 rounded-lg"
+                >
+                  <option value="empleado">Empleado por cuenta ajena</option>
+                  <option value="autonomo">Autónomo</option>
+                  <option value="funcionario">Funcionario</option>
+                  <option value="empresario">Empresario</option>
+                  <option value="pensionista">Pensionista</option>
+                  <option value="otro">Otro</option>
+                </select>
+              </div>
+              
+              {/* Loan Preview */}
+              {newLoanRequest.amount && newLoanRequest.term_months && (
+                <div className="bg-indigo-50 rounded-xl p-4">
+                  <p className="text-sm font-medium text-indigo-900 mb-2">Estimación (sin compromiso)</p>
+                  <div className="grid grid-cols-3 gap-4 text-center">
+                    <div>
+                      <p className="text-2xl font-bold text-indigo-600">
+                        {Math.round(parseFloat(newLoanRequest.amount) / parseInt(newLoanRequest.term_months) * 1.08).toLocaleString('es-ES')}€
+                      </p>
+                      <p className="text-xs text-indigo-700">Cuota aprox.</p>
+                    </div>
+                    <div>
+                      <p className="text-2xl font-bold text-indigo-600">
+                        {newLoanRequest.loan_type === 'hipotecario' ? '2.5%' : 
+                         newLoanRequest.loan_type === 'rapido' ? '12%' : '5.9%'}
+                      </p>
+                      <p className="text-xs text-indigo-700">TAE desde</p>
+                    </div>
+                    <div>
+                      <p className="text-2xl font-bold text-indigo-600">24h</p>
+                      <p className="text-xs text-indigo-700">Respuesta</p>
+                    </div>
+                  </div>
+                </div>
+              )}
+              
+              <Button type="submit" className="w-full h-12 bg-indigo-600 hover:bg-indigo-700">
+                <PiggyBank className="w-4 h-4 mr-2" />
+                Registrar Solicitud de Préstamo
+              </Button>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
