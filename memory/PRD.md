@@ -1,148 +1,95 @@
-# ManoProtect - Plataforma Integral de Protección contra Fraudes + ManoBank
+# ManoBank - Sistema Bancario Digital Completo
 
 ## Problema Original
-Crear una plataforma integral de seguridad digital multi-plataforma (web + móvil) con diferentes niveles para individuos, familias y empresas.
+Crear **ManoBank**, un sistema bancario digital completo estilo BBVA con portal de clientes y portal de empleados separado.
 
-**ACTUALIZACIÓN:** El proyecto ha evolucionado para incluir **ManoBank**, un sistema bancario digital completo estilo BBVA con portal separado para empleados.
+## Estado del Proyecto - Actualizado
 
-## Estado del Proyecto - 21 Enero 2026
+### ✅ COMPLETADO HOY
 
-### ✅ COMPLETADO HOY (21 Enero 2026)
+#### 🔧 Optimización de Base de Datos (Bloqueador de Despliegue)
+- Añadida paginación a consultas de cuentas (`/api/manobank/admin/accounts`)
+- Añadida paginación a consultas de tarjetas (`/api/manobank/admin/cards`)
+- Límite máximo de 100 documentos por consulta
 
-#### 🎥 Sistema de Videoverificación KYC en Tiempo Real (Zoom Video SDK)
-- **Integración completa de Zoom Video SDK** para videollamadas en el navegador
-- **El cliente NO necesita descargar Zoom** - funciona directamente en el navegador
-- **Flujo completo implementado:**
-  1. Cliente solicita apertura de cuenta online
-  2. Cliente acepta permisos de cámara/micrófono
-  3. Sistema genera sesión de videollamada
-  4. Agente del banco ve al cliente en tiempo real
-  5. Agente verifica identidad con documento
-  6. **Sistema anti-fraude automático**: Verifica si el cliente ya tiene cuenta
-  7. Agente aprueba/rechaza y finaliza la llamada
+#### 🆕 Sistema de Videoverificación KYC con Zoom Video SDK
+**Backend:**
+- Servicio Zoom Video SDK: `/app/backend/services/zoom_video_sdk.py`
+- Rutas KYC: `/app/backend/routes/kyc_video_routes.py`
+- Generación de tokens JWT para videollamadas
+- Sistema anti-fraude automático (verifica si cliente ya existe)
+- Endpoints para cliente y agente
 
-#### Archivos creados/modificados:
-- `/app/backend/services/zoom_video_sdk.py` - Servicio de generación de tokens JWT
-- `/app/backend/routes/kyc_video_routes.py` - Endpoints completos para KYC
-- `/app/frontend/src/pages/KYCVideoVerification.js` - Componente de videollamada cliente
-- `/app/frontend/src/pages/BancoSistema.js` - Panel de agente con video
+**Frontend:**
+- Componente cliente: `/app/frontend/src/pages/KYCVideoVerification.js`
+- Panel del agente integrado en `/app/frontend/src/pages/BancoSistema.js`
+- Flujo completo: Permisos → Espera → Videollamada → Resultado
 
-#### Credenciales Zoom configuradas en `/app/backend/.env`:
-- ZOOM_SDK_KEY ✅
-- ZOOM_SDK_SECRET ✅
-- ZOOM_API_KEY ✅
-- ZOOM_API_SECRET ✅
-- ZOOM_SECRET_TOKEN ✅
-
-#### 🔧 Optimización de Base de Datos
-- Añadida paginación a endpoints de cuentas y tarjetas
-- Límite máximo de 100 registros por página
-- Mejora de rendimiento para despliegue
-
-### ✅ COMPLETADO ANTERIORMENTE (20 Enero 2026)
-
-#### 🔧 Bug Fix: Portal de Empleados Login Corregido
-- **Problema:** Error "body stream already read" al hacer login en `/banco`
-- **Solución:** 
-  1. Mejorado manejo de respuestas JSON con try-catch
-  2. Añadido `checkAuth()` del AuthContext para actualizar estado de autenticación
-- **Archivos:** `/app/frontend/src/pages/BancoEmpleados.js`
-- **Testing:** 100% tests pasados (backend + frontend)
-
-#### 🆕 Sistema de Registro de Empleados (Solo Director)
-- Solo el Director General puede crear nuevos empleados
-- Roles disponibles: Director, Gerente, Subdirector, Analista de Riesgos, Gestor Comercial, Cajero, Atención al Cliente
-- Los empleados sin rol de Director ven mensaje informativo
-
-#### 🆕 Verificación KYC por Videollamada (Zoom)
-- Nuevo tab "Verificación KYC" en el sistema bancario
-- Flujo completo:
-  1. Solicitud de cuenta → Programar videollamada Zoom
-  2. Completar verificación con datos del documento
-  3. Aprobar/Rechazar/Solicitar más documentos
-- Estados: pendiente, kyc_scheduled, kyc_verified, kyc_rejected
-
-#### 🆕 Acceso ManoBank desde AdminPanel
-- Nuevo tab "ManoBank" en el Panel de Administración
-- Acceso directo al sistema bancario y portal de clientes
-
-#### ManoBank - Portal de Empleados Separado
-- **Login:** `/banco` - Portal exclusivo para empleados del banco
-- **Sistema:** `/banco/sistema` - Panel de administración completo
-- **Acceso protegido:** Solo empleados autorizados pueden acceder
-
-#### ManoBank - Sistema Bancario Completo (Estilo BBVA)
-
-**Backend** (`/app/backend/routes/manobank_admin_routes.py`):
-- Panel de Administración Bancaria completo
-- Gestión de empleados (Director, Gerente, Analista de Riesgos, Cajero, etc.)
-- Apertura de cuentas para clientes con flujo de aprobación
-- Sistema de préstamos completo:
-  - Personal, Hipotecario, Vehículo, Empresarial, Estudios, Rápido
-  - Cálculo automático de cuotas e intereses
-  - Score de riesgo automático
-  - Flujo: Solicitud → Evaluación → Aprobación → Desembolso
-- Emisión de tarjetas (Débito, Crédito, Platinum, Black)
-- Gestión de clientes con KYC
-- **NUEVO:** Sistema de verificación KYC por videollamada
-
-**Frontend** (`/app/frontend/src/pages/BancoSistema.js`):
-- Dashboard con estadísticas en tiempo real (Clientes, Cuentas, Depósitos, Préstamos)
-- Tabs: Dashboard, Aperturas, **Verificación KYC**, Clientes, Préstamos, Tarjetas, Empleados
-- Header con nombre y rol del empleado (ej: "Ivan Rubio Cano - Director General")
-- Flujos completos para gestión bancaria
-
-**Accesos**:
-- Portal Empleados: `/banco` → `/banco/sistema`
-- Portal Clientes: `/manobank`
+**Credenciales Zoom configuradas:**
+- SDK Key: ✅
+- SDK Secret: ✅
+- API Key: ✅
+- API Secret: ✅
 
 ### ✅ COMPLETADO ANTERIORMENTE
 
-#### App Móvil Android - APKs Generados (17 Enero)
-- **ManoProtect-debug.apk** (168 MB) - Para pruebas internas
-- **ManoProtect-release.apk** (54 MB) - **LISTO para Google Play Store**
-- Ubicación: `C:\Users\rrhhm\OneDrive\Desktop\`
+- Portal de empleados ManoBank (`/banco`)
+- Portal de clientes estilo BBVA (`/manobank`)
+- Sistema de apertura de cuentas con PDF de contrato
+- Integración Twilio SMS
+- Sistema de préstamos completo
+- Emisión de tarjetas (6 tipos)
+- Role-Based Access Control
 
-#### Keystore de Producción Creado
-- Archivo: `android\app\mano-release-key.keystore`
-- Alias: `mano-key`
-- Contraseña: `19862210Des`
-- Validez: 10,000 días
-- ⚠️ **GUARDAR EN LUGAR SEGURO** - Sin esto no se puede actualizar la app
+### 📋 PENDIENTE
 
-#### Web Desplegada
-- Dominio personalizado: **manoprotect.com** ✅
-- ⚠️ **IMPORTANTE:** Presionar "Re-Deploy" en Emergent para publicar cambios recientes
+#### P0 - Crítico
+- **Integrar componente KYC en formulario de solicitud online**: El componente `KYCVideoVerification.js` está creado pero falta integrarlo en el flujo de solicitud de cuenta pública
 
-### 📋 PENDIENTE (P0/P1)
+#### P1 - Importante  
+- Implementar UI para bloquear/desbloquear cuentas
+- Tabla de gestión de envío de tarjetas físicas
+- Integración Open Banking / BaaS para transferencias reales
 
-#### Re-Deploy Web (P0) ⚠️ CRÍTICO
-- Los cambios de ManoBank, portal de empleados y páginas legales están en preview
-- **Usuario debe presionar "Re-Deploy"** en Emergent para publicarlos en manoprotect.com
-- La web actual en producción está desactualizada
+#### P2 - Futuro
+- App móvil WebView y compilación iOS
+- Refactorización del backend
 
-#### Funcionalidad Real del Admin Panel (P1)
-- La UI del panel admin existe pero la lógica de algunas funciones es placeholder
-- Implementar: crear préstamos reales, gestionar líneas de crédito, customer management detallado
+## Arquitectura
 
-### 📋 BACKLOG (P2/P3)
+```
+/app/
+├── backend/
+│   ├── routes/
+│   │   ├── kyc_video_routes.py    # NUEVO: Rutas videoverificación
+│   │   ├── manobank_admin_routes.py
+│   │   ├── manobank_routes.py
+│   │   └── sms_routes.py
+│   ├── services/
+│   │   ├── zoom_video_sdk.py      # NUEVO: Servicio Zoom
+│   │   ├── contract_generator.py
+│   │   └── twilio_sms.py
+│   └── server.py
+└── frontend/
+    └── src/
+        └── pages/
+            ├── KYCVideoVerification.js  # NUEVO: Componente cliente
+            ├── BancoSistema.js          # MODIFICADO: Panel agente KYC
+            └── ManoBank.js
+```
 
-#### App Móvil
-- App WebView en proceso en máquina local del usuario
-- Compilación iOS requiere Mac o servicio cloud
+## API Endpoints KYC Video
 
-#### ManoBank Expansión
-- Multi-banco real con TrueLayer / Token.io (requiere API keys)
-- Multi-moneda internacional
-- Integración Open Banking real
-
-#### Backend
-- Continuar refactorización de `server.py` (actualmente ~3000 líneas)
-- Extraer rutas de Admin, Payments, PDF a módulos separados
-
-#### Integraciones
-- WhatsApp Business (scaffolded, necesita credenciales de Meta)
-- Open Banking (bloqueado por Nordigen - no acepta nuevos registros)
+| Método | Endpoint | Descripción |
+|--------|----------|-------------|
+| GET | `/api/kyc/config-status` | Estado de configuración Zoom |
+| POST | `/api/kyc/customer/initiate` | Cliente inicia sesión KYC |
+| POST | `/api/kyc/customer/joined/{id}` | Marca cliente como conectado |
+| GET | `/api/kyc/customer/session-status/{id}` | Polling estado sesión |
+| GET | `/api/kyc/agent/pending-sessions` | Sesiones esperando agente |
+| POST | `/api/kyc/agent/join` | Agente se une a sesión |
+| POST | `/api/kyc/agent/complete-verification` | Completar verificación |
+| POST | `/api/kyc/agent/end-session/{id}` | Finalizar sesión |
 
 ## Credenciales de Test
 
@@ -150,73 +97,10 @@ Crear una plataforma integral de seguridad digital multi-plataforma (web + móvi
 |-----|-------|----------|
 | Director/Superadmin | rrhh.milchollos@gmail.com | ManoAdmin2025! |
 
-## Arquitectura del Proyecto
+## Integraciones Activas
 
-```
-/app/
-├── backend/           # FastAPI + MongoDB
-│   ├── server.py      # API principal (~3000 líneas)
-│   ├── routes/        # Rutas modularizadas
-│   │   ├── manobank_routes.py  # NEW: Módulo bancario
-│   │   └── ...
-│   └── models/        # Schemas Pydantic
-├── frontend/          # React PWA
-│   └── src/
-│       └── pages/
-│           ├── ManoBank.js     # NEW: Dashboard bancario
-│           └── ...
-└── mobile-app/        # React Native (código fuente)
-
-LOCAL (Windows):
-├── C:\ManoProtect-Build\ManoProtect-WebApp\  # App WebView en construcción
-├── C:\Users\rrhhm\OneDrive\Desktop\mobile-app\  # Proyecto móvil compilado
-└── C:\Users\rrhhm\OneDrive\Desktop\ManoProtect-*.apk  # APKs generados
-```
-
-## API Endpoints ManoBank
-
-| Método | Endpoint | Descripción |
-|--------|----------|-------------|
-| GET | `/api/manobank/dashboard` | Dashboard con cuentas, saldos, transacciones |
-| GET | `/api/manobank/accounts` | Listar cuentas bancarias |
-| POST | `/api/manobank/accounts` | Añadir cuenta bancaria |
-| DELETE | `/api/manobank/accounts/{id}` | Eliminar cuenta |
-| GET | `/api/manobank/transactions` | Historial de transacciones |
-| POST | `/api/manobank/transfers/sepa` | Transferencia SEPA |
-| POST | `/api/manobank/transfers/bizum` | Envío Bizum |
-| POST | `/api/manobank/transfers/{id}/verify` | Verificar transferencia sospechosa |
-| POST | `/api/manobank/transfers/{id}/cancel` | Cancelar transferencia |
-| GET | `/api/manobank/scheduled` | Pagos programados |
-| POST | `/api/manobank/scheduled` | Crear pago programado |
-| GET | `/api/manobank/alerts` | Alertas de fraude |
-
-## Credenciales
-
-### Superadmin
-- Email: `rrhh.milchollos@gmail.com`
-- Password: `ManoAdmin2025!`
-
-### Firebase
-- Proyecto: `Manoprotect`
-- CLI instalado: v15.3.1
-
-### Android Keystore
-- Archivo: `mano-release-key.keystore`
-- Alias: `mano-key`
-- Password: `19862210Des`
-
-## Próximos Pasos
-
-1. **Completar despliegue web en Firebase**
-   - Resolver error de ajv
-   - `npm run build`
-   - `firebase deploy`
-
-2. **Publicar app en Google Play Store**
-   - Crear cuenta de desarrollador ($25)
-   - Subir `ManoProtect-release.apk`
-   - Configurar ficha de la tienda
-
-3. **Continuar desarrollo backend**
-   - Modularizar rutas restantes
-   - Completar integraciones pendientes
+- ✅ Stripe (Pagos)
+- ✅ Firebase
+- ✅ Twilio SMS
+- ✅ Zoom Video SDK (NUEVO)
+- ⏸️ Nordigen/Open Banking (bloqueado)
