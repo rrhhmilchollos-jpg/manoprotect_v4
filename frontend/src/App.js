@@ -38,6 +38,7 @@ import BancoEmpleados from '@/pages/BancoEmpleados';
 import BancoSistema from '@/pages/BancoSistema';
 import SolicitarCuenta from '@/pages/SolicitarCuenta';
 import LandingPromo from '@/pages/LandingPromo';
+import RecuperarPassword from '@/pages/RecuperarPassword';
 import CookieConsent from '@/components/CookieConsent';
 
 import '@/App.css';
