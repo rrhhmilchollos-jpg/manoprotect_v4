@@ -582,6 +582,28 @@ const BancoSistema = () => {
     }
   };
 
+  const handleDeleteEmployee = async (employeeId) => {
+    if (!window.confirm('¿Estás seguro de eliminar este empleado permanentemente? Esta acción no se puede deshacer.')) {
+      return;
+    }
+    
+    try {
+      const response = await fetch(`${API_URL}/api/manobank/admin/employees/${employeeId}/permanent`, {
+        method: 'DELETE',
+        credentials: 'include',
+        headers: token ? { 'Authorization': `Bearer ${token}` } : {}
+      });
+      
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.detail);
+      
+      toast.success('Empleado eliminado permanentemente');
+      fetchEmployees();
+    } catch (error) {
+      toast.error(error.message || 'Error al eliminar empleado');
+    }
+  };
+
   const handleIssueCard = async (e) => {
     e.preventDefault();
     try {
