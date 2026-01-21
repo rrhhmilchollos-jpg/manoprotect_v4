@@ -407,21 +407,39 @@ const ManoBankDashboard = () => {
                     </div>
                   </div>
 
-                  {/* Pending Operations */}
-                  {pendingOperations.length > 0 && (
-                    <div className="bg-amber-50 border border-amber-200 rounded-2xl overflow-hidden">
-                      <div className="p-4 border-b border-amber-200 flex items-center gap-2">
-                        <Clock className="w-5 h-5 text-amber-600" />
-                        <h3 className="font-semibold text-amber-800">Operaciones Pendientes</h3>
+                  {/* Recent Completed Operations */}
+                  {recentOperations.length > 0 && (
+                    <div className="bg-white border border-gray-100 rounded-2xl overflow-hidden">
+                      <div className="p-4 border-b border-gray-100 flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <CheckCircle className="w-5 h-5 text-green-600" />
+                          <h3 className="font-semibold text-gray-900">Operaciones Realizadas</h3>
+                        </div>
+                        <button onClick={() => setActiveSection('movimientos')} className="text-sm text-blue-600 hover:underline">
+                          Ver todas
+                        </button>
                       </div>
-                      <div className="divide-y divide-amber-200">
-                        {pendingOperations.map((op) => (
-                          <div key={op.id} className="p-4 flex items-center justify-between">
-                            <div>
-                              <p className="font-medium text-amber-900">{op.desc}</p>
-                              <p className="text-sm text-amber-700">Programado: {op.date}</p>
+                      <div className="divide-y divide-gray-50">
+                        {recentOperations.map((op) => (
+                          <div key={op.id} className="p-4 flex items-center justify-between hover:bg-gray-50">
+                            <div className="flex items-center gap-3">
+                              <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
+                                op.amount > 0 ? 'bg-green-100' : 'bg-gray-100'
+                              }`}>
+                                {op.amount > 0 ? (
+                                  <ArrowDownLeft className="w-5 h-5 text-green-600" />
+                                ) : (
+                                  <ArrowUpRight className="w-5 h-5 text-gray-600" />
+                                )}
+                              </div>
+                              <div>
+                                <p className="font-medium text-gray-900">{op.desc}</p>
+                                <p className="text-sm text-gray-500">{op.date}</p>
+                              </div>
                             </div>
-                            <p className="font-semibold text-amber-800">{formatCurrency(op.amount)}</p>
+                            <p className={`font-semibold ${op.amount > 0 ? 'text-green-600' : 'text-gray-900'}`}>
+                              {op.amount > 0 ? '+' : ''}{formatCurrency(op.amount)}
+                            </p>
                           </div>
                         ))}
                       </div>
