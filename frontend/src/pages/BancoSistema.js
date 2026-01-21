@@ -33,6 +33,7 @@ import {
   Car,
   GraduationCap,
   Zap,
+  Trash2,
   Video,
   ExternalLink,
   Calendar,
