@@ -12,6 +12,10 @@
 - **Teléfono**: +34 900 123 456
 - **Email**: info@manobank.es
 
+## Punto de Envío SEUR
+- **ID Pick-up**: ES29153
+- **Dirección**: Calle Sor Isabel de Villena 82 bajo, 46819 Novelda, Valencia
+
 ## Estado del Sistema
 
 ### ✅ COMPLETADO
