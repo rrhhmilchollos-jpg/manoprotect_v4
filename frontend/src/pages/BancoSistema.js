@@ -76,7 +76,7 @@ const BancoSistema = () => {
   
   // Form states
   const [newEmployee, setNewEmployee] = useState({
-    email: '', name: '', role: 'cajero', phone: '', salary: ''
+    email: '', name: '', role: 'cajero', additionalRoles: [], phone: '', salary: ''
   });
   
   const [newAccountRequest, setNewAccountRequest] = useState({
