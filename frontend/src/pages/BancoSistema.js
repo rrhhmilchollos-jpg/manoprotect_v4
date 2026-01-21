@@ -1348,9 +1348,12 @@ const BancoSistema = () => {
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
               {cards.map((card) => (
                 <div key={card.id} className={`bg-gradient-to-br ${
-                  card.card_type === 'credito' ? 'from-purple-600 to-indigo-600' :
-                  card.card_type === 'platinum' ? 'from-zinc-700 to-zinc-900' :
-                  card.card_type === 'black' ? 'from-zinc-900 to-black' :
+                  card.card_type?.includes('gold') ? 'from-amber-400 via-yellow-500 to-amber-600' :
+                  card.card_type?.includes('platinum') ? 'from-slate-400 via-slate-500 to-slate-600' :
+                  card.card_type?.includes('mastercard') ? 'from-red-500 via-orange-500 to-red-600' :
+                  card.card_type?.includes('visa') ? 'from-blue-500 via-blue-600 to-blue-700' :
+                  card.card_type === 'business' ? 'from-zinc-700 to-zinc-900' :
+                  card.card_type === 'prepago' ? 'from-green-500 to-teal-600' :
                   'from-indigo-500 to-purple-500'
                 } rounded-2xl p-6 text-white relative overflow-hidden`}>
                   <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2" />
