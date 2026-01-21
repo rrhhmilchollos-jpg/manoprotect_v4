@@ -440,7 +440,7 @@ const SolicitarCuenta = () => {
 
           {/* Footer Info */}
           <div className="mt-8 text-center text-sm text-slate-500">
-            <p>ManoBank S.A. | CIF: A12345678 | Código entidad: 9999</p>
+            <p>ManoBank S.A. | CIF: B19427723 | Código entidad: 9999</p>
             <p>Inscrita en el Registro del Banco de España</p>
             <p className="mt-2">
               <Globe className="w-4 h-4 inline mr-1" />
@@ -539,7 +539,7 @@ const SolicitarCuenta = () => {
           </div>
 
           <p className="mt-6 text-xs text-slate-500">
-            ManoBank S.A. | CIF: A12345678 | Entidad regulada por el Banco de España
+            ManoBank S.A. | CIF: B19427723 | Entidad regulada por el Banco de España
           </p>
         </div>
       </div>
