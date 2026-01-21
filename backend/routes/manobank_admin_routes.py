@@ -141,29 +141,28 @@ async def require_bank_employee(request: Request, session_token: Optional[str] =
     user = await require_auth(request, session_token)
     db = get_db()
     
-    # Try to find by user_id first
+    # First try to find employee by email (most reliable)
     employee = await db.manobank_employees.find_one(
-        {"user_id": user.user_id, "is_active": True},
+        {"email": user.email, "is_active": True},
         {"_id": 0}
     )
     
-    # If not found by user_id, try by email
+    # If not found by email, try by user_id
     if not employee:
         employee = await db.manobank_employees.find_one(
-            {"email": user.email, "is_active": True},
+            {"user_id": user.user_id, "is_active": True},
             {"_id": 0}
         )
     
-    # If still not found and user is superadmin, create a minimal employee object
+    # If still not found and user is superadmin, allow access with minimal data
     if not employee:
         if getattr(user, "role", "") == "superadmin":
-            # Return minimal employee data for superadmin
             return user, {
                 "role": "director", 
                 "is_superadmin": True, 
                 "name": user.name, 
                 "email": user.email,
-                "phone": "+34600000000"  # Default, should be updated in DB
+                "phone": "+34600000000"
             }
         raise HTTPException(status_code=403, detail="Acceso denegado. Solo empleados del banco.")
     
