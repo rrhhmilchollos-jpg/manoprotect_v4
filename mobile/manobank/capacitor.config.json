@@ -1,0 +1,26 @@
+{
+  "appId": "com.manobank.app",
+  "appName": "ManoBank",
+  "webDir": "www",
+  "bundledWebRuntime": false,
+  "server": {
+    "url": "https://smart-banking-36.preview.emergentagent.com",
+    "cleartext": true
+  },
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 2000,
+      "backgroundColor": "#1a1a2e",
+      "androidSplashResourceName": "splash",
+      "showSpinner": false
+    },
+    "StatusBar": {
+      "style": "Dark",
+      "backgroundColor": "#1a1a2e"
+    }
+  },
+  "android": {
+    "allowMixedContent": true,
+    "backgroundColor": "#1a1a2e"
+  }
+}
