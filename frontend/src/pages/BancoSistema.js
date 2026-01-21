@@ -1482,6 +1482,143 @@ const BancoSistema = () => {
           </div>
         )}
 
+        {/* Shipments Tab - SEUR */}
+        {activeTab === 'shipments' && (
+          <div className="space-y-4">
+            <div className="flex justify-between items-center">
+              <h2 className="text-xl font-bold flex items-center gap-2">
+                <Truck className="w-6 h-6 text-orange-600" />
+                Envíos de Tarjetas - SEUR
+              </h2>
+              <div className="flex items-center gap-2 text-sm text-zinc-500">
+                <Package className="w-4 h-4" />
+                Punto Pick-up: ES29153
+              </div>
+            </div>
+
+            {/* Shipment Stats */}
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+              {[
+                { status: 'pending', label: 'Pendientes', color: 'bg-gray-100 text-gray-700' },
+                { status: 'preparing', label: 'Preparando', color: 'bg-yellow-100 text-yellow-700' },
+                { status: 'shipped', label: 'Enviados', color: 'bg-blue-100 text-blue-700' },
+                { status: 'in_transit', label: 'En tránsito', color: 'bg-purple-100 text-purple-700' },
+                { status: 'delivered', label: 'Entregados', color: 'bg-green-100 text-green-700' }
+              ].map(stat => (
+                <div key={stat.status} className={`${stat.color} rounded-xl p-4 text-center`}>
+                  <p className="text-2xl font-bold">{shipments.filter(s => s.status === stat.status).length}</p>
+                  <p className="text-sm">{stat.label}</p>
+                </div>
+              ))}
+            </div>
+
+            {/* Shipments List */}
+            <div className="bg-white rounded-xl shadow-sm overflow-hidden">
+              <div className="p-4 border-b bg-orange-50">
+                <h3 className="font-semibold flex items-center gap-2">
+                  <Navigation className="w-5 h-5 text-orange-600" />
+                  Todos los Envíos
+                </h3>
+              </div>
+              <div className="divide-y">
+                {shipments.map((shipment) => (
+                  <div key={shipment.id} className="p-4">
+                    <div className="flex items-start justify-between gap-4">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-3 mb-2">
+                          <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                            shipment.status === 'delivered' ? 'bg-green-100 text-green-700' :
+                            shipment.status === 'shipped' || shipment.status === 'in_transit' ? 'bg-blue-100 text-blue-700' :
+                            shipment.status === 'out_for_delivery' ? 'bg-orange-100 text-orange-700' :
+                            shipment.status === 'failed' || shipment.status === 'returned' ? 'bg-red-100 text-red-700' :
+                            'bg-gray-100 text-gray-700'
+                          }`}>
+                            {shipment.status === 'pending' && 'Pendiente'}
+                            {shipment.status === 'preparing' && 'Preparando'}
+                            {shipment.status === 'ready' && 'Listo'}
+                            {shipment.status === 'shipped' && 'Enviado'}
+                            {shipment.status === 'in_transit' && 'En tránsito'}
+                            {shipment.status === 'out_for_delivery' && 'En reparto'}
+                            {shipment.status === 'delivered' && 'Entregado'}
+                            {shipment.status === 'failed' && 'Fallido'}
+                            {shipment.status === 'returned' && 'Devuelto'}
+                          </span>
+                          <span className="font-mono text-sm bg-zinc-100 px-2 py-0.5 rounded">{shipment.tracking_number}</span>
+                        </div>
+                        <p className="font-medium">{shipment.customer_name}</p>
+                        <p className="text-sm text-zinc-500">{shipment.card_type_display || shipment.card_type} - {shipment.card_masked}</p>
+                        <p className="text-sm text-zinc-500 flex items-center gap-1 mt-1">
+                          <MapPin className="w-3 h-3" />
+                          {shipment.full_recipient_address || shipment.shipping_address}
+                        </p>
+                        {shipment.estimated_delivery && (
+                          <p className="text-xs text-zinc-400 mt-1">
+                            Entrega estimada: {new Date(shipment.estimated_delivery).toLocaleDateString('es-ES')}
+                          </p>
+                        )}
+                      </div>
+                      <div className="flex flex-col gap-2">
+                        {shipment.status === 'pending' && (
+                          <Button size="sm" onClick={() => handleUpdateShipmentStatus(shipment.id, 'preparing')} className="bg-yellow-500 hover:bg-yellow-600">
+                            <Package className="w-3 h-3 mr-1" />
+                            Preparar
+                          </Button>
+                        )}
+                        {shipment.status === 'preparing' && (
+                          <Button size="sm" onClick={() => handleUpdateShipmentStatus(shipment.id, 'shipped')} className="bg-blue-500 hover:bg-blue-600">
+                            <Truck className="w-3 h-3 mr-1" />
+                            Marcar Enviado
+                          </Button>
+                        )}
+                        {shipment.status === 'shipped' && (
+                          <Button size="sm" onClick={() => handleUpdateShipmentStatus(shipment.id, 'in_transit')} className="bg-purple-500 hover:bg-purple-600">
+                            <Navigation className="w-3 h-3 mr-1" />
+                            En Tránsito
+                          </Button>
+                        )}
+                        {shipment.status === 'in_transit' && (
+                          <Button size="sm" onClick={() => handleUpdateShipmentStatus(shipment.id, 'out_for_delivery')} className="bg-orange-500 hover:bg-orange-600">
+                            <MapPin className="w-3 h-3 mr-1" />
+                            En Reparto
+                          </Button>
+                        )}
+                        {shipment.status === 'out_for_delivery' && (
+                          <Button size="sm" onClick={() => handleUpdateShipmentStatus(shipment.id, 'delivered')} className="bg-green-500 hover:bg-green-600">
+                            <CheckCircle className="w-3 h-3 mr-1" />
+                            Entregado
+                          </Button>
+                        )}
+                        {!['delivered', 'returned', 'failed'].includes(shipment.status) && (
+                          <Button size="sm" variant="outline" className="text-red-600 border-red-300" onClick={() => handleUpdateShipmentStatus(shipment.id, 'failed', 'Entrega fallida')}>
+                            <XCircle className="w-3 h-3 mr-1" />
+                            Fallido
+                          </Button>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+                {shipments.length === 0 && (
+                  <div className="p-12 text-center text-zinc-500">
+                    <Truck className="w-12 h-12 mx-auto mb-4 text-zinc-300" />
+                    <p>No hay envíos registrados</p>
+                    <p className="text-sm mt-2">Los envíos se crean desde la pestaña de Tarjetas</p>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Sender Info */}
+            <div className="bg-orange-50 border border-orange-200 rounded-xl p-4">
+              <h4 className="font-semibold text-orange-800 mb-2">Dirección de Envío (Remitente)</h4>
+              <p className="text-sm text-orange-700">ManoBank S.A.</p>
+              <p className="text-sm text-orange-700">Calle Sor Isabel de Villena 82 bajo</p>
+              <p className="text-sm text-orange-700">46819 Novelda, Valencia</p>
+              <p className="text-sm text-orange-600 mt-2 font-medium">Punto SEUR: ES29153</p>
+            </div>
+          </div>
+        )}
+
         {/* Employees Tab */}
         {activeTab === 'employees' && (
           <div className="space-y-4">
