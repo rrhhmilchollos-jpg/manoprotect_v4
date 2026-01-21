@@ -35,7 +35,11 @@ import {
   Zap,
   Video,
   ExternalLink,
-  Calendar
+  Calendar,
+  Truck,
+  Package,
+  MapPin,
+  Navigation
 } from 'lucide-react';
 
 const API_URL = process.env.REACT_APP_BACKEND_URL;
