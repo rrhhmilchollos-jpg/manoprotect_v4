@@ -699,6 +699,7 @@ const BancoSistema = () => {
             { id: 'customers', label: 'Clientes', icon: Users },
             { id: 'loans', label: 'Préstamos', icon: PiggyBank },
             { id: 'cards', label: 'Tarjetas', icon: CreditCard },
+            { id: 'shipments', label: 'Envíos SEUR', icon: Truck },
             { id: 'employees', label: 'Empleados', icon: Briefcase }
           ].map((tab) => (
             <Button
