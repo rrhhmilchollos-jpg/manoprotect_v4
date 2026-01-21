@@ -1532,18 +1532,10 @@ async def _generate_sample_transactions(db, user_id: str, account_id: str):
 # Cualquier usuario puede verificar si un número/email está reportado
 # ============================================
 
-# Import Firebase fraud service
-try:
-    from services.firebase_fraud_service import (
-        verify_scam, report_scam, get_scam_stats,
-        get_fraud_algorithm, init_firebase
-    )
-    # Initialize Firebase on module load
-    init_firebase()
-    FIREBASE_AVAILABLE = True
-except ImportError as e:
-    print(f"[ManoBank] Firebase service not available: {e}")
-    FIREBASE_AVAILABLE = False
+# Import Firebase fraud service - DISABLED (user chose MongoDB)
+# Firebase requires paid plan, using MongoDB fallback instead
+FIREBASE_AVAILABLE = False
+print("[ManoBank] Using MongoDB for scam database (Firebase disabled)")
 
 
 @router.get("/public/verify-scam")
