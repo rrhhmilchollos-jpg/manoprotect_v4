@@ -105,6 +105,69 @@ const ManoBank = () => {
     }
   };
 
+  // Fetch card full details (including PIN, CVV, full number)
+  const fetchCardDetails = async (cardId) => {
+    try {
+      const response = await fetch(`${API_URL}/api/manobank/my-cards/${cardId}/details`, {
+        credentials: 'include',
+        headers: token ? { 'Authorization': `Bearer ${token}` } : {}
+      });
+      
+      if (!response.ok) {
+        throw new Error('No se pudieron cargar los detalles de la tarjeta');
+      }
+      
+      const data = await response.json();
+      setShowCardDetails(data.card);
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+
+  // Toggle card contactless
+  const toggleContactless = async (cardId) => {
+    try {
+      const response = await fetch(`${API_URL}/api/manobank/my-cards/${cardId}/toggle-contactless`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: token ? { 'Authorization': `Bearer ${token}` } : {}
+      });
+      
+      const data = await response.json();
+      toast.success(data.message);
+      if (showCardDetails) {
+        setShowCardDetails({...showCardDetails, contactless_enabled: data.contactless_enabled});
+      }
+    } catch (error) {
+      toast.error('Error al cambiar configuración');
+    }
+  };
+
+  // Toggle online purchases
+  const toggleOnlinePurchases = async (cardId) => {
+    try {
+      const response = await fetch(`${API_URL}/api/manobank/my-cards/${cardId}/toggle-online`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: token ? { 'Authorization': `Bearer ${token}` } : {}
+      });
+      
+      const data = await response.json();
+      toast.success(data.message);
+      if (showCardDetails) {
+        setShowCardDetails({...showCardDetails, online_purchases_enabled: data.online_purchases_enabled});
+      }
+    } catch (error) {
+      toast.error('Error al cambiar configuración');
+    }
+  };
+
+  // Copy to clipboard
+  const copyToClipboard = (text, label) => {
+    navigator.clipboard.writeText(text);
+    toast.success(`${label} copiado`);
+  };
+
   // Make transfer
   const handleTransfer = async (e) => {
     e.preventDefault();
