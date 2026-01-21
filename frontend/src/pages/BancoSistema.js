@@ -1461,15 +1461,45 @@ const BancoSistema = () => {
                     </div>
                   )}
                   
-                  {card.status === 'active' && (
-                    <Button
-                      size="sm"
-                      variant="ghost"
-                      className="absolute bottom-4 right-4 text-white/70 hover:text-white hover:bg-white/20"
-                      onClick={() => handleBlockCard(card.id)}
-                    >
-                      <Ban className="w-4 h-4" />
-                    </Button>
+                  {/* Action Buttons */}
+                  <div className="absolute bottom-4 right-4 flex gap-2">
+                    {!card.physical_card_status && card.status === 'active' && (
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        className="text-white/70 hover:text-white hover:bg-white/20"
+                        onClick={() => setShowShipCardModal(card)}
+                        title="Enviar tarjeta física"
+                      >
+                        <Truck className="w-4 h-4" />
+                      </Button>
+                    )}
+                    {card.status === 'active' && (
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        className="text-white/70 hover:text-white hover:bg-white/20"
+                        onClick={() => handleBlockCard(card.id)}
+                        title="Bloquear tarjeta"
+                      >
+                        <Ban className="w-4 h-4" />
+                      </Button>
+                    )}
+                  </div>
+                  
+                  {/* Shipping status badge */}
+                  {card.physical_card_status && (
+                    <div className="absolute top-4 left-4">
+                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                        card.physical_card_status === 'delivered' ? 'bg-green-500 text-white' :
+                        card.physical_card_status === 'pending_shipment' ? 'bg-yellow-500 text-white' :
+                        'bg-blue-500 text-white'
+                      }`}>
+                        {card.physical_card_status === 'delivered' && '📦 Entregada'}
+                        {card.physical_card_status === 'pending_shipment' && '📋 Pendiente envío'}
+                        {card.physical_card_status === 'shipping' && '🚚 Enviando'}
+                      </span>
+                    </div>
                   )}
                 </div>
               ))}
@@ -1478,6 +1508,68 @@ const BancoSistema = () => {
                   No hay tarjetas emitidas
                 </div>
               )}
+            </div>
+          </div>
+        )}
+
+        {/* Ship Card Modal */}
+        {showShipCardModal && (
+          <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+            <div className="bg-white rounded-2xl w-full max-w-md p-6">
+              <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
+                <Truck className="w-6 h-6 text-orange-600" />
+                Enviar Tarjeta Física
+              </h3>
+              
+              <div className="space-y-4">
+                <div className="bg-zinc-50 rounded-lg p-4">
+                  <p className="text-sm text-zinc-500">Tarjeta</p>
+                  <p className="font-medium">{showShipCardModal.card_type_display || showShipCardModal.card_type}</p>
+                  <p className="font-mono">{showShipCardModal.card_number_masked}</p>
+                  <p className="text-sm mt-2">{showShipCardModal.customer_name}</p>
+                </div>
+                
+                <div className="bg-orange-50 rounded-lg p-4">
+                  <p className="text-sm font-medium text-orange-800 mb-2">Dirección de envío</p>
+                  <p className="text-sm text-orange-700">Se usará la dirección registrada del cliente</p>
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium mb-2">Método de envío</label>
+                  <select 
+                    id="shipping-method"
+                    className="w-full px-4 py-2 border rounded-lg"
+                    defaultValue="standard"
+                  >
+                    <option value="standard">Estándar (5 días) - Gratis</option>
+                    <option value="express">Express (2 días) - 5€</option>
+                    <option value="24h">24 Horas - 10€</option>
+                  </select>
+                </div>
+                
+                <div className="flex gap-3 pt-4">
+                  <Button 
+                    variant="outline" 
+                    className="flex-1"
+                    onClick={() => setShowShipCardModal(null)}
+                  >
+                    Cancelar
+                  </Button>
+                  <Button 
+                    className="flex-1 bg-orange-600 hover:bg-orange-700"
+                    onClick={() => {
+                      const method = document.getElementById('shipping-method').value;
+                      handleCreateShipment(showShipCardModal.id, {
+                        shipping_method: method,
+                        send_sms_notification: true
+                      });
+                    }}
+                  >
+                    <Truck className="w-4 h-4 mr-2" />
+                    Crear Envío SEUR
+                  </Button>
+                </div>
+              </div>
             </div>
           </div>
         )}
