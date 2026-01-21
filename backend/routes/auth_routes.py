@@ -253,26 +253,14 @@ async def login_user(data: UserLogin, request: Request, response: Response):
         {"suspicious": is_suspicious, "suspicious_reason": suspicious_reason}
     )
     
-    session_token = generate_session_token()
-    session = SessionData(
-        user_id=user["user_id"],
-        session_token=session_token,
-        expires_at=datetime.now(timezone.utc) + timedelta(days=7)
-    )
-    
-    session_doc = session.model_dump()
-    session_doc['expires_at'] = session_doc['expires_at'].isoformat()
-    session_doc['created_at'] = session_doc['created_at'].isoformat()
-    await _db.user_sessions.insert_one(session_doc)
-    
     response.set_cookie(
         key="session_token",
-        value=session_token,
+        value=session["session_token"],
         httponly=True,
         secure=True,
         samesite="none",
         path="/",
-        max_age=7 * 24 * 60 * 60
+        max_age=30 * 24 * 60 * 60 if getattr(data, 'remember_device', False) else 24 * 60 * 60
     )
     
     return {
@@ -281,13 +269,209 @@ async def login_user(data: UserLogin, request: Request, response: Response):
         "name": user["name"],
         "role": user.get("role", "user"),
         "plan": user.get("plan", "free"),
-        "picture": user.get("picture")
+        "picture": user.get("picture"),
+        "security_alert": suspicious_reason if is_suspicious else None
     }
+
+
+# ============================================
+# 2FA ENDPOINTS
+# ============================================
+
+@router.post("/auth/2fa/send-code")
+async def send_2fa_code(request: Request):
+    """Send 2FA verification code via SMS"""
+    body = await request.json()
+    user_id = body.get("user_id")
+    phone = body.get("phone")
+    
+    if not user_id or not phone:
+        raise HTTPException(status_code=400, detail="user_id y phone son requeridos")
+    
+    ip_address, user_agent = get_client_info(request)
+    
+    # Get user
+    user = await _db.users.find_one({"user_id": user_id}, {"_id": 0})
+    if not user:
+        raise HTTPException(status_code=404, detail="Usuario no encontrado")
+    
+    # Create OTP session
+    otp_data = await create_otp_session(user_id, user["email"], phone, "login")
+    
+    # Send SMS via Twilio if available
+    if _twilio_client:
+        try:
+            from services.twilio_sms import send_sms
+            message = f"ManoBank - Tu código de verificación es: {otp_data['otp_code']}. Válido por {otp_data['expires_in_minutes']} minutos. No lo compartas con nadie."
+            await send_sms(phone, message)
+        except Exception as e:
+            print(f"Error sending SMS: {e}")
+    
+    await log_security_event(
+        SecurityEventTypes.OTP_SENT,
+        user_id,
+        user["email"],
+        ip_address,
+        user_agent,
+        {"phone_masked": phone[:3] + "****" + phone[-3:]}
+    )
+    
+    return {
+        "message": "Código enviado",
+        "expires_in_minutes": otp_data["expires_in_minutes"],
+        # Only for testing - remove in production
+        "debug_code": otp_data["otp_code"] if not _twilio_client else None
+    }
+
+
+@router.post("/auth/2fa/verify")
+async def verify_2fa_code(request: Request):
+    """Verify 2FA code"""
+    body = await request.json()
+    user_id = body.get("user_id")
+    otp_code = body.get("otp_code")
+    
+    if not user_id or not otp_code:
+        raise HTTPException(status_code=400, detail="user_id y otp_code son requeridos")
+    
+    ip_address, user_agent = get_client_info(request)
+    
+    success, message = await verify_otp(user_id, otp_code, "login")
+    
+    user = await _db.users.find_one({"user_id": user_id}, {"_id": 0})
+    
+    if success:
+        await log_security_event(
+            SecurityEventTypes.OTP_VERIFIED,
+            user_id,
+            user["email"] if user else None,
+            ip_address,
+            user_agent
+        )
+        return {"success": True, "message": message}
+    else:
+        await log_security_event(
+            SecurityEventTypes.OTP_FAILED,
+            user_id,
+            user["email"] if user else None,
+            ip_address,
+            user_agent,
+            {"reason": message},
+            severity="warning"
+        )
+        raise HTTPException(status_code=400, detail=message)
+
+
+# ============================================
+# PASSWORD VALIDATION ENDPOINT
+# ============================================
+
+@router.post("/auth/validate-password")
+async def validate_password_endpoint(request: Request):
+    """Validate password strength before registration"""
+    body = await request.json()
+    password = body.get("password", "")
+    
+    result = validate_password_strength(password)
+    
+    return {
+        "is_valid": result.is_valid,
+        "score": result.score,
+        "feedback": result.feedback,
+        "strength": "weak" if result.score < 40 else "medium" if result.score < 70 else "strong"
+    }
+
+
+# ============================================
+# SECURITY SETTINGS ENDPOINTS
+# ============================================
+
+@router.get("/auth/security-settings")
+async def get_security_settings(request: Request, session_token: Optional[str] = Cookie(None)):
+    """Get user's security settings"""
+    user = await get_current_user(request, session_token)
+    if not user:
+        raise HTTPException(status_code=401, detail="No autenticado")
+    
+    user_doc = await _db.users.find_one({"user_id": user.user_id}, {"_id": 0})
+    
+    security_settings = user_doc.get("security_settings", {
+        "two_factor_enabled": False,
+        "login_notifications": True,
+        "trusted_devices": []
+    })
+    
+    # Get recent login activity
+    recent_logins = await _db.security_login_attempts.find(
+        {"email": user.email, "success": True},
+        {"_id": 0}
+    ).sort("timestamp", -1).limit(5).to_list(5)
+    
+    return {
+        "security_settings": security_settings,
+        "recent_logins": recent_logins
+    }
+
+
+@router.post("/auth/change-password")
+async def change_password(request: Request, session_token: Optional[str] = Cookie(None)):
+    """Change user password with security validation"""
+    user = await get_current_user(request, session_token)
+    if not user:
+        raise HTTPException(status_code=401, detail="No autenticado")
+    
+    body = await request.json()
+    current_password = body.get("current_password")
+    new_password = body.get("new_password")
+    
+    if not current_password or not new_password:
+        raise HTTPException(status_code=400, detail="Contraseñas requeridas")
+    
+    ip_address, user_agent = get_client_info(request)
+    
+    # Verify current password
+    user_doc = await _db.users.find_one({"user_id": user.user_id}, {"_id": 0})
+    if not verify_password_secure(current_password, user_doc["password_hash"]):
+        raise HTTPException(status_code=401, detail="Contraseña actual incorrecta")
+    
+    # Validate new password
+    password_check = validate_password_strength(new_password)
+    if not password_check.is_valid:
+        raise HTTPException(
+            status_code=400,
+            detail={
+                "message": "La nueva contraseña no cumple los requisitos",
+                "feedback": password_check.feedback
+            }
+        )
+    
+    # Update password
+    new_hash = hash_password_secure(new_password)
+    await _db.users.update_one(
+        {"user_id": user.user_id},
+        {"$set": {"password_hash": new_hash}}
+    )
+    
+    # Invalidate all other sessions
+    await invalidate_all_user_sessions(user.user_id, except_token=session_token)
+    
+    # Log event
+    await log_security_event(
+        SecurityEventTypes.PASSWORD_CHANGE,
+        user.user_id,
+        user.email,
+        ip_address,
+        user_agent
+    )
+    
+    return {"message": "Contraseña actualizada correctamente. Todas las demás sesiones han sido cerradas."}
 
 
 @router.post("/auth/google/session")
 async def google_session(request: Request, response: Response):
     """Exchange Google OAuth session_id for local session"""
+    ip_address, user_agent = get_client_info(request)
+    
     body = await request.json()
     session_id = body.get("session_id")
     
