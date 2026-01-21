@@ -327,39 +327,27 @@ const ManoBankDashboard = () => {
                     </div>
                   </div>
 
-                  {/* Cards Summary */}
+                  {/* Cards Summary - Solo muestra resumen, tarjetas visibles en "Mis Tarjetas" */}
                   <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
-                    <div className="p-4 border-b border-gray-100 flex items-center justify-between">
-                      <h3 className="font-semibold text-gray-900 flex items-center gap-2">
-                        <CreditCard className="w-5 h-5 text-purple-600" />
-                        Mis Tarjetas
-                      </h3>
-                      <button onClick={() => setActiveSection('tarjetas')} className="text-sm text-blue-600 hover:underline">
-                        Ver todas
+                    <div className="p-4 flex items-center justify-between">
+                      <div className="flex items-center gap-4">
+                        <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center">
+                          <CreditCard className="w-6 h-6 text-purple-600" />
+                        </div>
+                        <div>
+                          <h3 className="font-semibold text-gray-900">Mis Tarjetas</h3>
+                          <p className="text-sm text-gray-500">
+                            {cards.length} tarjeta{cards.length !== 1 ? 's' : ''} activa{cards.length !== 1 ? 's' : ''}
+                          </p>
+                        </div>
+                      </div>
+                      <button 
+                        onClick={() => setActiveSection('tarjetas')} 
+                        className="flex items-center gap-2 px-4 py-2 bg-purple-50 text-purple-600 rounded-xl hover:bg-purple-100 transition-colors"
+                      >
+                        <span className="text-sm font-medium">Ver tarjetas</span>
+                        <ChevronRight className="w-4 h-4" />
                       </button>
-                    </div>
-                    <div className="p-4 flex gap-4 overflow-x-auto">
-                      {cards.slice(0, 2).map((card) => (
-                        <div key={card.id} className={`min-w-[280px] h-44 rounded-2xl p-5 text-white relative overflow-hidden ${getCardGradient(card.card_type)}`}>
-                          <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2" />
-                          <div className="flex justify-between mb-3">
-                            <span className="text-sm font-bold">ManoBank</span>
-                            <span className="text-xs font-bold">{card.card_brand || 'VISA'}</span>
-                          </div>
-                          <div className="w-10 h-7 bg-gradient-to-br from-yellow-300 to-yellow-500 rounded mb-3" />
-                          <p className="font-mono text-base tracking-wider mb-2">{card.card_number_masked}</p>
-                          <div className="flex justify-between text-xs">
-                            <span>{card.holder_name}</span>
-                            <span>{card.expiry}</span>
-                          </div>
-                        </div>
-                      ))}
-                      {cards.length === 0 && (
-                        <div className="w-full py-8 text-center text-gray-500">
-                          <CreditCard className="w-10 h-10 mx-auto mb-2 text-gray-300" />
-                          <p>No tienes tarjetas</p>
-                        </div>
-                      )}
                     </div>
                   </div>
 
