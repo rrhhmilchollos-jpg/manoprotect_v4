@@ -1,10 +1,12 @@
 """
 MANO - Authentication Routes
 User registration, login, logout, and session management
+With enhanced security features for ManoBank S.A.
 """
 from fastapi import APIRouter, HTTPException, Request, Response, Cookie
 from typing import Optional
 from datetime import datetime, timezone, timedelta
+from pydantic import BaseModel
 import httpx
 
 from models.all_schemas import User, UserRegister, UserLogin, SessionData
@@ -12,22 +14,56 @@ from core.auth import (
     hash_password, verify_password, generate_session_token,
     get_current_user
 )
+from services.security_service import (
+    validate_password_strength,
+    hash_password_secure,
+    verify_password_secure,
+    record_login_attempt,
+    is_account_locked,
+    get_failed_attempts,
+    clear_failed_attempts,
+    create_otp_session,
+    verify_otp,
+    log_security_event,
+    SecurityEventTypes,
+    generate_secure_session_token,
+    create_secure_session,
+    invalidate_all_user_sessions,
+    is_suspicious_login,
+    MAX_LOGIN_ATTEMPTS
+)
 
 router = APIRouter(tags=["Authentication"])
 
 # Database reference - set during initialization
 _db = None
+_twilio_client = None
 
 
-def init_auth_routes(db):
-    """Initialize routes with database connection"""
-    global _db
+def init_auth_routes(db, twilio_client=None):
+    """Initialize routes with database connection and optional Twilio"""
+    global _db, _twilio_client
     _db = db
+    _twilio_client = twilio_client
 
+
+def get_client_info(request: Request) -> tuple:
+    """Extract client IP and user agent from request"""
+    ip = request.headers.get("X-Forwarded-For", request.client.host if request.client else "unknown")
+    if "," in ip:
+        ip = ip.split(",")[0].strip()
+    user_agent = request.headers.get("User-Agent", "unknown")
+    return ip, user_agent
+
+
+# ============================================
+# ENHANCED REGISTRATION WITH SECURITY
+# ============================================
 
 @router.post("/auth/register")
-async def register_user(data: UserRegister, response: Response):
-    """Register new user with email/password"""
+async def register_user(data: UserRegister, request: Request, response: Response):
+    """Register new user with email/password - Enhanced security"""
+    ip_address, user_agent = get_client_info(request)
     existing = await _db.users.find_one({"email": data.email}, {"_id": 0})
     if existing:
         raise HTTPException(status_code=400, detail="El email ya está registrado")
