@@ -158,11 +158,22 @@ const ManoBankDashboard = () => {
     { icon: Building, title: 'Hipotecas', desc: 'Desde Euribor + 0,49%', color: 'bg-amber-500', tag: 'DESTACADO' },
   ];
 
-  // Pending operations (simulated)
-  const pendingOperations = [
-    { id: 1, type: 'transferencia', desc: 'Transferencia programada a María', amount: -250, date: '25/01/2026', status: 'pending' },
-    { id: 2, type: 'recibo', desc: 'Recibo Luz - Iberdrola', amount: -89.50, date: '28/01/2026', status: 'pending' },
-  ];
+  // Recent completed operations (shows from transactions if available, otherwise simulated examples)
+  const recentOperations = transactions.length > 0 
+    ? transactions.slice(0, 4).map((tx, i) => ({
+        id: tx.id || i,
+        type: tx.type || 'operacion',
+        desc: tx.description || tx.concept || 'Operación bancaria',
+        amount: tx.amount,
+        date: tx.created_at ? new Date(tx.created_at).toLocaleDateString('es-ES') : 'Hoy',
+        status: 'completed'
+      }))
+    : [
+        { id: 1, type: 'transferencia', desc: 'Transferencia a María García', amount: -250, date: '20/01/2026', status: 'completed' },
+        { id: 2, type: 'ingreso', desc: 'Nómina Enero 2026', amount: 2450, date: '15/01/2026', status: 'completed' },
+        { id: 3, type: 'recibo', desc: 'Recibo Luz - Iberdrola', amount: -89.50, date: '10/01/2026', status: 'completed' },
+        { id: 4, type: 'bizum', desc: 'Bizum recibido - Carlos', amount: 25, date: '08/01/2026', status: 'completed' },
+      ];
 
   const getCardGradient = (cardType) => {
     if (cardType?.includes('gold')) return 'bg-gradient-to-br from-amber-400 via-yellow-500 to-amber-600';
