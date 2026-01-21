@@ -2,7 +2,7 @@
 
 ## Información Legal del Banco
 - **Nombre**: ManoBank S.A. (Sociedad Anónima)
-- **CIF**: A12345678
+- **CIF**: B19427723
 - **Código entidad**: 9999
 - **SWIFT/BIC**: MANOES2XXXX
 - **Registro Mercantil**: Madrid, Tomo 12345, Folio 67, Hoja M-123456
