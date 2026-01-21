@@ -467,6 +467,134 @@ async def change_password(request: Request, session_token: Optional[str] = Cooki
     return {"message": "Contraseña actualizada correctamente. Todas las demás sesiones han sido cerradas."}
 
 
+# ============================================
+# PASSWORD RECOVERY
+# ============================================
+
+@router.post("/auth/forgot-password")
+async def forgot_password(request: Request):
+    """Send password recovery email"""
+    body = await request.json()
+    email = body.get("email")
+    
+    if not email:
+        raise HTTPException(status_code=400, detail="Email requerido")
+    
+    ip_address, user_agent = get_client_info(request)
+    
+    # Check if user exists
+    user = await _db.users.find_one({"email": email}, {"_id": 0})
+    
+    # Always return success to prevent email enumeration
+    if not user:
+        return {"message": "Si el email existe, recibirás instrucciones para recuperar tu contraseña"}
+    
+    # Generate recovery token
+    import secrets
+    import hashlib
+    
+    recovery_token = secrets.token_urlsafe(32)
+    token_hash = hashlib.sha256(recovery_token.encode()).hexdigest()
+    
+    # Store recovery request
+    recovery_doc = {
+        "email": email,
+        "user_id": user.get("user_id"),
+        "token_hash": token_hash,
+        "created_at": datetime.now(timezone.utc).isoformat(),
+        "expires_at": (datetime.now(timezone.utc) + timedelta(hours=1)).isoformat(),
+        "used": False
+    }
+    
+    await _db.password_recovery.insert_one(recovery_doc)
+    
+    # Log security event
+    await log_security_event(
+        SecurityEventTypes.PASSWORD_RESET_REQUEST,
+        user.get("user_id"),
+        email,
+        ip_address,
+        user_agent
+    )
+    
+    # TODO: Send email with recovery link
+    # For now, return the token for testing
+    recovery_link = f"https://manobank.es/recuperar-password?token={recovery_token}"
+    
+    return {
+        "message": "Si el email existe, recibirás instrucciones para recuperar tu contraseña",
+        "debug_link": recovery_link,  # Remove in production
+        "debug_token": recovery_token  # Remove in production
+    }
+
+
+@router.post("/auth/reset-password")
+async def reset_password(request: Request):
+    """Reset password using recovery token"""
+    body = await request.json()
+    token = body.get("token")
+    new_password = body.get("new_password")
+    
+    if not token or not new_password:
+        raise HTTPException(status_code=400, detail="Token y nueva contraseña requeridos")
+    
+    import hashlib
+    token_hash = hashlib.sha256(token.encode()).hexdigest()
+    
+    # Find recovery request
+    recovery = await _db.password_recovery.find_one({
+        "token_hash": token_hash,
+        "used": False
+    })
+    
+    if not recovery:
+        raise HTTPException(status_code=400, detail="Token inválido o expirado")
+    
+    # Check expiry
+    expires_at = datetime.fromisoformat(recovery["expires_at"].replace('Z', '+00:00'))
+    if datetime.now(timezone.utc) > expires_at:
+        raise HTTPException(status_code=400, detail="El token ha expirado. Solicita uno nuevo.")
+    
+    # Validate new password
+    password_check = validate_password_strength(new_password)
+    if not password_check.is_valid:
+        raise HTTPException(
+            status_code=400,
+            detail={
+                "message": "La contraseña no cumple los requisitos",
+                "feedback": password_check.feedback
+            }
+        )
+    
+    # Update password
+    new_hash = hash_password_secure(new_password)
+    await _db.users.update_one(
+        {"user_id": recovery["user_id"]},
+        {"$set": {"password_hash": new_hash}}
+    )
+    
+    # Mark token as used
+    await _db.password_recovery.update_one(
+        {"token_hash": token_hash},
+        {"$set": {"used": True}}
+    )
+    
+    # Invalidate all sessions
+    await invalidate_all_user_sessions(recovery["user_id"])
+    
+    ip_address, user_agent = get_client_info(request)
+    await log_security_event(
+        SecurityEventTypes.PASSWORD_CHANGE,
+        recovery["user_id"],
+        recovery["email"],
+        ip_address,
+        user_agent,
+        {"method": "recovery"}
+    )
+    
+    return {"message": "Contraseña actualizada correctamente. Ya puedes iniciar sesión."}
+
+
 @router.post("/auth/google/session")
 async def google_session(request: Request, response: Response):
     """Exchange Google OAuth session_id for local session"""
