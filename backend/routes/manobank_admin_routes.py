@@ -1698,9 +1698,13 @@ async def update_account_status(
 # ============================================
 
 class CardShipmentRequest(BaseModel):
-    shipping_address: Optional[str] = None  # Use customer address if not provided
-    shipping_method: str = "standard"  # standard, express, urgent
+    shipping_address_street: Optional[str] = None
+    shipping_address_city: Optional[str] = None
+    shipping_address_postal_code: Optional[str] = None
+    shipping_address_province: Optional[str] = None
+    shipping_method: str = "standard"  # standard, express, 24h
     notes: Optional[str] = None
+    send_sms_notification: bool = True
 
 @router.post("/cards/{card_id}/ship")
 async def ship_card_to_customer(
@@ -1709,7 +1713,7 @@ async def ship_card_to_customer(
     request: Request,
     session_token: Optional[str] = Cookie(None)
 ):
-    """Enviar tarjeta física al domicilio del cliente"""
+    """Enviar tarjeta física al domicilio del cliente via SEUR"""
     user, employee = await require_bank_employee(request, session_token)
     db = get_db()
     
@@ -1718,42 +1722,95 @@ async def ship_card_to_customer(
     if not card:
         raise HTTPException(status_code=404, detail="Tarjeta no encontrada")
     
+    # Check if card already has pending shipment
+    existing_shipment = await db.manobank_card_shipments.find_one({
+        "card_id": card_id,
+        "status": {"$nin": ["delivered", "returned", "cancelled"]}
+    })
+    if existing_shipment:
+        raise HTTPException(status_code=400, detail="Esta tarjeta ya tiene un envío pendiente")
+    
     # Get customer
     customer = await db.manobank_customers.find_one({"id": card["customer_id"]})
     if not customer:
         raise HTTPException(status_code=404, detail="Cliente no encontrado")
     
-    # Determine shipping address
-    if data.shipping_address:
-        shipping_address = data.shipping_address
-    else:
-        # Use customer's registered address
-        shipping_address = f"{customer.get('address_street', '')}, {customer.get('address_postal_code', '')} {customer.get('address_city', '')}, {customer.get('address_province', '')}, {customer.get('address_country', 'España')}"
+    # Build recipient address
+    recipient_address = {
+        "street": data.shipping_address_street or customer.get('address_street', ''),
+        "city": data.shipping_address_city or customer.get('address_city', ''),
+        "postal_code": data.shipping_address_postal_code or customer.get('address_postal_code', ''),
+        "province": data.shipping_address_province or customer.get('address_province', ''),
+        "country": customer.get('address_country', 'España')
+    }
+    
+    # Validate address
+    if not recipient_address["street"] or not recipient_address["city"] or not recipient_address["postal_code"]:
+        raise HTTPException(status_code=400, detail="Dirección de envío incompleta. Actualice los datos del cliente.")
+    
+    # Get shipping config
+    shipping_config = await db.manobank_config.find_one({"type": "shipping_config"})
+    sender_address = {
+        "name": "ManoBank S.A.",
+        "street": shipping_config.get("sender_address", "Calle Sor Isabel de Villena 82 bajo") if shipping_config else "Calle Sor Isabel de Villena 82 bajo",
+        "city": shipping_config.get("sender_city", "Novelda") if shipping_config else "Novelda",
+        "postal_code": shipping_config.get("sender_postal_code", "46819") if shipping_config else "46819",
+        "province": shipping_config.get("sender_province", "Valencia") if shipping_config else "Valencia",
+        "country": "España"
+    }
     
     # Calculate delivery dates based on shipping method
-    delivery_days = {"standard": 7, "express": 3, "urgent": 1}
-    days = delivery_days.get(data.shipping_method, 7)
+    delivery_days = {"standard": 5, "express": 2, "24h": 1}
+    days = delivery_days.get(data.shipping_method, 5)
     estimated_delivery = (datetime.now(timezone.utc) + timedelta(days=days)).isoformat()
     
     shipment_id = f"ship_{uuid.uuid4().hex[:12]}"
-    tracking_number = f"MB{random.randint(100000000, 999999999)}"
+    # SEUR-style tracking number
+    tracking_number = f"MANO{datetime.now().strftime('%y%m%d')}{uuid.uuid4().hex[:6].upper()}"
     
     shipment = {
         "id": shipment_id,
         "card_id": card_id,
         "customer_id": card["customer_id"],
         "customer_name": customer["name"],
-        "card_type": card["card_type"],
+        "customer_phone": customer.get("phone", ""),
+        "customer_email": customer.get("email", ""),
+        "card_type": card.get("card_type"),
+        "card_type_display": card.get("card_type_display", card.get("card_type")),
         "card_masked": card["card_number_masked"],
-        "shipping_address": shipping_address,
+        
+        # SEUR Info
+        "carrier": "SEUR",
+        "pickup_point_id": shipping_config.get("pickup_point_id", "ES29153") if shipping_config else "ES29153",
         "shipping_method": data.shipping_method,
         "tracking_number": tracking_number,
-        "status": "preparing",  # preparing, shipped, in_transit, delivered
-        "notes": data.notes,
+        
+        # Addresses
+        "sender_address": sender_address,
+        "recipient_address": recipient_address,
+        "full_recipient_address": f"{recipient_address['street']}, {recipient_address['postal_code']} {recipient_address['city']}, {recipient_address['province']}",
+        
+        # Status
+        "status": "pending",
+        "status_history": [{
+            "status": "pending",
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "note": "Envío creado",
+            "updated_by": employee.get("name", user.name)
+        }],
+        
+        # Dates
         "estimated_delivery": estimated_delivery,
+        "created_at": datetime.now(timezone.utc).isoformat(),
+        "shipped_at": None,
+        "delivered_at": None,
+        
+        # Additional
+        "notes": data.notes,
         "created_by": user.user_id,
         "created_by_name": employee.get("name", user.name),
-        "created_at": datetime.now(timezone.utc).isoformat()
+        "sms_notifications_enabled": data.send_sms_notification,
+        "signature_required": True
     }
     
     await db.manobank_card_shipments.insert_one(shipment)
@@ -1762,17 +1819,29 @@ async def ship_card_to_customer(
     await db.manobank_cards.update_one(
         {"id": card_id},
         {"$set": {
-            "physical_card_status": "shipping",
+            "physical_card_status": "pending_shipment",
             "shipment_id": shipment_id,
             "tracking_number": tracking_number
         }}
     )
     
+    # Send SMS notification if enabled
+    if data.send_sms_notification and customer.get("phone"):
+        try:
+            from services.twilio_sms import send_sms
+            await send_sms(
+                customer["phone"],
+                f"ManoBank: Tu tarjeta {card.get('card_type_display', 'bancaria')} está siendo preparada para envío. Tracking: {tracking_number}"
+            )
+        except Exception as e:
+            print(f"Error sending SMS: {e}")
+    
     shipment.pop("_id", None)
     
     return {
-        "message": "Envío de tarjeta programado",
-        "shipment": shipment
+        "message": "Envío de tarjeta creado correctamente",
+        "shipment": shipment,
+        "tracking_number": tracking_number
     }
 
 @router.get("/card-shipments")
