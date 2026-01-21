@@ -406,7 +406,11 @@ const BancoSistema = () => {
           ...(token && { 'Authorization': `Bearer ${token}` })
         },
         body: JSON.stringify({
-          ...newEmployee,
+          email: newEmployee.email,
+          name: newEmployee.name,
+          role: newEmployee.role,
+          roles: newEmployee.additionalRoles || [], // Send additional roles
+          phone: newEmployee.phone,
           salary: parseFloat(newEmployee.salary) || null
         })
       });
@@ -416,7 +420,7 @@ const BancoSistema = () => {
       
       toast.success('Empleado añadido correctamente');
       setShowAddEmployee(false);
-      setNewEmployee({ email: '', name: '', role: 'cajero', phone: '', salary: '' });
+      setNewEmployee({ email: '', name: '', role: 'cajero', additionalRoles: [], phone: '', salary: '' });
       fetchEmployees();
     } catch (error) {
       toast.error(error.message || 'Error al añadir empleado');
