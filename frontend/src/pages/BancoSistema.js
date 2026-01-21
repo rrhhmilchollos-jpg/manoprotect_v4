@@ -57,6 +57,8 @@ const BancoSistema = () => {
   const [customers, setCustomers] = useState([]);
   const [loans, setLoans] = useState([]);
   const [cards, setCards] = useState([]);
+  const [shipments, setShipments] = useState([]);
+  const [showShipCardModal, setShowShipCardModal] = useState(null);
   const [kycVerifications, setKycVerifications] = useState([]);
   const [pendingVideoSessions, setPendingVideoSessions] = useState([]);
   const [activeVideoSession, setActiveVideoSession] = useState(null);
