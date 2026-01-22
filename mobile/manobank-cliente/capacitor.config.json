@@ -1,0 +1,13 @@
+{
+  "appId": "com.manobank.clientes",
+  "appName": "ManoBank",
+  "webDir": "www",
+  "server": {
+    "url": "https://smart-banking-36.preview.emergentagent.com/login-seguro",
+    "cleartext": true
+  },
+  "android": {
+    "allowMixedContent": true,
+    "backgroundColor": "#1a1a2e"
+  }
+}
