@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">ManoBank</string>
+    <string name="title_activity_main">ManoBank</string>
+    <string name="package_name">com.manobank.clientes</string>
+    <string name="custom_url_scheme">com.manobank.clientes</string>
+</resources>
