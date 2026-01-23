@@ -3074,6 +3074,10 @@ try:
 except ImportError as e:
     print(f"⚠️ KYC routes not loaded: {e}")
 
+# Compliance & Audit routes
+api_router.include_router(compliance_router)
+print("✅ Compliance routes loaded")
+
 app.include_router(api_router)
 app.include_router(public_router)
 
