@@ -149,6 +149,10 @@ from routes.compliance_routes import router as compliance_router, init_complianc
 init_compliance_service(db)
 init_compliance_routes(db, require_admin)
 
+# Initialize Banking Core Services (Ledger, AML, KYC, Reporting)
+from routes.banking_core_routes import router as banking_core_router, init_banking_core_routes
+init_banking_core_routes(db, require_admin)
+
 # ============================================
 # COMMUNITY ROUTES
 # ============================================
