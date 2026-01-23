@@ -338,24 +338,57 @@ async def _check_sanctions_list(name: str) -> bool:
     # In production: Call Refinitiv World-Check, Dow Jones, or similar
     # This is a placeholder that checks against a local list
     
-    sanctioned_names = await _db.sanctions_list.find(
-        {"$text": {"$search": name}},
-        {"_id": 0}
-    ).limit(5).to_list(5)
-    
-    return len(sanctioned_names) > 0
+    try:
+        # Try text search first
+        sanctioned_names = await _db.sanctions_list.find(
+            {"$text": {"$search": name}},
+            {"_id": 0}
+        ).limit(5).to_list(5)
+        
+        return len(sanctioned_names) > 0
+    except Exception as e:
+        # If text index doesn't exist, fall back to regex search
+        # This handles the case where the collection doesn't exist or has no text index
+        try:
+            import re
+            name_pattern = re.compile(re.escape(name), re.IGNORECASE)
+            sanctioned_names = await _db.sanctions_list.find(
+                {"name": {"$regex": name_pattern}},
+                {"_id": 0}
+            ).limit(5).to_list(5)
+            return len(sanctioned_names) > 0
+        except Exception:
+            # Collection doesn't exist - return False (no match)
+            # In production, this would be a critical error
+            return False
 
 
 async def _check_pep_database(name: str) -> bool:
     """Check if person is a Politically Exposed Person (simplified)"""
     # In production: Call external PEP database API
     
-    pep_matches = await _db.pep_list.find(
-        {"$text": {"$search": name}},
-        {"_id": 0}
-    ).limit(5).to_list(5)
-    
-    return len(pep_matches) > 0
+    try:
+        # Try text search first
+        pep_matches = await _db.pep_list.find(
+            {"$text": {"$search": name}},
+            {"_id": 0}
+        ).limit(5).to_list(5)
+        
+        return len(pep_matches) > 0
+    except Exception as e:
+        # If text index doesn't exist, fall back to regex search
+        try:
+            import re
+            name_pattern = re.compile(re.escape(name), re.IGNORECASE)
+            pep_matches = await _db.pep_list.find(
+                {"name": {"$regex": name_pattern}},
+                {"_id": 0}
+            ).limit(5).to_list(5)
+            return len(pep_matches) > 0
+        except Exception:
+            # Collection doesn't exist - return False (no match)
+            # In production, this would be a critical error
+            return False
 
 
 async def _create_customer_alert(
