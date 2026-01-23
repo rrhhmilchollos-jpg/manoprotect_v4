@@ -110,7 +110,7 @@ async def create_audit_log(
     Create an immutable audit log entry for regulatory compliance.
     All entries are cryptographically hashed for integrity verification.
     """
-    if not _db:
+    if _db is None:
         raise RuntimeError("Compliance service not initialized")
     
     timestamp = datetime.now(timezone.utc)
@@ -168,7 +168,7 @@ async def get_audit_logs(
     Retrieve audit logs with filtering.
     For regulatory reporting and internal audits.
     """
-    if not _db:
+    if _db is None:
         return []
     
     query = {}
@@ -205,7 +205,7 @@ async def verify_audit_integrity(audit_id: str) -> Dict[str, Any]:
     Verify the integrity of an audit log entry.
     Returns verification status and any discrepancies.
     """
-    if not _db:
+    if _db is None:
         return {"verified": False, "error": "Service not initialized"}
     
     entry = await _db.compliance_audit_logs.find_one({"audit_id": audit_id}, {"_id": 0})
@@ -236,7 +236,7 @@ async def generate_regulatory_report(
     Generate regulatory compliance report.
     Supports: AML, KYC, TRANSACTIONS, ACCOUNTS
     """
-    if not _db:
+    if _db is None:
         return {"error": "Service not initialized"}
     
     report = {
@@ -306,7 +306,7 @@ async def get_compliance_summary() -> Dict[str, Any]:
     """
     Get compliance dashboard summary.
     """
-    if not _db:
+    if _db is None:
         return {"error": "Service not initialized"}
     
     now = datetime.now(timezone.utc)
