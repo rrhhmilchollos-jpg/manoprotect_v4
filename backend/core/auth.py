@@ -87,10 +87,11 @@ async def require_auth(request: Request, session_token: Optional[str] = Cookie(N
 
 
 async def require_admin(request: Request, session_token: Optional[str] = Cookie(None)) -> User:
-    """Require superadmin role"""
+    """Require admin role (superadmin, admin, or director)"""
     user = await require_auth(request, session_token)
-    if user.role != "superadmin":
-        raise HTTPException(status_code=403, detail="Acceso denegado - Se requiere rol de superadmin")
+    admin_roles = ["superadmin", "admin", "director"]
+    if user.role not in admin_roles:
+        raise HTTPException(status_code=403, detail="Acceso denegado - Se requiere rol de administrador")
     return user
 
 
