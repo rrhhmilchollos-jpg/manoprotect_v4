@@ -3,7 +3,7 @@
   "appName": "ManoBank",
   "webDir": "www",
   "server": {
-    "url": "https://smart-banking-36.preview.emergentagent.com/login-seguro",
+    "url": "https://digital-banking-58.preview.emergentagent.com/login-seguro",
     "cleartext": true
   },
   "android": {

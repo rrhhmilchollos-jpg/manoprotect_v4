@@ -27,7 +27,7 @@ class TestStripeCheckoutSession:
         """Test creating checkout session for weekly plan"""
         payload = {
             "plan_type": "weekly",
-            "origin_url": "https://smart-banking-36.preview.emergentagent.com",
+            "origin_url": "https://digital-banking-58.preview.emergentagent.com",
             "user_id": "test-user-001",
             "email": "test@example.com"
         }
@@ -50,7 +50,7 @@ class TestStripeCheckoutSession:
         """Test creating checkout session for monthly plan"""
         payload = {
             "plan_type": "monthly",
-            "origin_url": "https://smart-banking-36.preview.emergentagent.com",
+            "origin_url": "https://digital-banking-58.preview.emergentagent.com",
             "user_id": "test-user-002",
             "email": "monthly@example.com"
         }
@@ -70,7 +70,7 @@ class TestStripeCheckoutSession:
         """Test creating checkout session for quarterly plan"""
         payload = {
             "plan_type": "quarterly",
-            "origin_url": "https://smart-banking-36.preview.emergentagent.com",
+            "origin_url": "https://digital-banking-58.preview.emergentagent.com",
             "user_id": "test-user-003",
             "email": "quarterly@example.com"
         }
@@ -90,7 +90,7 @@ class TestStripeCheckoutSession:
         """Test creating checkout session for yearly plan"""
         payload = {
             "plan_type": "yearly",
-            "origin_url": "https://smart-banking-36.preview.emergentagent.com",
+            "origin_url": "https://digital-banking-58.preview.emergentagent.com",
             "user_id": "test-user-004",
             "email": "yearly@example.com"
         }
@@ -110,7 +110,7 @@ class TestStripeCheckoutSession:
         """Test creating checkout session for family monthly plan"""
         payload = {
             "plan_type": "family-monthly",
-            "origin_url": "https://smart-banking-36.preview.emergentagent.com",
+            "origin_url": "https://digital-banking-58.preview.emergentagent.com",
             "user_id": "test-user-005",
             "email": "family@example.com"
         }
@@ -130,7 +130,7 @@ class TestStripeCheckoutSession:
         """Test creating checkout session for family quarterly plan"""
         payload = {
             "plan_type": "family-quarterly",
-            "origin_url": "https://smart-banking-36.preview.emergentagent.com",
+            "origin_url": "https://digital-banking-58.preview.emergentagent.com",
             "user_id": "test-user-006",
             "email": "familyq@example.com"
         }
@@ -150,7 +150,7 @@ class TestStripeCheckoutSession:
         """Test creating checkout session for family yearly plan"""
         payload = {
             "plan_type": "family-yearly",
-            "origin_url": "https://smart-banking-36.preview.emergentagent.com",
+            "origin_url": "https://digital-banking-58.preview.emergentagent.com",
             "user_id": "test-user-007",
             "email": "familyy@example.com"
         }
@@ -170,7 +170,7 @@ class TestStripeCheckoutSession:
         """Test creating checkout session with invalid plan type"""
         payload = {
             "plan_type": "invalid-plan",
-            "origin_url": "https://smart-banking-36.preview.emergentagent.com",
+            "origin_url": "https://digital-banking-58.preview.emergentagent.com",
             "user_id": "test-user-008",
             "email": "invalid@example.com"
         }
@@ -204,7 +204,7 @@ class TestCheckoutStatus:
         # First create a session
         payload = {
             "plan_type": "weekly",
-            "origin_url": "https://smart-banking-36.preview.emergentagent.com",
+            "origin_url": "https://digital-banking-58.preview.emergentagent.com",
             "user_id": "test-status-user",
             "email": "status@example.com"
         }
