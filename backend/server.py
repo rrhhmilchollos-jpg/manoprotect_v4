@@ -3082,6 +3082,10 @@ except ImportError as e:
 api_router.include_router(compliance_router)
 print("✅ Compliance routes loaded")
 
+# Banking Core routes (Ledger, AML, KYC, Reporting)
+api_router.include_router(banking_core_router)
+print("✅ Banking Core routes loaded (Ledger, AML, KYC, Reporting)")
+
 app.include_router(api_router)
 app.include_router(public_router)
 
