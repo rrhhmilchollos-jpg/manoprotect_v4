@@ -2089,6 +2089,277 @@ async def update_account_status(
         "new_status": data.status
     }
 
+
+# ============================================
+# OPERACIONES BANCARIAS EN VENTANILLA
+# ============================================
+
+class DepositRequest(BaseModel):
+    amount: float
+    concept: Optional[str] = "Ingreso en ventanilla"
+
+class WithdrawRequest(BaseModel):
+    amount: float
+    concept: Optional[str] = "Retirada en ventanilla"
+
+
+@router.get("/customers/{customer_id}/accounts")
+async def get_customer_accounts(
+    customer_id: str,
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Get all accounts for a specific customer"""
+    user = await require_employee(request, session_token)
+    
+    accounts = await db.manobank_accounts.find(
+        {"customer_id": customer_id},
+        {"_id": 0}
+    ).to_list(20)
+    
+    return {"accounts": accounts}
+
+
+@router.get("/customers/{customer_id}/cards")
+async def get_customer_cards(
+    customer_id: str,
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Get all cards for a specific customer"""
+    user = await require_employee(request, session_token)
+    
+    cards = await db.manobank_cards.find(
+        {"customer_id": customer_id},
+        {"_id": 0}
+    ).to_list(20)
+    
+    return {"cards": cards}
+
+
+@router.get("/customers/{customer_id}/transactions")
+async def get_customer_transactions(
+    customer_id: str,
+    request: Request,
+    session_token: Optional[str] = Cookie(None),
+    limit: int = 50
+):
+    """Get transactions for a specific customer"""
+    user = await require_employee(request, session_token)
+    
+    # Get customer's accounts
+    accounts = await db.manobank_accounts.find(
+        {"customer_id": customer_id},
+        {"id": 1}
+    ).to_list(20)
+    
+    account_ids = [acc["id"] for acc in accounts]
+    
+    transactions = await db.manobank_transactions.find(
+        {"account_id": {"$in": account_ids}},
+        {"_id": 0}
+    ).sort("created_at", -1).limit(limit).to_list(limit)
+    
+    return {"transactions": transactions}
+
+
+@router.post("/accounts/{account_id}/deposit")
+async def deposit_to_account(
+    account_id: str,
+    data: DepositRequest,
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Make a deposit to an account (teller operation)"""
+    user = await require_employee(request, session_token)
+    
+    if data.amount <= 0:
+        raise HTTPException(status_code=400, detail="El monto debe ser mayor a 0")
+    
+    # Get account
+    account = await db.manobank_accounts.find_one({"id": account_id})
+    if not account:
+        raise HTTPException(status_code=404, detail="Cuenta no encontrada")
+    
+    if account.get("status") != "active":
+        raise HTTPException(status_code=400, detail="La cuenta no está activa")
+    
+    # Update balance
+    new_balance = account.get("balance", 0) + data.amount
+    
+    await db.manobank_accounts.update_one(
+        {"id": account_id},
+        {"$set": {
+            "balance": new_balance,
+            "available_balance": new_balance,
+            "last_movement": datetime.now(timezone.utc).isoformat()
+        }}
+    )
+    
+    # Create transaction record
+    transaction = {
+        "id": f"tx_{uuid.uuid4().hex[:12]}",
+        "account_id": account_id,
+        "customer_id": account.get("customer_id"),
+        "amount": data.amount,
+        "type": "deposit",
+        "transaction_type": "deposit",
+        "concept": data.concept,
+        "description": data.concept,
+        "balance_after": new_balance,
+        "status": "completed",
+        "operator_id": user.user_id,
+        "operator_name": user.name,
+        "channel": "branch",
+        "created_at": datetime.now(timezone.utc).isoformat()
+    }
+    await db.manobank_transactions.insert_one(transaction)
+    
+    return {
+        "message": f"Ingreso de €{data.amount:.2f} realizado correctamente",
+        "new_balance": new_balance,
+        "transaction_id": transaction["id"]
+    }
+
+
+@router.post("/accounts/{account_id}/withdraw")
+async def withdraw_from_account(
+    account_id: str,
+    data: WithdrawRequest,
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Make a withdrawal from an account (teller operation)"""
+    user = await require_employee(request, session_token)
+    
+    if data.amount <= 0:
+        raise HTTPException(status_code=400, detail="El monto debe ser mayor a 0")
+    
+    # Get account
+    account = await db.manobank_accounts.find_one({"id": account_id})
+    if not account:
+        raise HTTPException(status_code=404, detail="Cuenta no encontrada")
+    
+    if account.get("status") != "active":
+        raise HTTPException(status_code=400, detail="La cuenta no está activa")
+    
+    current_balance = account.get("balance", 0)
+    if data.amount > current_balance:
+        raise HTTPException(status_code=400, detail=f"Saldo insuficiente. Disponible: €{current_balance:.2f}")
+    
+    # Update balance
+    new_balance = current_balance - data.amount
+    
+    await db.manobank_accounts.update_one(
+        {"id": account_id},
+        {"$set": {
+            "balance": new_balance,
+            "available_balance": new_balance,
+            "last_movement": datetime.now(timezone.utc).isoformat()
+        }}
+    )
+    
+    # Create transaction record
+    transaction = {
+        "id": f"tx_{uuid.uuid4().hex[:12]}",
+        "account_id": account_id,
+        "customer_id": account.get("customer_id"),
+        "amount": -data.amount,
+        "type": "withdrawal",
+        "transaction_type": "withdrawal",
+        "concept": data.concept,
+        "description": data.concept,
+        "balance_after": new_balance,
+        "status": "completed",
+        "operator_id": user.user_id,
+        "operator_name": user.name,
+        "channel": "branch",
+        "created_at": datetime.now(timezone.utc).isoformat()
+    }
+    await db.manobank_transactions.insert_one(transaction)
+    
+    return {
+        "message": f"Retirada de €{data.amount:.2f} realizada correctamente",
+        "new_balance": new_balance,
+        "transaction_id": transaction["id"]
+    }
+
+
+@router.post("/accounts/{account_id}/freeze")
+async def freeze_account(
+    account_id: str,
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Freeze an account"""
+    user = await require_employee(request, session_token)
+    
+    account = await db.manobank_accounts.find_one({"id": account_id})
+    if not account:
+        raise HTTPException(status_code=404, detail="Cuenta no encontrada")
+    
+    await db.manobank_accounts.update_one(
+        {"id": account_id},
+        {"$set": {
+            "status": "frozen",
+            "frozen_by": user.user_id,
+            "frozen_at": datetime.now(timezone.utc).isoformat()
+        }}
+    )
+    
+    return {"message": "Cuenta congelada", "account_id": account_id}
+
+
+@router.post("/cards/{card_id}/block")
+async def block_card(
+    card_id: str,
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Block a card"""
+    user = await require_employee(request, session_token)
+    
+    card = await db.manobank_cards.find_one({"id": card_id})
+    if not card:
+        raise HTTPException(status_code=404, detail="Tarjeta no encontrada")
+    
+    await db.manobank_cards.update_one(
+        {"id": card_id},
+        {"$set": {
+            "status": "blocked",
+            "blocked_by": user.user_id,
+            "blocked_at": datetime.now(timezone.utc).isoformat()
+        }}
+    )
+    
+    return {"message": "Tarjeta bloqueada", "card_id": card_id}
+
+
+@router.post("/cards/{card_id}/unblock")
+async def unblock_card(
+    card_id: str,
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Unblock a card"""
+    user = await require_employee(request, session_token)
+    
+    card = await db.manobank_cards.find_one({"id": card_id})
+    if not card:
+        raise HTTPException(status_code=404, detail="Tarjeta no encontrada")
+    
+    await db.manobank_cards.update_one(
+        {"id": card_id},
+        {"$set": {
+            "status": "active",
+            "unblocked_by": user.user_id,
+            "unblocked_at": datetime.now(timezone.utc).isoformat()
+        }}
+    )
+    
+    return {"message": "Tarjeta desbloqueada", "card_id": card_id}
+
+
 # ============================================
 # ENVÍO DE TARJETAS A DOMICILIO
 # ============================================
