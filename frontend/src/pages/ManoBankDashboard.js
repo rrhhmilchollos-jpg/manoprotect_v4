@@ -49,6 +49,16 @@ const ManoBankDashboard = () => {
   const [savingProfile, setSavingProfile] = useState(false);
   const [savingPassword, setSavingPassword] = useState(false);
 
+  // Notifications state
+  const [showNotifications, setShowNotifications] = useState(false);
+  const [notifications, setNotifications] = useState([
+    { id: 1, type: 'security', title: 'Nuevo acceso detectado', message: 'Se ha detectado un acceso desde Madrid, España', time: 'Hace 5 min', read: false, icon: 'shield' },
+    { id: 2, type: 'transaction', title: 'Transferencia recibida', message: 'Has recibido 150,00€ de Juan García', time: 'Hace 2 horas', read: false, icon: 'arrow-down' },
+    { id: 3, type: 'promo', title: '¡Oferta especial!', message: 'Préstamo personal desde 4,95% TAE. Solo hasta el 31/01', time: 'Hace 1 día', read: true, icon: 'gift' },
+    { id: 4, type: 'card', title: 'Pago con tarjeta', message: 'Compra de 45,99€ en Amazon', time: 'Hace 2 días', read: true, icon: 'credit-card' },
+    { id: 5, type: 'info', title: 'Actualización de seguridad', message: 'Hemos mejorado la protección de tu cuenta', time: 'Hace 3 días', read: true, icon: 'info' },
+  ]);
+
   // Payment form state
   const [paymentType, setPaymentType] = useState('transferencia');
   const [paymentData, setPaymentData] = useState({
