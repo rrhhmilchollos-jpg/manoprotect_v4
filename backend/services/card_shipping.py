@@ -24,7 +24,7 @@ SEUR_PICKUP_POINT = "ES29153"
 SENDER_ADDRESS = {
     "name": "ManoBank S.A.",
     "street": "Calle Sor Isabel de Villena 82 bajo",
-    "city": "Novelda",
+    "city": "Noveltle",
     "province": "Valencia", 
     "postal_code": "46819",
     "country": "España",

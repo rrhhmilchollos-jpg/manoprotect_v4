@@ -1831,7 +1831,7 @@ const BancoSistema = () => {
               <h4 className="font-semibold text-orange-800 mb-2">Dirección de Envío (Remitente)</h4>
               <p className="text-sm text-orange-700">ManoBank S.A.</p>
               <p className="text-sm text-orange-700">Calle Sor Isabel de Villena 82 bajo</p>
-              <p className="text-sm text-orange-700">46819 Novelda, Valencia</p>
+              <p className="text-sm text-orange-700">46819 Noveltle, Valencia</p>
               <p className="text-sm text-orange-600 mt-2 font-medium">Punto SEUR: ES29153</p>
             </div>
           </div>

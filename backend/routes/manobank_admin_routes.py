@@ -2430,7 +2430,7 @@ async def ship_card_to_customer(
     sender_address = {
         "name": "ManoBank S.A.",
         "street": shipping_config.get("sender_address", "Calle Sor Isabel de Villena 82 bajo") if shipping_config else "Calle Sor Isabel de Villena 82 bajo",
-        "city": shipping_config.get("sender_city", "Novelda") if shipping_config else "Novelda",
+        "city": shipping_config.get("sender_city", "Noveltle") if shipping_config else "Noveltle",
         "postal_code": shipping_config.get("sender_postal_code", "46819") if shipping_config else "46819",
         "province": shipping_config.get("sender_province", "Valencia") if shipping_config else "Valencia",
         "country": "España"
