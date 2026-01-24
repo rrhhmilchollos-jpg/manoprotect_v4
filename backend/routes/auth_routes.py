@@ -707,6 +707,48 @@ async def get_me(request: Request, session_token: Optional[str] = Cookie(None)):
     }
 
 
+@router.patch("/auth/profile")
+async def update_profile(request: Request, session_token: Optional[str] = Cookie(None)):
+    """Update user profile data"""
+    user = await get_current_user(request, session_token)
+    if not user:
+        raise HTTPException(status_code=401, detail="No autenticado")
+    
+    body = await request.json()
+    
+    # Fields that can be updated
+    allowed_fields = ["name", "phone", "dark_mode", "notifications_enabled"]
+    update_data = {}
+    
+    for field in allowed_fields:
+        if field in body:
+            update_data[field] = body[field]
+    
+    if not update_data:
+        raise HTTPException(status_code=400, detail="No hay datos para actualizar")
+    
+    # Update user
+    await _db.users.update_one(
+        {"user_id": user.user_id},
+        {"$set": update_data}
+    )
+    
+    # Get updated user
+    updated_user = await _db.users.find_one({"user_id": user.user_id}, {"_id": 0, "password_hash": 0})
+    
+    return {
+        "message": "Perfil actualizado correctamente",
+        "user": {
+            "user_id": updated_user.get("user_id"),
+            "email": updated_user.get("email"),
+            "name": updated_user.get("name"),
+            "phone": updated_user.get("phone"),
+            "dark_mode": updated_user.get("dark_mode"),
+            "notifications_enabled": updated_user.get("notifications_enabled")
+        }
+    }
+
+
 @router.post("/auth/logout")
 async def logout(request: Request, response: Response, session_token: Optional[str] = Cookie(None)):
     """Logout - clear session"""
