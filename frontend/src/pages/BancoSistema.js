@@ -130,6 +130,15 @@ const BancoSistema = () => {
   
   const [searchCustomer, setSearchCustomer] = useState('');
 
+  // PIN Verification State
+  const [showPinVerification, setShowPinVerification] = useState(null); // card object
+  const [pinVerificationStep, setPinVerificationStep] = useState('request'); // request, verify, show
+  const [pinVerificationId, setPinVerificationId] = useState('');
+  const [pinVerificationCode, setPinVerificationCode] = useState('');
+  const [pinVerificationData, setPinVerificationData] = useState(null);
+  const [pinVerificationLoading, setPinVerificationLoading] = useState(false);
+  const [pinDebugCode, setPinDebugCode] = useState('');
+
   useEffect(() => {
     fetchDashboard();
   }, []);
