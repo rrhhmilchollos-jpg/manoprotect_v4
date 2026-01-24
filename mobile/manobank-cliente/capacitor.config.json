@@ -3,11 +3,25 @@
   "appName": "ManoBank",
   "webDir": "www",
   "server": {
-    "url": "https://digital-banking-58.preview.emergentagent.com/login-seguro",
+    "url": "https://digital-banking-58.preview.emergentagent.com",
     "cleartext": true
   },
   "android": {
     "allowMixedContent": true,
-    "backgroundColor": "#1a1a2e"
+    "backgroundColor": "#1a1a2e",
+    "captureInput": true,
+    "webContentsDebuggingEnabled": false
+  },
+  "ios": {
+    "backgroundColor": "#1a1a2e",
+    "contentInset": "automatic",
+    "allowsLinkPreview": false
+  },
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 2000,
+      "backgroundColor": "#1a1a2e",
+      "showSpinner": false
+    }
   }
 }
