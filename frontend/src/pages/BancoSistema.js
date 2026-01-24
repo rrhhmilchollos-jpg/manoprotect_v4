@@ -1826,6 +1826,270 @@ const BancoSistema = () => {
           </div>
         )}
 
+        {/* Compliance Tab */}
+        {activeTab === 'compliance' && (
+          <div className="space-y-6">
+            <h2 className="text-xl font-bold flex items-center gap-2">
+              <Shield className="w-6 h-6 text-indigo-600" />
+              Panel de Compliance - ManoBank S.A.
+            </h2>
+
+            {/* Entity Info */}
+            {complianceSummary && (
+              <div className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl p-6">
+                <div className="grid md:grid-cols-4 gap-4">
+                  <div>
+                    <p className="text-indigo-200 text-sm">Entidad</p>
+                    <p className="font-bold text-lg">{complianceSummary.entity?.name}</p>
+                  </div>
+                  <div>
+                    <p className="text-indigo-200 text-sm">CIF</p>
+                    <p className="font-bold text-lg">{complianceSummary.entity?.cif}</p>
+                  </div>
+                  <div>
+                    <p className="text-indigo-200 text-sm">Regulador</p>
+                    <p className="font-bold text-lg">{complianceSummary.entity?.regulator}</p>
+                  </div>
+                  <div>
+                    <p className="text-indigo-200 text-sm">Tipo de Licencia</p>
+                    <p className="font-bold text-lg">{complianceSummary.entity?.license_type}</p>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Stats Grid */}
+            <div className="grid md:grid-cols-4 gap-4">
+              <div className="bg-white rounded-xl p-6 shadow-sm border-l-4 border-blue-500">
+                <p className="text-zinc-500 text-sm">Total Audit Events</p>
+                <p className="text-3xl font-bold text-blue-600">{complianceSummary?.stats?.total_audit_events || 0}</p>
+              </div>
+              <div className="bg-white rounded-xl p-6 shadow-sm border-l-4 border-green-500">
+                <p className="text-zinc-500 text-sm">Eventos Hoy</p>
+                <p className="text-3xl font-bold text-green-600">{complianceSummary?.stats?.events_today || 0}</p>
+              </div>
+              <div className="bg-white rounded-xl p-6 shadow-sm border-l-4 border-red-500">
+                <p className="text-zinc-500 text-sm">Alto Riesgo</p>
+                <p className="text-3xl font-bold text-red-600">{complianceSummary?.stats?.high_risk_events || 0}</p>
+              </div>
+              <div className="bg-white rounded-xl p-6 shadow-sm border-l-4 border-purple-500">
+                <p className="text-zinc-500 text-sm">Reportes Pendientes</p>
+                <p className="text-3xl font-bold text-purple-600">{reportingDashboard?.pending_submission || 0}</p>
+              </div>
+            </div>
+
+            {/* KYC & Reporting Dashboards */}
+            <div className="grid md:grid-cols-2 gap-6">
+              {/* KYC Summary */}
+              <div className="bg-white rounded-xl p-6 shadow-sm">
+                <h3 className="font-bold text-lg mb-4 flex items-center gap-2">
+                  <BadgeCheck className="w-5 h-5 text-emerald-600" />
+                  Estado KYC
+                </h3>
+                {kycDashboard && (
+                  <div className="space-y-3">
+                    <div className="flex justify-between py-2 border-b">
+                      <span className="text-zinc-600">Total Procesos</span>
+                      <span className="font-semibold">{kycDashboard.total_processes || 0}</span>
+                    </div>
+                    <div className="flex justify-between py-2 border-b">
+                      <span className="text-zinc-600">Pendientes Revisión</span>
+                      <span className="font-semibold text-amber-600">{kycDashboard.pending_review || 0}</span>
+                    </div>
+                    <div className="flex justify-between py-2 border-b">
+                      <span className="text-zinc-600">Hoy</span>
+                      <span className="font-semibold text-blue-600">{kycDashboard.today_submissions || 0}</span>
+                    </div>
+                    <div className="flex justify-between py-2">
+                      <span className="text-zinc-600">Tiempo Medio (días)</span>
+                      <span className="font-semibold">{kycDashboard.avg_processing_days || 'N/A'}</span>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Reporting Summary */}
+              <div className="bg-white rounded-xl p-6 shadow-sm">
+                <h3 className="font-bold text-lg mb-4 flex items-center gap-2">
+                  <FileText className="w-5 h-5 text-blue-600" />
+                  Reportes Regulatorios
+                </h3>
+                {reportingDashboard && (
+                  <div className="space-y-3">
+                    <div className="flex justify-between py-2 border-b">
+                      <span className="text-zinc-600">Total Reportes</span>
+                      <span className="font-semibold">{reportingDashboard.total_reports || 0}</span>
+                    </div>
+                    <div className="grid grid-cols-2 gap-2 mt-4">
+                      <Button 
+                        onClick={() => handleGenerateReport('daily-cash')} 
+                        variant="outline" 
+                        className="text-sm"
+                        data-testid="generate-daily-report"
+                      >
+                        Generar Reporte Diario
+                      </Button>
+                      <Button 
+                        onClick={() => handleGenerateReport('monthly-operations')} 
+                        variant="outline"
+                        className="text-sm"
+                        data-testid="generate-monthly-report"
+                      >
+                        Generar Reporte Mensual
+                      </Button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Policies */}
+            <div className="bg-white rounded-xl p-6 shadow-sm">
+              <h3 className="font-bold text-lg mb-4">Políticas Regulatorias</h3>
+              <div className="grid md:grid-cols-3 gap-4">
+                {compliancePolicies.map((policy) => (
+                  <div key={policy.filename} className="p-4 bg-zinc-50 rounded-lg border flex items-center gap-3">
+                    <FileText className="w-5 h-5 text-indigo-600" />
+                    <span className="text-sm font-medium">{policy.name}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* AML Alerts Tab */}
+        {activeTab === 'alerts' && (
+          <div className="space-y-6">
+            <h2 className="text-xl font-bold flex items-center gap-2">
+              <AlertTriangle className="w-6 h-6 text-red-600" />
+              Alertas AML (Anti-Money Laundering)
+            </h2>
+
+            {/* AML Dashboard Stats */}
+            {amlDashboard && (
+              <div className="grid md:grid-cols-4 gap-4">
+                <div className="bg-white rounded-xl p-6 shadow-sm border-l-4 border-red-500">
+                  <p className="text-zinc-500 text-sm">Total Alertas</p>
+                  <p className="text-3xl font-bold text-red-600">{amlDashboard.total_alerts || 0}</p>
+                </div>
+                <div className="bg-white rounded-xl p-6 shadow-sm border-l-4 border-amber-500">
+                  <p className="text-zinc-500 text-sm">Pendientes Revisión</p>
+                  <p className="text-3xl font-bold text-amber-600">{amlDashboard.pending_review || 0}</p>
+                </div>
+                <div className="bg-white rounded-xl p-6 shadow-sm border-l-4 border-purple-500">
+                  <p className="text-zinc-500 text-sm">SARs Este Mes</p>
+                  <p className="text-3xl font-bold text-purple-600">{amlDashboard.sars_this_month || 0}</p>
+                </div>
+                <div className="bg-white rounded-xl p-6 shadow-sm border-l-4 border-blue-500">
+                  <p className="text-zinc-500 text-sm">Alto Riesgo</p>
+                  <p className="text-3xl font-bold text-blue-600">{amlDashboard.recent_high_risk?.length || 0}</p>
+                </div>
+              </div>
+            )}
+
+            {/* Alerts by Type */}
+            {amlDashboard?.alerts_by_type && Object.keys(amlDashboard.alerts_by_type).length > 0 && (
+              <div className="bg-white rounded-xl p-6 shadow-sm">
+                <h3 className="font-bold mb-4">Alertas por Tipo</h3>
+                <div className="grid md:grid-cols-4 gap-3">
+                  {Object.entries(amlDashboard.alerts_by_type).map(([type, count]) => (
+                    <div key={type} className="bg-zinc-50 rounded-lg p-3 text-center">
+                      <p className="text-xs text-zinc-500 truncate">{type.replace(/_/g, ' ')}</p>
+                      <p className="text-xl font-bold text-zinc-800">{count}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Alerts List */}
+            <div className="bg-white rounded-xl shadow-sm">
+              <div className="p-4 border-b flex justify-between items-center">
+                <h3 className="font-bold">Alertas Pendientes de Revisión</h3>
+                <Button onClick={fetchAMLData} variant="outline" size="sm">
+                  <RefreshCw className="w-4 h-4 mr-2" />
+                  Actualizar
+                </Button>
+              </div>
+              <div className="divide-y">
+                {amlAlerts.length === 0 ? (
+                  <div className="p-8 text-center text-zinc-500">
+                    <CheckCircle className="w-12 h-12 mx-auto mb-3 text-green-500" />
+                    <p>No hay alertas pendientes</p>
+                  </div>
+                ) : (
+                  amlAlerts.map((alert) => (
+                    <div key={alert.alert_id} className="p-4 hover:bg-zinc-50">
+                      <div className="flex items-start justify-between">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2 mb-1">
+                            <span className={`px-2 py-1 rounded text-xs font-medium ${
+                              alert.risk_level === 'critical' ? 'bg-red-100 text-red-800' :
+                              alert.risk_level === 'high' ? 'bg-orange-100 text-orange-800' :
+                              alert.risk_level === 'medium' ? 'bg-amber-100 text-amber-800' :
+                              'bg-green-100 text-green-800'
+                            }`}>
+                              {alert.risk_level?.toUpperCase()}
+                            </span>
+                            <span className="text-sm font-medium text-zinc-800">
+                              {alert.alert_type?.replace(/_/g, ' ')}
+                            </span>
+                          </div>
+                          <p className="text-sm text-zinc-600 mb-1">{alert.description}</p>
+                          <p className="text-xs text-zinc-400">
+                            {new Date(alert.created_at).toLocaleString('es-ES')}
+                          </p>
+                        </div>
+                        <div className="flex gap-2 ml-4">
+                          <Button 
+                            onClick={() => handleUpdateAlertStatus(alert.alert_id, 'cleared', 'Revisado - Sin acción')}
+                            variant="outline" 
+                            size="sm"
+                            className="text-green-600 border-green-300"
+                            data-testid={`clear-alert-${alert.alert_id}`}
+                          >
+                            <CheckCircle className="w-4 h-4" />
+                          </Button>
+                          <Button 
+                            onClick={() => handleUpdateAlertStatus(alert.alert_id, 'escalated', 'Escalado para revisión')}
+                            variant="outline"
+                            size="sm"
+                            className="text-red-600 border-red-300"
+                            data-testid={`escalate-alert-${alert.alert_id}`}
+                          >
+                            <AlertTriangle className="w-4 h-4" />
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+                  ))
+                )}
+              </div>
+            </div>
+
+            {/* Recent High Risk */}
+            {amlDashboard?.recent_high_risk?.length > 0 && (
+              <div className="bg-red-50 border border-red-200 rounded-xl p-6">
+                <h3 className="font-bold text-red-900 mb-4">Alertas de Alto Riesgo Recientes</h3>
+                <div className="space-y-3">
+                  {amlDashboard.recent_high_risk.slice(0, 5).map((alert, idx) => (
+                    <div key={idx} className="bg-white rounded-lg p-3 border border-red-200">
+                      <div className="flex justify-between items-start">
+                        <div>
+                          <p className="font-medium text-sm">{alert.alert_type?.replace(/_/g, ' ')}</p>
+                          <p className="text-xs text-zinc-500">{alert.description}</p>
+                        </div>
+                        <span className="text-xs text-red-600 font-medium">{alert.risk_level}</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
         {/* Employees Tab */}
         {activeTab === 'employees' && (
           <div className="space-y-4">
