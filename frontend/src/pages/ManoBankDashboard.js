@@ -300,6 +300,36 @@ const ManoBankDashboard = () => {
                 </button>
               </div>
 
+              {/* Position Summary - Moved here below greeting */}
+              <div className="bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-800 rounded-2xl p-6 text-white">
+                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                  <div>
+                    <p className="text-blue-200 text-sm mb-1">Posición Global</p>
+                    <p className="text-4xl font-bold">
+                      {showBalance ? formatCurrency(totalBalance) : '••••••'}
+                    </p>
+                    <div className="flex items-center gap-2 text-green-300 text-sm mt-2">
+                      <TrendingUp className="w-4 h-4" />
+                      <span>+2.5% respecto al mes anterior</span>
+                    </div>
+                  </div>
+                  <div className="flex gap-3">
+                    <div className="bg-white/10 backdrop-blur rounded-xl p-4 text-center min-w-[100px]">
+                      <p className="text-blue-200 text-xs mb-1">Cuentas</p>
+                      <p className="text-xl font-bold">{accounts.length}</p>
+                    </div>
+                    <div className="bg-white/10 backdrop-blur rounded-xl p-4 text-center min-w-[100px]">
+                      <p className="text-blue-200 text-xs mb-1">Tarjetas</p>
+                      <p className="text-xl font-bold">{cards.length}</p>
+                    </div>
+                    <div className="bg-white/10 backdrop-blur rounded-xl p-4 text-center min-w-[100px]">
+                      <p className="text-blue-200 text-xs mb-1">Productos</p>
+                      <p className="text-xl font-bold">4</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
               {/* Main Grid */}
               <div className="grid lg:grid-cols-3 gap-6">
                 {/* Left Column */}
