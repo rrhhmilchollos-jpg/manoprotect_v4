@@ -1,83 +1,91 @@
-# ManoBank S.A. - PRD
+# ManoBank - Product Requirements Document
 
-## Estado: Sistema Bancario Completo ✅
-**Última actualización:** 24 Enero 2026
+## Original Problem Statement
+Build **ManoBank**, a full-fledged, standalone digital banking system designed to operate as a regulated financial entity in Spain with:
+- Customer Portal (`/manobank`)
+- Employee Back-Office (`/banco`)
+- Legal & Compliance Framework (AML, KYC, Audit Logs)
+- Mobile App (Android APK, iOS IPA)
 
----
+## User Language
+Spanish
 
-## Cambios Recientes (24 Enero 2026)
+## Current Architecture
 
-### Arreglado
-1. ✅ **Usuario superadmin** - `rrhh.milchollos@gmail.com` ahora es `superadmin`
-2. ✅ **Video KYC mejorado** - Nueva UX para permisos de cámara/micrófono:
-   - Paso introductorio que explica los requisitos
-   - Indicadores visuales del estado de permisos
-   - Guía detallada de cómo activar permisos en cada navegador/dispositivo
-   - Botón de reintento después de activar permisos
-   - Vista previa de cámara antes de iniciar la videollamada
-3. ✅ **Panel de Compliance** en portal de empleados
-4. ✅ **Dashboard AML** con alertas
-5. ✅ **Botón "Ver Alertas"** funcionando
-6. ✅ **APK actualizado** v2.0.0 - Compliance Edition
+```
+/app/
+├── backend/
+│   ├── compliance/
+│   │   ├── aml/aml_service.py
+│   │   ├── kyc/kyc_service.py
+│   │   └── reporting/reporting_service.py
+│   ├── ledger/ledger_service.py
+│   ├── routes/
+│   │   ├── auth_routes.py
+│   │   ├── manobank_routes.py (✓ Updated with account transactions endpoint)
+│   │   ├── manobank_admin_routes.py
+│   │   ├── compliance_routes.py
+│   │   └── banking_core_routes.py
+│   ├── services/compliance_service.py
+│   └── server.py
+├── frontend/src/pages/
+│   ├── ManoBankDashboard.js (✓ Updated with account detail view)
+│   ├── BancoSistema.js
+│   └── KYCVideoVerification.js
+└── mobile/manobank-cliente/
+    └── manobank-clientes-v2.zip
+```
 
----
+## Completed Features
 
-## Sistema Completado
+### January 24, 2026
+- [x] **Customer Account Details View (P0)** - Implemented and tested
+  - Backend endpoint: `GET /api/manobank/accounts/{account_id}/transactions`
+  - Frontend: Clickable accounts → detail view with IBAN, BIC/SWIFT, transactions
+  - UI shows: Account info, quick actions (Transfer, Bizum, Extract, Certificate)
 
-### Portal de Clientes (`/manobank`)
-- Dashboard con balance total
-- Lista de cuentas con IBAN
-- Tarjetas con diseño premium
-- Transferencias y Bizum
-- Historial de movimientos
-- Productos y ofertas
+### Previous Sessions
+- [x] Employee portal login fixed
+- [x] Full banking backend (Ledger, AML, KYC, Reporting)
+- [x] Employee portal with Compliance/AML tabs
+- [x] Customer detail modal for employees
+- [x] Video KYC improved UX
+- [x] Customer dashboard reorganized
+- [x] "Ver Alertas" button fixed
+- [x] SEUR shipping location changed to "Novetle"
+- [x] Superadmin role for `rrhh.milchollos@gmail.com`
 
-### Portal de Empleados (`/banco`)
-- Dashboard con estadísticas
-- Gestión de aperturas de cuenta
-- Verificación KYC por videollamada
-- Gestión de clientes
-- Gestión de préstamos
-- Gestión de tarjetas
-- Envíos SEUR
-- Gestión de empleados
-- **Panel de Compliance** (NUEVO)
-- **Dashboard AML** (NUEVO)
+## In Progress / Pending
 
-### APIs Implementadas
-- `/api/auth/*` - Autenticación con 2FA
-- `/api/manobank/*` - APIs de clientes
-- `/api/manobank/admin/*` - APIs administrativas
-- `/api/compliance/*` - Compliance y auditoría
-- `/api/ledger/*` - Libro mayor inmutable
-- `/api/aml/*` - Anti-Money Laundering
-- `/api/kyc/*` - Know Your Customer
-- `/api/reporting/*` - Reportes regulatorios
+### P1 - Mobile App
+- [ ] Guide user to build Android APK via GitHub Actions (`manobank-clientes-v2.zip`)
+- [ ] iOS build requires macOS environment (limitation)
 
----
+### P2 - Future Tasks
+- [ ] ManoProtect.com features (awaiting user clarification)
+- [ ] 2FA on customer login
+- [ ] E2E test card shipping (SEUR - currently MOCKED)
 
-## Credenciales
+## Key Credentials
+- **Superadmin:** `rrhh.milchollos@gmail.com` / `19862210Des`
 
-| Usuario | Email | Password | Rol |
-|---------|-------|----------|-----|
-| Director General | rrhh.milchollos@gmail.com | 19862210Des | superadmin |
+## Database Collections
+- `manobank_accounts` - User bank accounts
+- `manobank_transactions` - Transaction records
+- `manobank_cards` - Virtual/physical cards
+- `manobank_ledger` - Immutable audit trail
+- `manobank_aml_alerts` - AML monitoring
+- `manobank_kyc_cases` - KYC verification
+- `manobank_employees` - Bank staff
 
-## URLs
-- Landing: `/`
-- Dashboard Cliente: `/manobank`
-- Login Clientes: `/login-seguro`
-- Portal Empleados: `/banco`
-- Video KYC: integrado en apertura de cuenta
+## 3rd Party Integrations
+- Zoom Video SDK (KYC)
+- Twilio (2FA SMS)
+- ReportLab (PDF generation)
+- Capacitor (Mobile hybrid app)
+- GitHub Actions (CI/CD for APK)
 
----
-
-## Proyecto Móvil
-
-**Ubicación:** `/app/mobile/manobank-cliente/`
-**ZIP:** `manobank-clientes-v2.zip`
-**Versión:** 2.0.0 - Compliance Edition
-
-### Para compilar:
-1. Subir ZIP a GitHub
-2. Ir a Actions → Run workflow
-3. Descargar `ManoBank-Android-APK` y `ManoBank-iOS-IPA`
+## Mocked Components
+- Card shipping (SEUR)
+- AML sanction/PEP lookups
+- Regulatory report submission (SEPBLAC)
