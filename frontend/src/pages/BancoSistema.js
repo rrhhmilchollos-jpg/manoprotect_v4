@@ -390,17 +390,95 @@ const BancoSistema = () => {
     if (activeTab === 'loans') fetchLoans();
     if (activeTab === 'cards') {
       fetchCards();
-      fetchCustomers(); // Need customers to issue new cards
+      fetchCustomers();
     }
     if (activeTab === 'shipments') {
       fetchShipments();
     }
     if (activeTab === 'kyc') {
       fetchKYCVerifications();
-      fetchAccountRequests(); // Need pending requests
-      fetchPendingVideoSessions(); // Load pending video sessions
+      fetchAccountRequests();
+      fetchPendingVideoSessions();
+    }
+    if (activeTab === 'compliance') {
+      fetchComplianceData();
+    }
+    if (activeTab === 'alerts') {
+      fetchAMLData();
     }
   }, [activeTab]);
+
+  // Compliance & AML fetch functions
+  const fetchComplianceData = async () => {
+    try {
+      const headers = { 'Content-Type': 'application/json', ...(token && { 'Authorization': `Bearer ${token}` }) };
+      const [summaryRes, policiesRes, kycRes, reportingRes] = await Promise.all([
+        fetch(`${API_URL}/api/compliance/summary`, { credentials: 'include', headers }),
+        fetch(`${API_URL}/api/compliance/policies`, { credentials: 'include', headers }),
+        fetch(`${API_URL}/api/kyc/dashboard`, { credentials: 'include', headers }),
+        fetch(`${API_URL}/api/reporting/dashboard`, { credentials: 'include', headers })
+      ]);
+      if (summaryRes.ok) setComplianceSummary(await summaryRes.json());
+      if (policiesRes.ok) setCompliancePolicies((await policiesRes.json()).policies || []);
+      if (kycRes.ok) setKycDashboard(await kycRes.json());
+      if (reportingRes.ok) setReportingDashboard(await reportingRes.json());
+    } catch (error) {
+      console.error('Error fetching compliance:', error);
+    }
+  };
+
+  const fetchAMLData = async () => {
+    try {
+      const headers = { 'Content-Type': 'application/json', ...(token && { 'Authorization': `Bearer ${token}` }) };
+      const [dashRes, alertsRes] = await Promise.all([
+        fetch(`${API_URL}/api/aml/dashboard`, { credentials: 'include', headers }),
+        fetch(`${API_URL}/api/aml/alerts`, { credentials: 'include', headers })
+      ]);
+      if (dashRes.ok) setAmlDashboard(await dashRes.json());
+      if (alertsRes.ok) setAmlAlerts((await alertsRes.json()).alerts || []);
+    } catch (error) {
+      console.error('Error fetching AML:', error);
+    }
+  };
+
+  const handleUpdateAlertStatus = async (alertId, status, resolution) => {
+    try {
+      const response = await fetch(`${API_URL}/api/aml/alerts/${alertId}`, {
+        method: 'PATCH',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json', ...(token && { 'Authorization': `Bearer ${token}` }) },
+        body: JSON.stringify({ status, resolution })
+      });
+      if (response.ok) {
+        toast.success('Alerta actualizada');
+        fetchAMLData();
+      }
+    } catch (error) {
+      toast.error('Error al actualizar alerta');
+    }
+  };
+
+  const handleGenerateReport = async (reportType) => {
+    try {
+      const now = new Date();
+      const body = reportType === 'monthly-operations' 
+        ? { year: now.getFullYear(), month: now.getMonth() + 1 }
+        : { report_date: now.toISOString() };
+      
+      const response = await fetch(`${API_URL}/api/reporting/${reportType}`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json', ...(token && { 'Authorization': `Bearer ${token}` }) },
+        body: JSON.stringify(body)
+      });
+      if (response.ok) {
+        toast.success('Reporte generado correctamente');
+        fetchComplianceData();
+      }
+    } catch (error) {
+      toast.error('Error al generar reporte');
+    }
+  };
 
   // API Handlers
   const handleAddEmployee = async (e) => {
