@@ -616,7 +616,7 @@ const ManoBankDashboard = () => {
           {/* Sidebar Contact */}
           <div className="p-4 mx-4 mb-4 bg-blue-50 rounded-xl">
             <p className="text-sm font-medium text-blue-800">¿Necesitas ayuda?</p>
-            <p className="text-xs text-blue-600 mt-1">900 123 456</p>
+            <p className="text-xs text-blue-600 mt-1">601 510 950</p>
             <p className="text-xs text-blue-600">Lunes a Viernes 8:00-22:00</p>
           </div>
         </aside>
@@ -1711,8 +1711,8 @@ const ManoBankDashboard = () => {
                     <h3 className="text-xl font-bold mb-1">¿No encuentras lo que buscas?</h3>
                     <p className="text-blue-100">Contacta con tu gestor personal para ofertas a medida</p>
                   </div>
-                  <Button className="bg-white text-blue-600 hover:bg-blue-50" onClick={() => window.open('tel:900123456')}>
-                    <Phone className="w-4 h-4 mr-2" />900 123 456
+                  <Button className="bg-white text-blue-600 hover:bg-blue-50" onClick={() => window.open('tel:601510950')}>
+                    <Phone className="w-4 h-4 mr-2" />601 510 950
                   </Button>
                 </div>
               </div>
@@ -1950,7 +1950,7 @@ const ManoBankDashboard = () => {
                     <p className="text-sm text-gray-500">Respuesta inmediata 24/7</p>
                   </button>
                   <button 
-                    onClick={() => window.open('tel:900123456')}
+                    onClick={() => window.open('tel:601510950')}
                     className="p-4 bg-green-50 rounded-xl text-left hover:bg-green-100 transition-colors"
                   >
                     <div className="flex items-center gap-3 mb-2">
@@ -1959,7 +1959,7 @@ const ManoBankDashboard = () => {
                       </div>
                       <p className="font-medium text-gray-900">Llamar</p>
                     </div>
-                    <p className="text-sm text-gray-500">900 123 456 (gratuito)</p>
+                    <p className="text-sm text-gray-500">601 510 950</p>
                   </button>
                 </div>
                 <div className="mt-6 p-4 bg-gray-50 rounded-xl">
