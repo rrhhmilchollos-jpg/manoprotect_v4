@@ -6,7 +6,7 @@
 // API Configuration
 export const API_CONFIG = {
   // Development/Preview URL (Emergent platform)
-  DEV_URL: 'https://digital-banking-58.preview.emergentagent.com/api',
+  DEV_URL: 'https://neofinancia.preview.emergentagent.com/api',
   
   // Production URL (update when deploying to production)
   PROD_URL: 'https://mano-protect.com/api',

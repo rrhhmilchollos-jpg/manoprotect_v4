@@ -3,7 +3,7 @@
   "appName": "ManoBank",
   "webDir": "www",
   "server": {
-    "url": "https://digital-banking-58.preview.emergentagent.com",
+    "url": "https://neofinancia.preview.emergentagent.com",
     "cleartext": true
   }
 }
