@@ -1044,7 +1044,11 @@ const ManoBankDashboard = () => {
                   </div>
                   <span className="text-sm font-medium text-gray-700">Bizum</span>
                 </button>
-                <button className="p-4 bg-white border border-gray-100 rounded-2xl hover:shadow-lg hover:border-green-200 transition-all flex flex-col items-center gap-2">
+                <button 
+                  onClick={() => downloadAccountStatement(selectedAccount.id)}
+                  data-testid="download-statement-btn"
+                  className="p-4 bg-white border border-gray-100 rounded-2xl hover:shadow-lg hover:border-green-200 transition-all flex flex-col items-center gap-2"
+                >
                   <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center">
                     <Download className="w-6 h-6 text-green-600" />
                   </div>
