@@ -204,7 +204,7 @@ function AppRouter() {
       <Route 
         path="/manobank" 
         element={
-          <ProtectedRoute>
+          <ProtectedRoute redirectTo="/login-seguro">
             <ManoBankDashboard />
           </ProtectedRoute>
         } 
