@@ -3570,3 +3570,5 @@ const CustomerDetailModal = ({ customer, onClose, onRefresh, API_URL, token }) =
     </div>
   );
 };
+
+export default BancoSistema;
