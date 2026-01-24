@@ -2761,8 +2761,8 @@ async def request_sensitive_data_verification(
     verification_record = {
         "id": verification_id,
         "card_id": card_id,
-        "customer_id": customer["id"],
-        "customer_name": customer["name"],
+        "customer_id": customer.get("id"),
+        "customer_name": customer.get("name", "Cliente"),
         "customer_phone": customer_phone,
         "data_type": data_type,
         "reason": reason,
