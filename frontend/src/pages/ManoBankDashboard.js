@@ -12,7 +12,8 @@ import {
   Lock, Key, User, Home, Clock, CheckCircle, AlertCircle,
   ArrowRight, MoreHorizontal, Banknote, RefreshCw, Car,
   Building, Umbrella, ShoppingBag, Zap, Gift, Heart,
-  Landmark, CreditCard as CardIcon, DollarSign, Euro
+  Landmark, CreditCard as CardIcon, DollarSign, Euro,
+  ChevronLeft, ExternalLink, Info
 } from 'lucide-react';
 
 const API_URL = process.env.REACT_APP_BACKEND_URL;
@@ -34,6 +35,11 @@ const ManoBankDashboard = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [selectedCard, setSelectedCard] = useState(null);
   const [showCardDetails, setShowCardDetails] = useState(null);
+  
+  // Account detail state
+  const [selectedAccount, setSelectedAccount] = useState(null);
+  const [accountTransactions, setAccountTransactions] = useState([]);
+  const [loadingAccountTx, setLoadingAccountTx] = useState(false);
 
   // Payment form state
   const [paymentType, setPaymentType] = useState('transferencia');
@@ -48,6 +54,32 @@ const ManoBankDashboard = () => {
   useEffect(() => {
     fetchAllData();
   }, []);
+
+  // Fetch transactions for a specific account
+  const fetchAccountTransactions = async (accountId) => {
+    setLoadingAccountTx(true);
+    try {
+      const headers = token ? { 'Authorization': `Bearer ${token}` } : {};
+      const res = await fetch(`${API_URL}/api/manobank/accounts/${accountId}/transactions?limit=50`, {
+        credentials: 'include', headers
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setAccountTransactions(data.transactions || []);
+      }
+    } catch (error) {
+      console.error('Error fetching account transactions:', error);
+    } finally {
+      setLoadingAccountTx(false);
+    }
+  };
+
+  // Open account detail
+  const openAccountDetail = (account) => {
+    setSelectedAccount(account);
+    setActiveSection('cuenta-detalle');
+    fetchAccountTransactions(account.id);
+  };
 
   const fetchAllData = async () => {
     setIsLoading(true);
