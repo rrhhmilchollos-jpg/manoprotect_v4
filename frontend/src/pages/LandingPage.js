@@ -549,17 +549,56 @@ const LandingPage = () => {
             </div>
           </div>
 
-          {/* Línea divisoria y copyright */}
-          <div className="border-t border-zinc-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+          {/* Sede y Contacto */}
+          <div className="border-t border-zinc-800 pt-8 mb-8">
+            <div className="grid md:grid-cols-3 gap-6">
+              <div className="flex items-start gap-3">
+                <div className="w-10 h-10 bg-zinc-800 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <svg className="w-5 h-5 text-zinc-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                  </svg>
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-white">Sede Central</p>
+                  <p className="text-sm text-zinc-500">C/ Sor Isabel de Villena 82 bajo</p>
+                  <p className="text-sm text-zinc-500">Novelé, Valencia, España</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-3">
+                <div className="w-10 h-10 bg-zinc-800 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <svg className="w-5 h-5 text-zinc-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                  </svg>
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-white">Teléfono</p>
+                  <a href="tel:601510950" className="text-sm text-indigo-400 hover:text-indigo-300">601 510 950</a>
+                </div>
+              </div>
+              <div className="flex items-start gap-3">
+                <div className="w-10 h-10 bg-zinc-800 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <svg className="w-5 h-5 text-zinc-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                  </svg>
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-white">Email</p>
+                  <a href="mailto:info@manobank.com" className="text-sm text-indigo-400 hover:text-indigo-300">info@manobank.com</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Copyright */}
+          <div className="border-t border-zinc-800 pt-6 flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-sm text-zinc-500">
               © 2025 ManoProtect S.L. Todos los derechos reservados.
             </p>
-            <div className="flex items-center gap-4 text-sm">
-              <span className="text-zinc-600">Xàtiva, Valencia, España</span>
+            <div className="flex items-center gap-4 text-sm text-zinc-500">
+              <span>CIF: B19427723</span>
               <span className="text-zinc-700">|</span>
-              <a href="mailto:info@manoprotect.com" className="hover:text-white transition-colors">
-                info@manoprotect.com
-              </a>
+              <span>Entidad supervisada por el Banco de España</span>
             </div>
           </div>
         </div>
