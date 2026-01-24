@@ -335,7 +335,7 @@ const KYCVideoVerification = ({
   }, [step, verificationResult, onVerificationComplete]);
 
   // Render based on step
-  if (step === 'permissions') {
+  if (step === 'intro') {
     return (
       <Card className="max-w-2xl mx-auto bg-gradient-to-b from-slate-900 to-slate-800 text-white border-slate-700">
         <CardHeader className="text-center">
@@ -373,10 +373,85 @@ const KYCVideoVerification = ({
             </ul>
           </div>
 
+          {/* Permission Status Indicators */}
+          <div className="bg-slate-800/50 rounded-lg p-4">
+            <h3 className="font-semibold text-lg mb-3 flex items-center gap-2">
+              <Camera className="w-5 h-5 text-blue-400" />
+              Estado de Permisos
+            </h3>
+            <div className="grid grid-cols-2 gap-3">
+              <div className={`p-3 rounded-lg flex items-center gap-2 ${
+                permissionStatus.camera === 'granted' ? 'bg-green-900/30 border border-green-500' :
+                permissionStatus.camera === 'denied' ? 'bg-red-900/30 border border-red-500' :
+                'bg-slate-700/50 border border-slate-600'
+              }`}>
+                <Video className={`w-5 h-5 ${
+                  permissionStatus.camera === 'granted' ? 'text-green-400' :
+                  permissionStatus.camera === 'denied' ? 'text-red-400' :
+                  'text-slate-400'
+                }`} />
+                <span className="text-sm">
+                  {permissionStatus.camera === 'granted' ? 'Cámara lista' :
+                   permissionStatus.camera === 'denied' ? 'Cámara bloqueada' :
+                   'Cámara pendiente'}
+                </span>
+              </div>
+              <div className={`p-3 rounded-lg flex items-center gap-2 ${
+                permissionStatus.microphone === 'granted' ? 'bg-green-900/30 border border-green-500' :
+                permissionStatus.microphone === 'denied' ? 'bg-red-900/30 border border-red-500' :
+                'bg-slate-700/50 border border-slate-600'
+              }`}>
+                <Mic className={`w-5 h-5 ${
+                  permissionStatus.microphone === 'granted' ? 'text-green-400' :
+                  permissionStatus.microphone === 'denied' ? 'text-red-400' :
+                  'text-slate-400'
+                }`} />
+                <span className="text-sm">
+                  {permissionStatus.microphone === 'granted' ? 'Micrófono listo' :
+                   permissionStatus.microphone === 'denied' ? 'Micrófono bloqueado' :
+                   'Micrófono pendiente'}
+                </span>
+              </div>
+            </div>
+          </div>
+
           {error && (
-            <div className="bg-red-900/30 border border-red-500 rounded-lg p-4 flex items-start gap-3">
-              <AlertCircle className="w-5 h-5 text-red-400 flex-shrink-0 mt-0.5" />
-              <p className="text-red-300">{error}</p>
+            <div className="bg-red-900/30 border border-red-500 rounded-lg p-4">
+              <div className="flex items-start gap-3">
+                <AlertCircle className="w-5 h-5 text-red-400 flex-shrink-0 mt-0.5" />
+                <div>
+                  <p className="text-red-300">{error}</p>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {showPermissionHelp && (
+            <div className="bg-amber-900/30 border border-amber-500 rounded-lg p-4 space-y-3">
+              <h4 className="font-semibold text-amber-300 flex items-center gap-2">
+                <Settings className="w-5 h-5" />
+                ¿Cómo activar permisos?
+              </h4>
+              <div className="text-sm text-amber-200 space-y-2">
+                <p><strong>En Chrome/Edge:</strong></p>
+                <ol className="list-decimal list-inside space-y-1 ml-2">
+                  <li>Haga clic en el icono de candado 🔒 en la barra de direcciones</li>
+                  <li>Busque "Cámara" y "Micrófono"</li>
+                  <li>Cambie a "Permitir"</li>
+                  <li>Recargue la página</li>
+                </ol>
+                <p className="mt-2"><strong>En Safari:</strong></p>
+                <ol className="list-decimal list-inside space-y-1 ml-2">
+                  <li>Safari → Preferencias → Sitios web</li>
+                  <li>Seleccione Cámara y Micrófono</li>
+                  <li>Permita este sitio</li>
+                </ol>
+                <p className="mt-2"><strong>En móvil:</strong></p>
+                <ol className="list-decimal list-inside space-y-1 ml-2">
+                  <li>Ajustes → Aplicaciones → Navegador</li>
+                  <li>Permisos → Activar Cámara y Micrófono</li>
+                </ol>
+              </div>
             </div>
           )}
 
@@ -384,21 +459,32 @@ const KYCVideoVerification = ({
             <Button 
               onClick={requestMediaPermissions}
               disabled={isLoading}
-              className="w-full h-12 text-lg bg-blue-600 hover:bg-blue-700"
+              className="w-full h-14 text-lg bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-lg"
               data-testid="start-kyc-verification-btn"
             >
               {isLoading ? (
                 <>
                   <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-                  Iniciando...
+                  Activando cámara y micrófono...
                 </>
               ) : (
                 <>
-                  <Video className="w-5 h-5 mr-2" />
-                  Iniciar Videoverificación
+                  <Camera className="w-5 h-5 mr-2" />
+                  Activar Cámara y Micrófono
                 </>
               )}
             </Button>
+            
+            {showPermissionHelp && (
+              <Button 
+                onClick={retryPermissions}
+                variant="outline" 
+                className="w-full border-amber-500 text-amber-300 hover:bg-amber-900/30"
+              >
+                <RefreshCw className="w-4 h-4 mr-2" />
+                Reintentar después de activar permisos
+              </Button>
+            )}
             
             {onCancel && (
               <Button 
@@ -415,6 +501,82 @@ const KYCVideoVerification = ({
           <p className="text-xs text-slate-500 text-center">
             Al continuar, acepta que se grabe la videollamada para fines de verificación y cumplimiento normativo.
           </p>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  if (step === 'permissions') {
+    return (
+      <Card className="max-w-2xl mx-auto bg-gradient-to-b from-slate-900 to-slate-800 text-white border-slate-700">
+        <CardHeader className="text-center">
+          <div className="mx-auto w-20 h-20 bg-green-600 rounded-full flex items-center justify-center mb-4">
+            <CheckCircle className="w-10 h-10 text-white" />
+          </div>
+          <CardTitle className="text-2xl">¡Cámara y Micrófono Activados!</CardTitle>
+          <p className="text-slate-400 mt-2">
+            Sus dispositivos están listos. Verifique que se ve correctamente en la vista previa.
+          </p>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          {/* Video Preview */}
+          <div className="relative aspect-video bg-slate-900 rounded-xl overflow-hidden border-2 border-green-500">
+            <video 
+              ref={localVideoRef} 
+              autoPlay 
+              playsInline 
+              muted 
+              className="w-full h-full object-cover transform scale-x-[-1]"
+            />
+            <div className="absolute bottom-3 left-3 flex items-center gap-2">
+              <div className="bg-green-600 text-white text-xs px-2 py-1 rounded-full flex items-center gap-1">
+                <Video className="w-3 h-3" />
+                Cámara activa
+              </div>
+              <div className="bg-green-600 text-white text-xs px-2 py-1 rounded-full flex items-center gap-1">
+                <Mic className="w-3 h-3" />
+                Micrófono activo
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-blue-900/30 border border-blue-500 rounded-lg p-4">
+            <h4 className="font-semibold text-blue-300 mb-2">Antes de continuar, verifique:</h4>
+            <ul className="text-sm text-blue-200 space-y-1">
+              <li>✓ Su rostro se ve claramente en la imagen</li>
+              <li>✓ La iluminación es adecuada</li>
+              <li>✓ Tiene su documento de identidad a mano</li>
+            </ul>
+          </div>
+
+          <Button 
+            onClick={proceedToSession}
+            disabled={isLoading}
+            className="w-full h-14 text-lg bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 shadow-lg"
+            data-testid="proceed-to-session-btn"
+          >
+            {isLoading ? (
+              <>
+                <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+                Conectando con un agente...
+              </>
+            ) : (
+              <>
+                <Phone className="w-5 h-5 mr-2" />
+                Iniciar Videollamada con Agente
+              </>
+            )}
+          </Button>
+
+          {onCancel && (
+            <Button 
+              variant="outline" 
+              onClick={onCancel}
+              className="w-full border-slate-600 text-slate-300 hover:bg-slate-700"
+            >
+              Cancelar
+            </Button>
+          )}
         </CardContent>
       </Card>
     );
