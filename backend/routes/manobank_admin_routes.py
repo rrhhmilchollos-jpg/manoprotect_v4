@@ -2111,6 +2111,7 @@ async def get_customer_accounts(
 ):
     """Get all accounts for a specific customer"""
     user = await require_bank_employee(request, session_token)
+    db = get_db()
     
     accounts = await db.manobank_accounts.find(
         {"customer_id": customer_id},
@@ -2128,6 +2129,7 @@ async def get_customer_cards(
 ):
     """Get all cards for a specific customer"""
     user = await require_bank_employee(request, session_token)
+    db = get_db()
     
     cards = await db.manobank_cards.find(
         {"customer_id": customer_id},
