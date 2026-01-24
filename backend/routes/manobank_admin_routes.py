@@ -26,6 +26,17 @@ def init_manobank_admin_routes(database):
 def get_db():
     return _db
 
+def clean_mongo_doc(doc):
+    """Remove _id from MongoDB document for JSON serialization"""
+    if doc is None:
+        return None
+    if isinstance(doc, list):
+        return [clean_mongo_doc(d) for d in doc]
+    if isinstance(doc, dict):
+        doc.pop("_id", None)
+        return doc
+    return doc
+
 # ============================================
 # ENUMS
 # ============================================
