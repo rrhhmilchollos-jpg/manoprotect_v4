@@ -98,7 +98,15 @@ const BancoEmpleados = () => {
         phone: employeePhone
       });
       
-      // Send 2FA code
+      // Director General / Superadmin can skip 2FA
+      if (dashboardData.employee?.is_superadmin || dashboardData.employee?.role === 'director') {
+        // Direct access for Director General
+        setIsAuthenticated(true);
+        toast.success(`Bienvenido, ${loginData.name || 'Director General'}`);
+        return;
+      }
+      
+      // Send 2FA code for other employees
       await send2FACode(loginData.user_id, employeePhone);
       
       setStep('2fa');
