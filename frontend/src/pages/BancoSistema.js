@@ -760,6 +760,82 @@ const BancoSistema = () => {
     }
   };
 
+  // Request PIN verification via SMS
+  const handleRequestPinVerification = async (card) => {
+    setPinVerificationLoading(true);
+    try {
+      const response = await fetch(`${API_URL}/api/manobank/admin/cards/${card.id}/request-sensitive-data?data_type=pin&reason=Consulta de PIN por empleado`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token && { 'Authorization': `Bearer ${token}` })
+        }
+      });
+      
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.detail || 'Error al solicitar verificación');
+      }
+      
+      setPinVerificationId(data.verification_id);
+      setPinDebugCode(data.debug_code || ''); // Only in dev mode
+      setPinVerificationStep('verify');
+      toast.success(`Código SMS enviado al teléfono ${data.phone_masked} del cliente ${data.customer_name}`);
+      
+    } catch (error) {
+      toast.error(error.message || 'Error al solicitar verificación SMS');
+    } finally {
+      setPinVerificationLoading(false);
+    }
+  };
+
+  // Verify SMS code and get PIN
+  const handleVerifyPinCode = async () => {
+    if (!pinVerificationCode || pinVerificationCode.length !== 6) {
+      toast.error('Introduce el código de 6 dígitos');
+      return;
+    }
+    
+    setPinVerificationLoading(true);
+    try {
+      const response = await fetch(`${API_URL}/api/manobank/admin/cards/verify-sensitive-data?verification_id=${pinVerificationId}&code=${pinVerificationCode}`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token && { 'Authorization': `Bearer ${token}` })
+        }
+      });
+      
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.detail || 'Código incorrecto');
+      }
+      
+      setPinVerificationData(data);
+      setPinVerificationStep('show');
+      toast.success('Verificación exitosa - Acceso registrado en auditoría');
+      
+    } catch (error) {
+      toast.error(error.message || 'Error de verificación');
+    } finally {
+      setPinVerificationLoading(false);
+    }
+  };
+
+  // Close PIN modal and reset state
+  const closePinModal = () => {
+    setShowPinVerification(null);
+    setPinVerificationStep('request');
+    setPinVerificationId('');
+    setPinVerificationCode('');
+    setPinVerificationData(null);
+    setPinDebugCode('');
+  };
+
   // KYC Handlers
   const handleScheduleKYC = async (e) => {
     e.preventDefault();
