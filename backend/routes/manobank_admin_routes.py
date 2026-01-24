@@ -2112,6 +2112,7 @@ async def get_customer_accounts(
     """Get all accounts for a specific customer"""
     user = await require_bank_employee(request, session_token)
     db = get_db()
+    db = get_db()
     
     accounts = await db.manobank_accounts.find(
         {"customer_id": customer_id},
@@ -2129,6 +2130,7 @@ async def get_customer_cards(
 ):
     """Get all cards for a specific customer"""
     user = await require_bank_employee(request, session_token)
+    db = get_db()
     db = get_db()
     
     cards = await db.manobank_cards.find(
@@ -2148,6 +2150,7 @@ async def get_customer_transactions(
 ):
     """Get transactions for a specific customer"""
     user = await require_bank_employee(request, session_token)
+    db = get_db()
     
     # Get customer's accounts
     accounts = await db.manobank_accounts.find(
@@ -2174,6 +2177,7 @@ async def deposit_to_account(
 ):
     """Make a deposit to an account (teller operation)"""
     user = await require_bank_employee(request, session_token)
+    db = get_db()
     
     if data.amount <= 0:
         raise HTTPException(status_code=400, detail="El monto debe ser mayor a 0")
@@ -2233,6 +2237,7 @@ async def withdraw_from_account(
 ):
     """Make a withdrawal from an account (teller operation)"""
     user = await require_bank_employee(request, session_token)
+    db = get_db()
     
     if data.amount <= 0:
         raise HTTPException(status_code=400, detail="El monto debe ser mayor a 0")
@@ -2295,6 +2300,7 @@ async def freeze_account(
 ):
     """Freeze an account"""
     user = await require_bank_employee(request, session_token)
+    db = get_db()
     
     account = await db.manobank_accounts.find_one({"id": account_id})
     if not account:
@@ -2320,6 +2326,7 @@ async def block_card(
 ):
     """Block a card"""
     user = await require_bank_employee(request, session_token)
+    db = get_db()
     
     card = await db.manobank_cards.find_one({"id": card_id})
     if not card:
@@ -2345,6 +2352,7 @@ async def unblock_card(
 ):
     """Unblock a card"""
     user = await require_bank_employee(request, session_token)
+    db = get_db()
     
     card = await db.manobank_cards.find_one({"id": card_id})
     if not card:
