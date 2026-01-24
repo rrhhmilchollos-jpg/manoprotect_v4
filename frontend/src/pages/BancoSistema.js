@@ -881,7 +881,7 @@ const BancoSistema = () => {
                     {dashboard.pending.fraud_alerts}
                   </span>
                 </div>
-                <Button variant="outline" className="w-full border-red-300">
+                <Button onClick={() => setActiveTab('alerts')} variant="outline" className="w-full border-red-300">
                   Ver Alertas
                 </Button>
               </div>
