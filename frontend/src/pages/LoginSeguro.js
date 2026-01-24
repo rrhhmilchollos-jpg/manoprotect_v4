@@ -165,9 +165,9 @@ const LoginSeguro = () => {
           </div>
           
           <div className="flex items-center gap-4">
-            <a href="tel:900123456" className="hidden md:flex items-center gap-2 text-white/70 hover:text-white text-sm">
+            <a href="tel:601510950" className="hidden md:flex items-center gap-2 text-white/70 hover:text-white text-sm">
               <Phone className="w-4 h-4" />
-              900 123 456
+              601 510 950
             </a>
             <a href="/ayuda" className="flex items-center gap-2 text-white/70 hover:text-white text-sm">
               <HelpCircle className="w-4 h-4" />
