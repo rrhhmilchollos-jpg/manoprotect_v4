@@ -572,25 +572,13 @@ const ManoBankDashboard = () => {
                         <Receipt className="w-6 h-6 text-green-600" />
                         <span className="text-sm font-medium text-green-700">Recibos</span>
                       </button>
-                      <button className="flex flex-col items-center gap-2 p-4 bg-amber-50 rounded-xl hover:bg-amber-100 transition-colors">
+                      <button 
+                        onClick={() => setActiveSection('productos')}
+                        className="flex flex-col items-center gap-2 p-4 bg-amber-50 rounded-xl hover:bg-amber-100 transition-colors"
+                      >
                         <Plus className="w-6 h-6 text-amber-600" />
-                        <span className="text-sm font-medium text-amber-700">Nuevo</span>
+                        <span className="text-sm font-medium text-amber-700">Contratar</span>
                       </button>
-                    </div>
-                  </div>
-
-                  {/* Position Summary */}
-                  <div className="bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-800 rounded-2xl p-5 text-white">
-                    <div className="flex items-center justify-between mb-4">
-                      <p className="text-blue-200 text-sm">Posición Global</p>
-                      <RefreshCw className="w-4 h-4 text-blue-200" />
-                    </div>
-                    <p className="text-3xl font-bold mb-4">
-                      {showBalance ? formatCurrency(totalBalance) : '••••••'}
-                    </p>
-                    <div className="flex items-center gap-2 text-green-300 text-sm">
-                      <TrendingUp className="w-4 h-4" />
-                      <span>+2.5% este mes</span>
                     </div>
                   </div>
 
