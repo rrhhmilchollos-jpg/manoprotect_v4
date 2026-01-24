@@ -866,6 +866,7 @@ const ManoBankDashboard = () => {
                 {accounts.map((account) => (
                   <button 
                     key={account.id} 
+                    data-testid={`account-card-${account.id}`}
                     onClick={() => openAccountDetail(account)}
                     className="bg-white rounded-2xl border border-gray-100 p-6 text-left hover:shadow-lg hover:border-blue-200 transition-all group"
                   >
@@ -875,8 +876,10 @@ const ManoBankDashboard = () => {
                           <Landmark className="w-7 h-7 text-blue-600" />
                         </div>
                         <div>
-                          <p className="font-semibold text-lg text-gray-900">{account.type === 'ahorro' ? 'Cuenta Ahorro' : 'Cuenta Corriente'}</p>
-                          <p className="text-sm text-gray-500">{account.account_number}</p>
+                          <p className="font-semibold text-lg text-gray-900">
+                            {account.alias || account.bank_name || (account.account_type === 'ahorro' ? 'Cuenta Ahorro' : 'Cuenta Corriente')}
+                          </p>
+                          <p className="text-sm text-gray-500">{account.bank_name || 'ManoBank'}</p>
                         </div>
                       </div>
                       <ChevronRight className="w-5 h-5 text-gray-400 group-hover:text-blue-600 group-hover:translate-x-1 transition-all" />
