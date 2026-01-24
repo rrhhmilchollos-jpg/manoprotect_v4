@@ -831,6 +831,129 @@ async def get_account_transactions(
     }
 
 
+@router.get("/accounts/{account_id}/statement/pdf")
+async def generate_account_statement_pdf(
+    account_id: str,
+    request: Request,
+    session_token: Optional[str] = Cookie(None),
+    days: int = 30
+):
+    """Generate PDF statement for a specific account"""
+    user = await require_auth(request, session_token)
+    db = get_db()
+    
+    # Verify account belongs to user
+    account = await db.manobank_accounts.find_one({
+        "id": account_id,
+        "user_id": user.user_id
+    })
+    
+    if not account:
+        raise HTTPException(status_code=404, detail="Cuenta no encontrada")
+    
+    # Get transactions for the period
+    date_from = datetime.now(timezone.utc) - timedelta(days=days)
+    transactions = await db.manobank_transactions.find(
+        {
+            "account_id": account_id,
+            "created_at": {"$gte": date_from.isoformat()}
+        },
+        {"_id": 0}
+    ).sort("created_at", -1).to_list(100)
+    
+    # Generate PDF
+    buffer = io.BytesIO()
+    doc = SimpleDocTemplate(buffer, pagesize=A4, rightMargin=2*cm, leftMargin=2*cm, topMargin=2*cm, bottomMargin=2*cm)
+    
+    styles = getSampleStyleSheet()
+    styles.add(ParagraphStyle(name='BankTitle', fontSize=18, textColor=colors.HexColor('#1e40af'), spaceAfter=20, alignment=TA_CENTER, fontName='Helvetica-Bold'))
+    styles.add(ParagraphStyle(name='SectionTitle', fontSize=12, textColor=colors.HexColor('#1e40af'), spaceBefore=15, spaceAfter=10, fontName='Helvetica-Bold'))
+    styles.add(ParagraphStyle(name='AccountInfo', fontSize=10, spaceBefore=5, fontName='Helvetica'))
+    styles.add(ParagraphStyle(name='Footer', fontSize=8, textColor=colors.gray, alignment=TA_CENTER))
+    
+    elements = []
+    
+    # Header
+    elements.append(Paragraph("ManoBank", styles['BankTitle']))
+    elements.append(Paragraph("Extracto de Cuenta", styles['SectionTitle']))
+    elements.append(Spacer(1, 10))
+    
+    # Account info
+    elements.append(Paragraph(f"<b>Titular:</b> {account.get('account_holder', user.name)}", styles['AccountInfo']))
+    elements.append(Paragraph(f"<b>IBAN:</b> {account.get('iban', 'N/A')}", styles['AccountInfo']))
+    elements.append(Paragraph(f"<b>BIC/SWIFT:</b> {account.get('swift_bic', 'MNBKESMMXXX')}", styles['AccountInfo']))
+    elements.append(Paragraph(f"<b>Divisa:</b> {account.get('currency', 'EUR')}", styles['AccountInfo']))
+    elements.append(Paragraph(f"<b>Saldo actual:</b> {account.get('balance', 0):.2f} €", styles['AccountInfo']))
+    elements.append(Paragraph(f"<b>Período:</b> Últimos {days} días ({date_from.strftime('%d/%m/%Y')} - {datetime.now().strftime('%d/%m/%Y')})", styles['AccountInfo']))
+    elements.append(Spacer(1, 20))
+    
+    # Transactions table
+    elements.append(Paragraph("Movimientos", styles['SectionTitle']))
+    
+    if transactions:
+        table_data = [['Fecha', 'Concepto', 'Importe', 'Saldo']]
+        
+        for tx in transactions:
+            tx_date = tx.get('created_at', '')
+            if isinstance(tx_date, str):
+                try:
+                    tx_date = datetime.fromisoformat(tx_date.replace('Z', '+00:00')).strftime('%d/%m/%Y')
+                except:
+                    tx_date = 'N/A'
+            
+            amount = tx.get('amount', 0)
+            amount_str = f"{'+' if amount > 0 else ''}{amount:.2f} €"
+            balance = tx.get('balance_after', '-')
+            balance_str = f"{balance:.2f} €" if isinstance(balance, (int, float)) else '-'
+            
+            table_data.append([
+                tx_date,
+                tx.get('description', tx.get('concept', 'Movimiento'))[:40],
+                amount_str,
+                balance_str
+            ])
+        
+        table = Table(table_data, colWidths=[2.5*cm, 9*cm, 2.5*cm, 2.5*cm])
+        table.setStyle(TableStyle([
+            ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor('#1e40af')),
+            ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),
+            ('ALIGN', (0, 0), (-1, 0), 'CENTER'),
+            ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+            ('FONTSIZE', (0, 0), (-1, 0), 9),
+            ('BOTTOMPADDING', (0, 0), (-1, 0), 8),
+            ('TOPPADDING', (0, 0), (-1, 0), 8),
+            ('BACKGROUND', (0, 1), (-1, -1), colors.white),
+            ('TEXTCOLOR', (0, 1), (-1, -1), colors.black),
+            ('FONTNAME', (0, 1), (-1, -1), 'Helvetica'),
+            ('FONTSIZE', (0, 1), (-1, -1), 8),
+            ('ALIGN', (2, 1), (3, -1), 'RIGHT'),
+            ('GRID', (0, 0), (-1, -1), 0.5, colors.HexColor('#e5e7eb')),
+            ('ROWHEIGHTS', (0, 0), (-1, -1), 20),
+        ]))
+        elements.append(table)
+    else:
+        elements.append(Paragraph("No hay movimientos en el período seleccionado.", styles['AccountInfo']))
+    
+    elements.append(Spacer(1, 30))
+    
+    # Footer
+    elements.append(Paragraph(f"Documento generado el {datetime.now().strftime('%d/%m/%Y a las %H:%M')}", styles['Footer']))
+    elements.append(Paragraph("ManoBank S.A. - CIF: A12345678 - C/ Gran Vía 28, 28013 Madrid", styles['Footer']))
+    elements.append(Paragraph("Este documento es meramente informativo y no tiene valor contractual.", styles['Footer']))
+    
+    doc.build(elements)
+    buffer.seek(0)
+    
+    # Generate filename
+    filename = f"extracto_manobank_{account_id}_{datetime.now().strftime('%Y%m%d')}.pdf"
+    
+    return StreamingResponse(
+        buffer,
+        media_type="application/pdf",
+        headers={"Content-Disposition": f"attachment; filename={filename}"}
+    )
+
+
 # ============================================
 # TRANSACTIONS
 # ============================================
