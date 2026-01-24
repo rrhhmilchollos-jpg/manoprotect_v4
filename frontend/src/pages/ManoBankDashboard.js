@@ -170,6 +170,36 @@ const ManoBankDashboard = () => {
     setPaymentData({ amount: '', recipient: '', iban: '', phone: '', concept: '' });
   };
 
+  // Download account statement PDF
+  const downloadAccountStatement = async (accountId, days = 30) => {
+    try {
+      toast.info('Generando extracto PDF...');
+      const response = await fetch(`${API_URL}/api/manobank/accounts/${accountId}/statement/pdf?days=${days}`, {
+        credentials: 'include',
+        headers: token ? { 'Authorization': `Bearer ${token}` } : {}
+      });
+      
+      if (!response.ok) {
+        throw new Error('Error al generar el extracto');
+      }
+      
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `extracto_manobank_${accountId}_${new Date().toISOString().split('T')[0]}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+      
+      toast.success('Extracto descargado correctamente');
+    } catch (error) {
+      console.error('Error downloading statement:', error);
+      toast.error('Error al descargar el extracto');
+    }
+  };
+
   // Sidebar menu items
   const menuItems = [
     { id: 'inicio', label: 'Inicio', icon: Home },
