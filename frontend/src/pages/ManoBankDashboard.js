@@ -1315,29 +1315,275 @@ const ManoBankDashboard = () => {
 
           {/* ==================== AJUSTES ==================== */}
           {activeSection === 'ajustes' && (
-            <div className="max-w-2xl space-y-6">
+            <div className="max-w-3xl space-y-6">
               <h2 className="text-2xl font-bold text-gray-900">Ajustes</h2>
-              <div className="bg-white rounded-2xl border border-gray-100 divide-y">
-                {[
-                  { icon: User, label: 'Datos personales', desc: 'Actualiza tu información' },
-                  { icon: Lock, label: 'Seguridad', desc: 'Contraseña y verificación' },
-                  { icon: Bell, label: 'Notificaciones', desc: 'Alertas y avisos' },
-                  { icon: Globe, label: 'Preferencias', desc: 'Idioma y configuración' },
-                  { icon: FileText, label: 'Documentos', desc: 'Contratos y extractos' },
-                  { icon: HelpCircle, label: 'Ayuda', desc: 'FAQ y contacto' },
-                ].map((item, i) => (
-                  <button key={i} className="w-full p-4 flex items-center gap-4 hover:bg-gray-50 text-left">
-                    <div className="w-12 h-12 bg-gray-100 rounded-xl flex items-center justify-center">
-                      <item.icon className="w-6 h-6 text-gray-600" />
-                    </div>
-                    <div className="flex-1">
-                      <p className="font-medium text-gray-900">{item.label}</p>
-                      <p className="text-sm text-gray-500">{item.desc}</p>
-                    </div>
-                    <ChevronRight className="w-5 h-5 text-gray-400" />
-                  </button>
-                ))}
+              
+              {/* Datos Personales */}
+              <div className="bg-white rounded-2xl border border-gray-100 p-6">
+                <div className="flex items-center gap-4 mb-6">
+                  <div className="w-14 h-14 bg-blue-100 rounded-xl flex items-center justify-center">
+                    <User className="w-7 h-7 text-blue-600" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-lg text-gray-900">Datos Personales</h3>
+                    <p className="text-sm text-gray-500">Información de tu cuenta</p>
+                  </div>
+                </div>
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div className="p-4 bg-gray-50 rounded-xl">
+                    <p className="text-xs text-gray-500 mb-1">Nombre completo</p>
+                    <p className="font-medium text-gray-900">{user?.name || 'Cliente ManoBank'}</p>
+                  </div>
+                  <div className="p-4 bg-gray-50 rounded-xl">
+                    <p className="text-xs text-gray-500 mb-1">Email</p>
+                    <p className="font-medium text-gray-900">{user?.email || 'N/A'}</p>
+                  </div>
+                  <div className="p-4 bg-gray-50 rounded-xl">
+                    <p className="text-xs text-gray-500 mb-1">Teléfono</p>
+                    <p className="font-medium text-gray-900">{user?.phone || '+34 600 000 000'}</p>
+                  </div>
+                  <div className="p-4 bg-gray-50 rounded-xl">
+                    <p className="text-xs text-gray-500 mb-1">Cliente desde</p>
+                    <p className="font-medium text-gray-900">{user?.created_at ? new Date(user.created_at).toLocaleDateString('es-ES') : 'Enero 2026'}</p>
+                  </div>
+                </div>
+                <Button variant="outline" className="mt-4" onClick={() => toast.info('Función de edición próximamente')}>
+                  Editar datos
+                </Button>
               </div>
+
+              {/* Seguridad */}
+              <div className="bg-white rounded-2xl border border-gray-100 p-6">
+                <div className="flex items-center gap-4 mb-6">
+                  <div className="w-14 h-14 bg-red-100 rounded-xl flex items-center justify-center">
+                    <Lock className="w-7 h-7 text-red-600" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-lg text-gray-900">Seguridad</h3>
+                    <p className="text-sm text-gray-500">Protege tu cuenta</p>
+                  </div>
+                </div>
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
+                    <div className="flex items-center gap-3">
+                      <Key className="w-5 h-5 text-gray-600" />
+                      <div>
+                        <p className="font-medium text-gray-900">Contraseña</p>
+                        <p className="text-sm text-gray-500">Última actualización: hace 30 días</p>
+                      </div>
+                    </div>
+                    <Button variant="outline" size="sm" onClick={() => toast.info('Cambio de contraseña próximamente')}>Cambiar</Button>
+                  </div>
+                  <div className="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
+                    <div className="flex items-center gap-3">
+                      <Smartphone className="w-5 h-5 text-gray-600" />
+                      <div>
+                        <p className="font-medium text-gray-900">Verificación en dos pasos (2FA)</p>
+                        <p className="text-sm text-gray-500">SMS al móvil registrado</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full">Activo</span>
+                    </div>
+                  </div>
+                  <div className="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
+                    <div className="flex items-center gap-3">
+                      <Shield className="w-5 h-5 text-gray-600" />
+                      <div>
+                        <p className="font-medium text-gray-900">Dispositivos autorizados</p>
+                        <p className="text-sm text-gray-500">2 dispositivos conectados</p>
+                      </div>
+                    </div>
+                    <Button variant="outline" size="sm" onClick={() => toast.info('Gestión de dispositivos próximamente')}>Ver</Button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Notificaciones */}
+              <div className="bg-white rounded-2xl border border-gray-100 p-6">
+                <div className="flex items-center gap-4 mb-6">
+                  <div className="w-14 h-14 bg-purple-100 rounded-xl flex items-center justify-center">
+                    <Bell className="w-7 h-7 text-purple-600" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-lg text-gray-900">Notificaciones</h3>
+                    <p className="text-sm text-gray-500">Configura tus alertas</p>
+                  </div>
+                </div>
+                <div className="space-y-4">
+                  {[
+                    { label: 'Movimientos de cuenta', desc: 'Alertas de ingresos y cargos', enabled: true },
+                    { label: 'Pagos con tarjeta', desc: 'Notificación por cada compra', enabled: true },
+                    { label: 'Transferencias recibidas', desc: 'Aviso de transferencias entrantes', enabled: true },
+                    { label: 'Alertas de seguridad', desc: 'Accesos sospechosos o nuevos', enabled: true },
+                    { label: 'Ofertas y promociones', desc: 'Novedades de ManoBank', enabled: false },
+                  ].map((notif, i) => (
+                    <div key={i} className="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
+                      <div>
+                        <p className="font-medium text-gray-900">{notif.label}</p>
+                        <p className="text-sm text-gray-500">{notif.desc}</p>
+                      </div>
+                      <button 
+                        onClick={() => toast.success(`Notificación ${notif.enabled ? 'desactivada' : 'activada'}`)}
+                        className={`w-12 h-7 rounded-full transition-colors relative ${notif.enabled ? 'bg-blue-600' : 'bg-gray-300'}`}
+                      >
+                        <span className={`absolute top-1 w-5 h-5 bg-white rounded-full shadow transition-transform ${notif.enabled ? 'right-1' : 'left-1'}`} />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Preferencias */}
+              <div className="bg-white rounded-2xl border border-gray-100 p-6">
+                <div className="flex items-center gap-4 mb-6">
+                  <div className="w-14 h-14 bg-green-100 rounded-xl flex items-center justify-center">
+                    <Globe className="w-7 h-7 text-green-600" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-lg text-gray-900">Preferencias</h3>
+                    <p className="text-sm text-gray-500">Personaliza tu experiencia</p>
+                  </div>
+                </div>
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div className="p-4 bg-gray-50 rounded-xl">
+                    <p className="text-xs text-gray-500 mb-2">Idioma</p>
+                    <select className="w-full p-2 border border-gray-200 rounded-lg bg-white text-gray-900">
+                      <option>Español</option>
+                      <option>English</option>
+                      <option>Català</option>
+                      <option>Euskara</option>
+                      <option>Galego</option>
+                    </select>
+                  </div>
+                  <div className="p-4 bg-gray-50 rounded-xl">
+                    <p className="text-xs text-gray-500 mb-2">Formato de fecha</p>
+                    <select className="w-full p-2 border border-gray-200 rounded-lg bg-white text-gray-900">
+                      <option>DD/MM/AAAA</option>
+                      <option>MM/DD/AAAA</option>
+                      <option>AAAA-MM-DD</option>
+                    </select>
+                  </div>
+                  <div className="p-4 bg-gray-50 rounded-xl">
+                    <p className="text-xs text-gray-500 mb-2">Moneda principal</p>
+                    <select className="w-full p-2 border border-gray-200 rounded-lg bg-white text-gray-900">
+                      <option>EUR - Euro</option>
+                      <option>USD - Dólar</option>
+                      <option>GBP - Libra</option>
+                    </select>
+                  </div>
+                  <div className="p-4 bg-gray-50 rounded-xl">
+                    <p className="text-xs text-gray-500 mb-2">Zona horaria</p>
+                    <select className="w-full p-2 border border-gray-200 rounded-lg bg-white text-gray-900">
+                      <option>Europe/Madrid (GMT+1)</option>
+                      <option>Atlantic/Canary (GMT+0)</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              {/* Documentos */}
+              <div className="bg-white rounded-2xl border border-gray-100 p-6">
+                <div className="flex items-center gap-4 mb-6">
+                  <div className="w-14 h-14 bg-amber-100 rounded-xl flex items-center justify-center">
+                    <FileText className="w-7 h-7 text-amber-600" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-lg text-gray-900">Documentos</h3>
+                    <p className="text-sm text-gray-500">Contratos y extractos</p>
+                  </div>
+                </div>
+                <div className="space-y-3">
+                  {[
+                    { name: 'Contrato de cuenta corriente', date: '15/01/2026', type: 'PDF' },
+                    { name: 'Condiciones generales', date: '15/01/2026', type: 'PDF' },
+                    { name: 'Política de privacidad', date: '01/01/2026', type: 'PDF' },
+                    { name: 'Tarifas y comisiones', date: '01/01/2026', type: 'PDF' },
+                  ].map((doc, i) => (
+                    <div key={i} className="flex items-center justify-between p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors">
+                      <div className="flex items-center gap-3">
+                        <FileText className="w-5 h-5 text-gray-500" />
+                        <div>
+                          <p className="font-medium text-gray-900">{doc.name}</p>
+                          <p className="text-sm text-gray-500">{doc.date} • {doc.type}</p>
+                        </div>
+                      </div>
+                      <Button variant="ghost" size="sm" onClick={() => toast.info('Descargando documento...')}>
+                        <Download className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Ayuda */}
+              <div className="bg-white rounded-2xl border border-gray-100 p-6">
+                <div className="flex items-center gap-4 mb-6">
+                  <div className="w-14 h-14 bg-cyan-100 rounded-xl flex items-center justify-center">
+                    <HelpCircle className="w-7 h-7 text-cyan-600" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-lg text-gray-900">Ayuda y Soporte</h3>
+                    <p className="text-sm text-gray-500">Estamos aquí para ayudarte</p>
+                  </div>
+                </div>
+                <div className="grid md:grid-cols-2 gap-4">
+                  <button 
+                    onClick={() => toast.info('Abriendo chat de soporte...')}
+                    className="p-4 bg-blue-50 rounded-xl text-left hover:bg-blue-100 transition-colors"
+                  >
+                    <div className="flex items-center gap-3 mb-2">
+                      <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                        <Mail className="w-5 h-5 text-blue-600" />
+                      </div>
+                      <p className="font-medium text-gray-900">Chat en vivo</p>
+                    </div>
+                    <p className="text-sm text-gray-500">Respuesta inmediata 24/7</p>
+                  </button>
+                  <button 
+                    onClick={() => window.open('tel:900123456')}
+                    className="p-4 bg-green-50 rounded-xl text-left hover:bg-green-100 transition-colors"
+                  >
+                    <div className="flex items-center gap-3 mb-2">
+                      <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
+                        <Phone className="w-5 h-5 text-green-600" />
+                      </div>
+                      <p className="font-medium text-gray-900">Llamar</p>
+                    </div>
+                    <p className="text-sm text-gray-500">900 123 456 (gratuito)</p>
+                  </button>
+                </div>
+                <div className="mt-6 p-4 bg-gray-50 rounded-xl">
+                  <h4 className="font-medium text-gray-900 mb-3">Preguntas frecuentes</h4>
+                  <div className="space-y-2">
+                    {[
+                      '¿Cómo cambio mi contraseña?',
+                      '¿Cómo solicito una nueva tarjeta?',
+                      '¿Cómo hago una transferencia internacional?',
+                      '¿Cómo activo las notificaciones push?',
+                    ].map((faq, i) => (
+                      <button 
+                        key={i}
+                        onClick={() => toast.info('Abriendo respuesta...')}
+                        className="w-full p-3 bg-white rounded-lg text-left text-sm text-gray-700 hover:bg-gray-100 flex items-center justify-between"
+                      >
+                        {faq}
+                        <ChevronRight className="w-4 h-4 text-gray-400" />
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Cerrar sesión */}
+              <Button 
+                variant="outline" 
+                className="w-full border-red-200 text-red-600 hover:bg-red-50"
+                onClick={handleLogout}
+              >
+                <LogOut className="w-4 h-4 mr-2" />
+                Cerrar sesión
+              </Button>
             </div>
           )}
         </main>
