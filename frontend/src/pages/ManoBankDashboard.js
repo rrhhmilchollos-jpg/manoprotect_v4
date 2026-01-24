@@ -587,20 +587,28 @@ const ManoBankDashboard = () => {
                     <div className="p-4 border-b border-gray-100">
                       <h3 className="font-semibold text-gray-900 flex items-center gap-2">
                         <Gift className="w-5 h-5 text-pink-500" />
-                        Ofertas para ti
+                        Ofertas Exclusivas para Ti
                       </h3>
+                      <p className="text-xs text-gray-500 mt-1">Ofertas personalizadas basadas en tu perfil</p>
                     </div>
                     <div className="divide-y divide-gray-50">
                       {marketingOffers.map((offer, i) => (
-                        <button key={i} className="w-full p-4 flex items-center gap-4 hover:bg-gray-50 text-left">
-                          <div className={`w-12 h-12 ${offer.color} rounded-xl flex items-center justify-center flex-shrink-0`}>
+                        <button 
+                          key={i} 
+                          onClick={() => {
+                            setActiveSection('ofertas');
+                            toast.success(`Abriendo oferta: ${offer.title}`);
+                          }}
+                          className="w-full p-4 flex items-center gap-4 hover:bg-gray-50 text-left transition-colors"
+                        >
+                          <div className={`w-12 h-12 ${offer.color} rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg`}>
                             <offer.icon className="w-6 h-6 text-white" />
                           </div>
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center gap-2">
                               <p className="font-medium text-gray-900">{offer.title}</p>
                               {offer.tag && (
-                                <span className="text-[10px] bg-red-500 text-white px-1.5 py-0.5 rounded font-medium">
+                                <span className="text-[10px] bg-red-500 text-white px-1.5 py-0.5 rounded font-medium animate-pulse">
                                   {offer.tag}
                                 </span>
                               )}
@@ -610,6 +618,15 @@ const ManoBankDashboard = () => {
                           <ChevronRight className="w-5 h-5 text-gray-400 flex-shrink-0" />
                         </button>
                       ))}
+                    </div>
+                    <div className="p-4 bg-gradient-to-r from-pink-50 to-purple-50 border-t">
+                      <button 
+                        onClick={() => setActiveSection('ofertas')}
+                        className="w-full py-2 text-sm font-medium text-purple-600 hover:text-purple-700 flex items-center justify-center gap-2"
+                      >
+                        Ver todas las ofertas
+                        <ChevronRight className="w-4 h-4" />
+                      </button>
                     </div>
                   </div>
 
