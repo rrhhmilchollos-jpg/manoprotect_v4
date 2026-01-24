@@ -512,19 +512,19 @@ const ManoBankDashboard = () => {
                   </div>
                   <div className="p-4 space-y-3">
                     <button 
-                      onClick={() => { window.open('tel:900123456'); setShowHelpPanel(false); }}
+                      onClick={() => { window.open('tel:601510950'); setShowHelpPanel(false); }}
                       className="w-full p-3 bg-green-50 rounded-xl text-left hover:bg-green-100 transition-colors flex items-center gap-3"
                     >
                       <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
                         <Phone className="w-5 h-5 text-green-600" />
                       </div>
                       <div>
-                        <p className="font-medium text-gray-900">Llamar gratis</p>
-                        <p className="text-sm text-gray-500">900 123 456</p>
+                        <p className="font-medium text-gray-900">Llamar</p>
+                        <p className="text-sm text-gray-500">601 510 950</p>
                       </div>
                     </button>
                     <button 
-                      onClick={() => { window.open('https://wa.me/34900123456'); setShowHelpPanel(false); }}
+                      onClick={() => { window.open('https://wa.me/34601510950'); setShowHelpPanel(false); }}
                       className="w-full p-3 bg-emerald-50 rounded-xl text-left hover:bg-emerald-100 transition-colors flex items-center gap-3"
                     >
                       <div className="w-10 h-10 bg-emerald-100 rounded-lg flex items-center justify-center">
