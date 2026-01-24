@@ -2731,8 +2731,20 @@ async def request_sensitive_data_verification(
     if not card:
         raise HTTPException(status_code=404, detail="Tarjeta no encontrada")
     
-    # Get the customer to get their phone
-    customer = await db.manobank_customers.find_one({"id": card["customer_id"]})
+    # Get the customer - try customer_id first, then user_id
+    customer_id = card.get("customer_id") or card.get("user_id")
+    customer = await db.manobank_customers.find_one({"id": customer_id})
+    
+    # If not found in customers, try users table
+    if not customer:
+        user_record = await db.users.find_one({"user_id": customer_id})
+        if user_record:
+            customer = {
+                "id": user_record.get("user_id"),
+                "name": user_record.get("name", "Cliente"),
+                "phone": user_record.get("phone")
+            }
+    
     if not customer:
         raise HTTPException(status_code=404, detail="Cliente no encontrado")
     
