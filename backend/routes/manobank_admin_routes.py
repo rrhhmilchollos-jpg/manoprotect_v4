@@ -2110,7 +2110,7 @@ async def get_customer_accounts(
     session_token: Optional[str] = Cookie(None)
 ):
     """Get all accounts for a specific customer"""
-    user = await require_employee(request, session_token)
+    user = await require_bank_employee(request, session_token)
     
     accounts = await db.manobank_accounts.find(
         {"customer_id": customer_id},
@@ -2127,7 +2127,7 @@ async def get_customer_cards(
     session_token: Optional[str] = Cookie(None)
 ):
     """Get all cards for a specific customer"""
-    user = await require_employee(request, session_token)
+    user = await require_bank_employee(request, session_token)
     
     cards = await db.manobank_cards.find(
         {"customer_id": customer_id},
@@ -2145,7 +2145,7 @@ async def get_customer_transactions(
     limit: int = 50
 ):
     """Get transactions for a specific customer"""
-    user = await require_employee(request, session_token)
+    user = await require_bank_employee(request, session_token)
     
     # Get customer's accounts
     accounts = await db.manobank_accounts.find(
@@ -2171,7 +2171,7 @@ async def deposit_to_account(
     session_token: Optional[str] = Cookie(None)
 ):
     """Make a deposit to an account (teller operation)"""
-    user = await require_employee(request, session_token)
+    user = await require_bank_employee(request, session_token)
     
     if data.amount <= 0:
         raise HTTPException(status_code=400, detail="El monto debe ser mayor a 0")
@@ -2230,7 +2230,7 @@ async def withdraw_from_account(
     session_token: Optional[str] = Cookie(None)
 ):
     """Make a withdrawal from an account (teller operation)"""
-    user = await require_employee(request, session_token)
+    user = await require_bank_employee(request, session_token)
     
     if data.amount <= 0:
         raise HTTPException(status_code=400, detail="El monto debe ser mayor a 0")
@@ -2292,7 +2292,7 @@ async def freeze_account(
     session_token: Optional[str] = Cookie(None)
 ):
     """Freeze an account"""
-    user = await require_employee(request, session_token)
+    user = await require_bank_employee(request, session_token)
     
     account = await db.manobank_accounts.find_one({"id": account_id})
     if not account:
@@ -2317,7 +2317,7 @@ async def block_card(
     session_token: Optional[str] = Cookie(None)
 ):
     """Block a card"""
-    user = await require_employee(request, session_token)
+    user = await require_bank_employee(request, session_token)
     
     card = await db.manobank_cards.find_one({"id": card_id})
     if not card:
@@ -2342,7 +2342,7 @@ async def unblock_card(
     session_token: Optional[str] = Cookie(None)
 ):
     """Unblock a card"""
-    user = await require_employee(request, session_token)
+    user = await require_bank_employee(request, session_token)
     
     card = await db.manobank_cards.find_one({"id": card_id})
     if not card:
