@@ -5,65 +5,79 @@
 
 ---
 
-## Cambios Recientes
+## Cambios Recientes (24 Enero 2026)
 
-### 24 Enero 2026
-- ✅ **Panel de Compliance** añadido al portal de empleados
-- ✅ **Dashboard AML** con alertas y gestión
-- ✅ **Botón "Ver Alertas"** arreglado (ahora navega a tab AML)
-- ✅ **Tabs de navegación** añadidos: Compliance, Alertas AML
-- ✅ **Deployment Health Check** completado - Ready for deployment
-
-### Funcionalidades Implementadas en Frontend
-
-**Tab Compliance:**
-- Info de entidad (ManoBank S.A., CIF, Regulador)
-- Estadísticas de audit events
-- Estado KYC (pendientes, tiempo medio)
-- Reportes regulatorios (generar diario/mensual)
-- Lista de políticas regulatorias
-
-**Tab Alertas AML:**
-- Dashboard con total alertas y pendientes
-- SARs del mes
-- Alertas por tipo
-- Lista de alertas con acciones (aprobar/escalar)
-- Alertas de alto riesgo recientes
+### Arreglado
+1. ✅ **Usuario superadmin** - `rrhh.milchollos@gmail.com` ahora es `superadmin`
+2. ✅ **Video KYC mejorado** - Nueva UX para permisos de cámara/micrófono:
+   - Paso introductorio que explica los requisitos
+   - Indicadores visuales del estado de permisos
+   - Guía detallada de cómo activar permisos en cada navegador/dispositivo
+   - Botón de reintento después de activar permisos
+   - Vista previa de cámara antes de iniciar la videollamada
+3. ✅ **Panel de Compliance** en portal de empleados
+4. ✅ **Dashboard AML** con alertas
+5. ✅ **Botón "Ver Alertas"** funcionando
+6. ✅ **APK actualizado** v2.0.0 - Compliance Edition
 
 ---
 
-## APIs Disponibles
+## Sistema Completado
 
-### Compliance
-- GET `/api/compliance/summary`
-- GET `/api/compliance/policies`
-- GET `/api/compliance/audit-logs`
+### Portal de Clientes (`/manobank`)
+- Dashboard con balance total
+- Lista de cuentas con IBAN
+- Tarjetas con diseño premium
+- Transferencias y Bizum
+- Historial de movimientos
+- Productos y ofertas
 
-### AML
-- GET `/api/aml/dashboard`
-- GET `/api/aml/alerts`
-- PATCH `/api/aml/alerts/{id}`
-- POST `/api/aml/screen-customer`
+### Portal de Empleados (`/banco`)
+- Dashboard con estadísticas
+- Gestión de aperturas de cuenta
+- Verificación KYC por videollamada
+- Gestión de clientes
+- Gestión de préstamos
+- Gestión de tarjetas
+- Envíos SEUR
+- Gestión de empleados
+- **Panel de Compliance** (NUEVO)
+- **Dashboard AML** (NUEVO)
 
-### KYC
-- GET `/api/kyc/dashboard`
-- GET `/api/kyc/pending`
-- POST `/api/kyc/initiate`
-- POST `/api/kyc/{id}/approve`
-
-### Reporting
-- GET `/api/reporting/dashboard`
-- POST `/api/reporting/daily-cash`
-- POST `/api/reporting/monthly-operations`
+### APIs Implementadas
+- `/api/auth/*` - Autenticación con 2FA
+- `/api/manobank/*` - APIs de clientes
+- `/api/manobank/admin/*` - APIs administrativas
+- `/api/compliance/*` - Compliance y auditoría
+- `/api/ledger/*` - Libro mayor inmutable
+- `/api/aml/*` - Anti-Money Laundering
+- `/api/kyc/*` - Know Your Customer
+- `/api/reporting/*` - Reportes regulatorios
 
 ---
 
-## Credenciales de Test
-| Usuario | Email | Password |
-|---------|-------|----------|
-| Director General | rrhh.milchollos@gmail.com | 19862210Des |
+## Credenciales
+
+| Usuario | Email | Password | Rol |
+|---------|-------|----------|-----|
+| Director General | rrhh.milchollos@gmail.com | 19862210Des | superadmin |
 
 ## URLs
-- Portal Clientes: `/manobank`
+- Landing: `/`
+- Dashboard Cliente: `/manobank`
+- Login Clientes: `/login-seguro`
 - Portal Empleados: `/banco`
-- Verificar Estafa: `/verificar-estafa`
+- Video KYC: integrado en apertura de cuenta
+
+---
+
+## Proyecto Móvil
+
+**Ubicación:** `/app/mobile/manobank-cliente/`
+**ZIP:** `manobank-clientes-v2.zip`
+**Versión:** 2.0.0 - Compliance Edition
+
+### Para compilar:
+1. Subir ZIP a GitHub
+2. Ir a Actions → Run workflow
+3. Descargar `ManoBank-Android-APK` y `ManoBank-iOS-IPA`
