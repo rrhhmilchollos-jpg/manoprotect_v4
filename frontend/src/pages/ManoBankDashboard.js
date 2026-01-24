@@ -1288,27 +1288,155 @@ const ManoBankDashboard = () => {
           {/* ==================== OFERTAS ==================== */}
           {activeSection === 'ofertas' && (
             <div className="space-y-6">
-              <h2 className="text-2xl font-bold text-gray-900">Ofertas Exclusivas</h2>
+              <div className="flex items-center justify-between">
+                <div>
+                  <h2 className="text-2xl font-bold text-gray-900">Ofertas Exclusivas</h2>
+                  <p className="text-gray-500">Ventajas especiales para clientes ManoBank</p>
+                </div>
+                <span className="bg-red-100 text-red-700 px-3 py-1 rounded-full text-sm font-medium">6 ofertas activas</span>
+              </div>
+              
               <div className="grid md:grid-cols-2 gap-6">
-                {[
-                  { icon: Car, title: 'Renting de Vehículos', desc: 'Conduce el coche que quieras desde 199€/mes. Mantenimiento, seguro y asistencia incluidos.', color: 'bg-blue-500', cta: 'Solicitar info' },
-                  { icon: Smartphone, title: 'Telefonía Móvil ManoBank', desc: 'Tarifas exclusivas para clientes. Fibra + Móvil desde 29,90€/mes.', color: 'bg-purple-500', cta: 'Ver tarifas' },
-                  { icon: Umbrella, title: 'Seguros ManoBank', desc: 'Hogar, vida, salud y auto. 20% descuento el primer año.', color: 'bg-green-500', cta: 'Calcular precio' },
-                  { icon: Building, title: 'Hipoteca Fija', desc: 'Desde 2,49% TIN fijo. Sin comisiones de apertura hasta el 31/03.', color: 'bg-amber-500', cta: 'Simular' },
-                  { icon: PiggyBank, title: 'Préstamo Instantáneo', desc: 'Hasta 30.000€ en 24h. Sin papeleos, 100% online.', color: 'bg-red-500', cta: 'Solicitar' },
-                  { icon: Gift, title: 'Plan Amigo', desc: 'Trae un amigo y gana 50€. Él también gana 50€.', color: 'bg-pink-500', cta: 'Invitar' },
-                ].map((offer, i) => (
-                  <div key={i} className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
-                    <div className={`h-32 ${offer.color} flex items-center justify-center`}>
-                      <offer.icon className="w-16 h-16 text-white/80" />
-                    </div>
-                    <div className="p-6">
-                      <h3 className="font-semibold text-lg mb-2">{offer.title}</h3>
-                      <p className="text-gray-600 mb-4">{offer.desc}</p>
-                      <Button className="w-full">{offer.cta}</Button>
+                {/* Renting Ayvens */}
+                <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden hover:shadow-lg transition-shadow">
+                  <div className="h-40 bg-gradient-to-br from-blue-600 to-blue-800 flex items-center justify-center relative overflow-hidden">
+                    <img src="https://www.ayvens.com/content/dam/ayvens/master/ayvens-logo/ayvens-logo-white.svg" alt="Ayvens" className="h-12 relative z-10" onError={(e) => e.target.style.display='none'} />
+                    <Car className="w-20 h-20 text-white/20 absolute right-4 bottom-4" />
+                    <span className="absolute top-4 left-4 bg-yellow-400 text-yellow-900 px-2 py-1 rounded text-xs font-bold">DESTACADO</span>
+                  </div>
+                  <div className="p-6">
+                    <h3 className="font-semibold text-lg mb-1">Renting de Vehículos Ayvens</h3>
+                    <p className="text-sm text-blue-600 font-medium mb-2">Desde 199€/mes todo incluido</p>
+                    <p className="text-gray-600 text-sm mb-4">Todos los modelos: Tesla, BMW, Mercedes, Audi, Volkswagen y más. Mantenimiento, seguro a todo riesgo y asistencia 24h incluidos.</p>
+                    <div className="flex gap-2">
+                      <Button className="flex-1" onClick={() => window.open('https://www.ayvens.com/es-es/renting-particulares/', '_blank')}>
+                        <ExternalLink className="w-4 h-4 mr-2" />Ver coches
+                      </Button>
+                      <Button variant="outline" onClick={() => toast.success('Solicitud enviada. Te contactaremos en 24h')}>Info</Button>
                     </div>
                   </div>
-                ))}
+                </div>
+
+                {/* Vodafone */}
+                <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden hover:shadow-lg transition-shadow">
+                  <div className="h-40 bg-gradient-to-br from-red-600 to-red-700 flex items-center justify-center relative overflow-hidden">
+                    <span className="text-white text-3xl font-bold relative z-10">vodafone</span>
+                    <Smartphone className="w-20 h-20 text-white/20 absolute right-4 bottom-4" />
+                    <span className="absolute top-4 left-4 bg-white text-red-600 px-2 py-1 rounded text-xs font-bold">-30% CLIENTES</span>
+                  </div>
+                  <div className="p-6">
+                    <h3 className="font-semibold text-lg mb-1">Telefonía Vodafone</h3>
+                    <p className="text-sm text-red-600 font-medium mb-2">Fibra 600Mb + Móvil desde 29,90€/mes</p>
+                    <p className="text-gray-600 text-sm mb-4">Tarifas exclusivas ManoBank. Fibra simétrica, llamadas ilimitadas, 5G incluido. Instalación gratis.</p>
+                    <div className="flex gap-2">
+                      <Button className="flex-1 bg-red-600 hover:bg-red-700" onClick={() => window.open('https://www.vodafone.es/c/particulares/es/productos-y-servicios/movil/tarifas-contrato/', '_blank')}>
+                        <ExternalLink className="w-4 h-4 mr-2" />Ver tarifas
+                      </Button>
+                      <Button variant="outline" onClick={() => window.open('tel:900900900')}>Llamar</Button>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Seguros Mapfre */}
+                <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden hover:shadow-lg transition-shadow">
+                  <div className="h-40 bg-gradient-to-br from-green-600 to-green-700 flex items-center justify-center relative overflow-hidden">
+                    <span className="text-white text-2xl font-bold relative z-10">MAPFRE</span>
+                    <Umbrella className="w-20 h-20 text-white/20 absolute right-4 bottom-4" />
+                    <span className="absolute top-4 left-4 bg-yellow-400 text-yellow-900 px-2 py-1 rounded text-xs font-bold">-20% 1er AÑO</span>
+                  </div>
+                  <div className="p-6">
+                    <h3 className="font-semibold text-lg mb-1">Seguros Mapfre</h3>
+                    <p className="text-sm text-green-600 font-medium mb-2">Hogar desde 8€/mes, Auto desde 15€/mes</p>
+                    <p className="text-gray-600 text-sm mb-4">Seguros de hogar, vida, salud, auto y mascotas. 20% descuento exclusivo clientes ManoBank el primer año.</p>
+                    <div className="flex gap-2">
+                      <Button className="flex-1 bg-green-600 hover:bg-green-700" onClick={() => window.open('https://www.mapfre.es/seguros/', '_blank')}>
+                        <ExternalLink className="w-4 h-4 mr-2" />Calcular precio
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Hipoteca */}
+                <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden hover:shadow-lg transition-shadow">
+                  <div className="h-40 bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center relative overflow-hidden">
+                    <Building className="w-16 h-16 text-white relative z-10" />
+                    <Home className="w-20 h-20 text-white/20 absolute right-4 bottom-4" />
+                    <span className="absolute top-4 left-4 bg-white text-amber-600 px-2 py-1 rounded text-xs font-bold">OFERTA LIMITADA</span>
+                  </div>
+                  <div className="p-6">
+                    <h3 className="font-semibold text-lg mb-1">Hipoteca Fija ManoBank</h3>
+                    <p className="text-sm text-amber-600 font-medium mb-2">Desde 2,49% TIN fijo a 25 años</p>
+                    <p className="text-gray-600 text-sm mb-4">Sin comisión de apertura hasta 31/03. Hasta 80% de financiación. Respuesta en 48h. Gestoría incluida.</p>
+                    <div className="flex gap-2">
+                      <Button className="flex-1 bg-amber-500 hover:bg-amber-600" onClick={() => window.open('https://www.idealista.com/hipotecas/', '_blank')}>
+                        <ExternalLink className="w-4 h-4 mr-2" />Simular hipoteca
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Préstamo */}
+                <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden hover:shadow-lg transition-shadow">
+                  <div className="h-40 bg-gradient-to-br from-indigo-600 to-purple-700 flex items-center justify-center relative overflow-hidden">
+                    <Euro className="w-16 h-16 text-white relative z-10" />
+                    <PiggyBank className="w-20 h-20 text-white/20 absolute right-4 bottom-4" />
+                    <span className="absolute top-4 left-4 bg-green-400 text-green-900 px-2 py-1 rounded text-xs font-bold">24H</span>
+                  </div>
+                  <div className="p-6">
+                    <h3 className="font-semibold text-lg mb-1">Préstamo Instantáneo</h3>
+                    <p className="text-sm text-indigo-600 font-medium mb-2">Hasta 30.000€ • TAE desde 5,95%</p>
+                    <p className="text-gray-600 text-sm mb-4">Aprobación en minutos, dinero en 24h. 100% online, sin papeleos. Plazos flexibles de 12 a 84 meses.</p>
+                    <div className="flex gap-2">
+                      <Button className="flex-1 bg-indigo-600 hover:bg-indigo-700" onClick={() => toast.success('Redirigiendo al simulador de préstamos...')}>
+                        Solicitar ahora
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Plan Amigo */}
+                <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden hover:shadow-lg transition-shadow">
+                  <div className="h-40 bg-gradient-to-br from-pink-500 to-rose-600 flex items-center justify-center relative overflow-hidden">
+                    <Heart className="w-16 h-16 text-white relative z-10" />
+                    <Gift className="w-20 h-20 text-white/20 absolute right-4 bottom-4" />
+                    <span className="absolute top-4 left-4 bg-white text-pink-600 px-2 py-1 rounded text-xs font-bold">50€ + 50€</span>
+                  </div>
+                  <div className="p-6">
+                    <h3 className="font-semibold text-lg mb-1">Plan Amigo ManoBank</h3>
+                    <p className="text-sm text-pink-600 font-medium mb-2">Tú ganas 50€, tu amigo gana 50€</p>
+                    <p className="text-gray-600 text-sm mb-4">Invita a tus amigos a ManoBank. Cuando abran su cuenta, ambos recibís 50€. ¡Sin límite de invitaciones!</p>
+                    <div className="flex gap-2">
+                      <Button className="flex-1 bg-pink-500 hover:bg-pink-600" onClick={() => {
+                        navigator.clipboard.writeText(`https://manobank.es/registro?ref=${user?.user_id || 'AMIGO50'}`);
+                        toast.success('¡Enlace de invitación copiado!');
+                      }}>
+                        <Copy className="w-4 h-4 mr-2" />Copiar enlace
+                      </Button>
+                      <Button variant="outline" onClick={() => {
+                        if (navigator.share) {
+                          navigator.share({ title: 'ManoBank', text: '¡Únete a ManoBank y gana 50€!', url: `https://manobank.es/registro?ref=${user?.user_id || 'AMIGO50'}` });
+                        } else {
+                          toast.info('Comparte tu enlace por WhatsApp, Email o redes sociales');
+                        }
+                      }}>
+                        <Send className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Banner promocional */}
+              <div className="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 rounded-2xl p-6 text-white">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h3 className="text-xl font-bold mb-1">¿No encuentras lo que buscas?</h3>
+                    <p className="text-blue-100">Contacta con tu gestor personal para ofertas a medida</p>
+                  </div>
+                  <Button className="bg-white text-blue-600 hover:bg-blue-50" onClick={() => window.open('tel:900123456')}>
+                    <Phone className="w-4 h-4 mr-2" />900 123 456
+                  </Button>
+                </div>
               </div>
             </div>
           )}
