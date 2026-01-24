@@ -951,9 +951,9 @@ const ManoBankDashboard = () => {
                     <div className="p-4 bg-gray-50 rounded-xl">
                       <p className="text-xs text-gray-500 mb-1">BIC / SWIFT</p>
                       <div className="flex items-center justify-between">
-                        <p className="font-mono font-medium text-gray-900">{selectedAccount.bic || 'MNBKESMMXXX'}</p>
+                        <p className="font-mono font-medium text-gray-900">{selectedAccount.swift_bic || selectedAccount.bic || 'MNBKESMMXXX'}</p>
                         <button 
-                          onClick={() => copyToClipboard(selectedAccount.bic || 'MNBKESMMXXX', 'BIC')}
+                          onClick={() => copyToClipboard(selectedAccount.swift_bic || selectedAccount.bic || 'MNBKESMMXXX', 'BIC')}
                           className="p-2 hover:bg-gray-200 rounded-lg transition-colors"
                         >
                           <Copy className="w-4 h-4 text-gray-500" />
