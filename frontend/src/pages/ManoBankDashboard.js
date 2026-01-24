@@ -613,11 +613,42 @@ const ManoBankDashboard = () => {
             ))}
           </nav>
 
-          {/* Sidebar Contact */}
-          <div className="p-4 mx-4 mb-4 bg-blue-50 rounded-xl">
-            <p className="text-sm font-medium text-blue-800">¿Necesitas ayuda?</p>
-            <p className="text-xs text-blue-600 mt-1">601 510 950</p>
-            <p className="text-xs text-blue-600">Lunes a Viernes 8:00-22:00</p>
+          {/* Sidebar Contact Info */}
+          <div className="p-4 mx-4 mb-4 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl border border-blue-100">
+            <div className="flex items-center gap-2 mb-3">
+              <Phone className="w-4 h-4 text-blue-600" />
+              <p className="text-sm font-semibold text-blue-900">¿Necesitas ayuda?</p>
+            </div>
+            <a href="tel:601510950" className="text-lg font-bold text-blue-600 hover:text-blue-700 block mb-3">
+              601 510 950
+            </a>
+            <div className="space-y-2 text-xs">
+              <div className="flex items-start gap-2 p-2 bg-white/60 rounded-lg">
+                <div className="w-2 h-2 bg-green-500 rounded-full mt-1 flex-shrink-0"></div>
+                <div>
+                  <p className="font-medium text-gray-800">Sucursal</p>
+                  <p className="text-gray-600">08:00 - 14:00 h</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-2 p-2 bg-white/60 rounded-lg">
+                <div className="w-2 h-2 bg-blue-500 rounded-full mt-1 flex-shrink-0"></div>
+                <div>
+                  <p className="font-medium text-gray-800">Gestores</p>
+                  <p className="text-gray-600">14:00 - 18:00 h</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-2 p-2 bg-white/60 rounded-lg">
+                <div className="w-2 h-2 bg-red-500 rounded-full mt-1 flex-shrink-0"></div>
+                <div>
+                  <p className="font-medium text-gray-800">Urgencias 24h</p>
+                  <p className="text-gray-600">Bloqueo tarjetas</p>
+                  <p className="text-gray-500">18:00 - 08:00 h</p>
+                </div>
+              </div>
+            </div>
+            <p className="text-xs text-gray-500 mt-3 pt-2 border-t border-blue-100">
+              Modificar datos, consultas, extravío o robo de tarjetas
+            </p>
           </div>
         </aside>
 
