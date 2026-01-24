@@ -3,14 +3,24 @@ ManoBank - Módulo Bancario Integrado en ManoProtect
 Funcionalidades: Cuentas, Saldos, Transferencias SEPA/Bizum, Alertas antifraude
 """
 from fastapi import APIRouter, HTTPException, Request, Cookie
+from fastapi.responses import StreamingResponse
 from typing import Optional, Dict, Any, List
 from datetime import datetime, timezone, timedelta
 from pydantic import BaseModel, Field
 import uuid
 import random
+import io
 
 # Import auth from core
 from core.auth import require_auth
+
+# PDF generation imports
+from reportlab.lib import colors
+from reportlab.lib.pagesizes import A4
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+from reportlab.lib.units import cm
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer, Image
+from reportlab.lib.enums import TA_CENTER, TA_RIGHT, TA_LEFT
 
 router = APIRouter(prefix="/manobank", tags=["ManoBank"])
 
