@@ -1674,6 +1674,17 @@ const BancoSistema = () => {
                   
                   {/* Action Buttons */}
                   <div className="absolute bottom-4 right-4 flex gap-2">
+                    {card.status === 'active' && (
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        className="text-white/70 hover:text-white hover:bg-white/20"
+                        onClick={() => setShowPinVerification(card)}
+                        title="Ver PIN (requiere verificación SMS)"
+                      >
+                        <Key className="w-4 h-4" />
+                      </Button>
+                    )}
                     {!card.physical_card_status && card.status === 'active' && (
                       <Button
                         size="sm"
