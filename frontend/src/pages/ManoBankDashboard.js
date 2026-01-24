@@ -962,7 +962,9 @@ const ManoBankDashboard = () => {
                     </div>
                     <div className="p-4 bg-gray-50 rounded-xl">
                       <p className="text-xs text-gray-500 mb-1">Nº de Cuenta</p>
-                      <p className="font-mono font-medium text-gray-900">{selectedAccount.account_number}</p>
+                      <p className="font-mono font-medium text-gray-900">
+                        {selectedAccount.account_number || (selectedAccount.iban ? selectedAccount.iban.slice(-10) : 'N/A')}
+                      </p>
                     </div>
                   </div>
 
@@ -970,7 +972,9 @@ const ManoBankDashboard = () => {
                   <div className="grid grid-cols-3 gap-4">
                     <div className="p-4 bg-gray-50 rounded-xl text-center">
                       <p className="text-xs text-gray-500 mb-1">Tipo</p>
-                      <p className="font-medium text-gray-900">{selectedAccount.type === 'ahorro' ? 'Ahorro' : 'Corriente'}</p>
+                      <p className="font-medium text-gray-900">
+                        {selectedAccount.account_type === 'ahorro' || selectedAccount.type === 'ahorro' ? 'Ahorro' : 'Corriente'}
+                      </p>
                     </div>
                     <div className="p-4 bg-gray-50 rounded-xl text-center">
                       <p className="text-xs text-gray-500 mb-1">Divisa</p>
@@ -978,8 +982,8 @@ const ManoBankDashboard = () => {
                     </div>
                     <div className="p-4 bg-gray-50 rounded-xl text-center">
                       <p className="text-xs text-gray-500 mb-1">Estado</p>
-                      <p className={`font-medium ${selectedAccount.status === 'active' ? 'text-green-600' : 'text-red-600'}`}>
-                        {selectedAccount.status === 'active' ? 'Activa' : 'Inactiva'}
+                      <p className={`font-medium ${selectedAccount.status === 'active' || selectedAccount.is_verified ? 'text-green-600' : 'text-red-600'}`}>
+                        {selectedAccount.status === 'active' || selectedAccount.is_verified ? 'Activa' : 'Inactiva'}
                       </p>
                     </div>
                   </div>
