@@ -59,6 +59,9 @@ const ManoBankDashboard = () => {
     { id: 5, type: 'info', title: 'Actualización de seguridad', message: 'Hemos mejorado la protección de tu cuenta', time: 'Hace 3 días', read: true, icon: 'info' },
   ]);
 
+  // Help panel state
+  const [showHelpPanel, setShowHelpPanel] = useState(false);
+
   // Payment form state
   const [paymentType, setPaymentType] = useState('transferencia');
   const [paymentData, setPaymentData] = useState({
