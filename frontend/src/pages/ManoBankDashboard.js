@@ -41,6 +41,14 @@ const ManoBankDashboard = () => {
   const [accountTransactions, setAccountTransactions] = useState([]);
   const [loadingAccountTx, setLoadingAccountTx] = useState(false);
 
+  // Settings modals state
+  const [showEditProfile, setShowEditProfile] = useState(false);
+  const [showChangePassword, setShowChangePassword] = useState(false);
+  const [profileForm, setProfileForm] = useState({ name: '', phone: '' });
+  const [passwordForm, setPasswordForm] = useState({ current: '', new: '', confirm: '' });
+  const [savingProfile, setSavingProfile] = useState(false);
+  const [savingPassword, setSavingPassword] = useState(false);
+
   // Payment form state
   const [paymentType, setPaymentType] = useState('transferencia');
   const [paymentData, setPaymentData] = useState({
