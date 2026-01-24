@@ -747,19 +747,78 @@ const Pricing = () => {
               </div>
               <div className="mt-8 flex flex-col sm:flex-row gap-4">
                 <Button
-                  onClick={() => toast.info('Contacto comercial próximamente')}
+                  onClick={() => window.open('mailto:enterprise@manobank.es?subject=Solicitud%20Demo%20Enterprise&body=Hola,%20me%20gustaría%20solicitar%20una%20demo%20personalizada%20del%20Plan%20Enterprise.%0A%0ANombre:%0AEmpresa:%0ATeléfono:%0A%0AGracias', '_blank')}
                   className="flex-1 bg-amber-600 hover:bg-amber-700 text-white rounded-lg h-14 text-lg font-semibold"
                 >
                   Solicitar Demo Personalizada
                   <ArrowRight className="ml-2 w-5 h-5" />
                 </Button>
                 <Button
-                  onClick={() => toast.info('Descarga próximamente')}
+                  onClick={() => navigate('/downloads')}
                   variant="outline"
                   className="flex-1 border-2 border-amber-300 hover:border-amber-400 rounded-lg h-14 text-lg"
                 >
+                  <Download className="mr-2 w-5 h-5" />
                   Descargar Plan de Negocio
                 </Button>
+              </div>
+              
+              {/* Investor Documents Section */}
+              <div className="mt-8 p-6 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl border border-indigo-200">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-12 h-12 bg-indigo-100 rounded-xl flex items-center justify-center">
+                    <FileText className="w-6 h-6 text-indigo-600" />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-indigo-900">Documentación para Inversores</h4>
+                    <p className="text-sm text-indigo-600">Acceso exclusivo a información confidencial</p>
+                  </div>
+                </div>
+                <div className="grid sm:grid-cols-2 gap-3">
+                  <button 
+                    onClick={() => navigate('/investor/register')}
+                    className="p-4 bg-white rounded-lg border border-indigo-100 hover:border-indigo-300 hover:shadow-md transition-all text-left group"
+                  >
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-sm font-semibold text-gray-900">Plan de Negocio</span>
+                      <Download className="w-4 h-4 text-indigo-500 group-hover:text-indigo-600" />
+                    </div>
+                    <p className="text-xs text-gray-500">120 páginas • Análisis TAM €12B • ROI 100-160x</p>
+                  </button>
+                  <button 
+                    onClick={() => navigate('/investor/register')}
+                    className="p-4 bg-white rounded-lg border border-indigo-100 hover:border-indigo-300 hover:shadow-md transition-all text-left group"
+                  >
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-sm font-semibold text-gray-900">Modelo Financiero</span>
+                      <Download className="w-4 h-4 text-emerald-500 group-hover:text-emerald-600" />
+                    </div>
+                    <p className="text-xs text-gray-500">Proyecciones 5 años • LTV/CAC 20x • 89 métricas</p>
+                  </button>
+                  <button 
+                    onClick={() => navigate('/investor/register')}
+                    className="p-4 bg-white rounded-lg border border-indigo-100 hover:border-indigo-300 hover:shadow-md transition-all text-left group"
+                  >
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-sm font-semibold text-gray-900">Pitch Deck</span>
+                      <Download className="w-4 h-4 text-orange-500 group-hover:text-orange-600" />
+                    </div>
+                    <p className="text-xs text-gray-500">11 slides • Optimizado VCs • SAM €2.5B</p>
+                  </button>
+                  <button 
+                    onClick={() => navigate('/investor/register')}
+                    className="p-4 bg-white rounded-lg border border-indigo-100 hover:border-indigo-300 hover:shadow-md transition-all text-left group"
+                  >
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-sm font-semibold text-gray-900">Dossier B2B</span>
+                      <Download className="w-4 h-4 text-cyan-500 group-hover:text-cyan-600" />
+                    </div>
+                    <p className="text-xs text-gray-500">Casos de uso • Integraciones • Pricing B2B</p>
+                  </button>
+                </div>
+                <p className="text-xs text-indigo-600 mt-4 text-center">
+                  🔒 Requiere registro como inversor verificado • <button onClick={() => navigate('/investor/register')} className="underline hover:text-indigo-800">Solicitar acceso</button>
+                </p>
               </div>
             </CardContent>
           </Card>
