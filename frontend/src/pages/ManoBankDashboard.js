@@ -292,6 +292,36 @@ const ManoBankDashboard = () => {
     }
   };
 
+  // Mark notification as read
+  const markNotificationRead = (id) => {
+    setNotifications(prev => prev.map(n => n.id === id ? { ...n, read: true } : n));
+  };
+
+  // Mark all notifications as read
+  const markAllNotificationsRead = () => {
+    setNotifications(prev => prev.map(n => ({ ...n, read: true })));
+    toast.success('Todas las notificaciones marcadas como leídas');
+  };
+
+  // Delete notification
+  const deleteNotification = (id) => {
+    setNotifications(prev => prev.filter(n => n.id !== id));
+  };
+
+  // Get unread count
+  const unreadCount = notifications.filter(n => !n.read).length;
+
+  // Get notification icon
+  const getNotificationIcon = (type) => {
+    switch(type) {
+      case 'security': return <Shield className="w-5 h-5 text-red-500" />;
+      case 'transaction': return <ArrowDownLeft className="w-5 h-5 text-green-500" />;
+      case 'promo': return <Gift className="w-5 h-5 text-purple-500" />;
+      case 'card': return <CreditCard className="w-5 h-5 text-blue-500" />;
+      default: return <Info className="w-5 h-5 text-gray-500" />;
+    }
+  };
+
   // Sidebar menu items
   const menuItems = [
     { id: 'inicio', label: 'Inicio', icon: Home },
