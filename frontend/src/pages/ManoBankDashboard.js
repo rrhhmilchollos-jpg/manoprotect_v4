@@ -380,7 +380,11 @@ const ManoBankDashboard = () => {
                     </div>
                     <div className="divide-y divide-gray-50">
                       {accounts.slice(0, 2).map((account) => (
-                        <div key={account.id} className="p-4 flex items-center justify-between hover:bg-gray-50">
+                        <button 
+                          key={account.id} 
+                          onClick={() => openAccountDetail(account)}
+                          className="w-full p-4 flex items-center justify-between hover:bg-blue-50 transition-colors text-left"
+                        >
                           <div className="flex items-center gap-4">
                             <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
                               <Landmark className="w-6 h-6 text-blue-600" />
@@ -390,12 +394,15 @@ const ManoBankDashboard = () => {
                               <p className="text-sm text-gray-500">{formatIBAN(account.iban)}</p>
                             </div>
                           </div>
-                          <div className="text-right">
-                            <p className="font-bold text-gray-900 text-lg">
-                              {showBalance ? formatCurrency(account.balance) : '••••••'}
-                            </p>
+                          <div className="flex items-center gap-3">
+                            <div className="text-right">
+                              <p className="font-bold text-gray-900 text-lg">
+                                {showBalance ? formatCurrency(account.balance) : '••••••'}
+                              </p>
+                              <p className="text-xs text-blue-600">Ver detalle →</p>
+                            </div>
                           </div>
-                        </div>
+                        </button>
                       ))}
                     </div>
                   </div>
