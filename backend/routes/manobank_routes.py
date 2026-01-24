@@ -784,6 +784,43 @@ async def set_primary_account(
     
     return {"message": "Cuenta establecida como principal"}
 
+
+@router.get("/accounts/{account_id}/transactions")
+async def get_account_transactions(
+    account_id: str,
+    request: Request,
+    session_token: Optional[str] = Cookie(None),
+    limit: int = 50
+):
+    """Get transactions for a specific account with full details"""
+    user = await require_auth(request, session_token)
+    db = get_db()
+    
+    # First verify the account belongs to this user
+    account = await db.manobank_accounts.find_one({
+        "id": account_id,
+        "user_id": user.user_id
+    })
+    
+    if not account:
+        raise HTTPException(status_code=404, detail="Cuenta no encontrada")
+    
+    # Get transactions for this account
+    transactions = await db.manobank_transactions.find(
+        {"account_id": account_id},
+        {"_id": 0}
+    ).sort("created_at", -1).limit(limit).to_list(limit)
+    
+    # If no transactions, return empty list with account info
+    return {
+        "account_id": account_id,
+        "iban": account.get("iban"),
+        "bic": account.get("swift_bic", "MNBKESMMXXX"),
+        "account_number": account.get("account_number", account_id),
+        "transactions": transactions
+    }
+
+
 # ============================================
 # TRANSACTIONS
 # ============================================
