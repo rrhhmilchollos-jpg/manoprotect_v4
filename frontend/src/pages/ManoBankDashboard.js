@@ -13,7 +13,7 @@ import {
   ArrowRight, MoreHorizontal, Banknote, RefreshCw, Car,
   Building, Umbrella, ShoppingBag, Zap, Gift, Heart,
   Landmark, CreditCard as CardIcon, DollarSign, Euro,
-  ChevronLeft, ExternalLink, Info
+  ChevronLeft, ExternalLink, Info, Trash2
 } from 'lucide-react';
 
 const API_URL = process.env.REACT_APP_BACKEND_URL;
