@@ -797,7 +797,9 @@ const BancoSistema = () => {
             { id: 'loans', label: 'Préstamos', icon: PiggyBank },
             { id: 'cards', label: 'Tarjetas', icon: CreditCard },
             { id: 'shipments', label: 'Envíos SEUR', icon: Truck },
-            { id: 'employees', label: 'Empleados', icon: Briefcase }
+            { id: 'employees', label: 'Empleados', icon: Briefcase },
+            { id: 'compliance', label: 'Compliance', icon: Shield },
+            { id: 'alerts', label: 'Alertas AML', icon: AlertTriangle }
           ].map((tab) => (
             <Button
               key={tab.id}
