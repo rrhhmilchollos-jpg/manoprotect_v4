@@ -403,10 +403,94 @@ const ManoBankDashboard = () => {
           </div>
 
           <div className="flex items-center gap-2">
-            <button className="relative p-2 hover:bg-gray-100 rounded-xl">
-              <Bell className="w-5 h-5 text-gray-600" />
-              <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full" />
-            </button>
+            <div className="relative">
+              <button 
+                onClick={() => setShowNotifications(!showNotifications)}
+                className="relative p-2 hover:bg-gray-100 rounded-xl"
+                data-testid="notifications-bell"
+              >
+                <Bell className="w-5 h-5 text-gray-600" />
+                {unreadCount > 0 && (
+                  <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full" />
+                )}
+              </button>
+              
+              {/* Notifications Panel */}
+              {showNotifications && (
+                <div className="absolute right-0 top-12 w-96 bg-white rounded-2xl shadow-2xl border border-gray-100 z-50 overflow-hidden">
+                  <div className="p-4 border-b border-gray-100 flex items-center justify-between">
+                    <div>
+                      <h3 className="font-semibold text-gray-900">Notificaciones</h3>
+                      <p className="text-xs text-gray-500">{unreadCount} sin leer</p>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      {unreadCount > 0 && (
+                        <button 
+                          onClick={markAllNotificationsRead}
+                          className="text-xs text-blue-600 hover:text-blue-700 font-medium"
+                        >
+                          Marcar todas leídas
+                        </button>
+                      )}
+                      <button 
+                        onClick={() => setShowNotifications(false)}
+                        className="p-1 hover:bg-gray-100 rounded-lg"
+                      >
+                        <X className="w-4 h-4 text-gray-500" />
+                      </button>
+                    </div>
+                  </div>
+                  <div className="max-h-96 overflow-y-auto">
+                    {notifications.length === 0 ? (
+                      <div className="p-8 text-center">
+                        <Bell className="w-12 h-12 text-gray-300 mx-auto mb-3" />
+                        <p className="text-gray-500">No tienes notificaciones</p>
+                      </div>
+                    ) : (
+                      notifications.map((notif) => (
+                        <div 
+                          key={notif.id}
+                          className={`p-4 border-b border-gray-50 hover:bg-gray-50 cursor-pointer transition-colors ${!notif.read ? 'bg-blue-50/50' : ''}`}
+                          onClick={() => markNotificationRead(notif.id)}
+                        >
+                          <div className="flex gap-3">
+                            <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ${!notif.read ? 'bg-blue-100' : 'bg-gray-100'}`}>
+                              {getNotificationIcon(notif.type)}
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <div className="flex items-start justify-between gap-2">
+                                <p className={`text-sm ${!notif.read ? 'font-semibold text-gray-900' : 'font-medium text-gray-700'}`}>
+                                  {notif.title}
+                                </p>
+                                <button 
+                                  onClick={(e) => { e.stopPropagation(); deleteNotification(notif.id); }}
+                                  className="p-1 hover:bg-gray-200 rounded opacity-0 group-hover:opacity-100 transition-opacity"
+                                >
+                                  <Trash2 className="w-3 h-3 text-gray-400" />
+                                </button>
+                              </div>
+                              <p className="text-xs text-gray-500 mt-0.5 truncate">{notif.message}</p>
+                              <p className="text-xs text-gray-400 mt-1">{notif.time}</p>
+                            </div>
+                            {!notif.read && (
+                              <div className="w-2 h-2 bg-blue-500 rounded-full flex-shrink-0 mt-2" />
+                            )}
+                          </div>
+                        </div>
+                      ))
+                    )}
+                  </div>
+                  <div className="p-3 border-t border-gray-100 bg-gray-50">
+                    <button 
+                      onClick={() => { setShowNotifications(false); setActiveSection('ajustes'); }}
+                      className="w-full text-center text-sm text-blue-600 hover:text-blue-700 font-medium"
+                    >
+                      Configurar notificaciones
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
             <button className="p-2 hover:bg-gray-100 rounded-xl">
               <HelpCircle className="w-5 h-5 text-gray-600" />
             </button>
