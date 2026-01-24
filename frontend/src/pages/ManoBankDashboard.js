@@ -208,6 +208,80 @@ const ManoBankDashboard = () => {
     }
   };
 
+  // Save profile changes
+  const handleSaveProfile = async () => {
+    setSavingProfile(true);
+    try {
+      const response = await fetch(`${API_URL}/api/auth/profile`, {
+        method: 'PATCH',
+        credentials: 'include',
+        headers: { 
+          'Content-Type': 'application/json',
+          ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+        },
+        body: JSON.stringify({
+          name: profileForm.name,
+          phone: profileForm.phone
+        })
+      });
+      
+      if (response.ok) {
+        toast.success('Datos actualizados correctamente');
+        setShowEditProfile(false);
+        // Refresh page to get updated user data
+        window.location.reload();
+      } else {
+        const data = await response.json();
+        toast.error(data.detail || 'Error al actualizar');
+      }
+    } catch (error) {
+      toast.error('Error de conexión');
+    } finally {
+      setSavingProfile(false);
+    }
+  };
+
+  // Change password
+  const handleChangePassword = async () => {
+    if (passwordForm.new !== passwordForm.confirm) {
+      toast.error('Las contraseñas no coinciden');
+      return;
+    }
+    if (passwordForm.new.length < 8) {
+      toast.error('La contraseña debe tener al menos 8 caracteres');
+      return;
+    }
+    
+    setSavingPassword(true);
+    try {
+      const response = await fetch(`${API_URL}/api/auth/change-password`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: { 
+          'Content-Type': 'application/json',
+          ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+        },
+        body: JSON.stringify({
+          current_password: passwordForm.current,
+          new_password: passwordForm.new
+        })
+      });
+      
+      if (response.ok) {
+        toast.success('Contraseña cambiada correctamente');
+        setShowChangePassword(false);
+        setPasswordForm({ current: '', new: '', confirm: '' });
+      } else {
+        const data = await response.json();
+        toast.error(data.detail || 'Error al cambiar contraseña');
+      }
+    } catch (error) {
+      toast.error('Error de conexión');
+    } finally {
+      setSavingPassword(false);
+    }
+  };
+
   // Sidebar menu items
   const menuItems = [
     { id: 'inicio', label: 'Inicio', icon: Home },
