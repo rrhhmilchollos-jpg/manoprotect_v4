@@ -1557,7 +1557,10 @@ const ManoBankDashboard = () => {
                     <p className="font-medium text-gray-900">{user?.created_at ? new Date(user.created_at).toLocaleDateString('es-ES') : 'Enero 2026'}</p>
                   </div>
                 </div>
-                <Button variant="outline" className="mt-4" onClick={() => toast.info('Función de edición próximamente')}>
+                <Button variant="outline" className="mt-4" onClick={() => {
+                  setProfileForm({ name: user?.name || '', phone: user?.phone || '' });
+                  setShowEditProfile(true);
+                }}>
                   Editar datos
                 </Button>
               </div>
@@ -1582,7 +1585,7 @@ const ManoBankDashboard = () => {
                         <p className="text-sm text-gray-500">Última actualización: hace 30 días</p>
                       </div>
                     </div>
-                    <Button variant="outline" size="sm" onClick={() => toast.info('Cambio de contraseña próximamente')}>Cambiar</Button>
+                    <Button variant="outline" size="sm" onClick={() => setShowChangePassword(true)}>Cambiar</Button>
                   </div>
                   <div className="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
                     <div className="flex items-center gap-3">
