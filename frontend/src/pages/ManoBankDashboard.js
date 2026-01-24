@@ -864,25 +864,228 @@ const ManoBankDashboard = () => {
               </div>
               <div className="grid md:grid-cols-2 gap-4">
                 {accounts.map((account) => (
-                  <div key={account.id} className="bg-white rounded-2xl border border-gray-100 p-6">
-                    <div className="flex items-center gap-4 mb-4">
-                      <div className="w-14 h-14 bg-blue-100 rounded-xl flex items-center justify-center">
-                        <Landmark className="w-7 h-7 text-blue-600" />
+                  <button 
+                    key={account.id} 
+                    onClick={() => openAccountDetail(account)}
+                    className="bg-white rounded-2xl border border-gray-100 p-6 text-left hover:shadow-lg hover:border-blue-200 transition-all group"
+                  >
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="flex items-center gap-4">
+                        <div className="w-14 h-14 bg-blue-100 rounded-xl flex items-center justify-center group-hover:bg-blue-200 transition-colors">
+                          <Landmark className="w-7 h-7 text-blue-600" />
+                        </div>
+                        <div>
+                          <p className="font-semibold text-lg text-gray-900">{account.type === 'ahorro' ? 'Cuenta Ahorro' : 'Cuenta Corriente'}</p>
+                          <p className="text-sm text-gray-500">{account.account_number}</p>
+                        </div>
                       </div>
-                      <div>
-                        <p className="font-semibold text-lg text-gray-900">{account.type === 'ahorro' ? 'Cuenta Ahorro' : 'Cuenta Corriente'}</p>
-                        <p className="text-sm text-gray-500">{account.account_number}</p>
-                      </div>
+                      <ChevronRight className="w-5 h-5 text-gray-400 group-hover:text-blue-600 group-hover:translate-x-1 transition-all" />
                     </div>
                     <p className="text-3xl font-bold text-gray-900 mb-4">{showBalance ? formatCurrency(account.balance) : '••••••'}</p>
                     <div className="flex items-center gap-2 p-3 bg-gray-50 rounded-xl">
                       <p className="text-sm text-gray-600 flex-1 font-mono">{formatIBAN(account.iban)}</p>
-                      <button onClick={() => copyToClipboard(account.iban, 'IBAN')} className="p-2 hover:bg-gray-200 rounded-lg">
-                        <Copy className="w-4 h-4 text-gray-500" />
-                      </button>
+                      <span className="text-xs text-blue-600 font-medium">Ver movimientos →</span>
+                    </div>
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* ==================== DETALLE DE CUENTA ==================== */}
+          {activeSection === 'cuenta-detalle' && selectedAccount && (
+            <div className="space-y-6">
+              {/* Header with back button */}
+              <div className="flex items-center gap-4">
+                <button 
+                  onClick={() => { setSelectedAccount(null); setActiveSection('cuentas'); }}
+                  className="p-2 hover:bg-gray-100 rounded-xl transition-colors"
+                >
+                  <ChevronLeft className="w-6 h-6 text-gray-600" />
+                </button>
+                <div>
+                  <h2 className="text-2xl font-bold text-gray-900">
+                    {selectedAccount.type === 'ahorro' ? 'Cuenta Ahorro' : 'Cuenta Corriente'}
+                  </h2>
+                  <p className="text-gray-500">{selectedAccount.account_number}</p>
+                </div>
+              </div>
+
+              {/* Account Balance Card */}
+              <div className="bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-800 rounded-2xl p-8 text-white">
+                <p className="text-blue-200 text-sm mb-2">Saldo disponible</p>
+                <p className="text-5xl font-bold mb-4">
+                  {showBalance ? formatCurrency(selectedAccount.balance) : '••••••'}
+                </p>
+                <div className="flex items-center gap-2 text-blue-200 text-sm">
+                  <Clock className="w-4 h-4" />
+                  <span>Actualizado: {new Date().toLocaleString('es-ES')}</span>
+                </div>
+              </div>
+
+              {/* Account Details */}
+              <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
+                <div className="p-4 border-b border-gray-100 bg-gray-50">
+                  <h3 className="font-semibold text-gray-900 flex items-center gap-2">
+                    <Info className="w-5 h-5 text-blue-600" />
+                    Datos de la Cuenta
+                  </h3>
+                </div>
+                <div className="p-4 space-y-4">
+                  {/* IBAN */}
+                  <div className="flex items-center justify-between p-4 bg-blue-50 rounded-xl">
+                    <div>
+                      <p className="text-xs text-gray-500 mb-1">IBAN</p>
+                      <p className="font-mono text-lg font-medium text-gray-900">{formatIBAN(selectedAccount.iban)}</p>
+                    </div>
+                    <button 
+                      onClick={() => copyToClipboard(selectedAccount.iban, 'IBAN')}
+                      className="p-3 bg-blue-100 hover:bg-blue-200 rounded-xl transition-colors"
+                    >
+                      <Copy className="w-5 h-5 text-blue-600" />
+                    </button>
+                  </div>
+                  
+                  {/* BIC/SWIFT */}
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="p-4 bg-gray-50 rounded-xl">
+                      <p className="text-xs text-gray-500 mb-1">BIC / SWIFT</p>
+                      <div className="flex items-center justify-between">
+                        <p className="font-mono font-medium text-gray-900">{selectedAccount.bic || 'MNBKESMMXXX'}</p>
+                        <button 
+                          onClick={() => copyToClipboard(selectedAccount.bic || 'MNBKESMMXXX', 'BIC')}
+                          className="p-2 hover:bg-gray-200 rounded-lg transition-colors"
+                        >
+                          <Copy className="w-4 h-4 text-gray-500" />
+                        </button>
+                      </div>
+                    </div>
+                    <div className="p-4 bg-gray-50 rounded-xl">
+                      <p className="text-xs text-gray-500 mb-1">Nº de Cuenta</p>
+                      <p className="font-mono font-medium text-gray-900">{selectedAccount.account_number}</p>
                     </div>
                   </div>
-                ))}
+
+                  {/* Additional Info */}
+                  <div className="grid grid-cols-3 gap-4">
+                    <div className="p-4 bg-gray-50 rounded-xl text-center">
+                      <p className="text-xs text-gray-500 mb-1">Tipo</p>
+                      <p className="font-medium text-gray-900">{selectedAccount.type === 'ahorro' ? 'Ahorro' : 'Corriente'}</p>
+                    </div>
+                    <div className="p-4 bg-gray-50 rounded-xl text-center">
+                      <p className="text-xs text-gray-500 mb-1">Divisa</p>
+                      <p className="font-medium text-gray-900">{selectedAccount.currency || 'EUR'}</p>
+                    </div>
+                    <div className="p-4 bg-gray-50 rounded-xl text-center">
+                      <p className="text-xs text-gray-500 mb-1">Estado</p>
+                      <p className={`font-medium ${selectedAccount.status === 'active' ? 'text-green-600' : 'text-red-600'}`}>
+                        {selectedAccount.status === 'active' ? 'Activa' : 'Inactiva'}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Quick Actions */}
+              <div className="grid grid-cols-4 gap-4">
+                <button 
+                  onClick={() => setActiveSection('pagos')}
+                  className="p-4 bg-white border border-gray-100 rounded-2xl hover:shadow-lg hover:border-blue-200 transition-all flex flex-col items-center gap-2"
+                >
+                  <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
+                    <Send className="w-6 h-6 text-blue-600" />
+                  </div>
+                  <span className="text-sm font-medium text-gray-700">Transferir</span>
+                </button>
+                <button 
+                  onClick={() => { setActiveSection('pagos'); setPaymentType('bizum'); }}
+                  className="p-4 bg-white border border-gray-100 rounded-2xl hover:shadow-lg hover:border-purple-200 transition-all flex flex-col items-center gap-2"
+                >
+                  <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center">
+                    <Smartphone className="w-6 h-6 text-purple-600" />
+                  </div>
+                  <span className="text-sm font-medium text-gray-700">Bizum</span>
+                </button>
+                <button className="p-4 bg-white border border-gray-100 rounded-2xl hover:shadow-lg hover:border-green-200 transition-all flex flex-col items-center gap-2">
+                  <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center">
+                    <Download className="w-6 h-6 text-green-600" />
+                  </div>
+                  <span className="text-sm font-medium text-gray-700">Extracto</span>
+                </button>
+                <button className="p-4 bg-white border border-gray-100 rounded-2xl hover:shadow-lg hover:border-amber-200 transition-all flex flex-col items-center gap-2">
+                  <div className="w-12 h-12 bg-amber-100 rounded-xl flex items-center justify-center">
+                    <FileText className="w-6 h-6 text-amber-600" />
+                  </div>
+                  <span className="text-sm font-medium text-gray-700">Certificado</span>
+                </button>
+              </div>
+
+              {/* Transactions */}
+              <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
+                <div className="p-4 border-b border-gray-100 flex items-center justify-between">
+                  <h3 className="font-semibold text-gray-900 flex items-center gap-2">
+                    <Receipt className="w-5 h-5 text-gray-600" />
+                    Últimos Movimientos
+                  </h3>
+                  <button 
+                    onClick={() => fetchAccountTransactions(selectedAccount.id)}
+                    className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                  >
+                    <RefreshCw className={`w-4 h-4 text-gray-500 ${loadingAccountTx ? 'animate-spin' : ''}`} />
+                  </button>
+                </div>
+                <div className="divide-y divide-gray-50">
+                  {loadingAccountTx ? (
+                    <div className="p-8 text-center text-gray-500">
+                      <RefreshCw className="w-8 h-8 mx-auto mb-2 animate-spin text-blue-600" />
+                      <p>Cargando movimientos...</p>
+                    </div>
+                  ) : accountTransactions.length === 0 ? (
+                    <div className="p-8 text-center text-gray-500">
+                      <Receipt className="w-12 h-12 mx-auto mb-3 opacity-50" />
+                      <p>No hay movimientos en esta cuenta</p>
+                    </div>
+                  ) : (
+                    accountTransactions.map((tx, idx) => (
+                      <div key={tx.id || idx} className="p-4 flex items-center justify-between hover:bg-gray-50 transition-colors">
+                        <div className="flex items-center gap-4">
+                          <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${
+                            tx.amount > 0 ? 'bg-green-100' : 'bg-red-100'
+                          }`}>
+                            {tx.amount > 0 ? 
+                              <ArrowDownLeft className="w-6 h-6 text-green-600" /> :
+                              <ArrowUpRight className="w-6 h-6 text-red-600" />
+                            }
+                          </div>
+                          <div>
+                            <p className="font-medium text-gray-900">{tx.description || tx.concept || 'Movimiento'}</p>
+                            <p className="text-sm text-gray-500">
+                              {tx.created_at ? new Date(tx.created_at).toLocaleDateString('es-ES', {
+                                day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit'
+                              }) : 'Sin fecha'}
+                            </p>
+                          </div>
+                        </div>
+                        <div className="text-right">
+                          <p className={`font-bold text-lg ${tx.amount > 0 ? 'text-green-600' : 'text-red-600'}`}>
+                            {tx.amount > 0 ? '+' : ''}{formatCurrency(tx.amount)}
+                          </p>
+                          <p className="text-xs text-gray-500">
+                            Saldo: {formatCurrency(tx.balance_after || 0)}
+                          </p>
+                        </div>
+                      </div>
+                    ))
+                  )}
+                </div>
+                {accountTransactions.length > 0 && (
+                  <div className="p-4 border-t border-gray-100 bg-gray-50">
+                    <button className="w-full py-2 text-sm font-medium text-blue-600 hover:text-blue-700 flex items-center justify-center gap-2">
+                      Ver todos los movimientos
+                      <ChevronRight className="w-4 h-4" />
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
           )}
