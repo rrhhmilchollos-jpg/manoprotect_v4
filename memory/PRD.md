@@ -44,6 +44,11 @@ Spanish
   - Frontend: Clickable accounts → detail view with IBAN, BIC/SWIFT, transactions
   - UI shows: Account info, quick actions (Transfer, Bizum, Extract, Certificate)
 
+- [x] **PDF Account Statement Download** - Implemented and tested
+  - Backend endpoint: `GET /api/manobank/accounts/{account_id}/statement/pdf?days=30`
+  - Generates professional PDF with ReportLab (account details, transaction table, legal footer)
+  - "Extracto" button in account detail triggers download with success toast
+
 ### Previous Sessions
 - [x] Employee portal login fixed
 - [x] Full banking backend (Ledger, AML, KYC, Reporting)
