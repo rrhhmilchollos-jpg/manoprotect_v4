@@ -897,20 +897,21 @@ const ManoBankDashboard = () => {
 
           {/* ==================== DETALLE DE CUENTA ==================== */}
           {activeSection === 'cuenta-detalle' && selectedAccount && (
-            <div className="space-y-6">
+            <div className="space-y-6" data-testid="account-detail-view">
               {/* Header with back button */}
               <div className="flex items-center gap-4">
                 <button 
                   onClick={() => { setSelectedAccount(null); setActiveSection('cuentas'); }}
                   className="p-2 hover:bg-gray-100 rounded-xl transition-colors"
+                  data-testid="back-to-accounts-btn"
                 >
                   <ChevronLeft className="w-6 h-6 text-gray-600" />
                 </button>
                 <div>
                   <h2 className="text-2xl font-bold text-gray-900">
-                    {selectedAccount.type === 'ahorro' ? 'Cuenta Ahorro' : 'Cuenta Corriente'}
+                    {selectedAccount.alias || selectedAccount.bank_name || 'Cuenta'}
                   </h2>
-                  <p className="text-gray-500">{selectedAccount.account_number}</p>
+                  <p className="text-gray-500">{selectedAccount.bank_name}</p>
                 </div>
               </div>
 
