@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Button } from '../components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
-import { AlertCircle, Video, VideoOff, Mic, MicOff, Phone, PhoneOff, User, Shield, CheckCircle, XCircle, Loader2 } from 'lucide-react';
+import { AlertCircle, Video, VideoOff, Mic, MicOff, Phone, PhoneOff, User, Shield, CheckCircle, XCircle, Loader2, Settings, RefreshCw, Camera } from 'lucide-react';
 
 const API_URL = process.env.REACT_APP_BACKEND_URL;
 
@@ -14,7 +14,7 @@ const KYCVideoVerification = ({
   onVerificationComplete,
   onCancel 
 }) => {
-  const [step, setStep] = useState('permissions'); // permissions, waiting, connected, completed, failed
+  const [step, setStep] = useState('intro'); // intro, permissions, waiting, connected, completed, failed
   const [sessionData, setSessionData] = useState(null);
   const [error, setError] = useState(null);
   const [cameraEnabled, setCameraEnabled] = useState(false);
@@ -22,6 +22,8 @@ const KYCVideoVerification = ({
   const [agentJoined, setAgentJoined] = useState(false);
   const [verificationResult, setVerificationResult] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [permissionStatus, setPermissionStatus] = useState({ camera: 'unknown', microphone: 'unknown' });
+  const [showPermissionHelp, setShowPermissionHelp] = useState(false);
   
   const localVideoRef = useRef(null);
   const remoteVideoRef = useRef(null);
@@ -29,11 +31,47 @@ const KYCVideoVerification = ({
   const streamRef = useRef(null);
   const pollIntervalRef = useRef(null);
 
-  // Check media permissions
+  // Check current permission status on mount
+  useEffect(() => {
+    checkPermissionStatus();
+  }, []);
+
+  const checkPermissionStatus = async () => {
+    try {
+      if (navigator.permissions) {
+        const [cameraPermission, micPermission] = await Promise.all([
+          navigator.permissions.query({ name: 'camera' }).catch(() => ({ state: 'unknown' })),
+          navigator.permissions.query({ name: 'microphone' }).catch(() => ({ state: 'unknown' }))
+        ]);
+        setPermissionStatus({
+          camera: cameraPermission.state,
+          microphone: micPermission.state
+        });
+      }
+    } catch (err) {
+      console.log('Permission API not fully supported');
+    }
+  };
+
+  // Request permissions with better UX
   const requestMediaPermissions = async () => {
     setIsLoading(true);
+    setError(null);
+    setShowPermissionHelp(false);
+    
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+      // First, try to get permissions
+      const stream = await navigator.mediaDevices.getUserMedia({ 
+        video: { 
+          facingMode: 'user',
+          width: { ideal: 1280 },
+          height: { ideal: 720 }
+        }, 
+        audio: true 
+      });
+      
+      // Store stream reference
+      streamRef.current = stream;
       
       // Show local preview
       if (localVideoRef.current) {
@@ -42,22 +80,63 @@ const KYCVideoVerification = ({
       
       setCameraEnabled(true);
       setMicEnabled(true);
+      setStep('permissions');
       
-      // Initialize KYC session
-      await initializeKYCSession();
+      // Update permission status
+      setPermissionStatus({ camera: 'granted', microphone: 'granted' });
       
     } catch (err) {
       console.error('Media permission error:', err);
-      if (err.name === 'NotAllowedError') {
-        setError('Debe permitir el acceso a la cámara y el micrófono para continuar con la verificación.');
-      } else if (err.name === 'NotFoundError') {
-        setError('No se encontró cámara o micrófono en su dispositivo.');
+      setShowPermissionHelp(true);
+      
+      if (err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError') {
+        setError('Para continuar, necesita permitir el acceso a la cámara y micrófono.');
+        setPermissionStatus({ camera: 'denied', microphone: 'denied' });
+      } else if (err.name === 'NotFoundError' || err.name === 'DevicesNotFoundError') {
+        setError('No se detectó cámara o micrófono en su dispositivo. Por favor, conecte uno y vuelva a intentarlo.');
+      } else if (err.name === 'NotReadableError' || err.name === 'TrackStartError') {
+        setError('La cámara o micrófono están siendo usados por otra aplicación. Cierre otras apps y vuelva a intentarlo.');
+      } else if (err.name === 'OverconstrainedError') {
+        // Try again with basic constraints
+        try {
+          const basicStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+          streamRef.current = basicStream;
+          if (localVideoRef.current) {
+            localVideoRef.current.srcObject = basicStream;
+          }
+          setCameraEnabled(true);
+          setMicEnabled(true);
+          setStep('permissions');
+          setPermissionStatus({ camera: 'granted', microphone: 'granted' });
+          return;
+        } catch (retryErr) {
+          setError('Error al acceder a la cámara. Por favor, intente con otro navegador.');
+        }
       } else {
-        setError('Error al acceder a la cámara y micrófono. Por favor, verifique los permisos de su navegador.');
+        setError('Error inesperado al acceder a la cámara y micrófono. Intente recargar la página.');
       }
     } finally {
       setIsLoading(false);
     }
+  };
+
+  // Proceed to KYC session after permissions granted
+  const proceedToSession = async () => {
+    setIsLoading(true);
+    try {
+      await initializeKYCSession();
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Check media permissions
+  const retryPermissions = () => {
+    setError(null);
+    setShowPermissionHelp(false);
+    requestMediaPermissions();
   };
 
   // Initialize KYC session with backend
