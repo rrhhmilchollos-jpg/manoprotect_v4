@@ -4,7 +4,7 @@ import { Button } from '../components/ui/button';
 import { 
   Landmark, CreditCard, Smartphone, Shield, CheckCircle, ArrowRight,
   Star, Users, TrendingUp, Award, Zap, Lock, Globe, Phone,
-  ChevronDown, Play, Wallet, PiggyBank, Receipt, Building2
+  ChevronDown, Play, Wallet, PiggyBank, Receipt, Building2, MapPin, Mail
 } from 'lucide-react';
 
 const LandingPromo = () => {
