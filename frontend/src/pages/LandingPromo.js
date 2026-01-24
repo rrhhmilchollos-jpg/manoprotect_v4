@@ -411,9 +411,27 @@ const LandingPromo = () => {
                 </div>
                 <span className="text-xl font-bold">ManoBank</span>
               </div>
-              <p className="text-gray-400 text-sm">
+              <p className="text-gray-400 text-sm mb-4">
                 Tu neobanco 100% digital. Banca sin comisiones, sin letra pequeña.
               </p>
+              {/* Sede info */}
+              <div className="space-y-2 text-sm">
+                <div className="flex items-start gap-2">
+                  <MapPin className="w-4 h-4 text-blue-400 mt-0.5 flex-shrink-0" />
+                  <div className="text-gray-400">
+                    <p>C/ Sor Isabel de Villena 82 bajo</p>
+                    <p>Novelé, Valencia, España</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Phone className="w-4 h-4 text-blue-400" />
+                  <a href="tel:601510950" className="text-blue-400 hover:text-blue-300">601 510 950</a>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Mail className="w-4 h-4 text-blue-400" />
+                  <a href="mailto:info@manobank.com" className="text-blue-400 hover:text-blue-300">info@manobank.com</a>
+                </div>
+              </div>
             </div>
             
             <div>
@@ -446,6 +464,16 @@ const LandingPromo = () => {
                 <li><a href="#" className="hover:text-white">Cookies</a></li>
                 <li><a href="#" className="hover:text-white">Tarifas</a></li>
               </ul>
+              
+              {/* Horarios */}
+              <div className="mt-6 p-3 bg-gray-800 rounded-lg">
+                <p className="text-xs font-medium text-white mb-2">Horarios de atención</p>
+                <div className="space-y-1 text-xs text-gray-400">
+                  <p>🟢 Sucursal: 08:00 - 14:00</p>
+                  <p>🔵 Gestores: 14:00 - 18:00</p>
+                  <p>🔴 Urgencias: 18:00 - 08:00</p>
+                </div>
+              </div>
             </div>
           </div>
           
@@ -453,9 +481,15 @@ const LandingPromo = () => {
             <p className="text-sm text-gray-400">
               © 2026 ManoBank S.A. · CIF: B19427723 · Entidad supervisada por el Banco de España
             </p>
-            <div className="flex items-center gap-4">
-              <Phone className="w-4 h-4 text-gray-400" />
-              <span className="text-sm text-gray-400">900 123 456 (Gratuito)</span>
+            <div className="flex items-center gap-6 text-sm text-gray-400">
+              <a href="tel:601510950" className="flex items-center gap-2 hover:text-white">
+                <Phone className="w-4 h-4" />
+                <span>601 510 950</span>
+              </a>
+              <a href="mailto:info@manobank.com" className="flex items-center gap-2 hover:text-white">
+                <Mail className="w-4 h-4" />
+                <span>info@manobank.com</span>
+              </a>
             </div>
           </div>
         </div>
