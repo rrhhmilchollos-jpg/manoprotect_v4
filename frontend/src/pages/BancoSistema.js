@@ -51,7 +51,10 @@ import {
   Banknote,
   Send,
   Loader2,
-  AlertCircle
+  AlertCircle,
+  Key,
+  Smartphone,
+  ShieldCheck
 } from 'lucide-react';
 
 const API_URL = process.env.REACT_APP_BACKEND_URL;
