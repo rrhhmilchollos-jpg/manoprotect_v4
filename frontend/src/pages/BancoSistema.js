@@ -3666,6 +3666,173 @@ const CustomerDetailModal = ({ customer, onClose, onRefresh, API_URL, token }) =
           )}
         </div>
       </div>
+
+      {/* Modal de Verificación SMS para PIN */}
+      {showPinVerification && (
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl w-full max-w-md overflow-hidden shadow-2xl">
+            {/* Header */}
+            <div className="bg-gradient-to-r from-red-600 to-red-700 text-white p-6">
+              <div className="flex items-center gap-3">
+                <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
+                  <ShieldCheck className="w-6 h-6" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-bold">Verificación Requerida</h3>
+                  <p className="text-red-100 text-sm">Acceso a datos sensibles</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Content */}
+            <div className="p-6">
+              {/* Card Info */}
+              <div className="bg-gray-50 rounded-xl p-4 mb-6">
+                <p className="text-sm text-gray-500 mb-1">Tarjeta</p>
+                <p className="font-mono font-semibold">{showPinVerification.card_number}</p>
+                <p className="text-sm text-gray-600 mt-1">{showPinVerification.customer_name}</p>
+              </div>
+
+              {/* Step: Request */}
+              {pinVerificationStep === 'request' && (
+                <div className="space-y-4">
+                  <div className="bg-amber-50 border border-amber-200 rounded-xl p-4">
+                    <div className="flex items-start gap-3">
+                      <AlertTriangle className="w-5 h-5 text-amber-600 mt-0.5" />
+                      <div>
+                        <p className="font-medium text-amber-800">Datos sensibles protegidos</p>
+                        <p className="text-sm text-amber-700 mt-1">
+                          Para ver el PIN de esta tarjeta, se enviará un código SMS al teléfono del cliente registrado en el banco. El cliente debe proporcionar este código.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <p className="text-sm text-gray-600">
+                    Esta acción quedará registrada en el sistema de auditoría con tu identificación de empleado.
+                  </p>
+                  <div className="flex gap-3">
+                    <Button 
+                      variant="outline" 
+                      className="flex-1"
+                      onClick={closePinModal}
+                    >
+                      Cancelar
+                    </Button>
+                    <Button 
+                      className="flex-1 bg-red-600 hover:bg-red-700"
+                      onClick={() => handleRequestPinVerification(showPinVerification)}
+                      disabled={pinVerificationLoading}
+                    >
+                      {pinVerificationLoading ? (
+                        <><Loader2 className="w-4 h-4 mr-2 animate-spin" />Enviando...</>
+                      ) : (
+                        <><Smartphone className="w-4 h-4 mr-2" />Enviar código SMS</>
+                      )}
+                    </Button>
+                  </div>
+                </div>
+              )}
+
+              {/* Step: Verify */}
+              {pinVerificationStep === 'verify' && (
+                <div className="space-y-4">
+                  <div className="bg-blue-50 border border-blue-200 rounded-xl p-4">
+                    <div className="flex items-start gap-3">
+                      <Smartphone className="w-5 h-5 text-blue-600 mt-0.5" />
+                      <div>
+                        <p className="font-medium text-blue-800">Código SMS enviado</p>
+                        <p className="text-sm text-blue-700 mt-1">
+                          Se ha enviado un código de 6 dígitos al teléfono del cliente. Solicita el código al cliente y escríbelo aquí.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {pinDebugCode && (
+                    <div className="bg-purple-50 border border-purple-200 rounded-xl p-3">
+                      <p className="text-xs text-purple-600 font-medium">🔧 Modo desarrollo - Código: <span className="font-mono text-lg">{pinDebugCode}</span></p>
+                    </div>
+                  )}
+                  
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Código de verificación</label>
+                    <input
+                      type="text"
+                      maxLength={6}
+                      value={pinVerificationCode}
+                      onChange={(e) => setPinVerificationCode(e.target.value.replace(/\D/g, ''))}
+                      className="w-full px-4 py-3 text-center text-2xl font-mono tracking-widest border border-gray-300 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                      placeholder="000000"
+                    />
+                  </div>
+                  
+                  <p className="text-xs text-gray-500 text-center">El código expira en 5 minutos</p>
+                  
+                  <div className="flex gap-3">
+                    <Button 
+                      variant="outline" 
+                      className="flex-1"
+                      onClick={closePinModal}
+                    >
+                      Cancelar
+                    </Button>
+                    <Button 
+                      className="flex-1 bg-red-600 hover:bg-red-700"
+                      onClick={handleVerifyPinCode}
+                      disabled={pinVerificationLoading || pinVerificationCode.length !== 6}
+                    >
+                      {pinVerificationLoading ? (
+                        <><Loader2 className="w-4 h-4 mr-2 animate-spin" />Verificando...</>
+                      ) : (
+                        <><ShieldCheck className="w-4 h-4 mr-2" />Verificar</>
+                      )}
+                    </Button>
+                  </div>
+                </div>
+              )}
+
+              {/* Step: Show PIN */}
+              {pinVerificationStep === 'show' && pinVerificationData && (
+                <div className="space-y-4">
+                  <div className="bg-green-50 border border-green-200 rounded-xl p-4">
+                    <div className="flex items-center gap-2 mb-2">
+                      <CheckCircle className="w-5 h-5 text-green-600" />
+                      <p className="font-medium text-green-800">Verificación exitosa</p>
+                    </div>
+                    <p className="text-sm text-green-700">
+                      Acceso autorizado y registrado en auditoría
+                    </p>
+                  </div>
+                  
+                  <div className="bg-gray-900 rounded-xl p-6 text-center">
+                    <p className="text-gray-400 text-sm mb-2">PIN de la tarjeta</p>
+                    <p className="text-4xl font-mono font-bold text-white tracking-[0.5em]">
+                      {pinVerificationData.sensitive_data?.pin || '****'}
+                    </p>
+                    <p className="text-gray-500 text-xs mt-3">
+                      Cliente: {pinVerificationData.customer_name}
+                    </p>
+                  </div>
+                  
+                  <div className="bg-red-50 border border-red-200 rounded-xl p-3">
+                    <p className="text-xs text-red-700 flex items-center gap-2">
+                      <AlertTriangle className="w-4 h-4" />
+                      Este PIN se mostrará solo una vez. El acceso ha sido registrado.
+                    </p>
+                  </div>
+                  
+                  <Button 
+                    className="w-full"
+                    onClick={closePinModal}
+                  >
+                    Cerrar
+                  </Button>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
