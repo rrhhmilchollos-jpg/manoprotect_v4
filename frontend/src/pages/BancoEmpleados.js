@@ -102,7 +102,7 @@ const BancoEmpleados = () => {
       if (dashboardData.employee?.is_superadmin || dashboardData.employee?.role === 'director') {
         // Direct access for Director General - navigate to system
         toast.success(`Bienvenido, ${loginData.name || 'Director General'}`);
-        navigate('/banco-sistema');
+        navigate('/banco/sistema');
         return;
       }
       
