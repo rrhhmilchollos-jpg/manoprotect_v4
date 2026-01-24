@@ -483,13 +483,19 @@ const ManoBankDashboard = () => {
                         <FileText className="w-5 h-5 text-indigo-600" />
                         Mis Productos Contratados
                       </h3>
-                      <button onClick={() => setActiveSection('productos')} className="text-sm text-blue-600 hover:underline">
-                        Ver todos
+                      <button onClick={() => setActiveSection('productos')} className="text-sm text-blue-600 hover:underline flex items-center gap-1">
+                        Ver todos <ChevronRight className="w-4 h-4" />
                       </button>
                     </div>
                     <div className="p-4 grid sm:grid-cols-2 gap-4">
-                      {/* Simulated products */}
-                      <div className="p-4 bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl border border-green-100">
+                      {/* Simulated products with click actions */}
+                      <button 
+                        onClick={() => {
+                          setActiveSection('productos');
+                          toast.info('Consultando detalles de tu hipoteca...');
+                        }}
+                        className="p-4 bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl border border-green-100 hover:shadow-md transition-all text-left"
+                      >
                         <div className="flex items-center gap-3 mb-3">
                           <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
                             <Building className="w-5 h-5 text-green-600" />
@@ -501,9 +507,19 @@ const ManoBankDashboard = () => {
                         </div>
                         <p className="text-2xl font-bold text-green-800">142.350,00 €</p>
                         <p className="text-xs text-green-600 mt-1">Pendiente de pago</p>
-                      </div>
+                        <div className="mt-3 pt-3 border-t border-green-200 flex justify-between text-xs">
+                          <span className="text-green-600">Cuota: 685€/mes</span>
+                          <span className="text-green-500">Ver detalles →</span>
+                        </div>
+                      </button>
 
-                      <div className="p-4 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl border border-blue-100">
+                      <button 
+                        onClick={() => {
+                          setActiveSection('productos');
+                          toast.info('Consultando tu seguro de hogar...');
+                        }}
+                        className="p-4 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl border border-blue-100 hover:shadow-md transition-all text-left"
+                      >
                         <div className="flex items-center gap-3 mb-3">
                           <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
                             <Umbrella className="w-5 h-5 text-blue-600" />
@@ -515,9 +531,19 @@ const ManoBankDashboard = () => {
                         </div>
                         <p className="text-2xl font-bold text-blue-800">320,00 €/año</p>
                         <p className="text-xs text-blue-600 mt-1">Próxima renovación: Mar 2026</p>
-                      </div>
+                        <div className="mt-3 pt-3 border-t border-blue-200 flex justify-between text-xs">
+                          <span className="text-blue-600">Cobertura: 150.000€</span>
+                          <span className="text-blue-500">Ver póliza →</span>
+                        </div>
+                      </button>
 
-                      <div className="p-4 bg-gradient-to-br from-purple-50 to-violet-50 rounded-xl border border-purple-100">
+                      <button 
+                        onClick={() => {
+                          setActiveSection('productos');
+                          toast.info('Consultando tu préstamo personal...');
+                        }}
+                        className="p-4 bg-gradient-to-br from-purple-50 to-violet-50 rounded-xl border border-purple-100 hover:shadow-md transition-all text-left"
+                      >
                         <div className="flex items-center gap-3 mb-3">
                           <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
                             <PiggyBank className="w-5 h-5 text-purple-600" />
@@ -529,9 +555,19 @@ const ManoBankDashboard = () => {
                         </div>
                         <p className="text-2xl font-bold text-purple-800">8.500,00 €</p>
                         <p className="text-xs text-purple-600 mt-1">Cuota: 285€/mes</p>
-                      </div>
+                        <div className="mt-3 pt-3 border-t border-purple-200 flex justify-between text-xs">
+                          <span className="text-purple-600">Quedan 30 cuotas</span>
+                          <span className="text-purple-500">Amortizar →</span>
+                        </div>
+                      </button>
 
-                      <div className="p-4 bg-gradient-to-br from-amber-50 to-orange-50 rounded-xl border border-amber-100">
+                      <button 
+                        onClick={() => {
+                          setActiveSection('productos');
+                          toast.info('Consultando tu seguro de coche...');
+                        }}
+                        className="p-4 bg-gradient-to-br from-amber-50 to-orange-50 rounded-xl border border-amber-100 hover:shadow-md transition-all text-left"
+                      >
                         <div className="flex items-center gap-3 mb-3">
                           <div className="w-10 h-10 bg-amber-100 rounded-lg flex items-center justify-center">
                             <Car className="w-5 h-5 text-amber-600" />
@@ -543,7 +579,11 @@ const ManoBankDashboard = () => {
                         </div>
                         <p className="text-2xl font-bold text-amber-800">580,00 €/año</p>
                         <p className="text-xs text-amber-600 mt-1">Vence: Dic 2026</p>
-                      </div>
+                        <div className="mt-3 pt-3 border-t border-amber-200 flex justify-between text-xs">
+                          <span className="text-amber-600">Matrícula: 1234ABC</span>
+                          <span className="text-amber-500">Dar parte →</span>
+                        </div>
+                      </button>
                     </div>
                   </div>
                 </div>
