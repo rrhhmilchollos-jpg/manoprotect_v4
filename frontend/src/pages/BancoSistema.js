@@ -64,6 +64,14 @@ const BancoSistema = () => {
   const [pendingVideoSessions, setPendingVideoSessions] = useState([]);
   const [activeVideoSession, setActiveVideoSession] = useState(null);
   
+  // Compliance & AML states
+  const [complianceSummary, setComplianceSummary] = useState(null);
+  const [compliancePolicies, setCompliancePolicies] = useState([]);
+  const [amlDashboard, setAmlDashboard] = useState(null);
+  const [amlAlerts, setAmlAlerts] = useState([]);
+  const [kycDashboard, setKycDashboard] = useState(null);
+  const [reportingDashboard, setReportingDashboard] = useState(null);
+  
   // Modal states
   const [showAddEmployee, setShowAddEmployee] = useState(false);
   const [showNewAccount, setShowNewAccount] = useState(false);
