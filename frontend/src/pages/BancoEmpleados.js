@@ -100,9 +100,9 @@ const BancoEmpleados = () => {
       
       // Director General / Superadmin can skip 2FA
       if (dashboardData.employee?.is_superadmin || dashboardData.employee?.role === 'director') {
-        // Direct access for Director General
-        setIsAuthenticated(true);
+        // Direct access for Director General - navigate to system
         toast.success(`Bienvenido, ${loginData.name || 'Director General'}`);
+        navigate('/banco-sistema');
         return;
       }
       
