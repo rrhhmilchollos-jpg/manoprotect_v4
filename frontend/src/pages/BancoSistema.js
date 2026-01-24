@@ -3048,8 +3048,514 @@ const BancoSistema = () => {
           </div>
         </div>
       )}
+
+      {/* Customer Detail Modal */}
+      {showCustomerDetail && (
+        <CustomerDetailModal 
+          customer={showCustomerDetail} 
+          onClose={() => setShowCustomerDetail(null)}
+          onRefresh={fetchCustomers}
+          API_URL={API_URL}
+          token={token}
+        />
+      )}
     </div>
   );
 };
 
-export default BancoSistema;
+// Customer Detail Modal Component with Banking Operations
+const CustomerDetailModal = ({ customer, onClose, onRefresh, API_URL, token }) => {
+  const [activeSection, setActiveSection] = useState('info');
+  const [accounts, setAccounts] = useState([]);
+  const [cards, setCards] = useState([]);
+  const [transactions, setTransactions] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [operationAmount, setOperationAmount] = useState('');
+  const [operationConcept, setOperationConcept] = useState('');
+  const [selectedAccount, setSelectedAccount] = useState(null);
+
+  useEffect(() => {
+    fetchCustomerData();
+  }, [customer.id]);
+
+  const fetchCustomerData = async () => {
+    setLoading(true);
+    try {
+      const headers = { 'Content-Type': 'application/json', ...(token && { 'Authorization': `Bearer ${token}` }) };
+      
+      // Fetch accounts
+      const accRes = await fetch(`${API_URL}/api/manobank/admin/customers/${customer.id}/accounts`, {
+        credentials: 'include', headers
+      });
+      if (accRes.ok) {
+        const data = await accRes.json();
+        setAccounts(data.accounts || []);
+        if (data.accounts?.length > 0) setSelectedAccount(data.accounts[0]);
+      }
+
+      // Fetch cards
+      const cardsRes = await fetch(`${API_URL}/api/manobank/admin/customers/${customer.id}/cards`, {
+        credentials: 'include', headers
+      });
+      if (cardsRes.ok) {
+        const data = await cardsRes.json();
+        setCards(data.cards || []);
+      }
+
+      // Fetch transactions
+      const txRes = await fetch(`${API_URL}/api/manobank/admin/customers/${customer.id}/transactions?limit=20`, {
+        credentials: 'include', headers
+      });
+      if (txRes.ok) {
+        const data = await txRes.json();
+        setTransactions(data.transactions || []);
+      }
+    } catch (error) {
+      console.error('Error fetching customer data:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDeposit = async () => {
+    if (!operationAmount || !selectedAccount) {
+      toast.error('Ingrese un monto y seleccione una cuenta');
+      return;
+    }
+    try {
+      const response = await fetch(`${API_URL}/api/manobank/admin/accounts/${selectedAccount.id}/deposit`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json', ...(token && { 'Authorization': `Bearer ${token}` }) },
+        body: JSON.stringify({
+          amount: parseFloat(operationAmount),
+          concept: operationConcept || 'Ingreso en ventanilla'
+        })
+      });
+      if (response.ok) {
+        toast.success(`Ingreso de €${operationAmount} realizado`);
+        setOperationAmount('');
+        setOperationConcept('');
+        fetchCustomerData();
+      } else {
+        const err = await response.json();
+        toast.error(err.detail || 'Error al realizar ingreso');
+      }
+    } catch (error) {
+      toast.error('Error de conexión');
+    }
+  };
+
+  const handleWithdrawal = async () => {
+    if (!operationAmount || !selectedAccount) {
+      toast.error('Ingrese un monto y seleccione una cuenta');
+      return;
+    }
+    try {
+      const response = await fetch(`${API_URL}/api/manobank/admin/accounts/${selectedAccount.id}/withdraw`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json', ...(token && { 'Authorization': `Bearer ${token}` }) },
+        body: JSON.stringify({
+          amount: parseFloat(operationAmount),
+          concept: operationConcept || 'Retirada en ventanilla'
+        })
+      });
+      if (response.ok) {
+        toast.success(`Retirada de €${operationAmount} realizada`);
+        setOperationAmount('');
+        setOperationConcept('');
+        fetchCustomerData();
+      } else {
+        const err = await response.json();
+        toast.error(err.detail || 'Error al realizar retirada');
+      }
+    } catch (error) {
+      toast.error('Error de conexión');
+    }
+  };
+
+  const handleBlockCard = async (cardId) => {
+    try {
+      const response = await fetch(`${API_URL}/api/manobank/admin/cards/${cardId}/block`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json', ...(token && { 'Authorization': `Bearer ${token}` }) }
+      });
+      if (response.ok) {
+        toast.success('Tarjeta bloqueada');
+        fetchCustomerData();
+      }
+    } catch (error) {
+      toast.error('Error al bloquear tarjeta');
+    }
+  };
+
+  const handleUnblockCard = async (cardId) => {
+    try {
+      const response = await fetch(`${API_URL}/api/manobank/admin/cards/${cardId}/unblock`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json', ...(token && { 'Authorization': `Bearer ${token}` }) }
+      });
+      if (response.ok) {
+        toast.success('Tarjeta desbloqueada');
+        fetchCustomerData();
+      }
+    } catch (error) {
+      toast.error('Error al desbloquear tarjeta');
+    }
+  };
+
+  const handleFreezeAccount = async (accountId) => {
+    try {
+      const response = await fetch(`${API_URL}/api/manobank/admin/accounts/${accountId}/freeze`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json', ...(token && { 'Authorization': `Bearer ${token}` }) }
+      });
+      if (response.ok) {
+        toast.success('Cuenta congelada');
+        fetchCustomerData();
+      }
+    } catch (error) {
+      toast.error('Error al congelar cuenta');
+    }
+  };
+
+  const formatCurrency = (amount) => {
+    return new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR' }).format(amount || 0);
+  };
+
+  const formatIBAN = (iban) => {
+    if (!iban) return 'N/A';
+    return iban.replace(/(.{4})/g, '$1 ').trim();
+  };
+
+  return (
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 overflow-y-auto">
+      <div className="bg-white rounded-2xl max-w-4xl w-full my-8 max-h-[90vh] overflow-hidden flex flex-col">
+        {/* Header */}
+        <div className="p-6 border-b bg-gradient-to-r from-indigo-600 to-purple-600 text-white">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center">
+                <User className="w-8 h-8" />
+              </div>
+              <div>
+                <h2 className="text-2xl font-bold">{customer.name}</h2>
+                <p className="text-indigo-200">DNI: {customer.dni} | {customer.email}</p>
+                <p className="text-indigo-200 text-sm">Tel: {customer.phone || 'N/A'}</p>
+              </div>
+            </div>
+            <button onClick={onClose} className="p-2 hover:bg-white/20 rounded-full">
+              <X className="w-6 h-6" />
+            </button>
+          </div>
+          
+          {/* Status badges */}
+          <div className="flex gap-2 mt-4">
+            <span className={`px-3 py-1 rounded-full text-sm ${
+              customer.kyc_verified ? 'bg-green-500' : 'bg-amber-500'
+            }`}>
+              KYC: {customer.kyc_verified ? 'Verificado' : 'Pendiente'}
+            </span>
+            <span className={`px-3 py-1 rounded-full text-sm ${
+              customer.status === 'active' ? 'bg-green-500' : 'bg-red-500'
+            }`}>
+              {customer.status === 'active' ? 'Activo' : 'Inactivo'}
+            </span>
+            <span className={`px-3 py-1 rounded-full text-sm ${
+              customer.risk_level === 'bajo' ? 'bg-green-500' :
+              customer.risk_level === 'medio' ? 'bg-amber-500' : 'bg-red-500'
+            }`}>
+              Riesgo: {customer.risk_level}
+            </span>
+          </div>
+        </div>
+
+        {/* Navigation */}
+        <div className="flex border-b bg-zinc-50">
+          {[
+            { id: 'info', label: 'Información', icon: User },
+            { id: 'accounts', label: 'Cuentas', icon: Wallet },
+            { id: 'cards', label: 'Tarjetas', icon: CreditCard },
+            { id: 'operations', label: 'Operaciones', icon: ArrowUpDown },
+            { id: 'transactions', label: 'Movimientos', icon: Receipt }
+          ].map(tab => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveSection(tab.id)}
+              className={`flex-1 py-3 px-4 flex items-center justify-center gap-2 text-sm font-medium transition-colors ${
+                activeSection === tab.id 
+                  ? 'border-b-2 border-indigo-600 text-indigo-600 bg-white' 
+                  : 'text-zinc-500 hover:text-zinc-700'
+              }`}
+            >
+              <tab.icon className="w-4 h-4" />
+              {tab.label}
+            </button>
+          ))}
+        </div>
+
+        {/* Content */}
+        <div className="flex-1 overflow-y-auto p-6">
+          {loading ? (
+            <div className="flex items-center justify-center h-40">
+              <Loader2 className="w-8 h-8 animate-spin text-indigo-600" />
+            </div>
+          ) : (
+            <>
+              {/* Info Section */}
+              {activeSection === 'info' && (
+                <div className="space-y-6">
+                  <div className="grid md:grid-cols-2 gap-6">
+                    <div className="bg-zinc-50 rounded-xl p-4">
+                      <h4 className="font-semibold mb-3">Datos Personales</h4>
+                      <div className="space-y-2 text-sm">
+                        <div className="flex justify-between"><span className="text-zinc-500">Nombre:</span> <span>{customer.name}</span></div>
+                        <div className="flex justify-between"><span className="text-zinc-500">DNI/NIE:</span> <span>{customer.dni}</span></div>
+                        <div className="flex justify-between"><span className="text-zinc-500">Email:</span> <span>{customer.email}</span></div>
+                        <div className="flex justify-between"><span className="text-zinc-500">Teléfono:</span> <span>{customer.phone || 'N/A'}</span></div>
+                        <div className="flex justify-between"><span className="text-zinc-500">Dirección:</span> <span>{customer.address || 'N/A'}</span></div>
+                      </div>
+                    </div>
+                    <div className="bg-zinc-50 rounded-xl p-4">
+                      <h4 className="font-semibold mb-3">Información de Cuenta</h4>
+                      <div className="space-y-2 text-sm">
+                        <div className="flex justify-between"><span className="text-zinc-500">Cliente desde:</span> <span>{customer.created_at ? new Date(customer.created_at).toLocaleDateString('es-ES') : 'N/A'}</span></div>
+                        <div className="flex justify-between"><span className="text-zinc-500">Tipo de cuenta:</span> <span>{customer.account_type || 'Estándar'}</span></div>
+                        <div className="flex justify-between"><span className="text-zinc-500">Nº Cuentas:</span> <span>{accounts.length}</span></div>
+                        <div className="flex justify-between"><span className="text-zinc-500">Nº Tarjetas:</span> <span>{cards.length}</span></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Accounts Section */}
+              {activeSection === 'accounts' && (
+                <div className="space-y-4">
+                  {accounts.length === 0 ? (
+                    <div className="text-center py-8 text-zinc-500">
+                      <Wallet className="w-12 h-12 mx-auto mb-3 opacity-50" />
+                      <p>Este cliente no tiene cuentas</p>
+                    </div>
+                  ) : (
+                    accounts.map(account => (
+                      <div key={account.id} className="bg-gradient-to-r from-indigo-600 to-purple-600 rounded-xl p-5 text-white">
+                        <div className="flex justify-between items-start mb-4">
+                          <div>
+                            <p className="text-indigo-200 text-sm">{account.account_type || 'Cuenta Corriente'}</p>
+                            <p className="text-3xl font-bold mt-1">{formatCurrency(account.balance)}</p>
+                          </div>
+                          <div className="flex gap-2">
+                            <span className={`px-2 py-1 rounded text-xs ${
+                              account.status === 'active' ? 'bg-green-500' : 'bg-red-500'
+                            }`}>
+                              {account.status === 'active' ? 'Activa' : 'Bloqueada'}
+                            </span>
+                          </div>
+                        </div>
+                        <p className="text-indigo-200 text-sm font-mono">{formatIBAN(account.iban)}</p>
+                        <div className="mt-4 flex gap-2">
+                          {account.status === 'active' ? (
+                            <Button size="sm" variant="secondary" onClick={() => handleFreezeAccount(account.id)}>
+                              <Lock className="w-4 h-4 mr-1" /> Congelar
+                            </Button>
+                          ) : (
+                            <Button size="sm" variant="secondary">
+                              <Unlock className="w-4 h-4 mr-1" /> Descongelar
+                            </Button>
+                          )}
+                        </div>
+                      </div>
+                    ))
+                  )}
+                </div>
+              )}
+
+              {/* Cards Section */}
+              {activeSection === 'cards' && (
+                <div className="space-y-4">
+                  {cards.length === 0 ? (
+                    <div className="text-center py-8 text-zinc-500">
+                      <CreditCard className="w-12 h-12 mx-auto mb-3 opacity-50" />
+                      <p>Este cliente no tiene tarjetas</p>
+                    </div>
+                  ) : (
+                    cards.map(card => (
+                      <div key={card.id} className="bg-gradient-to-br from-zinc-800 to-zinc-900 rounded-xl p-5 text-white">
+                        <div className="flex justify-between items-start">
+                          <div>
+                            <p className="text-zinc-400 text-sm">{card.card_type}</p>
+                            <p className="font-mono text-lg mt-2">•••• •••• •••• {card.last_four || '****'}</p>
+                            <p className="text-zinc-400 text-sm mt-2">Expira: {card.expiry_date || 'N/A'}</p>
+                          </div>
+                          <div className="text-right">
+                            <span className={`px-2 py-1 rounded text-xs ${
+                              card.status === 'active' ? 'bg-green-500' :
+                              card.status === 'blocked' ? 'bg-red-500' : 'bg-amber-500'
+                            }`}>
+                              {card.status === 'active' ? 'Activa' : 
+                               card.status === 'blocked' ? 'Bloqueada' : card.status}
+                            </span>
+                          </div>
+                        </div>
+                        <div className="mt-4 flex gap-2">
+                          {card.status === 'active' ? (
+                            <Button size="sm" variant="destructive" onClick={() => handleBlockCard(card.id)}>
+                              <Lock className="w-4 h-4 mr-1" /> Bloquear
+                            </Button>
+                          ) : (
+                            <Button size="sm" variant="outline" className="text-white border-white" onClick={() => handleUnblockCard(card.id)}>
+                              <Unlock className="w-4 h-4 mr-1" /> Desbloquear
+                            </Button>
+                          )}
+                        </div>
+                      </div>
+                    ))
+                  )}
+                </div>
+              )}
+
+              {/* Operations Section - BANKING OPERATIONS */}
+              {activeSection === 'operations' && (
+                <div className="space-y-6">
+                  {accounts.length === 0 ? (
+                    <div className="text-center py-8 text-zinc-500">
+                      <AlertCircle className="w-12 h-12 mx-auto mb-3 opacity-50" />
+                      <p>Este cliente no tiene cuentas para operar</p>
+                    </div>
+                  ) : (
+                    <>
+                      {/* Account selector */}
+                      <div className="bg-zinc-50 rounded-xl p-4">
+                        <label className="block text-sm font-medium mb-2">Cuenta seleccionada</label>
+                        <select
+                          value={selectedAccount?.id || ''}
+                          onChange={(e) => setSelectedAccount(accounts.find(a => a.id === e.target.value))}
+                          className="w-full p-3 border border-zinc-300 rounded-lg"
+                        >
+                          {accounts.map(acc => (
+                            <option key={acc.id} value={acc.id}>
+                              {formatIBAN(acc.iban)} - {formatCurrency(acc.balance)}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+
+                      {/* Operation form */}
+                      <div className="bg-zinc-50 rounded-xl p-4 space-y-4">
+                        <h4 className="font-semibold flex items-center gap-2">
+                          <Banknote className="w-5 h-5 text-green-600" />
+                          Operación en Ventanilla
+                        </h4>
+                        
+                        <div className="grid md:grid-cols-2 gap-4">
+                          <div>
+                            <label className="block text-sm font-medium mb-1">Importe (€)</label>
+                            <input
+                              type="number"
+                              value={operationAmount}
+                              onChange={(e) => setOperationAmount(e.target.value)}
+                              placeholder="0.00"
+                              className="w-full p-3 border border-zinc-300 rounded-lg text-2xl font-bold"
+                              min="0"
+                              step="0.01"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-sm font-medium mb-1">Concepto</label>
+                            <input
+                              type="text"
+                              value={operationConcept}
+                              onChange={(e) => setOperationConcept(e.target.value)}
+                              placeholder="Ingreso/Retirada en ventanilla"
+                              className="w-full p-3 border border-zinc-300 rounded-lg"
+                            />
+                          </div>
+                        </div>
+
+                        <div className="flex gap-3">
+                          <Button 
+                            onClick={handleDeposit}
+                            className="flex-1 h-12 bg-green-600 hover:bg-green-700"
+                            disabled={!operationAmount || parseFloat(operationAmount) <= 0}
+                          >
+                            <ArrowDown className="w-5 h-5 mr-2" />
+                            Ingresar
+                          </Button>
+                          <Button 
+                            onClick={handleWithdrawal}
+                            className="flex-1 h-12 bg-red-600 hover:bg-red-700"
+                            disabled={!operationAmount || parseFloat(operationAmount) <= 0}
+                          >
+                            <ArrowUp className="w-5 h-5 mr-2" />
+                            Retirar
+                          </Button>
+                        </div>
+                      </div>
+
+                      {/* Quick actions */}
+                      <div className="grid md:grid-cols-3 gap-4">
+                        <Button variant="outline" className="h-16 flex-col">
+                          <Send className="w-5 h-5 mb-1" />
+                          <span className="text-xs">Transferencia</span>
+                        </Button>
+                        <Button variant="outline" className="h-16 flex-col">
+                          <FileText className="w-5 h-5 mb-1" />
+                          <span className="text-xs">Extracto</span>
+                        </Button>
+                        <Button variant="outline" className="h-16 flex-col">
+                          <Shield className="w-5 h-5 mb-1" />
+                          <span className="text-xs">Bloquear Todo</span>
+                        </Button>
+                      </div>
+                    </>
+                  )}
+                </div>
+              )}
+
+              {/* Transactions Section */}
+              {activeSection === 'transactions' && (
+                <div className="space-y-3">
+                  {transactions.length === 0 ? (
+                    <div className="text-center py-8 text-zinc-500">
+                      <Receipt className="w-12 h-12 mx-auto mb-3 opacity-50" />
+                      <p>No hay movimientos</p>
+                    </div>
+                  ) : (
+                    transactions.map((tx, idx) => (
+                      <div key={tx.id || idx} className="flex items-center justify-between p-4 bg-zinc-50 rounded-lg">
+                        <div className="flex items-center gap-3">
+                          <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
+                            tx.amount > 0 ? 'bg-green-100' : 'bg-red-100'
+                          }`}>
+                            {tx.amount > 0 ? 
+                              <ArrowDown className="w-5 h-5 text-green-600" /> : 
+                              <ArrowUp className="w-5 h-5 text-red-600" />
+                            }
+                          </div>
+                          <div>
+                            <p className="font-medium">{tx.description || tx.concept || 'Movimiento'}</p>
+                            <p className="text-xs text-zinc-500">
+                              {tx.created_at ? new Date(tx.created_at).toLocaleString('es-ES') : 'N/A'}
+                            </p>
+                          </div>
+                        </div>
+                        <p className={`font-bold ${tx.amount > 0 ? 'text-green-600' : 'text-red-600'}`}>
+                          {tx.amount > 0 ? '+' : ''}{formatCurrency(tx.amount)}
+                        </p>
+                      </div>
+                    ))
+                  )}
+                </div>
+              )}
+            </>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
