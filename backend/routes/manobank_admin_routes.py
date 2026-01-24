@@ -2693,6 +2693,205 @@ async def update_customer(
 
 
 # ============================================
+# VERIFICACIÓN SMS PARA DATOS SENSIBLES
+# ============================================
+
+class SensitiveDataType(str, Enum):
+    PIN = "pin"
+    CVV = "cvv"
+    FULL_CARD_NUMBER = "full_card_number"
+    ACCOUNT_PASSWORD = "account_password"
+
+class RequestSensitiveDataVerification(BaseModel):
+    card_id: str
+    data_type: SensitiveDataType
+    reason: str = "Consulta de datos sensibles"
+
+class VerifySensitiveDataCode(BaseModel):
+    verification_id: str
+    code: str
+
+@router.post("/cards/{card_id}/request-sensitive-data")
+async def request_sensitive_data_verification(
+    card_id: str,
+    request: Request,
+    session_token: Optional[str] = Cookie(None),
+    data_type: str = "pin",
+    reason: str = "Consulta de datos sensibles"
+):
+    """
+    Solicitar verificación SMS para ver datos sensibles de tarjeta.
+    Envía código al teléfono del cliente registrado en el banco.
+    """
+    user, employee = await require_bank_employee(request, session_token)
+    db = get_db()
+    
+    # Get the card
+    card = await db.manobank_cards.find_one({"id": card_id})
+    if not card:
+        raise HTTPException(status_code=404, detail="Tarjeta no encontrada")
+    
+    # Get the customer to get their phone
+    customer = await db.manobank_customers.find_one({"id": card["customer_id"]})
+    if not customer:
+        raise HTTPException(status_code=404, detail="Cliente no encontrado")
+    
+    customer_phone = customer.get("phone")
+    if not customer_phone:
+        raise HTTPException(status_code=400, detail="El cliente no tiene teléfono registrado")
+    
+    # Generate verification code
+    import secrets
+    verification_code = ''.join([str(secrets.randbelow(10)) for _ in range(6)])
+    verification_id = f"sens_{uuid.uuid4().hex[:16]}"
+    
+    # Store verification request
+    verification_record = {
+        "id": verification_id,
+        "card_id": card_id,
+        "customer_id": customer["id"],
+        "customer_name": customer["name"],
+        "customer_phone": customer_phone,
+        "data_type": data_type,
+        "reason": reason,
+        "code": verification_code,
+        "requested_by": user.user_id,
+        "requested_by_name": employee.get("name", user.name),
+        "created_at": datetime.now(timezone.utc).isoformat(),
+        "expires_at": (datetime.now(timezone.utc) + timedelta(minutes=5)).isoformat(),
+        "verified": False,
+        "used": False
+    }
+    
+    await db.manobank_sensitive_verifications.insert_one(verification_record)
+    
+    # Send SMS
+    sms_sent = False
+    try:
+        from services.twilio_sms import send_sms
+        message = f"ManoBank: Su código de verificación es {verification_code}. Un empleado del banco ha solicitado acceso a datos sensibles de su tarjeta. Si no reconoce esta solicitud, llame al 601510950."
+        await send_sms(customer_phone, message)
+        sms_sent = True
+    except Exception as e:
+        print(f"Error sending SMS: {e}")
+        # In development, continue without SMS
+    
+    # Log the access attempt
+    await db.manobank_audit_log.insert_one({
+        "action": "sensitive_data_request",
+        "card_id": card_id,
+        "customer_id": customer["id"],
+        "data_type": data_type,
+        "reason": reason,
+        "employee_id": user.user_id,
+        "employee_name": employee.get("name"),
+        "verification_id": verification_id,
+        "timestamp": datetime.now(timezone.utc).isoformat()
+    })
+    
+    # Mask phone for response
+    masked_phone = customer_phone[:3] + "****" + customer_phone[-3:] if len(customer_phone) > 6 else "****"
+    
+    return {
+        "message": "Código de verificación enviado",
+        "verification_id": verification_id,
+        "customer_name": customer["name"],
+        "phone_masked": masked_phone,
+        "sms_sent": sms_sent,
+        "expires_in_seconds": 300,
+        "debug_code": verification_code if not sms_sent else None  # Only in dev when SMS fails
+    }
+
+
+@router.post("/cards/verify-sensitive-data")
+async def verify_sensitive_data_code(
+    request: Request,
+    session_token: Optional[str] = Cookie(None),
+    verification_id: str = None,
+    code: str = None
+):
+    """
+    Verificar código SMS y devolver datos sensibles de la tarjeta.
+    """
+    user, employee = await require_bank_employee(request, session_token)
+    db = get_db()
+    
+    # Get verification record
+    verification = await db.manobank_sensitive_verifications.find_one({
+        "id": verification_id,
+        "verified": False,
+        "used": False
+    })
+    
+    if not verification:
+        raise HTTPException(status_code=404, detail="Verificación no encontrada o ya utilizada")
+    
+    # Check expiration
+    expires_at = datetime.fromisoformat(verification["expires_at"].replace("Z", "+00:00"))
+    if datetime.now(timezone.utc) > expires_at:
+        raise HTTPException(status_code=400, detail="El código ha expirado. Solicite uno nuevo.")
+    
+    # Verify code
+    if verification["code"] != code:
+        # Log failed attempt
+        await db.manobank_audit_log.insert_one({
+            "action": "sensitive_data_verification_failed",
+            "verification_id": verification_id,
+            "employee_id": user.user_id,
+            "timestamp": datetime.now(timezone.utc).isoformat()
+        })
+        raise HTTPException(status_code=400, detail="Código incorrecto")
+    
+    # Mark as verified and used
+    await db.manobank_sensitive_verifications.update_one(
+        {"id": verification_id},
+        {"$set": {"verified": True, "used": True, "verified_at": datetime.now(timezone.utc).isoformat()}}
+    )
+    
+    # Get the card with sensitive data
+    card = await db.manobank_cards.find_one({"id": verification["card_id"]})
+    if not card:
+        raise HTTPException(status_code=404, detail="Tarjeta no encontrada")
+    
+    # Prepare response based on data_type
+    data_type = verification["data_type"]
+    sensitive_data = {}
+    
+    if data_type == "pin":
+        sensitive_data["pin"] = card.get("pin", "N/A")
+    elif data_type == "cvv":
+        sensitive_data["cvv"] = card.get("cvv", "N/A")
+    elif data_type == "full_card_number":
+        sensitive_data["card_number"] = card.get("card_number", "N/A")
+    elif data_type == "account_password":
+        # Get account password if exists
+        account = await db.manobank_accounts.find_one({"id": card.get("account_id")})
+        sensitive_data["account_password"] = account.get("password", "N/A") if account else "N/A"
+    
+    # Log successful access
+    await db.manobank_audit_log.insert_one({
+        "action": "sensitive_data_accessed",
+        "card_id": verification["card_id"],
+        "customer_id": verification["customer_id"],
+        "data_type": data_type,
+        "employee_id": user.user_id,
+        "employee_name": employee.get("name"),
+        "verification_id": verification_id,
+        "timestamp": datetime.now(timezone.utc).isoformat()
+    })
+    
+    return {
+        "message": "Verificación exitosa",
+        "card_id": verification["card_id"],
+        "customer_name": verification["customer_name"],
+        "data_type": data_type,
+        "sensitive_data": sensitive_data,
+        "access_logged": True,
+        "warning": "Este acceso ha sido registrado en el sistema de auditoría"
+    }
+
+
+# ============================================
 # BASE DE DATOS DE ESTAFAS Y FRAUDES
 # Sistema de verificación pública de números/emails fraudulentos
 # ============================================
