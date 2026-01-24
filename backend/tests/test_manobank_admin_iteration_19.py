@@ -27,8 +27,9 @@ class TestAuthLogin:
         )
         assert response.status_code == 200, f"Login failed: {response.text}"
         data = response.json()
-        assert "user" in data or "token" in data or "session_token" in data
-        print(f"✓ Login successful for {TEST_EMAIL}")
+        # Response contains user data directly (email, name, etc.)
+        assert "email" in data or "user" in data or "token" in data
+        print(f"✓ Login successful for {data.get('email', TEST_EMAIL)}")
     
     def test_login_invalid_credentials(self):
         """POST /api/auth/login - Invalid credentials returns 401"""
@@ -162,7 +163,7 @@ class TestTellerOperations:
         deposit_amount = 50.00
         response = auth_session.post(
             f"{BASE_URL}/api/manobank/admin/accounts/{TEST_ACCOUNT_ID}/deposit",
-            params={"amount": deposit_amount, "concept": "TEST_Ingreso prueba pytest"}
+            json={"amount": deposit_amount, "concept": "TEST_Ingreso prueba pytest"}
         )
         assert response.status_code == 200, f"Deposit failed: {response.text}"
         data = response.json()
@@ -178,7 +179,7 @@ class TestTellerOperations:
         withdraw_amount = 25.00
         response = auth_session.post(
             f"{BASE_URL}/api/manobank/admin/accounts/{TEST_ACCOUNT_ID}/withdraw",
-            params={"amount": withdraw_amount, "concept": "TEST_Retirada prueba pytest"}
+            json={"amount": withdraw_amount, "concept": "TEST_Retirada prueba pytest"}
         )
         assert response.status_code == 200, f"Withdraw failed: {response.text}"
         data = response.json()
@@ -192,7 +193,7 @@ class TestTellerOperations:
         # Try to withdraw a very large amount
         response = auth_session.post(
             f"{BASE_URL}/api/manobank/admin/accounts/{TEST_ACCOUNT_ID}/withdraw",
-            params={"amount": 999999999.00, "concept": "TEST_Should fail"}
+            json={"amount": 999999999.00, "concept": "TEST_Should fail"}
         )
         # Should fail with 400 (insufficient funds) or similar
         assert response.status_code in [400, 422], f"Expected 400/422 for insufficient funds, got {response.status_code}"
@@ -208,9 +209,11 @@ class TestComplianceEndpoints:
         assert response.status_code == 200, f"Compliance summary failed: {response.text}"
         data = response.json()
         
-        # Verify entity info
-        assert "entity_name" in data or "regulated_entity" in data
-        print(f"✓ Compliance summary loaded")
+        # Verify entity info - nested under "entity" key
+        assert "entity" in data, f"Missing entity in response: {data.keys()}"
+        entity = data["entity"]
+        assert "name" in entity or "cif" in entity
+        print(f"✓ Compliance summary loaded: {entity.get('name', 'N/A')}")
     
     def test_aml_dashboard(self, auth_session):
         """GET /api/aml/dashboard - Dashboard AML"""
