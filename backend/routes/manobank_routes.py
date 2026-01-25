@@ -2496,3 +2496,197 @@ async def cambiar_password_temporal(request: Request):
         "email": registration["email"],
         "nombre": registration["nombre_completo"]
     }
+
+
+# ============================================
+# DEPÓSITO INICIAL OBLIGATORIO (STRIPE)
+# ============================================
+
+@router.post("/deposito-inicial/crear-sesion")
+async def crear_sesion_deposito_inicial(request: Request):
+    """
+    Crear sesión de Stripe para el depósito inicial de 25€
+    """
+    import stripe
+    import os
+    
+    stripe.api_key = os.environ.get("STRIPE_API_KEY")
+    
+    db = get_db()
+    body = await request.json()
+    
+    account_id = body.get("account_id")
+    customer_id = body.get("customer_id")
+    success_url = body.get("success_url", "https://manobank.es/manobank")
+    cancel_url = body.get("cancel_url", "https://manobank.es/manobank")
+    
+    if not account_id or not customer_id:
+        raise HTTPException(status_code=400, detail="account_id y customer_id son requeridos")
+    
+    # Verificar que la cuenta existe y no tiene depósito inicial
+    account = await db.manobank_accounts.find_one({"account_id": account_id})
+    if not account:
+        raise HTTPException(status_code=404, detail="Cuenta no encontrada")
+    
+    registration = await db.manobank_customer_registrations.find_one({"account_id": account_id})
+    if registration and registration.get("initial_deposit_completed"):
+        raise HTTPException(status_code=400, detail="El depósito inicial ya fue realizado")
+    
+    try:
+        # Crear sesión de checkout de Stripe
+        checkout_session = stripe.checkout.Session.create(
+            payment_method_types=['card'],
+            line_items=[{
+                'price_data': {
+                    'currency': 'eur',
+                    'product_data': {
+                        'name': 'Depósito Inicial ManoBank',
+                        'description': 'Activación de cuenta bancaria ManoBank',
+                    },
+                    'unit_amount': 2500,  # 25.00 EUR en céntimos
+                },
+                'quantity': 1,
+            }],
+            mode='payment',
+            success_url=f"{success_url}?deposit=success&session_id={{CHECKOUT_SESSION_ID}}",
+            cancel_url=f"{cancel_url}?deposit=cancelled",
+            metadata={
+                'account_id': account_id,
+                'customer_id': customer_id,
+                'type': 'initial_deposit'
+            }
+        )
+        
+        # Guardar referencia de la sesión
+        await db.manobank_payment_sessions.insert_one({
+            "session_id": checkout_session.id,
+            "account_id": account_id,
+            "customer_id": customer_id,
+            "amount": 25.0,
+            "currency": "EUR",
+            "type": "initial_deposit",
+            "status": "pending",
+            "created_at": datetime.now(timezone.utc).isoformat()
+        })
+        
+        return {
+            "success": True,
+            "session_id": checkout_session.id,
+            "checkout_url": checkout_session.url
+        }
+        
+    except stripe.error.StripeError as e:
+        raise HTTPException(status_code=500, detail=f"Error de Stripe: {str(e)}")
+
+
+@router.post("/deposito-inicial/confirmar")
+async def confirmar_deposito_inicial(request: Request):
+    """
+    Confirmar que el depósito inicial fue exitoso
+    Se llama después de que Stripe redirige con success
+    """
+    import stripe
+    import os
+    
+    stripe.api_key = os.environ.get("STRIPE_API_KEY")
+    
+    db = get_db()
+    body = await request.json()
+    
+    session_id = body.get("session_id")
+    
+    if not session_id:
+        raise HTTPException(status_code=400, detail="session_id requerido")
+    
+    try:
+        # Verificar el estado de la sesión en Stripe
+        session = stripe.checkout.Session.retrieve(session_id)
+        
+        if session.payment_status != 'paid':
+            raise HTTPException(status_code=400, detail="El pago no se ha completado")
+        
+        account_id = session.metadata.get('account_id')
+        customer_id = session.metadata.get('customer_id')
+        
+        # Actualizar cuenta - añadir el saldo de 25€
+        await db.manobank_accounts.update_one(
+            {"account_id": account_id},
+            {
+                "$set": {
+                    "status": "active",
+                    "balance": 25.0,
+                    "available_balance": 25.0,
+                    "activated_at": datetime.now(timezone.utc).isoformat()
+                }
+            }
+        )
+        
+        # Marcar el depósito inicial como completado
+        await db.manobank_customer_registrations.update_one(
+            {"account_id": account_id},
+            {
+                "$set": {
+                    "initial_deposit_completed": True,
+                    "initial_deposit_date": datetime.now(timezone.utc).isoformat()
+                }
+            }
+        )
+        
+        # Crear transacción de depósito
+        await db.manobank_transactions.insert_one({
+            "transaction_id": f"txn_{uuid.uuid4().hex[:12]}",
+            "account_id": account_id,
+            "customer_id": customer_id,
+            "type": "deposit",
+            "subtype": "initial_deposit",
+            "amount": 25.0,
+            "currency": "EUR",
+            "description": "Depósito inicial de activación",
+            "status": "completed",
+            "stripe_session_id": session_id,
+            "balance_after": 25.0,
+            "created_at": datetime.now(timezone.utc).isoformat()
+        })
+        
+        # Actualizar sesión de pago
+        await db.manobank_payment_sessions.update_one(
+            {"session_id": session_id},
+            {
+                "$set": {
+                    "status": "completed",
+                    "completed_at": datetime.now(timezone.utc).isoformat()
+                }
+            }
+        )
+        
+        return {
+            "success": True,
+            "message": "Depósito inicial completado. Su cuenta está activa.",
+            "account_id": account_id,
+            "new_balance": 25.0
+        }
+        
+    except stripe.error.StripeError as e:
+        raise HTTPException(status_code=500, detail=f"Error verificando pago: {str(e)}")
+
+
+@router.get("/deposito-inicial/estado/{account_id}")
+async def estado_deposito_inicial(account_id: str):
+    """
+    Verificar si una cuenta tiene el depósito inicial completado
+    """
+    db = get_db()
+    
+    registration = await db.manobank_customer_registrations.find_one(
+        {"account_id": account_id},
+        {"_id": 0, "initial_deposit_completed": 1, "initial_deposit_required": 1}
+    )
+    
+    if not registration:
+        raise HTTPException(status_code=404, detail="Cuenta no encontrada")
+    
+    return {
+        "account_id": account_id,
+        "initial_deposit_required": registration.get("initial_deposit_required", 25.0),
+        "initial_deposit_completed": registration.get("initial_deposit_completed", False)
+    }
