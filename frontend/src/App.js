@@ -40,6 +40,7 @@ import SolicitarCuenta from '@/pages/SolicitarCuenta';
 import LandingPromo from '@/pages/LandingPromo';
 import RecuperarPassword from '@/pages/RecuperarPassword';
 import VerificarEstafa from '@/pages/VerificarEstafa';
+import ManoBankRegistro from '@/pages/ManoBankRegistro';
 import CookieConsent from '@/components/CookieConsent';
 
 import '@/App.css';
