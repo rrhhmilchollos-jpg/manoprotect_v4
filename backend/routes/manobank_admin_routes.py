@@ -3087,3 +3087,350 @@ async def delete_scam_report(
         raise HTTPException(status_code=404, detail="Reporte no encontrado")
     
     return {"message": "Reporte eliminado"}
+
+
+
+# ============================================
+# GESTIÓN DE SOLICITUDES DE REGISTRO (NUEVOS CLIENTES)
+# ============================================
+
+@router.get("/registrations")
+async def get_customer_registrations(
+    request: Request,
+    session_token: Optional[str] = Cookie(None),
+    status: Optional[str] = None
+):
+    """Listar solicitudes de registro de nuevos clientes"""
+    user, employee = await require_bank_employee(request, session_token)
+    db = get_db()
+    
+    query = {}
+    if status:
+        query["status"] = status
+    
+    registrations = await db.manobank_customer_registrations.find(
+        query,
+        {"_id": 0, "temp_password": 0}  # No exponer contraseñas
+    ).sort("created_at", -1).limit(100).to_list(100)
+    
+    # Stats
+    stats = {
+        "total": await db.manobank_customer_registrations.count_documents({}),
+        "pending": await db.manobank_customer_registrations.count_documents({"status": "pending"}),
+        "kyc_scheduled": await db.manobank_customer_registrations.count_documents({"kyc_status": "scheduled"}),
+        "approved": await db.manobank_customer_registrations.count_documents({"status": "approved"}),
+        "rejected": await db.manobank_customer_registrations.count_documents({"status": "rejected"})
+    }
+    
+    return {
+        "registrations": registrations,
+        "stats": stats
+    }
+
+
+@router.get("/registrations/{solicitud_id}")
+async def get_registration_detail(
+    solicitud_id: str,
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Ver detalle de una solicitud de registro"""
+    user, employee = await require_bank_employee(request, session_token)
+    db = get_db()
+    
+    registration = await db.manobank_customer_registrations.find_one(
+        {"solicitud_id": solicitud_id},
+        {"_id": 0}
+    )
+    
+    if not registration:
+        raise HTTPException(status_code=404, detail="Solicitud no encontrada")
+    
+    return registration
+
+
+@router.post("/registrations/{solicitud_id}/approve")
+async def approve_customer_registration(
+    solicitud_id: str,
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """
+    Aprobar solicitud de registro tras verificación KYC exitosa
+    - Genera cuenta bancaria con IBAN
+    - Genera contraseña temporal
+    - Envía SMS al cliente con credenciales (válidas 24h)
+    """
+    user, employee = await require_bank_employee(request, session_token)
+    db = get_db()
+    
+    body = await request.json()
+    kyc_notes = body.get("kyc_notes", "")
+    
+    registration = await db.manobank_customer_registrations.find_one(
+        {"solicitud_id": solicitud_id}
+    )
+    
+    if not registration:
+        raise HTTPException(status_code=404, detail="Solicitud no encontrada")
+    
+    if registration.get("status") == "approved":
+        raise HTTPException(status_code=400, detail="Esta solicitud ya fue aprobada")
+    
+    # 1. Generar IBAN español (ES + 22 dígitos)
+    bank_code = "0234"  # Código ficticio de ManoBank
+    branch_code = "0001"  # Sucursal principal
+    account_number = ''.join([str(random.randint(0, 9)) for _ in range(10)])
+    bban = f"{bank_code}{branch_code}{account_number}"
+    
+    # Calcular dígitos de control IBAN
+    check_digits = 98 - (int(bban + "142800") % 97)  # ES = 14 28
+    iban = f"ES{check_digits:02d}{bban}"
+    
+    # 2. Generar ID de cuenta y cliente
+    customer_id = f"cli_{uuid.uuid4().hex[:12]}"
+    account_id = f"acc_{uuid.uuid4().hex[:12]}"
+    
+    # 3. Generar contraseña temporal (8 caracteres alfanuméricos)
+    import secrets
+    import string
+    temp_chars = string.ascii_letters + string.digits
+    temp_password = ''.join(secrets.choice(temp_chars) for _ in range(8))
+    temp_password_expires = datetime.now(timezone.utc) + timedelta(hours=24)
+    
+    # 4. Crear cuenta bancaria
+    new_account = {
+        "account_id": account_id,
+        "user_id": None,  # Se vinculará cuando el cliente complete el primer login
+        "customer_id": customer_id,
+        "iban": iban,
+        "bic": "MANOES2V",
+        "swift": "MANOES2VXXX",
+        "account_type": "corriente",
+        "account_name": f"Cuenta {registration['nombre']}",
+        "currency": "EUR",
+        "balance": 0.0,  # Empieza en 0
+        "available_balance": 0.0,
+        "status": "pending_deposit",  # Pendiente del depósito inicial de 25€
+        "holder_name": registration["nombre_completo"],
+        "holder_dni": registration["documento_completo"],
+        "created_at": datetime.now(timezone.utc).isoformat(),
+        "is_primary": True
+    }
+    
+    await db.manobank_accounts.insert_one(new_account)
+    
+    # 5. Crear registro de cliente
+    new_customer = {
+        "customer_id": customer_id,
+        "documento": registration["documento_completo"],
+        "tipo_documento": registration["tipo_documento"],
+        "nombre": registration["nombre"],
+        "apellidos": f"{registration['primer_apellido']} {registration.get('segundo_apellido', '')}".strip(),
+        "nombre_completo": registration["nombre_completo"],
+        "email": registration["email"],
+        "telefono": registration["telefono_movil"],
+        "direccion": registration["direccion_completa"],
+        "codigo_postal": registration["codigo_postal"],
+        "localidad": registration["localidad"],
+        "provincia": registration["provincia"],
+        "fecha_nacimiento": registration["fecha_nacimiento"],
+        "nacionalidad": registration["nacionalidad"],
+        "kyc_verified": True,
+        "kyc_verified_at": datetime.now(timezone.utc).isoformat(),
+        "kyc_verified_by": employee.get("name", user.name),
+        "accounts": [account_id],
+        "cards": [],
+        "gestor_asignado": employee.get("employee_id"),
+        "created_at": datetime.now(timezone.utc).isoformat(),
+        "status": "active"
+    }
+    
+    await db.manobank_customers.insert_one(new_customer)
+    
+    # 6. Actualizar solicitud de registro
+    await db.manobank_customer_registrations.update_one(
+        {"solicitud_id": solicitud_id},
+        {
+            "$set": {
+                "status": "approved",
+                "kyc_status": "completed",
+                "customer_id": customer_id,
+                "account_id": account_id,
+                "iban": iban,
+                "temp_password": temp_password,
+                "temp_password_expires": temp_password_expires.isoformat(),
+                "credentials_sent": True,
+                "approved_at": datetime.now(timezone.utc).isoformat(),
+                "approved_by": employee.get("name", user.name),
+                "updated_at": datetime.now(timezone.utc).isoformat()
+            },
+            "$push": {
+                "kyc_notes": {
+                    "note": kyc_notes or "Verificación KYC completada satisfactoriamente",
+                    "by": employee.get("name", user.name),
+                    "at": datetime.now(timezone.utc).isoformat()
+                }
+            }
+        }
+    )
+    
+    # 7. Enviar SMS con credenciales temporales
+    sms_message = (
+        f"ManoBank: ¡Bienvenido/a {registration['nombre']}! "
+        f"Su cuenta ha sido aprobada. "
+        f"Acceda con: DNI/NIE: {registration['documento_completo']} | "
+        f"Contraseña temporal: {temp_password} "
+        f"(válida 24h). Cámbiela en su primer acceso. "
+        f"https://manobank.es/login-seguro"
+    )
+    
+    # Intentar enviar SMS via Twilio
+    sms_sent = False
+    try:
+        from services.twilio_sms import send_sms
+        await send_sms(registration["telefono_movil"], sms_message)
+        sms_sent = True
+    except Exception as e:
+        print(f"Error enviando SMS: {e}")
+    
+    # Log del evento
+    await db.manobank_audit_log.insert_one({
+        "event_type": "customer_approved",
+        "solicitud_id": solicitud_id,
+        "customer_id": customer_id,
+        "account_id": account_id,
+        "iban": iban,
+        "approved_by": employee.get("name", user.name),
+        "employee_id": employee.get("employee_id"),
+        "sms_sent": sms_sent,
+        "timestamp": datetime.now(timezone.utc).isoformat()
+    })
+    
+    return {
+        "success": True,
+        "message": "Cliente aprobado correctamente",
+        "customer_id": customer_id,
+        "account_id": account_id,
+        "iban": iban,
+        "sms_sent": sms_sent,
+        "temp_password": temp_password,  # Solo para debug, no mostrar en producción
+        "instructions": f"Se ha enviado SMS a {registration['telefono_movil']} con las credenciales temporales"
+    }
+
+
+@router.post("/registrations/{solicitud_id}/reject")
+async def reject_customer_registration(
+    solicitud_id: str,
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Rechazar solicitud de registro"""
+    user, employee = await require_bank_employee(request, session_token)
+    db = get_db()
+    
+    body = await request.json()
+    rejection_reason = body.get("reason", "No se especificó motivo")
+    
+    registration = await db.manobank_customer_registrations.find_one(
+        {"solicitud_id": solicitud_id}
+    )
+    
+    if not registration:
+        raise HTTPException(status_code=404, detail="Solicitud no encontrada")
+    
+    await db.manobank_customer_registrations.update_one(
+        {"solicitud_id": solicitud_id},
+        {
+            "$set": {
+                "status": "rejected",
+                "kyc_status": "failed",
+                "rejection_reason": rejection_reason,
+                "rejected_at": datetime.now(timezone.utc).isoformat(),
+                "rejected_by": employee.get("name", user.name),
+                "updated_at": datetime.now(timezone.utc).isoformat()
+            }
+        }
+    )
+    
+    # Notificar al cliente por SMS
+    try:
+        from services.twilio_sms import send_sms
+        sms_message = (
+            f"ManoBank: Lo sentimos, su solicitud de cuenta no ha podido ser aprobada. "
+            f"Para más información contacte con 601 510 950."
+        )
+        await send_sms(registration["telefono_movil"], sms_message)
+    except Exception as e:
+        print(f"Error enviando SMS de rechazo: {e}")
+    
+    return {
+        "success": True,
+        "message": "Solicitud rechazada",
+        "reason": rejection_reason
+    }
+
+
+@router.post("/registrations/{solicitud_id}/schedule-kyc")
+async def schedule_kyc_for_registration(
+    solicitud_id: str,
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Programar videoverificación KYC para una solicitud"""
+    user, employee = await require_bank_employee(request, session_token)
+    db = get_db()
+    
+    body = await request.json()
+    scheduled_date = body.get("scheduled_date")
+    meeting_link = body.get("meeting_link")
+    
+    if not scheduled_date:
+        raise HTTPException(status_code=400, detail="Fecha requerida")
+    
+    registration = await db.manobank_customer_registrations.find_one(
+        {"solicitud_id": solicitud_id}
+    )
+    
+    if not registration:
+        raise HTTPException(status_code=404, detail="Solicitud no encontrada")
+    
+    appointment = {
+        "scheduled_date": scheduled_date,
+        "meeting_link": meeting_link,
+        "agent_id": employee.get("employee_id"),
+        "agent_name": employee.get("name", user.name),
+        "status": "scheduled",
+        "created_at": datetime.now(timezone.utc).isoformat()
+    }
+    
+    await db.manobank_customer_registrations.update_one(
+        {"solicitud_id": solicitud_id},
+        {
+            "$set": {
+                "status": "kyc_scheduled",
+                "kyc_status": "scheduled",
+                "kyc_appointment": appointment,
+                "kyc_agent_id": employee.get("employee_id"),
+                "updated_at": datetime.now(timezone.utc).isoformat()
+            }
+        }
+    )
+    
+    # Enviar SMS con cita
+    try:
+        from services.twilio_sms import send_sms
+        sms_message = (
+            f"ManoBank: Su videoverificación está programada para el {scheduled_date}. "
+            f"Enlace: {meeting_link or 'Se enviará antes de la cita'}. "
+            f"Tenga su DNI/NIE original preparado."
+        )
+        await send_sms(registration["telefono_movil"], sms_message)
+    except Exception as e:
+        print(f"Error enviando SMS: {e}")
+    
+    return {
+        "success": True,
+        "message": "Videoverificación programada",
+        "appointment": appointment
+    }
