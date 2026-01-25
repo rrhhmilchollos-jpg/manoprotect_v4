@@ -2443,13 +2443,13 @@ async def cambiar_password_temporal(request: Request):
     
     if not existing_user:
         # Crear nuevo usuario en la colección de users
-        from services.security_service import hash_password
+        from services.security_service import hash_password_secure
         
         new_user = {
             "user_id": customer_id,
             "email": registration["email"],
             "name": registration["nombre_completo"],
-            "password_hash": hash_password(new_password),
+            "password_hash": hash_password_secure(new_password),
             "role": "customer",
             "phone": registration.get("telefono_movil"),
             "dni": documento,
@@ -2464,11 +2464,12 @@ async def cambiar_password_temporal(request: Request):
         await db.users.insert_one(new_user)
     else:
         # Actualizar usuario existente
+        from services.security_service import hash_password_secure
         await db.users.update_one(
             {"email": registration["email"]},
             {
                 "$set": {
-                    "password_hash": hash_password(new_password),
+                    "password_hash": hash_password_secure(new_password),
                     "is_manobank_customer": True,
                     "manobank_customer_id": customer_id,
                     "dni": documento,
