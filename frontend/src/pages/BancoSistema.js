@@ -188,13 +188,53 @@ const BancoSistema = () => {
 
   const fetchAccountRequests = async () => {
     try {
-      const response = await fetch(`${API_URL}/api/manobank/admin/account-requests`, {
-        credentials: 'include',
-        headers: token ? { 'Authorization': `Bearer ${token}` } : {}
-      });
-      const data = await response.json();
-      setAccountRequests(data.requests || []);
+      // Fetch both old account requests and new BBVA-style registrations
+      const [oldRequestsRes, newRegistrationsRes] = await Promise.all([
+        fetch(`${API_URL}/api/manobank/admin/account-requests`, {
+          credentials: 'include',
+          headers: token ? { 'Authorization': `Bearer ${token}` } : {}
+        }),
+        fetch(`${API_URL}/api/manobank/admin/registrations`, {
+          credentials: 'include',
+          headers: token ? { 'Authorization': `Bearer ${token}` } : {}
+        })
+      ]);
+      
+      const oldData = await oldRequestsRes.json();
+      const newData = await newRegistrationsRes.json();
+      
+      // Combine and format both types of requests
+      const oldRequests = (oldData.requests || []).map(r => ({ ...r, source: 'legacy' }));
+      const newRegistrations = (newData.registrations || []).map(r => ({
+        id: r.solicitud_id,
+        customer_name: r.nombre_completo,
+        customer_dni: r.documento_completo,
+        customer_email: r.email,
+        customer_phone: r.telefono_movil,
+        account_type: 'corriente',
+        status: r.status,
+        kyc_status: r.kyc_status,
+        kyc_appointment: r.kyc_appointment,
+        initial_deposit: r.initial_deposit_required || 25,
+        iban: r.iban,
+        created_at: r.created_at,
+        source: 'bbva_registration',
+        // Additional registration data
+        direccion: r.direccion_completa,
+        localidad: r.localidad,
+        provincia: r.provincia,
+        situacion_laboral: r.situacion_laboral,
+        origen_fondos: r.origen_fondos
+      }));
+      
+      // Combine and sort by date (newest first)
+      const allRequests = [...oldRequests, ...newRegistrations].sort((a, b) => 
+        new Date(b.created_at || 0) - new Date(a.created_at || 0)
+      );
+      
+      setAccountRequests(allRequests);
     } catch (error) {
+      console.error('Error fetching account requests:', error);
       toast.error('Error al cargar solicitudes');
     }
   };
