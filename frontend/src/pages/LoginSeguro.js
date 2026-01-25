@@ -204,46 +204,13 @@ const LoginSeguro = () => {
       }
 
       toast.success('Cuenta creada correctamente. Ya puede iniciar sesión.');
-      setIsLogin(true);
+      setLoginType('email');
       
     } catch (error) {
       toast.error(error.message);
     } finally {
       setIsLoading(false);
     }
-  };
-
-  // Password strength indicator
-  const [passwordStrength, setPasswordStrength] = useState({ score: 0, feedback: [] });
-  
-  const checkPasswordStrength = async (password) => {
-    if (password.length < 3) {
-      setPasswordStrength({ score: 0, feedback: [] });
-      return;
-    }
-    try {
-      const response = await fetch(`${API_URL}/api/auth/validate-password`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ password })
-      });
-      const data = await response.json();
-      setPasswordStrength(data);
-    } catch (e) {
-      console.log('Password validation error');
-    }
-  };
-
-  const getStrengthColor = (score) => {
-    if (score < 40) return 'bg-red-500';
-    if (score < 70) return 'bg-yellow-500';
-    return 'bg-green-500';
-  };
-
-  const getStrengthText = (score) => {
-    if (score < 40) return 'Débil';
-    if (score < 70) return 'Media';
-    return 'Fuerte';
   };
 
   return (
@@ -344,249 +311,422 @@ const LoginSeguro = () => {
               <span>Conexión segura verificada</span>
             </div>
 
-            {/* Form Card */}
-            <div className="bg-white rounded-2xl shadow-2xl shadow-black/20 overflow-hidden">
-              {/* Tabs */}
-              <div className="flex border-b">
-                <button
-                  onClick={() => setIsLogin(true)}
-                  className={`flex-1 py-4 text-center font-medium transition-colors ${
-                    isLogin 
-                      ? 'text-blue-600 border-b-2 border-blue-600 bg-blue-50/50' 
-                      : 'text-gray-500 hover:text-gray-700'
-                  }`}
-                >
-                  Iniciar Sesión
-                </button>
-                <button
-                  onClick={() => setIsLogin(false)}
-                  className={`flex-1 py-4 text-center font-medium transition-colors ${
-                    !isLogin 
-                      ? 'text-blue-600 border-b-2 border-blue-600 bg-blue-50/50' 
-                      : 'text-gray-500 hover:text-gray-700'
-                  }`}
-                >
-                  Hazte Cliente
-                </button>
+            {/* Password Change Modal */}
+            {showPasswordChange && customerData && (
+              <div className="bg-white rounded-2xl shadow-2xl shadow-black/20 overflow-hidden">
+                <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white p-6">
+                  <h2 className="text-xl font-bold">Cambio de contraseña obligatorio</h2>
+                  <p className="text-blue-100 text-sm mt-1">Bienvenido/a {customerData.nombre}</p>
+                </div>
+                
+                <form onSubmit={handlePasswordChange} className="p-6 space-y-5">
+                  <div className="bg-amber-50 border border-amber-200 rounded-xl p-4">
+                    <div className="flex items-start gap-3">
+                      <AlertTriangle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
+                      <div className="text-sm text-amber-800">
+                        <p className="font-medium">Primer acceso detectado</p>
+                        <p className="mt-1">Por su seguridad, debe cambiar la contraseña temporal que recibió por SMS.</p>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Nueva contraseña
+                    </label>
+                    <div className="relative">
+                      <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                      <input
+                        type={showPassword ? 'text' : 'password'}
+                        value={newPasswordData.newPassword}
+                        onChange={(e) => setNewPasswordData({...newPasswordData, newPassword: e.target.value})}
+                        required
+                        minLength={8}
+                        className="w-full pl-12 pr-12 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500"
+                        placeholder="Mínimo 8 caracteres"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                      >
+                        {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                      </button>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Confirmar nueva contraseña
+                    </label>
+                    <div className="relative">
+                      <Key className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                      <input
+                        type="password"
+                        value={newPasswordData.confirmPassword}
+                        onChange={(e) => setNewPasswordData({...newPasswordData, confirmPassword: e.target.value})}
+                        required
+                        className="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500"
+                        placeholder="Repetir contraseña"
+                      />
+                    </div>
+                  </div>
+
+                  <Button
+                    type="submit"
+                    disabled={isLoading}
+                    className="w-full h-12 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-xl"
+                  >
+                    {isLoading ? 'Guardando...' : 'Guardar y acceder'}
+                    {!isLoading && <ArrowRight className="w-5 h-5 ml-2" />}
+                  </Button>
+                </form>
               </div>
+            )}
 
-              <div className="p-6">
-                {isLogin ? (
-                  /* Login Form */
-                  <form onSubmit={handleLogin} className="space-y-5">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Usuario / Email
-                      </label>
-                      <div className="relative">
-                        <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                        <input
-                          type="email"
-                          value={formData.email}
-                          onChange={(e) => setFormData({...formData, email: e.target.value})}
-                          required
-                          className="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
-                          placeholder="tu@email.com"
-                          data-testid="login-email"
-                        />
-                      </div>
-                    </div>
+            {/* Main Login Form */}
+            {!showPasswordChange && (
+              <div className="bg-white rounded-2xl shadow-2xl shadow-black/20 overflow-hidden">
+                {/* Tabs */}
+                <div className="flex border-b">
+                  <button
+                    onClick={() => setLoginType('email')}
+                    className={`flex-1 py-4 text-center font-medium transition-colors text-sm ${
+                      loginType === 'email' 
+                        ? 'text-blue-600 border-b-2 border-blue-600 bg-blue-50/50' 
+                        : 'text-gray-500 hover:text-gray-700'
+                    }`}
+                  >
+                    <Mail className="w-4 h-4 inline mr-1" />
+                    Email
+                  </button>
+                  <button
+                    onClick={() => setLoginType('dni')}
+                    className={`flex-1 py-4 text-center font-medium transition-colors text-sm ${
+                      loginType === 'dni' 
+                        ? 'text-blue-600 border-b-2 border-blue-600 bg-blue-50/50' 
+                        : 'text-gray-500 hover:text-gray-700'
+                    }`}
+                  >
+                    <CreditCard className="w-4 h-4 inline mr-1" />
+                    DNI/NIE
+                  </button>
+                  <button
+                    onClick={() => setLoginType('register')}
+                    className={`flex-1 py-4 text-center font-medium transition-colors text-sm ${
+                      loginType === 'register' 
+                        ? 'text-blue-600 border-b-2 border-blue-600 bg-blue-50/50' 
+                        : 'text-gray-500 hover:text-gray-700'
+                    }`}
+                  >
+                    Hazte Cliente
+                  </button>
+                </div>
 
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Contraseña
-                      </label>
-                      <div className="relative">
-                        <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                        <input
-                          type={showPassword ? 'text' : 'password'}
-                          value={formData.password}
-                          onChange={(e) => setFormData({...formData, password: e.target.value})}
-                          required
-                          className="w-full pl-12 pr-12 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
-                          placeholder="••••••••"
-                          data-testid="login-password"
-                        />
-                        <button
-                          type="button"
-                          onClick={() => setShowPassword(!showPassword)}
-                          className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
-                        >
-                          {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-                        </button>
-                      </div>
-                    </div>
-
-                    <div className="flex items-center justify-between">
-                      <label className="flex items-center gap-2 cursor-pointer">
-                        <input
-                          type="checkbox"
-                          checked={formData.rememberDevice}
-                          onChange={(e) => setFormData({...formData, rememberDevice: e.target.checked})}
-                          className="w-4 h-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500"
-                        />
-                        <span className="text-sm text-gray-600">Recordar dispositivo</span>
-                      </label>
-                      <a href="/recuperar-password" className="text-sm text-blue-600 hover:underline">
-                        ¿Olvidaste tu clave?
-                      </a>
-                    </div>
-
-                    <Button
-                      type="submit"
-                      disabled={isLoading}
-                      className="w-full h-12 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-xl"
-                      data-testid="login-submit"
-                    >
-                      {isLoading ? 'Verificando...' : 'Acceder a mi cuenta'}
-                      {!isLoading && <ArrowRight className="w-5 h-5 ml-2" />}
-                    </Button>
-
-                    {/* Security Notice */}
-                    <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 flex gap-3">
-                      <AlertTriangle className="w-5 h-5 text-amber-600 flex-shrink-0" />
-                      <div className="text-xs text-amber-800">
-                        <p className="font-medium">Consejos de seguridad:</p>
-                        <ul className="mt-1 space-y-1 text-amber-700">
-                          <li>• Nunca compartas tu contraseña</li>
-                          <li>• ManoBank nunca te pedirá claves por email o SMS</li>
-                        </ul>
-                      </div>
-                    </div>
-                  </form>
-                ) : (
-                  /* Register Form */
-                  <form onSubmit={handleRegister} className="space-y-4">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Nombre completo
-                      </label>
-                      <div className="relative">
-                        <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                        <input
-                          type="text"
-                          value={registerData.name}
-                          onChange={(e) => setRegisterData({...registerData, name: e.target.value})}
-                          required
-                          className="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500"
-                          placeholder="Tu nombre"
-                        />
-                      </div>
-                    </div>
-
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Email
-                      </label>
-                      <div className="relative">
-                        <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                        <input
-                          type="email"
-                          value={registerData.email}
-                          onChange={(e) => setRegisterData({...registerData, email: e.target.value})}
-                          required
-                          className="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500"
-                          placeholder="tu@email.com"
-                        />
-                      </div>
-                    </div>
-
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Teléfono móvil
-                      </label>
-                      <div className="relative">
-                        <Smartphone className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                        <input
-                          type="tel"
-                          value={registerData.phone}
-                          onChange={(e) => setRegisterData({...registerData, phone: e.target.value})}
-                          className="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500"
-                          placeholder="+34 600 000 000"
-                        />
-                      </div>
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-3">
+                <div className="p-6">
+                  {/* Email Login Form */}
+                  {loginType === 'email' && (
+                    <form onSubmit={handleLogin} className="space-y-5">
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Usuario / Email
+                        </label>
+                        <div className="relative">
+                          <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                          <input
+                            type="email"
+                            value={formData.email}
+                            onChange={(e) => setFormData({...formData, email: e.target.value})}
+                            required
+                            className="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                            placeholder="tu@email.com"
+                            data-testid="login-email"
+                          />
+                        </div>
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
                           Contraseña
                         </label>
                         <div className="relative">
-                          <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                          <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                           <input
-                            type="password"
-                            value={registerData.password}
-                            onChange={(e) => setRegisterData({...registerData, password: e.target.value})}
+                            type={showPassword ? 'text' : 'password'}
+                            value={formData.password}
+                            onChange={(e) => setFormData({...formData, password: e.target.value})}
                             required
-                            minLength={8}
-                            className="w-full pl-10 pr-3 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 text-sm"
-                            placeholder="Mín. 8 caracteres"
+                            className="w-full pl-12 pr-12 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                            placeholder="••••••••"
+                            data-testid="login-password"
                           />
+                          <button
+                            type="button"
+                            onClick={() => setShowPassword(!showPassword)}
+                            className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                          >
+                            {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                          </button>
                         </div>
                       </div>
+
+                      <div className="flex items-center justify-between">
+                        <label className="flex items-center gap-2 cursor-pointer">
+                          <input
+                            type="checkbox"
+                            checked={formData.rememberDevice}
+                            onChange={(e) => setFormData({...formData, rememberDevice: e.target.checked})}
+                            className="w-4 h-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500"
+                          />
+                          <span className="text-sm text-gray-600">Recordar dispositivo</span>
+                        </label>
+                        <a href="/recuperar-password" className="text-sm text-blue-600 hover:underline">
+                          ¿Olvidaste tu clave?
+                        </a>
+                      </div>
+
+                      <Button
+                        type="submit"
+                        disabled={isLoading}
+                        className="w-full h-12 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-xl"
+                        data-testid="login-submit"
+                      >
+                        {isLoading ? 'Verificando...' : 'Acceder a mi cuenta'}
+                        {!isLoading && <ArrowRight className="w-5 h-5 ml-2" />}
+                      </Button>
+
+                      {/* Security Notice */}
+                      <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 flex gap-3">
+                        <AlertTriangle className="w-5 h-5 text-amber-600 flex-shrink-0" />
+                        <div className="text-xs text-amber-800">
+                          <p className="font-medium">Consejos de seguridad:</p>
+                          <ul className="mt-1 space-y-1 text-amber-700">
+                            <li>• Nunca compartas tu contraseña</li>
+                            <li>• ManoBank nunca te pedirá claves por email o SMS</li>
+                          </ul>
+                        </div>
+                      </div>
+                    </form>
+                  )}
+
+                  {/* DNI Login Form (for new customers) */}
+                  {loginType === 'dni' && (
+                    <form onSubmit={handleDniLogin} className="space-y-5">
+                      <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-4">
+                        <div className="flex items-start gap-3">
+                          <CreditCard className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
+                          <div className="text-sm text-blue-800">
+                            <p className="font-medium">Acceso para nuevos clientes</p>
+                            <p className="mt-1">Usa tu DNI/NIE y la contraseña temporal que recibiste por SMS tras la verificación.</p>
+                          </div>
+                        </div>
+                      </div>
+
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
-                          Confirmar
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          DNI / NIE (con letra)
                         </label>
                         <div className="relative">
-                          <Key className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                          <CreditCard className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                           <input
-                            type="password"
-                            value={registerData.confirmPassword}
-                            onChange={(e) => setRegisterData({...registerData, confirmPassword: e.target.value})}
+                            type="text"
+                            value={dniFormData.documento}
+                            onChange={(e) => setDniFormData({...dniFormData, documento: e.target.value.toUpperCase()})}
                             required
-                            className="w-full pl-10 pr-3 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 text-sm"
-                            placeholder="Repetir"
+                            className="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 uppercase"
+                            placeholder="12345678Z"
+                            maxLength={9}
+                            data-testid="dni-input"
                           />
                         </div>
                       </div>
-                    </div>
 
-                    <label className="flex items-start gap-3 cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={registerData.acceptTerms}
-                        onChange={(e) => setRegisterData({...registerData, acceptTerms: e.target.checked})}
-                        className="w-4 h-4 mt-1 text-blue-600 rounded border-gray-300"
-                      />
-                      <span className="text-xs text-gray-600">
-                        Acepto los <a href="/terminos" className="text-blue-600 underline">Términos y Condiciones</a> y 
-                        la <a href="/privacidad" className="text-blue-600 underline">Política de Privacidad</a> de ManoBank S.A.
-                      </span>
-                    </label>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Contraseña temporal
+                        </label>
+                        <div className="relative">
+                          <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                          <input
+                            type={showPassword ? 'text' : 'password'}
+                            value={dniFormData.password}
+                            onChange={(e) => setDniFormData({...dniFormData, password: e.target.value})}
+                            required
+                            className="w-full pl-12 pr-12 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500"
+                            placeholder="Contraseña del SMS"
+                            data-testid="dni-password"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => setShowPassword(!showPassword)}
+                            className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                          >
+                            {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                          </button>
+                        </div>
+                      </div>
 
-                    <Button
-                      type="submit"
-                      disabled={isLoading}
-                      className="w-full h-12 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-xl"
-                    >
-                      {isLoading ? 'Creando cuenta...' : 'Crear mi cuenta'}
-                      {!isLoading && <ArrowRight className="w-5 h-5 ml-2" />}
-                    </Button>
-
-                    <p className="text-center text-sm text-gray-500">
-                      ¿Ya tienes cuenta?{' '}
-                      <button 
-                        type="button"
-                        onClick={() => setIsLogin(true)} 
-                        className="text-blue-600 hover:underline font-medium"
+                      <Button
+                        type="submit"
+                        disabled={isLoading}
+                        className="w-full h-12 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-xl"
+                        data-testid="dni-submit"
                       >
-                        Inicia sesión
-                      </button>
-                    </p>
-                  </form>
-                )}
+                        {isLoading ? 'Verificando...' : 'Acceder con DNI'}
+                        {!isLoading && <ArrowRight className="w-5 h-5 ml-2" />}
+                      </Button>
+
+                      <p className="text-center text-sm text-gray-500">
+                        ¿No tienes cuenta?{' '}
+                        <a href="/manobank/registro" className="text-blue-600 hover:underline font-medium">
+                          Ábrela aquí
+                        </a>
+                      </p>
+                    </form>
+                  )}
+
+                  {/* Register Form */}
+                  {loginType === 'register' && (
+                    <form onSubmit={handleRegister} className="space-y-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                          Nombre completo
+                        </label>
+                        <div className="relative">
+                          <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                          <input
+                            type="text"
+                            value={registerData.name}
+                            onChange={(e) => setRegisterData({...registerData, name: e.target.value})}
+                            required
+                            className="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500"
+                            placeholder="Tu nombre"
+                          />
+                        </div>
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                          Email
+                        </label>
+                        <div className="relative">
+                          <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                          <input
+                            type="email"
+                            value={registerData.email}
+                            onChange={(e) => setRegisterData({...registerData, email: e.target.value})}
+                            required
+                            className="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500"
+                            placeholder="tu@email.com"
+                          />
+                        </div>
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                          Teléfono móvil
+                        </label>
+                        <div className="relative">
+                          <Smartphone className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                          <input
+                            type="tel"
+                            value={registerData.phone}
+                            onChange={(e) => setRegisterData({...registerData, phone: e.target.value})}
+                            className="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500"
+                            placeholder="+34 600 000 000"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-3">
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-1">
+                            Contraseña
+                          </label>
+                          <div className="relative">
+                            <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                            <input
+                              type="password"
+                              value={registerData.password}
+                              onChange={(e) => setRegisterData({...registerData, password: e.target.value})}
+                              required
+                              minLength={8}
+                              className="w-full pl-10 pr-3 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 text-sm"
+                              placeholder="Mín. 8 caracteres"
+                            />
+                          </div>
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-1">
+                            Confirmar
+                          </label>
+                          <div className="relative">
+                            <Key className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                            <input
+                              type="password"
+                              value={registerData.confirmPassword}
+                              onChange={(e) => setRegisterData({...registerData, confirmPassword: e.target.value})}
+                              required
+                              className="w-full pl-10 pr-3 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 text-sm"
+                              placeholder="Repetir"
+                            />
+                          </div>
+                        </div>
+                      </div>
+
+                      <label className="flex items-start gap-3 cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={registerData.acceptTerms}
+                          onChange={(e) => setRegisterData({...registerData, acceptTerms: e.target.checked})}
+                          className="w-4 h-4 mt-1 text-blue-600 rounded border-gray-300"
+                        />
+                        <span className="text-xs text-gray-600">
+                          Acepto los <a href="/terminos" className="text-blue-600 underline">Términos y Condiciones</a> y 
+                          la <a href="/privacidad" className="text-blue-600 underline">Política de Privacidad</a> de ManoBank S.A.
+                        </span>
+                      </label>
+
+                      <Button
+                        type="submit"
+                        disabled={isLoading}
+                        className="w-full h-12 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-xl"
+                      >
+                        {isLoading ? 'Creando cuenta...' : 'Crear mi cuenta'}
+                        {!isLoading && <ArrowRight className="w-5 h-5 ml-2" />}
+                      </Button>
+
+                      <div className="text-center">
+                        <p className="text-sm text-gray-500 mb-2">
+                          ¿Ya tienes cuenta?{' '}
+                          <button 
+                            type="button"
+                            onClick={() => setLoginType('email')} 
+                            className="text-blue-600 hover:underline font-medium"
+                          >
+                            Inicia sesión
+                          </button>
+                        </p>
+                        <p className="text-sm text-gray-500">
+                          ¿Registro completo BBVA?{' '}
+                          <a href="/manobank/registro" className="text-blue-600 hover:underline font-medium">
+                            Abrir cuenta aquí
+                          </a>
+                        </p>
+                      </div>
+                    </form>
+                  )}
+                </div>
               </div>
-            </div>
+            )}
 
             {/* Bottom Links */}
             <div className="mt-6 text-center">
               <a 
-                href="/abrir-cuenta" 
+                href="/manobank/registro" 
                 className="inline-flex items-center gap-2 text-white/80 hover:text-white text-sm"
               >
-                ¿Nuevo cliente? Abre tu cuenta online
+                ¿Nuevo cliente? Abre tu cuenta online (proceso completo)
                 <ChevronRight className="w-4 h-4" />
               </a>
             </div>
