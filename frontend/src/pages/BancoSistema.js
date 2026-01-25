@@ -1192,31 +1192,46 @@ const BancoSistema = () => {
                   <div className="flex items-center gap-4">
                     <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
                       req.status === 'pending' ? 'bg-amber-100' :
+                      req.status === 'kyc_scheduled' ? 'bg-blue-100' :
                       req.status === 'approved' ? 'bg-emerald-100' : 'bg-red-100'
                     }`}>
                       {req.status === 'pending' ? <Clock className="w-5 h-5 text-amber-600" /> :
+                       req.status === 'kyc_scheduled' ? <Video className="w-5 h-5 text-blue-600" /> :
                        req.status === 'approved' ? <CheckCircle className="w-5 h-5 text-emerald-600" /> :
                        <XCircle className="w-5 h-5 text-red-600" />}
                     </div>
                     <div>
-                      <p className="font-medium">{req.customer_name}</p>
+                      <div className="flex items-center gap-2">
+                        <p className="font-medium">{req.customer_name}</p>
+                        {req.source === 'bbva_registration' && (
+                          <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full">BBVA</span>
+                        )}
+                      </div>
                       <p className="text-sm text-zinc-500">DNI: {req.customer_dni} | {req.account_type}</p>
-                      <p className="text-xs text-zinc-400">{req.customer_email}</p>
+                      <p className="text-xs text-zinc-400">{req.customer_email} | {req.customer_phone}</p>
+                      {req.source === 'bbva_registration' && req.localidad && (
+                        <p className="text-xs text-zinc-400">{req.localidad}, {req.provincia}</p>
+                      )}
                     </div>
                   </div>
                   <div className="flex items-center gap-4">
                     {req.initial_deposit > 0 && (
                       <span className="text-sm text-zinc-600">
-                        Depósito: {req.initial_deposit}€
+                        Depósito mín: {req.initial_deposit}€
+                      </span>
+                    )}
+                    {req.kyc_status === 'scheduled' && req.kyc_appointment && (
+                      <span className="text-xs bg-blue-50 text-blue-700 px-2 py-1 rounded">
+                        KYC: {new Date(req.kyc_appointment.scheduled_date).toLocaleDateString('es-ES')}
                       </span>
                     )}
                     {req.status === 'pending' && (
                       <div className="flex gap-2">
-                        <Button size="sm" onClick={() => handleApproveAccount(req.id)} className="bg-emerald-600 hover:bg-emerald-700">
+                        <Button size="sm" onClick={() => handleApproveAccount(req.id, req.source)} className="bg-emerald-600 hover:bg-emerald-700">
                           <CheckCircle className="w-4 h-4 mr-1" />
                           Aprobar
                         </Button>
-                        <Button size="sm" variant="outline" onClick={() => handleRejectAccount(req.id)} className="text-red-600 border-red-300">
+                        <Button size="sm" variant="outline" onClick={() => handleRejectAccount(req.id, req.source)} className="text-red-600 border-red-300">
                           <XCircle className="w-4 h-4 mr-1" />
                           Rechazar
                         </Button>
