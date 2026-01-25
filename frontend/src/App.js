@@ -227,6 +227,9 @@ function AppRouter() {
       {/* ManoBank Public Account Request - No Auth Required */}
       <Route path="/abrir-cuenta" element={<SolicitarCuenta />} />
       
+      {/* ManoBank BBVA-Style Registration - No Auth Required */}
+      <Route path="/manobank/registro" element={<ManoBankRegistro />} />
+      
       {/* ManoBank Employee Portal - Separate System */}
       <Route path="/banco" element={<BancoEmpleados />} />
       <Route 
