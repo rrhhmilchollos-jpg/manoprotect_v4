@@ -6,7 +6,7 @@ import pytest
 import requests
 import os
 
-BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', 'https://neofinancia.preview.emergentagent.com')
+BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', 'https://neo-banking-5.preview.emergentagent.com')
 
 # Test credentials for bank employee (superadmin/director)
 EMPLOYEE_EMAIL = "rrhh.milchollos@gmail.com"

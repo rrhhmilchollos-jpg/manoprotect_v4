@@ -1,120 +1,141 @@
 <analysis>**original_problem_statement:**
 The user's goal is to build **ManoBank**, a full-fledged, standalone digital banking system with a professional look and feel, designed to operate as a regulated financial entity in Spain.
 
-**Core requirements:**
+**Core requirements from the user:**
 1.  **Standalone Digital Bank:** A complete system with a professional UI/UX.
-2.  **Customer Portal ():** Users can create accounts, view balances/transactions, see account details (IBAN/BIC), and access products/offers.
-3.  **Employee Back-Office ():** A secure portal for staff to manage customer accounts (view details, deposit, withdraw, block), manage loans, handle KYC, view compliance/AML dashboards, and manage employees. The Director General has full administrative powers.
-4.  **Legal & Compliance Framework:** The system must be structured to meet regulatory requirements (AML, KYC, Immutable Audit Logs, Reporting).
-5.  **Mobile App:** A hybrid Android APK and iOS IPA for customers to access the neobank.
-6.  **Specific User Requests from Session:**
-    *   Fix the employee portal login failure (DONE).
-    *   Fix the non-functional Ver Alertas button in the employee portal (DONE).
-    *   Implement functionality for bank employees to view and operate on customer accounts (DONE).
-    *   Fix the Video KYC camera/microphone permission flow to be more user-friendly (DONE).
-    *   Reorganize the customer dashboard layout and add functionality to Mis Productos and Ofertas (DONE).
-    *   Implement a detailed view for each customer account, showing IBAN/BIC/SWIFT and a transaction list (IN PROGRESS).
-    *   Update SEUR shipping location from novelda to novetle (DONE).
-    *   Promote  to  for  (DONE).
-    -   Provide updated Android and iOS mobile app builds (IN PROGRESS).
-    -   Add features to  (NOT STARTED).
+2.  **Customer Portal ():** Users create accounts, view balances/transactions, see account details (IBAN/BIC), and access products/offers.
+3.  **Employee Back-Office ():** A secure portal for staff to manage customer accounts, loans, KYC, and compliance. The Director General () must have full administrative privileges.
+4.  **BBVA-Style Customer Registration:** A new, detailed registration flow for ManoBank identical to BBVA's. It must include:
+    *   Videoverification with automatic camera/microphone permission requests.
+    *   Collection of all the same data as BBVA.
+    *   High-security standards.
+    *   Upon approval by a bank agent, the new customer receives temporary credentials (DNI/NIE + temporary password) via SMS, valid for 24 hours.
+    *   The new customer's account starts at €0 balance and requires a mandatory initial deposit of €25.
+5.  **Data Sensitivity:** Viewing sensitive customer data (like card PINs) in the employee portal must be gated by a mandatory SMS verification to the customer's phone.
+6.  **Distinct Portals:** ManoProtect and ManoBank must have separate registration flows and designs. Accessing  should never redirect to .
+7.  **Mobile App:** Provide updated Android and iOS mobile app builds.
 
 **User's preferred language**: Spanish
 
 **what currently exists?**
 *   A full-stack application with a React frontend, FastAPI backend, and MongoDB database.
-*   A comprehensive backend architecture for a regulated bank, including modular services and APIs for an immutable ledger, AML, KYC, and regulatory reporting.
-*   A secure, 2FA-enabled employee portal () where staff can manage customers, loans, and view compliance/AML dashboards. A customer detail modal allows employees to view accounts and perform operations (deposit, withdraw, block).
-*   A customer portal () with a redesigned dashboard layout, functional products and offers sections, and clickable accounts (though the detail view is not yet implemented).
-*   An improved Video KYC flow that explicitly requests camera/microphone permissions for a better user experience.
-*   An updated mobile app project () and a corresponding GitHub Actions workflow () to build the Android APK.
-*   The  user is configured as a .
+*   Two main portals: the customer-facing  and the employee-facing .
+*   **Customer Portal Features:**
+    *   A dashboard where users can view their accounts.
+    *   A detailed account view showing IBAN, BIC, SWIFT, and an empty transaction list.
+    *   Functionality to download an account statement as a PDF.
+    *   A functional Ajustes (Settings) section to edit profile data, change passwords, and manage preferences.
+    *   Functional Ofertas (Offers) and notification panels.
+    *   A help panel with contact information and business hours.
+*   **Employee Portal Features:**
+    *   A system for employees to manage customers.
+    *   A mandatory SMS 2FA system for viewing sensitive customer data like card PINs.
+*   **Backend:**
+    *   Endpoints for all implemented frontend features.
+    *   A  role with  privileges has been assigned to the user . The backend correctly identifies this role on login.
+*   **General:** Company address and contact details have been added to the footers of both the ManoBank and ManoProtect landing pages.
 
 **Last working item**:
-    - Last item agent was working: The agent was implementing the functionality for the customer dashboard () to display a detailed view of a selected bank account. This includes showing the account's IBAN, BIC, SWIFT, and a list of its transactions. The agent had just started by adding the necessary state management () and making the account cards clickable in .
-    - Status: IN PROGRESS
+    - Last item agent was working: The agent had just started implementing the new, complex BBVA-style customer registration flow as requested by the user. This is a major feature requiring a separate registration page and backend logic for video verification, KYC, and temporary credential generation. The agent created the initial frontend file .
+    - Status: NOT STARTED
     - Agent Testing Done: N
-    - Which testing method agent to use? Both. First, use  to test the new backend endpoint that will fetch transactions for a specific account. Then, use the  tool to verify the new account detail modal in the frontend.
+    - Which testing method agent to use? both. This is a large feature. Each step will require backend testing via  and frontend verification via . Upon completion of the entire flow, the  should be used for comprehensive E2E testing.
     - User Testing Done: N
 
 **All Pending/In progress Issue list**:
-  - Issue 1: Implement Customer Account Details View (P0)
-  - Issue 2: Verify Mobile App Build and Address iOS Request (P1)
-  - Issue 3: Clarify and Implement  Requirements (P2)
+  - Issue 1: Director General Login to Employee Portal Fails (P0)
+  - Issue 2: New Customer Registration Flow for ManoBank (P0)
+  - Issue 3: Incorrect Redirect from  to  (P1)
+  - Issue 4: Potential for  fields in API responses (P2)
+  - Issue 5: Mobile App Build and Delivery (P2)
+  - Issue 6: Clarify and Implement  Requirements (P3)
   
   **Issues Detail:**
-  - **Issue 1: Implement Customer Account Details View (P0)**
-     - **Description**: The customer dashboard in  needs to show a detailed view when a user clicks on one of their accounts. This view must display the account's IBAN, BIC, and SWIFT codes, along with a list of all its transactions.
-     - **Attempted fixes**: The agent added  state and  handlers to the account cards in . The backend endpoint and the UI modal have not been created.
+  - **Issue 1: Director General Login to Employee Portal Fails (P0)**
+     - **Description**: The user () is unable to log into the employee portal at . Despite having the correct  and  roles in the database and the backend verifying credentials correctly via , the frontend login page fails.
+     - **Attempted fixes**: The agent corrected the password hashing mechanism in the backend (from bcrypt to PBKDF2), updated the user's password hash, and modified  to bypass 2FA for superadmins. However, automated tests with the screenshot tool failed to complete the login, suggesting a potential issue with how React handles the form inputs or a state management bug ( was an error at one point).
      - **Next debug checklist**:
-        1.  Create a new backend endpoint in : . This endpoint should fetch all transactions associated with the given account ID.
-        2.  In , create a new modal component ( or inline) that is displayed when the  state is populated.
-        3.  Inside the modal, fetch data from the new endpoint when it opens.
-        4.  Display the account details (IBAN, BIC from the  object) and render the list of fetched transactions.
-        5.  Ensure the modal has a close button that sets  back to .
-     - **Why fix this issue and what will be achieved with the fix?** This is a fundamental feature for any banking application, allowing users to inspect their account activity. It was the user's last explicit request.
+        1.  In , add comprehensive  statements within the  function to trace the execution flow, the API response, and the logic that decides whether to navigate or show an error.
+        2.  Verify the  call is being triggered correctly after a successful login for a .
+        3.  Manually test the login flow in the preview environment to rule out issues with the automated testing tool.
+     - **Why fix this issue and what will be achieved with the fix?** This is a critical blocker. The user cannot access the employee portal to perform administrative tasks, which is a core requirement.
      - **Status**: IN PROGRESS
+     - **Is recurring issue?** Y
+     - **Should Test frontend/backend/both after fix?** Both. Frontend is the priority.
+
+  - **Issue 2: New Customer Registration Flow for ManoBank (P0)**
+     - **Description**: The user has requested a completely new, multi-step registration flow for ManoBank that mimics the BBVA process. This involves video verification, specific data collection, KYC processing, and issuing temporary SMS credentials. This task is part of the .
+     - **Status**: NOT STARTED
      - **Is recurring issue?** N
      - **Should Test frontend/backend/both after fix?** Both.
 
-  - **Issue 2: Verify Mobile App Build and Address iOS Request (P1)**
-     - **Description**: The user needs an updated mobile app. The Android APK build process via GitHub Actions needs user confirmation. Additionally, the user requested an iOS () file, which the current environment cannot build.
-     - **Attempted fixes**: The agent created  with the latest code and updated the  workflow. The agent correctly identified that iOS builds require a macOS environment.
+  - **Issue 3: Incorrect Redirect from  to  (P1)**
+     - **Description**: The user reported that navigating to  sometimes incorrectly redirects to the  landing page. This breaks the separation between the two brands.
+     - **Attempted fixes**: The agent modified , adjusting the  component to redirect unauthenticated users from  to a new  page instead of the generic login.
      - **Next debug checklist**:
-        1.  Guide the user to upload  to a new GitHub repository to trigger the Android APK build.
-        2.  Ask the user to install the generated APK and specifically test the Video KYC permission flow.
-        3.  Clearly explain the iOS build limitation. Propose guiding them to set up a macOS runner on GitHub Actions or to build it locally if they have a Mac.
-     - **Why fix this issue and what will be achieved with the fix?** Delivers the mobile app, a key user requirement, and addresses a recurring usability pain point (KYC permissions).
+        1.  Review the routing logic in  again, specifically the root path () and any catch-all routes ().
+        2.  Verify that the  page, after a successful login, correctly navigates to  and not .
+        3.  Test the flow by navigating directly to  in a new incognito window.
+     - **Why fix this issue and what will be achieved with the fix?** It will enforce the brand separation required by the user and fix a confusing user experience.
+     - **Status**: IN PROGRESS
+     - **Is recurring issue?** N
+     - **Should Test frontend/backend/both after fix?** Frontend.
+
+  - **Issue 4: Potential for  fields in API responses (P2)**
+     - **Description**: The user mentioned problems with .json responses. The agent found that some backend endpoints might be returning raw MongoDB documents containing  (an ), which is not JSON serializable and can crash the frontend.
+     - **Attempted fixes**: The agent added a helper function  in  and fixed some queries. However, a full audit was not performed.
+     - **Next debug checklist**:
+        1.  Globally search the backend codebase ( files) for all  and  calls.
+        2.  Ensure every query either uses the projection  or has its result passed through a Pydantic model or a cleaning function that converts  to .
+     - **Why fix this issue and what will be achieved with the fix?** This will prevent unexpected frontend crashes and ensure API stability.
+     - **Status**: IN PROGRESS
+     - **Is recurring issue?** N
+     - **Should Test frontend/backend/both after fix?** Backend.
+
+  - **Issue 5: Mobile App Build and Delivery (P2)**
+     - **Description**: The user needs updated Android and iOS mobile apps.
      - **Status**: BLOCKED (on user action for APK, and environment for IPA).
      - **Is recurring issue?** Y
-     - **Should Test frontend/backend/both after fix?** User testing on a device is required.
 
-  - **Issue 3: Clarify and Implement  Requirements (P2)**
-     - **Description**: The user requested that the agent add all the necessary functions and improvements for . This request lacks specific details.
-     - **Attempted fixes**: The agent assigned the  role to  as requested for this context. No other work has been done.
-     - **Next debug checklist**:
-        1.  Ask the user to provide a clear explanation of what  is.
-        2.  Ask for a specific list of features or bug fixes they want for it.
-        3.  Search the codebase for any existing files or references to  to build context.
-     - **Why fix this issue and what will be achieved with the fix?** To address a user request. The scope and priority are currently unknown.
+  - **Issue 6: Clarify and Implement  Requirements (P3)**
+     - **Description**: The user's request for features and improvements for  is still undefined.
      - **Status**: NOT STARTED
-     - **Is recurring issue?** N
-     - **Should Test frontend/backend/both after fix?** To be determined.
      - **Blocked on other issue**: User clarification.
 
 **In progress Task List**:
-  - **Task 1: Add Customer Account Details View & Backend Endpoint (P0)**
-     - **Where to resume**: Start by creating the backend API endpoint  in . Once tested, implement the corresponding frontend modal in .
-     - **What will be achieved with this?** A functional customer dashboard where users can view the details and transaction history of their individual bank accounts.
+  - **Task 1: Implement BBVA-Style Customer Registration Flow (P0)**
+     - **Where to resume**: The file  has been created. The next step is to build out the multi-step form UI in this component. Concurrently, create the necessary backend endpoints in a new file (e.g., ) to handle each step of the process.
+     - **What will be achieved with this?** A complete, secure, and user-friendly onboarding experience for new ManoBank customers, fulfilling a major user requirement.
      - **Status**: IN PROGRESS
      - **Should Test frontend/backend/both after fix?** Both
      - **Blocked on something**: None
 
 **Upcoming and Future Tasks**
-- **P1: Guide User Through Mobile App Generation:** Walk the user through using the  to build the Android APK via GitHub Actions.
-- **P2: Test Card Shipping Flow:** The SEUR shipment logic is in place but only mocked. Needs a full E2E test.
-- **P2: Implement 2FA on Customer Login:** Enhance security for the customer-facing portal, which was an original requirement.
+- **P1: Implement Certificado de Titularidad**: Add functionality to the Certificado button in the account detail view to download a PDF certificate of account ownership.
+- **P2: Add Notifications to Employee Portal**: Implement a notification panel (bell icon) in the employee portal () to show alerts for new KYC cases, loan applications, etc.
+- **P2: Full E2E Test of Card Shipping Flow**: The current logic is mocked and needs to be tested thoroughly.
+- **P3: 2FA on Customer Login**: The original requirement to add 2FA to the customer portal () has not been implemented yet.
 
 **Completed work in this session**
-- **Resolved Critical Login Blocker:** Fixed the persistent employee portal login issue.
-- **Implemented Full Banking Backend:** Built and integrated a complete, modular backend for compliance, including an immutable ledger, AML, KYC, and reporting services.
-- **Enhanced Employee Portal ():**
-    - Added functional Compliance and AML dashboard tabs.
-    - Implemented a customer detail modal allowing employees to view accounts and perform operations (deposit, withdraw, block).
-- **Improved Video KYC UX:** Refactored the permissions request flow to be more user-friendly.
-- **Enhanced Customer Dashboard ():**
-    - Reorganized the layout and made the Products and Offers sections functional.
-- **Addressed Multiple User Bug Fixes:**
-    - Corrected the SEUR shipping location to Novetle.
-    - Assigned  role as requested.
-- **Conducted Comprehensive Testing:** Successfully ran the testing agent three times (, , ), achieving 100% pass rates and applying automated fixes.
-- **Prepared Mobile App Update:** Created an updated mobile project source () and GitHub Actions workflow.
+- **Account Details View**: Implemented a clickable view on the customer dashboard to see account details (IBAN, BIC, SWIFT).
+- **PDF Account Statements**: Added a button to download a PDF statement for an account.
+- **Functional Customer Settings**: Fully implemented the Ajustes section in the customer dashboard, allowing users to edit their profile and change their password.
+- **Functional Offers Page**: Linked the cards on the Ofertas page to external provider websites (Ayvens, Vodafone, etc.).
+- **Notification & Help Panels**: Created functional, slide-out panels for notifications (bell icon) and help/contact (question mark icon) in the customer dashboard.
+- **Investor Documents**: Added downloadable PDF documents to the Enterprise Custom plan on the pricing page.
+- **Contact Info Update**: Updated the company address, phone, and email in the footers and sidebars across the application.
+- **SMS PIN Verification**: Implemented a secure flow in the employee portal where viewing a customer's card PIN requires SMS 2FA.
+- **Attempted Director Login Fix**: Investigated and applied several backend and frontend fixes for the recurring Director General login issue.
 
 **Earlier issues found/mentioned but not fixed**
-- The original request to build an APK for  was deferred and has now resurfaced as a vague request for features, which remains unaddressed pending clarification.
+- The vague request for  features remains unaddressed pending user clarification.
+- The core Director General login issue persists despite multiple fix attempts.
 
 **Known issue recurrence from previous fork**
-  - **Mobile App Build Failure**: The general topic of building mobile apps is a recurring challenge. The agent has successfully bypassed local environment issues by using GitHub Actions, but the user still requires guidance, and the new request for an iOS build introduces an environment-related blocker.
+  - **Director/Superadmin Login Failure**: The user is unable to log into the employee portal. This is a recurring high-priority blocker. The agent's last investigation pointed towards a frontend issue in  or a problem with the automated testing tool, as backend  tests were successful.
+  - **Recurrence count:** 3+
+  - **Status:** IN PROGRESS
+  - **Mobile App Build Failure**: The challenge of building and delivering mobile apps remains.
   - **Recurrence count:** 3+
   - **Status:** BLOCKED
 
@@ -122,75 +143,74 @@ The user's goal is to build **ManoBank**, a full-fledged, standalone digital ban
 
 
 **Key Technical Concepts**
-- **Modular Backend Services:** The architecture now features distinct, independent services for core banking functions (Ledger, AML, KYC, Reporting), promoting separation of concerns.
-- **Role-Based Access Control (RBAC):** Access control was refined to allow  role to perform  actions, and new endpoints were protected with an  role check.
-- **Stateful Frontend Modals:** The UI heavily uses React state to manage modals for displaying detailed information (customer details) and forms, providing a dynamic user experience without page reloads.
-- **Improved User Experience (UX) Flow:** The Video KYC permission process was explicitly redesigned to guide the user, ask for permissions at the right time, and handle denial gracefully, directly addressing a user pain point.
+- **PDF Generation ()**: The backend now uses ReportLab to dynamically generate PDF account statements.
+- **Action-Specific 2FA**: A new security pattern was implemented where a specific sensitive action (viewing a PIN) triggers an on-demand SMS verification, rather than just gating the entire login.
+- **Complex Frontend State Management**:  has become a large component managing state for multiple modals and panels (account details, profile editing, password change, notifications, help), indicating a potential need for refactoring into smaller components or using a state management library.
+- **PBKDF2 Password Hashing**: The correct password hashing algorithm for the employee portal was identified and used to fix a backend authentication bug.
 
 **key DB schema**
--   **manobank_ledger:** (New) Stores immutable records of all financial transactions for audit purposes.
--   **manobank_aml_alerts:** (New) Tracks suspicious activities and AML-related alerts.
--   **manobank_kyc_cases:** (New) Manages the status and data for each user's KYC verification process.
--   **manobank_reports:** (New) Stores metadata for generated regulatory reports.
--   **manobank_transactions:** (New) Records individual customer transactions like deposits and withdrawals.
--   **manobank_employees:**  user was updated to have .
+-   **manobank_sensitive_access**: (New) Stores temporary verification codes (), expiry times, and status for sensitive data access requests. Linked to a user/customer.
 
 **All files of reference**
--   : The primary file for the current task of implementing the account detail view.
--   : The likely location for the new backend endpoint to fetch account transactions.
--   : The main file for the employee portal, which was heavily modified.
--   : The new source code for the mobile app that the user needs to use.
--   : The latest comprehensive test report, confirming system stability.
--   : The product requirements document, updated with the latest changes.
+-   : The new file for the P0 registration task.
+-   : The file containing the buggy login logic for the employee portal.
+-   : The main routing file, relevant for fixing the incorrect redirection issue.
+-   : The location of the SMS verification endpoints.
+-   : The location of authentication logic.
+-   : The main file for the customer portal.
 
 **Critical Info for New Agent**
--   **Immediate Priority:** The user's last request was to add a detailed account view (transactions, IBAN, etc.) to the customer dashboard. Start here.
--   **Guide the User:** The user is non-technical. Provide clear, simple, step-by-step instructions for tasks like using GitHub to build the APK.
--   **iOS Build Limitation:** The current environment cannot build iOS  files. You must communicate this limitation clearly and suggest alternatives (e.g., a guide for local building on a Mac, using a paid macOS runner in GitHub Actions).
--   **Undefined Scope:** The request for  features is too vague. You must ask for clarification before starting any work on it.
--   The user prefers to see multiple fixes/features implemented at once (), so batching related work is a good strategy.
+-   **Immediate Priorities:**
+    1.  **Fix the Director General login (Issue #1).** This is a critical blocker preventing the user from accessing core functionality. Investigate  thoroughly.
+    2.  **Begin the new BBVA-style registration flow (Task #1).** This is the user's main new feature request.
+-   **User's Method of Working:** The user prefers to see multiple issues fixed at once () and provides detailed, real-world requirements. Be prepared to implement complex flows based on their descriptions.
+-   **Technical Debt:**
+    *   **MongoDB s:** Be vigilant about API responses. Proactively audit endpoints to ensure no  fields are being sent to the frontend.
+    *   ** Complexity:** This file is very large. When adding new features to it, consider breaking out components to improve maintainability.
+-   **Testing Automation Quirks:** The screenshot tool (Playwright) has difficulty filling in some React-controlled form inputs. Do not trust it as the sole source of truth for login failures. Always cross-verify with  tests against the backend.
 
 **documents and test reports created in this job**
--   
--   
--   
--   
--    (overwritten multiple times)
--   Multiple new service and route files in the .
+-  (overwritten multiple times)
 
 **Last 10 User Messages and any pending HUMAN messages** 
-1.  **User:** Asks to implement a clickable account view on the customer dashboard to see details like transactions, IBAN, BIC, SWIFT. (IN PROGRESS)
-2.  **User:** Requests a redesign of the customer dashboard: move Posición Global and add functionality to Mis Productos and Ofertas. (DONE)
-3.  **User:** Asks to change novelda to novetle in SEUR shipping info and to run comprehensive tests. (DONE)
-4.  **User:** Reports that the employee portal's button to view a customer's account/dashboard doesn't work and that employees can't operate on accounts. (DONE)
-5.  **User:** Confirms to proceed with fixing bugs and implementing new frontend panels for Compliance/AML. (DONE)
-6.  **User:** Reports that  does not recognize their  role and requests updated Android APK and new iOS IPA files. (DONE/IN PROGRESS)
-7.  **User:** Provides details on the Video KYC issue (permission prompts are not automatic) and asks the agent to fix all pending issues for both ManoBank and ManoProtect. (DONE/IN PROGRESS)
-8.  **User:** Implicitly confirms pending verification items by providing more details on them.
-9.  **User:** Implicitly confirms go-ahead to proceed.
-10. **Agent:** Asks for confirmation on pending verification items (Video KYC, Customer Dashboard, APK download).
+1.  **User:** Requests a complete, BBVA-style registration flow for ManoBank with video verification and temporary SMS credentials. (IN PROGRESS)
+2.  **User:** Asks for SMS verification to be mandatory for employees to view sensitive customer data like card PINs. (DONE)
+3.  **User:** Reports that accessing  redirects to  and that there are issues with JSON responses for employee accounts. Asks the agent to fix everything at once. (IN PROGRESS)
+4.  **User:** Reports that their  role is not recognized across any of the three portals, preventing them from performing admin actions. (IN PROGRESS, RECURRING)
+5.  **User:** Asks to add the company's full address and contact info to the footers of ManoProtect and ManoBank. (DONE)
+6.  **User:** Asks to add a detailed contact and schedule panel to the customer dashboard sidebar. (DONE)
+7.  **User:** Corrects the help-line phone number and states the enterprise dashboard is failing to load. (DONE/FIXED)
+8.  **User:** Requests functionality for the question mark (help) button, functional buttons on the Enterprise plan, and downloadable PDFs for investors. (DONE)
+9.  **User:** States that the notification bells on the dashboards have no function. (DONE)
+10. **User:** Confirms to proceed with adding functionality to the Ajustes (Settings) section, including editing personal data and changing passwords, and adding real URLs to the Ofertas. (DONE)
 
 **Project Health Check:**
 -   **Broken:**
-    -   **Customer Account Details:** The functionality to click an account and see its detailed transaction history and information (IBAN/BIC) is missing. This is the current P0 task.
+    -   **Employee Portal Login:** The Director General cannot log in via the frontend at .
+    -   **App Routing:** Navigating to  can incorrectly redirect to the wrong site.
 -   **Mocked:**
-    -   Card shipping logic (SEUR) is simulated.
-    -   AML sanction/PEP list lookups are mocked locally.
-    -   Regulatory report submission (e.g., to SEPBLAC) is simulated.
+    -   Card shipping logic (SEUR).
+    -   AML sanction/PEP list lookups.
+    -   Regulatory report submission.
 
 **3rd Party Integrations**
--   **Zoom Video SDK:** Integrated for KYC.
--   **Twilio:** Integrated for 2FA SMS.
--   **ReportLab:** Integrated for PDF generation.
--   **Capacitor:** Used for the Android hybrid app project.
--   **GitHub Actions:** Used for CI/CD to build the Android APK.
+-   **Zoom Video SDK:** For KYC.
+-   **Twilio:** Used for 2FA login and for action-specific SMS verification (viewing PINs).
+-   **ReportLab:** For PDF generation.
+-   **Capacitor:** For the mobile app project.
+-   **GitHub Actions:** For building the Android APK.
 
 **Testing status**
-  - Testing agent used after significant changes: YES (multiple times, successfully)
+  - Testing agent used after significant changes: NO
   - Troubleshoot agent used after agent stuck in loop: NO
-  - Test files created: No new explicit test files, but the testing agent ran comprehensive tests and applied fixes.
-  - Known regressions: None. The critical login regression from the previous fork was resolved.
+  - Test files created: []
+  - Known regressions:
+    - The employee portal login, which was fixed in a previous fork, is broken again.
 
 **Credentials to test flow:**
 -   **Superadmin/Bank Director:** 
--   **Password:** </analysis>
+-   **Password:** 
+
+**What agent forgot to execute**
+- The agent did not fully resolve the Director General's login issue before moving on. While backend tests passed, the frontend remained broken for the user, and the agent attributed it to a testing tool issue without finding a definitive workaround or confirming a manual test.
+- A full audit of all database queries for the  field was started but not completed, leaving potential for JSON serialization errors.</analysis>
