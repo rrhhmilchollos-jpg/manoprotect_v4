@@ -2367,3 +2367,131 @@ async def login_temporal(request: Request):
         "initial_deposit_required": registration.get("initial_deposit_required", 25.0),
         "initial_deposit_completed": registration.get("initial_deposit_completed", False)
     }
+
+
+@router.post("/registro/cambiar-password")
+async def cambiar_password_temporal(request: Request):
+    """
+    Cambiar contraseña temporal por una permanente
+    Requerido en el primer login de nuevos clientes
+    """
+    db = get_db()
+    body = await request.json()
+    
+    documento = body.get("documento", "").upper().replace(" ", "")
+    temp_password = body.get("temp_password", "")
+    new_password = body.get("new_password", "")
+    
+    if not documento or not temp_password or not new_password:
+        raise HTTPException(status_code=400, detail="Todos los campos son requeridos")
+    
+    if len(new_password) < 8:
+        raise HTTPException(status_code=400, detail="La nueva contraseña debe tener al menos 8 caracteres")
+    
+    # Buscar cliente
+    registration = await db.manobank_customer_registrations.find_one({
+        "documento_completo": documento,
+        "status": "approved"
+    })
+    
+    if not registration:
+        raise HTTPException(status_code=401, detail="Documento no encontrado o cuenta no aprobada")
+    
+    # Verificar contraseña temporal
+    if registration.get("temp_password") != temp_password:
+        raise HTTPException(status_code=401, detail="Contraseña temporal incorrecta")
+    
+    # Verificar expiración
+    expires = registration.get("temp_password_expires")
+    if expires:
+        expires_dt = datetime.fromisoformat(expires.replace('Z', '+00:00'))
+        if datetime.now(timezone.utc) > expires_dt:
+            raise HTTPException(
+                status_code=401, 
+                detail="La contraseña temporal ha expirado. Contacte con ManoBank al 601 510 950."
+            )
+    
+    # Hash de la nueva contraseña
+    import hashlib
+    password_hash = hashlib.pbkdf2_hmac(
+        'sha256',
+        new_password.encode('utf-8'),
+        documento.encode('utf-8'),
+        100000
+    ).hex()
+    
+    # Actualizar registro - marcar primer login como completado
+    await db.manobank_customer_registrations.update_one(
+        {"documento_completo": documento},
+        {
+            "$set": {
+                "first_login_completed": True,
+                "password_hash": password_hash,
+                "temp_password": None,  # Eliminar contraseña temporal
+                "temp_password_expires": None,
+                "password_changed_at": datetime.now(timezone.utc).isoformat(),
+                "updated_at": datetime.now(timezone.utc).isoformat()
+            }
+        }
+    )
+    
+    # Crear usuario en el sistema principal para que pueda hacer login normal
+    customer_id = registration.get("customer_id")
+    
+    # Verificar si ya existe usuario
+    existing_user = await db.users.find_one({"email": registration["email"]})
+    
+    if not existing_user:
+        # Crear nuevo usuario en la colección de users
+        from services.security_service import hash_password
+        
+        new_user = {
+            "user_id": customer_id,
+            "email": registration["email"],
+            "name": registration["nombre_completo"],
+            "password_hash": hash_password(new_password),
+            "role": "customer",
+            "phone": registration.get("telefono_movil"),
+            "dni": documento,
+            "is_manobank_customer": True,
+            "manobank_customer_id": customer_id,
+            "manobank_accounts": [registration.get("account_id")],
+            "created_at": datetime.now(timezone.utc).isoformat(),
+            "status": "active",
+            "kyc_verified": True
+        }
+        
+        await db.users.insert_one(new_user)
+    else:
+        # Actualizar usuario existente
+        await db.users.update_one(
+            {"email": registration["email"]},
+            {
+                "$set": {
+                    "password_hash": hash_password(new_password),
+                    "is_manobank_customer": True,
+                    "manobank_customer_id": customer_id,
+                    "dni": documento,
+                    "updated_at": datetime.now(timezone.utc).isoformat()
+                },
+                "$addToSet": {
+                    "manobank_accounts": registration.get("account_id")
+                }
+            }
+        )
+    
+    # Log del evento
+    await db.manobank_audit_log.insert_one({
+        "event_type": "password_changed",
+        "customer_id": customer_id,
+        "documento": documento,
+        "timestamp": datetime.now(timezone.utc).isoformat()
+    })
+    
+    return {
+        "success": True,
+        "message": "Contraseña actualizada correctamente",
+        "customer_id": customer_id,
+        "email": registration["email"],
+        "nombre": registration["nombre_completo"]
+    }
