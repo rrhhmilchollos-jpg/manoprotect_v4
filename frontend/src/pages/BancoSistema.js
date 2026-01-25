@@ -621,18 +621,31 @@ const BancoSistema = () => {
     }
   };
 
-  const handleApproveAccount = async (requestId) => {
+  const handleApproveAccount = async (requestId, source = 'legacy') => {
     try {
-      const response = await fetch(`${API_URL}/api/manobank/admin/account-requests/${requestId}/approve`, {
+      // Determine which endpoint to use based on source
+      const endpoint = source === 'bbva_registration' 
+        ? `${API_URL}/api/manobank/admin/registrations/${requestId}/approve`
+        : `${API_URL}/api/manobank/admin/account-requests/${requestId}/approve`;
+      
+      const response = await fetch(endpoint, {
         method: 'POST',
         credentials: 'include',
-        headers: token ? { 'Authorization': `Bearer ${token}` } : {}
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token && { 'Authorization': `Bearer ${token}` })
+        },
+        body: JSON.stringify({ kyc_notes: 'Verificación KYC completada - Aprobado por sistema' })
       });
       
       const data = await response.json();
       if (!response.ok) throw new Error(data.detail);
       
-      toast.success(`Cuenta aprobada. IBAN: ${data.iban}`);
+      if (source === 'bbva_registration') {
+        toast.success(`Cliente aprobado. IBAN: ${data.iban}. Credenciales enviadas por SMS.`);
+      } else {
+        toast.success(`Cuenta aprobada. IBAN: ${data.iban}`);
+      }
       fetchAccountRequests();
       fetchDashboard();
     } catch (error) {
@@ -640,15 +653,24 @@ const BancoSistema = () => {
     }
   };
 
-  const handleRejectAccount = async (requestId) => {
+  const handleRejectAccount = async (requestId, source = 'legacy') => {
     const reason = prompt('Motivo del rechazo:');
     if (!reason) return;
     
     try {
-      const response = await fetch(`${API_URL}/api/manobank/admin/account-requests/${requestId}/reject?reason=${encodeURIComponent(reason)}`, {
+      // Determine which endpoint to use based on source
+      const endpoint = source === 'bbva_registration'
+        ? `${API_URL}/api/manobank/admin/registrations/${requestId}/reject`
+        : `${API_URL}/api/manobank/admin/account-requests/${requestId}/reject?reason=${encodeURIComponent(reason)}`;
+      
+      const response = await fetch(endpoint, {
         method: 'POST',
         credentials: 'include',
-        headers: token ? { 'Authorization': `Bearer ${token}` } : {}
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token && { 'Authorization': `Bearer ${token}` })
+        },
+        body: source === 'bbva_registration' ? JSON.stringify({ reason }) : undefined
       });
       
       if (!response.ok) throw new Error('Error al rechazar');
