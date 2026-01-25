@@ -1991,3 +1991,379 @@ async def resolve_fraud_alert_endpoint(
         return {"message": "Alerta resuelta correctamente"}
     else:
         raise HTTPException(status_code=500, detail="Error al resolver alerta")
+
+
+# ============================================
+# REGISTRO DE NUEVOS CLIENTES MANOBANK (ESTILO BBVA)
+# ============================================
+
+class NuevoClienteRegistro(BaseModel):
+    """Modelo para registro de nuevo cliente - Similar a BBVA"""
+    # Datos personales
+    tipo_documento: str  # DNI, NIE, Pasaporte
+    numero_documento: str
+    letra_documento: Optional[str] = None
+    nombre: str
+    primer_apellido: str
+    segundo_apellido: Optional[str] = None
+    fecha_nacimiento: str
+    sexo: Optional[str] = None
+    nacionalidad: str = "Española"
+    
+    # Contacto
+    email: str
+    telefono_movil: str
+    telefono_fijo: Optional[str] = None
+    
+    # Dirección
+    direccion: str
+    numero: Optional[str] = None
+    piso: Optional[str] = None
+    puerta: Optional[str] = None
+    codigo_postal: str
+    localidad: str
+    provincia: str
+    pais: str = "España"
+    
+    # Situación económica
+    situacion_laboral: str
+    profesion: Optional[str] = None
+    nombre_empresa: Optional[str] = None
+    ingresos_anuales: Optional[str] = None
+    origen_fondos: str
+    proposito_cuenta: str
+    
+    # Declaraciones
+    persona_politica: bool = False
+    titular_real: bool = True
+    
+    # Consentimientos
+    acepta_terminos: bool
+    acepta_privacidad: bool
+    acepta_comunicaciones: bool = False
+
+
+@router.post("/registro/nuevo-cliente")
+async def registrar_nuevo_cliente(data: NuevoClienteRegistro):
+    """
+    Registro de nuevo cliente ManoBank - Estilo BBVA
+    Requiere videoverificación posterior para activar la cuenta
+    """
+    db = get_db()
+    
+    # Validar documento
+    documento_completo = f"{data.numero_documento}{data.letra_documento or ''}".upper()
+    
+    # Verificar si ya existe una solicitud con este documento
+    existing = await db.manobank_customer_registrations.find_one({
+        "documento_completo": documento_completo
+    })
+    
+    if existing:
+        if existing.get("status") == "approved":
+            raise HTTPException(
+                status_code=400, 
+                detail="Ya existe una cuenta asociada a este documento. Use el acceso de cliente existente."
+            )
+        elif existing.get("status") == "pending":
+            raise HTTPException(
+                status_code=400,
+                detail=f"Ya tiene una solicitud pendiente (ID: {existing.get('solicitud_id')}). Espere a la videoverificación."
+            )
+    
+    # Verificar email único
+    email_exists = await db.manobank_customer_registrations.find_one({
+        "email": data.email.lower(),
+        "status": {"$in": ["pending", "approved"]}
+    })
+    if email_exists:
+        raise HTTPException(status_code=400, detail="Este email ya está registrado")
+    
+    # Crear solicitud de registro
+    solicitud_id = f"SOL-{datetime.now().strftime('%Y%m%d')}-{uuid.uuid4().hex[:8].upper()}"
+    
+    # Generar dirección completa
+    direccion_completa = data.direccion
+    if data.numero:
+        direccion_completa += f" {data.numero}"
+    if data.piso:
+        direccion_completa += f", {data.piso}"
+    if data.puerta:
+        direccion_completa += f" {data.puerta}"
+    
+    registration = {
+        "solicitud_id": solicitud_id,
+        "documento_completo": documento_completo,
+        "tipo_documento": data.tipo_documento,
+        "numero_documento": data.numero_documento,
+        "letra_documento": data.letra_documento,
+        
+        # Datos personales
+        "nombre": data.nombre,
+        "primer_apellido": data.primer_apellido,
+        "segundo_apellido": data.segundo_apellido,
+        "nombre_completo": f"{data.nombre} {data.primer_apellido} {data.segundo_apellido or ''}".strip(),
+        "fecha_nacimiento": data.fecha_nacimiento,
+        "sexo": data.sexo,
+        "nacionalidad": data.nacionalidad,
+        
+        # Contacto
+        "email": data.email.lower(),
+        "telefono_movil": data.telefono_movil,
+        "telefono_fijo": data.telefono_fijo,
+        
+        # Dirección
+        "direccion": data.direccion,
+        "numero": data.numero,
+        "piso": data.piso,
+        "puerta": data.puerta,
+        "direccion_completa": direccion_completa,
+        "codigo_postal": data.codigo_postal,
+        "localidad": data.localidad,
+        "provincia": data.provincia,
+        "pais": data.pais,
+        
+        # Económico
+        "situacion_laboral": data.situacion_laboral,
+        "profesion": data.profesion,
+        "nombre_empresa": data.nombre_empresa,
+        "ingresos_anuales": data.ingresos_anuales,
+        "origen_fondos": data.origen_fondos,
+        "proposito_cuenta": data.proposito_cuenta,
+        
+        # Declaraciones PBC/AML
+        "persona_politica": data.persona_politica,
+        "titular_real": data.titular_real,
+        
+        # Consentimientos
+        "acepta_terminos": data.acepta_terminos,
+        "acepta_privacidad": data.acepta_privacidad,
+        "acepta_comunicaciones": data.acepta_comunicaciones,
+        
+        # Estado del proceso
+        "status": "pending",  # pending, kyc_scheduled, kyc_in_progress, approved, rejected
+        "kyc_status": "pending",  # pending, scheduled, completed, failed
+        "kyc_appointment": None,
+        "kyc_agent_id": None,
+        "kyc_notes": [],
+        
+        # Credenciales (se generan tras aprobar KYC)
+        "credentials_sent": False,
+        "temp_password": None,
+        "temp_password_expires": None,
+        "first_login_completed": False,
+        
+        # Cuenta bancaria (se crea tras aprobar KYC)
+        "account_id": None,
+        "iban": None,
+        "initial_deposit_required": 25.0,
+        "initial_deposit_completed": False,
+        
+        # Timestamps
+        "created_at": datetime.now(timezone.utc).isoformat(),
+        "updated_at": datetime.now(timezone.utc).isoformat(),
+        "approved_at": None,
+        "approved_by": None
+    }
+    
+    await db.manobank_customer_registrations.insert_one(registration)
+    
+    # Crear notificación para el equipo de KYC
+    await db.manobank_notifications.insert_one({
+        "notification_id": f"notif_{uuid.uuid4().hex[:12]}",
+        "type": "new_registration",
+        "title": "Nueva solicitud de cuenta",
+        "message": f"Nueva solicitud de {registration['nombre_completo']} ({documento_completo})",
+        "data": {
+            "solicitud_id": solicitud_id,
+            "nombre": registration["nombre_completo"],
+            "documento": documento_completo,
+            "telefono": data.telefono_movil
+        },
+        "for_roles": ["director", "kyc_agent", "compliance"],
+        "is_read": False,
+        "created_at": datetime.now(timezone.utc).isoformat()
+    })
+    
+    return {
+        "success": True,
+        "solicitud_id": solicitud_id,
+        "message": "Solicitud recibida correctamente",
+        "next_step": "videoverificacion",
+        "telefono_contacto": data.telefono_movil,
+        "instrucciones": "Un agente de ManoBank contactará contigo para programar la videoverificación"
+    }
+
+
+@router.post("/registro/solicitar-videoverificacion")
+async def solicitar_videoverificacion(request: Request):
+    """
+    Solicitar cita para videoverificación KYC
+    """
+    db = get_db()
+    body = await request.json()
+    
+    documento = body.get("documento", "").upper()
+    nombre = body.get("nombre")
+    telefono = body.get("telefono")
+    email = body.get("email")
+    
+    if not documento:
+        raise HTTPException(status_code=400, detail="Documento requerido")
+    
+    # Buscar solicitud existente
+    registration = await db.manobank_customer_registrations.find_one({
+        "documento_completo": documento
+    })
+    
+    if not registration:
+        raise HTTPException(status_code=404, detail="No se encontró solicitud con ese documento")
+    
+    if registration.get("status") == "approved":
+        raise HTTPException(status_code=400, detail="Esta cuenta ya ha sido aprobada")
+    
+    if registration.get("kyc_status") == "scheduled":
+        return {
+            "success": True,
+            "message": "Ya tiene una cita de videoverificación programada",
+            "appointment": registration.get("kyc_appointment")
+        }
+    
+    # Programar videoverificación (horario bancario: L-V 9:00-17:00)
+    now = datetime.now(timezone.utc)
+    
+    # Buscar próximo slot disponible
+    next_slot = now + timedelta(hours=2)  # Mínimo 2 horas después
+    
+    # Ajustar a horario bancario
+    if next_slot.weekday() >= 5:  # Sábado o Domingo
+        days_until_monday = 7 - next_slot.weekday()
+        next_slot = next_slot + timedelta(days=days_until_monday)
+        next_slot = next_slot.replace(hour=9, minute=0, second=0)
+    elif next_slot.hour < 9:
+        next_slot = next_slot.replace(hour=9, minute=0, second=0)
+    elif next_slot.hour >= 17:
+        next_slot = next_slot + timedelta(days=1)
+        if next_slot.weekday() >= 5:
+            days_until_monday = 7 - next_slot.weekday()
+            next_slot = next_slot + timedelta(days=days_until_monday)
+        next_slot = next_slot.replace(hour=9, minute=0, second=0)
+    
+    appointment = {
+        "scheduled_date": next_slot.isoformat(),
+        "duration_minutes": 15,
+        "status": "scheduled",
+        "zoom_link": None,  # Se genera cuando el agente confirma
+        "notes": []
+    }
+    
+    # Actualizar registro
+    await db.manobank_customer_registrations.update_one(
+        {"documento_completo": documento},
+        {
+            "$set": {
+                "kyc_status": "scheduled",
+                "kyc_appointment": appointment,
+                "updated_at": datetime.now(timezone.utc).isoformat()
+            }
+        }
+    )
+    
+    return {
+        "success": True,
+        "message": "Videoverificación programada",
+        "appointment": appointment,
+        "instrucciones": f"Recibirá un SMS en {telefono} con el enlace para la videollamada. Tenga preparado su documento de identidad original."
+    }
+
+
+@router.get("/registro/estado/{solicitud_id}")
+async def obtener_estado_registro(solicitud_id: str):
+    """
+    Consultar estado de una solicitud de registro
+    """
+    db = get_db()
+    
+    registration = await db.manobank_customer_registrations.find_one(
+        {"solicitud_id": solicitud_id},
+        {"_id": 0, "temp_password": 0}  # No exponer contraseña temporal
+    )
+    
+    if not registration:
+        raise HTTPException(status_code=404, detail="Solicitud no encontrada")
+    
+    return {
+        "solicitud_id": solicitud_id,
+        "status": registration.get("status"),
+        "kyc_status": registration.get("kyc_status"),
+        "kyc_appointment": registration.get("kyc_appointment"),
+        "created_at": registration.get("created_at"),
+        "message": get_status_message(registration.get("status"))
+    }
+
+
+def get_status_message(status: str) -> str:
+    """Obtener mensaje descriptivo del estado"""
+    messages = {
+        "pending": "Su solicitud está siendo procesada. Le contactaremos para la videoverificación.",
+        "kyc_scheduled": "Tiene una cita de videoverificación programada.",
+        "kyc_in_progress": "Videoverificación en curso.",
+        "approved": "¡Enhorabuena! Su cuenta ha sido aprobada. Recibirá sus credenciales por SMS.",
+        "rejected": "Lo sentimos, su solicitud no ha podido ser aprobada. Contacte con nosotros para más información."
+    }
+    return messages.get(status, "Estado desconocido")
+
+
+@router.post("/registro/login-temporal")
+async def login_temporal(request: Request):
+    """
+    Login con credenciales temporales (DNI/NIE + contraseña temporal)
+    Para nuevos clientes que acaban de ser verificados
+    """
+    db = get_db()
+    body = await request.json()
+    
+    documento = body.get("documento", "").upper().replace(" ", "")
+    temp_password = body.get("password", "")
+    
+    if not documento or not temp_password:
+        raise HTTPException(status_code=400, detail="Documento y contraseña requeridos")
+    
+    # Buscar cliente
+    registration = await db.manobank_customer_registrations.find_one({
+        "documento_completo": documento,
+        "status": "approved"
+    })
+    
+    if not registration:
+        raise HTTPException(
+            status_code=401, 
+            detail="Documento no encontrado o cuenta no aprobada aún"
+        )
+    
+    # Verificar contraseña temporal
+    if registration.get("temp_password") != temp_password:
+        raise HTTPException(status_code=401, detail="Contraseña incorrecta")
+    
+    # Verificar expiración
+    expires = registration.get("temp_password_expires")
+    if expires:
+        expires_dt = datetime.fromisoformat(expires.replace('Z', '+00:00'))
+        if datetime.now(timezone.utc) > expires_dt:
+            raise HTTPException(
+                status_code=401, 
+                detail="La contraseña temporal ha expirado. Contacte con ManoBank al 601 510 950."
+            )
+    
+    return {
+        "success": True,
+        "message": "Login exitoso",
+        "first_login": not registration.get("first_login_completed", False),
+        "requires_password_change": not registration.get("first_login_completed", False),
+        "customer_id": registration.get("customer_id"),
+        "account_id": registration.get("account_id"),
+        "nombre": registration.get("nombre_completo"),
+        "email": registration.get("email"),
+        "initial_deposit_required": registration.get("initial_deposit_required", 25.0),
+        "initial_deposit_completed": registration.get("initial_deposit_completed", False)
+    }
