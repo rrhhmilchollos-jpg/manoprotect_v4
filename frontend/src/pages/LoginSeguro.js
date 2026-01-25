@@ -6,24 +6,38 @@ import { toast } from 'sonner';
 import { 
   Building2, Shield, Lock, Eye, EyeOff, User, Mail, 
   CheckCircle, AlertTriangle, Fingerprint, Smartphone,
-  ArrowRight, HelpCircle, Phone, ChevronRight, Key
+  ArrowRight, HelpCircle, Phone, ChevronRight, Key, CreditCard
 } from 'lucide-react';
 
 const API_URL = process.env.REACT_APP_BACKEND_URL;
 
 const LoginSeguro = () => {
   const navigate = useNavigate();
-  const { login } = useAuth();
-  const [isLogin, setIsLogin] = useState(true);
+  const { login, checkAuth } = useAuth();
+  const [loginType, setLoginType] = useState('email'); // 'email', 'dni', 'register'
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [step, setStep] = useState(1); // 1: credentials, 2: verification
   
+  // Email login form
   const [formData, setFormData] = useState({
     email: '',
     password: '',
     rememberDevice: false
   });
+
+  // DNI login form (for new customers with temp password)
+  const [dniFormData, setDniFormData] = useState({
+    documento: '',
+    password: ''
+  });
+
+  // Password change form (after first DNI login)
+  const [showPasswordChange, setShowPasswordChange] = useState(false);
+  const [newPasswordData, setNewPasswordData] = useState({
+    newPassword: '',
+    confirmPassword: ''
+  });
+  const [customerData, setCustomerData] = useState(null);
 
   const [registerData, setRegisterData] = useState({
     name: '',
@@ -55,8 +69,95 @@ const LoginSeguro = () => {
       }
 
       const data = await response.json();
-      login(data);
+      await checkAuth();
       toast.success('Acceso correcto');
+      navigate('/manobank');
+      
+    } catch (error) {
+      toast.error(error.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Login with DNI + temporary password (for new verified customers)
+  const handleDniLogin = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+    
+    try {
+      const response = await fetch(`${API_URL}/api/manobank/registro/login-temporal`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({
+          documento: dniFormData.documento.toUpperCase().replace(/\s/g, ''),
+          password: dniFormData.password
+        })
+      });
+
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.detail || 'Credenciales incorrectas');
+      }
+
+      // Check if first login - need to change password
+      if (data.first_login || data.requires_password_change) {
+        setCustomerData(data);
+        setShowPasswordChange(true);
+        toast.info('Primer acceso detectado. Debe cambiar su contraseña temporal.');
+      } else {
+        // Already has permanent password - go to dashboard
+        toast.success(`Bienvenido/a, ${data.nombre}`);
+        navigate('/manobank');
+      }
+      
+    } catch (error) {
+      toast.error(error.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Change temporary password to permanent
+  const handlePasswordChange = async (e) => {
+    e.preventDefault();
+    
+    if (newPasswordData.newPassword !== newPasswordData.confirmPassword) {
+      toast.error('Las contraseñas no coinciden');
+      return;
+    }
+    
+    if (newPasswordData.newPassword.length < 8) {
+      toast.error('La contraseña debe tener al menos 8 caracteres');
+      return;
+    }
+    
+    setIsLoading(true);
+    
+    try {
+      const response = await fetch(`${API_URL}/api/manobank/registro/cambiar-password`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({
+          documento: dniFormData.documento.toUpperCase().replace(/\s/g, ''),
+          temp_password: dniFormData.password,
+          new_password: newPasswordData.newPassword
+        })
+      });
+
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.detail || 'Error al cambiar contraseña');
+      }
+
+      toast.success('Contraseña actualizada correctamente');
+      
+      // Auto-login with new credentials
+      await checkAuth();
       navigate('/manobank');
       
     } catch (error) {
@@ -94,7 +195,6 @@ const LoginSeguro = () => {
 
       if (!response.ok) {
         const error = await response.json();
-        // Handle password validation errors
         if (error.detail?.feedback) {
           toast.error(error.detail.message);
           error.detail.feedback.forEach(fb => toast.error(fb));
