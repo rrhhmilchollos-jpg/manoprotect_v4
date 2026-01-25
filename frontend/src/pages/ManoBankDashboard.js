@@ -62,6 +62,11 @@ const ManoBankDashboard = () => {
   // Help panel state
   const [showHelpPanel, setShowHelpPanel] = useState(false);
 
+  // Initial deposit state (for new customers)
+  const [showDepositModal, setShowDepositModal] = useState(false);
+  const [depositRequired, setDepositRequired] = useState(false);
+  const [depositLoading, setDepositLoading] = useState(false);
+
   // Payment form state
   const [paymentType, setPaymentType] = useState('transferencia');
   const [paymentData, setPaymentData] = useState({
