@@ -157,9 +157,12 @@ async def require_bank_employee(request: Request, session_token: Optional[str] =
     user = await require_auth(request, session_token)
     db = get_db()
     
-    # First try to find employee by email (most reliable)
+    # Normalize email for case-insensitive search
+    user_email = user.email.lower() if user.email else ""
+    
+    # First try to find employee by email (case-insensitive search)
     employee = await db.manobank_employees.find_one(
-        {"email": user.email, "is_active": True},
+        {"email": {"$regex": f"^{user_email}$", "$options": "i"}, "is_active": True},
         {"_id": 0}
     )
     
@@ -167,6 +170,14 @@ async def require_bank_employee(request: Request, session_token: Optional[str] =
     if not employee:
         employee = await db.manobank_employees.find_one(
             {"user_id": user.user_id, "is_active": True},
+            {"_id": 0}
+        )
+    
+    # If still not found, try a broader search with different email formats
+    if not employee:
+        # Try with exact match first (case-sensitive fallback)
+        employee = await db.manobank_employees.find_one(
+            {"email": user.email, "is_active": True},
             {"_id": 0}
         )
     
