@@ -143,15 +143,13 @@ init_profile_routes(db)
 from routes.family_sos_routes import router as family_sos_router, init_family_routes
 init_family_routes(db, PLAN_FEATURES)
 
-# Initialize Compliance Service
-from services.compliance_service import init_compliance_service
-from routes.compliance_routes import router as compliance_router, init_compliance_routes
-init_compliance_service(db)
-init_compliance_routes(db, require_admin)
-
-# Initialize Banking Core Services (Ledger, AML, KYC, Reporting)
-from routes.banking_core_routes import router as banking_core_router, init_banking_core_routes
-init_banking_core_routes(db, require_admin)
+# Banking and Compliance services - RESERVED for ManoBank.es
+# from services.compliance_service import init_compliance_service
+# from routes.compliance_routes import router as compliance_router, init_compliance_routes
+# init_compliance_service(db)
+# init_compliance_routes(db, require_admin)
+# from routes.banking_core_routes import router as banking_core_router, init_banking_core_routes
+# init_banking_core_routes(db, require_admin)
 
 # ============================================
 # COMMUNITY ROUTES
