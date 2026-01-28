@@ -495,7 +495,8 @@ const LandingPage = () => {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-6">
+          {/* Primera fila de testimonios */}
+          <div className="grid md:grid-cols-3 gap-6 mb-6">
             {/* Testimonial 1 */}
             <div className="bg-gradient-to-br from-indigo-50 to-white p-6 rounded-2xl border border-indigo-100 shadow-sm hover:shadow-md transition-shadow">
               <div className="flex items-center gap-1 mb-4">
@@ -560,39 +561,128 @@ const LandingPage = () => {
             </div>
           </div>
 
+          {/* Segunda fila de testimonios */}
+          <div className="grid md:grid-cols-3 gap-6">
+            {/* Testimonial 4 */}
+            <div className="bg-gradient-to-br from-emerald-50 to-white p-6 rounded-2xl border border-emerald-100 shadow-sm hover:shadow-md transition-shadow">
+              <div className="flex items-center gap-1 mb-4">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="w-5 h-5 fill-yellow-400 text-yellow-400" />
+                ))}
+              </div>
+              <p className="text-zinc-700 mb-4 italic">
+                "Me llegó un SMS falso de Correos pidiendo datos de mi tarjeta. ManoProtect me avisó antes de que pudiera hacer click. ¡Increíble!"
+              </p>
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-emerald-100 rounded-full flex items-center justify-center text-emerald-600 font-bold">
+                  PR
+                </div>
+                <div>
+                  <p className="font-medium text-zinc-900">Pedro Ruiz</p>
+                  <p className="text-sm text-zinc-500">Sevilla • Plan Personal</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Testimonial 5 */}
+            <div className="bg-gradient-to-br from-purple-50 to-white p-6 rounded-2xl border border-purple-100 shadow-sm hover:shadow-md transition-shadow">
+              <div className="flex items-center gap-1 mb-4">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="w-5 h-5 fill-yellow-400 text-yellow-400" />
+                ))}
+              </div>
+              <p className="text-zinc-700 mb-4 italic">
+                "Mi abuela tiene 78 años y ahora navega tranquila. La protección automática es perfecta para personas mayores que no entienden de tecnología."
+              </p>
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center text-purple-600 font-bold">
+                  LM
+                </div>
+                <div>
+                  <p className="font-medium text-zinc-900">Laura Martín</p>
+                  <p className="text-sm text-zinc-500">Bilbao • Plan Familiar</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Testimonial 6 */}
+            <div className="bg-gradient-to-br from-orange-50 to-white p-6 rounded-2xl border border-orange-100 shadow-sm hover:shadow-md transition-shadow">
+              <div className="flex items-center gap-1 mb-4">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="w-5 h-5 fill-yellow-400 text-yellow-400" />
+                ))}
+              </div>
+              <p className="text-zinc-700 mb-4 italic">
+                "En mi negocio procesamos muchos pagos online. ManoProtect ha detectado 3 intentos de fraude este mes. Vale cada euro de la suscripción."
+              </p>
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center text-orange-600 font-bold">
+                  CF
+                </div>
+                <div>
+                  <p className="font-medium text-zinc-900">Carlos Fernández</p>
+                  <p className="text-sm text-zinc-500">Málaga • Business</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
           {/* Trust Badges */}
           <div className="mt-16 pt-12 border-t border-zinc-200">
-            <p className="text-center text-sm text-zinc-500 mb-8">CONFÍAN EN NOSOTROS</p>
+            <p className="text-center text-sm text-zinc-500 mb-8">COLABORADORES Y PARTNERS TECNOLÓGICOS</p>
             
             {/* Partners Logos */}
-            <div className="flex flex-wrap items-center justify-center gap-8 mb-10 grayscale hover:grayscale-0 transition-all">
-              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Visa_Inc._logo.svg/200px-Visa_Inc._logo.svg.png" alt="VISA" className="h-8 object-contain opacity-60 hover:opacity-100" />
-              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Mastercard-logo.svg/200px-Mastercard-logo.svg.png" alt="Mastercard" className="h-10 object-contain opacity-60 hover:opacity-100" />
-              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/PayPal.svg/200px-PayPal.svg.png" alt="PayPal" className="h-6 object-contain opacity-60 hover:opacity-100" />
-              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Stripe_Logo%2C_revised_2016.svg/200px-Stripe_Logo%2C_revised_2016.svg.png" alt="Stripe" className="h-8 object-contain opacity-60 hover:opacity-100" />
+            <div className="flex flex-wrap items-center justify-center gap-10 mb-12">
+              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Visa_Inc._logo.svg/200px-Visa_Inc._logo.svg.png" alt="VISA" className="h-8 object-contain opacity-50 hover:opacity-100 transition-opacity" />
+              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Mastercard-logo.svg/200px-Mastercard-logo.svg.png" alt="Mastercard" className="h-10 object-contain opacity-50 hover:opacity-100 transition-opacity" />
+              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/PayPal.svg/200px-PayPal.svg.png" alt="PayPal" className="h-6 object-contain opacity-50 hover:opacity-100 transition-opacity" />
+              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Stripe_Logo%2C_revised_2016.svg/200px-Stripe_Logo%2C_revised_2016.svg.png" alt="Stripe" className="h-8 object-contain opacity-50 hover:opacity-100 transition-opacity" />
+              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/OpenAI_Logo.svg/200px-OpenAI_Logo.svg.png" alt="OpenAI" className="h-8 object-contain opacity-50 hover:opacity-100 transition-opacity" />
+              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/Microsoft_logo_%282012%29.svg/200px-Microsoft_logo_%282012%29.svg.png" alt="Microsoft" className="h-7 object-contain opacity-50 hover:opacity-100 transition-opacity" />
             </div>
             
-            {/* Trust Badges */}
-            <div className="flex flex-wrap items-center justify-center gap-8">
+            {/* Trust Badges - Institutional */}
+            <p className="text-center text-sm text-zinc-500 mb-6">CERTIFICACIONES Y CUMPLIMIENTO</p>
+            <div className="flex flex-wrap items-center justify-center gap-8 mb-8">
+              <div className="flex items-center gap-2 px-4 py-2 bg-zinc-100 rounded-lg">
+                <Shield className="w-5 h-5 text-indigo-600" />
+                <span className="text-sm font-medium text-zinc-700">SSL 256-bit</span>
+              </div>
+              <div className="flex items-center gap-2 px-4 py-2 bg-zinc-100 rounded-lg">
+                <Building2 className="w-5 h-5 text-indigo-600" />
+                <span className="text-sm font-medium text-zinc-700">Banco de España</span>
+              </div>
+              <div className="flex items-center gap-2 px-4 py-2 bg-zinc-100 rounded-lg">
+                <Check className="w-5 h-5 text-emerald-600" />
+                <span className="text-sm font-medium text-zinc-700">RGPD Compliant</span>
+              </div>
+              <div className="flex items-center gap-2 px-4 py-2 bg-zinc-100 rounded-lg">
+                <Shield className="w-5 h-5 text-blue-600" />
+                <span className="text-sm font-medium text-zinc-700">ISO 27001</span>
+              </div>
+              <div className="flex items-center gap-2 px-4 py-2 bg-zinc-100 rounded-lg">
+                <Check className="w-5 h-5 text-purple-600" />
+                <span className="text-sm font-medium text-zinc-700">PCI DSS</span>
+              </div>
+            </div>
+            
+            {/* Statistics */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-10 p-8 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-2xl">
               <div className="text-center">
-                <Shield className="w-8 h-8 mx-auto mb-2 text-indigo-600" />
-                <p className="text-xs text-zinc-600">Cifrado SSL 256-bit</p>
+                <div className="text-3xl font-bold text-indigo-600">+15.000</div>
+                <p className="text-sm text-zinc-600 mt-1">Familias Protegidas</p>
               </div>
               <div className="text-center">
-                <Building2 className="w-8 h-8 mx-auto mb-2 text-indigo-600" />
-                <p className="text-xs text-zinc-600">Banco de España</p>
+                <div className="text-3xl font-bold text-emerald-600">50.000+</div>
+                <p className="text-sm text-zinc-600 mt-1">Estafas Bloqueadas</p>
               </div>
               <div className="text-center">
-                <Check className="w-8 h-8 mx-auto mb-2 text-indigo-600" />
-                <p className="text-xs text-zinc-600">RGPD Compliant</p>
+                <div className="text-3xl font-bold text-purple-600">4.9/5</div>
+                <p className="text-sm text-zinc-600 mt-1">Valoración Media</p>
               </div>
               <div className="text-center">
-                <Users className="w-8 h-8 mx-auto mb-2 text-indigo-600" />
-                <p className="text-xs text-zinc-600">+15.000 Familias</p>
-              </div>
-              <div className="text-center">
-                <Sparkles className="w-8 h-8 mx-auto mb-2 text-indigo-600" />
-                <p className="text-xs text-zinc-600">4.9/5 Valoración</p>
+                <div className="text-3xl font-bold text-orange-600">99.8%</div>
+                <p className="text-sm text-zinc-600 mt-1">Tasa de Detección</p>
               </div>
             </div>
           </div>
