@@ -286,9 +286,340 @@ async def send_custom_email(
     background_tasks: BackgroundTasks
 ):
     """Send custom email"""
-    background_tasks.add_task(send_email, data.to, data.subject, data.content)
+    background_tasks.add_task(send_email, data.to, data.subject, data_content)
     
     return {
         "status": "queued",
         "message": "Email enviado"
     }
+
+
+# ============================================
+# FRAUD ALERT SUBSCRIPTION MODELS
+# ============================================
+
+class AlertSubscription(BaseModel):
+    email: EmailStr
+    name: Optional[str] = None
+    alert_types: List[str] = ["all"]  # phishing, smishing, vishing, identity-theft, all
+    frequency: str = "immediate"  # immediate, daily, weekly
+
+
+class AlertUnsubscribe(BaseModel):
+    email: EmailStr
+    token: str
+
+
+class NewThreatAlert(BaseModel):
+    threat_type: str
+    title: str
+    description: str
+    risk_level: str = "alto"  # alto, medio, bajo
+    source: Optional[str] = None
+    affected_entities: Optional[List[str]] = []
+
+
+# ============================================
+# EMAIL TEMPLATES FOR ALERTS
+# ============================================
+
+def get_alert_subscription_template(name: str, unsubscribe_token: str) -> str:
+    """Template for subscription confirmation"""
+    return f"""
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="utf-8">
+        <style>
+            body {{ font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; }}
+            .header {{ background: linear-gradient(135deg, #4F46E5, #7C3AED); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }}
+            .content {{ background: #f9fafb; padding: 30px; border-radius: 0 0 10px 10px; }}
+            .success-box {{ background: #ecfdf5; border: 1px solid #10b981; border-radius: 8px; padding: 20px; margin: 20px 0; text-align: center; }}
+            .footer {{ text-align: center; padding: 20px; color: #6b7280; font-size: 12px; }}
+            .unsubscribe {{ color: #9ca3af; font-size: 11px; }}
+        </style>
+    </head>
+    <body>
+        <div class="header">
+            <h1>🛡️ ¡Suscripción Activada!</h1>
+        </div>
+        <div class="content">
+            <h2>Hola {name or 'Usuario'},</h2>
+            <div class="success-box">
+                <p style="color: #10b981; font-size: 18px; margin: 0;">✅ Te has suscrito a las alertas de seguridad de ManoProtect</p>
+            </div>
+            <p>A partir de ahora recibirás notificaciones sobre:</p>
+            <ul>
+                <li>🎣 Nuevas campañas de phishing detectadas</li>
+                <li>📱 Alertas de smishing y SMS fraudulentos</li>
+                <li>📞 Estafas telefónicas (vishing) activas</li>
+                <li>🆔 Intentos de suplantación de identidad</li>
+                <li>🏦 Fraudes financieros en circulación</li>
+            </ul>
+            <p>Mantente un paso adelante de los ciberdelincuentes.</p>
+        </div>
+        <div class="footer">
+            <p>© 2025 ManoProtect. Tu escudo digital contra fraudes.</p>
+            <p class="unsubscribe">¿Ya no quieres recibir alertas? <a href="https://manoprotect.com/unsubscribe?token={unsubscribe_token}">Darse de baja</a></p>
+        </div>
+    </body>
+    </html>
+    """
+
+
+def get_new_threat_broadcast_template(threat_type: str, title: str, description: str, risk_level: str, affected_entities: List[str]) -> str:
+    """Template for broadcasting new threat alerts"""
+    risk_color = "#ef4444" if risk_level == "alto" else "#f59e0b" if risk_level == "medio" else "#22c55e"
+    risk_emoji = "🔴" if risk_level == "alto" else "🟡" if risk_level == "medio" else "🟢"
+    
+    entities_html = ""
+    if affected_entities:
+        entities_list = "".join([f"<li>{entity}</li>" for entity in affected_entities])
+        entities_html = f"""
+        <div style="background: #fef2f2; border-radius: 8px; padding: 15px; margin: 15px 0;">
+            <strong>⚠️ Entidades afectadas:</strong>
+            <ul style="margin: 10px 0;">{entities_list}</ul>
+        </div>
+        """
+    
+    return f"""
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="utf-8">
+        <style>
+            body {{ font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; }}
+            .header {{ background: {risk_color}; color: white; padding: 25px; text-align: center; border-radius: 10px 10px 0 0; }}
+            .content {{ background: #f9fafb; padding: 30px; border-radius: 0 0 10px 10px; }}
+            .alert-badge {{ display: inline-block; background: white; color: {risk_color}; padding: 5px 15px; border-radius: 20px; font-weight: bold; font-size: 12px; }}
+            .threat-box {{ background: white; border-left: 4px solid {risk_color}; padding: 20px; margin: 20px 0; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }}
+            .action-box {{ background: #eff6ff; border: 1px solid #3b82f6; border-radius: 8px; padding: 15px; margin: 20px 0; }}
+            .button {{ display: inline-block; background: #4F46E5; color: white; padding: 12px 30px; text-decoration: none; border-radius: 5px; margin-top: 15px; }}
+            .footer {{ text-align: center; padding: 20px; color: #6b7280; font-size: 12px; }}
+        </style>
+    </head>
+    <body>
+        <div class="header">
+            <span class="alert-badge">{risk_emoji} RIESGO {risk_level.upper()}</span>
+            <h1 style="margin-top: 15px;">⚠️ Nueva Alerta de Seguridad</h1>
+        </div>
+        <div class="content">
+            <div class="threat-box">
+                <h2 style="margin-top: 0; color: #1f2937;">{title}</h2>
+                <p><strong>Tipo de amenaza:</strong> {threat_type}</p>
+                <p>{description}</p>
+            </div>
+            {entities_html}
+            <div class="action-box">
+                <strong>🛡️ ¿Qué debes hacer?</strong>
+                <ul style="margin: 10px 0;">
+                    <li>No hagas clic en enlaces sospechosos</li>
+                    <li>Verifica siempre el remitente antes de responder</li>
+                    <li>Si tienes dudas, usa ManoProtect para analizar el mensaje</li>
+                    <li>Comparte esta alerta con familiares y amigos</li>
+                </ul>
+            </div>
+            <div style="text-align: center;">
+                <a href="https://manoprotect.com/dashboard" class="button">Analizar mensaje sospechoso</a>
+            </div>
+        </div>
+        <div class="footer">
+            <p>© 2025 ManoProtect - Protegiendo a la comunidad</p>
+            <p style="font-size: 11px; color: #9ca3af;">Esta alerta fue generada automáticamente por el sistema de detección de ManoProtect</p>
+        </div>
+    </body>
+    </html>
+    """
+
+
+# ============================================
+# ALERT SUBSCRIPTION ENDPOINTS
+# ============================================
+
+@alerts_router.post("/subscribe")
+async def subscribe_to_alerts(
+    data: AlertSubscription,
+    background_tasks: BackgroundTasks
+):
+    """Subscribe to fraud alert notifications"""
+    if not db:
+        raise HTTPException(status_code=500, detail="Base de datos no inicializada")
+    
+    # Check if already subscribed
+    existing = await db.alert_subscriptions.find_one({"email": data.email.lower()})
+    if existing:
+        if existing.get("is_active", True):
+            return {
+                "status": "already_subscribed",
+                "message": "Ya estás suscrito a las alertas de ManoProtect"
+            }
+        else:
+            # Reactivate subscription
+            unsubscribe_token = str(uuid.uuid4())
+            await db.alert_subscriptions.update_one(
+                {"email": data.email.lower()},
+                {"$set": {
+                    "is_active": True,
+                    "reactivated_at": datetime.now(timezone.utc).isoformat(),
+                    "unsubscribe_token": unsubscribe_token,
+                    "alert_types": data.alert_types,
+                    "frequency": data.frequency
+                }}
+            )
+            
+            # Send confirmation email
+            html_content = get_alert_subscription_template(data.name, unsubscribe_token)
+            background_tasks.add_task(
+                send_email, 
+                data.email, 
+                "🛡️ Tu suscripción a alertas de ManoProtect ha sido reactivada", 
+                html_content
+            )
+            
+            return {
+                "status": "reactivated",
+                "message": "Tu suscripción ha sido reactivada"
+            }
+    
+    # Create new subscription
+    unsubscribe_token = str(uuid.uuid4())
+    subscription = {
+        "id": f"sub_{uuid.uuid4().hex[:12]}",
+        "email": data.email.lower(),
+        "name": data.name,
+        "alert_types": data.alert_types,
+        "frequency": data.frequency,
+        "is_active": True,
+        "unsubscribe_token": unsubscribe_token,
+        "created_at": datetime.now(timezone.utc).isoformat()
+    }
+    
+    await db.alert_subscriptions.insert_one(subscription)
+    
+    # Send confirmation email
+    html_content = get_alert_subscription_template(data.name, unsubscribe_token)
+    background_tasks.add_task(
+        send_email, 
+        data.email, 
+        "🛡️ ¡Bienvenido a las alertas de seguridad de ManoProtect!", 
+        html_content
+    )
+    
+    return {
+        "status": "subscribed",
+        "message": "Te has suscrito correctamente a las alertas de fraude",
+        "subscription_id": subscription["id"]
+    }
+
+
+@alerts_router.post("/unsubscribe")
+async def unsubscribe_from_alerts(data: AlertUnsubscribe):
+    """Unsubscribe from fraud alert notifications"""
+    if not db:
+        raise HTTPException(status_code=500, detail="Base de datos no inicializada")
+    
+    result = await db.alert_subscriptions.update_one(
+        {"email": data.email.lower(), "unsubscribe_token": data.token},
+        {"$set": {
+            "is_active": False,
+            "unsubscribed_at": datetime.now(timezone.utc).isoformat()
+        }}
+    )
+    
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Suscripción no encontrada o token inválido")
+    
+    return {
+        "status": "unsubscribed",
+        "message": "Te has dado de baja de las alertas de ManoProtect"
+    }
+
+
+@alerts_router.get("/subscriptions/count")
+async def get_subscription_count():
+    """Get total number of alert subscribers (public stat)"""
+    if not db:
+        return {"count": 0, "message": "Base de datos no disponible"}
+    
+    count = await db.alert_subscriptions.count_documents({"is_active": True})
+    return {"count": count}
+
+
+@alerts_router.post("/broadcast")
+async def broadcast_new_threat(
+    data: NewThreatAlert,
+    background_tasks: BackgroundTasks,
+    api_key: Optional[str] = None
+):
+    """
+    Broadcast a new threat alert to all subscribers.
+    This endpoint can be called internally when new threats are detected,
+    or by ManoBank to notify about new security threats.
+    """
+    if not db:
+        raise HTTPException(status_code=500, detail="Base de datos no inicializada")
+    
+    # Get all active subscribers
+    subscribers = await db.alert_subscriptions.find(
+        {"is_active": True}
+    ).to_list(10000)
+    
+    if not subscribers:
+        return {
+            "status": "no_subscribers",
+            "message": "No hay suscriptores activos para enviar alertas"
+        }
+    
+    # Generate email content
+    html_content = get_new_threat_broadcast_template(
+        data.threat_type,
+        data.title,
+        data.description,
+        data.risk_level,
+        data.affected_entities or []
+    )
+    
+    # Subject based on risk level
+    risk_prefix = "🔴 URGENTE" if data.risk_level == "alto" else "🟡 ALERTA" if data.risk_level == "medio" else "🟢 INFO"
+    subject = f"{risk_prefix}: {data.title} - ManoProtect"
+    
+    # Send to all subscribers in background
+    sent_count = 0
+    for sub in subscribers:
+        # Check if subscriber wants this type of alert
+        if "all" in sub.get("alert_types", ["all"]) or data.threat_type in sub.get("alert_types", []):
+            background_tasks.add_task(send_email, sub["email"], subject, html_content)
+            sent_count += 1
+    
+    # Log the broadcast
+    await db.alert_broadcasts.insert_one({
+        "id": f"broadcast_{uuid.uuid4().hex[:12]}",
+        "threat_type": data.threat_type,
+        "title": data.title,
+        "description": data.description,
+        "risk_level": data.risk_level,
+        "source": data.source,
+        "affected_entities": data.affected_entities,
+        "subscribers_notified": sent_count,
+        "created_at": datetime.now(timezone.utc).isoformat()
+    })
+    
+    return {
+        "status": "broadcast_queued",
+        "message": f"Alerta enviada a {sent_count} suscriptores",
+        "subscribers_notified": sent_count
+    }
+
+
+@alerts_router.get("/history")
+async def get_alert_history(limit: int = 20):
+    """Get recent broadcast alert history (public)"""
+    if not db:
+        return {"alerts": [], "message": "Base de datos no disponible"}
+    
+    alerts = await db.alert_broadcasts.find(
+        {},
+        {"_id": 0}
+    ).sort("created_at", -1).limit(limit).to_list(limit)
+    
+    return {"alerts": alerts}
