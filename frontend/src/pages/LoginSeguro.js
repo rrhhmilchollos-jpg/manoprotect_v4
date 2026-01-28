@@ -380,6 +380,75 @@ const LoginSeguro = () => {
               <span>Conexión segura verificada</span>
             </div>
 
+            {/* 2FA Verification Modal */}
+            {show2FA && (
+              <div className="bg-white rounded-2xl shadow-2xl shadow-black/20 overflow-hidden">
+                <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white p-6">
+                  <div className="flex items-center gap-3">
+                    <Smartphone className="w-8 h-8" />
+                    <div>
+                      <h2 className="text-xl font-bold">Verificación en dos pasos</h2>
+                      <p className="text-blue-100 text-sm">Introduce el código enviado a {phoneMasked2FA}</p>
+                    </div>
+                  </div>
+                </div>
+                
+                <form onSubmit={handle2FAVerify} className="p-6 space-y-5">
+                  <div className="bg-blue-50 border border-blue-200 rounded-xl p-4">
+                    <p className="text-sm text-blue-800">
+                      <Shield className="w-4 h-4 inline mr-2" />
+                      Hemos enviado un código de 6 dígitos a tu teléfono móvil.
+                    </p>
+                  </div>
+                  
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Código de verificación
+                    </label>
+                    <input
+                      type="text"
+                      maxLength={6}
+                      value={twoFACode}
+                      onChange={(e) => setTwoFACode(e.target.value.replace(/\D/g, ''))}
+                      required
+                      className="w-full px-4 py-4 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 text-center text-3xl tracking-[0.5em] font-mono"
+                      placeholder="000000"
+                      autoFocus
+                    />
+                  </div>
+
+                  <div className="flex gap-3">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      className="flex-1"
+                      onClick={() => { setShow2FA(false); setTwoFACode(''); }}
+                    >
+                      Cancelar
+                    </Button>
+                    <Button
+                      type="submit"
+                      disabled={isLoading || twoFACode.length < 6}
+                      className="flex-1 bg-blue-600 hover:bg-blue-700"
+                    >
+                      {isLoading ? 'Verificando...' : 'Verificar'}
+                    </Button>
+                  </div>
+                  
+                  <p className="text-center text-sm text-gray-500">
+                    ¿No recibiste el código?{' '}
+                    <button 
+                      type="button"
+                      onClick={() => handleLogin({ preventDefault: () => {} })}
+                      className="text-blue-600 hover:underline"
+                    >
+                      Reenviar
+                    </button>
+                  </p>
+                </form>
+              </div>
+            )}
+
             {/* Password Change Modal */}
             {showPasswordChange && customerData && (
               <div className="bg-white rounded-2xl shadow-2xl shadow-black/20 overflow-hidden">
