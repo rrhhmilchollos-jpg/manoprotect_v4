@@ -310,8 +310,13 @@ async def create_employee(
             detail="Solo el Director General puede crear nuevos empleados"
         )
     
-    # Check if email already exists - allow update if same person with different role
-    existing = await db.manobank_employees.find_one({"email": data.email})
+    # CRITICAL: Normalize email to lowercase to prevent case-sensitivity issues
+    normalized_email = data.email.strip().lower()
+    
+    # Check if email already exists in manobank_employees (case-insensitive)
+    existing = await db.manobank_employees.find_one({
+        "email": {"$regex": f"^{normalized_email}$", "$options": "i"}
+    })
     
     employee_id = f"emp_{uuid.uuid4().hex[:12]}"
     
@@ -322,6 +327,15 @@ async def create_employee(
             if r not in all_roles:
                 all_roles.append(r)
     
+    # Generate temporary password
+    import secrets
+    import string
+    temp_chars = string.ascii_letters + string.digits
+    temp_password = ''.join(secrets.choice(temp_chars) for _ in range(10))
+    
+    from services.security_service import hash_password_secure
+    password_hash = hash_password_secure(temp_password)
+    
     if existing:
         # Update existing employee with new/additional roles
         existing_roles = existing.get("roles", [existing.get("role", "")])
@@ -331,30 +345,48 @@ async def create_employee(
         # Merge roles
         merged_roles = list(set(existing_roles + all_roles))
         
+        # Update manobank_employees
         await db.manobank_employees.update_one(
-            {"email": data.email},
+            {"email": {"$regex": f"^{normalized_email}$", "$options": "i"}},
             {
                 "$set": {
+                    "email": normalized_email,  # Normalize email
                     "roles": merged_roles,
-                    "role": data.role.value,  # Primary role
+                    "role": data.role.value,
                     "department": data.department or existing.get("department"),
                     "phone": data.phone or existing.get("phone"),
                     "salary": data.salary or existing.get("salary"),
+                    "is_active": True,
                     "updated_at": datetime.now(timezone.utc).isoformat(),
                     "updated_by": user.user_id
                 }
             }
         )
         
-        updated = await db.manobank_employees.find_one({"email": data.email}, {"_id": 0})
+        # CRITICAL: Also update users collection for authentication
+        await db.users.update_one(
+            {"email": {"$regex": f"^{normalized_email}$", "$options": "i"}},
+            {
+                "$set": {
+                    "email": normalized_email,
+                    "name": data.name,
+                    "is_active": True,
+                    "role": "employee",
+                    "updated_at": datetime.now(timezone.utc).isoformat()
+                }
+            }
+        )
+        
+        updated = await db.manobank_employees.find_one({"email": normalized_email}, {"_id": 0})
         return {
             "message": f"Empleado actualizado con roles: {', '.join(merged_roles)}", 
             "employee": updated
         }
     
+    # Create new employee in manobank_employees
     new_employee = {
         "id": employee_id,
-        "email": data.email,
+        "email": normalized_email,
         "name": data.name,
         "role": data.role.value,
         "roles": all_roles,
@@ -369,20 +401,47 @@ async def create_employee(
         "created_at": datetime.now(timezone.utc).isoformat()
     }
     
-    # Generate temporary password for new employee
-    import secrets
-    import string
-    temp_chars = string.ascii_letters + string.digits
-    temp_password = ''.join(secrets.choice(temp_chars) for _ in range(10))
-    
-    # Store password hash in employee record
-    from services.security_service import hash_password_secure
-    new_employee["password_hash"] = hash_password_secure(temp_password)
-    new_employee["temp_password"] = temp_password  # Store temporarily for SMS
+    new_employee["password_hash"] = password_hash
+    new_employee["temp_password"] = temp_password
     new_employee["temp_password_expires"] = (datetime.now(timezone.utc) + timedelta(hours=24)).isoformat()
     new_employee["first_login_completed"] = False
     
     await db.manobank_employees.insert_one(new_employee)
+    
+    # CRITICAL: Also create/update user in users collection for authentication
+    existing_user = await db.users.find_one({
+        "email": {"$regex": f"^{normalized_email}$", "$options": "i"}
+    })
+    
+    if existing_user:
+        # Update existing user
+        await db.users.update_one(
+            {"email": {"$regex": f"^{normalized_email}$", "$options": "i"}},
+            {
+                "$set": {
+                    "email": normalized_email,
+                    "name": data.name,
+                    "password": password_hash,
+                    "role": "employee",
+                    "is_active": True,
+                    "phone": data.phone,
+                    "updated_at": datetime.now(timezone.utc).isoformat()
+                }
+            }
+        )
+    else:
+        # Create new user for authentication
+        new_user = {
+            "id": f"user_{uuid.uuid4().hex[:12]}",
+            "email": normalized_email,
+            "name": data.name,
+            "password": password_hash,
+            "role": "employee",
+            "is_active": True,
+            "phone": data.phone,
+            "created_at": datetime.now(timezone.utc).isoformat()
+        }
+        await db.users.insert_one(new_user)
     
     # Send SMS with credentials if phone number provided
     sms_sent = False
@@ -392,7 +451,7 @@ async def create_employee(
             sms_message = (
                 f"ManoBank Empleados: Bienvenido/a {data.name}. "
                 f"Sus credenciales de acceso son: "
-                f"Email: {data.email} | "
+                f"Email: {normalized_email} | "
                 f"Contraseña temporal: {temp_password} "
                 f"(válida 24h). "
                 f"Acceda en: https://manobank.es/banco"
