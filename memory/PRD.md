@@ -12,10 +12,9 @@ Los proyectos están completamente separados pero conectados mediante API de ant
 /app/
 ├── frontend/          # ManoProtect Frontend (puerto 3000)
 ├── backend/           # ManoProtect Backend (puerto 8001)
-├── manobank/          # ManoBank - Proyecto independiente
-│   ├── frontend/      # ManoBank Frontend (puerto 3001)
-│   └── backend/       # ManoBank Backend (puerto 8002)
-└── manobank_reserved/ # Código legacy (migrar gradualmente)
+└── manobank/          # ManoBank - Proyecto independiente
+    ├── frontend/      # ManoBank Frontend (puerto 3001)
+    └── backend/       # ManoBank Backend (puerto 8002)
 ```
 
 ---
@@ -33,13 +32,22 @@ Plataforma de protección contra fraudes y estafas digitales para familias espa�
 ## Funcionalidades ✅
 - Landing page con testimonios y badges de confianza
 - Sistema de autenticación (email + Google OAuth)
-- Dashboard de protección
-- Verificador de estafas público
-- **Sistema de alertas por email (NUEVO - 28 enero 2026)**
+- Dashboard de protección con alertas recientes
+- Verificador de estafas público mejorado
+- **Sistema de alertas por email (28 enero 2026)**
   - Suscripción gratuita a alertas de fraude
   - Broadcast de amenazas a todos los suscriptores
   - Historial de alertas enviadas
   - Integración con SendGrid
+- **Panel Admin mejorado (28 enero 2026)**
+  - Nueva pestaña "Alertas" para gestionar alertas de seguridad
+  - Crear y enviar alertas masivas desde el panel
+  - Ver estadísticas de suscriptores
+- **Planes familiares corregidos (28 enero 2026)**
+  - Añadir miembros familiares (POST /api/family/members)
+  - Actualizar configuración de miembros
+  - Vincular cuentas de miembros
+  - Ver estado de familia y miembros enlazados
 - Planes y precios con Stripe
 - API de fraude compartida con ManoBank
 
