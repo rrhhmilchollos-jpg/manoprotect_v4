@@ -225,7 +225,7 @@ async def public_report_scam(request: Request):
     """
     body = await request.json()
     
-    if not _db:
+    if _db is None:
         return {"message": "Reporte recibido"}
     
     report = {
