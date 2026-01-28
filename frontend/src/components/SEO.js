@@ -76,7 +76,7 @@ const SEO = ({
       "@context": "https://schema.org",
       "@type": "Organization",
       "name": "ManoProtect",
-      "alternateName": "ManoBank",
+      "alternateName": "Protección Digital ManoProtect",
       "url": "https://manoprotect.com",
       "logo": "https://manoprotect.com/logo.png",
       "description": description,
