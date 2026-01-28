@@ -1,6 +1,6 @@
 """
 MANO Security Service
-Advanced security features for ManoBank S.A.
+Advanced security features for ManoProtect
 - Rate limiting
 - Failed login tracking
 - Account lockout
