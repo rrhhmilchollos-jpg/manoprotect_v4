@@ -3091,12 +3091,11 @@ app.include_router(api_router)
 app.include_router(public_router)
 
 # Configure CORS with specific origins for credential-based requests
+# ManoProtect.com only - ManoBank.es will be added when domain is ready
 allowed_origins = [
-    "https://manobank.preview.emergentagent.com",
+    "https://manoprotect.preview.emergentagent.com",
     "http://localhost:3000",
     "http://localhost:8001",
-    "https://manobank.es",
-    "https://www.manobank.es",
     "https://manoprotect.com",
     "https://www.manoprotect.com",
 ]
