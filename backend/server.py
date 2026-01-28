@@ -3047,9 +3047,12 @@ except ImportError as e:
 #     print(f"⚠️ ManoBank Admin routes not loaded: {e}")
 
 try:
-    from routes.email_routes import router as email_router
+    from routes.email_routes import router as email_router, alerts_router, init_email_routes
+    init_email_routes(db)
     api_router.include_router(email_router)
+    api_router.include_router(alerts_router)
     print("✅ Email routes loaded")
+    print("✅ Alert subscription routes loaded")
 except ImportError as e:
     print(f"⚠️ Email routes not loaded: {e}")
 
