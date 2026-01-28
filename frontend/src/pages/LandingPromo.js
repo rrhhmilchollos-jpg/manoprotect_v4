@@ -61,6 +61,13 @@ const LandingPromo = () => {
 
   return (
     <div className="min-h-screen bg-white">
+      <SEO 
+        title="ManoBank - Tu Banco Digital sin Comisiones | Cuenta Gratis España"
+        description="Abre tu cuenta bancaria online gratis. Sin comisiones, VISA gratis, Bizum incluido. El banco digital que cuida de tu dinero. ¡Primer mes premium GRATIS!"
+        keywords="banco digital, cuenta gratis, sin comisiones, VISA gratis, banco online España, bizum, transferencias gratis, banca móvil"
+        canonical="https://manobank.es"
+      />
+      
       {/* Header */}
       <header className="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-md border-b border-gray-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
