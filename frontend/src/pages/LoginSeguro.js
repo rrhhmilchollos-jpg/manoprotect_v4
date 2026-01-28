@@ -59,14 +59,47 @@ const LoginSeguro = () => {
     setIsLoading(true);
     
     try {
+      // First check if user has 2FA enabled
+      const check2FA = await fetch(`${API_URL}/api/manobank/cliente/2fa/enviar-codigo`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: formData.email })
+      });
+      
+      const twoFAData = await check2FA.json();
+      
+      if (twoFAData.requires_2fa) {
+        // Need to verify 2FA first
+        setPendingLoginData({ email: formData.email, password: formData.password });
+        setPhoneMasked2FA(twoFAData.phone_masked);
+        setShow2FA(true);
+        
+        if (twoFAData.code_for_testing) {
+          // Show code for testing (only when SMS not sent)
+          toast.info(`Código de prueba: ${twoFAData.code_for_testing}`);
+        } else {
+          toast.info('Código enviado por SMS');
+        }
+        setIsLoading(false);
+        return;
+      }
+      
+      // No 2FA, proceed with normal login
+      await performLogin(formData.email, formData.password);
+      
+    } catch (error) {
+      toast.error(error.message);
+      setIsLoading(false);
+    }
+  };
+
+  const performLogin = async (email, password) => {
+    try {
       const response = await fetch(`${API_URL}/api/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
-        body: JSON.stringify({
-          email: formData.email,
-          password: formData.password
-        })
+        body: JSON.stringify({ email, password })
       });
 
       if (!response.ok) {
@@ -74,7 +107,6 @@ const LoginSeguro = () => {
         throw new Error(error.detail || 'Credenciales incorrectas');
       }
 
-      const data = await response.json();
       await checkAuth();
       toast.success('Acceso correcto');
       navigate('/manobank');
@@ -82,6 +114,37 @@ const LoginSeguro = () => {
     } catch (error) {
       toast.error(error.message);
     } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handle2FAVerify = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+    
+    try {
+      // Verify 2FA code
+      const verifyResponse = await fetch(`${API_URL}/api/manobank/cliente/2fa/verificar-codigo`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: pendingLoginData.email,
+          code: twoFACode
+        })
+      });
+      
+      if (!verifyResponse.ok) {
+        const error = await verifyResponse.json();
+        throw new Error(error.detail || 'Código incorrecto');
+      }
+      
+      // 2FA verified, proceed with login
+      await performLogin(pendingLoginData.email, pendingLoginData.password);
+      setShow2FA(false);
+      setTwoFACode('');
+      
+    } catch (error) {
+      toast.error(error.message);
       setIsLoading(false);
     }
   };
