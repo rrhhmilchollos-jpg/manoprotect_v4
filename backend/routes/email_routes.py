@@ -7,8 +7,18 @@ from typing import Optional, List
 from pydantic import BaseModel, EmailStr
 from datetime import datetime, timezone
 import os
+import uuid
 
 router = APIRouter(prefix="/email", tags=["Email"])
+alerts_router = APIRouter(prefix="/alerts", tags=["Alerts"])
+
+# Database reference (initialized in init_email_routes)
+db = None
+
+def init_email_routes(database):
+    """Initialize email routes with database"""
+    global db
+    db = database
 
 # SendGrid Configuration
 SENDGRID_API_KEY = os.environ.get('SENDGRID_API_KEY')
