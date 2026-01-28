@@ -655,7 +655,7 @@ const LandingPage = () => {
                 </div>
                 <div>
                   <p className="text-sm font-medium text-white">Email</p>
-                  <a href="mailto:info@manobank.com" className="text-sm text-indigo-400 hover:text-indigo-300">info@manobank.com</a>
+                  <a href="mailto:info@manoprotect.com" className="text-sm text-indigo-400 hover:text-indigo-300">info@manoprotect.com</a>
                 </div>
               </div>
             </div>
