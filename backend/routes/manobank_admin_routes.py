@@ -369,10 +369,50 @@ async def create_employee(
         "created_at": datetime.now(timezone.utc).isoformat()
     }
     
-    await db.manobank_employees.insert_one(new_employee)
-    new_employee.pop("_id", None)
+    # Generate temporary password for new employee
+    import secrets
+    import string
+    temp_chars = string.ascii_letters + string.digits
+    temp_password = ''.join(secrets.choice(temp_chars) for _ in range(10))
     
-    return {"message": "Empleado creado y autorizado correctamente", "employee": new_employee}
+    # Store password hash in employee record
+    from services.security_service import hash_password_secure
+    new_employee["password_hash"] = hash_password_secure(temp_password)
+    new_employee["temp_password"] = temp_password  # Store temporarily for SMS
+    new_employee["temp_password_expires"] = (datetime.now(timezone.utc) + timedelta(hours=24)).isoformat()
+    new_employee["first_login_completed"] = False
+    
+    await db.manobank_employees.insert_one(new_employee)
+    
+    # Send SMS with credentials if phone number provided
+    sms_sent = False
+    if data.phone:
+        try:
+            from services.twilio_sms import send_sms
+            sms_message = (
+                f"ManoBank Empleados: Bienvenido/a {data.name}. "
+                f"Sus credenciales de acceso son: "
+                f"Email: {data.email} | "
+                f"Contraseña temporal: {temp_password} "
+                f"(válida 24h). "
+                f"Acceda en: https://manobank.es/banco"
+            )
+            await send_sms(data.phone, sms_message)
+            sms_sent = True
+        except Exception as e:
+            print(f"Error enviando SMS a empleado: {e}")
+    
+    # Remove _id and sensitive data before returning
+    new_employee.pop("_id", None)
+    new_employee.pop("password_hash", None)
+    
+    return {
+        "message": "Empleado creado y autorizado correctamente", 
+        "employee": new_employee,
+        "temp_password": temp_password,
+        "sms_sent": sms_sent,
+        "instructions": f"Credenciales enviadas por SMS a {data.phone}" if sms_sent else f"Contraseña temporal: {temp_password} (válida 24h)"
+    }
 
 @router.patch("/employees/{employee_id}")
 async def update_employee(
