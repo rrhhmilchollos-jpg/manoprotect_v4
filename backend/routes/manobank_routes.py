@@ -3004,3 +3004,239 @@ async def verificar_sms_recuperacion(request: Request):
         "temp_password": new_temp_password,
         "instructions": "Usa tu DNI/NIE y la nueva contraseña para acceder."
     }
+
+
+# ============================================
+# CERTIFICADO DE TITULARIDAD PDF
+# ============================================
+
+@router.get("/certificado-titularidad/{account_id}")
+async def generar_certificado_titularidad(
+    account_id: str,
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """
+    Genera un certificado de titularidad en PDF para una cuenta
+    """
+    from reportlab.lib.pagesizes import A4
+    from reportlab.lib import colors
+    from reportlab.lib.units import cm
+    from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, Image
+    from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+    from reportlab.lib.enums import TA_CENTER, TA_JUSTIFY, TA_RIGHT
+    from io import BytesIO
+    from fastapi.responses import StreamingResponse
+    
+    db = get_db()
+    
+    # Get user from session
+    user = await get_current_user_from_session(request, session_token)
+    if not user:
+        raise HTTPException(status_code=401, detail="No autenticado")
+    
+    # Get account
+    account = await db.manobank_accounts.find_one({"account_id": account_id})
+    if not account:
+        raise HTTPException(status_code=404, detail="Cuenta no encontrada")
+    
+    # Get customer data
+    customer = await db.manobank_customers.find_one({"customer_id": account.get("customer_id")})
+    registration = await db.manobank_customer_registrations.find_one({"account_id": account_id})
+    
+    # Prepare data
+    holder_name = account.get("holder_name") or customer.get("nombre_completo") if customer else user.name
+    holder_dni = account.get("holder_dni") or customer.get("documento") if customer else "N/A"
+    iban = account.get("iban", "N/A")
+    bic = account.get("bic", "MANOES2VXXX")
+    account_type = account.get("account_type", "corriente")
+    created_at = account.get("created_at", datetime.now(timezone.utc).isoformat())
+    
+    # Parse date
+    try:
+        if isinstance(created_at, str):
+            created_date = datetime.fromisoformat(created_at.replace('Z', '+00:00'))
+        else:
+            created_date = created_at
+        fecha_apertura = created_date.strftime("%d/%m/%Y")
+    except:
+        fecha_apertura = "N/A"
+    
+    # Create PDF
+    buffer = BytesIO()
+    doc = SimpleDocTemplate(buffer, pagesize=A4, topMargin=2*cm, bottomMargin=2*cm)
+    
+    styles = getSampleStyleSheet()
+    styles.add(ParagraphStyle(
+        name='TitleStyle',
+        parent=styles['Heading1'],
+        fontSize=18,
+        alignment=TA_CENTER,
+        spaceAfter=30,
+        textColor=colors.HexColor('#1e3a5f')
+    ))
+    styles.add(ParagraphStyle(
+        name='SubtitleStyle',
+        parent=styles['Normal'],
+        fontSize=12,
+        alignment=TA_CENTER,
+        spaceAfter=20,
+        textColor=colors.HexColor('#666666')
+    ))
+    styles.add(ParagraphStyle(
+        name='BodyStyle',
+        parent=styles['Normal'],
+        fontSize=11,
+        alignment=TA_JUSTIFY,
+        spaceAfter=12,
+        leading=16
+    ))
+    styles.add(ParagraphStyle(
+        name='FooterStyle',
+        parent=styles['Normal'],
+        fontSize=9,
+        alignment=TA_CENTER,
+        textColor=colors.HexColor('#888888')
+    ))
+    
+    elements = []
+    
+    # Header
+    elements.append(Paragraph("MANOBANK S.A.", styles['TitleStyle']))
+    elements.append(Paragraph("Entidad de Crédito - Banco de España Nº 0234", styles['SubtitleStyle']))
+    elements.append(Spacer(1, 20))
+    
+    # Title
+    elements.append(Paragraph(
+        "<b>CERTIFICADO DE TITULARIDAD DE CUENTA</b>",
+        ParagraphStyle(
+            name='CertTitle',
+            fontSize=16,
+            alignment=TA_CENTER,
+            spaceAfter=30,
+            textColor=colors.HexColor('#1e3a5f'),
+            borderWidth=1,
+            borderColor=colors.HexColor('#1e3a5f'),
+            borderPadding=10
+        )
+    ))
+    elements.append(Spacer(1, 20))
+    
+    # Certificate number
+    cert_number = f"CERT-{datetime.now().strftime('%Y%m%d')}-{account_id[-8:].upper()}"
+    elements.append(Paragraph(
+        f"Número de certificado: <b>{cert_number}</b>",
+        ParagraphStyle(name='CertNum', fontSize=10, alignment=TA_RIGHT, textColor=colors.gray)
+    ))
+    elements.append(Spacer(1, 20))
+    
+    # Body text
+    today = datetime.now().strftime("%d de %B de %Y").replace(
+        "January", "enero").replace("February", "febrero").replace("March", "marzo"
+    ).replace("April", "abril").replace("May", "mayo").replace("June", "junio"
+    ).replace("July", "julio").replace("August", "agosto").replace("September", "septiembre"
+    ).replace("October", "octubre").replace("November", "noviembre").replace("December", "diciembre")
+    
+    body_text = f"""
+    <b>D./Dña. IVAN RUBIO CANO</b>, en calidad de Director General de MANOBANK S.A., 
+    con CIF B19427723 y domicilio social en Calle de la Innovación, 15 - 46001 Valencia,
+    <br/><br/>
+    <b>CERTIFICA:</b>
+    <br/><br/>
+    Que <b>{holder_name}</b>, con documento de identidad <b>{holder_dni}</b>, 
+    es titular de la siguiente cuenta bancaria en esta entidad:
+    """
+    elements.append(Paragraph(body_text, styles['BodyStyle']))
+    elements.append(Spacer(1, 20))
+    
+    # Account details table
+    account_data = [
+        ['DATOS DE LA CUENTA', ''],
+        ['Titular:', holder_name],
+        ['DNI/NIE:', holder_dni],
+        ['IBAN:', iban],
+        ['BIC/SWIFT:', bic],
+        ['Tipo de cuenta:', f"Cuenta {account_type.capitalize()}"],
+        ['Fecha de apertura:', fecha_apertura],
+        ['Estado:', 'Activa' if account.get("status") in ["active", "pending_deposit"] else account.get("status", "N/A").capitalize()],
+    ]
+    
+    table = Table(account_data, colWidths=[5*cm, 10*cm])
+    table.setStyle(TableStyle([
+        ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor('#1e3a5f')),
+        ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),
+        ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
+        ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+        ('FONTSIZE', (0, 0), (-1, 0), 12),
+        ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
+        ('TOPPADDING', (0, 0), (-1, 0), 12),
+        ('BACKGROUND', (0, 1), (-1, -1), colors.HexColor('#f8f9fa')),
+        ('FONTNAME', (0, 1), (0, -1), 'Helvetica-Bold'),
+        ('FONTSIZE', (0, 1), (-1, -1), 10),
+        ('GRID', (0, 0), (-1, -1), 0.5, colors.HexColor('#dee2e6')),
+        ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+        ('LEFTPADDING', (0, 0), (-1, -1), 10),
+        ('RIGHTPADDING', (0, 0), (-1, -1), 10),
+        ('TOPPADDING', (0, 1), (-1, -1), 8),
+        ('BOTTOMPADDING', (0, 1), (-1, -1), 8),
+    ]))
+    elements.append(table)
+    elements.append(Spacer(1, 30))
+    
+    # Closing text
+    closing_text = f"""
+    Y para que conste a los efectos oportunos, se expide el presente certificado 
+    en Valencia, a {today}.
+    <br/><br/>
+    Este documento tiene validez a todos los efectos legales y puede ser verificado 
+    contactando con ManoBank en el teléfono 601 510 950 o en soporte@manobank.es
+    """
+    elements.append(Paragraph(closing_text, styles['BodyStyle']))
+    elements.append(Spacer(1, 40))
+    
+    # Signature
+    elements.append(Paragraph(
+        "Firmado digitalmente por ManoBank S.A.",
+        ParagraphStyle(name='Sig', fontSize=10, alignment=TA_CENTER)
+    ))
+    elements.append(Spacer(1, 5))
+    elements.append(Paragraph(
+        f"Hash de verificación: {cert_number}-{secrets.token_hex(8).upper()}",
+        ParagraphStyle(name='Hash', fontSize=8, alignment=TA_CENTER, textColor=colors.gray)
+    ))
+    elements.append(Spacer(1, 40))
+    
+    # Footer
+    elements.append(Paragraph(
+        "MANOBANK S.A. - CIF: B19427723 - Inscrita en el Registro Mercantil de Valencia",
+        styles['FooterStyle']
+    ))
+    elements.append(Paragraph(
+        "Calle de la Innovación, 15 - 46001 Valencia - Tel: 601 510 950 - soporte@manobank.es",
+        styles['FooterStyle']
+    ))
+    elements.append(Paragraph(
+        "Entidad supervisada por el Banco de España - Fondo de Garantía de Depósitos hasta 100.000€",
+        styles['FooterStyle']
+    ))
+    
+    # Build PDF
+    doc.build(elements)
+    buffer.seek(0)
+    
+    # Log the action
+    await db.manobank_audit_log.insert_one({
+        "event_type": "certificate_generated",
+        "cert_number": cert_number,
+        "account_id": account_id,
+        "user_id": user.user_id,
+        "timestamp": datetime.now(timezone.utc).isoformat()
+    })
+    
+    return StreamingResponse(
+        buffer,
+        media_type="application/pdf",
+        headers={
+            "Content-Disposition": f"attachment; filename=certificado_titularidad_{iban.replace(' ', '')}.pdf"
+        }
+    )
