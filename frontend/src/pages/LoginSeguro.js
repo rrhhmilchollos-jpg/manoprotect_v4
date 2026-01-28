@@ -576,12 +576,19 @@ const LoginSeguro = () => {
                         {!isLoading && <ArrowRight className="w-5 h-5 ml-2" />}
                       </Button>
 
-                      <p className="text-center text-sm text-gray-500">
-                        ¿No tienes cuenta?{' '}
-                        <a href="/manobank/registro" className="text-blue-600 hover:underline font-medium">
-                          Ábrela aquí
-                        </a>
-                      </p>
+                      <div className="text-center space-y-2">
+                        <p className="text-sm text-gray-500">
+                          <a href="/manobank/recuperar-password" className="text-blue-600 hover:underline font-medium">
+                            ¿Olvidaste tu contraseña?
+                          </a>
+                        </p>
+                        <p className="text-sm text-gray-500">
+                          ¿No tienes cuenta?{' '}
+                          <a href="/manobank/registro" className="text-blue-600 hover:underline font-medium">
+                            Ábrela aquí
+                          </a>
+                        </p>
+                      </div>
                     </form>
                   )}
 
