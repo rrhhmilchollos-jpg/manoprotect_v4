@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { Phone, Mail, MessageSquare, Users, Building2, Check, ArrowRight, LogIn, CreditCard, Wallet, Shield, Smartphone, Send, TrendingUp, Sparkles, Star } from 'lucide-react';
+import { Phone, Mail, MessageSquare, Users, Building2, Check, ArrowRight, LogIn, Shield, Sparkles, Star } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/context/AuthContext';
 import SEO from '@/components/SEO';
