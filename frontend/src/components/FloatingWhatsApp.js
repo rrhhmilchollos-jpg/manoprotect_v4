@@ -28,7 +28,7 @@ const FloatingWhatsApp = () => {
                   <MessageCircle className="w-5 h-5" />
                 </div>
                 <div>
-                  <p className="font-semibold">Soporte ManoBank</p>
+                  <p className="font-semibold">Soporte ManoProtect</p>
                   <p className="text-xs text-green-100">Normalmente responde en minutos</p>
                 </div>
               </div>
