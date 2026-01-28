@@ -4,7 +4,7 @@ import { MessageCircle, X } from 'lucide-react';
 const FloatingWhatsApp = () => {
   const [isOpen, setIsOpen] = useState(false);
   const whatsappNumber = '34601510950';
-  const defaultMessage = '¡Hola! Me gustaría obtener más información sobre ManoProtect/ManoBank.';
+  const defaultMessage = '¡Hola! Me gustaría obtener más información sobre ManoProtect.';
   
   const handleClick = () => {
     if (isOpen) {
