@@ -50,7 +50,7 @@ async def check_fraud(data: FraudCheckRequest):
     reasons = []
     
     # Check email against known scammers
-    if data.email and _db:
+    if data.email and _db is not None:
         scammer = await _db.known_scammers.find_one({
             "email": data.email.lower()
         })
@@ -59,7 +59,7 @@ async def check_fraud(data: FraudCheckRequest):
             reasons.append(f"Email en lista de estafadores conocidos")
     
     # Check phone against known scammers
-    if data.phone and _db:
+    if data.phone and _db is not None:
         scammer = await _db.known_scammers.find_one({
             "phone": data.phone
         })
@@ -68,7 +68,7 @@ async def check_fraud(data: FraudCheckRequest):
             reasons.append(f"Teléfono reportado como fraudulento")
     
     # Check DNI
-    if data.dni and _db:
+    if data.dni and _db is not None:
         scammer = await _db.known_scammers.find_one({
             "dni": data.dni.upper()
         })
@@ -77,7 +77,7 @@ async def check_fraud(data: FraudCheckRequest):
             reasons.append(f"DNI en lista de estafadores")
     
     # Check destination IBAN for transfers
-    if data.destination_iban and _db:
+    if data.destination_iban and _db is not None:
         flagged_iban = await _db.flagged_ibans.find_one({
             "iban": data.destination_iban.replace(" ", "").upper()
         })
