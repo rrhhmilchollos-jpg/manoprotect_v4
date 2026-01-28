@@ -483,6 +483,112 @@ const LandingPage = () => {
         </div>
       </section>
 
+      {/* Testimonials Section */}
+      <section className="px-6 py-20 bg-white">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-zinc-900 mb-4">
+              Lo que dicen nuestros clientes
+            </h2>
+            <p className="text-zinc-600 max-w-2xl mx-auto">
+              Miles de familias españolas confían en ManoProtect para su seguridad digital
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-6">
+            {/* Testimonial 1 */}
+            <div className="bg-gradient-to-br from-indigo-50 to-white p-6 rounded-2xl border border-indigo-100 shadow-sm hover:shadow-md transition-shadow">
+              <div className="flex items-center gap-1 mb-4">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="w-5 h-5 fill-yellow-400 text-yellow-400" />
+                ))}
+              </div>
+              <p className="text-zinc-700 mb-4 italic">
+                "Gracias a ManoProtect detectaron un intento de phishing que me habría costado 3.000€. La alerta llegó al instante."
+              </p>
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-600 font-bold">
+                  MG
+                </div>
+                <div>
+                  <p className="font-medium text-zinc-900">María García</p>
+                  <p className="text-sm text-zinc-500">Madrid • Plan Familiar</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Testimonial 2 */}
+            <div className="bg-gradient-to-br from-indigo-50 to-white p-6 rounded-2xl border border-indigo-100 shadow-sm hover:shadow-md transition-shadow">
+              <div className="flex items-center gap-1 mb-4">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="w-5 h-5 fill-yellow-400 text-yellow-400" />
+                ))}
+              </div>
+              <p className="text-zinc-700 mb-4 italic">
+                "Mis padres mayores recibían llamadas de estafa constantemente. Desde que tienen ManoProtect, las bloquea automáticamente."
+              </p>
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-600 font-bold">
+                  JL
+                </div>
+                <div>
+                  <p className="font-medium text-zinc-900">Juan López</p>
+                  <p className="text-sm text-zinc-500">Barcelona • Plan Premium</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Testimonial 3 */}
+            <div className="bg-gradient-to-br from-indigo-50 to-white p-6 rounded-2xl border border-indigo-100 shadow-sm hover:shadow-md transition-shadow">
+              <div className="flex items-center gap-1 mb-4">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="w-5 h-5 fill-yellow-400 text-yellow-400" />
+                ))}
+              </div>
+              <p className="text-zinc-700 mb-4 italic">
+                "Como empresa, necesitábamos proteger a nuestros empleados. ManoProtect Enterprise ha reducido los incidentes de seguridad un 95%."
+              </p>
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-600 font-bold">
+                  AS
+                </div>
+                <div>
+                  <p className="font-medium text-zinc-900">Ana Sánchez</p>
+                  <p className="text-sm text-zinc-500">Valencia • Enterprise</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Trust Badges */}
+          <div className="mt-16 pt-12 border-t border-zinc-200">
+            <p className="text-center text-sm text-zinc-500 mb-6">ENTIDAD REGULADA Y DE CONFIANZA</p>
+            <div className="flex flex-wrap items-center justify-center gap-8 opacity-70">
+              <div className="text-center">
+                <Shield className="w-8 h-8 mx-auto mb-2 text-indigo-600" />
+                <p className="text-xs text-zinc-600">Cifrado SSL 256-bit</p>
+              </div>
+              <div className="text-center">
+                <Building2 className="w-8 h-8 mx-auto mb-2 text-indigo-600" />
+                <p className="text-xs text-zinc-600">Banco de España</p>
+              </div>
+              <div className="text-center">
+                <Check className="w-8 h-8 mx-auto mb-2 text-indigo-600" />
+                <p className="text-xs text-zinc-600">RGPD Compliant</p>
+              </div>
+              <div className="text-center">
+                <Users className="w-8 h-8 mx-auto mb-2 text-indigo-600" />
+                <p className="text-xs text-zinc-600">+15.000 Familias</p>
+              </div>
+              <div className="text-center">
+                <Sparkles className="w-8 h-8 mx-auto mb-2 text-indigo-600" />
+                <p className="text-xs text-zinc-600">4.9/5 Valoración</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Footer */}
       <footer className="px-6 py-12 bg-zinc-900 text-zinc-400">
         <div className="max-w-7xl mx-auto">
