@@ -442,7 +442,7 @@ async def subscribe_to_alerts(
     background_tasks: BackgroundTasks
 ):
     """Subscribe to fraud alert notifications"""
-    if not db:
+    if db is None:
         raise HTTPException(status_code=500, detail="Base de datos no inicializada")
     
     # Check if already subscribed
