@@ -138,7 +138,7 @@ async def get_user_alerts(user_id: str):
     """
     Obtiene alertas de fraude para un usuario específico.
     """
-    if not _db:
+    if _db is None:
         return {"alerts": []}
     
     # Get recent fraud alerts related to this user
