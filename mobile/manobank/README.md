@@ -43,4 +43,4 @@
 
 - **App ID:** com.manobank.app
 - **Nombre:** ManoBank
-- **URL Web:** https://neo-banking-5.preview.emergentagent.com
+- **URL Web:** https://manobank.preview.emergentagent.com
