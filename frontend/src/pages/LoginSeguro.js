@@ -523,7 +523,7 @@ const LoginSeguro = () => {
             )}
 
             {/* Main Login Form */}
-            {!showPasswordChange && (
+            {!showPasswordChange && !show2FA && (
               <div className="bg-white rounded-2xl shadow-2xl shadow-black/20 overflow-hidden">
                 {/* Tabs */}
                 <div className="flex border-b">
