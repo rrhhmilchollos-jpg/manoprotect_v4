@@ -100,7 +100,7 @@ async def verify_scam(value: str, scam_type: str = "phone") -> Dict[str, Any]:
                     "No proporcione datos bancarios ni personales",
                     "No realice ningún tipo de pago o transferencia",
                     "Denuncie a las autoridades si ha sido víctima",
-                    "Contacte con ManoBank si tiene dudas: 900 123 456"
+                    "Contacte con ManoProtect si tiene dudas: 900 123 456"
                 ]
             }
         
@@ -110,8 +110,8 @@ async def verify_scam(value: str, scam_type: str = "phone") -> Dict[str, Any]:
             "message": "Este número/email NO está en nuestra base de datos de estafas conocidas.",
             "disclaimer": "Esto no garantiza que sea seguro. Siempre verifique la identidad de quien le contacta.",
             "tips": [
-                "ManoBank nunca le pedirá contraseñas por teléfono o email",
-                "Verifique siempre la URL oficial: manobank.es",
+                "ManoProtect nunca le pedirá contraseñas por teléfono o email",
+                "Verifique siempre la URL oficial: manoprotect.es",
                 "En caso de duda, contacte directamente con nosotros"
             ]
         }
@@ -161,7 +161,7 @@ async def report_scam(
                     'public_reports': firestore.Increment(1) if source == 'public' else firestore.Increment(0),
                     'updated_at': timestamp,
                     'reports': firestore.ArrayUnion([{
-                        'reported_by': 'Usuario público' if source == 'public' else 'ManoBank',
+                        'reported_by': 'Usuario público' if source == 'public' else 'ManoProtect',
                         'reporter_email': reporter_email,
                         'reason': description,
                         'source': source,
@@ -182,7 +182,7 @@ async def report_scam(
                 'report_count': 1,
                 'public_reports': 1 if source == 'public' else 0,
                 'reports': [{
-                    'reported_by': 'Usuario público' if source == 'public' else 'ManoBank',
+                    'reported_by': 'Usuario público' if source == 'public' else 'ManoProtect',
                     'reporter_email': reporter_email,
                     'reason': description,
                     'source': source,
