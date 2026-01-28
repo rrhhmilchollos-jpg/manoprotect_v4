@@ -17,6 +17,7 @@ const VerificarEstafa = () => {
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
   const [stats, setStats] = useState(null);
+  const [recentAlerts, setRecentAlerts] = useState([]);
   const [showReportForm, setShowReportForm] = useState(false);
   const [reportData, setReportData] = useState({
     type: 'phone',
@@ -28,6 +29,7 @@ const VerificarEstafa = () => {
 
   useEffect(() => {
     fetchStats();
+    fetchRecentAlerts();
   }, []);
 
   const fetchStats = async () => {
@@ -37,6 +39,18 @@ const VerificarEstafa = () => {
       setStats(data);
     } catch (error) {
       console.error('Error fetching stats:', error);
+    }
+  };
+
+  const fetchRecentAlerts = async () => {
+    try {
+      const response = await fetch(`${API_URL}/api/alerts/history?limit=5`);
+      if (response.ok) {
+        const data = await response.json();
+        setRecentAlerts(data.alerts || []);
+      }
+    } catch (error) {
+      console.error('Error fetching alerts:', error);
     }
   };
 
