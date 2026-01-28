@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
-import { Shield, Search, AlertTriangle, CheckCircle, Clock, Phone, MessageSquare, Mail, Link as LinkIcon, ArrowLeft, TrendingUp, Users, User, Book, Download, Share2, Flag, Building2, Heart, Settings, Bell, LogOut, Brain, CreditCard, Trophy } from 'lucide-react';
+import { Shield, Search, AlertTriangle, CheckCircle, Clock, Phone, MessageSquare, Mail, Link as LinkIcon, ArrowLeft, TrendingUp, Users, User, Book, Download, Share2, Flag, Building2, Heart, Settings, Bell, LogOut, Brain, CreditCard, Trophy, Megaphone } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -11,6 +11,7 @@ import NotificationCenter from '@/components/NotificationCenter';
 import PushNotificationToggle from '@/components/PushNotificationToggle';
 import ThreatAnalyzer from '@/components/ThreatAnalyzer';
 import BankingDashboard from '@/components/BankingDashboard';
+import AlertSubscription from '@/components/AlertSubscription';
 import { SubscriptionBadge, SubscriptionBadgeCard } from '@/components/SubscriptionBadge';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
