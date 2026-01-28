@@ -121,6 +121,13 @@ const ManoBankDashboard = () => {
       const total = (accData.accounts || []).reduce((sum, acc) => sum + (acc.balance || 0), 0);
       setTotalBalance(total);
 
+      // Check if any account needs initial deposit (status = pending_deposit)
+      const pendingDeposit = (accData.accounts || []).find(acc => acc.status === 'pending_deposit');
+      if (pendingDeposit) {
+        setDepositRequired(true);
+        setShowDepositModal(true);
+      }
+
       // Fetch cards
       const cardsRes = await fetch(`${API_URL}/api/manobank/my-cards`, {
         credentials: 'include', headers
