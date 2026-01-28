@@ -3089,10 +3089,21 @@ print("✅ Banking Core routes loaded (Ledger, AML, KYC, Reporting)")
 app.include_router(api_router)
 app.include_router(public_router)
 
+# Configure CORS with specific origins for credential-based requests
+allowed_origins = [
+    "https://manobank.preview.emergentagent.com",
+    "http://localhost:3000",
+    "http://localhost:8001",
+    "https://manobank.es",
+    "https://www.manobank.es",
+    "https://manoprotect.com",
+    "https://www.manoprotect.com",
+]
+
 app.add_middleware(
     CORSMiddleware,
     allow_credentials=True,
-    allow_origins=["*"],
+    allow_origins=allowed_origins,
     allow_methods=["*"],
     allow_headers=["*"],
 )
