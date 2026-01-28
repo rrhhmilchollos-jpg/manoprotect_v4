@@ -3097,13 +3097,17 @@ app.include_router(api_router)
 app.include_router(public_router)
 
 # Configure CORS with specific origins for credential-based requests
-# ManoProtect.com only - ManoBank.es will be added when domain is ready
+# ManoProtect.com + ManoBank integration
 allowed_origins = [
     "https://manoprotect.preview.emergentagent.com",
     "http://localhost:3000",
+    "http://localhost:3001",  # ManoBank frontend
     "http://localhost:8001",
+    "http://localhost:8002",  # ManoBank backend
     "https://manoprotect.com",
     "https://www.manoprotect.com",
+    "https://manobank.es",
+    "https://www.manobank.es",
 ]
 
 app.add_middleware(
