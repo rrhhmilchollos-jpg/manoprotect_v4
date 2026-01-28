@@ -1,152 +1,199 @@
 {
   "identity": {
-    "name": "MANO",
-    "archetype": "The Digital Lighthouse",
-    "vibe": "Vigilant, Human, Protective, Swiss-Precision",
-    "description": "A fraud protection platform that feels like a personal bodyguard, not a complex IT tool. It balances professional security with family-friendly accessibility."
+    "name": "E1",
+    "role": "Anti-AI Designer",
+    "principles": [
+      "Fusion over Imitation",
+      "Emotion First",
+      "Content is King",
+      "Zoom In",
+      "Negative Space",
+      "Contrast"
+    ]
   },
-  "typography": {
-    "headings": {
-      "family": "Outfit",
-      "url": "https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap",
-      "weights": ["400", "600", "700"],
-      "usage": "Use for all major headings. Tracking tight (-0.02em). Weight 600 for standard, 400 for large display text."
+  "project_context": {
+    "app_name": "ManoProtect & ManoBank",
+    "target_audience": "Spanish families (30-60 years old) concerned about digital security",
+    "core_theme": "Trust, Security, Family, Professionalism",
+    "platform": "Web (React + Tailwind + Shadcn)",
+    "mode": "Light Mode (Primary) with High-Contrast Elements"
+  },
+  "design_system": {
+    "typography": {
+      "headings": {
+        "font_family": "Manrope, sans-serif",
+        "weights": ["600", "700", "800"],
+        "usage": "Headings, Hero Titles, Feature Names",
+        "letter_spacing": "tracking-tight"
+      },
+      "body": {
+        "font_family": "Inter, sans-serif",
+        "weights": ["400", "500"],
+        "usage": "Paragraphs, UI Elements, Labels",
+        "letter_spacing": "tracking-normal"
+      },
+      "accent": {
+        "font_family": "Space Grotesk, monospace",
+        "usage": "Numbers, Data, Urgency Counters (Use sparingly)"
+      }
     },
-    "body": {
-      "family": "Public Sans",
-      "url": "https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600&display=swap",
-      "weights": ["400", "500"],
-      "usage": "Use for all body text, UI labels, and data. Excellent legibility for seniors."
+    "colors": {
+      "palettes": {
+        "mano_protect": {
+          "primary": "#4F46E5",
+          "secondary": "#818CF8",
+          "surface": "#EEF2FF",
+          "text_contrast": "#312E81"
+        },
+        "mano_bank": {
+          "primary": "#2563EB",
+          "secondary": "#60A5FA",
+          "surface": "#EFF6FF",
+          "text_contrast": "#1E3A8A"
+        },
+        "shared": {
+          "neutral_bg": "#FFFFFF",
+          "neutral_text": "#0F172A",
+          "neutral_muted": "#64748B",
+          "urgency": "#EA580C",
+          "success": "#10B981",
+          "border": "#E2E8F0"
+        }
+      },
+      "rules": [
+        "Never use pure black (#000000). Use #0F172A or #020617.",
+        "ManoProtect pages must lean into Indigo/Purple hues.",
+        "ManoBank pages must lean into Blue/Sky hues.",
+        "CTAs must be high contrast (Primary Color or Urgency Orange)."
+      ]
+    },
+    "spacing": {
+      "scale": "Tailwind Default",
+      "rules": [
+        "Use generous padding (py-20, py-24) for section separation.",
+        "Grid gaps should be gap-8 or gap-12 for breathing room.",
+        "Mobile padding: px-6 minimum."
+      ]
+    },
+    "visual_enhancers": {
+      "glassmorphism": "backdrop-blur-xl bg-white/70 border border-white/20 shadow-sm",
+      "gradients": {
+        "protect_hero": "bg-gradient-to-br from-indigo-50 to-white",
+        "bank_hero": "bg-gradient-to-br from-blue-50 to-white",
+        "glow": "shadow-[0_0_40px_-10px_rgba(79,70,229,0.3)]"
+      },
+      "textures": "Use subtle noise overlays on solid backgrounds to prevent 'flatness'.",
+      "shadows": "shadow-lg for cards, shadow-xl for floating elements."
     }
   },
-  "colors": {
-    "palette_name": "Protective Swiss",
-    "mode": "light_preferred",
-    "primary": {
-      "name": "Indigo Shield",
-      "hex": "#4F46E5",
-      "tailwind": "indigo-600",
-      "usage": "Primary actions, brand identity, 'Protection Active' state."
+  "assets": {
+    "images": {
+      "hero_protect": {
+        "url": "https://images.pexels.com/photos/5691823/pexels-photo-5691823.jpeg",
+        "alt": "Happy family feeling secure with digital devices",
+        "usage": "Main hero background or split layout image for ManoProtect"
+      },
+      "hero_bank": {
+        "url": "https://images.unsplash.com/photo-1758522484692-efa6ce38a25f?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzNDR8MHwxfHNlYXJjaHwxfHxtb2Rlcm4lMjBkaWdpdGFsJTIwYmFua2luZyUyMHNtYXJ0cGhvbmUlMjBwYXltZW50fGVufDB8fHx8MTc2OTYxNDQ4OHww&ixlib=rb-4.1.0&q=85",
+        "alt": "Modern digital banking payment",
+        "usage": "Main hero image for ManoBank"
+      },
+      "features_protect": [
+        {
+          "url": "https://images.unsplash.com/photo-1639503547276-90230c4a4198?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1Nzl8MHwxfHNlYXJjaHwxfHxjeWJlcnNlY3VyaXR5JTIwZGlnaXRhbCUyMHNoaWVsZCUyMGFic3RyYWN0fGVufDB8fHx8MTc2OTYxNDQ4Nnww&ixlib=rb-4.1.0&q=85",
+          "alt": "Digital Shield Abstract",
+          "usage": "Feature card background or icon accompaniment"
+        },
+        {
+          "url": "https://images.unsplash.com/photo-1669052700037-db884b37b2d9?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1Nzl8MHwxfHNlYXJjaHwyfHxjeWJlcnNlY3VyaXR5JTIwZGlnaXRhbCUyMHNoaWVsZCUyMGFic3RyYWN0fGVufDB8fHx8MTc2OTYxNDQ4Nnww&ixlib=rb-4.1.0&q=85",
+          "alt": "Secure Laptop",
+          "usage": "Device security feature section"
+        }
+      ],
+      "features_bank": [
+        {
+          "url": "https://images.unsplash.com/photo-1758611974001-2e7ad7b83432?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzNDR8MHwxfHNlYXJjaHwyfHxtb2Rlcm4lMjBkaWdpdGFsJTIwYmFua2luZyUyMHNtYXJ0cGhvbmUlMjBwYXltZW50fGVufDB8fHx8MTc2OTYxNDQ4OHww&ixlib=rb-4.1.0&q=85",
+          "alt": "Easy Payments",
+          "usage": "Banking feature section"
+        }
+      ],
+      "social_proof": [
+        {
+          "url": "https://images.pexels.com/photos/7534791/pexels-photo-7534791.jpeg",
+          "alt": "Trustworthy Professional",
+          "usage": "Testimonial avatar or support agent"
+        }
+      ]
     },
-    "secondary": {
-      "name": "Safe Emerald",
-      "hex": "#10B981",
-      "tailwind": "emerald-500",
-      "usage": "Success states, 'Safe' indicators, positive trends."
-    },
-    "accent": {
-      "name": "Alert Orange",
-      "hex": "#F97316",
-      "tailwind": "orange-500",
-      "usage": "Warnings, attention-needed, 'Threat Detected' (Non-critical)."
-    },
-    "destructive": {
-      "name": "Critical Rose",
-      "hex": "#E11D48",
-      "tailwind": "rose-600",
-      "usage": "Blocked threats, critical alerts, delete actions."
-    },
-    "background": {
-      "light": "#FAFAFA",
-      "dark": "#09090B",
-      "paper": "#FFFFFF"
-    },
-    "text": {
-      "primary": "#18181B",
-      "secondary": "#52525B",
-      "muted": "#A1A1AA"
+    "icons": {
+      "library": "lucide-react",
+      "preferred": ["ShieldCheck", "Lock", "Smartphone", "CreditCard", "Users", "CheckCircle2", "AlertTriangle", "Clock"]
     }
   },
-  "layout_strategies": {
-    "landing_page": {
-      "grid_type": "Bento Grid (Mode A)",
-      "spacing": "Generous (p-8 to p-24)",
-      "rules": [
-        "Use 'Tetris' grid for feature showcases.",
-        "Asymmetry is key: 60/40 splits, not 50/50.",
-        "Large typography (text-5xl+) for value propositions."
+  "layouts": {
+    "hero_section": {
+      "structure": "Split Layout (Text Left, Image Right) or Centered with Background Blur",
+      "elements": [
+        "H1: Bold, High Contrast (Manrope)",
+        "Subtext: Clear value prop (Inter)",
+        "Primary CTA: Solid Color, Rounded-Full",
+        "Secondary CTA: Outline or Ghost",
+        "Trust Badges: 'Verified by...', 'Secure' icons below CTA"
       ]
     },
-    "dashboard": {
-      "grid_type": "High Density (Mode B)",
-      "spacing": "Compact (gap-4, p-6)",
+    "bento_grid": {
+      "structure": "Grid with varied spans (col-span-1, col-span-2)",
+      "usage": "Features Section",
       "rules": [
-        "Card-based layout with 1px borders.",
-        "No 'floating' elements; everything anchored to the grid.",
-        "Use 'Sidebar' navigation for desktop, 'Bottom Bar' for mobile."
+        "Use 'Tetris' logic: Mix tall cards, wide cards, and square cards.",
+        "Don't make every card the same size.",
+        "Use light background colors (bg-slate-50) for cards with subtle borders."
       ]
     },
-    "senior_mode": {
-      "grid_type": "Single Column / Big Grid",
-      "spacing": "Massive (gap-8, p-8)",
-      "rules": [
-        "Minimum touch target: 60px.",
-        "Font size minimum: 18px.",
-        "High contrast borders (2px solid)."
-      ]
+    "testimonials": {
+      "structure": "Carousel (Shadcn) or Masonry Grid",
+      "style": "Card-based, shadow-sm, rounded-xl. Include star ratings."
     }
   },
   "components": {
-    "buttons": {
-      "style": "Pill-shaped or slightly rounded (rounded-lg)",
-      "animation": "Scale down on click (active:scale-95)",
-      "shadow": "shadow-sm hover:shadow-md transition-all"
-    },
-    "cards": {
-      "style": "Flat with 1px border (border-zinc-200 dark:border-zinc-800)",
-      "hover": "hover:border-indigo-300 transition-colors duration-300",
-      "glass": "Use 'Glassmorphism' only for sticky headers, not content cards."
-    },
-    "inputs": {
-      "style": "Tall (h-12), bg-zinc-50, border-zinc-200 focus:ring-2 focus:ring-indigo-500/20"
-    },
-    "visual_enhancers": [
-      "Use 'Grain' texture overlays on solid backgrounds to reduce digital flatness.",
-      "Use 'Radar Scan' animations (CSS/Framer) for 'Scanning' states.",
-      "Use 'Blur' reveals for sensitive data."
-    ]
-  },
-  "motion": {
-    "library": "framer-motion",
-    "transitions": "spring (stiffness: 300, damping: 30)",
-    "micro_interactions": [
-      "Buttons scale 0.95 on press.",
-      "Cards lift -4px on hover.",
-      "Lists stagger in (0.05s delay per item)."
-    ]
-  },
-  "images": {
-    "landing_hero": {
-      "url": "https://images.unsplash.com/photo-1752652011717-f06f7ed3927a?crop=entropy&cs=srgb&fm=jpg&q=85",
-      "alt": "Family using tablet safely",
-      "usage": "Hero section background or main visual."
-    },
-    "senior_feature": {
-      "url": "https://images.unsplash.com/photo-1758686254056-6cd980b9aaee?crop=entropy&cs=srgb&fm=jpg&q=85",
-      "alt": "Senior couple happy with phone",
-      "usage": "Senior protection feature section."
-    },
-    "business_feature": {
-      "url": "https://images.unsplash.com/photo-1709715357520-5e1047a2b691?crop=entropy&cs=srgb&fm=jpg&q=85",
-      "alt": "Business team meeting",
-      "usage": "Corporate dashboard feature section."
-    },
-    "security_abstract": {
-      "url": "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80",
-      "alt": "Abstract digital security",
-      "usage": "Backgrounds for threat analysis sections (Use as fallback if CSS shield isn't used)."
+    "required_custom": [
+      {
+        "name": "FloatingWhatsApp",
+        "position": "Fixed Bottom Right",
+        "style": "Green-500, Rounded-Full, Shadow-2xl, Pulse Effect on Hover",
+        "content": "Icon + '¿Ayuda?' text"
+      },
+      {
+        "name": "UrgencyBanner",
+        "position": "Top of page (Sticky)",
+        "style": "bg-orange-600 text-white text-sm font-medium py-2 text-center",
+        "content": "Countdown timer or 'Limited Time Offer' text"
+      },
+      {
+        "name": "ServiceSwitcher",
+        "position": "Navbar or Hero Top",
+        "style": "Toggle or Tabs to switch between ManoProtect and ManoBank views easily"
+      }
+    ],
+    "shadcn_overrides": {
+      "button": "rounded-full font-semibold shadow-md hover:shadow-lg transition-all",
+      "card": "rounded-2xl border-slate-100 shadow-sm hover:shadow-md transition-all",
+      "input": "bg-slate-50 border-slate-200 focus:ring-2 focus:ring-indigo-500"
     }
   },
-  "universal_guidelines": [
-    "DO NOT use generic 'Cybersecurity Green' matrix effects.",
-    "DO NOT use 'Inter' font. Use 'Outfit' for headings.",
-    "Ensure all text has APCA compliant contrast (especially for Seniors).",
-    "Use 'Sonner' for all toast notifications.",
-    "All interactive elements must have `data-testid`.",
-    "Dark colors look good when used independently without gradients. DO NOT use dark colors as gradients.",
-    "Create depth through layered design elements with z-index hierarchy.",
-    "Use glass-morphism effects with backdrop filters (12-24px blur) for headers/overlays.",
-    "NEVER use AI assistant Emoji characters like 🤖🧠 for icons."
+  "instructions_to_main_agent": [
+    "Implement the 'FloatingWhatsApp' component immediately and add it to the root layout.",
+    "Refactor the LandingPage.js to use the 'Bento Grid' layout for features.",
+    "Ensure distinct visual identities: ManoProtect = Indigo, ManoBank = Blue.",
+    "Add the 'UrgencyBanner' to the top of both landing pages.",
+    "Use the provided image URLs for the respective sections. Do not use placeholders.",
+    "Optimize for Mobile: Stack grids to 1 column, ensure touch targets are 44px+.",
+    "Add 'data-testid' to all interactive elements."
   ],
-  "instructions_to_main_agent": "Implement the 'Protective Swiss' aesthetic. Start with the Landing Page using the Bento Grid. Then build the Dashboard with the High Density grid. Ensure the 'Senior Mode' is a distinct, simplified view. Use the provided image URLs. For the 'Shield' visual, prefer a CSS/SVG implementation of a pulsing shield over a stock photo if possible."
+  "universal_guidelines": [
+    "Avoid generic centered layouts. Use asymmetry.",
+    "Use noise textures to avoid 'AI slop' flatness.",
+    "Ensure text contrast ratios meet WCAG AA.",
+    "Micro-animations on hover are mandatory."
+  ]
 }
