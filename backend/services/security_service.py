@@ -87,7 +87,7 @@ def validate_password_strength(password: str) -> PasswordStrength:
         score += 15
     
     # Common patterns check
-    common_patterns = ['123456', 'password', 'qwerty', 'abc123', 'manobank', '111111']
+    common_patterns = ['123456', 'password', 'qwerty', 'abc123', 'manoprotect', '111111']
     if any(pattern in password.lower() for pattern in common_patterns):
         feedback.append("La contraseña contiene patrones comunes no permitidos")
         score -= 20
