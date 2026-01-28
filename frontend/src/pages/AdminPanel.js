@@ -429,10 +429,6 @@ const AdminPanel = () => {
               <Database className="w-4 h-4 mr-2" />
               Base de Datos
             </TabsTrigger>
-            <TabsTrigger value="manobank" className="data-[state=active]:bg-purple-100">
-              <Landmark className="w-4 h-4 mr-2" />
-              ManoBank
-            </TabsTrigger>
           </TabsList>
 
           {/* Investors Tab */}
