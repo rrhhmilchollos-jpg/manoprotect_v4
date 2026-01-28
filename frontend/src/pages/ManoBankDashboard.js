@@ -1461,7 +1461,11 @@ const ManoBankDashboard = () => {
                   </div>
                   <span className="text-sm font-medium text-gray-700">Extracto</span>
                 </button>
-                <button className="p-4 bg-white border border-gray-100 rounded-2xl hover:shadow-lg hover:border-amber-200 transition-all flex flex-col items-center gap-2">
+                <button 
+                  className="p-4 bg-white border border-gray-100 rounded-2xl hover:shadow-lg hover:border-amber-200 transition-all flex flex-col items-center gap-2"
+                  onClick={() => downloadCertificado(selectedAccount.account_id || selectedAccount.id)}
+                  data-testid="certificado-btn"
+                >
                   <div className="w-12 h-12 bg-amber-100 rounded-xl flex items-center justify-center">
                     <FileText className="w-6 h-6 text-amber-600" />
                   </div>
