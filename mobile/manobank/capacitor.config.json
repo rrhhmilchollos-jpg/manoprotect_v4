@@ -3,7 +3,7 @@
   "appName": "ManoBank",
   "webDir": "www",
   "server": {
-    "url": "https://dual-finance-app.preview.emergentagent.com",
+    "url": "https://familyplan-fix.preview.emergentagent.com",
     "cleartext": true
   }
 }

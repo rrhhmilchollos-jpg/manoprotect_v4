@@ -3102,7 +3102,7 @@ app.include_router(public_router)
 # Configure CORS with specific origins for credential-based requests
 # ManoProtect.com + ManoBank integration
 allowed_origins = [
-    "https://dual-finance-app.preview.emergentagent.com",
+    "https://familyplan-fix.preview.emergentagent.com",
     "http://localhost:3000",
     "http://localhost:3001",  # ManoBank frontend
     "http://localhost:8001",
