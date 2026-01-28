@@ -443,7 +443,7 @@ const VerificarEstafa = () => {
         )}
 
         {/* Info Section */}
-        <div className="bg-slate-800/30 rounded-2xl p-8 border border-slate-700">
+        <div className="bg-slate-800/30 rounded-2xl p-8 border border-slate-700 mb-8">
           <h2 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
             <Info className="w-5 h-5 text-blue-400" />
             ¿Cómo funciona?
@@ -471,6 +471,51 @@ const VerificarEstafa = () => {
               </p>
             </div>
           </div>
+        </div>
+
+        {/* Recent Alerts Section */}
+        {recentAlerts.length > 0 && (
+          <div className="bg-gradient-to-br from-red-900/30 to-orange-900/30 rounded-2xl p-8 border border-red-800/50 mb-8">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-xl font-bold text-white flex items-center gap-2">
+                <Bell className="w-5 h-5 text-red-400" />
+                Alertas de Seguridad Recientes
+              </h2>
+            </div>
+            <div className="space-y-3">
+              {recentAlerts.map((alert, idx) => (
+                <div key={alert.id || idx} className="bg-slate-800/50 rounded-xl p-4 border border-slate-700">
+                  <div className="flex items-start gap-3">
+                    <div className={`w-3 h-3 mt-1.5 rounded-full flex-shrink-0 ${
+                      alert.risk_level === 'alto' ? 'bg-red-500' : 
+                      alert.risk_level === 'medio' ? 'bg-amber-500' : 'bg-green-500'
+                    }`} />
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${
+                          alert.risk_level === 'alto' ? 'bg-red-500/20 text-red-300' :
+                          alert.risk_level === 'medio' ? 'bg-amber-500/20 text-amber-300' :
+                          'bg-green-500/20 text-green-300'
+                        }`}>
+                          {alert.risk_level === 'alto' ? '🔴 Alto' : alert.risk_level === 'medio' ? '🟡 Medio' : '🟢 Bajo'}
+                        </span>
+                        <span className="text-xs text-slate-500">
+                          {new Date(alert.created_at).toLocaleDateString('es-ES')}
+                        </span>
+                      </div>
+                      <h4 className="font-semibold text-white">{alert.title}</h4>
+                      <p className="text-sm text-slate-400 mt-1 line-clamp-2">{alert.description}</p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Alert Subscription */}
+        <div className="mb-8">
+          <AlertSubscription variant="inline" />
         </div>
       </main>
 
