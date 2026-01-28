@@ -5,9 +5,9 @@ Este código está reservado para cuando el dominio ManoBank.es esté configurad
 
 ## Fecha de reserva: 28 de enero de 2026
 
-## Contenido reservado
+## Contenido reservado (53 archivos)
 
-### Frontend (React)
+### Frontend (React) - /frontend/pages/
 - `BancoEmpleados.js` - Portal de login para empleados del banco
 - `BancoSistema.js` - Dashboard completo del sistema bancario (empleados)
 - `LoginSeguro.js` - Login seguro para clientes con 2FA
@@ -17,10 +17,33 @@ Este código está reservado para cuando el dominio ManoBank.es esté configurad
 - `RecuperarPasswordManoBank.js` - Recuperación de contraseña con verificación de tarjeta
 - `LandingPromo.js` - Landing page promocional para ManoBank
 - `SolicitarCuenta.js` - Formulario para solicitar cuenta bancaria
+- `KYCVideoVerification.js` - Verificación por video para KYC
 
-### Backend (FastAPI)
+### Backend (FastAPI) - /backend/routes/
 - `manobank_routes.py` - Rutas de cliente: login, registro, depósito, 2FA, PDF certificado
 - `manobank_admin_routes.py` - Rutas de empleados: gestión de clientes, KYC, préstamos, tarjetas
+- `kyc_video_routes.py` - Rutas de verificación KYC por video
+- `banking_core_routes.py` - Rutas del core bancario
+- `compliance_routes.py` - Rutas de compliance y auditoría
+- `sms_routes.py` - Rutas de SMS para notificaciones bancarias
+
+### Servicios - /backend/services/
+- `card_shipping.py` - Servicio de envío de tarjetas físicas
+- `contract_generator.py` - Generador de contratos bancarios PDF
+- `compliance_service.py` - Servicio de compliance y auditoría
+- `zoom_video_sdk.py` - Servicio de video SDK para KYC
+
+### Compliance y Ledger - /backend/
+- `/compliance/` - Servicios de AML, KYC, Reporting
+- `/ledger/` - Servicio de libro mayor bancario
+- `/policies/` - Políticas de AML, KYC, Riesgos, etc.
+
+### Tests - /backend/tests/
+- `test_manobank_registration_iteration_20.py`
+- `test_manobank_admin_iteration_19.py`
+- `test_employee_portal_iteration_21.py`
+- `test_banking_core_iteration_18.py`
+- `test_iteration_17.py`
 
 ## Funcionalidades implementadas
 1. ✅ Registro de clientes estilo BBVA (multistep)
