@@ -6,7 +6,7 @@ import { useEffect } from 'react';
 // Firebase Analytics
 import { logAnalyticsEvent, AnalyticsEvents } from '@/services/firebase';
 
-// Pages
+// Pages - ManoProtect Only
 import LandingPage from '@/pages/LandingPage';
 import Dashboard from '@/pages/Dashboard';
 import HowItWorks from '@/pages/HowItWorks';
@@ -31,18 +31,10 @@ import PrivacyPolicy from '@/pages/PrivacyPolicy';
 import TermsOfService from '@/pages/TermsOfService';
 import RefundPolicy from '@/pages/RefundPolicy';
 import LegalNotice from '@/pages/LegalNotice';
-import ManoBank from '@/pages/ManoBank';
-import ManoBankDashboard from '@/pages/ManoBankDashboard';
-import LoginSeguro from '@/pages/LoginSeguro';
-import BancoEmpleados from '@/pages/BancoEmpleados';
-import BancoSistema from '@/pages/BancoSistema';
-import SolicitarCuenta from '@/pages/SolicitarCuenta';
 import LandingPromo from '@/pages/LandingPromo';
 import RecuperarPassword from '@/pages/RecuperarPassword';
 import VerificarEstafa from '@/pages/VerificarEstafa';
-import ManoBankRegistro from '@/pages/ManoBankRegistro';
 import ManoProtectRegistro from '@/pages/ManoProtectRegistro';
-import RecuperarPasswordManoBank from '@/pages/RecuperarPasswordManoBank';
 import CookieConsent from '@/components/CookieConsent';
 import FloatingWhatsApp from '@/components/FloatingWhatsApp';
 import UrgencyBanner from '@/components/UrgencyBanner';
@@ -91,12 +83,11 @@ const ProtectedRoute = ({ children, requireInvestor = false, requireAdmin = fals
   return children;
 };
 
-// App Router with session_id detection
+// App Router - ManoProtect.com Only
 function AppRouter() {
   const location = useLocation();
   
   // Check URL fragment for session_id (Google OAuth callback)
-  // REMINDER: This synchronous check prevents race conditions
   if (location.hash?.includes('session_id=')) {
     return <AuthCallback />;
   }
@@ -105,166 +96,122 @@ function AppRouter() {
     <>
       <AnalyticsTracker />
       <Routes>
-      {/* Public Routes */}
-      <Route path="/" element={<LandingPage />} />
-      <Route path="/how-it-works" element={<HowItWorks />} />
-      <Route path="/pricing" element={<Pricing />} />
-      <Route path="/payment-success" element={<PaymentSuccess />} />
-      <Route path="/knowledge" element={<Knowledge />} />
-      <Route path="/community" element={<Community />} />
-      
-      {/* Legal Pages */}
-      <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-      <Route path="/terms-of-service" element={<TermsOfService />} />
-      <Route path="/refund-policy" element={<RefundPolicy />} />
-      <Route path="/legal-notice" element={<LegalNotice />} />
-      
-      {/* ManoBank Promo Landing */}
-      <Route path="/manobank-promo" element={<LandingPromo />} />
-      <Route path="/manoprotect" element={<LandingPromo />} />
-      <Route path="/recuperar-password" element={<RecuperarPassword />} />
-      <Route path="/verificar-estafa" element={<VerificarEstafa />} />
-      
-      {/* Auth Routes */}
-      <Route path="/login" element={<Login />} />
-      <Route path="/register" element={<Register />} />
-      <Route path="/auth/callback" element={<AuthCallback />} />
-      
-      {/* Investor Routes */}
-      <Route path="/investor/register" element={<InvestorRegister />} />
-      <Route 
-        path="/downloads" 
-        element={
-          <ProtectedRoute requireInvestor={true}>
-            <Downloads />
-          </ProtectedRoute>
-        } 
-      />
-      
-      {/* Protected Routes */}
-      <Route 
-        path="/dashboard" 
-        element={
-          <ProtectedRoute>
-            <Dashboard />
-          </ProtectedRoute>
-        } 
-      />
-      <Route 
-        path="/family-mode" 
-        element={
-          <ProtectedRoute>
-            <FamilyMode />
-          </ProtectedRoute>
-        } 
-      />
-      <Route 
-        path="/family-admin" 
-        element={
-          <ProtectedRoute>
-            <FamilyAdmin />
-          </ProtectedRoute>
-        } 
-      />
-      <Route 
-        path="/child-tracking" 
-        element={
-          <ProtectedRoute>
-            <ChildTracking />
-          </ProtectedRoute>
-        } 
-      />
-      <Route 
-        path="/contacts" 
-        element={
-          <ProtectedRoute>
-            <Contacts />
-          </ProtectedRoute>
-        } 
-      />
-      <Route 
-        path="/profile" 
-        element={
-          <ProtectedRoute>
-            <Profile />
-          </ProtectedRoute>
-        } 
-      />
-      <Route 
-        path="/rewards" 
-        element={
-          <ProtectedRoute>
-            <Rewards />
-          </ProtectedRoute>
-        } 
-      />
-      <Route 
-        path="/enterprise" 
-        element={
-          <ProtectedRoute>
-            <EnterpriseDashboard />
-          </ProtectedRoute>
-        } 
-      />
-      <Route 
-        path="/manobank" 
-        element={
-          <ProtectedRoute redirectTo="/login-seguro">
-            <ManoBankDashboard />
-          </ProtectedRoute>
-        } 
-      />
-      
-      {/* ManoBank Classic View */}
-      <Route 
-        path="/manobank-clasico" 
-        element={
-          <ProtectedRoute>
-            <ManoBank />
-          </ProtectedRoute>
-        } 
-      />
-      
-      {/* Login Seguro */}
-      <Route path="/login-seguro" element={<LoginSeguro />} />
-      
-      {/* ManoBank Public Account Request - No Auth Required */}
-      <Route path="/abrir-cuenta" element={<SolicitarCuenta />} />
-      
-      {/* ManoBank BBVA-Style Registration - No Auth Required */}
-      <Route path="/manobank/registro" element={<ManoBankRegistro />} />
-      
-      {/* ManoProtect Registration - Different design from ManoBank */}
-      <Route path="/manoprotect/registro" element={<ManoProtectRegistro />} />
-      <Route path="/registro" element={<ManoProtectRegistro />} />
-      
-      {/* ManoBank Password Recovery */}
-      <Route path="/manobank/recuperar-password" element={<RecuperarPasswordManoBank />} />
-      
-      {/* ManoBank Employee Portal - Separate System */}
-      <Route path="/banco" element={<BancoEmpleados />} />
-      <Route 
-        path="/banco/sistema" 
-        element={
-          <ProtectedRoute redirectTo="/banco">
-            <BancoSistema />
-          </ProtectedRoute>
-        } 
-      />
-      
-      {/* Admin Routes */}
-      <Route 
-        path="/admin" 
-        element={
-          <ProtectedRoute requireAdmin={true}>
-            <AdminPanel />
-          </ProtectedRoute>
-        } 
-      />
-      
-      {/* Fallback */}
-      <Route path="*" element={<Navigate to="/" replace />} />
-    </Routes>
+        {/* Public Routes */}
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/how-it-works" element={<HowItWorks />} />
+        <Route path="/pricing" element={<Pricing />} />
+        <Route path="/payment-success" element={<PaymentSuccess />} />
+        <Route path="/knowledge" element={<Knowledge />} />
+        <Route path="/community" element={<Community />} />
+        
+        {/* Legal Pages */}
+        <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+        <Route path="/terms-of-service" element={<TermsOfService />} />
+        <Route path="/refund-policy" element={<RefundPolicy />} />
+        <Route path="/legal-notice" element={<LegalNotice />} />
+        
+        {/* ManoProtect Promo Landing */}
+        <Route path="/promo" element={<LandingPromo />} />
+        <Route path="/manoprotect" element={<LandingPromo />} />
+        <Route path="/recuperar-password" element={<RecuperarPassword />} />
+        <Route path="/verificar-estafa" element={<VerificarEstafa />} />
+        
+        {/* Auth Routes */}
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/registro" element={<ManoProtectRegistro />} />
+        <Route path="/auth/callback" element={<AuthCallback />} />
+        
+        {/* Investor Routes */}
+        <Route path="/investor/register" element={<InvestorRegister />} />
+        <Route 
+          path="/downloads" 
+          element={
+            <ProtectedRoute requireInvestor={true}>
+              <Downloads />
+            </ProtectedRoute>
+          } 
+        />
+        
+        {/* Protected Routes */}
+        <Route 
+          path="/dashboard" 
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/family-mode" 
+          element={
+            <ProtectedRoute>
+              <FamilyMode />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/family-admin" 
+          element={
+            <ProtectedRoute>
+              <FamilyAdmin />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/child-tracking" 
+          element={
+            <ProtectedRoute>
+              <ChildTracking />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/contacts" 
+          element={
+            <ProtectedRoute>
+              <Contacts />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/profile" 
+          element={
+            <ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/rewards" 
+          element={
+            <ProtectedRoute>
+              <Rewards />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/enterprise" 
+          element={
+            <ProtectedRoute>
+              <EnterpriseDashboard />
+            </ProtectedRoute>
+          } 
+        />
+        
+        {/* Admin Routes */}
+        <Route 
+          path="/admin" 
+          element={
+            <ProtectedRoute requireAdmin={true}>
+              <AdminPanel />
+            </ProtectedRoute>
+          } 
+        />
+        
+        {/* Fallback */}
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
     </>
   );
 }
