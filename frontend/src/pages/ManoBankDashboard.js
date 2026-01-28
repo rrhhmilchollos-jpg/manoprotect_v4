@@ -319,6 +319,36 @@ const ManoBankDashboard = () => {
     }
   };
 
+  // Download Certificado de Titularidad
+  const downloadCertificado = async (accountId) => {
+    try {
+      toast.info('Generando certificado de titularidad...');
+      const response = await fetch(`${API_URL}/api/manobank/certificado-titularidad/${accountId}`, {
+        credentials: 'include',
+        headers: token ? { 'Authorization': `Bearer ${token}` } : {}
+      });
+      
+      if (!response.ok) {
+        throw new Error('Error al generar el certificado');
+      }
+      
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `certificado_titularidad_${new Date().toISOString().split('T')[0]}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+      
+      toast.success('Certificado descargado correctamente');
+    } catch (error) {
+      console.error('Error downloading certificate:', error);
+      toast.error('Error al descargar el certificado');
+    }
+  };
+
   // Save profile changes
   const handleSaveProfile = async () => {
     setSavingProfile(true);
