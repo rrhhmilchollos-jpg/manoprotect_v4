@@ -11,8 +11,8 @@ from .payments import router as payments_router
 from .rewards import router as rewards_router
 from .notifications import router as notifications_router
 from .profile import router as profile_router
-from .family import router as family_router
 from .enterprise import router as enterprise_router
+from .family_sos_routes import router as family_sos_router
 
 # List of all routers for easy registration
 all_routers = [
@@ -25,7 +25,7 @@ all_routers = [
     rewards_router,
     notifications_router,
     profile_router,
-    family_router,
+    family_sos_router,
     enterprise_router
 ]
 
@@ -39,7 +39,7 @@ __all__ = [
     'rewards_router',
     'notifications_router',
     'profile_router',
-    'family_router',
+    'family_sos_router',
     'enterprise_router',
     'all_routers'
 ]
