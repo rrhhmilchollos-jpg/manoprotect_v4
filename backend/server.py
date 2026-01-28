@@ -3060,22 +3060,23 @@ try:
 except ImportError as e:
     print(f"⚠️ WhatsApp routes not loaded: {e}")
 
-try:
-    from routes.sms_routes import router as sms_router, init_sms_routes
-    init_sms_routes(db)
-    api_router.include_router(sms_router)
-    print("✅ SMS/Twilio routes loaded")
-except ImportError as e:
-    print(f"⚠️ SMS routes not loaded: {e}")
+# SMS routes - RESERVED for ManoBank.es
+# try:
+#     from routes.sms_routes import router as sms_router, init_sms_routes
+#     init_sms_routes(db)
+#     api_router.include_router(sms_router)
+#     print("✅ SMS/Twilio routes loaded")
+# except ImportError as e:
+#     print(f"⚠️ SMS routes not loaded: {e}")
 
-# KYC Video Verification routes (Zoom Video SDK)
-try:
-    from routes.kyc_video_routes import router as kyc_router, init_kyc_routes
-    init_kyc_routes(db)
-    api_router.include_router(kyc_router)
-    print("✅ KYC Video Verification routes loaded")
-except ImportError as e:
-    print(f"⚠️ KYC routes not loaded: {e}")
+# KYC Video Verification routes - RESERVED for ManoBank.es
+# try:
+#     from routes.kyc_video_routes import router as kyc_router, init_kyc_routes
+#     init_kyc_routes(db)
+#     api_router.include_router(kyc_router)
+#     print("✅ KYC Video Verification routes loaded")
+# except ImportError as e:
+#     print(f"⚠️ KYC routes not loaded: {e}")
 
 # Compliance & Banking Core routes - RESERVED for ManoBank.es
 # api_router.include_router(compliance_router)
