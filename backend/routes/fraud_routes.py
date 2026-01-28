@@ -110,7 +110,7 @@ async def report_fraud(data: FraudReport):
     """
     Reporta actividad sospechosa desde ManoBank.
     """
-    if not _db:
+    if _db is None:
         return {"message": "Reporte recibido (DB no disponible)"}
     
     report = {
