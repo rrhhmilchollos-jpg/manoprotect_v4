@@ -236,6 +236,9 @@ function AppRouter() {
       <Route path="/manoprotect/registro" element={<ManoProtectRegistro />} />
       <Route path="/registro" element={<ManoProtectRegistro />} />
       
+      {/* ManoBank Password Recovery */}
+      <Route path="/manobank/recuperar-password" element={<RecuperarPasswordManoBank />} />
+      
       {/* ManoBank Employee Portal - Separate System */}
       <Route path="/banco" element={<BancoEmpleados />} />
       <Route 
