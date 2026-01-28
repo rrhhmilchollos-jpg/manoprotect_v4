@@ -274,8 +274,13 @@ function App() {
     <div className="App">
       <BrowserRouter>
         <AuthProvider>
+          <UrgencyBanner 
+            message="🎁 OFERTA ESPECIAL: Primer mes GRATIS en ManoProtect"
+            link="/registro"
+          />
           <Toaster position="top-center" richColors />
           <AppRouter />
+          <FloatingWhatsApp />
           <CookieConsent />
         </AuthProvider>
       </BrowserRouter>
