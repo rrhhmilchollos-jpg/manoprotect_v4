@@ -548,6 +548,41 @@ const LandingPage = () => {
         </div>
       </section>
 
+      {/* Alert Subscription Section */}
+      <section className="px-6 py-16 bg-zinc-100">
+        <div className="max-w-4xl mx-auto">
+          <div className="grid md:grid-cols-2 gap-8 items-center">
+            <div>
+              <h2 className="text-2xl sm:text-3xl font-bold text-zinc-900 mb-4">
+                Mantente informado sobre las últimas estafas
+              </h2>
+              <p className="text-zinc-600 mb-4">
+                Suscríbete gratis a nuestras alertas de seguridad y recibe notificaciones cuando detectemos nuevas amenazas activas en España.
+              </p>
+              <ul className="space-y-2 text-sm text-zinc-600">
+                <li className="flex items-center gap-2">
+                  <Check className="h-4 w-4 text-green-500" />
+                  Alertas de phishing y emails fraudulentos
+                </li>
+                <li className="flex items-center gap-2">
+                  <Check className="h-4 w-4 text-green-500" />
+                  SMS y llamadas sospechosas (smishing/vishing)
+                </li>
+                <li className="flex items-center gap-2">
+                  <Check className="h-4 w-4 text-green-500" />
+                  Suplantación de bancos y empresas
+                </li>
+                <li className="flex items-center gap-2">
+                  <Check className="h-4 w-4 text-green-500" />
+                  Totalmente gratis, sin compromiso
+                </li>
+              </ul>
+            </div>
+            <AlertSubscription variant="default" />
+          </div>
+        </div>
+      </section>
+
       {/* Footer */}
       <footer className="px-6 py-12 bg-zinc-900 text-zinc-400">
         <div className="max-w-7xl mx-auto">
