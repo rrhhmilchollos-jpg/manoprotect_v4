@@ -231,6 +231,10 @@ function AppRouter() {
       {/* ManoBank BBVA-Style Registration - No Auth Required */}
       <Route path="/manobank/registro" element={<ManoBankRegistro />} />
       
+      {/* ManoProtect Registration - Different design from ManoBank */}
+      <Route path="/manoprotect/registro" element={<ManoProtectRegistro />} />
+      <Route path="/registro" element={<ManoProtectRegistro />} />
+      
       {/* ManoBank Employee Portal - Separate System */}
       <Route path="/banco" element={<BancoEmpleados />} />
       <Route 
