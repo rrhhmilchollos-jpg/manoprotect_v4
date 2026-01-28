@@ -3,7 +3,7 @@
   "appName": "ManoBank",
   "webDir": "www",
   "server": {
-    "url": "https://manobank.preview.emergentagent.com",
+    "url": "https://dual-finance-app.preview.emergentagent.com",
     "cleartext": true
   }
 }

@@ -43,4 +43,4 @@
 
 - **App ID:** com.manobank.app
 - **Nombre:** ManoBank
-- **URL Web:** https://manobank.preview.emergentagent.com
+- **URL Web:** https://dual-finance-app.preview.emergentagent.com
