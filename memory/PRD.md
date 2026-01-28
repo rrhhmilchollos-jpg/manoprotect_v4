@@ -1,132 +1,127 @@
 # ManoBank & ManoProtect - Product Requirements Document
 
-## Original Problem Statement
-Build **ManoBank** (digital banking) and **ManoProtect** (digital protection) as separate services with distinct registration flows, designs, and features.
+## Última Actualización: 28 Enero 2026
 
-## Current Architecture
+## Problema Original
+Construir ManoBank (banca digital) y ManoProtect (protección digital) como servicios separados con flujos de registro distintos, diseños diferentes y funcionalidades específicas.
+
+## Arquitectura Actual
 
 ```
 /app/
-├── backend/
-│   └── routes/
-│       ├── manobank_routes.py      // Customer registration, deposits, accounts
-│       ├── manobank_admin_routes.py // Employee management, KYC approval
-│       └── auth_routes.py          // Authentication
-├── frontend/src/pages/
-│   ├── ManoBankRegistro.js         // BBVA-style 5-step registration (BLUE)
-│   ├── ManoProtectRegistro.js      // Plan-based 2-step registration (PURPLE)
-│   ├── ManoBankDashboard.js        // Customer dashboard + deposit modal
-│   ├── BancoSistema.js             // Employee portal
-│   ├── BancoEmpleados.js           // Employee login
-│   └── LoginSeguro.js              // 3-tab login (Email/DNI/Register)
+├── backend/routes/
+│   ├── manobank_routes.py        // Registro clientes, depósitos, cuentas, recuperar password
+│   ├── manobank_admin_routes.py  // Gestión empleados, aprobación KYC
+│   └── auth_routes.py            // Autenticación
+├── frontend/src/
+│   ├── pages/
+│   │   ├── ManoBankRegistro.js        // Registro estilo BBVA (5 pasos, AZUL)
+│   │   ├── ManoProtectRegistro.js     // Registro con planes (2 pasos, PÚRPURA)
+│   │   ├── RecuperarPasswordManoBank.js // Recuperar contraseña + verificación tarjeta
+│   │   ├── LoginSeguro.js              // Login 3 tabs (Email/DNI/Registro)
+│   │   ├── ManoBankDashboard.js        // Dashboard cliente + modal depósito
+│   │   ├── LandingPage.js              // Landing ManoProtect + testimonios + SEO
+│   │   └── LandingPromo.js             // Landing ManoBank + SEO
+│   └── components/
+│       ├── FloatingWhatsApp.js   // Botón WhatsApp flotante permanente
+│       ├── UrgencyBanner.js      // Banner de oferta/urgencia
+│       └── SEO.js                // Meta tags SEO + JSON-LD
+├── public/
+│   ├── sitemap.xml               // Sitemap para SEO
+│   └── robots.txt                // Robots.txt para SEO
 ```
 
-## Completed Features (January 28, 2026)
+## ✅ Funcionalidades Completadas
 
-### ✅ BBVA-Style Customer Registration (ManoBank)
-- 5-step form: Personal Data → Contact → Employment → Documents → Video Verification
-- Camera/microphone permission requests for KYC
-- Data collection matching BBVA standards
-- Route: `/manobank/registro`
+### Registro y Login
+- [x] Registro BBVA-style para ManoBank (5 pasos, videoverificación)
+- [x] Registro ManoProtect separado (2 pasos, selección de planes)
+- [x] Login con DNI/NIE + contraseña temporal
+- [x] Cambio de contraseña obligatorio en primer login
+- [x] **NUEVO: Recuperar contraseña con verificación de tarjeta**
 
-### ✅ DNI/NIE Login for New Customers
-- Tab "DNI/NIE" in `/login-seguro`
-- Accepts DNI with letter + temporary password from SMS
-- Forces password change on first login
-- After password change, creates user in main system for email login
+### Sistema de Credenciales
+- [x] Contraseñas temporales para nuevos clientes (SMS)
+- [x] Contraseñas temporales para nuevos empleados (SMS)
+- [x] Validez 24 horas
+- [x] Forzar cambio en primer acceso
 
-### ✅ Temporary Credentials System
-- New customers receive: DNI/NIE + 8-char alphanumeric password
-- Valid for 24 hours
-- SMS notification (falls back to console if Twilio unavailable)
-- Password change required before accessing dashboard
+### Depósito Inicial €25
+- [x] Modal automático para cuentas pendientes
+- [x] Integración con Stripe Checkout
+- [x] Activación de cuenta tras pago
 
-### ✅ Initial Deposit €25 (Stripe)
-- Modal appears when account status = "pending_deposit"
-- Stripe Checkout integration
-- Creates transaction on success
-- Activates account with €25 balance
+### Conversión y SEO
+- [x] Banner de urgencia con ofertas
+- [x] WhatsApp Business flotante (601 510 950)
+- [x] Testimonios de clientes
+- [x] Badges de confianza (Banco de España, RGPD, etc.)
+- [x] Meta tags SEO (Open Graph, Twitter Cards)
+- [x] Schema.org JSON-LD
+- [x] sitemap.xml y robots.txt
 
-### ✅ Employee SMS Credentials
-- When superadmin creates new employee, system generates:
-  - 10-char temporary password
-  - SMS with login credentials
-- Employee credentials returned in API response
+## 📋 Credenciales de Prueba
 
-### ✅ ManoProtect Separate Registration
-- Different design (purple/indigo vs blue)
-- Plan selection (Individual €4.99, Familiar €9.99, Premium €19.99)
-- Simplified 2-step process
-- Route: `/manoprotect/registro` or `/registro`
+### Director General
+- Email: rrhh.milchollos@gmail.com
+- Password: 19862210Des
 
-## Employee Credentials
+### Empleados
+| Nombre | Email | Contraseña |
+|--------|-------|------------|
+| Ana García | ana.garcia@manobank.es | bm6TRCzJQH |
+| Juan Martínez | juan.martinez@manobank.es | zHWmD6MJnG |
+| Laura Sánchez | laura.sanchez@manobank.es | in9zdl1x7X |
+| Carlos López | carlos.lopez@manobank.es | gH163tRjNX |
 
-| Name | Email | Password | Role |
-|------|-------|----------|------|
-| Ivan Rubio Cano | rrhh.milchollos@gmail.com | 19862210Des | Director |
-| Ana García López | ana.garcia@manobank.es | bm6TRCzJQH | Gestor Comercial |
-| Juan Martínez Ruiz | juan.martinez@manobank.es | zHWmD6MJnG | Cajero |
-| Laura Sánchez Pérez | laura.sanchez@manobank.es | in9zdl1x7X | Atención Cliente |
-| Carlos López García | carlos.lopez@manobank.es | gH163tRjNX | Compliance |
+## 📱 Rutas Principales
 
-## API Endpoints
+| Ruta | Descripción |
+|------|-------------|
+| `/` | Landing ManoProtect |
+| `/landing-manobank` | Landing ManoBank |
+| `/registro` | Registro ManoProtect |
+| `/manobank/registro` | Registro ManoBank (BBVA style) |
+| `/login-seguro` | Login clientes (3 tabs) |
+| `/manobank/recuperar-password` | Recuperar contraseña con tarjeta |
+| `/banco` | Login empleados |
+| `/banco/sistema` | Portal empleados |
 
-### Customer Registration (ManoBank)
-- `POST /api/manobank/registro/nuevo-cliente` - Submit registration
-- `POST /api/manobank/registro/solicitar-videoverificacion` - Schedule KYC
-- `GET /api/manobank/registro/estado/{id}` - Check status
-- `POST /api/manobank/registro/login-temporal` - Login with DNI + temp password
-- `POST /api/manobank/registro/cambiar-password` - Change temp password
+## 🔗 APIs Importantes
 
-### Initial Deposit
-- `POST /api/manobank/deposito-inicial/crear-sesion` - Create Stripe session
-- `POST /api/manobank/deposito-inicial/confirmar` - Confirm payment
-- `GET /api/manobank/deposito-inicial/estado/{account_id}` - Check status
+### Recuperación de Contraseña
+- `POST /api/manobank/recuperar-password/iniciar` - Inicia proceso
+- `POST /api/manobank/recuperar-password/verificar-tarjeta` - Verifica con tarjeta
+- `POST /api/manobank/recuperar-password/verificar-sms` - Verifica con SMS
 
-### Admin (Employee Portal)
-- `POST /api/manobank/admin/employees` - Create employee (sends SMS)
-- `GET /api/manobank/admin/registrations` - List customer registrations
-- `POST /api/manobank/admin/registrations/{id}/approve` - Approve & generate IBAN
-- `POST /api/manobank/admin/registrations/{id}/reject` - Reject registration
+### Registro y Login
+- `POST /api/manobank/registro/nuevo-cliente` - Nuevo cliente
+- `POST /api/manobank/registro/login-temporal` - Login DNI + temporal
+- `POST /api/manobank/registro/cambiar-password` - Cambiar temporal
 
-## Pending Tasks
+### Depósito
+- `POST /api/manobank/deposito-inicial/crear-sesion` - Crear sesión Stripe
+- `POST /api/manobank/deposito-inicial/confirmar` - Confirmar pago
 
-### 🟡 Landing Page Optimization (User Request)
-Based on user feedback about conversion issues:
-1. Above the fold clarity - what is ManoProtect, what it protects, CTA
-2. Visual separation between ManoProtect and ManoBank
-3. Testimonials and trust logos
-4. Unified CTAs per section
-5. Floating WhatsApp Business button
-6. Limited offers / urgency elements
-7. Mobile optimization
+## 🟡 Tareas Pendientes
 
-### 🟢 Future Tasks
-- Mobile apps (Android APK, iOS)
-- 2FA on customer login
-- "Certificado de Titularidad" PDF
-- Full E2E card shipping test
+### Backlog
+- [ ] Apps móviles (Android APK / iOS)
+- [ ] 2FA en login de clientes
+- [ ] Certificado de Titularidad PDF
+- [ ] Más optimizaciones de conversión
 
-## Database Collections
-- `manobank_customer_registrations` - BBVA-style registrations
-- `manobank_accounts` - Bank accounts with IBAN
-- `manobank_customers` - KYC-verified customers
-- `manobank_employees` - Bank staff with temp passwords
-- `manobank_payment_sessions` - Stripe payment sessions
-- `manobank_transactions` - All transactions
-- `manobank_audit_log` - Security events
+## Integraciones
+- **Stripe** - Pagos y depósito inicial
+- **Twilio** - SMS (fallback a debug si no configurado)
+- **Zoom Video SDK** - Videoverificación KYC
 
-## 3rd Party Integrations
-- **Stripe** - Payment processing for initial deposit
-- **Twilio** - SMS for credentials (fallback to debug mode)
-- **Zoom Video SDK** - KYC video calls
-- **ReportLab** - PDF generation
-
-## Mocked Components
-- Card shipping (SEUR)
-- AML sanction/PEP lookups
-- Regulatory reports (SEPBLAC)
-- Twilio SMS (falls back to console output)
-
-## Test Reports
-- `/app/test_reports/iteration_20.json` - Backend 100% pass
+## Colecciones MongoDB
+- `manobank_customer_registrations`
+- `manobank_accounts`
+- `manobank_customers`
+- `manobank_employees`
+- `manobank_password_recovery` (NUEVA)
+- `manobank_payment_sessions`
+- `manobank_transactions`
+- `manobank_audit_log`
