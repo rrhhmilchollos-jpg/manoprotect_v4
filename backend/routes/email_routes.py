@@ -515,7 +515,7 @@ async def subscribe_to_alerts(
 @alerts_router.post("/unsubscribe")
 async def unsubscribe_from_alerts(data: AlertUnsubscribe):
     """Unsubscribe from fraud alert notifications"""
-    if not db:
+    if db is None:
         raise HTTPException(status_code=500, detail="Base de datos no inicializada")
     
     result = await db.alert_subscriptions.update_one(
@@ -538,7 +538,7 @@ async def unsubscribe_from_alerts(data: AlertUnsubscribe):
 @alerts_router.get("/subscriptions/count")
 async def get_subscription_count():
     """Get total number of alert subscribers (public stat)"""
-    if not db:
+    if db is None:
         return {"count": 0, "message": "Base de datos no disponible"}
     
     count = await db.alert_subscriptions.count_documents({"is_active": True})
@@ -556,7 +556,7 @@ async def broadcast_new_threat(
     This endpoint can be called internally when new threats are detected,
     or by ManoBank to notify about new security threats.
     """
-    if not db:
+    if db is None:
         raise HTTPException(status_code=500, detail="Base de datos no inicializada")
     
     # Get all active subscribers
@@ -614,7 +614,7 @@ async def broadcast_new_threat(
 @alerts_router.get("/history")
 async def get_alert_history(limit: int = 20):
     """Get recent broadcast alert history (public)"""
-    if not db:
+    if db is None:
         return {"alerts": [], "message": "Base de datos no disponible"}
     
     alerts = await db.alert_broadcasts.find(
