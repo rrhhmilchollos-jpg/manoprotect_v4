@@ -1,7 +1,8 @@
 import { useNavigate } from 'react-router-dom';
-import { Phone, Mail, MessageSquare, Users, Building2, Check, ArrowRight, LogIn, CreditCard, Wallet, Shield, Smartphone, Send, TrendingUp, Sparkles } from 'lucide-react';
+import { Phone, Mail, MessageSquare, Users, Building2, Check, ArrowRight, LogIn, CreditCard, Wallet, Shield, Smartphone, Send, TrendingUp, Sparkles, Star } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/context/AuthContext';
+import SEO from '@/components/SEO';
 
 const LandingPage = () => {
   const navigate = useNavigate();
@@ -9,6 +10,12 @@ const LandingPage = () => {
 
   return (
     <div className="min-h-screen bg-zinc-50">
+      <SEO 
+        title="ManoProtect - Protección Digital para tu Familia | Anti-Estafas España"
+        description="Protege a tu familia contra estafas online, fraudes telefónicos y amenazas digitales. Detección de estafas en tiempo real. Primer mes GRATIS."
+        keywords="protección digital, anti estafas, seguridad online, protección familiar, fraudes online, ciberseguridad, España, detectar estafas, phishing"
+        canonical="https://manoprotect.com"
+      />
       {/* Header */}
       <header className="glass sticky top-0 z-50 px-6 py-4">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
