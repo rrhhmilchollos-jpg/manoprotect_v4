@@ -185,7 +185,7 @@ async def verify_scam(value: str, type: str = "phone"):
     """
     Verifica si un número de teléfono o email está en la base de datos de estafadores.
     """
-    if not _db:
+    if _db is None:
         return {
             "is_scam": False,
             "risk_level": "unknown",
