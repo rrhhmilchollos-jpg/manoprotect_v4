@@ -404,15 +404,6 @@ const Dashboard = () => {
             <Clock className="w-4 h-4 mr-2" />
             Historial
           </Button>
-          <Button
-            data-testid="manobank-btn"
-            variant="outline"
-            onClick={() => navigate('/manobank')}
-            className="ml-auto border-purple-300 text-purple-600 hover:bg-purple-50"
-          >
-            <Building2 className="w-4 h-4 mr-2" />
-            ManoBank
-          </Button>
         </div>
 
         {/* Tab Content */}
