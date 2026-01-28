@@ -562,8 +562,18 @@ const LandingPage = () => {
 
           {/* Trust Badges */}
           <div className="mt-16 pt-12 border-t border-zinc-200">
-            <p className="text-center text-sm text-zinc-500 mb-6">ENTIDAD REGULADA Y DE CONFIANZA</p>
-            <div className="flex flex-wrap items-center justify-center gap-8 opacity-70">
+            <p className="text-center text-sm text-zinc-500 mb-8">CONFÍAN EN NOSOTROS</p>
+            
+            {/* Partners Logos */}
+            <div className="flex flex-wrap items-center justify-center gap-8 mb-10 grayscale hover:grayscale-0 transition-all">
+              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Visa_Inc._logo.svg/200px-Visa_Inc._logo.svg.png" alt="VISA" className="h-8 object-contain opacity-60 hover:opacity-100" />
+              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Mastercard-logo.svg/200px-Mastercard-logo.svg.png" alt="Mastercard" className="h-10 object-contain opacity-60 hover:opacity-100" />
+              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/PayPal.svg/200px-PayPal.svg.png" alt="PayPal" className="h-6 object-contain opacity-60 hover:opacity-100" />
+              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Stripe_Logo%2C_revised_2016.svg/200px-Stripe_Logo%2C_revised_2016.svg.png" alt="Stripe" className="h-8 object-contain opacity-60 hover:opacity-100" />
+            </div>
+            
+            {/* Trust Badges */}
+            <div className="flex flex-wrap items-center justify-center gap-8">
               <div className="text-center">
                 <Shield className="w-8 h-8 mx-auto mb-2 text-indigo-600" />
                 <p className="text-xs text-zinc-600">Cifrado SSL 256-bit</p>
