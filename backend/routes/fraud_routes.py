@@ -157,7 +157,7 @@ async def get_scam_stats():
     """
     Estadísticas públicas de estafas detectadas.
     """
-    if not _db:
+    if _db is None:
         return {
             "total_scams_blocked": 50000,
             "scams_today": 127,
