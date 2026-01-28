@@ -203,6 +203,92 @@ const ManoBankDashboard = () => {
     setPaymentData({ amount: '', recipient: '', iban: '', phone: '', concept: '' });
   };
 
+  // Handle initial deposit with Stripe
+  const handleInitialDeposit = async () => {
+    setDepositLoading(true);
+    try {
+      const pendingAccount = accounts.find(acc => acc.status === 'pending_deposit');
+      if (!pendingAccount) {
+        toast.error('No se encontró cuenta pendiente de activación');
+        return;
+      }
+
+      const response = await fetch(`${API_URL}/api/manobank/deposito-inicial/crear-sesion`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: { 
+          'Content-Type': 'application/json',
+          ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+        },
+        body: JSON.stringify({
+          account_id: pendingAccount.account_id,
+          customer_id: user?.user_id,
+          success_url: window.location.origin + '/manobank',
+          cancel_url: window.location.origin + '/manobank'
+        })
+      });
+
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.detail || 'Error al crear sesión de pago');
+      }
+
+      // Redirect to Stripe checkout
+      if (data.checkout_url) {
+        window.location.href = data.checkout_url;
+      }
+    } catch (error) {
+      toast.error(error.message);
+    } finally {
+      setDepositLoading(false);
+    }
+  };
+
+  // Check for deposit confirmation on page load
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const depositStatus = urlParams.get('deposit');
+    const sessionId = urlParams.get('session_id');
+    
+    if (depositStatus === 'success' && sessionId) {
+      // Confirm the deposit
+      confirmDeposit(sessionId);
+      // Clean URL
+      window.history.replaceState({}, document.title, '/manobank');
+    } else if (depositStatus === 'cancelled') {
+      toast.error('Pago cancelado. Puedes intentarlo de nuevo.');
+      window.history.replaceState({}, document.title, '/manobank');
+    }
+  }, []);
+
+  const confirmDeposit = async (sessionId) => {
+    try {
+      const response = await fetch(`${API_URL}/api/manobank/deposito-inicial/confirmar`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: { 
+          'Content-Type': 'application/json',
+          ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+        },
+        body: JSON.stringify({ session_id: sessionId })
+      });
+
+      const data = await response.json();
+      
+      if (response.ok) {
+        toast.success('¡Depósito completado! Tu cuenta ya está activa con 25€.');
+        setDepositRequired(false);
+        setShowDepositModal(false);
+        fetchAllData(); // Refresh data
+      } else {
+        toast.error(data.detail || 'Error al confirmar el depósito');
+      }
+    } catch (error) {
+      toast.error('Error al confirmar el depósito');
+    }
+  };
+
   // Download account statement PDF
   const downloadAccountStatement = async (accountId, days = 30) => {
     try {
