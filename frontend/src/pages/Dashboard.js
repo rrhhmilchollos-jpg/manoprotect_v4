@@ -358,6 +358,52 @@ const Dashboard = () => {
           </div>
         )}
 
+        {/* Recent Community Alerts */}
+        {recentAlerts.length > 0 && (
+          <Card className="mb-8 border-l-4 border-l-red-500">
+            <CardHeader className="pb-3">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <Megaphone className="w-5 h-5 text-red-500" />
+                  <CardTitle className="text-lg">Alertas de Seguridad Recientes</CardTitle>
+                </div>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => navigate('/knowledge')}
+                  className="text-zinc-600"
+                >
+                  Ver todas
+                </Button>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                {recentAlerts.slice(0, 3).map((alert, idx) => (
+                  <div key={alert.id || idx} className="flex items-start gap-3 p-3 bg-zinc-50 rounded-lg">
+                    <div className={`w-2 h-2 mt-2 rounded-full flex-shrink-0 ${
+                      alert.risk_level === 'alto' ? 'bg-red-500' : 
+                      alert.risk_level === 'medio' ? 'bg-amber-500' : 'bg-green-500'
+                    }`} />
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 mb-1">
+                        <Badge variant="outline" className="text-xs">
+                          {alert.threat_type}
+                        </Badge>
+                        <span className="text-xs text-zinc-500">
+                          {new Date(alert.created_at).toLocaleDateString('es-ES')}
+                        </span>
+                      </div>
+                      <h4 className="font-medium text-sm text-zinc-900 line-clamp-1">{alert.title}</h4>
+                      <p className="text-xs text-zinc-600 line-clamp-1">{alert.description}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
         {/* Investor Access Banner */}
         {isInvestor && (
           <Card className="mb-8 border-2 border-amber-400 bg-gradient-to-r from-amber-50 to-yellow-50 shadow-lg">
