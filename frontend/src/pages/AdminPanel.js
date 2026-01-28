@@ -937,6 +937,11 @@ const AdminPanel = () => {
             <APIKeyManager />
           </TabsContent>
 
+          {/* Alerts Tab */}
+          <TabsContent value="alerts">
+            <AlertsManager />
+          </TabsContent>
+
           {/* Database Info Tab */}
           <TabsContent value="database">
             <Card className="bg-white">
