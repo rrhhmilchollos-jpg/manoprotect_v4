@@ -426,6 +426,10 @@ const AdminPanel = () => {
               <Key className="w-4 h-4 mr-2" />
               API Keys
             </TabsTrigger>
+            <TabsTrigger value="alerts" className="data-[state=active]:bg-red-100">
+              <Bell className="w-4 h-4 mr-2" />
+              Alertas
+            </TabsTrigger>
             <TabsTrigger value="database" className="data-[state=active]:bg-emerald-100">
               <Database className="w-4 h-4 mr-2" />
               Base de Datos
