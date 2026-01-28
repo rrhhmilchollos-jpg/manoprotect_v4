@@ -2291,6 +2291,87 @@ const ManoBankDashboard = () => {
           </div>
         </div>
       )}
+
+      {/* Initial Deposit Modal */}
+      {showDepositModal && depositRequired && (
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl w-full max-w-md overflow-hidden shadow-2xl">
+            <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white p-6">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
+                  <Building2 className="w-7 h-7" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold">Activa tu cuenta</h3>
+                  <p className="text-blue-100 text-sm">ManoBank</p>
+                </div>
+              </div>
+            </div>
+            
+            <div className="p-6 space-y-4">
+              <div className="bg-amber-50 border border-amber-200 rounded-xl p-4">
+                <div className="flex items-start gap-3">
+                  <AlertTriangle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
+                  <div className="text-sm text-amber-800">
+                    <p className="font-medium">Depósito inicial obligatorio</p>
+                    <p className="mt-1">Para activar tu cuenta y empezar a operar, necesitas realizar un depósito mínimo de <strong>25,00€</strong>.</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-gray-50 rounded-xl p-4 space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-gray-600">Depósito mínimo</span>
+                  <span className="text-2xl font-bold text-gray-900">25,00€</span>
+                </div>
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-gray-500">Método de pago</span>
+                  <span className="text-gray-700 flex items-center gap-1">
+                    <CreditCard className="w-4 h-4" />
+                    Tarjeta de crédito/débito
+                  </span>
+                </div>
+              </div>
+
+              <div className="bg-green-50 border border-green-200 rounded-xl p-4">
+                <div className="flex items-start gap-3">
+                  <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+                  <div className="text-sm text-green-800">
+                    <p className="font-medium">¿Qué obtienes?</p>
+                    <ul className="mt-1 space-y-1">
+                      <li>• Cuenta activa con 25€ de saldo</li>
+                      <li>• Tarjeta virtual gratis</li>
+                      <li>• Transferencias ilimitadas</li>
+                      <li>• Sin comisiones de mantenimiento</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="p-6 border-t border-gray-100">
+              <Button 
+                className="w-full h-12 bg-blue-600 hover:bg-blue-700 text-white font-medium" 
+                onClick={handleInitialDeposit}
+                disabled={depositLoading}
+                data-testid="deposit-btn"
+              >
+                {depositLoading ? (
+                  <>Procesando...</>
+                ) : (
+                  <>
+                    <CreditCard className="w-5 h-5 mr-2" />
+                    Pagar 25,00€ y activar cuenta
+                  </>
+                )}
+              </Button>
+              <p className="text-xs text-center text-gray-500 mt-3">
+                Pago seguro procesado por Stripe
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
