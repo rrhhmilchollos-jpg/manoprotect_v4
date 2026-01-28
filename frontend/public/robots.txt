@@ -1,0 +1,25 @@
+# ManoProtect & ManoBank Robots.txt
+# https://www.robotstxt.org/robotstxt.html
+
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://manoprotect.com/sitemap.xml
+
+# Disallow admin and system pages
+Disallow: /banco/
+Disallow: /admin/
+Disallow: /api/
+Disallow: /dashboard/
+Disallow: /manobank/dashboard
+Disallow: /*?deposit=*
+
+# Allow important pages
+Allow: /
+Allow: /registro
+Allow: /login
+Allow: /pricing
+Allow: /manobank/registro
+Allow: /login-seguro
+Allow: /verificar-estafa
