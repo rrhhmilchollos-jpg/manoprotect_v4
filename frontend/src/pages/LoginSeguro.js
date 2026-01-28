@@ -25,6 +25,12 @@ const LoginSeguro = () => {
     rememberDevice: false
   });
 
+  // 2FA state
+  const [show2FA, setShow2FA] = useState(false);
+  const [twoFACode, setTwoFACode] = useState('');
+  const [phoneMasked2FA, setPhoneMasked2FA] = useState('');
+  const [pendingLoginData, setPendingLoginData] = useState(null);
+
   // DNI login form (for new customers with temp password)
   const [dniFormData, setDniFormData] = useState({
     documento: '',
