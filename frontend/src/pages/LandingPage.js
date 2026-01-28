@@ -3,6 +3,7 @@ import { Phone, Mail, MessageSquare, Users, Building2, Check, ArrowRight, LogIn,
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/context/AuthContext';
 import SEO from '@/components/SEO';
+import AlertSubscription from '@/components/AlertSubscription';
 
 const LandingPage = () => {
   const navigate = useNavigate();
