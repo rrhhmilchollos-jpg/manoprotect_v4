@@ -50,7 +50,7 @@ const VerificarEstafa = () => {
 
     try {
       const response = await fetch(
-        `${API_URL}/api/manobank/public/verify-scam?value=${encodeURIComponent(searchValue)}&type=${searchType}`
+        `${API_URL}/api/fraud/public/verify-scam?value=${encodeURIComponent(searchValue)}&type=${searchType}`
       );
       const data = await response.json();
       setResult(data);
@@ -72,7 +72,7 @@ const VerificarEstafa = () => {
     setLoading(true);
 
     try {
-      const response = await fetch(`${API_URL}/api/manobank/public/report-scam`, {
+      const response = await fetch(`${API_URL}/api/fraud/public/report-scam`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(reportData)
