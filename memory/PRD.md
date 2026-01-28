@@ -43,11 +43,16 @@ Plataforma de protección contra fraudes y estafas digitales para familias espa�
   - Nueva pestaña "Alertas" para gestionar alertas de seguridad
   - Crear y enviar alertas masivas desde el panel
   - Ver estadísticas de suscriptores
-- **Planes familiares corregidos (28 enero 2026)**
-  - Añadir miembros familiares (POST /api/family/members)
-  - Actualizar configuración de miembros
-  - Vincular cuentas de miembros
-  - Ver estado de familia y miembros enlazados
+- **✅ Bug Plan Familiar CORREGIDO (28 enero 2026)**
+  - Eliminado archivo duplicado `/app/backend/routes/family.py`
+  - Corregido `/app/backend/routes/__init__.py`
+  - Endpoints funcionando correctamente:
+    - POST /api/family/members - Añadir miembros
+    - PATCH /api/family/members/{id} - Actualizar miembros
+    - DELETE /api/family/members/{id} - Eliminar miembros
+    - GET /api/family/dashboard - Dashboard familiar
+  - 13 tests automatizados pasando (pytest)
+  - UI Panel Familiar verificada con Playwright
 - Planes y precios con Stripe
 - API de fraude compartida con ManoBank
 
