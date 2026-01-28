@@ -184,7 +184,7 @@ export const AuthProvider = ({ children }) => {
     loading,
     error,
     isAuthenticated: !!user,
-    isAdmin: user?.role === 'superadmin' || user?.role === 'director',
+    isAdmin: user?.role === 'superadmin' || user?.role === 'director' || user?.role === 'admin',
     isSuperAdmin: user?.role === 'superadmin' || user?.role === 'director',
     isDirector: user?.role === 'director',
     isPremium: user?.role === 'premium' || user?.role === 'superadmin' || user?.role === 'director' || (user?.plan && user?.plan !== 'free'),
