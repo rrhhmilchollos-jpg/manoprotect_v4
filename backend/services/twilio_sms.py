@@ -1,5 +1,5 @@
 """
-Twilio SMS Service for ManoBank
+Twilio SMS Service for ManoProtect
 - Verification codes (OTP)
 - Password reset
 - Transaction alerts
@@ -119,26 +119,26 @@ def send_password_reset_code(phone_number: str) -> dict:
 def send_transaction_alert(phone_number: str, amount: float, transaction_type: str, balance: float) -> dict:
     """Send transaction notification"""
     if transaction_type == 'debit':
-        message = f"ManoBank: Cargo de {amount:.2f}€ en tu cuenta. Saldo actual: {balance:.2f}€"
+        message = f"ManoProtect: Cargo de {amount:.2f}€ en tu cuenta. Saldo actual: {balance:.2f}€"
     else:
-        message = f"ManoBank: Abono de {amount:.2f}€ en tu cuenta. Saldo actual: {balance:.2f}€"
+        message = f"ManoProtect: Abono de {amount:.2f}€ en tu cuenta. Saldo actual: {balance:.2f}€"
     
     return send_sms(phone_number, message)
 
 
 def send_login_alert(phone_number: str, device: str = "dispositivo desconocido", location: str = "ubicación desconocida") -> dict:
     """Send security alert for new login"""
-    message = f"ManoBank: Nuevo acceso detectado desde {device} en {location}. Si no fuiste tú, contacta con soporte inmediatamente."
+    message = f"ManoProtect: Nuevo acceso detectado desde {device} en {location}. Si no fuiste tú, contacta con soporte inmediatamente."
     return send_sms(phone_number, message)
 
 
 def send_card_blocked_alert(phone_number: str, card_last4: str) -> dict:
     """Send alert when card is blocked"""
-    message = f"ManoBank: Tu tarjeta terminada en {card_last4} ha sido bloqueada por seguridad. Contacta con soporte para desbloquearla."
+    message = f"ManoProtect: Tu tarjeta terminada en {card_last4} ha sido bloqueada por seguridad. Contacta con soporte para desbloquearla."
     return send_sms(phone_number, message)
 
 
 def send_welcome_sms(phone_number: str, customer_name: str) -> dict:
     """Send welcome message to new customer"""
-    message = f"¡Bienvenido a ManoBank, {customer_name}! Tu cuenta está activa. Descarga nuestra app para gestionar tus finanzas. Soporte: soporte@manobank.es"
+    message = f"¡Bienvenido a ManoProtect, {customer_name}! Tu cuenta está activa. Descarga nuestra app para gestionar tus finanzas. Soporte: soporte@manoprotect.es"
     return send_sms(phone_number, message)
