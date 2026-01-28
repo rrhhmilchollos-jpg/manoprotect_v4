@@ -41,6 +41,7 @@ import LandingPromo from '@/pages/LandingPromo';
 import RecuperarPassword from '@/pages/RecuperarPassword';
 import VerificarEstafa from '@/pages/VerificarEstafa';
 import ManoBankRegistro from '@/pages/ManoBankRegistro';
+import ManoProtectRegistro from '@/pages/ManoProtectRegistro';
 import CookieConsent from '@/components/CookieConsent';
 
 import '@/App.css';
