@@ -3077,13 +3077,11 @@ try:
 except ImportError as e:
     print(f"⚠️ KYC routes not loaded: {e}")
 
-# Compliance & Audit routes
-api_router.include_router(compliance_router)
-print("✅ Compliance routes loaded")
-
-# Banking Core routes (Ledger, AML, KYC, Reporting)
-api_router.include_router(banking_core_router)
-print("✅ Banking Core routes loaded (Ledger, AML, KYC, Reporting)")
+# Compliance & Banking Core routes - RESERVED for ManoBank.es
+# api_router.include_router(compliance_router)
+# print("✅ Compliance routes loaded")
+# api_router.include_router(banking_core_router)
+# print("✅ Banking Core routes loaded (Ledger, AML, KYC, Reporting)")
 
 app.include_router(api_router)
 app.include_router(public_router)
