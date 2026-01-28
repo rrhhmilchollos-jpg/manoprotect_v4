@@ -27,11 +27,25 @@ const Dashboard = () => {
   const [stats, setStats] = useState(null);
   const [lastAnalysis, setLastAnalysis] = useState(null);
   const [activeTab, setActiveTab] = useState('analyze'); // 'analyze', 'banking', 'history'
+  const [recentAlerts, setRecentAlerts] = useState([]);
 
   useEffect(() => {
     loadThreats();
     loadStats();
+    loadRecentAlerts();
   }, []);
+
+  const loadRecentAlerts = async () => {
+    try {
+      const response = await fetch(`${API}/alerts/history?limit=5`);
+      if (response.ok) {
+        const data = await response.json();
+        setRecentAlerts(data.alerts || []);
+      }
+    } catch (error) {
+      console.error('Error loading alerts:', error);
+    }
+  };
 
   const loadThreats = async () => {
     try {
