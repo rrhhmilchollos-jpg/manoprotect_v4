@@ -747,7 +747,7 @@ const Pricing = () => {
               </div>
               <div className="mt-8 flex flex-col sm:flex-row gap-4">
                 <Button
-                  onClick={() => window.open('mailto:enterprise@manobank.es?subject=Solicitud%20Demo%20Enterprise&body=Hola,%20me%20gustaría%20solicitar%20una%20demo%20personalizada%20del%20Plan%20Enterprise.%0A%0ANombre:%0AEmpresa:%0ATeléfono:%0A%0AGracias', '_blank')}
+                  onClick={() => window.open('mailto:enterprise@manoprotect.com?subject=Solicitud%20Demo%20Enterprise&body=Hola,%20me%20gustaría%20solicitar%20una%20demo%20personalizada%20del%20Plan%20Enterprise.%0A%0ANombre:%0AEmpresa:%0ATeléfono:%0A%0AGracias', '_blank')}
                   className="flex-1 bg-amber-600 hover:bg-amber-700 text-white rounded-lg h-14 text-lg font-semibold"
                 >
                   Solicitar Demo Personalizada
