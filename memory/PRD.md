@@ -35,7 +35,11 @@ Plataforma de protección contra fraudes y estafas digitales para familias espa�
 - Sistema de autenticación (email + Google OAuth)
 - Dashboard de protección
 - Verificador de estafas público
-- Sistema de alertas
+- **Sistema de alertas por email (NUEVO - 28 enero 2026)**
+  - Suscripción gratuita a alertas de fraude
+  - Broadcast de amenazas a todos los suscriptores
+  - Historial de alertas enviadas
+  - Integración con SendGrid
 - Planes y precios con Stripe
 - API de fraude compartida con ManoBank
 
@@ -53,6 +57,15 @@ POST /api/fraud/check       - Verificar transacción
 POST /api/fraud/report      - Reportar fraude
 GET  /api/fraud/alerts/{id} - Obtener alertas
 GET  /api/fraud/public/scam-stats - Estadísticas
+```
+
+## API de Alertas (NUEVO)
+```
+POST /api/alerts/subscribe          - Suscribirse a alertas
+POST /api/alerts/unsubscribe        - Darse de baja
+GET  /api/alerts/subscriptions/count - Contador de suscriptores
+POST /api/alerts/broadcast          - Enviar alerta masiva
+GET  /api/alerts/history            - Historial de alertas
 ```
 
 ---
