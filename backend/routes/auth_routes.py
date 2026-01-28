@@ -1,7 +1,7 @@
 """
 MANO - Authentication Routes
 User registration, login, logout, and session management
-With enhanced security features for ManoBank S.A.
+With enhanced security features for ManoProtect
 """
 from fastapi import APIRouter, HTTPException, Request, Response, Cookie
 from typing import Optional
@@ -307,7 +307,7 @@ async def send_2fa_code(request: Request):
     if _twilio_client:
         try:
             from services.twilio_sms import send_sms
-            message = f"ManoBank - Tu código de verificación es: {otp_data['otp_code']}. Válido por {otp_data['expires_in_minutes']} minutos. No lo compartas con nadie."
+            message = f"ManoProtect - Tu código de verificación es: {otp_data['otp_code']}. Válido por {otp_data['expires_in_minutes']} minutos. No lo compartas con nadie."
             await send_sms(phone, message)
         except Exception as e:
             print(f"Error sending SMS: {e}")
@@ -524,7 +524,7 @@ async def forgot_password(request: Request):
     
     # TODO: Send email with recovery link
     # For now, return the token for testing
-    recovery_link = f"https://manobank.es/recuperar-password?token={recovery_token}"
+    recovery_link = f"https://manoprotect.es/recuperar-password?token={recovery_token}"
     
     return {
         "message": "Si el email existe, recibirás instrucciones para recuperar tu contraseña",
