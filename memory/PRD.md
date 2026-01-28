@@ -1,127 +1,157 @@
-# ManoBank & ManoProtect - Product Requirements Document
+# ManoProtect - Product Requirements Document
 
-## Última Actualización: 28 Enero 2026
+## Estado Actual: ACTIVO (ManoProtect.com independiente)
 
-## Problema Original
-Construir ManoBank (banca digital) y ManoProtect (protección digital) como servicios separados con flujos de registro distintos, diseños diferentes y funcionalidades específicas.
+## Última actualización: 28 de enero de 2026
 
-## Arquitectura Actual
+---
 
-```
-/app/
-├── backend/routes/
-│   ├── manobank_routes.py        // Registro clientes, depósitos, cuentas, recuperar password
-│   ├── manobank_admin_routes.py  // Gestión empleados, aprobación KYC
-│   └── auth_routes.py            // Autenticación
-├── frontend/src/
-│   ├── pages/
-│   │   ├── ManoBankRegistro.js        // Registro estilo BBVA (5 pasos, AZUL)
-│   │   ├── ManoProtectRegistro.js     // Registro con planes (2 pasos, PÚRPURA)
-│   │   ├── RecuperarPasswordManoBank.js // Recuperar contraseña + verificación tarjeta
-│   │   ├── LoginSeguro.js              // Login 3 tabs (Email/DNI/Registro)
-│   │   ├── ManoBankDashboard.js        // Dashboard cliente + modal depósito
-│   │   ├── LandingPage.js              // Landing ManoProtect + testimonios + SEO
-│   │   └── LandingPromo.js             // Landing ManoBank + SEO
-│   └── components/
-│       ├── FloatingWhatsApp.js   // Botón WhatsApp flotante permanente
-│       ├── UrgencyBanner.js      // Banner de oferta/urgencia
-│       └── SEO.js                // Meta tags SEO + JSON-LD
-├── public/
-│   ├── sitemap.xml               // Sitemap para SEO
-│   └── robots.txt                // Robots.txt para SEO
-```
+## Descripción del Producto
+ManoProtect es una plataforma de protección contra fraudes y estafas digitales diseñada para familias españolas. Ofrece detección automática de phishing, bloqueo de llamadas fraudulentas, alertas en tiempo real y monitoreo de seguridad digital.
 
-## ✅ Funcionalidades Completadas
+## Arquitectura
+- **Frontend**: React con TailwindCSS, Shadcn/UI
+- **Backend**: FastAPI (Python)
+- **Base de datos**: MongoDB
+- **Servicios**: Firebase (Analytics, Auth), Stripe (pagos)
 
-### Registro y Login
-- [x] Registro BBVA-style para ManoBank (5 pasos, videoverificación)
-- [x] Registro ManoProtect separado (2 pasos, selección de planes)
-- [x] Login con DNI/NIE + contraseña temporal
-- [x] Cambio de contraseña obligatorio en primer login
-- [x] **NUEVO: Recuperar contraseña con verificación de tarjeta**
+---
 
-### Sistema de Credenciales
-- [x] Contraseñas temporales para nuevos clientes (SMS)
-- [x] Contraseñas temporales para nuevos empleados (SMS)
-- [x] Validez 24 horas
-- [x] Forzar cambio en primer acceso
+## Funcionalidades Implementadas ✅
 
-### Depósito Inicial €25
-- [x] Modal automático para cuentas pendientes
-- [x] Integración con Stripe Checkout
-- [x] Activación de cuenta tras pago
+### Core de Protección
+- [x] Detección automática de phishing
+- [x] Bloqueo de llamadas fraudulentas
+- [x] Alertas en tiempo real (SMS y Email)
+- [x] Base de datos de estafadores conocidos
+- [x] Verificador público de estafas (`/verificar-estafa`)
 
-### Conversión y SEO
-- [x] Banner de urgencia con ofertas
-- [x] WhatsApp Business flotante (601 510 950)
-- [x] Testimonios de clientes
-- [x] Badges de confianza (Banco de España, RGPD, etc.)
-- [x] Meta tags SEO (Open Graph, Twitter Cards)
-- [x] Schema.org JSON-LD
-- [x] sitemap.xml y robots.txt
+### Autenticación y Usuarios
+- [x] Login con email/password
+- [x] Google OAuth
+- [x] Registro de usuarios
+- [x] Recuperación de contraseña
+- [x] Perfiles de usuario
 
-## 📋 Credenciales de Prueba
+### Dashboard y Analytics
+- [x] Dashboard de protección
+- [x] Analizador de amenazas
+- [x] Historial de alertas
+- [x] Modo familiar (protección para menores)
 
-### Director General
-- Email: rrhh.milchollos@gmail.com
-- Password: 19862210Des
+### Planes y Pagos
+- [x] Página de precios (`/pricing`)
+- [x] Integración con Stripe
+- [x] Planes: Personal, Familiar, Premium, Enterprise
 
-### Empleados
-| Nombre | Email | Contraseña |
-|--------|-------|------------|
-| Ana García | ana.garcia@manobank.es | bm6TRCzJQH |
-| Juan Martínez | juan.martinez@manobank.es | zHWmD6MJnG |
-| Laura Sánchez | laura.sanchez@manobank.es | in9zdl1x7X |
-| Carlos López | carlos.lopez@manobank.es | gH163tRjNX |
+### SEO y Conversión
+- [x] Meta tags optimizados
+- [x] Sitemap y robots.txt
+- [x] 6 testimonios de clientes
+- [x] Logos de partners (Visa, Mastercard, PayPal, Stripe, OpenAI, Microsoft)
+- [x] Badges de confianza (SSL, RGPD, ISO 27001, PCI DSS, Banco de España)
+- [x] Estadísticas de impacto (+15.000 familias, 50.000+ fraudes bloqueados)
+- [x] Banner de urgencia
+- [x] Botón flotante de WhatsApp
 
-## 📱 Rutas Principales
+### Páginas Legales
+- [x] Política de privacidad
+- [x] Términos de servicio
+- [x] Política de reembolsos
+- [x] Aviso legal
 
-| Ruta | Descripción |
-|------|-------------|
-| `/` | Landing ManoProtect |
-| `/landing-manobank` | Landing ManoBank |
-| `/registro` | Registro ManoProtect |
-| `/manobank/registro` | Registro ManoBank (BBVA style) |
-| `/login-seguro` | Login clientes (3 tabs) |
-| `/manobank/recuperar-password` | Recuperar contraseña con tarjeta |
-| `/banco` | Login empleados |
-| `/banco/sistema` | Portal empleados |
+---
 
-## 🔗 APIs Importantes
+## Rutas Activas
 
-### Recuperación de Contraseña
-- `POST /api/manobank/recuperar-password/iniciar` - Inicia proceso
-- `POST /api/manobank/recuperar-password/verificar-tarjeta` - Verifica con tarjeta
-- `POST /api/manobank/recuperar-password/verificar-sms` - Verifica con SMS
+### Públicas
+- `/` - Landing page principal
+- `/promo` - Landing promocional
+- `/pricing` - Planes y precios
+- `/how-it-works` - Cómo funciona
+- `/knowledge` - Base de conocimiento
+- `/community` - Comunidad
+- `/verificar-estafa` - Verificador de estafas
+- `/registro` - Registro de usuarios
+- `/login` - Inicio de sesión
+- `/recuperar-password` - Recuperación de contraseña
 
-### Registro y Login
-- `POST /api/manobank/registro/nuevo-cliente` - Nuevo cliente
-- `POST /api/manobank/registro/login-temporal` - Login DNI + temporal
-- `POST /api/manobank/registro/cambiar-password` - Cambiar temporal
+### Protegidas (requieren login)
+- `/dashboard` - Panel principal
+- `/family-mode` - Modo familiar
+- `/family-admin` - Administración familiar
+- `/child-tracking` - Seguimiento de menores
+- `/contacts` - Contactos de confianza
+- `/profile` - Perfil de usuario
+- `/rewards` - Recompensas
+- `/enterprise` - Dashboard empresarial
 
-### Depósito
-- `POST /api/manobank/deposito-inicial/crear-sesion` - Crear sesión Stripe
-- `POST /api/manobank/deposito-inicial/confirmar` - Confirmar pago
+### Admin
+- `/admin` - Panel de administración
 
-## 🟡 Tareas Pendientes
+---
 
-### Backlog
-- [ ] Apps móviles (Android APK / iOS)
-- [ ] 2FA en login de clientes
-- [ ] Certificado de Titularidad PDF
-- [ ] Más optimizaciones de conversión
+## Separación ManoBank.es (RESERVADO)
 
-## Integraciones
-- **Stripe** - Pagos y depósito inicial
-- **Twilio** - SMS (fallback a debug si no configurado)
-- **Zoom Video SDK** - Videoverificación KYC
+El 28 de enero de 2026 se separó completamente el código de ManoBank para mantenerlo independiente hasta que el dominio ManoBank.es esté configurado.
 
-## Colecciones MongoDB
-- `manobank_customer_registrations`
-- `manobank_accounts`
-- `manobank_customers`
-- `manobank_employees`
-- `manobank_password_recovery` (NUEVA)
-- `manobank_payment_sessions`
-- `manobank_transactions`
-- `manobank_audit_log`
+### Ubicación del código reservado
+`/app/manobank_reserved/`
+
+### Contenido reservado (53 archivos)
+- Frontend: 10 páginas de React
+- Backend: 6 rutas, 4 servicios
+- Compliance: AML, KYC, Reporting
+- Ledger: Sistema de libro mayor
+- Tests: 5 archivos de pruebas
+
+### Para reactivar ManoBank
+1. Configurar dominio ManoBank.es
+2. Crear correos corporativos (@manobank.es)
+3. Restaurar archivos desde `/app/manobank_reserved/`
+4. Descomentar rutas en `server.py`
+5. Actualizar CORS
+6. Configurar base de datos separada si es necesario
+
+---
+
+## Backlog / Próximas Tareas
+
+### P0 - Crítico
+- (Ninguno pendiente)
+
+### P1 - Alta Prioridad
+- [ ] Mejorar UX del dashboard de protección
+- [ ] Implementar notificaciones push
+- [ ] Añadir más idiomas (Catalán, Gallego, Euskera)
+
+### P2 - Media Prioridad
+- [ ] Apps móviles (Android/iOS) para ManoProtect
+- [ ] Integración con más bancos españoles
+- [ ] API pública para empresas
+
+### P3 - Baja Prioridad
+- [ ] Gamificación y sistema de puntos
+- [ ] Integración con redes sociales
+- [ ] Extensión para navegador
+
+---
+
+## Credenciales de Prueba
+
+### Admin ManoProtect
+- Email: admin@manoprotect.com
+- Password: (configurar en producción)
+
+---
+
+## APIs Mockeadas ⚠️
+- Twilio SMS: Logs a consola en desarrollo
+- Stripe: Usa claves de test
+
+---
+
+## Contacto
+- Web: https://manoprotect.com
+- Email: info@manoprotect.com
+- WhatsApp: +34 XXX XXX XXX
