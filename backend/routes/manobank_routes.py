@@ -2690,3 +2690,317 @@ async def estado_deposito_inicial(account_id: str):
         "initial_deposit_required": registration.get("initial_deposit_required", 25.0),
         "initial_deposit_completed": registration.get("initial_deposit_completed", False)
     }
+
+
+# ============================================
+# RECUPERACIÓN DE CONTRASEÑA CON VERIFICACIÓN DE TARJETA
+# ============================================
+
+@router.post("/recuperar-password/iniciar")
+async def iniciar_recuperacion_password(request: Request):
+    """
+    Paso 1: Iniciar recuperación de contraseña
+    El cliente proporciona su DNI/NIE o email
+    """
+    db = get_db()
+    body = await request.json()
+    
+    identifier = body.get("identifier", "").strip()  # DNI or email
+    
+    if not identifier:
+        raise HTTPException(status_code=400, detail="DNI/NIE o email requerido")
+    
+    # Search by DNI or email
+    customer = None
+    registration = None
+    
+    # Try to find by DNI
+    if len(identifier) <= 10:  # Likely a DNI
+        identifier = identifier.upper().replace(" ", "")
+        registration = await db.manobank_customer_registrations.find_one({
+            "documento_completo": identifier,
+            "status": "approved"
+        })
+        if registration:
+            customer = await db.manobank_customers.find_one({
+                "documento": identifier
+            })
+    
+    # Try to find by email
+    if not registration:
+        registration = await db.manobank_customer_registrations.find_one({
+            "email": identifier.lower(),
+            "status": "approved"
+        })
+        if registration:
+            customer = await db.manobank_customers.find_one({
+                "email": identifier.lower()
+            })
+    
+    if not registration:
+        raise HTTPException(
+            status_code=404, 
+            detail="No se encontró ninguna cuenta con esos datos"
+        )
+    
+    # Get customer's cards for verification
+    customer_id = registration.get("customer_id")
+    cards = await db.manobank_cards.find(
+        {"customer_id": customer_id, "status": {"$in": ["active", "inactive"]}},
+        {"_id": 0, "card_id": 1, "last_four": 1, "card_type": 1}
+    ).to_list(10)
+    
+    if not cards:
+        # No cards, use phone verification instead
+        phone = registration.get("telefono_movil")
+        if phone:
+            # Send OTP to phone
+            from services.twilio_sms import send_verification_code
+            result = send_verification_code(phone)
+            
+            # Store recovery session
+            recovery_id = f"rec_{uuid.uuid4().hex[:12]}"
+            await db.manobank_password_recovery.insert_one({
+                "recovery_id": recovery_id,
+                "customer_id": customer_id,
+                "documento": registration.get("documento_completo"),
+                "email": registration.get("email"),
+                "phone": phone,
+                "verification_method": "sms",
+                "status": "pending",
+                "created_at": datetime.now(timezone.utc).isoformat(),
+                "expires_at": (datetime.now(timezone.utc) + timedelta(minutes=15)).isoformat()
+            })
+            
+            return {
+                "success": True,
+                "recovery_id": recovery_id,
+                "verification_method": "sms",
+                "phone_masked": f"***{phone[-4:]}",
+                "message": "Se ha enviado un código de verificación a tu teléfono"
+            }
+        else:
+            raise HTTPException(
+                status_code=400, 
+                detail="No tienes tarjetas ni teléfono asociado. Contacta con soporte."
+            )
+    
+    # Has cards - prepare card verification
+    recovery_id = f"rec_{uuid.uuid4().hex[:12]}"
+    
+    # Select the most used card (or random if no usage data)
+    selected_card = cards[0]  # In production, select based on usage
+    
+    await db.manobank_password_recovery.insert_one({
+        "recovery_id": recovery_id,
+        "customer_id": customer_id,
+        "documento": registration.get("documento_completo"),
+        "email": registration.get("email"),
+        "phone": registration.get("telefono_movil"),
+        "verification_method": "card",
+        "card_id": selected_card["card_id"],
+        "card_last_four": selected_card["last_four"],
+        "status": "pending",
+        "created_at": datetime.now(timezone.utc).isoformat(),
+        "expires_at": (datetime.now(timezone.utc) + timedelta(minutes=15)).isoformat()
+    })
+    
+    return {
+        "success": True,
+        "recovery_id": recovery_id,
+        "verification_method": "card",
+        "card_type": selected_card.get("card_type", "débito"),
+        "card_masked": f"**** **** **** {selected_card['last_four']}",
+        "message": "Por seguridad, introduce los datos de tu tarjeta para verificar tu identidad"
+    }
+
+
+@router.post("/recuperar-password/verificar-tarjeta")
+async def verificar_tarjeta_recuperacion(request: Request):
+    """
+    Paso 2: Verificar identidad con datos de tarjeta
+    """
+    db = get_db()
+    body = await request.json()
+    
+    recovery_id = body.get("recovery_id")
+    last_four = body.get("last_four", "").strip()
+    expiry_month = body.get("expiry_month", "").strip()
+    expiry_year = body.get("expiry_year", "").strip()
+    
+    if not recovery_id or not last_four:
+        raise HTTPException(status_code=400, detail="Datos incompletos")
+    
+    # Find recovery session
+    recovery = await db.manobank_password_recovery.find_one({
+        "recovery_id": recovery_id,
+        "status": "pending"
+    })
+    
+    if not recovery:
+        raise HTTPException(status_code=404, detail="Sesión de recuperación no encontrada o expirada")
+    
+    # Check expiration
+    expires = datetime.fromisoformat(recovery["expires_at"].replace('Z', '+00:00'))
+    if datetime.now(timezone.utc) > expires:
+        await db.manobank_password_recovery.update_one(
+            {"recovery_id": recovery_id},
+            {"$set": {"status": "expired"}}
+        )
+        raise HTTPException(status_code=400, detail="La sesión ha expirado. Inicie de nuevo.")
+    
+    # Verify card details
+    if recovery.get("verification_method") == "card":
+        if recovery.get("card_last_four") != last_four:
+            # Wrong card
+            await db.manobank_password_recovery.update_one(
+                {"recovery_id": recovery_id},
+                {"$inc": {"failed_attempts": 1}}
+            )
+            raise HTTPException(status_code=401, detail="Los datos de la tarjeta no coinciden")
+        
+        # Optional: verify expiry date if we have it
+        card = await db.manobank_cards.find_one({"card_id": recovery["card_id"]})
+        if card and expiry_month and expiry_year:
+            card_expiry = card.get("expiry_date", "")  # Format: MM/YY
+            if card_expiry:
+                expected_expiry = f"{expiry_month.zfill(2)}/{expiry_year[-2:]}"
+                if card_expiry != expected_expiry:
+                    raise HTTPException(status_code=401, detail="Fecha de caducidad incorrecta")
+    
+    # Card verified - generate new temporary password
+    import secrets
+    import string
+    temp_chars = string.ascii_letters + string.digits
+    new_temp_password = ''.join(secrets.choice(temp_chars) for _ in range(8))
+    
+    # Update recovery session
+    await db.manobank_password_recovery.update_one(
+        {"recovery_id": recovery_id},
+        {
+            "$set": {
+                "status": "verified",
+                "verified_at": datetime.now(timezone.utc).isoformat()
+            }
+        }
+    )
+    
+    # Update customer registration with new temp password
+    await db.manobank_customer_registrations.update_one(
+        {"documento_completo": recovery["documento"]},
+        {
+            "$set": {
+                "temp_password": new_temp_password,
+                "temp_password_expires": (datetime.now(timezone.utc) + timedelta(hours=24)).isoformat(),
+                "first_login_completed": False,  # Force password change
+                "password_reset_at": datetime.now(timezone.utc).isoformat()
+            }
+        }
+    )
+    
+    # Send SMS with new password
+    phone = recovery.get("phone")
+    sms_sent = False
+    if phone:
+        try:
+            from services.twilio_sms import send_sms
+            sms_message = (
+                f"ManoBank: Tu nueva contraseña temporal es: {new_temp_password} "
+                f"(válida 24h). Accede con tu DNI/NIE y esta contraseña en manobank.es/login-seguro"
+            )
+            await send_sms(phone, sms_message)
+            sms_sent = True
+        except Exception as e:
+            print(f"Error sending password reset SMS: {e}")
+    
+    # Log event
+    await db.manobank_audit_log.insert_one({
+        "event_type": "password_reset",
+        "customer_id": recovery["customer_id"],
+        "documento": recovery["documento"],
+        "verification_method": recovery["verification_method"],
+        "sms_sent": sms_sent,
+        "timestamp": datetime.now(timezone.utc).isoformat()
+    })
+    
+    return {
+        "success": True,
+        "message": "Verificación correcta. Nueva contraseña enviada por SMS.",
+        "sms_sent": sms_sent,
+        "temp_password": new_temp_password if not sms_sent else None,  # Only show if SMS failed
+        "instructions": "Usa tu DNI/NIE y la nueva contraseña para acceder. Deberás cambiarla en el primer inicio de sesión."
+    }
+
+
+@router.post("/recuperar-password/verificar-sms")
+async def verificar_sms_recuperacion(request: Request):
+    """
+    Paso 2 (alternativo): Verificar identidad con código SMS
+    """
+    db = get_db()
+    body = await request.json()
+    
+    recovery_id = body.get("recovery_id")
+    code = body.get("code", "").strip()
+    
+    if not recovery_id or not code:
+        raise HTTPException(status_code=400, detail="Datos incompletos")
+    
+    # Find recovery session
+    recovery = await db.manobank_password_recovery.find_one({
+        "recovery_id": recovery_id,
+        "status": "pending",
+        "verification_method": "sms"
+    })
+    
+    if not recovery:
+        raise HTTPException(status_code=404, detail="Sesión no encontrada o expirada")
+    
+    # Verify code with Twilio
+    from services.twilio_sms import verify_code
+    result = verify_code(recovery["phone"], code)
+    
+    if not result.get("success") or not result.get("verified"):
+        raise HTTPException(status_code=401, detail="Código incorrecto o expirado")
+    
+    # Code verified - generate new temporary password
+    import secrets
+    import string
+    temp_chars = string.ascii_letters + string.digits
+    new_temp_password = ''.join(secrets.choice(temp_chars) for _ in range(8))
+    
+    # Update recovery session
+    await db.manobank_password_recovery.update_one(
+        {"recovery_id": recovery_id},
+        {"$set": {"status": "verified", "verified_at": datetime.now(timezone.utc).isoformat()}}
+    )
+    
+    # Update customer registration
+    await db.manobank_customer_registrations.update_one(
+        {"documento_completo": recovery["documento"]},
+        {
+            "$set": {
+                "temp_password": new_temp_password,
+                "temp_password_expires": (datetime.now(timezone.utc) + timedelta(hours=24)).isoformat(),
+                "first_login_completed": False,
+                "password_reset_at": datetime.now(timezone.utc).isoformat()
+            }
+        }
+    )
+    
+    # Send new password via SMS
+    try:
+        from services.twilio_sms import send_sms
+        await send_sms(
+            recovery["phone"],
+            f"ManoBank: Tu nueva contraseña temporal es: {new_temp_password} (válida 24h)"
+        )
+    except:
+        pass
+    
+    return {
+        "success": True,
+        "message": "Verificación correcta. Nueva contraseña enviada por SMS.",
+        "temp_password": new_temp_password,
+        "instructions": "Usa tu DNI/NIE y la nueva contraseña para acceder."
+    }
