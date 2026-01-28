@@ -5,7 +5,7 @@ import {
   Shield, Users, CreditCard, FileText, CheckCircle, XCircle, 
   Clock, ArrowLeft, TrendingUp, Download, Eye, UserCheck, Loader2,
   MessageCircle, Key, Activity, Crown, Database, Trash2, Edit, RefreshCw,
-  Landmark, ExternalLink
+  Landmark, ExternalLink, Bell
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
@@ -16,6 +16,7 @@ import { toast } from 'sonner';
 import RealTimeMetrics from '@/components/RealTimeMetrics';
 import WhatsAppManager from '@/components/WhatsAppManager';
 import APIKeyManager from '@/components/APIKeyManager';
+import AlertsManager from '@/components/AlertsManager';
 import { SubscriptionBadge } from '@/components/SubscriptionBadge';
 
 const API = process.env.REACT_APP_BACKEND_URL + '/api';
