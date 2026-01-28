@@ -3240,3 +3240,185 @@ async def generar_certificado_titularidad(
             "Content-Disposition": f"attachment; filename=certificado_titularidad_{iban.replace(' ', '')}.pdf"
         }
     )
+
+
+# ============================================
+# 2FA PARA CLIENTES
+# ============================================
+
+@router.post("/cliente/2fa/activar")
+async def activar_2fa_cliente(
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """
+    Activar 2FA para un cliente
+    """
+    db = get_db()
+    user = await get_current_user_from_session(request, session_token)
+    if not user:
+        raise HTTPException(status_code=401, detail="No autenticado")
+    
+    body = await request.json()
+    phone = body.get("phone")
+    
+    if not phone:
+        raise HTTPException(status_code=400, detail="Teléfono requerido")
+    
+    # Update user to enable 2FA
+    await db.users.update_one(
+        {"user_id": user.user_id},
+        {
+            "$set": {
+                "has_2fa": True,
+                "phone_2fa": phone,
+                "updated_at": datetime.now(timezone.utc).isoformat()
+            }
+        }
+    )
+    
+    return {"success": True, "message": "2FA activado correctamente"}
+
+
+@router.post("/cliente/2fa/desactivar")
+async def desactivar_2fa_cliente(
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """
+    Desactivar 2FA para un cliente
+    """
+    db = get_db()
+    user = await get_current_user_from_session(request, session_token)
+    if not user:
+        raise HTTPException(status_code=401, detail="No autenticado")
+    
+    await db.users.update_one(
+        {"user_id": user.user_id},
+        {
+            "$set": {
+                "has_2fa": False,
+                "updated_at": datetime.now(timezone.utc).isoformat()
+            }
+        }
+    )
+    
+    return {"success": True, "message": "2FA desactivado"}
+
+
+@router.post("/cliente/2fa/enviar-codigo")
+async def enviar_codigo_2fa_cliente(request: Request):
+    """
+    Enviar código 2FA al teléfono del cliente durante el login
+    """
+    db = get_db()
+    body = await request.json()
+    
+    email = body.get("email")
+    if not email:
+        raise HTTPException(status_code=400, detail="Email requerido")
+    
+    user = await db.users.find_one({"email": email.lower()})
+    if not user:
+        raise HTTPException(status_code=404, detail="Usuario no encontrado")
+    
+    if not user.get("has_2fa"):
+        return {"success": True, "requires_2fa": False}
+    
+    phone = user.get("phone_2fa") or user.get("phone")
+    if not phone:
+        raise HTTPException(status_code=400, detail="No hay teléfono configurado para 2FA")
+    
+    # Generate code
+    import random
+    code = ''.join([str(random.randint(0, 9)) for _ in range(6)])
+    
+    # Store code temporarily
+    await db.manobank_2fa_codes.update_one(
+        {"email": email.lower()},
+        {
+            "$set": {
+                "code": code,
+                "created_at": datetime.now(timezone.utc).isoformat(),
+                "expires_at": (datetime.now(timezone.utc) + timedelta(minutes=5)).isoformat(),
+                "verified": False
+            }
+        },
+        upsert=True
+    )
+    
+    # Send SMS
+    try:
+        from services.twilio_sms import send_sms
+        await send_sms(phone, f"ManoBank: Tu código de verificación es {code}. Válido por 5 minutos.")
+        sms_sent = True
+    except Exception as e:
+        print(f"Error sending 2FA SMS: {e}")
+        sms_sent = False
+    
+    return {
+        "success": True,
+        "requires_2fa": True,
+        "phone_masked": f"***{phone[-4:]}" if phone else None,
+        "sms_sent": sms_sent,
+        "code_for_testing": code if not sms_sent else None  # Only for testing
+    }
+
+
+@router.post("/cliente/2fa/verificar-codigo")
+async def verificar_codigo_2fa_cliente(request: Request):
+    """
+    Verificar código 2FA durante el login
+    """
+    db = get_db()
+    body = await request.json()
+    
+    email = body.get("email")
+    code = body.get("code")
+    
+    if not email or not code:
+        raise HTTPException(status_code=400, detail="Email y código requeridos")
+    
+    # Find stored code
+    stored = await db.manobank_2fa_codes.find_one({"email": email.lower()})
+    
+    if not stored:
+        raise HTTPException(status_code=400, detail="No hay código pendiente")
+    
+    # Check expiration
+    expires = datetime.fromisoformat(stored["expires_at"].replace('Z', '+00:00'))
+    if datetime.now(timezone.utc) > expires:
+        raise HTTPException(status_code=400, detail="El código ha expirado")
+    
+    # Verify code
+    if stored["code"] != code:
+        raise HTTPException(status_code=401, detail="Código incorrecto")
+    
+    # Mark as verified
+    await db.manobank_2fa_codes.update_one(
+        {"email": email.lower()},
+        {"$set": {"verified": True}}
+    )
+    
+    return {"success": True, "verified": True}
+
+
+@router.get("/cliente/2fa/estado")
+async def estado_2fa_cliente(
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """
+    Verificar si el cliente tiene 2FA activado
+    """
+    db = get_db()
+    user = await get_current_user_from_session(request, session_token)
+    if not user:
+        raise HTTPException(status_code=401, detail="No autenticado")
+    
+    user_data = await db.users.find_one({"user_id": user.user_id})
+    
+    return {
+        "has_2fa": user_data.get("has_2fa", False) if user_data else False,
+        "phone_2fa": f"***{user_data['phone_2fa'][-4:]}" if user_data and user_data.get("phone_2fa") else None
+    }
