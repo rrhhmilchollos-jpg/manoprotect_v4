@@ -35,6 +35,7 @@ import LandingPromo from '@/pages/LandingPromo';
 import RecuperarPassword from '@/pages/RecuperarPassword';
 import VerificarEstafa from '@/pages/VerificarEstafa';
 import ManoProtectRegistro from '@/pages/ManoProtectRegistro';
+import FAQ from '@/pages/FAQ';
 import CookieConsent from '@/components/CookieConsent';
 import FloatingWhatsApp from '@/components/FloatingWhatsApp';
 import UrgencyBanner from '@/components/UrgencyBanner';
