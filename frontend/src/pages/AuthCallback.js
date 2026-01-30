@@ -1,7 +1,8 @@
 import { useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
-import { Loader2 } from 'lucide-react';
+import { Loader2, Shield, CheckCircle } from 'lucide-react';
+import NoAdsPage from '@/components/NoAdsPage';
 
 const AuthCallback = () => {
   const navigate = useNavigate();
@@ -46,12 +47,48 @@ const AuthCallback = () => {
   }, [location.hash, navigate, processGoogleSession]);
 
   return (
-    <div className="min-h-screen bg-zinc-50 flex items-center justify-center">
-      <div className="text-center">
-        <Loader2 className="w-12 h-12 text-indigo-600 animate-spin mx-auto mb-4" />
-        <p className="text-lg text-zinc-600">Verificando autenticación...</p>
+    <NoAdsPage reason="authentication-callback">
+      <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-emerald-50 flex items-center justify-center p-4">
+        <div className="max-w-md w-full">
+          {/* Main Card */}
+          <div className="bg-white rounded-2xl shadow-xl p-8 text-center border border-zinc-100">
+            {/* Logo */}
+            <div className="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-6">
+              <Shield className="w-8 h-8 text-indigo-600" />
+            </div>
+            
+            {/* Loading Animation */}
+            <Loader2 className="w-10 h-10 text-indigo-600 animate-spin mx-auto mb-4" />
+            
+            <h2 className="text-2xl font-bold text-zinc-900 mb-2">
+              Verificando tu cuenta
+            </h2>
+            <p className="text-zinc-600 mb-6">
+              Estamos confirmando tu identidad de forma segura. Serás redirigido automáticamente en unos segundos.
+            </p>
+            
+            {/* Security badges */}
+            <div className="flex items-center justify-center gap-4 text-sm text-zinc-500">
+              <div className="flex items-center gap-1">
+                <CheckCircle className="w-4 h-4 text-emerald-500" />
+                <span>Conexión segura</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <CheckCircle className="w-4 h-4 text-emerald-500" />
+                <span>Encriptado</span>
+              </div>
+            </div>
+          </div>
+          
+          {/* Footer info */}
+          <p className="text-center text-xs text-zinc-400 mt-6">
+            ManoProtect - Protección contra fraudes digitales
+            <br />
+            Tu seguridad es nuestra prioridad
+          </p>
+        </div>
       </div>
-    </div>
+    </NoAdsPage>
   );
 };
 
