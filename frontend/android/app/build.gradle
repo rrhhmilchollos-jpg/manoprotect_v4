@@ -8,7 +8,7 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
-        versionName "1.0"
+        versionName "1.0.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         aaptOptions {
              // Files and dirs to omit from the packaged assets dir, modified to accommodate modern web apps.
@@ -16,10 +16,27 @@ android {
             ignoreAssetsPattern '!.svn:!.git:!.ds_store:!*.scc:.*:!CVS:!thumbs.db:!picasa.ini:!*~'
         }
     }
+    signingConfigs {
+        release {
+            // These will be set via environment variables or local.properties
+            // For production: generate keystore and set these values
+            // keytool -genkey -v -keystore manoprotect-release.keystore -alias manoprotect -keyalg RSA -keysize 2048 -validity 10000
+            if (project.hasProperty('MANOPROTECT_STORE_FILE')) {
+                storeFile file(MANOPROTECT_STORE_FILE)
+                storePassword MANOPROTECT_STORE_PASSWORD
+                keyAlias MANOPROTECT_KEY_ALIAS
+                keyPassword MANOPROTECT_KEY_PASSWORD
+            }
+        }
+    }
     buildTypes {
         release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            if (project.hasProperty('MANOPROTECT_STORE_FILE')) {
+                signingConfig signingConfigs.release
+            }
         }
     }
 }
