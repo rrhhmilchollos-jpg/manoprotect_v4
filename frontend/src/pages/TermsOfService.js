@@ -30,8 +30,8 @@ const TermsOfService = () => {
           <section className="space-y-4">
             <h2 className="text-xl font-bold text-zinc-900">1. Identificación</h2>
             <p className="text-zinc-600">
-              El presente sitio web y aplicación móvil son propiedad de <strong>ManoProtect S.L.</strong>, 
-              con domicilio en Xàtiva, Valencia, España, y CIF B-XXXXXXXX.
+              El presente sitio web y aplicación móvil son propiedad de <strong>STARTBOOKING SL</strong>, 
+              con domicilio en España, y CIF B19427723.
             </p>
           </section>
 
@@ -115,7 +115,7 @@ const TermsOfService = () => {
             <h2 className="text-xl font-bold text-zinc-900">7. Propiedad Intelectual</h2>
             <p className="text-zinc-600">
               Todos los contenidos de ManoProtect (diseños, logos, textos, código, algoritmos) son 
-              propiedad de ManoProtect S.L. o sus licenciantes. Queda prohibida su reproducción 
+              propiedad de STARTBOOKING SL o sus licenciantes. Queda prohibida su reproducción 
               sin autorización expresa.
             </p>
           </section>

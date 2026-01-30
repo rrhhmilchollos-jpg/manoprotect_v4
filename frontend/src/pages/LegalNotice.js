@@ -33,9 +33,9 @@ const LegalNotice = () => {
               1. Datos Identificativos
             </h2>
             <div className="bg-indigo-50 p-6 rounded-xl space-y-3">
-              <p><strong>Denominación Social:</strong> ManoProtect S.L.</p>
-              <p><strong>CIF:</strong> B-XXXXXXXX</p>
-              <p><strong>Domicilio Social:</strong> Xàtiva, Valencia, España</p>
+              <p><strong>Denominación Social:</strong> STARTBOOKING SL</p>
+              <p><strong>CIF:</strong> B19427723</p>
+              <p><strong>Domicilio Social:</strong> España</p>
               <p><strong>Email de contacto:</strong> info@manoprotect.com</p>
               <p><strong>Teléfono:</strong> +34 601 510 950</p>
               <p><strong>Inscripción:</strong> Inscrita en el Registro Mercantil de Valencia, Tomo XXXX, Folio XXX, Hoja V-XXXXX</p>
@@ -47,7 +47,7 @@ const LegalNotice = () => {
             <p className="text-zinc-600">
               El presente Aviso Legal regula el uso del sitio web <strong>www.manoprotect.com</strong> y 
               de la aplicación móvil ManoProtect (en adelante, conjuntamente, "la Plataforma"), 
-              del que es titular ManoProtect S.L.
+              del que es titular STARTBOOKING SL
             </p>
             <p className="text-zinc-600">
               La navegación por la Plataforma atribuye la condición de Usuario e implica la aceptación 
@@ -58,7 +58,7 @@ const LegalNotice = () => {
           <section className="space-y-4">
             <h2 className="text-xl font-bold text-zinc-900">3. Actividad</h2>
             <p className="text-zinc-600">
-              ManoProtect S.L. ofrece servicios de:
+              STARTBOOKING SL ofrece servicios de:
             </p>
             <ul className="list-disc pl-6 space-y-2 text-zinc-600">
               <li>Detección y prevención de fraudes digitales (vishing, smishing, phishing)</li>
@@ -90,20 +90,20 @@ const LegalNotice = () => {
               gráficos, imágenes, iconos, tecnología, software, código fuente, diseños, marcas, 
               nombres comerciales, así como la estructura, selección, ordenación y presentación de 
               sus contenidos, están protegidos por derechos de propiedad intelectual e industrial 
-              de ManoProtect S.L. o de terceros.
+              de STARTBOOKING SL o de terceros.
             </p>
             <div className="bg-orange-50 border-l-4 border-orange-500 p-4 rounded-r-lg">
               <p className="text-orange-800">
                 <strong>Queda prohibida</strong> la reproducción, distribución, comunicación pública, 
                 transformación o cualquier otra forma de explotación de los contenidos sin autorización 
-                expresa y por escrito de ManoProtect S.L.
+                expresa y por escrito de STARTBOOKING SL
               </p>
             </div>
           </section>
 
           <section className="space-y-4">
             <h2 className="text-xl font-bold text-zinc-900">6. Exclusión de Responsabilidad</h2>
-            <p className="text-zinc-600">ManoProtect S.L. no se hace responsable de:</p>
+            <p className="text-zinc-600">STARTBOOKING SL no se hace responsable de:</p>
             <ul className="list-disc pl-6 space-y-2 text-zinc-600">
               <li>Los daños que pudieran derivarse del uso indebido de la Plataforma</li>
               <li>Los fallos o errores técnicos de la red de telecomunicaciones</li>
@@ -117,7 +117,7 @@ const LegalNotice = () => {
           <section className="space-y-4">
             <h2 className="text-xl font-bold text-zinc-900">7. Enlaces a Terceros</h2>
             <p className="text-zinc-600">
-              La Plataforma puede contener enlaces a sitios web de terceros. ManoProtect S.L. no 
+              La Plataforma puede contener enlaces a sitios web de terceros. STARTBOOKING SL no 
               tiene control sobre dichos sitios y no asume responsabilidad alguna por sus contenidos 
               ni por las políticas de privacidad de los mismos.
             </p>
@@ -140,7 +140,7 @@ const LegalNotice = () => {
             <p className="text-zinc-600">
               El presente Aviso Legal se rige íntegramente por la legislación española. Para la 
               resolución de cualquier controversia que pudiera derivarse del acceso o uso de la 
-              Plataforma, ManoProtect S.L. y el Usuario acuerdan someterse expresamente a los 
+              Plataforma, STARTBOOKING SL y el Usuario acuerdan someterse expresamente a los 
               Juzgados y Tribunales de la ciudad de Valencia, con renuncia a cualquier otro fuero 
               que pudiera corresponderles.
             </p>
@@ -149,7 +149,7 @@ const LegalNotice = () => {
           <section className="space-y-4">
             <h2 className="text-xl font-bold text-zinc-900">10. Modificaciones</h2>
             <p className="text-zinc-600">
-              ManoProtect S.L. se reserva el derecho de modificar, en cualquier momento y sin 
+              STARTBOOKING SL se reserva el derecho de modificar, en cualquier momento y sin 
               previo aviso, la presentación y configuración de la Plataforma, así como el presente 
               Aviso Legal. Por ello, el Usuario debe leer atentamente este Aviso Legal cada vez 
               que acceda a la Plataforma.
@@ -192,7 +192,7 @@ const LegalNotice = () => {
               <p><strong>Email general:</strong> info@manoprotect.com</p>
               <p><strong>Email legal:</strong> legal@manoprotect.com</p>
               <p><strong>Teléfono:</strong> +34 601 510 950</p>
-              <p><strong>Dirección:</strong> Xàtiva, Valencia, España</p>
+              <p><strong>Dirección:</strong> España</p>
             </div>
           </section>
 
