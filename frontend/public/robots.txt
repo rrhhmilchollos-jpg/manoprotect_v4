@@ -7,20 +7,33 @@ Allow: /verificar-estafa
 Allow: /pricing
 Allow: /login
 Allow: /registro
+Allow: /how-it-works
+Allow: /knowledge
+Allow: /community
+Allow: /privacy-policy
+Allow: /terms-of-service
+Allow: /refund-policy
+Allow: /legal-notice
 
+# Disallow pages without substantial content (AdSense compliance)
+Disallow: /auth/callback
+Disallow: /payment-success
+Disallow: /api/
+
+# Disallow authenticated/private pages
 Disallow: /dashboard
 Disallow: /admin
 Disallow: /family-admin
+Disallow: /family-mode
 Disallow: /child-tracking
 Disallow: /enterprise
-Disallow: /api/
-Disallow: /auth/
+Disallow: /profile
+Disallow: /rewards
+Disallow: /contacts
+Disallow: /downloads
 
 # Sitemap location
 Sitemap: https://manoprotect.com/sitemap.xml
-
-# Crawl-delay for respectful crawling
-Crawl-delay: 1
 
 # Google specific
 User-agent: Googlebot
@@ -31,3 +44,12 @@ Crawl-delay: 0
 User-agent: Bingbot
 Allow: /
 Crawl-delay: 1
+
+# Ad crawlers - exclude processing pages
+User-agent: Mediapartners-Google
+Disallow: /auth/callback
+Disallow: /payment-success
+
+User-agent: AdsBot-Google
+Disallow: /auth/callback
+Disallow: /payment-success
