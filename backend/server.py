@@ -3099,19 +3099,23 @@ except ImportError as e:
 app.include_router(api_router)
 app.include_router(public_router)
 
-# Configure CORS with specific origins for credential-based requests
-# ManoProtect.com + ManoBank integration
-allowed_origins = [
-    "https://familyplan-fix.preview.emergentagent.com",
+# Configure CORS - read from environment for deployment flexibility
+cors_origins_env = os.environ.get('CORS_ORIGINS', '*')
+if cors_origins_env == '*':
+    allowed_origins = ['*']
+else:
+    allowed_origins = [origin.strip() for origin in cors_origins_env.split(',')]
+
+# Add localhost origins for development
+dev_origins = [
     "http://localhost:3000",
-    "http://localhost:3001",  # ManoBank frontend
+    "http://localhost:3001",
     "http://localhost:8001",
-    "http://localhost:8002",  # ManoBank backend
-    "https://manoprotect.com",
-    "https://www.manoprotect.com",
-    "https://manobank.es",
-    "https://www.manobank.es",
+    "http://localhost:8002",
 ]
+for origin in dev_origins:
+    if origin not in allowed_origins:
+        allowed_origins.append(origin)
 
 app.add_middleware(
     CORSMiddleware,
