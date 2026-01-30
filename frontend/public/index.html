@@ -152,18 +152,36 @@
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
         
-        <script src="https://assets.emergent.sh/scripts/emergent-main.js"></script>
+        <!-- Emergent Development Tools - Only load in iframe/preview mode -->
         <script>
-            if (window.self !== window.top) {
-                var debugMonitorScript = document.createElement('script');
-                debugMonitorScript.src = 'https://assets.emergent.sh/scripts/debug-monitor.js';
-                document.head.appendChild(debugMonitorScript);
-                window.tailwind = window.tailwind || {};
-                tailwind.config = { corePlugins: { preflight: false } };
-                var tailwindScript = document.createElement('script');
-                tailwindScript.src = 'https://cdn.tailwindcss.com';
-                document.head.appendChild(tailwindScript);
-            }
+            (function() {
+                // Only load Emergent scripts in development/preview environment
+                var isEmergentPreview = window.self !== window.top || 
+                    window.location.hostname.includes('preview.emergentagent.com') ||
+                    window.location.hostname === 'localhost';
+                
+                if (isEmergentPreview && window.location.hostname !== 'manoprotect.com' && window.location.hostname !== 'www.manoprotect.com') {
+                    // Load Emergent main script
+                    var emergentScript = document.createElement('script');
+                    emergentScript.src = 'https://assets.emergent.sh/scripts/emergent-main.js';
+                    emergentScript.onerror = function() { console.log('Emergent script not available'); };
+                    document.head.appendChild(emergentScript);
+                    
+                    // Load debug monitor in iframe
+                    if (window.self !== window.top) {
+                        var debugMonitorScript = document.createElement('script');
+                        debugMonitorScript.src = 'https://assets.emergent.sh/scripts/debug-monitor.js';
+                        debugMonitorScript.onerror = function() { console.log('Debug monitor not available'); };
+                        document.head.appendChild(debugMonitorScript);
+                        
+                        window.tailwind = window.tailwind || {};
+                        tailwind.config = { corePlugins: { preflight: false } };
+                        var tailwindScript = document.createElement('script');
+                        tailwindScript.src = 'https://cdn.tailwindcss.com';
+                        document.head.appendChild(tailwindScript);
+                    }
+                }
+            })();
         </script>
         
         <!-- PWA Service Worker Registration -->
@@ -175,7 +193,7 @@
                             console.log('ManoProtect PWA: Service Worker registrado');
                         })
                         .catch(function(error) {
-                            console.log('ManoProtect PWA: Error SW:', error);
+                            // Service worker not found is OK - will work without it
                         });
                 });
             }
