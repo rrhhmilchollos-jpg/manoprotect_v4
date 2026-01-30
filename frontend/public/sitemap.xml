@@ -7,41 +7,101 @@
     <!-- Página principal -->
     <url>
         <loc>https://manoprotect.com/</loc>
-        <lastmod>2026-01-28</lastmod>
+        <lastmod>2026-01-30</lastmod>
         <changefreq>weekly</changefreq>
         <priority>1.0</priority>
     </url>
     
-    <!-- Verificador de estafas (público) -->
+    <!-- Verificador de estafas (público) - Alto valor SEO -->
     <url>
         <loc>https://manoprotect.com/verificar-estafa</loc>
-        <lastmod>2026-01-28</lastmod>
+        <lastmod>2026-01-30</lastmod>
         <changefreq>daily</changefreq>
+        <priority>0.95</priority>
+    </url>
+    
+    <!-- Preguntas Frecuentes - Alto valor contenido -->
+    <url>
+        <loc>https://manoprotect.com/faq</loc>
+        <lastmod>2026-01-30</lastmod>
+        <changefreq>weekly</changefreq>
         <priority>0.9</priority>
+    </url>
+    
+    <!-- Cómo funciona - Contenido educativo -->
+    <url>
+        <loc>https://manoprotect.com/how-it-works</loc>
+        <lastmod>2026-01-30</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.85</priority>
+    </url>
+    
+    <!-- Base de conocimiento - Contenido educativo -->
+    <url>
+        <loc>https://manoprotect.com/knowledge</loc>
+        <lastmod>2026-01-30</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.85</priority>
+    </url>
+    
+    <!-- Comunidad -->
+    <url>
+        <loc>https://manoprotect.com/community</loc>
+        <lastmod>2026-01-30</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
     </url>
     
     <!-- Precios -->
     <url>
         <loc>https://manoprotect.com/pricing</loc>
-        <lastmod>2026-01-28</lastmod>
+        <lastmod>2026-01-30</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
     
-    <!-- Login -->
+    <!-- Páginas legales - Necesarias para AdSense -->
     <url>
-        <loc>https://manoprotect.com/login</loc>
-        <lastmod>2026-01-28</lastmod>
+        <loc>https://manoprotect.com/privacy-policy</loc>
+        <lastmod>2026-01-30</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.6</priority>
     </url>
     
-    <!-- Registro -->
+    <url>
+        <loc>https://manoprotect.com/terms-of-service</loc>
+        <lastmod>2026-01-30</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    
+    <url>
+        <loc>https://manoprotect.com/refund-policy</loc>
+        <lastmod>2026-01-30</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.5</priority>
+    </url>
+    
+    <url>
+        <loc>https://manoprotect.com/legal-notice</loc>
+        <lastmod>2026-01-30</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.5</priority>
+    </url>
+    
+    <!-- Auth pages - Baja prioridad -->
+    <url>
+        <loc>https://manoprotect.com/login</loc>
+        <lastmod>2026-01-30</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.4</priority>
+    </url>
+    
     <url>
         <loc>https://manoprotect.com/registro</loc>
-        <lastmod>2026-01-28</lastmod>
+        <lastmod>2026-01-30</lastmod>
         <changefreq>monthly</changefreq>
-        <priority>0.7</priority>
+        <priority>0.5</priority>
     </url>
     
 </urlset>
