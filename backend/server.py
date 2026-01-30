@@ -395,13 +395,20 @@ async def get_available_plans():
 # STRIPE PAYMENT ROUTES
 # ============================================
 
+# Company information for invoices
+COMPANY_INFO = {
+    "name": "STARTBOOKING SL",
+    "cif": "B19427723",
+    "country": "ES"
+}
+
 @api_router.post("/create-checkout-session")
 async def create_checkout_session(
     data: CheckoutRequest,
     http_request: Request,
     session_token: Optional[str] = Cookie(None)
 ):
-    """Create Stripe checkout session"""
+    """Create Stripe checkout session with product description and company info"""
     user = await get_current_user(http_request, session_token)
     user_id = user.user_id if user else "anonymous"
     user_email = user.email if user else "anonymous@mano.com"
@@ -410,6 +417,12 @@ async def create_checkout_session(
         package = SUBSCRIPTION_PACKAGES.get(data.plan_type)
         if not package:
             raise HTTPException(status_code=400, detail="Plan de suscripción no válido")
+        
+        # Build product description for checkout
+        product_description = f"ManoProtect {package['name']} - Protección contra fraudes y estafas digitales"
+        if package.get("max_users", 1) > 1:
+            product_description += f" (hasta {package['max_users']} usuarios)"
+        product_description += f". Período: {package['period']}."
         
         # Redirigir a página de éxito personalizada
         success_url = f"{data.origin_url}/payment-success?session_id={{CHECKOUT_SESSION_ID}}"
@@ -428,7 +441,11 @@ async def create_checkout_session(
                 "user_id": user_id,
                 "email": user_email,
                 "plan_type": data.plan_type,
-                "plan_name": package["name"]
+                "plan_name": package["name"],
+                "product_description": product_description,
+                "company_name": COMPANY_INFO["name"],
+                "company_cif": COMPANY_INFO["cif"],
+                "billing_period": package["period"]
             }
         )
         
@@ -443,7 +460,13 @@ async def create_checkout_session(
             currency="eur",
             status="pending",
             payment_status="initiated",
-            metadata={"plan_name": package["name"], "plan_period": package["period"]}
+            metadata={
+                "plan_name": package["name"], 
+                "plan_period": package["period"],
+                "product_description": product_description,
+                "company": COMPANY_INFO["name"],
+                "cif": COMPANY_INFO["cif"]
+            }
         )
         
         tx_doc = transaction.model_dump()
@@ -451,7 +474,18 @@ async def create_checkout_session(
         tx_doc['updated_at'] = tx_doc['updated_at'].isoformat()
         await db.payment_transactions.insert_one(tx_doc)
         
-        return {"checkout_url": session.url, "session_id": session.session_id}
+        return {
+            "checkout_url": session.url, 
+            "session_id": session.session_id,
+            "product": {
+                "name": package["name"],
+                "description": product_description,
+                "amount": package["amount"],
+                "currency": "EUR",
+                "period": package["period"]
+            },
+            "company": COMPANY_INFO
+        }
     
     except HTTPException:
         raise
