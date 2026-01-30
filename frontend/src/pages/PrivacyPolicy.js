@@ -31,9 +31,9 @@ const PrivacyPolicy = () => {
           <section className="space-y-4">
             <h2 className="text-xl font-bold text-zinc-900">1. Responsable del Tratamiento</h2>
             <div className="bg-zinc-50 p-4 rounded-lg space-y-2">
-              <p><strong>Empresa:</strong> ManoProtect S.L.</p>
-              <p><strong>CIF:</strong> B-XXXXXXXX</p>
-              <p><strong>Dirección:</strong> Xàtiva, Valencia, España</p>
+              <p><strong>Empresa:</strong> STARTBOOKING SL</p>
+              <p><strong>CIF:</strong> B19427723</p>
+              <p><strong>Dirección:</strong> España</p>
               <p><strong>Email:</strong> privacidad@manoprotect.com</p>
               <p><strong>Teléfono:</strong> +34 601 510 950</p>
             </div>
