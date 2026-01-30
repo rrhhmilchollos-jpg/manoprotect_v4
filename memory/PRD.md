@@ -21,11 +21,16 @@ Los proyectos están completamente separados pero conectados mediante API de ant
 
 # ManoProtect.com
 
+## Información Legal
+- **Empresa:** STARTBOOKING SL
+- **CIF:** B19427723
+- **App ID (Android):** com.manoprotect.app
+
 ## Descripción
 Plataforma de protección contra fraudes y estafas digitales para familias españolas.
 
 ## Tecnología
-- Frontend: React + TailwindCSS + Shadcn/UI
+- Frontend: React + TailwindCSS + Shadcn/UI + Capacitor (Android)
 - Backend: FastAPI (Python)
 - Base de datos: MongoDB (test_database)
 
@@ -53,8 +58,21 @@ Plataforma de protección contra fraudes y estafas digitales para familias espa�
     - GET /api/family/dashboard - Dashboard familiar
   - 13 tests automatizados pasando (pytest)
   - UI Panel Familiar verificada con Playwright
+- **✅ SEO/SEM Avanzado (30 enero 2026)**
+  - Meta tags optimizados (título, descripción, keywords)
+  - Schema.org markup (Organization, SoftwareApplication, FAQPage)
+  - Open Graph y Twitter Cards
+  - sitemap.xml y robots.txt configurados
+  - Canonical URLs
+- **✅ Checkout con info empresa (30 enero 2026)**
+  - Descripción del producto en checkout
+  - Datos de STARTBOOKING SL (CIF B19427723)
+  - Período de facturación visible
+- **✅ App Móvil Android preparada (30 enero 2026)**
+  - Capacitor 6 configurado
+  - Build de producción listo
+  - Guía de compilación: `/app/frontend/ANDROID_BUILD_GUIDE.md`
 - Planes y precios con Stripe
-- API de fraude compartida con ManoBank
 
 ## Rutas activas
 - `/` - Landing principal
