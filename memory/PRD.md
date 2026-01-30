@@ -72,6 +72,12 @@ Plataforma de protección contra fraudes y estafas digitales para familias espa�
   - Paquete descargable: `/app/ManoProtect-GooglePlay.zip`
   - Guía de compilación: `/app/frontend/ANDROID_BUILD_GUIDE.md`
   - Ficha de Play Store: `/app/frontend/GOOGLE_PLAY_LISTING.md`
+- **✅ Correcciones AdSense (30 enero 2026)**
+  - Páginas de callback/loading mejoradas con contenido real
+  - Meta tags para excluir páginas sin contenido de ads
+  - robots.txt actualizado para excluir páginas de proceso
+  - Nueva página FAQ con contenido de alta calidad
+  - Sitemap actualizado con todas las páginas públicas
 - Planes y precios con Stripe
 
 ## Rutas activas
