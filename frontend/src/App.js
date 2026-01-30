@@ -110,6 +110,8 @@ function AppRouter() {
         <Route path="/terms-of-service" element={<TermsOfService />} />
         <Route path="/refund-policy" element={<RefundPolicy />} />
         <Route path="/legal-notice" element={<LegalNotice />} />
+        <Route path="/faq" element={<FAQ />} />
+        <Route path="/preguntas-frecuentes" element={<FAQ />} />
         
         {/* ManoProtect Promo Landing */}
         <Route path="/promo" element={<LandingPromo />} />
