@@ -1,6 +1,6 @@
 # Proyectos ManoProtect y ManoBank
 
-## Última actualización: 28 de enero de 2026
+## Última actualización: 30 de enero de 2026
 
 ---
 
@@ -30,7 +30,7 @@ Los proyectos están completamente separados pero conectados mediante API de ant
 Plataforma de protección contra fraudes y estafas digitales para familias españolas.
 
 ## Tecnología
-- Frontend: React + TailwindCSS + Shadcn/UI + Capacitor (Android)
+- Frontend: React + TailwindCSS + Shadcn/UI + Capacitor 6 (Android)
 - Backend: FastAPI (Python)
 - Base de datos: MongoDB (test_database)
 
@@ -51,13 +51,8 @@ Plataforma de protección contra fraudes y estafas digitales para familias espa�
 - **✅ Bug Plan Familiar CORREGIDO (28 enero 2026)**
   - Eliminado archivo duplicado `/app/backend/routes/family.py`
   - Corregido `/app/backend/routes/__init__.py`
-  - Endpoints funcionando correctamente:
-    - POST /api/family/members - Añadir miembros
-    - PATCH /api/family/members/{id} - Actualizar miembros
-    - DELETE /api/family/members/{id} - Eliminar miembros
-    - GET /api/family/dashboard - Dashboard familiar
+  - Endpoints funcionando correctamente
   - 13 tests automatizados pasando (pytest)
-  - UI Panel Familiar verificada con Playwright
 - **✅ SEO/SEM Avanzado (30 enero 2026)**
   - Meta tags optimizados (título, descripción, keywords)
   - Schema.org markup (Organization, SoftwareApplication, FAQPage)
@@ -68,10 +63,15 @@ Plataforma de protección contra fraudes y estafas digitales para familias espa�
   - Descripción del producto en checkout
   - Datos de STARTBOOKING SL (CIF B19427723)
   - Período de facturación visible
-- **✅ App Móvil Android preparada (30 enero 2026)**
+- **✅ App Móvil Android COMPLETA (30 enero 2026)**
   - Capacitor 6 configurado
-  - Build de producción listo
+  - Keystore generado: `/app/frontend/android/keystores/manoprotect-release.keystore`
+  - Android SDK 34 + Build Tools 34.0.0
+  - Icono de app generado (512x512)
+  - Feature graphic generado (1024x500)
+  - Paquete descargable: `/app/ManoProtect-GooglePlay.zip`
   - Guía de compilación: `/app/frontend/ANDROID_BUILD_GUIDE.md`
+  - Ficha de Play Store: `/app/frontend/GOOGLE_PLAY_LISTING.md`
 - Planes y precios con Stripe
 
 ## Rutas activas
