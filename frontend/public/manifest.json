@@ -1,120 +1,51 @@
 {
-  "name": "ManoProtect - Protección contra Fraudes",
+  "name": "ManoProtect",
   "short_name": "ManoProtect",
-  "description": "Protege a tu familia contra fraudes, phishing, smishing y estafas digitales en tiempo real. Desarrollado por STARTBOOKING SL.",
+  "description": "Protege a tu familia contra fraudes, phishing y estafas digitales.",
   "start_url": "/",
   "display": "standalone",
-  "orientation": "portrait-primary",
   "background_color": "#ffffff",
   "theme_color": "#10b981",
   "lang": "es",
-  "dir": "ltr",
   "scope": "/",
-  "id": "com.manoprotect.app",
-  "iarc_rating_id": "e84b072d-71b3-4d3e-86ae-31a8ce4e53b7",
   "icons": [
-    {
-      "src": "/icons/icon-72x72.png",
-      "sizes": "72x72",
-      "type": "image/png",
-      "purpose": "maskable any"
-    },
-    {
-      "src": "/icons/icon-96x96.png",
-      "sizes": "96x96",
-      "type": "image/png",
-      "purpose": "maskable any"
-    },
-    {
-      "src": "/icons/icon-128x128.png",
-      "sizes": "128x128",
-      "type": "image/png",
-      "purpose": "maskable any"
-    },
-    {
-      "src": "/icons/icon-144x144.png",
-      "sizes": "144x144",
-      "type": "image/png",
-      "purpose": "maskable any"
-    },
-    {
-      "src": "/icons/icon-152x152.png",
-      "sizes": "152x152",
-      "type": "image/png",
-      "purpose": "maskable any"
-    },
     {
       "src": "/icons/icon-192x192.png",
       "sizes": "192x192",
       "type": "image/png",
-      "purpose": "maskable any"
-    },
-    {
-      "src": "/icons/icon-384x384.png",
-      "sizes": "384x384",
-      "type": "image/png",
-      "purpose": "maskable any"
+      "purpose": "any"
     },
     {
       "src": "/icons/icon-512x512.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "maskable any"
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ],
-  "categories": ["security", "productivity", "finance", "utilities"],
   "screenshots": [
     {
       "src": "/screenshots/dashboard.png",
       "sizes": "1280x720",
       "type": "image/png",
-      "label": "Dashboard de protección",
       "form_factor": "wide"
     },
     {
       "src": "/screenshots/mobile-dashboard.png",
       "sizes": "390x844",
       "type": "image/png",
-      "label": "Dashboard móvil",
       "form_factor": "narrow"
     }
-  ],
-  "shortcuts": [
-    {
-      "name": "Analizar Amenaza",
-      "short_name": "Analizar",
-      "description": "Analizar mensaje o enlace sospechoso",
-      "url": "/dashboard?action=analyze",
-      "icons": [{ "src": "/icons/analyze-icon.png", "sizes": "96x96" }]
-    },
-    {
-      "name": "Alerta SOS",
-      "short_name": "SOS",
-      "description": "Enviar alerta de emergencia a tu familia",
-      "url": "/dashboard?action=sos",
-      "icons": [{ "src": "/icons/sos-icon.png", "sizes": "96x96" }]
-    },
-    {
-      "name": "Verificar Estafa",
-      "short_name": "Verificar",
-      "description": "Comprobar si algo es una estafa",
-      "url": "/verificar-estafa",
-      "icons": [{ "src": "/icons/verify-icon.png", "sizes": "96x96" }]
-    }
-  ],
-  "related_applications": [
-    {
-      "platform": "play",
-      "url": "https://play.google.com/store/apps/details?id=com.manoprotect.app",
-      "id": "com.manoprotect.app"
-    }
-  ],
-  "prefer_related_applications": false,
-  "launch_handler": {
-    "client_mode": "navigate-existing"
-  },
-  "handle_links": "preferred",
-  "edge_side_panel": {
-    "preferred_width": 400
-  }
+  ]
 }
