@@ -593,7 +593,7 @@ const ChildTracking = () => {
                 </div>
                 
                 <div>
-                  <Label htmlFor="email">Email (para enviar invitación)</Label>
+                  <Label htmlFor="email">Email <span className="text-red-500">*</span></Label>
                   <Input
                     id="email"
                     type="email"
@@ -601,10 +601,11 @@ const ChildTracking = () => {
                     value={newChild.email}
                     onChange={(e) => setNewChild({ ...newChild, email: e.target.value })}
                     className="mt-1"
+                    required
                     data-testid="child-email-input"
                   />
                   <p className="text-xs text-zinc-500 mt-1">
-                    📧 Se enviará un enlace de vinculación a este email
+                    📧 Obligatorio - Se enviará un enlace de vinculación a este email
                   </p>
                 </div>
                 
