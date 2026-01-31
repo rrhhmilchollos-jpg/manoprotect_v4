@@ -4,6 +4,7 @@ import "@/index.css";
 import App from "@/App";
 import { Toaster } from "sonner";
 import { HelmetProvider } from "react-helmet-async";
+import { I18nProvider } from "@/i18n/I18nContext";
 
 // Suppress PostHog/analytics errors in preview environment
 const suppressPostHogError = (event) => {
@@ -40,8 +41,10 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <HelmetProvider>
-      <App />
-      <Toaster position="top-right" richColors />
+      <I18nProvider>
+        <App />
+        <Toaster position="top-right" richColors />
+      </I18nProvider>
     </HelmetProvider>
   </React.StrictMode>,
 );
