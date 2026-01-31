@@ -111,6 +111,13 @@ Plataforma de protección contra fraudes y estafas digitales para familias espa�
   - Soporte RTL para árabe
   - Landing page principal traducida a todos los idiomas
   - Archivos: `/app/frontend/src/i18n/locales/[lang].json`
+- **✅ Sistema Trial 7 Días con Verificación de Tarjeta (31 enero 2026 - sesión 2)**
+  - Verificación de tarjeta con cobro de 0,00€
+  - Cobro automático de €29,99/mes después de 7 días
+  - Cancelación posible antes de los 7 días sin cargo
+  - Endpoints: `/api/create-trial-subscription`, `/api/trial/status/{id}`, `/api/trial/cancel`
+  - Página de éxito: `/trial-success`
+  - Cambio de "Precios" a "Ver Planes" en navegación (todos los idiomas)
 - **✅ Proyecto iOS Completo (31 enero 2026)**
   - Capacitor iOS configurado
   - Iconos iOS generados (todos los tamaños requeridos)
