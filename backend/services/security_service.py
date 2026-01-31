@@ -124,15 +124,22 @@ def hash_password_secure(password: str) -> str:
 
 def verify_password_secure(password: str, stored_hash: str) -> bool:
     """Verify password against secure hash"""
-    print(f"[DEBUG] verify_password_secure called with hash length={len(stored_hash)}, has_dollar={'$' in stored_hash}")
+    print(f"[DEBUG] verify_password_secure called with hash length={len(stored_hash)}, starts_with=${stored_hash[:4] if stored_hash else 'NONE'}")
     try:
-        # Handle legacy SHA-256 hashes (no salt)
+        # Handle bcrypt hashes (start with $2a$, $2b$, or $2y$)
+        if stored_hash.startswith('$2'):
+            import bcrypt
+            result = bcrypt.checkpw(password.encode(), stored_hash.encode())
+            print(f"[DEBUG] Bcrypt hash verification: {result}")
+            return result
+        
+        # Handle legacy SHA-256 hashes (no salt, 64 chars hex)
         if '$' not in stored_hash:
             result = hashlib.sha256(password.encode()).hexdigest() == stored_hash
             print(f"[DEBUG] Legacy hash verification: {result}")
             return result
         
-        # New secure format
+        # New secure format (PBKDF2)
         salt, pwd_hash = stored_hash.split('$')
         check_hash = hashlib.pbkdf2_hmac(
             'sha256',
