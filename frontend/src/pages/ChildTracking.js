@@ -37,8 +37,18 @@ const ChildTracking = () => {
   const [newChild, setNewChild] = useState({
     name: '',
     phone: '',
+    age: '',
     silent_mode: false
   });
+
+  // Determine person type based on age
+  const getPersonType = (age) => {
+    if (!age) return 'familiar';
+    const ageNum = parseInt(age);
+    if (ageNum < 18) return 'niño';
+    if (ageNum >= 65) return 'anciano';
+    return 'adulto';
+  };
 
   useEffect(() => {
     loadChildren();
