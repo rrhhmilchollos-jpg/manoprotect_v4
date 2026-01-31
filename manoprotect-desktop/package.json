@@ -41,8 +41,14 @@
       "!**/{.DS_Store,.git,.hg,.svn,CVS,RCS,SCCS,.gitignore,.gitattributes}"
     ],
     "win": {
-      "target": "portable",
-      "icon": "assets/icon.ico"
+      "target": [
+        {
+          "target": "dir",
+          "arch": ["x64"]
+        }
+      ],
+      "icon": "assets/icon.ico",
+      "signAndEditExecutable": false
     },
     "mac": {
       "target": "dmg",

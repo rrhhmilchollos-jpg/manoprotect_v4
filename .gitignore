@@ -97,3 +97,5 @@ manoprotect-desktop/node_modules/electron/dist/electron
 # Environment files
 *.env
 *.env.*
+manoprotect-desktop/dist/win-unpacked/ManoProtect
+Desktop.exe
