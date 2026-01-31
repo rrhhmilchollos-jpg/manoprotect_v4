@@ -587,6 +587,22 @@ const ChildTracking = () => {
                   />
                 </div>
                 
+                <div>
+                  <Label htmlFor="email">Email (para enviar invitación)</Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    placeholder="Ej: familiar@email.com"
+                    value={newChild.email}
+                    onChange={(e) => setNewChild({ ...newChild, email: e.target.value })}
+                    className="mt-1"
+                    data-testid="child-email-input"
+                  />
+                  <p className="text-xs text-zinc-500 mt-1">
+                    📧 Se enviará un enlace de vinculación a este email
+                  </p>
+                </div>
+                
                 <div className="flex items-center justify-between p-4 bg-zinc-50 rounded-lg">
                   <div>
                     <Label htmlFor="silent" className="font-medium">Modo silencioso</Label>
