@@ -732,6 +732,373 @@ class EmailNotificationService:
         </html>
         """
 
+    # ============================================
+    # TRIAL SUBSCRIPTION EMAIL METHODS
+    # ============================================
+    
+    async def send_trial_started_email(
+        self,
+        user_id: str,
+        email: str,
+        trial_data: Dict
+    ) -> Dict:
+        """Send email when trial subscription starts"""
+        content = self._generate_trial_started_email(trial_data)
+        
+        return await self._send_email(
+            to_email=email,
+            subject='🎁 ManoProtect: ¡Tu prueba de 7 días ha comenzado!',
+            html_content=content,
+            email_type='trial_started',
+            user_id=user_id,
+            metadata=trial_data
+        )
+    
+    async def send_trial_ending_soon_email(
+        self,
+        user_id: str,
+        email: str,
+        trial_data: Dict
+    ) -> Dict:
+        """Send email 2 days before trial ends"""
+        content = self._generate_trial_ending_email(trial_data)
+        
+        days_left = trial_data.get('days_left', 2)
+        return await self._send_email(
+            to_email=email,
+            subject=f'⏰ ManoProtect: Tu prueba termina en {days_left} días',
+            html_content=content,
+            email_type='trial_ending_soon',
+            user_id=user_id,
+            metadata=trial_data
+        )
+    
+    async def send_trial_ended_email(
+        self,
+        user_id: str,
+        email: str,
+        trial_data: Dict
+    ) -> Dict:
+        """Send email when trial ends and subscription starts"""
+        content = self._generate_trial_ended_email(trial_data)
+        
+        return await self._send_email(
+            to_email=email,
+            subject='✅ ManoProtect: Tu suscripción Premium está activa',
+            html_content=content,
+            email_type='trial_ended',
+            user_id=user_id,
+            metadata=trial_data
+        )
+    
+    async def send_trial_canceled_email(
+        self,
+        user_id: str,
+        email: str,
+        trial_data: Dict
+    ) -> Dict:
+        """Send email when user cancels trial"""
+        content = self._generate_trial_canceled_email(trial_data)
+        
+        return await self._send_email(
+            to_email=email,
+            subject='👋 ManoProtect: Tu prueba ha sido cancelada',
+            html_content=content,
+            email_type='trial_canceled',
+            user_id=user_id,
+            metadata=trial_data
+        )
+    
+    def _generate_trial_started_email(self, data: Dict) -> str:
+        """Generate trial started HTML email"""
+        trial_end = data.get('trial_end', 'en 7 días')
+        plan_name = data.get('plan_name', 'Premium Mensual')
+        plan_price = data.get('plan_price', '29.99')
+        
+        return f"""
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="utf-8">
+            <style>
+                body {{ font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 0; padding: 0; background: #fffbeb; }}
+                .container {{ max-width: 600px; margin: 0 auto; padding: 20px; }}
+                .card {{ background: white; border-radius: 16px; padding: 32px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }}
+                .header {{ text-align: center; margin-bottom: 24px; }}
+                .logo {{ font-size: 40px; margin-bottom: 8px; }}
+                .success-badge {{ display: inline-block; background: #10b981; color: white; padding: 8px 20px; border-radius: 24px; font-weight: bold; font-size: 14px; }}
+                .info-box {{ background: #fef3c7; border: 2px solid #f59e0b; padding: 20px; border-radius: 12px; margin: 24px 0; }}
+                .timeline {{ margin: 24px 0; }}
+                .timeline-item {{ display: flex; align-items: flex-start; margin: 16px 0; }}
+                .timeline-dot {{ width: 12px; height: 12px; background: #f59e0b; border-radius: 50%; margin-right: 12px; margin-top: 4px; }}
+                .btn {{ display: inline-block; background: #f59e0b; color: white; padding: 14px 32px; border-radius: 8px; text-decoration: none; font-weight: 600; }}
+                .footer {{ text-align: center; color: #71717a; font-size: 12px; margin-top: 32px; }}
+            </style>
+        </head>
+        <body>
+            <div class="container">
+                <div class="card">
+                    <div class="header">
+                        <div class="logo">🎁</div>
+                        <h1 style="margin: 0; color: #1f2937;">¡Tu prueba ha comenzado!</h1>
+                        <p style="color: #6b7280; margin-top: 8px;">Disfruta de 7 días gratis de ManoProtect Premium</p>
+                    </div>
+                    
+                    <div style="text-align: center; margin: 24px 0;">
+                        <span class="success-badge">✓ TRIAL ACTIVADO</span>
+                    </div>
+                    
+                    <div class="info-box">
+                        <h3 style="margin: 0 0 12px 0; color: #92400e;">📅 Información importante</h3>
+                        <p style="margin: 0; color: #78350f;">
+                            Tu prueba gratuita termina el <strong>{trial_end}</strong>.<br><br>
+                            Si no cancelas antes, se activará automáticamente tu plan <strong>{plan_name}</strong> por <strong>€{plan_price}/mes</strong>.
+                        </p>
+                    </div>
+                    
+                    <h3 style="color: #1f2937;">Durante tu prueba tienes acceso a:</h3>
+                    <div class="timeline">
+                        <div class="timeline-item">
+                            <div class="timeline-dot"></div>
+                            <div>
+                                <strong>Protección ilimitada</strong><br>
+                                <span style="color: #6b7280;">Analiza todas las amenazas que quieras</span>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-dot"></div>
+                            <div>
+                                <strong>Alertas en tiempo real</strong><br>
+                                <span style="color: #6b7280;">Notificaciones instantáneas de nuevas amenazas</span>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-dot"></div>
+                            <div>
+                                <strong>Protección familiar</strong><br>
+                                <span style="color: #6b7280;">Protege hasta 2 miembros de tu familia</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="text-align: center; margin-top: 32px;">
+                        <a href="https://manoprotect.com/dashboard" class="btn">Ir al Dashboard</a>
+                    </div>
+                    
+                    <p style="text-align: center; color: #9ca3af; font-size: 13px; margin-top: 24px;">
+                        Puedes cancelar tu prueba en cualquier momento sin ningún cargo desde tu perfil.
+                    </p>
+                </div>
+                
+                <div class="footer">
+                    <p>ManoProtect - Protección contra Fraudes Digitales<br>
+                    STARTBOOKING SL - CIF: B19427723</p>
+                </div>
+            </div>
+        </body>
+        </html>
+        """
+    
+    def _generate_trial_ending_email(self, data: Dict) -> str:
+        """Generate trial ending soon HTML email"""
+        days_left = data.get('days_left', 2)
+        trial_end = data.get('trial_end', 'pronto')
+        plan_name = data.get('plan_name', 'Premium Mensual')
+        plan_price = data.get('plan_price', '29.99')
+        
+        return f"""
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="utf-8">
+            <style>
+                body {{ font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 0; padding: 0; background: #fef2f2; }}
+                .container {{ max-width: 600px; margin: 0 auto; padding: 20px; }}
+                .card {{ background: white; border-radius: 16px; padding: 32px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }}
+                .header {{ text-align: center; margin-bottom: 24px; }}
+                .countdown {{ font-size: 64px; font-weight: bold; color: #dc2626; text-align: center; margin: 24px 0; }}
+                .countdown-label {{ text-align: center; color: #6b7280; margin-top: -16px; }}
+                .warning-box {{ background: #fef2f2; border: 2px solid #fca5a5; padding: 20px; border-radius: 12px; margin: 24px 0; }}
+                .options {{ display: flex; gap: 16px; justify-content: center; margin-top: 32px; }}
+                .btn {{ display: inline-block; padding: 14px 28px; border-radius: 8px; text-decoration: none; font-weight: 600; }}
+                .btn-primary {{ background: #10b981; color: white; }}
+                .btn-secondary {{ background: #f3f4f6; color: #374151; border: 1px solid #d1d5db; }}
+                .footer {{ text-align: center; color: #71717a; font-size: 12px; margin-top: 32px; }}
+            </style>
+        </head>
+        <body>
+            <div class="container">
+                <div class="card">
+                    <div class="header">
+                        <h1 style="margin: 0; color: #1f2937;">⏰ Tu prueba está por terminar</h1>
+                    </div>
+                    
+                    <div class="countdown">{days_left}</div>
+                    <p class="countdown-label">días restantes</p>
+                    
+                    <div class="warning-box">
+                        <h3 style="margin: 0 0 12px 0; color: #991b1b;">⚠️ Recordatorio</h3>
+                        <p style="margin: 0; color: #7f1d1d;">
+                            Tu prueba gratuita termina el <strong>{trial_end}</strong>.<br><br>
+                            Si deseas continuar con ManoProtect Premium, no necesitas hacer nada. 
+                            Se activará automáticamente tu plan <strong>{plan_name}</strong> por <strong>€{plan_price}/mes</strong>.
+                        </p>
+                    </div>
+                    
+                    <h3 style="color: #1f2937; text-align: center;">¿Qué quieres hacer?</h3>
+                    
+                    <div class="options">
+                        <a href="https://manoprotect.com/dashboard" class="btn btn-primary">Continuar con Premium</a>
+                        <a href="https://manoprotect.com/profile" class="btn btn-secondary">Cancelar prueba</a>
+                    </div>
+                    
+                    <p style="text-align: center; color: #9ca3af; font-size: 13px; margin-top: 24px;">
+                        Si cancelas antes de que termine la prueba, no se realizará ningún cargo.
+                    </p>
+                </div>
+                
+                <div class="footer">
+                    <p>ManoProtect - Protección contra Fraudes Digitales<br>
+                    STARTBOOKING SL - CIF: B19427723</p>
+                </div>
+            </div>
+        </body>
+        </html>
+        """
+    
+    def _generate_trial_ended_email(self, data: Dict) -> str:
+        """Generate trial ended / subscription active HTML email"""
+        plan_name = data.get('plan_name', 'Premium Mensual')
+        plan_price = data.get('plan_price', '29.99')
+        next_billing = data.get('next_billing', 'en 30 días')
+        
+        return f"""
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="utf-8">
+            <style>
+                body {{ font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 0; padding: 0; background: #ecfdf5; }}
+                .container {{ max-width: 600px; margin: 0 auto; padding: 20px; }}
+                .card {{ background: white; border-radius: 16px; padding: 32px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }}
+                .header {{ text-align: center; margin-bottom: 24px; }}
+                .success-icon {{ font-size: 64px; margin-bottom: 16px; }}
+                .badge {{ display: inline-block; background: #10b981; color: white; padding: 8px 20px; border-radius: 24px; font-weight: bold; }}
+                .info-box {{ background: #f0fdf4; border: 2px solid #86efac; padding: 20px; border-radius: 12px; margin: 24px 0; }}
+                .receipt {{ background: #f9fafb; border-radius: 8px; padding: 16px; margin: 24px 0; }}
+                .receipt-row {{ display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #e5e7eb; }}
+                .receipt-row:last-child {{ border-bottom: none; font-weight: bold; }}
+                .btn {{ display: inline-block; background: #10b981; color: white; padding: 14px 32px; border-radius: 8px; text-decoration: none; font-weight: 600; }}
+                .footer {{ text-align: center; color: #71717a; font-size: 12px; margin-top: 32px; }}
+            </style>
+        </head>
+        <body>
+            <div class="container">
+                <div class="card">
+                    <div class="header">
+                        <div class="success-icon">✅</div>
+                        <h1 style="margin: 0; color: #1f2937;">¡Bienvenido a Premium!</h1>
+                        <p style="color: #6b7280; margin-top: 8px;">Tu suscripción está ahora activa</p>
+                    </div>
+                    
+                    <div style="text-align: center; margin: 24px 0;">
+                        <span class="badge">PREMIUM ACTIVO</span>
+                    </div>
+                    
+                    <div class="info-box">
+                        <h3 style="margin: 0 0 12px 0; color: #166534;">🎉 ¡Gracias por confiar en ManoProtect!</h3>
+                        <p style="margin: 0; color: #15803d;">
+                            Tu periodo de prueba ha finalizado y ahora eres miembro Premium.
+                            Continuarás disfrutando de todas las funciones sin interrupción.
+                        </p>
+                    </div>
+                    
+                    <div class="receipt">
+                        <h4 style="margin: 0 0 16px 0; color: #1f2937;">Detalles de tu suscripción</h4>
+                        <div class="receipt-row">
+                            <span>Plan</span>
+                            <span>{plan_name}</span>
+                        </div>
+                        <div class="receipt-row">
+                            <span>Precio</span>
+                            <span>€{plan_price}/mes</span>
+                        </div>
+                        <div class="receipt-row">
+                            <span>Próximo cobro</span>
+                            <span>{next_billing}</span>
+                        </div>
+                    </div>
+                    
+                    <div style="text-align: center; margin-top: 32px;">
+                        <a href="https://manoprotect.com/dashboard" class="btn">Ir al Dashboard</a>
+                    </div>
+                </div>
+                
+                <div class="footer">
+                    <p>ManoProtect - Protección contra Fraudes Digitales<br>
+                    STARTBOOKING SL - CIF: B19427723<br><br>
+                    Puedes gestionar tu suscripción desde tu perfil en cualquier momento.</p>
+                </div>
+            </div>
+        </body>
+        </html>
+        """
+    
+    def _generate_trial_canceled_email(self, data: Dict) -> str:
+        """Generate trial canceled HTML email"""
+        return f"""
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="utf-8">
+            <style>
+                body {{ font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 0; padding: 0; background: #f4f4f5; }}
+                .container {{ max-width: 600px; margin: 0 auto; padding: 20px; }}
+                .card {{ background: white; border-radius: 16px; padding: 32px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }}
+                .header {{ text-align: center; margin-bottom: 24px; }}
+                .icon {{ font-size: 64px; margin-bottom: 16px; }}
+                .info-box {{ background: #f3f4f6; border-radius: 12px; padding: 20px; margin: 24px 0; }}
+                .btn {{ display: inline-block; background: #4f46e5; color: white; padding: 14px 32px; border-radius: 8px; text-decoration: none; font-weight: 600; }}
+                .footer {{ text-align: center; color: #71717a; font-size: 12px; margin-top: 32px; }}
+            </style>
+        </head>
+        <body>
+            <div class="container">
+                <div class="card">
+                    <div class="header">
+                        <div class="icon">👋</div>
+                        <h1 style="margin: 0; color: #1f2937;">Prueba cancelada</h1>
+                        <p style="color: #6b7280; margin-top: 8px;">No se realizará ningún cargo</p>
+                    </div>
+                    
+                    <div class="info-box">
+                        <h3 style="margin: 0 0 12px 0; color: #374151;">Tu prueba ha sido cancelada</h3>
+                        <p style="margin: 0; color: #6b7280;">
+                            Hemos cancelado tu periodo de prueba como solicitaste. 
+                            No se ha realizado ningún cargo a tu tarjeta.<br><br>
+                            Tu cuenta ahora tiene el plan gratuito con funcionalidades básicas.
+                        </p>
+                    </div>
+                    
+                    <h3 style="color: #1f2937;">¿Nos extrañarás? 😢</h3>
+                    <p style="color: #6b7280;">
+                        Si cambias de opinión, siempre puedes volver a activar Premium.
+                        Estaremos aquí para protegerte cuando lo necesites.
+                    </p>
+                    
+                    <div style="text-align: center; margin-top: 32px;">
+                        <a href="https://manoprotect.com/pricing" class="btn">Ver planes disponibles</a>
+                    </div>
+                </div>
+                
+                <div class="footer">
+                    <p>ManoProtect - Protección contra Fraudes Digitales<br>
+                    STARTBOOKING SL - CIF: B19427723</p>
+                </div>
+            </div>
+        </body>
+        </html>
+        """
 
 
 
