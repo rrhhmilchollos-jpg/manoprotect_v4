@@ -143,6 +143,9 @@ init_profile_routes(db)
 from routes.family_sos_routes import router as family_sos_router, init_family_routes
 init_family_routes(db, PLAN_FEATURES)
 
+# Payment Routes (Stripe)
+from routes.payments_routes import router as payments_router
+
 # Banking and Compliance services - RESERVED for ManoBank.es
 # from services.compliance_service import init_compliance_service
 # from routes.compliance_routes import router as compliance_router, init_compliance_routes
