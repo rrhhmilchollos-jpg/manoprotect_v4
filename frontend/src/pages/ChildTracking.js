@@ -456,6 +456,40 @@ const ChildTracking = () => {
           </CardContent>
         </Card>
 
+        {/* SOS Emergency Button Card */}
+        <Card className="mb-6 bg-gradient-to-br from-red-600 to-red-700 border-0 shadow-lg shadow-red-500/30">
+          <CardContent className="p-6 text-center">
+            <h3 className="text-xl font-bold text-white mb-2">EMERGENCIA FAMILIAR</h3>
+            <p className="text-red-100 text-sm mb-4">
+              Pulsa el botón para enviar tu ubicación exacta a todos tus familiares
+            </p>
+            
+            <Button
+              onClick={() => navigate('/sos-emergency')}
+              className="w-32 h-32 rounded-full bg-white hover:bg-red-100 text-red-600 text-3xl font-black shadow-xl mx-auto flex flex-col items-center justify-center"
+              data-testid="sos-main-button"
+            >
+              <span className="text-4xl">SOS</span>
+              <span className="text-xs font-normal mt-1">⚠️ Pulsa si necesitas ayuda urgente</span>
+            </Button>
+            
+            <div className="grid grid-cols-3 gap-2 mt-6 text-white text-xs">
+              <div className="flex flex-col items-center">
+                <MapPin className="w-5 h-5 mb-1" />
+                <span>GPS Preciso</span>
+              </div>
+              <div className="flex flex-col items-center">
+                <Users className="w-5 h-5 mb-1" />
+                <span>Toda la Familia</span>
+              </div>
+              <div className="flex flex-col items-center">
+                <Send className="w-5 h-5 mb-1" />
+                <span>Instantáneo</span>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
         {/* Info Card */}
         <Card className="mb-6 bg-blue-50 border-blue-200">
           <CardContent className="p-4">
