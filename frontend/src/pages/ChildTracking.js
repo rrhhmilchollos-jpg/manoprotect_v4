@@ -182,17 +182,30 @@ const ChildTracking = () => {
       return;
     }
 
+    if (!newChild.age) {
+      toast.error('Por favor, indica la edad para clasificar automáticamente');
+      return;
+    }
+
     try {
-      const response = await axios.post(`${API}/family/children/add`, newChild, {
+      const payload = {
+        name: newChild.name,
+        phone: newChild.phone,
+        age: parseInt(newChild.age),
+        silent_mode: newChild.silent_mode
+      };
+      
+      const response = await axios.post(`${API}/family/children/add`, payload, {
         withCredentials: true
       });
       
       toast.success(response.data.message);
       setShowAddForm(false);
-      setNewChild({ name: '', phone: '', silent_mode: false });
-      loadChildren();
+      setNewChild({ name: '', phone: '', age: '', silent_mode: false });
+      await loadChildren();
     } catch (error) {
-      toast.error(error.response?.data?.detail || 'Error al añadir niño');
+      console.error('Error adding child:', error);
+      toast.error(error.response?.data?.detail || 'Error al añadir familiar');
     }
   };
 
