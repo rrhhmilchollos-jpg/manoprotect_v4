@@ -60,6 +60,7 @@ const Pricing = () => {
     const sessionId = searchParams.get('session_id');
     const success = searchParams.get('success');
     const canceled = searchParams.get('canceled');
+    const trialCanceled = searchParams.get('trial_canceled');
 
     if (sessionId && success === 'true') {
       setCheckingPayment(true);
@@ -70,8 +71,29 @@ const Pricing = () => {
     } else if (canceled === 'true') {
       toast.info('Pago cancelado. Puedes intentarlo de nuevo cuando quieras.');
       setSearchParams({});
+    } else if (trialCanceled === 'true') {
+      toast.info('Prueba cancelada. Puedes activarla cuando quieras.');
+      setSearchParams({});
     }
   }, [searchParams, setSearchParams, pollPaymentStatus]);
+
+  // Plan de prueba 7 días
+  const trialPlan = {
+    name: 'Prueba 7 Días GRATIS',
+    price: 0,
+    period: '/ 7 días',
+    icon: Zap,
+    color: 'amber',
+    badge: '🎁 PROBAR GRATIS',
+    description: 'Verifica tu tarjeta (0,00€) y prueba todas las funciones Premium durante 7 días. Si no cancelas, se cobrará el plan seleccionado automáticamente.',
+    features: [
+      '✅ Verificación de tarjeta (0,00€)',
+      '✅ Acceso completo 7 días',
+      '✅ Cancela cuando quieras sin cargo',
+      '✅ Todas las funciones Premium',
+      '⚠️ Después: cobro automático del plan'
+    ]
+  };
 
   const plans = {
     free: {
