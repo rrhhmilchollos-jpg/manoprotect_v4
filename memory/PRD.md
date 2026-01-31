@@ -104,6 +104,13 @@ Plataforma de protección contra fraudes y estafas digitales para familias espa�
   - Enlace de vinculación visible para miembros pendientes
   - Botones "Enviar por WhatsApp" y "Enviar por Email" funcionando
   - Archivo modificado: `/app/backend/services/security_service.py`
+- **✅ Sistema i18n Multiidioma COMPLETO (31 enero 2026 - sesión 2)**
+  - 9 idiomas soportados: Español, Inglés, Francés, Alemán, Italiano, Portugués, Chino, Ruso, Árabe
+  - Detección automática por IP del país del usuario
+  - Selector de idiomas en el header con banderas
+  - Soporte RTL para árabe
+  - Landing page principal traducida a todos los idiomas
+  - Archivos: `/app/frontend/src/i18n/locales/[lang].json`
 - **✅ Proyecto iOS Completo (31 enero 2026)**
   - Capacitor iOS configurado
   - Iconos iOS generados (todos los tamaños requeridos)
