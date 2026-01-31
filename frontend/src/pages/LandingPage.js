@@ -4,10 +4,13 @@ import { Button } from '@/components/ui/button';
 import { useAuth } from '@/context/AuthContext';
 import SEO from '@/components/SEO';
 import AlertSubscription from '@/components/AlertSubscription';
+import LanguageSelector from '@/components/LanguageSelector';
+import { useI18n } from '@/i18n/I18nContext';
 
 const LandingPage = () => {
   const navigate = useNavigate();
   const { isAuthenticated, user } = useAuth();
+  const { t } = useI18n();
 
   return (
     <div className="min-h-screen bg-zinc-50">
@@ -28,13 +31,14 @@ const LandingPage = () => {
             />
           </div>
           <div className="flex items-center gap-3">
+            <LanguageSelector className="mr-2" />
             <Button
               data-testid="header-pricing-btn"
               onClick={() => navigate('/pricing')}
               variant="ghost"
               className="text-zinc-700 hover:text-indigo-600 rounded-lg px-4 h-10"
             >
-              Precios
+              {t('nav.pricing')}
             </Button>
             <Button
               data-testid="header-investors-btn"
@@ -50,7 +54,7 @@ const LandingPage = () => {
                 onClick={() => navigate('/dashboard')}
                 className="bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg px-6 h-12 shadow-sm hover:shadow-md active:scale-95 transition-all"
               >
-                Mi Dashboard
+                {t('nav.dashboard')}
               </Button>
             ) : (
               <>
@@ -61,14 +65,14 @@ const LandingPage = () => {
                   className="border-indigo-600 text-indigo-600 hover:bg-indigo-50 rounded-lg px-4 h-10"
                 >
                   <LogIn className="w-4 h-4 mr-2" />
-                  Iniciar Sesión
+                  {t('nav.login')}
                 </Button>
                 <Button
                   data-testid="header-register-btn"
                   onClick={() => navigate('/register')}
                   className="bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg px-6 h-12 shadow-sm hover:shadow-md active:scale-95 transition-all"
                 >
-                  Registrarse Gratis
+                  {t('nav.register')}
                 </Button>
               </>
             )}
