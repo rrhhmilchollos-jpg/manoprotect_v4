@@ -118,6 +118,16 @@ Plataforma de protección contra fraudes y estafas digitales para familias espa�
   - Endpoints: `/api/create-trial-subscription`, `/api/trial/status/{id}`, `/api/trial/cancel`
   - Página de éxito: `/trial-success`
   - Cambio de "Precios" a "Ver Planes" en navegación (todos los idiomas)
+- **✅ Webhook Stripe para Eventos de Trial (31 enero 2026 - sesión 2)**
+  - Maneja eventos: subscription.created, trial_will_end, subscription.updated, subscription.deleted
+  - Actualiza automáticamente el estado del usuario en la BD
+  - Integrado con sistema de emails
+- **✅ Notificaciones Email de Trial (31 enero 2026 - sesión 2)**
+  - Email de bienvenida al iniciar trial
+  - Email de recordatorio 2-3 días antes de que termine
+  - Email de confirmación cuando se activa la suscripción
+  - Email de despedida si cancela el trial
+  - Templates HTML profesionales con branding ManoProtect
 - **✅ Proyecto iOS Completo (31 enero 2026)**
   - Capacitor iOS configurado
   - Iconos iOS generados (todos los tamaños requeridos)
