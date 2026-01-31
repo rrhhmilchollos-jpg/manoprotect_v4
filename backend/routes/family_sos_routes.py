@@ -903,15 +903,33 @@ async def add_child_member(
         "family_owner_id": user.user_id,
         "name": data.name,
         "phone": data.phone,
+        "email": data.email,
         "age": data.age,
         "person_type": person_type,
         "silent_mode": data.silent_mode,
         "device_linked": False,
         "last_location": None,
+        "invite_token": uuid.uuid4().hex[:16],
         "created_at": datetime.now(timezone.utc).isoformat()
     }
     
     await _db.family_children.insert_one(child)
+    
+    # Send invitation email if email provided
+    email_sent = False
+    if data.email:
+        try:
+            # Generate invite link
+            invite_link = f"https://manoprotect.com/vincular/{child['child_id']}?token={child['invite_token']}"
+            
+            result = await email_service.send_family_invite(
+                owner_name=user.name,
+                member_data=child,
+                invite_link=invite_link
+            )
+            email_sent = result.get("success", False)
+        except Exception as e:
+            print(f"Error sending invite email: {e}")
     
     # Mensaje personalizado según tipo
     type_messages = {
@@ -921,10 +939,13 @@ async def add_child_member(
         "unknown": f"Familiar '{data.name}' añadido"
     }
     
+    invite_msg = " Se ha enviado un email de invitación." if email_sent else " Instala la app MANO en su teléfono para completar la vinculación."
+    
     return {
         "success": True, 
         "child": {k: v for k, v in child.items() if k != "_id"},
-        "message": f"{type_messages[person_type]}. Instala la app MANO en su teléfono para completar la vinculación."
+        "email_sent": email_sent,
+        "message": f"{type_messages[person_type]}.{invite_msg}"
     }
 
 
