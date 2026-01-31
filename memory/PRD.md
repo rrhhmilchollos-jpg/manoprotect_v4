@@ -128,6 +128,10 @@ Plataforma de protección contra fraudes y estafas digitales para familias espa�
   - Email de confirmación cuando se activa la suscripción
   - Email de despedida si cancela el trial
   - Templates HTML profesionales con branding ManoProtect
+- **✅ Preparación para Despliegue (31 enero 2026 - sesión 2)**
+  - Limpiado .gitignore para permitir archivos .env
+  - Firebase actualizado para usar variables de entorno (FIREBASE_PROJECT_ID, FIREBASE_PRIVATE_KEY, FIREBASE_CLIENT_EMAIL)
+  - Health check de deployment aprobado
 - **✅ Proyecto iOS Completo (31 enero 2026)**
   - Capacitor iOS configurado
   - Iconos iOS generados (todos los tamaños requeridos)
