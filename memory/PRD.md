@@ -74,6 +74,13 @@ Plataforma de protección contra fraudes y estafas digitales para familias espa�
   - Paquete descargable: `/app/ManoProtect-GooglePlay.zip`
   - Guía de compilación: `/app/frontend/ANDROID_BUILD_GUIDE.md`
   - Ficha de Play Store: `/app/frontend/GOOGLE_PLAY_LISTING.md`
+- **✅ Desktop App para Empleados COMPLETA (31 enero 2026)**
+  - Electron app con SQLite local
+  - Funcionalidades: Dashboard, Gestión de amenazas, Clientes, Verificador de estafas, Tickets, Chat interno
+  - Ejecutable Windows compilado: `ManoProtect Desktop.exe` (107MB)
+  - ZIP descargable: `/app/frontend/public/ManoProtect-Desktop-Windows.zip`
+  - Página de descarga: `/empleados/descargar`
+  - Credenciales: admin@manoprotect.com / Admin2024!
 - **✅ Correcciones AdSense (30 enero 2026)**
   - Páginas de callback/loading mejoradas con contenido real
   - Meta tags para excluir páginas sin contenido de ads
