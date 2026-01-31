@@ -366,32 +366,222 @@ async def get_checkout_status(session_id: str, http_request: Request):
 
 @router.post("/webhook/stripe")
 async def stripe_webhook(request: Request):
-    """Handle Stripe webhooks"""
+    """Handle Stripe webhooks including trial subscription events"""
     try:
         payload = await request.body()
+        sig_header = request.headers.get("Stripe-Signature")
         
-        host_url = str(request.base_url).rstrip('/')
-        webhook_url = f"{host_url}/api/webhook/stripe"
-        stripe_checkout = StripeCheckout(api_key=STRIPE_API_KEY, webhook_url=webhook_url)
+        # Get webhook secret from env (if configured)
+        webhook_secret = os.environ.get('STRIPE_WEBHOOK_SECRET')
         
-        webhook_response = await stripe_checkout.handle_webhook(
-            payload,
-            request.headers.get("Stripe-Signature")
-        )
+        event = None
         
-        if webhook_response.session_id:
+        # Verify webhook signature if secret is configured
+        if webhook_secret:
+            try:
+                event = stripe.Webhook.construct_event(
+                    payload, sig_header, webhook_secret
+                )
+            except stripe.error.SignatureVerificationError as e:
+                logging.error(f"Webhook signature verification failed: {e}")
+                raise HTTPException(status_code=400, detail="Invalid signature")
+        else:
+            # Parse event without signature verification (development mode)
+            import json
+            event = stripe.Event.construct_from(
+                json.loads(payload), stripe.api_key
+            )
+        
+        event_type = event.type
+        event_data = event.data.object
+        
+        logging.info(f"Stripe webhook received: {event_type}")
+        
+        # Import email service
+        from services.email_service import email_service
+        
+        # Handle different event types
+        if event_type == 'customer.subscription.created':
+            # New subscription created (trial started)
+            subscription_id = event_data.id
+            customer_id = event_data.customer
+            trial_end = event_data.trial_end
+            
+            # Find trial record
+            trial = await db.trial_subscriptions.find_one({"customer_id": customer_id})
+            if trial:
+                trial_end_date = datetime.fromtimestamp(trial_end, tz=timezone.utc) if trial_end else None
+                await db.trial_subscriptions.update_one(
+                    {"customer_id": customer_id},
+                    {"$set": {
+                        "stripe_subscription_id": subscription_id,
+                        "status": "trialing",
+                        "trial_end": trial_end_date.isoformat() if trial_end_date else None,
+                        "updated_at": datetime.now(timezone.utc).isoformat()
+                    }}
+                )
+                
+                # Send trial started email
+                await email_service.send_trial_started_email(
+                    user_id=trial.get("user_id"),
+                    email=trial.get("email"),
+                    trial_data={
+                        "trial_end": trial_end_date.strftime("%d de %B de %Y") if trial_end_date else "en 7 días",
+                        "plan_name": trial.get("plan_after_trial", "Premium Mensual"),
+                        "plan_price": str(trial.get("plan_amount", 29.99))
+                    }
+                )
+                
+                # Update user plan
+                await db.users.update_one(
+                    {"user_id": trial.get("user_id")},
+                    {"$set": {
+                        "plan": "trial-7days",
+                        "subscription_status": "trialing",
+                        "trial_end": trial_end_date.isoformat() if trial_end_date else None
+                    }}
+                )
+        
+        elif event_type == 'customer.subscription.trial_will_end':
+            # Trial ending in 3 days (Stripe sends this automatically)
+            subscription_id = event_data.id
+            customer_id = event_data.customer
+            trial_end = event_data.trial_end
+            
+            trial = await db.trial_subscriptions.find_one({"stripe_subscription_id": subscription_id})
+            if trial:
+                trial_end_date = datetime.fromtimestamp(trial_end, tz=timezone.utc) if trial_end else None
+                now = datetime.now(timezone.utc)
+                days_left = (trial_end_date - now).days if trial_end_date else 3
+                
+                # Send trial ending soon email
+                await email_service.send_trial_ending_soon_email(
+                    user_id=trial.get("user_id"),
+                    email=trial.get("email"),
+                    trial_data={
+                        "days_left": days_left,
+                        "trial_end": trial_end_date.strftime("%d de %B de %Y") if trial_end_date else "pronto",
+                        "plan_name": trial.get("plan_after_trial", "Premium Mensual"),
+                        "plan_price": str(trial.get("plan_amount", 29.99))
+                    }
+                )
+        
+        elif event_type == 'customer.subscription.updated':
+            # Subscription updated (could be trial ended -> active)
+            subscription_id = event_data.id
+            status = event_data.status
+            
+            if status == 'active':
+                # Trial ended, subscription is now active
+                trial = await db.trial_subscriptions.find_one({"stripe_subscription_id": subscription_id})
+                if trial and trial.get("status") == "trialing":
+                    current_period_end = event_data.current_period_end
+                    next_billing = datetime.fromtimestamp(current_period_end, tz=timezone.utc) if current_period_end else None
+                    
+                    await db.trial_subscriptions.update_one(
+                        {"stripe_subscription_id": subscription_id},
+                        {"$set": {
+                            "status": "active",
+                            "subscription_started_at": datetime.now(timezone.utc).isoformat(),
+                            "updated_at": datetime.now(timezone.utc).isoformat()
+                        }}
+                    )
+                    
+                    # Update user to paid plan
+                    plan_type = trial.get("plan_after_trial", "monthly")
+                    await db.users.update_one(
+                        {"user_id": trial.get("user_id")},
+                        {"$set": {
+                            "plan": plan_type,
+                            "subscription_status": "active",
+                            "trial_end": None
+                        }}
+                    )
+                    
+                    # Send subscription active email
+                    await email_service.send_trial_ended_email(
+                        user_id=trial.get("user_id"),
+                        email=trial.get("email"),
+                        trial_data={
+                            "plan_name": trial.get("plan_after_trial", "Premium Mensual"),
+                            "plan_price": str(trial.get("plan_amount", 29.99)),
+                            "next_billing": next_billing.strftime("%d de %B de %Y") if next_billing else "en 30 días"
+                        }
+                    )
+        
+        elif event_type == 'customer.subscription.deleted':
+            # Subscription canceled
+            subscription_id = event_data.id
+            
+            trial = await db.trial_subscriptions.find_one({"stripe_subscription_id": subscription_id})
+            if trial:
+                await db.trial_subscriptions.update_one(
+                    {"stripe_subscription_id": subscription_id},
+                    {"$set": {
+                        "status": "canceled",
+                        "canceled_at": datetime.now(timezone.utc).isoformat(),
+                        "updated_at": datetime.now(timezone.utc).isoformat()
+                    }}
+                )
+                
+                # Update user to free plan
+                await db.users.update_one(
+                    {"user_id": trial.get("user_id")},
+                    {"$set": {
+                        "plan": "free",
+                        "subscription_status": "canceled",
+                        "trial_end": None
+                    }}
+                )
+                
+                # Send canceled email
+                await email_service.send_trial_canceled_email(
+                    user_id=trial.get("user_id"),
+                    email=trial.get("email"),
+                    trial_data={}
+                )
+        
+        elif event_type == 'invoice.payment_succeeded':
+            # Payment successful
+            subscription_id = event_data.subscription
+            if subscription_id:
+                await db.trial_subscriptions.update_one(
+                    {"stripe_subscription_id": subscription_id},
+                    {"$set": {
+                        "last_payment_at": datetime.now(timezone.utc).isoformat(),
+                        "payment_status": "paid"
+                    }}
+                )
+        
+        elif event_type == 'invoice.payment_failed':
+            # Payment failed
+            subscription_id = event_data.subscription
+            if subscription_id:
+                await db.trial_subscriptions.update_one(
+                    {"stripe_subscription_id": subscription_id},
+                    {"$set": {
+                        "payment_status": "failed",
+                        "payment_failed_at": datetime.now(timezone.utc).isoformat()
+                    }}
+                )
+        
+        # Also handle checkout.session.completed for regular payments
+        elif event_type == 'checkout.session.completed':
+            session_id = event_data.id
+            payment_status = event_data.payment_status
+            
             await db.payment_transactions.update_one(
-                {"session_id": webhook_response.session_id},
+                {"session_id": session_id},
                 {"$set": {
-                    "status": webhook_response.event_type,
-                    "payment_status": webhook_response.payment_status,
+                    "status": "completed",
+                    "payment_status": payment_status,
                     "updated_at": datetime.now(timezone.utc).isoformat()
                 }}
             )
             
-            if webhook_response.payment_status == "paid":
+            if payment_status == "paid":
                 tx = await db.payment_transactions.find_one(
-                    {"session_id": webhook_response.session_id},
+                    {"session_id": session_id},
                     {"_id": 0}
                 )
                 if tx:
@@ -404,11 +594,14 @@ async def stripe_webhook(request: Request):
                         upsert=True
                     )
         
-        return {"status": "success", "event_type": webhook_response.event_type}
+        return {"status": "success", "event_type": event_type}
     
-    except Exception as e:
+    except stripe.error.StripeError as e:
         logging.error(f"Stripe webhook error: {e}")
         raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        logging.error(f"Webhook processing error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 # ============================================
