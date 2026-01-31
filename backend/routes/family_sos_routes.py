@@ -877,22 +877,33 @@ async def add_child_member(
     request: Request,
     session_token: Optional[str] = Cookie(None)
 ):
-    """Add a child to the family for tracking (Family Yearly only)"""
+    """Add a child/elderly person to the family for tracking (Family Yearly only)"""
     user = await require_auth(request, session_token)
     features = get_plan_features_for_user(user)
     
     if not features.get("child_tracking"):
         raise HTTPException(
             status_code=403, 
-            detail="La localización de niños requiere el Plan Familiar Anual. Actualiza tu plan para acceder a esta función."
+            detail="La localización de familiares requiere el Plan Familiar Anual. Actualiza tu plan para acceder a esta función."
         )
     
+    # Determinar tipo de persona según edad
+    person_type = "unknown"
+    if data.age is not None:
+        if data.age < 18:
+            person_type = "child"
+        elif data.age >= 65:
+            person_type = "elderly"
+        else:
+            person_type = "adult"
+    
     child = {
-        "child_id": f"child_{uuid.uuid4().hex[:12]}",
+        "child_id": f"member_{uuid.uuid4().hex[:12]}",
         "family_owner_id": user.user_id,
         "name": data.name,
         "phone": data.phone,
-        "is_child": True,
+        "age": data.age,
+        "person_type": person_type,
         "silent_mode": data.silent_mode,
         "device_linked": False,
         "last_location": None,
@@ -901,10 +912,18 @@ async def add_child_member(
     
     await _db.family_children.insert_one(child)
     
+    # Mensaje personalizado según tipo
+    type_messages = {
+        "child": f"Niño '{data.name}' añadido",
+        "elderly": f"Familiar mayor '{data.name}' añadido",
+        "adult": f"Adulto '{data.name}' añadido",
+        "unknown": f"Familiar '{data.name}' añadido"
+    }
+    
     return {
         "success": True, 
         "child": {k: v for k, v in child.items() if k != "_id"},
-        "message": f"Niño '{data.name}' añadido. Instala la app MANO en su teléfono para completar la vinculación."
+        "message": f"{type_messages[person_type]}. Instala la app MANO en su teléfono para completar la vinculación."
     }
 
 
