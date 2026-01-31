@@ -440,6 +440,63 @@ const Pricing = () => {
           </CardContent>
         </Card>
 
+        {/* Trial Banner - 7 días gratis */}
+        <Card className="mb-16 bg-gradient-to-br from-amber-50 to-yellow-50 border-amber-300 border-2 relative overflow-hidden">
+          <div className="absolute top-0 right-0 bg-amber-500 text-white px-8 py-2 transform rotate-45 translate-x-8 translate-y-4 text-sm font-bold">
+            GRATIS
+          </div>
+          <CardContent className="p-8">
+            <div className="grid md:grid-cols-2 gap-8 items-center">
+              <div>
+                <Badge className="bg-amber-500 text-white px-4 py-2 text-sm mb-4">
+                  🎁 OFERTA ESPECIAL
+                </Badge>
+                <h3 className="text-3xl font-bold mb-4">Prueba 7 Días GRATIS</h3>
+                <p className="text-zinc-700 mb-4">
+                  Verifica tu tarjeta con un cargo de <strong>0,00€</strong> y accede a todas las funciones Premium durante 7 días.
+                </p>
+                <ul className="space-y-2 mb-6">
+                  <li className="flex items-center gap-2 text-sm">
+                    <Check className="w-4 h-4 text-emerald-500" />
+                    <span>Verificación segura de tarjeta (sin cargo)</span>
+                  </li>
+                  <li className="flex items-center gap-2 text-sm">
+                    <Check className="w-4 h-4 text-emerald-500" />
+                    <span>Acceso completo a Premium durante 7 días</span>
+                  </li>
+                  <li className="flex items-center gap-2 text-sm">
+                    <Check className="w-4 h-4 text-emerald-500" />
+                    <span>Cancela cuando quieras sin ningún cargo</span>
+                  </li>
+                  <li className="flex items-center gap-2 text-sm text-amber-700">
+                    <AlertTriangle className="w-4 h-4" />
+                    <span>Después de 7 días: €29,99/mes (Plan Mensual)</span>
+                  </li>
+                </ul>
+              </div>
+              <div className="text-center">
+                <div className="text-6xl font-bold text-amber-600 mb-2">0,00€</div>
+                <div className="text-zinc-600 mb-6">Verificación de tarjeta</div>
+                <Button
+                  data-testid="start-trial-btn"
+                  onClick={() => handleStartTrial('monthly')}
+                  disabled={loadingTrial}
+                  className="w-full max-w-xs bg-amber-500 hover:bg-amber-600 text-white rounded-lg h-14 text-lg font-bold"
+                >
+                  {loadingTrial ? (
+                    <><Loader2 className="w-5 h-5 mr-2 animate-spin" /> Procesando...</>
+                  ) : (
+                    <>Probar 7 Días Gratis <ArrowRight className="w-5 h-5 ml-2" /></>
+                  )}
+                </Button>
+                <p className="text-xs text-zinc-500 mt-3">
+                  Al continuar, aceptas que se verificará tu tarjeta. Si no cancelas antes de 7 días, se cobrará €29,99/mes.
+                </p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
         {/* Premium Plans */}
         <div className="mb-20">
           <h2 className="text-3xl font-bold text-center mb-4">Planes Premium Individual</h2>
