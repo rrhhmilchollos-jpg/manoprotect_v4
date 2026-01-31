@@ -192,6 +192,7 @@ const ChildTracking = () => {
       const payload = {
         name: newChild.name,
         phone: newChild.phone,
+        email: newChild.email || null,
         age: parseInt(newChild.age),
         silent_mode: newChild.silent_mode
       };
@@ -200,9 +201,15 @@ const ChildTracking = () => {
         withCredentials: true
       });
       
-      toast.success(response.data.message);
+      // Show success with email status
+      if (response.data.email_sent) {
+        toast.success(`${response.data.message} 📧`);
+      } else {
+        toast.success(response.data.message);
+      }
+      
       setShowAddForm(false);
-      setNewChild({ name: '', phone: '', age: '', silent_mode: false });
+      setNewChild({ name: '', phone: '', email: '', age: '', silent_mode: false });
       await loadChildren();
     } catch (error) {
       console.error('Error adding child:', error);
