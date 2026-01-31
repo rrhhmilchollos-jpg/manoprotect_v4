@@ -12,6 +12,7 @@ from models.all_schemas import (
     ChildMember, User
 )
 from core.auth import require_auth
+from services.email_service import email_service
 
 router = APIRouter(tags=["SOS & Family"])
 
