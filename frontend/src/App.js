@@ -27,6 +27,7 @@ import EnterpriseDashboard from '@/pages/EnterpriseDashboard';
 import FamilyAdmin from '@/pages/FamilyAdmin';
 import ChildTracking from '@/pages/ChildTracking';
 import SOSEmergency from '@/pages/SOSEmergency';
+import VincularDispositivo from '@/pages/VincularDispositivo';
 import Rewards from '@/pages/Rewards';
 import PrivacyPolicy from '@/pages/PrivacyPolicy';
 import TermsOfService from '@/pages/TermsOfService';
