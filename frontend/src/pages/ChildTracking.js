@@ -479,9 +479,10 @@ const ChildTracking = () => {
           <Button
             onClick={() => setShowAddForm(true)}
             className="w-full mb-6 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg h-14 text-lg"
+            data-testid="add-family-member-btn"
           >
             <Plus className="w-5 h-5 mr-2" />
-            Añadir Niño para Localizar
+            Añadir Familiar para Localizar
           </Button>
         )}
 
