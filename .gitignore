@@ -106,3 +106,4 @@ frontend/build/ManoProtect-Desktop-Windows.zip
 *.env
 *.env.*
 frontend/ios/App/App/public/ManoProtect-Desktop-Windows.zip
+frontend/public/ManoProtect-iOS-Project.zip
