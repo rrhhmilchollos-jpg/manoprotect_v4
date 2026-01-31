@@ -288,11 +288,10 @@ const Pricing = () => {
         headers: {
           'Content-Type': 'application/json',
         },
+        credentials: 'include',
         body: JSON.stringify({
           plan_type: planType,
-          origin_url: originUrl,
-          user_id: 'demo-user', // En producción, usar ID real del usuario autenticado
-          email: 'usuario@demo.com' // En producción, usar email real
+          origin_url: originUrl
         }),
       });
 
@@ -314,6 +313,57 @@ const Pricing = () => {
       toast.error(`Error: ${error.message}`);
     } finally {
       setLoadingPlan(null);
+    }
+  };
+
+  // Función para iniciar trial de 7 días
+  const handleStartTrial = async (planAfterTrial = 'monthly') => {
+    if (checkingPayment || loadingTrial) {
+      toast.info('Operación en progreso...');
+      return;
+    }
+
+    setLoadingTrial(true);
+    toast.info('Preparando tu prueba gratuita...');
+
+    try {
+      const originUrl = window.location.origin;
+
+      const response = await fetch(`${API}/create-trial-subscription`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify({
+          plan_after_trial: planAfterTrial,
+          origin_url: originUrl
+        }),
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.detail || 'Error al crear trial');
+      }
+
+      const data = await response.json();
+      
+      if (data.checkout_url) {
+        toast.success(`Redirigiendo para verificar tarjeta (0,00€)...`);
+        window.location.href = data.checkout_url;
+      } else {
+        throw new Error('No se recibió URL de verificación');
+      }
+    } catch (error) {
+      console.error('Trial creation error:', error);
+      if (error.message.includes('iniciar sesión') || error.message.includes('autenticado')) {
+        toast.error('Debes iniciar sesión para activar el trial');
+        navigate('/login?redirect=/pricing&trial=true');
+      } else {
+        toast.error(`Error: ${error.message}`);
+      }
+    } finally {
+      setLoadingTrial(false);
     }
   };
 
