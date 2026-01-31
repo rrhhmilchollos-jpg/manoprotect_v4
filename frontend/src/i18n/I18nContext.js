@@ -1,17 +1,65 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import esTranslations from './locales/es.json';
 import enTranslations from './locales/en.json';
+import frTranslations from './locales/fr.json';
+import deTranslations from './locales/de.json';
+import itTranslations from './locales/it.json';
+import ptTranslations from './locales/pt.json';
+import zhTranslations from './locales/zh.json';
+import ruTranslations from './locales/ru.json';
+import arTranslations from './locales/ar.json';
 
 const translations = {
   es: esTranslations,
-  en: enTranslations
+  en: enTranslations,
+  fr: frTranslations,
+  de: deTranslations,
+  it: itTranslations,
+  pt: ptTranslations,
+  zh: zhTranslations,
+  ru: ruTranslations,
+  ar: arTranslations
 };
 
-// Countries that speak Spanish
-const spanishCountries = [
-  'ES', 'MX', 'AR', 'CO', 'PE', 'VE', 'CL', 'EC', 'GT', 'CU', 
-  'BO', 'DO', 'HN', 'PY', 'SV', 'NI', 'CR', 'PA', 'UY', 'PR'
-];
+// Language metadata for selector
+export const languageNames = {
+  es: { name: 'Español', flag: '🇪🇸', dir: 'ltr' },
+  en: { name: 'English', flag: '🇬🇧', dir: 'ltr' },
+  fr: { name: 'Français', flag: '🇫🇷', dir: 'ltr' },
+  de: { name: 'Deutsch', flag: '🇩🇪', dir: 'ltr' },
+  it: { name: 'Italiano', flag: '🇮🇹', dir: 'ltr' },
+  pt: { name: 'Português', flag: '🇵🇹', dir: 'ltr' },
+  zh: { name: '中文', flag: '🇨🇳', dir: 'ltr' },
+  ru: { name: 'Русский', flag: '🇷🇺', dir: 'ltr' },
+  ar: { name: 'العربية', flag: '🇸🇦', dir: 'rtl' }
+};
+
+// Country to language mapping
+const countryToLanguage = {
+  // Spanish
+  ES: 'es', MX: 'es', AR: 'es', CO: 'es', PE: 'es', VE: 'es', CL: 'es', 
+  EC: 'es', GT: 'es', CU: 'es', BO: 'es', DO: 'es', HN: 'es', PY: 'es', 
+  SV: 'es', NI: 'es', CR: 'es', PA: 'es', UY: 'es', PR: 'es',
+  // French
+  FR: 'fr', BE: 'fr', CH: 'fr', CA: 'fr', LU: 'fr', MC: 'fr', SN: 'fr', 
+  CI: 'fr', ML: 'fr', BF: 'fr', NE: 'fr', TG: 'fr', BJ: 'fr',
+  // German
+  DE: 'de', AT: 'de', LI: 'de',
+  // Italian
+  IT: 'it', SM: 'it', VA: 'it',
+  // Portuguese
+  PT: 'pt', BR: 'pt', AO: 'pt', MZ: 'pt', CV: 'pt',
+  // Chinese
+  CN: 'zh', TW: 'zh', HK: 'zh', MO: 'zh', SG: 'zh',
+  // Russian
+  RU: 'ru', BY: 'ru', KZ: 'ru', KG: 'ru',
+  // Arabic
+  SA: 'ar', AE: 'ar', EG: 'ar', MA: 'ar', DZ: 'ar', TN: 'ar', LY: 'ar', 
+  JO: 'ar', LB: 'ar', SY: 'ar', IQ: 'ar', KW: 'ar', QA: 'ar', BH: 'ar', 
+  OM: 'ar', YE: 'ar',
+  // English (default for others)
+  US: 'en', GB: 'en', AU: 'en', NZ: 'en', IE: 'en', ZA: 'en', IN: 'en'
+};
 
 const I18nContext = createContext();
 
@@ -25,12 +73,10 @@ export const useI18n = () => {
 
 export const I18nProvider = ({ children }) => {
   const [locale, setLocale] = useState(() => {
-    // Check localStorage first
     const saved = localStorage.getItem('manoprotect_locale');
     if (saved && translations[saved]) {
       return saved;
     }
-    // Default to Spanish
     return 'es';
   });
   
@@ -38,7 +84,6 @@ export const I18nProvider = ({ children }) => {
   const [detectedCountry, setDetectedCountry] = useState(null);
 
   useEffect(() => {
-    // Only detect if no saved preference
     const saved = localStorage.getItem('manoprotect_locale');
     if (!saved) {
       detectCountryByIP();
@@ -47,9 +92,15 @@ export const I18nProvider = ({ children }) => {
     }
   }, []);
 
+  // Apply RTL direction for Arabic
+  useEffect(() => {
+    const dir = languageNames[locale]?.dir || 'ltr';
+    document.documentElement.dir = dir;
+    document.documentElement.lang = locale;
+  }, [locale]);
+
   const detectCountryByIP = async () => {
     try {
-      // Use free IP geolocation API
       const response = await fetch('https://ipapi.co/json/', {
         timeout: 5000
       });
@@ -60,18 +111,15 @@ export const I18nProvider = ({ children }) => {
         setDetectedCountry(countryCode);
         
         // Set language based on country
-        if (spanishCountries.includes(countryCode)) {
-          setLocale('es');
-        } else {
-          setLocale('en');
-        }
+        const detectedLang = countryToLanguage[countryCode] || 'en';
+        setLocale(detectedLang);
       }
     } catch (error) {
       console.log('Could not detect country, using default language');
       // Fallback: check browser language
       const browserLang = navigator.language?.split('-')[0];
-      if (browserLang === 'es') {
-        setLocale('es');
+      if (translations[browserLang]) {
+        setLocale(browserLang);
       }
     } finally {
       setIsDetecting(false);
@@ -94,7 +142,7 @@ export const I18nProvider = ({ children }) => {
       if (value && typeof value === 'object') {
         value = value[k];
       } else {
-        return key; // Return key if translation not found
+        return key;
       }
     }
     
@@ -118,8 +166,8 @@ export const I18nProvider = ({ children }) => {
     isDetecting,
     detectedCountry,
     availableLocales: Object.keys(translations),
-    isSpanish: locale === 'es',
-    isEnglish: locale === 'en'
+    languageNames,
+    isRTL: languageNames[locale]?.dir === 'rtl'
   };
 
   return (
