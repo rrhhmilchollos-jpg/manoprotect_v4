@@ -122,21 +122,23 @@ class TestPublicPages:
 class TestFraudVerification:
     """Test fraud verification public endpoint"""
     
-    def test_verify_phone_number(self):
-        """Test phone number verification"""
-        response = requests.post(
-            f"{BASE_URL}/api/fraud/public/verify",
-            json={"type": "phone", "value": "+34612345678"}
+    def test_verify_scam_phone(self):
+        """Test phone number scam verification"""
+        response = requests.get(
+            f"{BASE_URL}/api/fraud/public/verify-scam",
+            params={"type": "phone", "value": "+34612345678"}
         )
         # Should return 200 even for unknown numbers
         assert response.status_code == 200
         data = response.json()
-        assert "risk_level" in data or "result" in data or "is_scam" in data
+        assert "is_scam" in data or "risk_level" in data or "result" in data
     
-    def test_verify_email(self):
-        """Test email verification"""
+    def test_fraud_check_endpoint(self):
+        """Test fraud check endpoint"""
         response = requests.post(
-            f"{BASE_URL}/api/fraud/public/verify",
-            json={"type": "email", "value": "test@example.com"}
+            f"{BASE_URL}/api/fraud/check",
+            json={"type": "login", "email": "test@example.com"}
         )
         assert response.status_code == 200
+        data = response.json()
+        assert "risk_score" in data or "is_fraud" in data or "allowed" in data
