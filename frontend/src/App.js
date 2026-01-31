@@ -38,6 +38,7 @@ import ManoProtectRegistro from '@/pages/ManoProtectRegistro';
 import FAQ from '@/pages/FAQ';
 import DescargarDesktop from '@/pages/DescargarDesktop';
 import DescargarApps from '@/pages/DescargarApps';
+import PortalEmpleados from '@/pages/PortalEmpleados';
 import CookieConsent from '@/components/CookieConsent';
 import FloatingWhatsApp from '@/components/FloatingWhatsApp';
 import UrgencyBanner from '@/components/UrgencyBanner';
