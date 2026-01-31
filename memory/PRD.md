@@ -81,6 +81,14 @@ Plataforma de protección contra fraudes y estafas digitales para familias espa�
   - ZIP descargable: `/app/frontend/public/ManoProtect-Desktop-Windows.zip`
   - Página de descarga: `/empleados/descargar`
   - Credenciales: admin@manoprotect.com / Admin2024!
+- **✅ Proyecto iOS Completo (31 enero 2026)**
+  - Capacitor iOS configurado
+  - Iconos iOS generados (todos los tamaños requeridos)
+  - Proyecto Xcode descargable: `/app/frontend/public/ManoProtect-iOS-Project.zip`
+  - Guía completa: `/app/frontend/public/GUIA_APP_STORE_IOS.md`
+- **✅ Guías de Publicación (31 enero 2026)**
+  - Guía Google Play: `/app/frontend/public/GUIA_GOOGLE_PLAY.md`
+  - Portal de desarrolladores: `/desarrolladores/descargas`
 - **✅ Correcciones AdSense (30 enero 2026)**
   - Páginas de callback/loading mejoradas con contenido real
   - Meta tags para excluir páginas sin contenido de ads
