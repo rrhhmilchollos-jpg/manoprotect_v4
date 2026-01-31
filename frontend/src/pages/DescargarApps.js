@@ -15,13 +15,13 @@ export default function DescargarApps() {
       ),
       color: 'from-green-500 to-green-600',
       files: [
+        { name: 'Proyecto Android (Capacitor)', url: '/ManoProtect-Android-Project.zip', size: '8.8 MB' },
         { name: 'Guía Google Play', url: '/GUIA_GOOGLE_PLAY.md', size: '5 KB' },
       ],
       steps: [
-        'Hacer Redeploy en Emergent',
-        'Ir a pwabuilder.com',
-        'Ingresar manoprotect.com',
-        'Generar paquete Android',
+        'Descargar proyecto Android',
+        'Abrir en Android Studio',
+        'Build > Generate Signed Bundle',
         'Subir AAB a Google Play Console'
       ]
     },
