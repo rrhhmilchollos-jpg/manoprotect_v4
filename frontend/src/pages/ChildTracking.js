@@ -5,7 +5,7 @@ import {
   MapPin, Users, ArrowLeft, Plus, Loader2, Phone, 
   Eye, EyeOff, History, Trash2, Settings, Bell, BellOff,
   ExternalLink, Clock, CheckCircle2, AlertTriangle, Crown,
-  AlertOctagon, Shield, Send
+  AlertOctagon, Shield, Send, Mail, Copy, MessageSquare
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -14,6 +14,7 @@ import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
+import { useAuth } from '@/context/AuthContext';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
