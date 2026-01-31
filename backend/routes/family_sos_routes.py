@@ -1254,13 +1254,32 @@ async def trigger_premium_sos(
     # Save to database
     await _db.sos_premium_alerts.insert_one(sos_alert)
     
+    # Send emails to all family members
+    email_results = {"sent": 0, "total": 0}
+    if family_members:
+        try:
+            email_results = await email_service.send_sos_alert_to_family(
+                sos_data={
+                    "sos_id": sos_id,
+                    "user_id": user.user_id,
+                    "user_name": user.name,
+                    "message": data.get("message", "¡EMERGENCIA! Necesito ayuda urgente."),
+                    "location": data.get("location", {})
+                },
+                family_members=family_members
+            )
+        except Exception as e:
+            # Don't fail the SOS if email fails
+            print(f"Error sending SOS emails: {e}")
+    
     return {
         "success": True,
         "sos_id": sos_id,
         "status": "active",
         "family_notified_count": len(all_family),
         "nearby_notified_count": len(nearby_users),
-        "message": "¡Alerta SOS enviada! Tu familia ha sido notificada."
+        "emails_sent": email_results.get("sent", 0),
+        "message": "¡Alerta SOS enviada! Tu familia ha sido notificada por email."
     }
 
 
