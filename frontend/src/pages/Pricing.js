@@ -341,12 +341,11 @@ const Pricing = () => {
         }),
       });
 
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.detail || 'Error al crear trial');
-      }
-
       const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.detail || 'Error al crear trial');
+      }
       
       if (data.checkout_url) {
         toast.success(`Redirigiendo para verificar tarjeta (0,00€)...`);
