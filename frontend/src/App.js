@@ -37,6 +37,7 @@ import VerificarEstafa from '@/pages/VerificarEstafa';
 import ManoProtectRegistro from '@/pages/ManoProtectRegistro';
 import FAQ from '@/pages/FAQ';
 import DescargarDesktop from '@/pages/DescargarDesktop';
+import DescargarApps from '@/pages/DescargarApps';
 import CookieConsent from '@/components/CookieConsent';
 import FloatingWhatsApp from '@/components/FloatingWhatsApp';
 import UrgencyBanner from '@/components/UrgencyBanner';
