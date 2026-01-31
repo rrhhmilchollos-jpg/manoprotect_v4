@@ -1,6 +1,6 @@
 # Proyectos ManoProtect y ManoBank
 
-## Última actualización: 30 de enero de 2026
+## Última actualización: 31 de enero de 2026
 
 ---
 
@@ -12,6 +12,7 @@ Los proyectos están completamente separados pero conectados mediante API de ant
 /app/
 ├── frontend/          # ManoProtect Frontend (puerto 3000)
 ├── backend/           # ManoProtect Backend (puerto 8001)
+├── manoprotect-desktop/  # Desktop App para empleados (Electron)
 └── manobank/          # ManoBank - Proyecto independiente
     ├── frontend/      # ManoBank Frontend (puerto 3001)
     └── backend/       # ManoBank Backend (puerto 8002)
@@ -33,6 +34,7 @@ Plataforma de protección contra fraudes y estafas digitales para familias espa�
 - Frontend: React + TailwindCSS + Shadcn/UI + Capacitor 6 (Android)
 - Backend: FastAPI (Python)
 - Base de datos: MongoDB (test_database)
+- Desktop App: Electron (Windows/Mac/Linux)
 
 ## Funcionalidades ✅
 - Landing page con testimonios y badges de confianza

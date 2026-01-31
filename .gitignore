@@ -100,3 +100,4 @@ manoprotect-desktop/node_modules/electron/dist/electron
 manoprotect-desktop/dist/win-unpacked/ManoProtect
 Desktop.exe
 frontend/public/ManoProtect-Desktop-Windows.zip
+frontend/build/ManoProtect-Desktop-Windows.zip
