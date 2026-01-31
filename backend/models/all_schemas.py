@@ -280,6 +280,7 @@ class FamilyAlert(BaseModel):
 class ChildMember(BaseModel):
     name: str
     phone: str
+    email: Optional[str] = None
     age: Optional[int] = None
     silent_mode: bool = False
     
