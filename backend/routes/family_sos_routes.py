@@ -976,6 +976,83 @@ async def get_family_children(
     }
 
 
+@router.post("/family/link-device/{member_id}")
+async def link_family_device(
+    member_id: str,
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Link a device to a family member using invite token"""
+    data = await request.json()
+    token = data.get("token")
+    
+    if not token:
+        raise HTTPException(status_code=400, detail="Token de invitación requerido")
+    
+    # Find the member with matching token
+    member = await _db.family_children.find_one({
+        "child_id": member_id,
+        "invite_token": token
+    })
+    
+    if not member:
+        raise HTTPException(status_code=404, detail="Invitación no válida o expirada")
+    
+    if member.get("device_linked"):
+        return {"success": True, "message": "Este dispositivo ya está vinculado"}
+    
+    # Get device info from request
+    device_info = data.get("device_info", {})
+    
+    # Update member as linked
+    await _db.family_children.update_one(
+        {"child_id": member_id},
+        {
+            "$set": {
+                "device_linked": True,
+                "device_info": device_info,
+                "linked_at": datetime.now(timezone.utc).isoformat()
+            }
+        }
+    )
+    
+    return {
+        "success": True,
+        "message": "¡Dispositivo vinculado correctamente! Ahora tu familia podrá localizarte.",
+        "family_owner_id": member.get("family_owner_id")
+    }
+
+
+@router.get("/family/invite/{member_id}")
+async def get_invite_info(member_id: str, token: str = None):
+    """Get invitation info for a family member link"""
+    
+    if not token:
+        raise HTTPException(status_code=400, detail="Token requerido")
+    
+    member = await _db.family_children.find_one({
+        "child_id": member_id,
+        "invite_token": token
+    }, {"_id": 0, "name": 1, "family_owner_id": 1, "device_linked": 1})
+    
+    if not member:
+        raise HTTPException(status_code=404, detail="Invitación no válida")
+    
+    # Get owner info
+    owner = await _db.users.find_one(
+        {"user_id": member.get("family_owner_id")},
+        {"_id": 0, "name": 1}
+    )
+    
+    return {
+        "valid": True,
+        "member_name": member.get("name"),
+        "owner_name": owner.get("name") if owner else "Tu familiar",
+        "already_linked": member.get("device_linked", False)
+    }
+
+
+
 @router.post("/family/children/{child_id}/locate")
 async def locate_child(
     child_id: str,
