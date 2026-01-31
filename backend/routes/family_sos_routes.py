@@ -27,6 +27,25 @@ def init_family_routes(db, plan_features):
     _PLAN_FEATURES = plan_features
 
 
+# Superadmins always have full access
+SUPERADMIN_EMAILS = [
+    "rrhh.milchollos@gmail.com",
+    "info@manoprotect.com",
+    "ivanrubiosolas@gmail.com"
+]
+
+# All paid plans that have family/SOS features
+PAID_PLANS = [
+    "family-yearly", "family-monthly", "family-quarterly", "family",
+    "premium", "premium-yearly", "premium-monthly", "premium-quarterly",
+    "personal-yearly", "personal-monthly", "personal-quarterly", "personal",
+    "yearly", "monthly", "quarterly", "weekly",
+    "trial-7days", "trial",
+    "business", "business-yearly", "business-monthly",
+    "enterprise", "enterprise-yearly", "enterprise-monthly"
+]
+
+
 def get_plan_features_for_user(user: User) -> dict:
     """Get features based on user's specific plan"""
     plan = user.plan
@@ -34,6 +53,32 @@ def get_plan_features_for_user(user: User) -> dict:
         return _PLAN_FEATURES[plan]
     base_plan = plan.split('-')[0] if '-' in plan else plan
     return _PLAN_FEATURES.get(base_plan, _PLAN_FEATURES["free"])
+
+
+def user_has_premium_access(user: User) -> bool:
+    """Check if user has access to premium features (family, SOS, GPS)"""
+    # Superadmins always have access
+    if user.email in SUPERADMIN_EMAILS:
+        return True
+    
+    # Check if user has any paid plan
+    if user.plan in PAID_PLANS:
+        return True
+    
+    # Check if plan is not free (catches any plan we might have missed)
+    if user.plan and user.plan != "free":
+        return True
+    
+    # Check features
+    features = get_plan_features_for_user(user)
+    if features.get("max_users", 1) >= 2:
+        return True
+    if features.get("sos", False) or features.get("sos_premium", False):
+        return True
+    if features.get("gps", False) or features.get("child_tracking", False):
+        return True
+    
+    return False
 
 
 # ============================================
