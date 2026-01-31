@@ -1,0 +1,210 @@
+{
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "add": "Add",
+    "search": "Search",
+    "filter": "Filter",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "submit": "Submit",
+    "close": "Close",
+    "yes": "Yes",
+    "no": "No",
+    "or": "or"
+  },
+  "nav": {
+    "home": "Home",
+    "howItWorks": "How It Works",
+    "pricing": "Pricing",
+    "knowledge": "Learn",
+    "community": "Community",
+    "login": "Login",
+    "register": "Sign Up",
+    "dashboard": "Dashboard",
+    "logout": "Logout",
+    "faq": "FAQ"
+  },
+  "landing": {
+    "hero": {
+      "title": "Protect your family from digital fraud and scams",
+      "subtitle": "ManoProtect is your shield against digital fraud. We protect families from phone scams, phishing, fraudulent SMS and much more.",
+      "cta": "Start Free",
+      "ctaSecondary": "See How It Works"
+    },
+    "features": {
+      "title": "Why ManoProtect?",
+      "scamVerifier": {
+        "title": "Scam Verifier",
+        "description": "Instantly analyze suspicious messages, calls and links"
+      },
+      "realTimeAlerts": {
+        "title": "Real-Time Alerts",
+        "description": "Receive notifications about new threats detected"
+      },
+      "familyProtection": {
+        "title": "Family Protection",
+        "description": "One plan for the whole family with up to 5 members"
+      },
+      "database": {
+        "title": "Updated Database",
+        "description": "+50,000 scams identified and growing"
+      }
+    },
+    "stats": {
+      "familiesProtected": "Families Protected",
+      "scamsBlocked": "Scams Blocked",
+      "detectionRate": "Detection Rate"
+    },
+    "testimonials": {
+      "title": "What our users say"
+    }
+  },
+  "auth": {
+    "login": {
+      "title": "Login",
+      "email": "Email address",
+      "password": "Password",
+      "forgotPassword": "Forgot your password?",
+      "noAccount": "Don't have an account?",
+      "signUp": "Sign up",
+      "withGoogle": "Continue with Google",
+      "button": "Login"
+    },
+    "register": {
+      "title": "Create Account",
+      "name": "Full name",
+      "email": "Email address",
+      "password": "Password",
+      "confirmPassword": "Confirm password",
+      "hasAccount": "Already have an account?",
+      "signIn": "Sign in",
+      "withGoogle": "Sign up with Google",
+      "button": "Create Account",
+      "terms": "By signing up, you agree to our"
+    }
+  },
+  "pricing": {
+    "title": "Plans & Pricing",
+    "subtitle": "Choose the plan that best fits your family",
+    "monthly": "Monthly",
+    "yearly": "Yearly",
+    "save": "Save",
+    "popular": "Most Popular",
+    "free": {
+      "name": "Free",
+      "price": "€0",
+      "description": "To start protecting yourself"
+    },
+    "premium": {
+      "name": "Premium",
+      "description": "Complete individual protection"
+    },
+    "family": {
+      "name": "Family",
+      "description": "Protect your whole family"
+    },
+    "features": {
+      "scamVerifier": "Scam verifier",
+      "basicAlerts": "Basic alerts",
+      "realTimeAlerts": "Real-time alerts",
+      "prioritySupport": "Priority support",
+      "familyMembers": "Up to 5 members",
+      "childTracking": "Family tracking",
+      "sosEmergency": "Emergency SOS"
+    },
+    "cta": "Get Started"
+  },
+  "dashboard": {
+    "welcome": "Welcome",
+    "protectionStatus": "Protection Status",
+    "recentAlerts": "Recent Alerts",
+    "quickActions": "Quick Actions",
+    "verifyScam": "Verify Scam",
+    "familyMembers": "Family Members",
+    "settings": "Settings"
+  },
+  "sos": {
+    "title": "Family Emergency",
+    "button": "SOS",
+    "subtitle": "Press the button to send your exact location to all your family members",
+    "recording": "Recording...",
+    "sending": "Sending alert...",
+    "active": "Alert active",
+    "cancel": "Cancel SOS",
+    "familyNotified": "Family notified",
+    "emailsSent": "Emails sent",
+    "nearbyUsers": "Nearby users",
+    "settings": {
+      "alertNearby": "Alert nearby users",
+      "alertNearbyDesc": "Notify premium users within 5km",
+      "soundEnabled": "Alert sound",
+      "soundEnabledDesc": "Play siren when sending SOS",
+      "autoRecord": "Auto record",
+      "autoRecordDesc": "Record audio when pressing SOS"
+    },
+    "howItWorks": {
+      "title": "How does it work?",
+      "step1": "Press the SOS button to send alert",
+      "step2": "Audio is recorded and GPS location detected",
+      "step3": "Your family receives critical notification with siren",
+      "step4": "Nearby premium users (5km) are alerted"
+    }
+  },
+  "childTracking": {
+    "title": "Child Tracking",
+    "subtitle": "Family Yearly Plan",
+    "addMember": "Add Family Member to Track",
+    "noMembers": "No family members added",
+    "noMembersDesc": "Add your children, parents or grandparents to locate them anytime",
+    "form": {
+      "name": "Name",
+      "phone": "Phone number",
+      "email": "Email",
+      "emailRequired": "Required - A link will be sent to this email",
+      "age": "Age",
+      "silentMode": "Silent mode",
+      "silentModeDesc": "Won't receive notification when you request their location"
+    },
+    "personType": {
+      "child": "Child",
+      "adult": "Adult",
+      "elderly": "Elderly",
+      "unknown": "Family member"
+    },
+    "status": {
+      "linked": "Device linked",
+      "pending": "Pending link"
+    }
+  },
+  "scamVerifier": {
+    "title": "Scam Verifier",
+    "subtitle": "Analyze suspicious messages, calls or links",
+    "placeholder": "Paste the suspicious message, number or link here...",
+    "analyze": "Analyze",
+    "analyzing": "Analyzing...",
+    "result": {
+      "safe": "Looks safe",
+      "suspicious": "Suspicious",
+      "dangerous": "Dangerous!"
+    }
+  },
+  "footer": {
+    "company": "Company",
+    "legal": "Legal",
+    "support": "Support",
+    "privacyPolicy": "Privacy Policy",
+    "termsOfService": "Terms of Service",
+    "refundPolicy": "Refund Policy",
+    "legalNotice": "Legal Notice",
+    "contact": "Contact",
+    "help": "Help",
+    "rights": "All rights reserved"
+  }
+}
