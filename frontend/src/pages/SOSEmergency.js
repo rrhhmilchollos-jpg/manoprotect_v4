@@ -43,8 +43,8 @@ export default function SOSEmergency() {
     autoRecord: true
   });
   
-  // Notifications
-  const [familyNotified, setFamilyNotified] = useState(0);
+  // Email status
+  const [emailsSent, setEmailsSent] = useState(0);
   const [nearbyNotified, setNearbyNotified] = useState(0);
   
   // Active alerts from family
