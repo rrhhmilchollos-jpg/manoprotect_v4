@@ -6,14 +6,35 @@ import { Toaster } from "sonner";
 import { HelmetProvider } from "react-helmet-async";
 
 // Suppress PostHog/analytics errors in preview environment
-window.addEventListener('error', (event) => {
-  if (event.message?.includes('postMessage') || 
-      event.message?.includes('PerformanceServerTiming') ||
-      event.filename?.includes('posthog')) {
-    event.preventDefault();
-    return false;
+const suppressPostHogError = (event) => {
+  const message = event?.message || event?.reason?.message || '';
+  const filename = event?.filename || '';
+  
+  if (message.includes('postMessage') || 
+      message.includes('PerformanceServerTiming') ||
+      message.includes('DataCloneError') ||
+      filename.includes('posthog')) {
+    event.preventDefault?.();
+    event.stopPropagation?.();
+    return true;
   }
-});
+  return false;
+};
+
+window.addEventListener('error', suppressPostHogError, true);
+window.addEventListener('unhandledrejection', suppressPostHogError, true);
+
+// Override console.error to filter PostHog errors
+const originalConsoleError = console.error;
+console.error = (...args) => {
+  const errorStr = args.join(' ');
+  if (errorStr.includes('posthog') || 
+      errorStr.includes('PerformanceServerTiming') ||
+      errorStr.includes('DataCloneError')) {
+    return;
+  }
+  originalConsoleError.apply(console, args);
+};
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
