@@ -278,10 +278,22 @@ class FamilyAlert(BaseModel):
 
 
 class ChildMember(BaseModel):
-    id: str = Field(default_factory=lambda: f"child_{uuid.uuid4().hex[:8]}")
-    family_owner_id: str
     name: str
     phone: str
+    age: Optional[int] = None
+    silent_mode: bool = False
+    
+    @property
+    def person_type(self) -> str:
+        """Determina automáticamente el tipo de persona según la edad"""
+        if self.age is None:
+            return "unknown"
+        if self.age < 18:
+            return "child"  # niño
+        elif self.age >= 65:
+            return "elderly"  # anciano
+        else:
+            return "adult"  # adulto
 
 
 class LocationRequest(BaseModel):
