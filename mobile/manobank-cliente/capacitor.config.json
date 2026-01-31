@@ -3,7 +3,7 @@
   "appName": "ManoBank",
   "webDir": "www",
   "server": {
-    "url": "https://familyplan-fix.preview.emergentagent.com",
+    "url": "https://manoapp-mobile.preview.emergentagent.com",
     "cleartext": true
   },
   "android": {

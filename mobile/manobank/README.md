@@ -43,4 +43,4 @@
 
 - **App ID:** com.manobank.app
 - **Nombre:** ManoBank
-- **URL Web:** https://familyplan-fix.preview.emergentagent.com
+- **URL Web:** https://manoapp-mobile.preview.emergentagent.com
