@@ -92,17 +92,15 @@ const LandingPage = () => {
                   alt="ManoProtect" 
                   className="h-5 w-auto"
                 />
-                <span className="text-sm font-medium text-indigo-700">Protección en Tiempo Real</span>
+                <span className="text-sm font-medium text-indigo-700">{t('landing.features.realTimeAlerts.title')}</span>
               </div>
               
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight leading-tight">
-                Tu mano protectora contra
-                <span className="block text-indigo-600 mt-2">fraudes digitales</span>
-                <span className="block text-emerald-600 mt-2">+ protección familiar avanzada</span>
+                {t('landing.hero.title')}
               </h1>
               
               <p className="text-lg text-zinc-600 leading-relaxed max-w-xl">
-                ManoProtect detecta y bloquea amenazas antes de que lleguen a ti. Protege a tu familia, tu empresa y tu tranquilidad con inteligencia artificial avanzada.
+                {t('landing.hero.subtitle')}
               </p>
               
               <div className="flex flex-wrap gap-4">
@@ -112,7 +110,7 @@ const LandingPage = () => {
                   variant="outline"
                   className="border-2 border-zinc-300 hover:border-indigo-300 rounded-lg px-8 h-14 text-lg active:scale-95 transition-all"
                 >
-                  Cómo Funciona
+                  {t('landing.hero.ctaSecondary')}
                 </Button>
               </div>
 
