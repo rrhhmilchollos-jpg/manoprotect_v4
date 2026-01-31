@@ -17,6 +17,8 @@ router = APIRouter(tags=["Payments"])
 
 # Fixed subscription pricing packages (amounts in EUR) - SINCRONIZADO CON FRONTEND
 SUBSCRIPTION_PACKAGES = {
+    # Plan de Prueba 7 días (TRIAL - verificación de tarjeta 0€)
+    "trial-7days": {"amount": 0, "name": "Prueba 7 días", "period": "7 días", "max_users": 2, "is_trial": True, "trial_days": 7, "after_trial_plan": "monthly"},
     # Planes individuales Premium (hasta 2 usuarios)
     "weekly": {"amount": 9.99, "name": "Premium Semanal", "period": "semana", "max_users": 2},
     "monthly": {"amount": 29.99, "name": "Premium Mensual", "period": "mes", "max_users": 2},
