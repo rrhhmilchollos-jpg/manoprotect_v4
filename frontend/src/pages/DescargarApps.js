@@ -15,8 +15,9 @@ export default function DescargarApps() {
       ),
       color: 'from-green-500 to-green-600',
       files: [
-        { name: 'Proyecto Android (Capacitor)', url: '/ManoProtect-Android-Project.zip', size: '8.8 MB' },
+        { name: 'Proyecto Android (Capacitor)', url: '/ManoProtect-Android-Project.zip', size: '4.8 MB' },
         { name: 'Guía Google Play', url: '/GUIA_GOOGLE_PLAY.md', size: '5 KB' },
+        { name: 'Cómo compilar APK', url: '/COMPILAR_APK.md', size: '3 KB' },
       ],
       steps: [
         'Descargar proyecto Android',
