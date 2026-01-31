@@ -3059,6 +3059,10 @@ print("✅ Profile & Contacts routes loaded")
 api_router.include_router(family_sos_router)
 print("✅ Family & SOS routes loaded")
 
+# Payment routes (Stripe)
+api_router.include_router(payments_router)
+print("✅ Payment routes loaded")
+
 try:
     from routes.banking_routes import router as banking_router
     api_router.include_router(banking_router)
