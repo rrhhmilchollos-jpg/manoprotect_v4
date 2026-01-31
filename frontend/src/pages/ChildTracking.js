@@ -591,10 +591,10 @@ const ChildTracking = () => {
             <CardContent>
               <Users className="w-16 h-16 mx-auto text-zinc-300 mb-4" />
               <h3 className="text-xl font-semibold text-zinc-600 mb-2">
-                No hay niños añadidos
+                No hay familiares añadidos
               </h3>
               <p className="text-zinc-500">
-                Añade a tus hijos para poder localizarlos en cualquier momento
+                Añade a tus hijos, padres o abuelos para poder localizarlos en cualquier momento
               </p>
             </CardContent>
           </Card>
@@ -609,9 +609,14 @@ const ChildTracking = () => {
                   <div className="flex items-start justify-between mb-4">
                     <div className="flex items-center gap-4">
                       <div className={`w-14 h-14 rounded-full flex items-center justify-center ${
+                        child.person_type === 'child' ? 'bg-blue-100' :
+                        child.person_type === 'elderly' ? 'bg-purple-100' :
                         child.device_linked ? 'bg-emerald-100' : 'bg-amber-100'
                       }`}>
-                        <Users className={`w-7 h-7 ${child.device_linked ? 'text-emerald-600' : 'text-amber-600'}`} />
+                        <span className="text-2xl">
+                          {child.person_type === 'child' ? '👶' :
+                           child.person_type === 'elderly' ? '👴' : '👤'}
+                        </span>
                       </div>
                       <div>
                         <h3 className="text-xl font-bold">{child.name}</h3>
@@ -619,7 +624,18 @@ const ChildTracking = () => {
                           <Phone className="w-4 h-4" />
                           {child.phone}
                         </p>
-                        <div className="flex items-center gap-2 mt-1">
+                        <div className="flex items-center gap-2 mt-1 flex-wrap">
+                          {/* Age and Type Badge */}
+                          {child.age && (
+                            <Badge className={`${
+                              child.person_type === 'child' ? 'bg-blue-100 text-blue-700' :
+                              child.person_type === 'elderly' ? 'bg-purple-100 text-purple-700' :
+                              'bg-zinc-100 text-zinc-700'
+                            }`}>
+                              {child.age} años - {child.person_type === 'child' ? 'Niño' : 
+                                                  child.person_type === 'elderly' ? 'Anciano' : 'Adulto'}
+                            </Badge>
+                          )}
                           {child.device_linked ? (
                             <Badge className="bg-emerald-100 text-emerald-700">
                               <CheckCircle2 className="w-3 h-3 mr-1" />
