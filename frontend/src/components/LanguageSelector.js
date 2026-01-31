@@ -1,5 +1,5 @@
 import React from 'react';
-import { useI18n } from '../i18n/I18nContext';
+import { useI18n, languageNames } from '../i18n/I18nContext';
 import { Globe } from 'lucide-react';
 import {
   DropdownMenu,
@@ -8,11 +8,6 @@ import {
   DropdownMenuTrigger,
 } from './ui/dropdown-menu';
 import { Button } from './ui/button';
-
-const languages = {
-  es: { name: 'Español', flag: '🇪🇸' },
-  en: { name: 'English', flag: '🇬🇧' }
-};
 
 export default function LanguageSelector({ className = '' }) {
   const { locale, setLocale, availableLocales } = useI18n();
@@ -27,19 +22,19 @@ export default function LanguageSelector({ className = '' }) {
           data-testid="language-selector"
         >
           <Globe className="w-4 h-4" />
-          <span>{languages[locale]?.flag}</span>
-          <span className="hidden sm:inline">{languages[locale]?.name}</span>
+          <span>{languageNames[locale]?.flag}</span>
+          <span className="hidden sm:inline">{languageNames[locale]?.name}</span>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
+      <DropdownMenuContent align="end" className="max-h-80 overflow-y-auto">
         {availableLocales.map((lang) => (
           <DropdownMenuItem
             key={lang}
             onClick={() => setLocale(lang)}
             className={`flex items-center gap-2 cursor-pointer ${locale === lang ? 'bg-emerald-50 text-emerald-700' : ''}`}
           >
-            <span className="text-lg">{languages[lang]?.flag}</span>
-            <span>{languages[lang]?.name}</span>
+            <span className="text-lg">{languageNames[lang]?.flag}</span>
+            <span>{languageNames[lang]?.name}</span>
             {locale === lang && (
               <span className="ml-auto text-emerald-600">✓</span>
             )}
