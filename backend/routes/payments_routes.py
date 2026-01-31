@@ -8,6 +8,7 @@ from datetime import datetime, timezone, timedelta
 from pydantic import BaseModel
 import logging
 import stripe
+import os
 
 from core.database import db, get_current_user, STRIPE_API_KEY
 from models.all_schemas import CheckoutRequest, PaymentTransaction
