@@ -366,19 +366,28 @@ export default function SOSEmergency() {
 
       {/* Status Cards */}
       {sosActive && (
-        <div className="grid grid-cols-2 gap-4 mb-6">
+        <div className="grid grid-cols-3 gap-3 mb-6">
           <Card className="bg-emerald-950/50 border-emerald-700">
-            <CardContent className="p-4 text-center">
-              <Users className="w-8 h-8 mx-auto text-emerald-400 mb-2" />
-              <p className="text-2xl font-bold text-white">{familyNotified}</p>
-              <p className="text-xs text-emerald-300">Familiares notificados</p>
+            <CardContent className="p-3 text-center">
+              <Users className="w-6 h-6 mx-auto text-emerald-400 mb-1" />
+              <p className="text-xl font-bold text-white">{familyNotified}</p>
+              <p className="text-xs text-emerald-300">Familiares</p>
+            </CardContent>
+          </Card>
+          <Card className="bg-purple-950/50 border-purple-700">
+            <CardContent className="p-3 text-center">
+              <svg className="w-6 h-6 mx-auto text-purple-400 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+              </svg>
+              <p className="text-xl font-bold text-white">{emailsSent}</p>
+              <p className="text-xs text-purple-300">Emails</p>
             </CardContent>
           </Card>
           <Card className="bg-blue-950/50 border-blue-700">
-            <CardContent className="p-4 text-center">
-              <Radio className="w-8 h-8 mx-auto text-blue-400 mb-2" />
-              <p className="text-2xl font-bold text-white">{nearbyNotified}</p>
-              <p className="text-xs text-blue-300">Usuarios cercanos</p>
+            <CardContent className="p-3 text-center">
+              <Radio className="w-6 h-6 mx-auto text-blue-400 mb-1" />
+              <p className="text-xl font-bold text-white">{nearbyNotified}</p>
+              <p className="text-xs text-blue-300">Cercanos</p>
             </CardContent>
           </Card>
         </div>
