@@ -45,6 +45,9 @@ export default function SOSEmergency() {
   
   // Email status
   const [emailsSent, setEmailsSent] = useState(0);
+  
+  // Notifications
+  const [familyNotified, setFamilyNotified] = useState(0);
   const [nearbyNotified, setNearbyNotified] = useState(0);
   
   // Active alerts from family
