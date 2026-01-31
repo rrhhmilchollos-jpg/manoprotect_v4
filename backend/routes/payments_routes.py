@@ -409,3 +409,333 @@ async def stripe_webhook(request: Request):
     except Exception as e:
         logging.error(f"Stripe webhook error: {e}")
         raise HTTPException(status_code=400, detail=str(e))
+
+
+# ============================================
+# TRIAL SUBSCRIPTION ENDPOINTS (7 días gratis)
+# ============================================
+
+class TrialSubscriptionRequest(BaseModel):
+    plan_after_trial: str = "monthly"  # Plan a cobrar después del trial
+    origin_url: str
+
+@router.post("/create-trial-subscription")
+async def create_trial_subscription(
+    data: TrialSubscriptionRequest,
+    http_request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """
+    Crear suscripción de prueba de 7 días
+    - Verifica la tarjeta con cargo de 0€
+    - Después de 7 días, cobra automáticamente el plan seleccionado
+    - El cliente puede cancelar antes de los 7 días sin cargo
+    """
+    user = await get_current_user(http_request, session_token)
+    if not user:
+        raise HTTPException(status_code=401, detail="Debe iniciar sesión para activar el trial")
+    
+    user_id = user.user_id
+    user_email = user.email
+    
+    try:
+        # Verificar que el plan después del trial existe
+        after_trial_package = SUBSCRIPTION_PACKAGES.get(data.plan_after_trial)
+        if not after_trial_package or after_trial_package.get("amount", 0) == 0:
+            raise HTTPException(status_code=400, detail="Plan de suscripción no válido para después del trial")
+        
+        # Verificar si el usuario ya tiene un trial activo
+        existing_trial = await db.trial_subscriptions.find_one({
+            "user_id": user_id,
+            "status": {"$in": ["trialing", "active"]}
+        })
+        if existing_trial:
+            raise HTTPException(status_code=400, detail="Ya tienes un trial activo o una suscripción vigente")
+        
+        # Crear o buscar cliente en Stripe
+        existing_customers = stripe.Customer.list(email=user_email, limit=1)
+        if existing_customers.data:
+            customer = existing_customers.data[0]
+        else:
+            customer = stripe.Customer.create(
+                email=user_email,
+                metadata={
+                    "user_id": user_id,
+                    "source": "manoprotect_trial"
+                }
+            )
+        
+        # Crear precio para la suscripción
+        amount_cents = int(after_trial_package["amount"] * 100)
+        
+        # Determinar el intervalo de facturación
+        interval = "month"
+        interval_count = 1
+        if "yearly" in data.plan_after_trial or "annual" in data.plan_after_trial:
+            interval = "year"
+        elif "quarterly" in data.plan_after_trial:
+            interval = "month"
+            interval_count = 3
+        elif "weekly" in data.plan_after_trial:
+            interval = "week"
+        
+        # Crear un producto y precio en Stripe
+        product = stripe.Product.create(
+            name=f"ManoProtect - {after_trial_package['name']}",
+            metadata={"plan_type": data.plan_after_trial}
+        )
+        
+        price = stripe.Price.create(
+            product=product.id,
+            unit_amount=amount_cents,
+            currency="eur",
+            recurring={
+                "interval": interval,
+                "interval_count": interval_count
+            }
+        )
+        
+        # Crear sesión de checkout con trial de 7 días
+        success_url = f"{data.origin_url}/trial-success?session_id={{CHECKOUT_SESSION_ID}}"
+        cancel_url = f"{data.origin_url}/pricing?trial_canceled=true"
+        
+        checkout_session = stripe.checkout.Session.create(
+            customer=customer.id,
+            payment_method_types=["card"],
+            mode="subscription",
+            line_items=[{
+                "price": price.id,
+                "quantity": 1
+            }],
+            subscription_data={
+                "trial_period_days": 7,
+                "metadata": {
+                    "user_id": user_id,
+                    "plan_type": data.plan_after_trial,
+                    "is_trial": "true"
+                }
+            },
+            success_url=success_url,
+            cancel_url=cancel_url,
+            metadata={
+                "user_id": user_id,
+                "email": user_email,
+                "plan_type": data.plan_after_trial,
+                "is_trial": "true",
+                "trial_days": "7"
+            }
+        )
+        
+        # Guardar información del trial en la base de datos
+        trial_record = {
+            "session_id": checkout_session.id,
+            "user_id": user_id,
+            "email": user_email,
+            "customer_id": customer.id,
+            "plan_after_trial": data.plan_after_trial,
+            "plan_amount": after_trial_package["amount"],
+            "trial_days": 7,
+            "trial_start": None,  # Se actualiza cuando Stripe confirma
+            "trial_end": None,
+            "status": "pending_verification",
+            "stripe_subscription_id": None,
+            "created_at": datetime.now(timezone.utc).isoformat(),
+            "updated_at": datetime.now(timezone.utc).isoformat()
+        }
+        await db.trial_subscriptions.insert_one(trial_record)
+        
+        return {
+            "checkout_url": checkout_session.url,
+            "session_id": checkout_session.id,
+            "trial_days": 7,
+            "plan_after_trial": after_trial_package["name"],
+            "amount_after_trial": after_trial_package["amount"],
+            "message": f"Verificación de tarjeta (0,00€). Después de 7 días: {after_trial_package['amount']}€/{after_trial_package['period']}"
+        }
+    
+    except stripe.error.StripeError as e:
+        logging.error(f"Stripe error creating trial: {e}")
+        raise HTTPException(status_code=400, detail=f"Error de Stripe: {str(e)}")
+    except HTTPException:
+        raise
+    except Exception as e:
+        logging.error(f"Error creating trial subscription: {e}")
+        raise HTTPException(status_code=500, detail=f"Error al crear trial: {str(e)}")
+
+
+@router.get("/trial/status/{session_id}")
+async def get_trial_status(session_id: str, http_request: Request):
+    """Obtener estado de la suscripción trial"""
+    try:
+        trial = await db.trial_subscriptions.find_one(
+            {"session_id": session_id},
+            {"_id": 0}
+        )
+        
+        if not trial:
+            raise HTTPException(status_code=404, detail="Trial no encontrado")
+        
+        # Obtener información actualizada de Stripe
+        checkout_session = stripe.checkout.Session.retrieve(session_id)
+        
+        response = {
+            "status": trial.get("status"),
+            "plan_after_trial": trial.get("plan_after_trial"),
+            "amount_after_trial": trial.get("plan_amount"),
+            "trial_days": trial.get("trial_days"),
+            "trial_start": trial.get("trial_start"),
+            "trial_end": trial.get("trial_end"),
+            "checkout_status": checkout_session.status,
+            "payment_status": checkout_session.payment_status
+        }
+        
+        # Si el checkout fue completado, actualizar estado
+        if checkout_session.status == "complete" and trial.get("status") == "pending_verification":
+            subscription_id = checkout_session.subscription
+            if subscription_id:
+                subscription = stripe.Subscription.retrieve(subscription_id)
+                trial_end = datetime.fromtimestamp(subscription.trial_end, tz=timezone.utc) if subscription.trial_end else None
+                trial_start = datetime.fromtimestamp(subscription.current_period_start, tz=timezone.utc)
+                
+                await db.trial_subscriptions.update_one(
+                    {"session_id": session_id},
+                    {"$set": {
+                        "status": "trialing",
+                        "stripe_subscription_id": subscription_id,
+                        "trial_start": trial_start.isoformat() if trial_start else None,
+                        "trial_end": trial_end.isoformat() if trial_end else None,
+                        "updated_at": datetime.now(timezone.utc).isoformat()
+                    }}
+                )
+                
+                # Actualizar plan del usuario a trial
+                await db.users.update_one(
+                    {"user_id": trial.get("user_id")},
+                    {"$set": {
+                        "plan": "trial-7days",
+                        "subscription_status": "trialing",
+                        "trial_end": trial_end.isoformat() if trial_end else None,
+                        "plan_after_trial": trial.get("plan_after_trial"),
+                        "stripe_subscription_id": subscription_id
+                    }}
+                )
+                
+                response["status"] = "trialing"
+                response["trial_start"] = trial_start.isoformat() if trial_start else None
+                response["trial_end"] = trial_end.isoformat() if trial_end else None
+                response["message"] = f"Trial activado. Tu tarjeta será cargada el {trial_end.strftime('%d/%m/%Y') if trial_end else 'N/A'} si no cancelas antes."
+        
+        return response
+    
+    except stripe.error.StripeError as e:
+        logging.error(f"Stripe error: {e}")
+        raise HTTPException(status_code=400, detail=str(e))
+    except HTTPException:
+        raise
+    except Exception as e:
+        logging.error(f"Error getting trial status: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.post("/trial/cancel")
+async def cancel_trial(
+    http_request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Cancelar trial antes de que termine (sin cargo)"""
+    user = await get_current_user(http_request, session_token)
+    if not user:
+        raise HTTPException(status_code=401, detail="No autenticado")
+    
+    try:
+        # Buscar trial activo del usuario
+        trial = await db.trial_subscriptions.find_one({
+            "user_id": user.user_id,
+            "status": "trialing"
+        })
+        
+        if not trial:
+            raise HTTPException(status_code=404, detail="No tienes un trial activo para cancelar")
+        
+        subscription_id = trial.get("stripe_subscription_id")
+        if subscription_id:
+            # Cancelar suscripción en Stripe inmediatamente
+            stripe.Subscription.cancel(subscription_id)
+        
+        # Actualizar estado en base de datos
+        await db.trial_subscriptions.update_one(
+            {"_id": trial["_id"]},
+            {"$set": {
+                "status": "canceled",
+                "canceled_at": datetime.now(timezone.utc).isoformat(),
+                "updated_at": datetime.now(timezone.utc).isoformat()
+            }}
+        )
+        
+        # Actualizar usuario a plan gratuito
+        await db.users.update_one(
+            {"user_id": user.user_id},
+            {"$set": {
+                "plan": "free",
+                "subscription_status": "canceled",
+                "trial_end": None,
+                "stripe_subscription_id": None
+            }}
+        )
+        
+        return {
+            "success": True,
+            "message": "Trial cancelado exitosamente. No se realizará ningún cargo.",
+            "new_plan": "free"
+        }
+    
+    except stripe.error.StripeError as e:
+        logging.error(f"Stripe error canceling trial: {e}")
+        raise HTTPException(status_code=400, detail=str(e))
+    except HTTPException:
+        raise
+    except Exception as e:
+        logging.error(f"Error canceling trial: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/trial/info")
+async def get_user_trial_info(
+    http_request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Obtener información del trial del usuario actual"""
+    user = await get_current_user(http_request, session_token)
+    if not user:
+        raise HTTPException(status_code=401, detail="No autenticado")
+    
+    trial = await db.trial_subscriptions.find_one(
+        {"user_id": user.user_id, "status": {"$in": ["trialing", "pending_verification"]}},
+        {"_id": 0}
+    )
+    
+    if not trial:
+        return {
+            "has_trial": False,
+            "can_start_trial": True,
+            "message": "Puedes iniciar tu periodo de prueba de 7 días gratis"
+        }
+    
+    # Calcular días restantes
+    days_remaining = 0
+    if trial.get("trial_end"):
+        trial_end = datetime.fromisoformat(trial["trial_end"].replace('Z', '+00:00'))
+        now = datetime.now(timezone.utc)
+        days_remaining = max(0, (trial_end - now).days)
+    
+    return {
+        "has_trial": True,
+        "can_start_trial": False,
+        "status": trial.get("status"),
+        "trial_end": trial.get("trial_end"),
+        "days_remaining": days_remaining,
+        "plan_after_trial": trial.get("plan_after_trial"),
+        "amount_after_trial": trial.get("plan_amount"),
+        "message": f"Trial activo. {days_remaining} días restantes antes del cargo."
+    }
+
