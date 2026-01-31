@@ -21,6 +21,7 @@ const API = `${BACKEND_URL}/api`;
 
 const ChildTracking = () => {
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [children, setChildren] = useState([]);
   const [loading, setLoading] = useState(true);
   const [featureAvailable, setFeatureAvailable] = useState(false);
