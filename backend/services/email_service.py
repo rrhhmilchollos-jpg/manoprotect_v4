@@ -612,6 +612,127 @@ class EmailNotificationService:
         </html>
         """
 
+    async def send_family_invite(
+        self,
+        owner_name: str,
+        member_data: dict,
+        invite_link: str
+    ) -> dict:
+        """Send family invitation email with link to join"""
+        
+        email = member_data.get("email")
+        if not email:
+            return {"success": False, "error": "No email provided"}
+        
+        member_name = member_data.get("name", "")
+        member_id = member_data.get("child_id", "")
+        
+        html_content = self._generate_family_invite_email(
+            owner_name=owner_name,
+            member_name=member_name,
+            invite_link=invite_link
+        )
+        
+        result = await self._send_email(
+            to_email=email,
+            subject=f"👨‍👩‍👧 {owner_name} te ha añadido a su familia en ManoProtect",
+            html_content=html_content,
+            email_type="family_invite",
+            user_id=member_id,
+            metadata={
+                "member_id": member_id,
+                "member_name": member_name,
+                "owner_name": owner_name
+            }
+        )
+        
+        return result
+    
+    def _generate_family_invite_email(self, owner_name: str, member_name: str, invite_link: str) -> str:
+        """Generate family invitation HTML email"""
+        
+        return f"""
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        </head>
+        <body style="margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f3f4f6;">
+            <div style="max-width: 600px; margin: 0 auto; padding: 20px;">
+                <!-- Header -->
+                <div style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); padding: 30px; text-align: center; border-radius: 12px 12px 0 0;">
+                    <h1 style="color: white; margin: 0; font-size: 28px;">👨‍👩‍👧 Invitación Familiar</h1>
+                    <p style="color: #d1fae5; margin: 10px 0 0 0;">ManoProtect - Protección Digital</p>
+                </div>
+                
+                <!-- Content -->
+                <div style="background: white; padding: 30px; border-radius: 0 0 12px 12px;">
+                    <div style="text-align: center; margin-bottom: 25px;">
+                        <p style="font-size: 18px; color: #374151; margin: 0;">
+                            ¡Hola <strong>{member_name}</strong>!
+                        </p>
+                    </div>
+                    
+                    <div style="padding: 20px; background: #ecfdf5; border-radius: 8px; margin-bottom: 25px;">
+                        <p style="margin: 0; color: #065f46; font-size: 16px; text-align: center;">
+                            <strong>{owner_name}</strong> te ha añadido a su familia<br>
+                            en ManoProtect para poder localizarte en caso de emergencia.
+                        </p>
+                    </div>
+                    
+                    <div style="margin-bottom: 25px;">
+                        <p style="color: #374151; font-weight: bold; margin: 0 0 15px 0;">
+                            ¿Qué significa esto?
+                        </p>
+                        <ul style="color: #6b7280; margin: 0; padding-left: 20px;">
+                            <li style="margin-bottom: 8px;">Tu familiar podrá ver tu ubicación cuando la solicite</li>
+                            <li style="margin-bottom: 8px;">Recibirás alertas SOS si alguien de la familia necesita ayuda</li>
+                            <li style="margin-bottom: 8px;">Estarás protegido contra fraudes y estafas</li>
+                        </ul>
+                    </div>
+                    
+                    <!-- CTA Button -->
+                    <div style="text-align: center; margin: 30px 0;">
+                        <a href="{invite_link}" 
+                           style="display: inline-block; background: #10b981; color: white; padding: 18px 40px; text-decoration: none; border-radius: 8px; font-weight: bold; font-size: 16px;">
+                            📱 Vincular mi dispositivo
+                        </a>
+                    </div>
+                    
+                    <div style="padding: 15px; background: #fef3c7; border-radius: 8px; margin-bottom: 20px;">
+                        <p style="margin: 0; color: #92400e; font-size: 14px; text-align: center;">
+                            <strong>Tu código de vinculación:</strong><br>
+                            <span style="font-size: 24px; font-family: monospace; letter-spacing: 3px;">{member_name[:3].upper()}{hash(invite_link) % 10000:04d}</span>
+                        </p>
+                    </div>
+                    
+                    <div style="border-top: 1px solid #e5e7eb; padding-top: 20px;">
+                        <p style="color: #6b7280; font-size: 14px; margin: 0;">
+                            <strong>Pasos para vincular:</strong>
+                        </p>
+                        <ol style="color: #6b7280; font-size: 14px; margin: 10px 0 0 0; padding-left: 20px;">
+                            <li>Descarga la app ManoProtect</li>
+                            <li>Abre el enlace de arriba o introduce el código</li>
+                            <li>¡Listo! Ya estarás conectado con tu familia</li>
+                        </ol>
+                    </div>
+                </div>
+                
+                <!-- Footer -->
+                <div style="text-align: center; padding: 20px; color: #9ca3af;">
+                    <p style="margin: 0; font-size: 12px;">
+                        Este email fue enviado por ManoProtect<br>
+                        STARTBOOKING SL - CIF: B19427723<br><br>
+                        Si no reconoces esta invitación, puedes ignorar este email.
+                    </p>
+                </div>
+            </div>
+        </body>
+        </html>
+        """
+
+
 
 
 # Global instance
