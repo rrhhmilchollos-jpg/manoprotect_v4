@@ -17,6 +17,7 @@ import Knowledge from '@/pages/Knowledge';
 import Community from '@/pages/Community';
 import Pricing from '@/pages/Pricing';
 import PaymentSuccess from '@/pages/PaymentSuccess';
+import TrialSuccess from '@/pages/TrialSuccess';
 import Downloads from '@/pages/Downloads';
 import Login from '@/pages/Login';
 import Register from '@/pages/Register';
