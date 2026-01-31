@@ -1,0 +1,210 @@
+{
+  "common": {
+    "loading": "جاري التحميل...",
+    "error": "خطأ",
+    "success": "نجاح",
+    "cancel": "إلغاء",
+    "save": "حفظ",
+    "delete": "حذف",
+    "edit": "تعديل",
+    "add": "إضافة",
+    "search": "بحث",
+    "filter": "تصفية",
+    "back": "رجوع",
+    "next": "التالي",
+    "previous": "السابق",
+    "submit": "إرسال",
+    "close": "إغلاق",
+    "yes": "نعم",
+    "no": "لا",
+    "or": "أو"
+  },
+  "nav": {
+    "home": "الرئيسية",
+    "howItWorks": "كيف يعمل",
+    "pricing": "الأسعار",
+    "knowledge": "تعلم",
+    "community": "المجتمع",
+    "login": "تسجيل الدخول",
+    "register": "التسجيل",
+    "dashboard": "لوحة التحكم",
+    "logout": "تسجيل الخروج",
+    "faq": "الأسئلة الشائعة"
+  },
+  "landing": {
+    "hero": {
+      "title": "احمِ عائلتك من الاحتيال الرقمي والنصب",
+      "subtitle": "ManoProtect هو درعك ضد الاحتيال الرقمي. نحن نحمي العائلات من المكالمات الاحتيالية والتصيد والرسائل النصية المزيفة والمزيد.",
+      "cta": "ابدأ مجاناً",
+      "ctaSecondary": "شاهد كيف يعمل"
+    },
+    "features": {
+      "title": "لماذا ManoProtect؟",
+      "scamVerifier": {
+        "title": "كاشف الاحتيال",
+        "description": "حلل الرسائل والمكالمات والروابط المشبوهة فوراً"
+      },
+      "realTimeAlerts": {
+        "title": "تنبيهات فورية",
+        "description": "احصل على إشعارات حول التهديدات الجديدة المكتشفة"
+      },
+      "familyProtection": {
+        "title": "حماية العائلة",
+        "description": "خطة واحدة لجميع أفراد العائلة حتى 5 أعضاء"
+      },
+      "database": {
+        "title": "قاعدة بيانات محدثة",
+        "description": "+50,000 عملية احتيال تم التعرف عليها وفي تزايد"
+      }
+    },
+    "stats": {
+      "familiesProtected": "عائلات محمية",
+      "scamsBlocked": "عمليات احتيال محظورة",
+      "detectionRate": "معدل الكشف"
+    },
+    "testimonials": {
+      "title": "ماذا يقول مستخدمونا"
+    }
+  },
+  "auth": {
+    "login": {
+      "title": "تسجيل الدخول",
+      "email": "البريد الإلكتروني",
+      "password": "كلمة المرور",
+      "forgotPassword": "نسيت كلمة المرور؟",
+      "noAccount": "ليس لديك حساب؟",
+      "signUp": "سجل الآن",
+      "withGoogle": "المتابعة مع Google",
+      "button": "تسجيل الدخول"
+    },
+    "register": {
+      "title": "إنشاء حساب",
+      "name": "الاسم الكامل",
+      "email": "البريد الإلكتروني",
+      "password": "كلمة المرور",
+      "confirmPassword": "تأكيد كلمة المرور",
+      "hasAccount": "لديك حساب بالفعل؟",
+      "signIn": "تسجيل الدخول",
+      "withGoogle": "التسجيل مع Google",
+      "button": "إنشاء حساب",
+      "terms": "بالتسجيل، أنت توافق على"
+    }
+  },
+  "pricing": {
+    "title": "الخطط والأسعار",
+    "subtitle": "اختر الخطة الأنسب لعائلتك",
+    "monthly": "شهري",
+    "yearly": "سنوي",
+    "save": "وفر",
+    "popular": "الأكثر شعبية",
+    "free": {
+      "name": "مجاني",
+      "price": "€0",
+      "description": "لبدء حماية نفسك"
+    },
+    "premium": {
+      "name": "مميز",
+      "description": "حماية فردية كاملة"
+    },
+    "family": {
+      "name": "عائلي",
+      "description": "احمِ عائلتك بأكملها"
+    },
+    "features": {
+      "scamVerifier": "كاشف الاحتيال",
+      "basicAlerts": "تنبيهات أساسية",
+      "realTimeAlerts": "تنبيهات فورية",
+      "prioritySupport": "دعم أولوي",
+      "familyMembers": "حتى 5 أعضاء",
+      "childTracking": "تتبع العائلة",
+      "sosEmergency": "SOS طوارئ"
+    },
+    "cta": "ابدأ الآن"
+  },
+  "dashboard": {
+    "welcome": "مرحباً",
+    "protectionStatus": "حالة الحماية",
+    "recentAlerts": "التنبيهات الأخيرة",
+    "quickActions": "إجراءات سريعة",
+    "verifyScam": "تحقق من الاحتيال",
+    "familyMembers": "أفراد العائلة",
+    "settings": "الإعدادات"
+  },
+  "sos": {
+    "title": "طوارئ عائلية",
+    "button": "SOS",
+    "subtitle": "اضغط الزر لإرسال موقعك الدقيق لجميع أفراد عائلتك",
+    "recording": "جاري التسجيل...",
+    "sending": "جاري إرسال التنبيه...",
+    "active": "التنبيه نشط",
+    "cancel": "إلغاء SOS",
+    "familyNotified": "تم إخطار العائلة",
+    "emailsSent": "رسائل مرسلة",
+    "nearbyUsers": "مستخدمون قريبون",
+    "settings": {
+      "alertNearby": "تنبيه المستخدمين القريبين",
+      "alertNearbyDesc": "إخطار المستخدمين المميزين في نطاق 5 كم",
+      "soundEnabled": "صوت التنبيه",
+      "soundEnabledDesc": "تشغيل صفارة إنذار عند إرسال SOS",
+      "autoRecord": "تسجيل تلقائي",
+      "autoRecordDesc": "تسجيل الصوت عند الضغط على SOS"
+    },
+    "howItWorks": {
+      "title": "كيف يعمل؟",
+      "step1": "اضغط زر SOS لإرسال التنبيه",
+      "step2": "يتم تسجيل الصوت وتحديد موقع GPS",
+      "step3": "تتلقى عائلتك إشعاراً حرجاً مع صفارة إنذار",
+      "step4": "يتم تنبيه المستخدمين المميزين القريبين (5 كم)"
+    }
+  },
+  "childTracking": {
+    "title": "تتبع الأطفال",
+    "subtitle": "الخطة العائلية السنوية",
+    "addMember": "إضافة فرد للتتبع",
+    "noMembers": "لم يتم إضافة أفراد",
+    "noMembersDesc": "أضف أطفالك أو والديك أو أجدادك لتحديد موقعهم في أي وقت",
+    "form": {
+      "name": "الاسم",
+      "phone": "رقم الهاتف",
+      "email": "البريد الإلكتروني",
+      "emailRequired": "مطلوب - سيتم إرسال رابط إلى هذا البريد",
+      "age": "العمر",
+      "silentMode": "الوضع الصامت",
+      "silentModeDesc": "لن يتلقى إشعاراً عند طلب موقعه"
+    },
+    "personType": {
+      "child": "طفل",
+      "adult": "بالغ",
+      "elderly": "مسن",
+      "unknown": "فرد العائلة"
+    },
+    "status": {
+      "linked": "الجهاز متصل",
+      "pending": "في انتظار الربط"
+    }
+  },
+  "scamVerifier": {
+    "title": "كاشف الاحتيال",
+    "subtitle": "حلل الرسائل أو المكالمات أو الروابط المشبوهة",
+    "placeholder": "الصق هنا الرسالة أو الرقم أو الرابط المشبوه...",
+    "analyze": "تحليل",
+    "analyzing": "جاري التحليل...",
+    "result": {
+      "safe": "يبدو آمناً",
+      "suspicious": "مشبوه",
+      "dangerous": "خطير!"
+    }
+  },
+  "footer": {
+    "company": "الشركة",
+    "legal": "قانوني",
+    "support": "الدعم",
+    "privacyPolicy": "سياسة الخصوصية",
+    "termsOfService": "شروط الخدمة",
+    "refundPolicy": "سياسة الاسترداد",
+    "legalNotice": "إشعار قانوني",
+    "contact": "اتصل بنا",
+    "help": "مساعدة",
+    "rights": "جميع الحقوق محفوظة"
+  }
+}

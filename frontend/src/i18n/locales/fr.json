@@ -1,0 +1,210 @@
+{
+  "common": {
+    "loading": "Chargement...",
+    "error": "Erreur",
+    "success": "Succès",
+    "cancel": "Annuler",
+    "save": "Enregistrer",
+    "delete": "Supprimer",
+    "edit": "Modifier",
+    "add": "Ajouter",
+    "search": "Rechercher",
+    "filter": "Filtrer",
+    "back": "Retour",
+    "next": "Suivant",
+    "previous": "Précédent",
+    "submit": "Envoyer",
+    "close": "Fermer",
+    "yes": "Oui",
+    "no": "Non",
+    "or": "ou"
+  },
+  "nav": {
+    "home": "Accueil",
+    "howItWorks": "Comment ça marche",
+    "pricing": "Tarifs",
+    "knowledge": "Apprendre",
+    "community": "Communauté",
+    "login": "Connexion",
+    "register": "S'inscrire",
+    "dashboard": "Tableau de bord",
+    "logout": "Déconnexion",
+    "faq": "FAQ"
+  },
+  "landing": {
+    "hero": {
+      "title": "Protégez votre famille contre la fraude et les arnaques numériques",
+      "subtitle": "ManoProtect est votre bouclier contre la fraude numérique. Nous protégeons les familles contre les arnaques téléphoniques, le phishing, les SMS frauduleux et bien plus encore.",
+      "cta": "Commencer Gratuitement",
+      "ctaSecondary": "Voir Comment ça Marche"
+    },
+    "features": {
+      "title": "Pourquoi ManoProtect?",
+      "scamVerifier": {
+        "title": "Vérificateur d'Arnaques",
+        "description": "Analysez instantanément les messages, appels et liens suspects"
+      },
+      "realTimeAlerts": {
+        "title": "Alertes en Temps Réel",
+        "description": "Recevez des notifications sur les nouvelles menaces détectées"
+      },
+      "familyProtection": {
+        "title": "Protection Familiale",
+        "description": "Un forfait pour toute la famille avec jusqu'à 5 membres"
+      },
+      "database": {
+        "title": "Base de Données Actualisée",
+        "description": "+50 000 arnaques identifiées et en croissance"
+      }
+    },
+    "stats": {
+      "familiesProtected": "Familles Protégées",
+      "scamsBlocked": "Arnaques Bloquées",
+      "detectionRate": "Taux de Détection"
+    },
+    "testimonials": {
+      "title": "Ce que disent nos utilisateurs"
+    }
+  },
+  "auth": {
+    "login": {
+      "title": "Connexion",
+      "email": "Adresse e-mail",
+      "password": "Mot de passe",
+      "forgotPassword": "Mot de passe oublié?",
+      "noAccount": "Pas de compte?",
+      "signUp": "S'inscrire",
+      "withGoogle": "Continuer avec Google",
+      "button": "Se Connecter"
+    },
+    "register": {
+      "title": "Créer un Compte",
+      "name": "Nom complet",
+      "email": "Adresse e-mail",
+      "password": "Mot de passe",
+      "confirmPassword": "Confirmer le mot de passe",
+      "hasAccount": "Déjà un compte?",
+      "signIn": "Se connecter",
+      "withGoogle": "S'inscrire avec Google",
+      "button": "Créer un Compte",
+      "terms": "En vous inscrivant, vous acceptez nos"
+    }
+  },
+  "pricing": {
+    "title": "Forfaits et Tarifs",
+    "subtitle": "Choisissez le forfait qui convient le mieux à votre famille",
+    "monthly": "Mensuel",
+    "yearly": "Annuel",
+    "save": "Économisez",
+    "popular": "Le Plus Populaire",
+    "free": {
+      "name": "Gratuit",
+      "price": "0€",
+      "description": "Pour commencer à vous protéger"
+    },
+    "premium": {
+      "name": "Premium",
+      "description": "Protection individuelle complète"
+    },
+    "family": {
+      "name": "Famille",
+      "description": "Protégez toute votre famille"
+    },
+    "features": {
+      "scamVerifier": "Vérificateur d'arnaques",
+      "basicAlerts": "Alertes basiques",
+      "realTimeAlerts": "Alertes en temps réel",
+      "prioritySupport": "Support prioritaire",
+      "familyMembers": "Jusqu'à 5 membres",
+      "childTracking": "Localisation familiale",
+      "sosEmergency": "SOS d'urgence"
+    },
+    "cta": "Commencer"
+  },
+  "dashboard": {
+    "welcome": "Bienvenue",
+    "protectionStatus": "État de Protection",
+    "recentAlerts": "Alertes Récentes",
+    "quickActions": "Actions Rapides",
+    "verifyScam": "Vérifier une Arnaque",
+    "familyMembers": "Membres de la Famille",
+    "settings": "Paramètres"
+  },
+  "sos": {
+    "title": "Urgence Familiale",
+    "button": "SOS",
+    "subtitle": "Appuyez sur le bouton pour envoyer votre position exacte à tous les membres de votre famille",
+    "recording": "Enregistrement...",
+    "sending": "Envoi de l'alerte...",
+    "active": "Alerte active",
+    "cancel": "Annuler SOS",
+    "familyNotified": "Famille notifiée",
+    "emailsSent": "E-mails envoyés",
+    "nearbyUsers": "Utilisateurs proches",
+    "settings": {
+      "alertNearby": "Alerter les utilisateurs proches",
+      "alertNearbyDesc": "Notifier les utilisateurs premium dans un rayon de 5km",
+      "soundEnabled": "Son d'alerte",
+      "soundEnabledDesc": "Jouer une sirène lors de l'envoi du SOS",
+      "autoRecord": "Enregistrement automatique",
+      "autoRecordDesc": "Enregistrer l'audio en appuyant sur SOS"
+    },
+    "howItWorks": {
+      "title": "Comment ça marche?",
+      "step1": "Appuyez sur le bouton SOS pour envoyer l'alerte",
+      "step2": "L'audio est enregistré et la position GPS détectée",
+      "step3": "Votre famille reçoit une notification critique avec sirène",
+      "step4": "Les utilisateurs premium proches (5km) sont alertés"
+    }
+  },
+  "childTracking": {
+    "title": "Localisation des Enfants",
+    "subtitle": "Forfait Famille Annuel",
+    "addMember": "Ajouter un Membre à Localiser",
+    "noMembers": "Aucun membre ajouté",
+    "noMembersDesc": "Ajoutez vos enfants, parents ou grands-parents pour les localiser à tout moment",
+    "form": {
+      "name": "Nom",
+      "phone": "Numéro de téléphone",
+      "email": "E-mail",
+      "emailRequired": "Obligatoire - Un lien sera envoyé à cet e-mail",
+      "age": "Âge",
+      "silentMode": "Mode silencieux",
+      "silentModeDesc": "Ne recevra pas de notification quand vous demandez sa position"
+    },
+    "personType": {
+      "child": "Enfant",
+      "adult": "Adulte",
+      "elderly": "Personne âgée",
+      "unknown": "Membre de famille"
+    },
+    "status": {
+      "linked": "Appareil lié",
+      "pending": "En attente de liaison"
+    }
+  },
+  "scamVerifier": {
+    "title": "Vérificateur d'Arnaques",
+    "subtitle": "Analysez les messages, appels ou liens suspects",
+    "placeholder": "Collez ici le message, numéro ou lien suspect...",
+    "analyze": "Analyser",
+    "analyzing": "Analyse en cours...",
+    "result": {
+      "safe": "Semble sûr",
+      "suspicious": "Suspect",
+      "dangerous": "Dangereux!"
+    }
+  },
+  "footer": {
+    "company": "Entreprise",
+    "legal": "Mentions Légales",
+    "support": "Support",
+    "privacyPolicy": "Politique de Confidentialité",
+    "termsOfService": "Conditions d'Utilisation",
+    "refundPolicy": "Politique de Remboursement",
+    "legalNotice": "Mentions Légales",
+    "contact": "Contact",
+    "help": "Aide",
+    "rights": "Tous droits réservés"
+  }
+}
