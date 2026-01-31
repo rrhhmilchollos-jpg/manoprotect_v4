@@ -193,8 +193,12 @@ export default function SOSEmergency() {
       setSosStatus('active');
       setFamilyNotified(response.data.family_notified_count);
       setNearbyNotified(response.data.nearby_notified_count);
+      setEmailsSent(response.data.emails_sent || 0);
       
-      toast.success('¡Alerta SOS enviada! Tu familia ha sido notificada.');
+      const emailMsg = response.data.emails_sent > 0 
+        ? `¡Alerta SOS enviada! Se enviaron ${response.data.emails_sent} emails a tu familia.`
+        : '¡Alerta SOS enviada! Tu familia ha sido notificada.';
+      toast.success(emailMsg);
       
       // Play alert sound
       if (settings.soundEnabled) {
