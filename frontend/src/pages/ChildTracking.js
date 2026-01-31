@@ -491,20 +491,44 @@ const ChildTracking = () => {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Plus className="w-5 h-5 text-indigo-600" />
-                Añadir Niño
+                Añadir Familiar para Localizar
               </CardTitle>
             </CardHeader>
             <CardContent>
               <form onSubmit={handleAddChild} className="space-y-4">
                 <div>
-                  <Label htmlFor="name">Nombre del niño</Label>
+                  <Label htmlFor="name">Nombre</Label>
                   <Input
                     id="name"
                     placeholder="Ej: María"
                     value={newChild.name}
                     onChange={(e) => setNewChild({ ...newChild, name: e.target.value })}
                     className="mt-1"
+                    data-testid="child-name-input"
                   />
+                </div>
+                
+                <div>
+                  <Label htmlFor="age">Edad</Label>
+                  <Input
+                    id="age"
+                    type="number"
+                    min="1"
+                    max="120"
+                    placeholder="Ej: 12"
+                    value={newChild.age}
+                    onChange={(e) => setNewChild({ ...newChild, age: e.target.value })}
+                    className="mt-1"
+                    data-testid="child-age-input"
+                  />
+                  {newChild.age && (
+                    <p className="text-sm mt-1 text-indigo-600 font-medium">
+                      Clasificación automática: {getPersonType(newChild.age).toUpperCase()}
+                      {parseInt(newChild.age) < 18 && ' 👶'}
+                      {parseInt(newChild.age) >= 65 && ' 👴'}
+                      {parseInt(newChild.age) >= 18 && parseInt(newChild.age) < 65 && ' 👤'}
+                    </p>
+                  )}
                 </div>
                 
                 <div>
@@ -516,6 +540,7 @@ const ChildTracking = () => {
                     value={newChild.phone}
                     onChange={(e) => setNewChild({ ...newChild, phone: e.target.value })}
                     className="mt-1"
+                    data-testid="child-phone-input"
                   />
                 </div>
                 
@@ -523,7 +548,7 @@ const ChildTracking = () => {
                   <div>
                     <Label htmlFor="silent" className="font-medium">Modo silencioso</Label>
                     <p className="text-sm text-zinc-500">
-                      El niño NO recibirá notificación cuando solicites su ubicación
+                      No recibirá notificación cuando solicites su ubicación
                     </p>
                   </div>
                   <Switch
@@ -545,8 +570,9 @@ const ChildTracking = () => {
                   <Button
                     type="submit"
                     className="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white"
+                    data-testid="add-child-submit"
                   >
-                    Añadir
+                    Añadir Familiar
                   </Button>
                 </div>
               </form>
