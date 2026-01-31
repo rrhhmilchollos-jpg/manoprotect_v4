@@ -4,14 +4,19 @@ Handles subscription plans, checkout sessions, and webhooks
 """
 from fastapi import APIRouter, HTTPException, Request, Cookie
 from typing import Optional
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
+from pydantic import BaseModel
 import logging
+import stripe
 
 from core.database import db, get_current_user, STRIPE_API_KEY
 from models.all_schemas import CheckoutRequest, PaymentTransaction
 from emergentintegrations.payments.stripe.checkout import (
     StripeCheckout, CheckoutSessionResponse, CheckoutStatusResponse, CheckoutSessionRequest
 )
+
+# Configure Stripe
+stripe.api_key = STRIPE_API_KEY
 
 router = APIRouter(tags=["Payments"])
 
