@@ -25,14 +25,33 @@ def init_firebase():
         return _firestore_client
     
     try:
-        # Get credentials path
-        cred_path = os.path.join(os.path.dirname(__file__), '..', 'secrets', 'firebase-admin.json')
+        # Try to get credentials from environment variables first
+        firebase_project_id = os.environ.get('FIREBASE_PROJECT_ID')
+        firebase_private_key = os.environ.get('FIREBASE_PRIVATE_KEY')
+        firebase_client_email = os.environ.get('FIREBASE_CLIENT_EMAIL')
         
-        if not os.path.exists(cred_path):
-            print(f"[Firebase] Warning: Credentials file not found at {cred_path}")
-            return None
+        if firebase_project_id and firebase_private_key and firebase_client_email:
+            # Use environment variables
+            cred_dict = {
+                "type": "service_account",
+                "project_id": firebase_project_id,
+                "private_key": firebase_private_key.replace('\\n', '\n'),  # Handle escaped newlines
+                "client_email": firebase_client_email,
+                "token_uri": "https://oauth2.googleapis.com/token"
+            }
+            cred = credentials.Certificate(cred_dict)
+            print("[Firebase] Using credentials from environment variables")
+        else:
+            # Fallback to file for local development
+            cred_path = os.path.join(os.path.dirname(__file__), '..', 'secrets', 'firebase-admin.json')
+            
+            if not os.path.exists(cred_path):
+                print(f"[Firebase] Warning: No credentials found (set FIREBASE_PROJECT_ID, FIREBASE_PRIVATE_KEY, FIREBASE_CLIENT_EMAIL env vars or provide {cred_path})")
+                return None
+            
+            cred = credentials.Certificate(cred_path)
+            print("[Firebase] Using credentials from file")
         
-        cred = credentials.Certificate(cred_path)
         _firebase_app = firebase_admin.initialize_app(cred)
         _firestore_client = firestore.client()
         
