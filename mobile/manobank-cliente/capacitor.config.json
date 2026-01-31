@@ -3,7 +3,7 @@
   "appName": "ManoBank",
   "webDir": "www",
   "server": {
-    "url": "https://manoapp-mobile.preview.emergentagent.com",
+    "url": "https://manoprotect-family.preview.emergentagent.com",
     "cleartext": true
   },
   "android": {
