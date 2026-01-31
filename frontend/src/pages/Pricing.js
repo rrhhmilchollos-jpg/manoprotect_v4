@@ -15,6 +15,7 @@ const Pricing = () => {
   const [billingCycle, setBillingCycle] = useState('monthly');
   const [loadingPlan, setLoadingPlan] = useState(null);
   const [checkingPayment, setCheckingPayment] = useState(false);
+  const [loadingTrial, setLoadingTrial] = useState(false);
 
   // Poll payment status function
   const pollPaymentStatus = useCallback(async (sessionId, attempts = 0) => {
