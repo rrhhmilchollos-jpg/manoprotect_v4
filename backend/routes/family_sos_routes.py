@@ -1269,11 +1269,34 @@ async def trigger_premium_sos(
     user = await require_auth(request, session_token)
     features = get_plan_features_for_user(user)
     
-    # Check if user has premium family plan
-    if not features.get("sos_premium", False) and user.plan not in ["family-yearly", "family-monthly", "premium"]:
+    # Superadmins always have access
+    SUPERADMIN_EMAILS = [
+        "rrhh.milchollos@gmail.com",
+        "info@manoprotect.com",
+        "ivanrubiosolas@gmail.com"
+    ]
+    
+    # Plans that have SOS access
+    ALLOWED_PLANS = [
+        "family-yearly", "family-monthly", "family-quarterly", "family",
+        "premium", "premium-yearly", "premium-monthly", "premium-quarterly",
+        "personal-yearly", "personal-monthly", "personal-quarterly", "personal",
+        "yearly", "monthly", "quarterly", "weekly",
+        "trial-7days", "trial",
+        "business", "business-yearly", "business-monthly",
+        "enterprise", "enterprise-yearly", "enterprise-monthly"
+    ]
+    
+    # Check if user has access to SOS
+    is_superadmin = user.email in SUPERADMIN_EMAILS
+    has_sos_feature = features.get("sos_premium", False) or features.get("sos", False)
+    has_allowed_plan = user.plan in ALLOWED_PLANS
+    has_any_paid_plan = user.plan and user.plan != "free"
+    
+    if not (is_superadmin or has_sos_feature or has_allowed_plan or has_any_paid_plan):
         raise HTTPException(
             status_code=403,
-            detail="El SOS Premium requiere Plan Familiar. Actualiza tu plan para acceder."
+            detail="El SOS Premium requiere Plan Premium o Familiar. Actualiza tu plan para acceder."
         )
     
     data = await request.json()
