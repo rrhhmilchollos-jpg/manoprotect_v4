@@ -88,6 +88,16 @@ Plataforma de protección contra fraudes y estafas digitales para familias espa�
   - Iconos diferenciados por tipo: 👶 👤 👴
   - Backend actualizado con person_type
   - Textos actualizados de "Niño" a "Familiar"
+- **✅ Sistema SOS Premium Familiar (31 enero 2026)**
+  - Botón SOS grande (rojo) para emergencias
+  - Grabación de audio automática (~15-20s)
+  - Detección GPS en tiempo real
+  - Notificación a todos los familiares
+  - Alertas a usuarios premium cercanos (5km)
+  - Sirena/sonido en dispositivos familiares
+  - Cancelación/confirmación de alertas
+  - Historial de alertas SOS
+  - Página: /sos-emergency
 - **✅ Proyecto iOS Completo (31 enero 2026)**
   - Capacitor iOS configurado
   - Iconos iOS generados (todos los tamaños requeridos)
