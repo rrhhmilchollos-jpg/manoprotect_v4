@@ -166,7 +166,7 @@ async def login_user(data: UserLogin, request: Request, response: Response):
     
     # Debug logging
     if user:
-        ph = user.get("password_hash", "")
+        ph = user.get("password_hash") or ""
         print(f"[DEBUG AUTH] User found, password_hash length={len(ph)}, has_dollar={'$' in ph}")
     
     if not user or not user.get("password_hash"):
