@@ -183,6 +183,11 @@ const ChildTracking = () => {
       return;
     }
 
+    if (!newChild.email) {
+      toast.error('El email es obligatorio para enviar el enlace de vinculación');
+      return;
+    }
+
     if (!newChild.age) {
       toast.error('Por favor, indica la edad para clasificar automáticamente');
       return;
@@ -192,7 +197,7 @@ const ChildTracking = () => {
       const payload = {
         name: newChild.name,
         phone: newChild.phone,
-        email: newChild.email || null,
+        email: newChild.email,
         age: parseInt(newChild.age),
         silent_mode: newChild.silent_mode
       };
