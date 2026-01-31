@@ -1,0 +1,210 @@
+{
+  "common": {
+    "loading": "Cargando...",
+    "error": "Error",
+    "success": "Éxito",
+    "cancel": "Cancelar",
+    "save": "Guardar",
+    "delete": "Eliminar",
+    "edit": "Editar",
+    "add": "Añadir",
+    "search": "Buscar",
+    "filter": "Filtrar",
+    "back": "Volver",
+    "next": "Siguiente",
+    "previous": "Anterior",
+    "submit": "Enviar",
+    "close": "Cerrar",
+    "yes": "Sí",
+    "no": "No",
+    "or": "o"
+  },
+  "nav": {
+    "home": "Inicio",
+    "howItWorks": "Cómo Funciona",
+    "pricing": "Precios",
+    "knowledge": "Aprende",
+    "community": "Comunidad",
+    "login": "Iniciar Sesión",
+    "register": "Registrarse",
+    "dashboard": "Panel",
+    "logout": "Cerrar Sesión",
+    "faq": "Preguntas Frecuentes"
+  },
+  "landing": {
+    "hero": {
+      "title": "Protege a tu familia de fraudes y estafas digitales",
+      "subtitle": "ManoProtect es tu escudo contra el fraude digital. Protegemos a familias españolas de estafas telefónicas, phishing, SMS fraudulentos y mucho más.",
+      "cta": "Empezar Gratis",
+      "ctaSecondary": "Ver Cómo Funciona"
+    },
+    "features": {
+      "title": "¿Por qué ManoProtect?",
+      "scamVerifier": {
+        "title": "Verificador de Estafas",
+        "description": "Analiza mensajes, llamadas y enlaces sospechosos al instante"
+      },
+      "realTimeAlerts": {
+        "title": "Alertas en Tiempo Real",
+        "description": "Recibe notificaciones sobre nuevas amenazas detectadas en España"
+      },
+      "familyProtection": {
+        "title": "Protección Familiar",
+        "description": "Un plan para toda la familia con hasta 5 miembros"
+      },
+      "database": {
+        "title": "Base de Datos Actualizada",
+        "description": "+50,000 estafas identificadas y en crecimiento"
+      }
+    },
+    "stats": {
+      "familiesProtected": "Familias Protegidas",
+      "scamsBlocked": "Estafas Bloqueadas",
+      "detectionRate": "Tasa de Detección"
+    },
+    "testimonials": {
+      "title": "Lo que dicen nuestros usuarios"
+    }
+  },
+  "auth": {
+    "login": {
+      "title": "Iniciar Sesión",
+      "email": "Correo electrónico",
+      "password": "Contraseña",
+      "forgotPassword": "¿Olvidaste tu contraseña?",
+      "noAccount": "¿No tienes cuenta?",
+      "signUp": "Regístrate",
+      "withGoogle": "Continuar con Google",
+      "button": "Iniciar Sesión"
+    },
+    "register": {
+      "title": "Crear Cuenta",
+      "name": "Nombre completo",
+      "email": "Correo electrónico",
+      "password": "Contraseña",
+      "confirmPassword": "Confirmar contraseña",
+      "hasAccount": "¿Ya tienes cuenta?",
+      "signIn": "Inicia sesión",
+      "withGoogle": "Registrarse con Google",
+      "button": "Crear Cuenta",
+      "terms": "Al registrarte, aceptas nuestros"
+    }
+  },
+  "pricing": {
+    "title": "Planes y Precios",
+    "subtitle": "Elige el plan que mejor se adapte a tu familia",
+    "monthly": "Mensual",
+    "yearly": "Anual",
+    "save": "Ahorra",
+    "popular": "Más Popular",
+    "free": {
+      "name": "Gratis",
+      "price": "0€",
+      "description": "Para empezar a protegerte"
+    },
+    "premium": {
+      "name": "Premium",
+      "description": "Protección completa individual"
+    },
+    "family": {
+      "name": "Familiar",
+      "description": "Protege a toda tu familia"
+    },
+    "features": {
+      "scamVerifier": "Verificador de estafas",
+      "basicAlerts": "Alertas básicas",
+      "realTimeAlerts": "Alertas en tiempo real",
+      "prioritySupport": "Soporte prioritario",
+      "familyMembers": "Hasta 5 miembros",
+      "childTracking": "Localización familiar",
+      "sosEmergency": "SOS de emergencia"
+    },
+    "cta": "Empezar"
+  },
+  "dashboard": {
+    "welcome": "Bienvenido",
+    "protectionStatus": "Estado de Protección",
+    "recentAlerts": "Alertas Recientes",
+    "quickActions": "Acciones Rápidas",
+    "verifyScam": "Verificar Estafa",
+    "familyMembers": "Miembros de la Familia",
+    "settings": "Configuración"
+  },
+  "sos": {
+    "title": "Emergencia Familiar",
+    "button": "SOS",
+    "subtitle": "Pulsa el botón para enviar tu ubicación exacta a todos tus familiares",
+    "recording": "Grabando...",
+    "sending": "Enviando alerta...",
+    "active": "Alerta activa",
+    "cancel": "Cancelar SOS",
+    "familyNotified": "Familiares notificados",
+    "emailsSent": "Emails enviados",
+    "nearbyUsers": "Usuarios cercanos",
+    "settings": {
+      "alertNearby": "Alertar usuarios cercanos",
+      "alertNearbyDesc": "Notificar a usuarios premium en 5km",
+      "soundEnabled": "Sonido de alerta",
+      "soundEnabledDesc": "Reproducir sirena al enviar SOS",
+      "autoRecord": "Grabar automáticamente",
+      "autoRecordDesc": "Grabar audio al pulsar SOS"
+    },
+    "howItWorks": {
+      "title": "¿Cómo funciona?",
+      "step1": "Pulsa el botón SOS para enviar alerta",
+      "step2": "Se graba audio y detecta tu ubicación GPS",
+      "step3": "Tu familia recibe notificación crítica con sirena",
+      "step4": "Usuarios premium cercanos (5km) son alertados"
+    }
+  },
+  "childTracking": {
+    "title": "Localización de Niños",
+    "subtitle": "Plan Familiar Anual",
+    "addMember": "Añadir Familiar para Localizar",
+    "noMembers": "No hay familiares añadidos",
+    "noMembersDesc": "Añade a tus hijos, padres o abuelos para poder localizarlos en cualquier momento",
+    "form": {
+      "name": "Nombre",
+      "phone": "Número de teléfono",
+      "email": "Email",
+      "emailRequired": "Obligatorio - Se enviará un enlace de vinculación a este email",
+      "age": "Edad",
+      "silentMode": "Modo silencioso",
+      "silentModeDesc": "No recibirá notificación cuando solicites su ubicación"
+    },
+    "personType": {
+      "child": "Niño",
+      "adult": "Adulto",
+      "elderly": "Anciano",
+      "unknown": "Familiar"
+    },
+    "status": {
+      "linked": "Dispositivo vinculado",
+      "pending": "Pendiente vincular"
+    }
+  },
+  "scamVerifier": {
+    "title": "Verificador de Estafas",
+    "subtitle": "Analiza mensajes, llamadas o enlaces sospechosos",
+    "placeholder": "Pega aquí el mensaje, número o enlace sospechoso...",
+    "analyze": "Analizar",
+    "analyzing": "Analizando...",
+    "result": {
+      "safe": "Parece seguro",
+      "suspicious": "Sospechoso",
+      "dangerous": "¡Peligroso!"
+    }
+  },
+  "footer": {
+    "company": "Empresa",
+    "legal": "Legal",
+    "support": "Soporte",
+    "privacyPolicy": "Política de Privacidad",
+    "termsOfService": "Términos de Servicio",
+    "refundPolicy": "Política de Reembolso",
+    "legalNotice": "Aviso Legal",
+    "contact": "Contacto",
+    "help": "Ayuda",
+    "rights": "Todos los derechos reservados"
+  }
+}
