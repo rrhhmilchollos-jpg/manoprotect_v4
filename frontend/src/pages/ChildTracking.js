@@ -747,6 +747,71 @@ const ChildTracking = () => {
                     </div>
                   </div>
                   
+                  {/* Invitation Link - Show when not linked */}
+                  {!child.device_linked && child.invite_token && (
+                    <div className="mb-4 p-4 bg-amber-50 rounded-lg border border-amber-200">
+                      <p className="text-sm font-medium text-amber-800 mb-2 flex items-center gap-2">
+                        <Mail className="w-4 h-4" />
+                        Enlace de Vinculación
+                      </p>
+                      <p className="text-xs text-amber-600 mb-3">
+                        Envía este enlace a {child.name} para que vincule su dispositivo:
+                      </p>
+                      <div className="flex gap-2">
+                        <input
+                          type="text"
+                          readOnly
+                          value={`https://manoprotect.com/vincular/${child.child_id}?token=${child.invite_token}`}
+                          className="flex-1 text-xs p-2 bg-white border border-amber-300 rounded text-zinc-600"
+                        />
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className="border-amber-500 text-amber-700 hover:bg-amber-100"
+                          onClick={() => {
+                            navigator.clipboard.writeText(`https://manoprotect.com/vincular/${child.child_id}?token=${child.invite_token}`);
+                            toast.success('Enlace copiado al portapapeles');
+                          }}
+                        >
+                          <Copy className="w-4 h-4" />
+                        </Button>
+                      </div>
+                      <div className="flex gap-2 mt-3">
+                        <Button
+                          size="sm"
+                          className="flex-1 bg-green-600 hover:bg-green-700 text-white"
+                          onClick={() => {
+                            const link = `https://manoprotect.com/vincular/${child.child_id}?token=${child.invite_token}`;
+                            const text = `Hola ${child.name}, te he añadido a mi familia en ManoProtect para poder localizarte en caso de emergencia. Pulsa este enlace para vincular tu dispositivo: ${link}`;
+                            window.open(`https://wa.me/${child.phone.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(text)}`, '_blank');
+                          }}
+                        >
+                          <MessageSquare className="w-4 h-4 mr-1" />
+                          Enviar por WhatsApp
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className="flex-1"
+                          onClick={() => {
+                            const link = `https://manoprotect.com/vincular/${child.child_id}?token=${child.invite_token}`;
+                            const subject = `${user?.name || 'Tu familiar'} te ha añadido a ManoProtect`;
+                            const body = `Hola ${child.name},\n\nTe he añadido a mi familia en ManoProtect para poder localizarte en caso de emergencia.\n\nPulsa este enlace para vincular tu dispositivo:\n${link}\n\nSaludos`;
+                            window.open(`mailto:${child.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`, '_blank');
+                          }}
+                        >
+                          <Mail className="w-4 h-4 mr-1" />
+                          Enviar por Email
+                        </Button>
+                      </div>
+                      {child.email && (
+                        <p className="text-xs text-amber-600 mt-2">
+                          📧 Ya se envió invitación automática a: {child.email}
+                        </p>
+                      )}
+                    </div>
+                  )}
+                  
                   {/* Last Location */}
                   {child.last_location && (
                     <div className="mb-4 p-4 bg-emerald-50 rounded-lg border border-emerald-200">
