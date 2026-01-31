@@ -186,6 +186,10 @@ function AppRouter() {
           } 
         />
         <Route 
+          path="/vincular/:memberId" 
+          element={<VincularDispositivo />} 
+        />
+        <Route 
           path="/contacts" 
           element={
             <ProtectedRoute>
