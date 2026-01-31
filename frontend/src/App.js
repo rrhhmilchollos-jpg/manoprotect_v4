@@ -177,6 +177,14 @@ function AppRouter() {
           } 
         />
         <Route 
+          path="/sos-emergency" 
+          element={
+            <ProtectedRoute>
+              <SOSEmergency />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
           path="/contacts" 
           element={
             <ProtectedRoute>
