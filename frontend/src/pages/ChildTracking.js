@@ -37,6 +37,7 @@ const ChildTracking = () => {
   const [newChild, setNewChild] = useState({
     name: '',
     phone: '',
+    email: '',
     age: '',
     silent_mode: false
   });
