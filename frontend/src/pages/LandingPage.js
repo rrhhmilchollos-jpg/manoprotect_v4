@@ -117,17 +117,17 @@ const LandingPage = () => {
               <div className="flex items-center gap-8 pt-4">
                 <div>
                   <div className="text-3xl font-bold text-indigo-600">99.8%</div>
-                  <div className="text-sm text-zinc-600">Detección</div>
+                  <div className="text-sm text-zinc-600">{t('landing.stats.detectionRate')}</div>
                 </div>
                 <div className="w-px h-12 bg-zinc-200" />
                 <div>
                   <div className="text-3xl font-bold text-emerald-500">24/7</div>
-                  <div className="text-sm text-zinc-600">Protección</div>
+                  <div className="text-sm text-zinc-600">{t('pricing.features.realTimeAlerts')}</div>
                 </div>
                 <div className="w-px h-12 bg-zinc-200" />
                 <div>
                   <div className="text-3xl font-bold text-orange-500">+10K</div>
-                  <div className="text-sm text-zinc-600">Amenazas Bloqueadas</div>
+                  <div className="text-sm text-zinc-600">{t('landing.stats.scamsBlocked')}</div>
                 </div>
               </div>
             </div>
