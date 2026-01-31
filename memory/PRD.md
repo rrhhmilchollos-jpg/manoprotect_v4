@@ -80,7 +80,14 @@ Plataforma de protección contra fraudes y estafas digitales para familias espa�
   - Ejecutable Windows compilado: `ManoProtect Desktop.exe` (107MB)
   - ZIP descargable: `/app/frontend/public/ManoProtect-Desktop-Windows.zip`
   - Página de descarga: `/empleados/descargar`
+  - **Portal completo para sucursales: `/empleados/portal`**
   - Credenciales: admin@manoprotect.com / Admin2024!
+- **✅ Localización Familiar Mejorada (31 enero 2026)**
+  - Campo de EDAD añadido al formulario
+  - Clasificación automática: Niño (<18), Adulto (18-64), Anciano (≥65)
+  - Iconos diferenciados por tipo: 👶 👤 👴
+  - Backend actualizado con person_type
+  - Textos actualizados de "Niño" a "Familiar"
 - **✅ Proyecto iOS Completo (31 enero 2026)**
   - Capacitor iOS configurado
   - Iconos iOS generados (todos los tamaños requeridos)
