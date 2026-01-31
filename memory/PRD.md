@@ -1,6 +1,6 @@
 # Proyectos ManoProtect y ManoBank
 
-## Última actualización: 31 de enero de 2026
+## Última actualización: 31 de enero de 2026 (sesión 2)
 
 ---
 
@@ -98,6 +98,12 @@ Plataforma de protección contra fraudes y estafas digitales para familias espa�
   - Cancelación/confirmación de alertas
   - Historial de alertas SOS
   - Página: /sos-emergency
+- **✅ Bug Enlace Invitación Familiar CORREGIDO (31 enero 2026 - sesión 2)**
+  - Corregido `verify_password_secure()` para soportar hashes bcrypt ($2b$)
+  - El `invite_token` ahora se muestra correctamente en el frontend
+  - Enlace de vinculación visible para miembros pendientes
+  - Botones "Enviar por WhatsApp" y "Enviar por Email" funcionando
+  - Archivo modificado: `/app/backend/services/security_service.py`
 - **✅ Proyecto iOS Completo (31 enero 2026)**
   - Capacitor iOS configurado
   - Iconos iOS generados (todos los tamaños requeridos)
