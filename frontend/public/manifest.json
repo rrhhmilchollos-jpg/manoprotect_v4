@@ -4,6 +4,7 @@
   "description": "Protege a tu familia contra fraudes, phishing y estafas digitales.",
   "start_url": "/",
   "display": "standalone",
+  "orientation": "portrait",
   "background_color": "#ffffff",
   "theme_color": "#10b981",
   "lang": "es",
