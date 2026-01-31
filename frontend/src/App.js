@@ -115,6 +115,7 @@ function AppRouter() {
         <Route path="/faq" element={<FAQ />} />
         <Route path="/preguntas-frecuentes" element={<FAQ />} />
         <Route path="/empleados/descargar" element={<DescargarDesktop />} />
+        <Route path="/desarrolladores/descargas" element={<DescargarApps />} />
         
         {/* ManoProtect Promo Landing */}
         <Route path="/promo" element={<LandingPromo />} />
