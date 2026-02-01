@@ -646,7 +646,7 @@ const LandingPage = () => {
             <div className="md:col-span-2">
               <div className="flex items-center gap-3 mb-4">
                 <img 
-                  src="https://customer-assets.emergentagent.com/job_5c97b24f-9a55-4567-9954-bd76179fb951/artifacts/8y6ab2pd_logo%20App%20Mano.png" 
+                  src={LOGO_URL}
                   alt="ManoProtect - Tu escudo digital contra fraudes" 
                   className="h-8 w-auto"
                   width="32"
