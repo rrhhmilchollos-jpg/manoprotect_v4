@@ -17,7 +17,19 @@
     "close": "Cerrar",
     "yes": "Sí",
     "no": "No",
-    "or": "o"
+    "or": "o",
+    "update": "Actualizar",
+    "confirm": "Confirmar",
+    "view": "Ver",
+    "viewAll": "Ver todas",
+    "analyze": "Analizar",
+    "analyzing": "Analizando...",
+    "processing": "Procesando...",
+    "saving": "Guardando...",
+    "share": "Compartir",
+    "export": "Exportar",
+    "download": "Descargar",
+    "upgrade": "Mejorar Plan"
   },
   "nav": {
     "home": "Inicio",
@@ -29,7 +41,15 @@
     "register": "Registrarse",
     "dashboard": "Panel",
     "logout": "Cerrar Sesión",
-    "faq": "Preguntas Frecuentes"
+    "faq": "Preguntas Frecuentes",
+    "profile": "Perfil",
+    "settings": "Configuración",
+    "contacts": "Contactos",
+    "rewards": "Recompensas",
+    "family": "Familia",
+    "enterprise": "Empresas",
+    "admin": "Admin",
+    "downloads": "Descargas"
   },
   "landing": {
     "hero": {
@@ -75,7 +95,11 @@
       "noAccount": "¿No tienes cuenta?",
       "signUp": "Regístrate",
       "withGoogle": "Continuar con Google",
-      "button": "Iniciar Sesión"
+      "button": "Iniciar Sesión",
+      "loggingIn": "Iniciando sesión...",
+      "welcomeBack": "¡Bienvenido de vuelta!",
+      "orWithEmail": "O con email",
+      "backToHome": "← Volver al inicio"
     },
     "register": {
       "title": "Crear Cuenta",
@@ -87,7 +111,12 @@
       "signIn": "Inicia sesión",
       "withGoogle": "Registrarse con Google",
       "button": "Crear Cuenta",
-      "terms": "Al registrarte, aceptas nuestros"
+      "terms": "Al registrarte, aceptas nuestros términos de servicio y política de privacidad.",
+      "creating": "Creando cuenta...",
+      "success": "¡Cuenta creada exitosamente!",
+      "passwordMinLength": "Al menos 8 caracteres",
+      "passwordsNotMatch": "Las contraseñas no coinciden",
+      "joinMano": "Únete a MANO y protégete contra fraudes"
     }
   },
   "pricing": {
@@ -97,8 +126,20 @@
     "yearly": "Anual",
     "save": "Ahorra",
     "popular": "Más Popular",
+    "bestValue": "Mejor Valor",
+    "trial": {
+      "title": "Prueba 7 Días GRATIS",
+      "badge": "🎁 OFERTA ESPECIAL",
+      "description": "Verifica tu tarjeta con un cargo de 0,00€ y accede a todas las funciones Premium durante 7 días.",
+      "cardVerification": "Verificación segura de tarjeta (sin cargo)",
+      "fullAccess": "Acceso completo a Premium durante 7 días",
+      "cancelAnytime": "Cancela cuando quieras sin ningún cargo",
+      "afterTrial": "Después de 7 días",
+      "button": "Probar 7 Días Gratis",
+      "disclaimer": "Al continuar, aceptas que se verificará tu tarjeta. Si no cancelas antes de 7 días, se cobrará €29,99/mes."
+    },
     "free": {
-      "name": "Gratis",
+      "name": "Básico",
       "price": "0€",
       "description": "Para empezar a protegerte"
     },
@@ -117,18 +158,94 @@
       "prioritySupport": "Soporte prioritario",
       "familyMembers": "Hasta 5 miembros",
       "childTracking": "Localización familiar",
-      "sosEmergency": "SOS de emergencia"
+      "sosEmergency": "SOS de emergencia",
+      "unlimitedAnalysis": "Análisis ilimitados",
+      "aiBlocking": "Bloqueo automático IA",
+      "fullHistory": "Historial completo",
+      "dataExport": "Exportación de datos",
+      "noAds": "Sin anuncios"
     },
-    "cta": "Empezar"
+    "cta": "Empezar",
+    "subscribe": "Suscribirse",
+    "investing": "Invierte en tu",
+    "security": "Seguridad",
+    "fraudWarning": "Un solo fraude puede costarte €5,000+. MANO Premium te protege 24/7 por menos de lo que gastas en café.",
+    "noCommitment": "Sin permanencia",
+    "guarantee": "Garantía 15 días",
+    "perMonth": "/ mes",
+    "perYear": "/ año"
   },
   "dashboard": {
-    "welcome": "Bienvenido",
+    "welcome": "Hola",
     "protectionStatus": "Estado de Protección",
-    "recentAlerts": "Alertas Recientes",
+    "protectionActive": "Tu protección está activa. Analiza contenido sospechoso abajo.",
+    "recentAlerts": "Alertas de Seguridad Recientes",
     "quickActions": "Acciones Rápidas",
     "verifyScam": "Verificar Estafa",
     "familyMembers": "Miembros de la Familia",
-    "settings": "Configuración"
+    "settings": "Configuración",
+    "stats": {
+      "totalAnalyzed": "Total Analizados",
+      "threatsBlocked": "Amenazas Bloqueadas",
+      "critical": "Críticas",
+      "high": "Altas"
+    },
+    "tabs": {
+      "aiAnalyzer": "Analizador IA",
+      "secureBanking": "Banca Segura",
+      "history": "Historial"
+    },
+    "quickAnalysis": "Análisis Rápido",
+    "quickAnalysisDesc": "Introduce un número de teléfono, mensaje, correo o enlace para verificar si es una amenaza",
+    "contentTypes": {
+      "phone": "Teléfono",
+      "sms": "SMS",
+      "email": "Email",
+      "url": "Enlace"
+    },
+    "threatDetected": "AMENAZA DETECTADA",
+    "safeContent": "CONTENIDO SEGURO",
+    "level": "Nivel",
+    "threatTypes": "Tipos de amenaza",
+    "recommendation": "Recomendación",
+    "analysis": "Análisis",
+    "threatHistory": "Historial de Amenazas",
+    "lastThreats": "Últimas amenazas detectadas",
+    "exportCSV": "Exportar CSV",
+    "noThreats": "No hay amenazas detectadas aún. ¡Estás protegido!",
+    "falsePositive": "Falso positivo",
+    "investorAccess": {
+      "title": "Acceso de Inversor Verificado",
+      "active": "ACTIVO",
+      "description": "Tienes acceso a la documentación confidencial: Plan de Negocio, Modelo Financiero, Pitch Deck y Dossier B2B.",
+      "goToDownloads": "Ir a Descargas"
+    }
+  },
+  "profile": {
+    "title": "Perfil y Configuración",
+    "personalInfo": "Información Personal",
+    "fullName": "Nombre completo",
+    "email": "Email",
+    "emailNoChange": "El email no se puede cambiar",
+    "phone": "Teléfono",
+    "pushNotifications": "Notificaciones Push",
+    "pushNotificationsDesc": "Recibe alertas instantáneas en tu navegador",
+    "preferences": "Preferencias y Seguridad",
+    "preferencesDesc": "Configura cómo ManoProtect te protege",
+    "darkMode": "Modo Oscuro",
+    "darkModeDesc": "Tema oscuro para la interfaz",
+    "emailAlerts": "Alertas por Email",
+    "emailAlertsDesc": "Recibir resumen de amenazas por correo",
+    "autoBlock": "Bloqueo Automático",
+    "autoBlockDesc": "Bloquear amenazas críticas automáticamente",
+    "yourProtection": "Tu Protección",
+    "analyzed": "Analizados",
+    "blocked": "Bloqueados",
+    "saveChanges": "Guardar Cambios",
+    "plan": "Plan",
+    "planFree": "Gratis",
+    "planPremium": "Premium",
+    "upgradeToPremium": "Actualizar a Premium"
   },
   "sos": {
     "title": "Emergencia Familiar",
@@ -138,9 +255,28 @@
     "sending": "Enviando alerta...",
     "active": "Alerta activa",
     "cancel": "Cancelar SOS",
+    "cancelled": "Alerta SOS cancelada",
     "familyNotified": "Familiares notificados",
     "emailsSent": "Emails enviados",
     "nearbyUsers": "Usuarios cercanos",
+    "emergency": "EMERGENCIA",
+    "alertSent": "¡ALERTA SOS ENVIADA!",
+    "familyReceived": "¡Todos tus familiares han recibido tu ubicación!",
+    "gettingLocation": "Obteniendo tu ubicación GPS precisa...",
+    "pressIfNeedHelp": "Pulsa si necesitas ayuda urgente",
+    "locationSent": "Ubicación enviada",
+    "viewOnGoogleMaps": "Ver en Google Maps",
+    "gpsAccurate": "GPS Preciso",
+    "wholeFamily": "Toda la Familia",
+    "instant": "Instantáneo",
+    "familyAlert": "¡Alerta de Familiar!",
+    "needsHelp": "necesita ayuda",
+    "onMyWay": "Voy en camino",
+    "call112": "Llamar 112",
+    "callEmergencies": "Llamar al 112 (Emergencias)",
+    "audioMessage": "Mensaje de Audio",
+    "willRecordAuto": "Se grabará automáticamente",
+    "audioRecorded": "Audio grabado",
     "settings": {
       "alertNearby": "Alertar usuarios cercanos",
       "alertNearbyDesc": "Notificar a usuarios premium en 5km",
@@ -163,14 +299,25 @@
     "addMember": "Añadir Familiar para Localizar",
     "noMembers": "No hay familiares añadidos",
     "noMembersDesc": "Añade a tus hijos, padres o abuelos para poder localizarlos en cualquier momento",
+    "exclusiveYearly": "Función Exclusiva Plan Anual",
+    "exclusiveYearlyDesc": "La localización de niños por teléfono está disponible exclusivamente en el Plan Familiar Anual. Incluye:",
+    "onDemandLocation": "Localización bajo demanda",
+    "locationHistory": "Historial de ubicaciones",
+    "silentModeOptional": "Modo silencioso opcional",
+    "upTo5Members": "Hasta 5 miembros",
+    "upgradeToYearly": "Actualizar a Plan Anual",
+    "savingsNote": "Ahorra €199.89 respecto al plan mensual",
+    "howItWorks": "¿Cómo funciona?",
+    "howItWorksSteps": "1. Añade a tus hijos con su número de teléfono\n2. Instala la app ManoProtect en sus dispositivos\n3. Solicita su ubicación cuando quieras (bajo demanda)\n4. Configura si quieres que reciban notificación o no",
     "form": {
       "name": "Nombre",
       "phone": "Número de teléfono",
       "email": "Email",
-      "emailRequired": "Obligatorio - Se enviará un enlace de vinculación a este email",
+      "emailRequired": "📧 Obligatorio - Se enviará un enlace de vinculación a este email",
       "age": "Edad",
       "silentMode": "Modo silencioso",
-      "silentModeDesc": "No recibirá notificación cuando solicites su ubicación"
+      "silentModeDesc": "No recibirá notificación cuando solicites su ubicación",
+      "autoClassification": "Clasificación automática"
     },
     "personType": {
       "child": "Niño",
@@ -181,7 +328,24 @@
     "status": {
       "linked": "Dispositivo vinculado",
       "pending": "Pendiente vincular"
-    }
+    },
+    "inviteLink": "Enlace de Vinculación",
+    "inviteLinkDesc": "Envía este enlace para que vincule su dispositivo",
+    "copyLink": "Copiar enlace",
+    "linkCopied": "Enlace copiado al portapapeles",
+    "sendByWhatsApp": "Enviar por WhatsApp",
+    "sendByEmail": "Enviar por Email",
+    "inviteSentTo": "Ya se envió invitación automática a",
+    "lastKnownLocation": "Última ubicación conocida",
+    "locateNow": "Localizar Ahora",
+    "locating": "Localizando...",
+    "viewHistory": "Ver Historial",
+    "historyTitle": "Historial de Ubicaciones (7 días)",
+    "noHistory": "No hay historial de ubicaciones",
+    "activateNotifications": "Activar notificaciones",
+    "silentModeActivated": "Modo silencioso activado",
+    "removeFromTracking": "¿Eliminar del seguimiento familiar?",
+    "removedFromTracking": "Eliminado del seguimiento"
   },
   "scamVerifier": {
     "title": "Verificador de Estafas",
@@ -189,10 +353,29 @@
     "placeholder": "Pega aquí el mensaje, número o enlace sospechoso...",
     "analyze": "Analizar",
     "analyzing": "Analizando...",
+    "enterContent": "Por favor ingresa contenido para analizar",
     "result": {
       "safe": "Parece seguro",
       "suspicious": "Sospechoso",
       "dangerous": "¡Peligroso!"
+    }
+  },
+  "faq": {
+    "title": "Preguntas Frecuentes",
+    "subtitle": "Encuentra respuestas a las preguntas más comunes sobre ManoProtect",
+    "searchPlaceholder": "Buscar pregunta...",
+    "noResults": "No encontramos resultados",
+    "tryOtherTerms": "Prueba con otros términos de búsqueda",
+    "needMoreHelp": "¿No encuentras lo que buscas?",
+    "supportAvailable": "Nuestro equipo de soporte está disponible para ayudarte con cualquier duda",
+    "readyToProtect": "¿Listo para protegerte?",
+    "joinUsers": "Únete a miles de usuarios que ya confían en ManoProtect",
+    "startFree": "Empezar Gratis",
+    "categories": {
+      "general": "General",
+      "pricing": "Planes y Precios",
+      "family": "Protección Familiar",
+      "technical": "Técnico"
     }
   },
   "footer": {
@@ -206,5 +389,25 @@
     "contact": "Contacto",
     "help": "Ayuda",
     "rights": "Todos los derechos reservados"
+  },
+  "errors": {
+    "generic": "Ha ocurrido un error",
+    "network": "Error de conexión",
+    "unauthorized": "No autorizado",
+    "notFound": "No encontrado",
+    "serverError": "Error del servidor",
+    "tryAgain": "Inténtalo de nuevo",
+    "invalidCredentials": "Credenciales inválidas",
+    "emailInUse": "El email ya está en uso",
+    "weakPassword": "La contraseña es muy débil"
+  },
+  "notifications": {
+    "success": "Operación exitosa",
+    "error": "Ha ocurrido un error",
+    "saved": "Guardado correctamente",
+    "deleted": "Eliminado correctamente",
+    "copied": "Copiado al portapapeles",
+    "sentSuccess": "Enviado correctamente",
+    "exportSuccess": "Exportado correctamente"
   }
 }
