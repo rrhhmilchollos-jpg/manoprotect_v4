@@ -504,11 +504,8 @@ async def get_family_locations(
     """Get locations of all family members (family plan owner only)"""
     user = await require_auth(request, session_token)
     
-    plan_key = user.plan.split('-')[0] if '-' in user.plan else user.plan
-    plan_features = _PLAN_FEATURES.get(plan_key, _PLAN_FEATURES["free"])
-    
-    if not plan_features.get("gps"):
-        raise HTTPException(status_code=403, detail="La función GPS requiere plan familiar o superior")
+    if not user_has_premium_access(user):
+        raise HTTPException(status_code=403, detail="La función GPS requiere plan Premium o Familiar")
     
     family_members = await _db.family_members.find(
         {"family_owner_id": user.user_id},
