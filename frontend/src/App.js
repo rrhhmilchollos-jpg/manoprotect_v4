@@ -109,55 +109,60 @@ function AppRouter() {
   
   // Check URL fragment for session_id (Google OAuth callback)
   if (location.hash?.includes('session_id=')) {
-    return <AuthCallback />;
+    return (
+      <Suspense fallback={<PageLoader />}>
+        <AuthCallback />
+      </Suspense>
+    );
   }
 
   return (
     <>
       <AnalyticsTracker />
-      <Routes>
-        {/* Public Routes */}
-        <Route path="/" element={<LandingPage />} />
-        <Route path="/how-it-works" element={<HowItWorks />} />
-        <Route path="/pricing" element={<Pricing />} />
-        <Route path="/payment-success" element={<PaymentSuccess />} />
-        <Route path="/trial-success" element={<TrialSuccess />} />
-        <Route path="/knowledge" element={<Knowledge />} />
-        <Route path="/community" element={<Community />} />
-        
-        {/* Legal Pages */}
-        <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-        <Route path="/terms-of-service" element={<TermsOfService />} />
-        <Route path="/refund-policy" element={<RefundPolicy />} />
-        <Route path="/legal-notice" element={<LegalNotice />} />
-        <Route path="/faq" element={<FAQ />} />
-        <Route path="/preguntas-frecuentes" element={<FAQ />} />
-        <Route path="/empleados/descargar" element={<DescargarDesktop />} />
-        <Route path="/empleados/portal" element={<PortalEmpleados />} />
-        <Route path="/desarrolladores/descargas" element={<DescargarApps />} />
-        
-        {/* ManoProtect Promo Landing */}
-        <Route path="/promo" element={<LandingPromo />} />
-        <Route path="/manoprotect" element={<LandingPromo />} />
-        <Route path="/recuperar-password" element={<RecuperarPassword />} />
-        <Route path="/verificar-estafa" element={<VerificarEstafa />} />
-        
-        {/* Auth Routes */}
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/registro" element={<ManoProtectRegistro />} />
-        <Route path="/auth/callback" element={<AuthCallback />} />
-        
-        {/* Investor Routes */}
-        <Route path="/investor/register" element={<InvestorRegister />} />
-        <Route 
-          path="/downloads" 
-          element={
-            <ProtectedRoute requireInvestor={true}>
-              <Downloads />
-            </ProtectedRoute>
-          } 
-        />
+      <Suspense fallback={<PageLoader />}>
+        <Routes>
+          {/* Public Routes */}
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/how-it-works" element={<HowItWorks />} />
+          <Route path="/pricing" element={<Pricing />} />
+          <Route path="/payment-success" element={<PaymentSuccess />} />
+          <Route path="/trial-success" element={<TrialSuccess />} />
+          <Route path="/knowledge" element={<Knowledge />} />
+          <Route path="/community" element={<Community />} />
+          
+          {/* Legal Pages */}
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+          <Route path="/terms-of-service" element={<TermsOfService />} />
+          <Route path="/refund-policy" element={<RefundPolicy />} />
+          <Route path="/legal-notice" element={<LegalNotice />} />
+          <Route path="/faq" element={<FAQ />} />
+          <Route path="/preguntas-frecuentes" element={<FAQ />} />
+          <Route path="/empleados/descargar" element={<DescargarDesktop />} />
+          <Route path="/empleados/portal" element={<PortalEmpleados />} />
+          <Route path="/desarrolladores/descargas" element={<DescargarApps />} />
+          
+          {/* ManoProtect Promo Landing */}
+          <Route path="/promo" element={<LandingPromo />} />
+          <Route path="/manoprotect" element={<LandingPromo />} />
+          <Route path="/recuperar-password" element={<RecuperarPassword />} />
+          <Route path="/verificar-estafa" element={<VerificarEstafa />} />
+          
+          {/* Auth Routes */}
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/registro" element={<ManoProtectRegistro />} />
+          <Route path="/auth/callback" element={<AuthCallback />} />
+          
+          {/* Investor Routes */}
+          <Route path="/investor/register" element={<InvestorRegister />} />
+          <Route 
+            path="/downloads" 
+            element={
+              <ProtectedRoute requireInvestor={true}>
+                <Downloads />
+              </ProtectedRoute>
+            } 
+          />
         
         {/* Protected Routes */}
         <Route 
