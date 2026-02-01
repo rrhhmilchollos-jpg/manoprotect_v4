@@ -132,6 +132,11 @@ Plataforma de protección contra fraudes y estafas digitales para familias espa�
   - Limpiado .gitignore para permitir archivos .env
   - Firebase actualizado para usar variables de entorno (FIREBASE_PROJECT_ID, FIREBASE_PRIVATE_KEY, FIREBASE_CLIENT_EMAIL)
   - Health check de deployment aprobado
+- **✅ Bug SOS Premium CORREGIDO (31 enero 2026 - sesión 2)**
+  - Validación de plan simplificada con función `user_has_premium_access()`
+  - Superadmins siempre tienen acceso: rrhh.milchollos@gmail.com, info@manoprotect.com, ivanrubiosolas@gmail.com
+  - Todos los planes de pago (family, premium, personal, trial, business, enterprise) ahora tienen acceso a SOS y GPS
+  - Eliminada restricción incorrecta que bloqueaba usuarios con plan familiar
 - **✅ Proyecto iOS Completo (31 enero 2026)**
   - Capacitor iOS configurado
   - Iconos iOS generados (todos los tamaños requeridos)
