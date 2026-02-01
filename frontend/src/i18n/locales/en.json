@@ -17,7 +17,19 @@
     "close": "Close",
     "yes": "Yes",
     "no": "No",
-    "or": "or"
+    "or": "or",
+    "update": "Update",
+    "confirm": "Confirm",
+    "view": "View",
+    "viewAll": "View all",
+    "analyze": "Analyze",
+    "analyzing": "Analyzing...",
+    "processing": "Processing...",
+    "saving": "Saving...",
+    "share": "Share",
+    "export": "Export",
+    "download": "Download",
+    "upgrade": "Upgrade Plan"
   },
   "nav": {
     "home": "Home",
@@ -25,15 +37,23 @@
     "pricing": "View Plans",
     "knowledge": "Learn",
     "community": "Community",
-    "login": "Login",
+    "login": "Sign In",
     "register": "Sign Up",
     "dashboard": "Dashboard",
-    "logout": "Logout",
-    "faq": "FAQ"
+    "logout": "Log Out",
+    "faq": "FAQ",
+    "profile": "Profile",
+    "settings": "Settings",
+    "contacts": "Contacts",
+    "rewards": "Rewards",
+    "family": "Family",
+    "enterprise": "Enterprise",
+    "admin": "Admin",
+    "downloads": "Downloads"
   },
   "landing": {
     "hero": {
-      "title": "Protect your family from digital fraud and scams",
+      "title": "Protect your family from fraud and digital scams",
       "subtitle": "ManoProtect is your shield against digital fraud. We protect families from phone scams, phishing, fraudulent SMS and much more.",
       "cta": "Start Free",
       "ctaSecondary": "See How It Works"
@@ -42,7 +62,7 @@
       "title": "Why ManoProtect?",
       "scamVerifier": {
         "title": "Scam Verifier",
-        "description": "Instantly analyze suspicious messages, calls and links"
+        "description": "Analyze suspicious messages, calls and links instantly"
       },
       "realTimeAlerts": {
         "title": "Real-Time Alerts",
@@ -54,7 +74,7 @@
       },
       "database": {
         "title": "Updated Database",
-        "description": "+50,000 scams identified and growing"
+        "description": "+50,000 identified scams and growing"
       }
     },
     "stats": {
@@ -68,14 +88,18 @@
   },
   "auth": {
     "login": {
-      "title": "Login",
+      "title": "Sign In",
       "email": "Email address",
       "password": "Password",
       "forgotPassword": "Forgot your password?",
       "noAccount": "Don't have an account?",
       "signUp": "Sign up",
       "withGoogle": "Continue with Google",
-      "button": "Login"
+      "button": "Sign In",
+      "loggingIn": "Signing in...",
+      "welcomeBack": "Welcome back!",
+      "orWithEmail": "Or with email",
+      "backToHome": "← Back to home"
     },
     "register": {
       "title": "Create Account",
@@ -87,18 +111,35 @@
       "signIn": "Sign in",
       "withGoogle": "Sign up with Google",
       "button": "Create Account",
-      "terms": "By signing up, you agree to our"
+      "terms": "By signing up, you agree to our terms of service and privacy policy.",
+      "creating": "Creating account...",
+      "success": "Account created successfully!",
+      "passwordMinLength": "At least 8 characters",
+      "passwordsNotMatch": "Passwords do not match",
+      "joinMano": "Join MANO and protect yourself against fraud"
     }
   },
   "pricing": {
-    "title": "Plans & Pricing",
+    "title": "Plans and Pricing",
     "subtitle": "Choose the plan that best fits your family",
     "monthly": "Monthly",
     "yearly": "Yearly",
     "save": "Save",
     "popular": "Most Popular",
+    "bestValue": "Best Value",
+    "trial": {
+      "title": "7-Day FREE Trial",
+      "badge": "🎁 SPECIAL OFFER",
+      "description": "Verify your card with a €0.00 charge and access all Premium features for 7 days.",
+      "cardVerification": "Secure card verification (no charge)",
+      "fullAccess": "Full access to Premium for 7 days",
+      "cancelAnytime": "Cancel anytime without any charge",
+      "afterTrial": "After 7 days",
+      "button": "Try 7 Days Free",
+      "disclaimer": "By continuing, you agree that your card will be verified. If you don't cancel within 7 days, €29.99/month will be charged."
+    },
     "free": {
-      "name": "Free",
+      "name": "Basic",
       "price": "€0",
       "description": "To start protecting yourself"
     },
@@ -108,7 +149,7 @@
     },
     "family": {
       "name": "Family",
-      "description": "Protect your whole family"
+      "description": "Protect your entire family"
     },
     "features": {
       "scamVerifier": "Scam verifier",
@@ -116,19 +157,95 @@
       "realTimeAlerts": "Real-time alerts",
       "prioritySupport": "Priority support",
       "familyMembers": "Up to 5 members",
-      "childTracking": "Family tracking",
-      "sosEmergency": "Emergency SOS"
+      "childTracking": "Family location",
+      "sosEmergency": "Emergency SOS",
+      "unlimitedAnalysis": "Unlimited analysis",
+      "aiBlocking": "AI automatic blocking",
+      "fullHistory": "Full history",
+      "dataExport": "Data export",
+      "noAds": "No ads"
     },
-    "cta": "Get Started"
+    "cta": "Get Started",
+    "subscribe": "Subscribe",
+    "investing": "Invest in your",
+    "security": "Security",
+    "fraudWarning": "A single fraud can cost you €5,000+. MANO Premium protects you 24/7 for less than what you spend on coffee.",
+    "noCommitment": "No commitment",
+    "guarantee": "15-day guarantee",
+    "perMonth": "/ month",
+    "perYear": "/ year"
   },
   "dashboard": {
-    "welcome": "Welcome",
+    "welcome": "Hello",
     "protectionStatus": "Protection Status",
-    "recentAlerts": "Recent Alerts",
+    "protectionActive": "Your protection is active. Analyze suspicious content below.",
+    "recentAlerts": "Recent Security Alerts",
     "quickActions": "Quick Actions",
     "verifyScam": "Verify Scam",
     "familyMembers": "Family Members",
-    "settings": "Settings"
+    "settings": "Settings",
+    "stats": {
+      "totalAnalyzed": "Total Analyzed",
+      "threatsBlocked": "Threats Blocked",
+      "critical": "Critical",
+      "high": "High"
+    },
+    "tabs": {
+      "aiAnalyzer": "AI Analyzer",
+      "secureBanking": "Secure Banking",
+      "history": "History"
+    },
+    "quickAnalysis": "Quick Analysis",
+    "quickAnalysisDesc": "Enter a phone number, message, email or link to verify if it's a threat",
+    "contentTypes": {
+      "phone": "Phone",
+      "sms": "SMS",
+      "email": "Email",
+      "url": "Link"
+    },
+    "threatDetected": "THREAT DETECTED",
+    "safeContent": "SAFE CONTENT",
+    "level": "Level",
+    "threatTypes": "Threat types",
+    "recommendation": "Recommendation",
+    "analysis": "Analysis",
+    "threatHistory": "Threat History",
+    "lastThreats": "Latest threats detected",
+    "exportCSV": "Export CSV",
+    "noThreats": "No threats detected yet. You're protected!",
+    "falsePositive": "False positive",
+    "investorAccess": {
+      "title": "Verified Investor Access",
+      "active": "ACTIVE",
+      "description": "You have access to confidential documentation: Business Plan, Financial Model, Pitch Deck and B2B Dossier.",
+      "goToDownloads": "Go to Downloads"
+    }
+  },
+  "profile": {
+    "title": "Profile & Settings",
+    "personalInfo": "Personal Information",
+    "fullName": "Full name",
+    "email": "Email",
+    "emailNoChange": "Email cannot be changed",
+    "phone": "Phone",
+    "pushNotifications": "Push Notifications",
+    "pushNotificationsDesc": "Receive instant alerts in your browser",
+    "preferences": "Preferences & Security",
+    "preferencesDesc": "Configure how ManoProtect protects you",
+    "darkMode": "Dark Mode",
+    "darkModeDesc": "Dark theme for the interface",
+    "emailAlerts": "Email Alerts",
+    "emailAlertsDesc": "Receive threat summary by email",
+    "autoBlock": "Auto Block",
+    "autoBlockDesc": "Automatically block critical threats",
+    "yourProtection": "Your Protection",
+    "analyzed": "Analyzed",
+    "blocked": "Blocked",
+    "saveChanges": "Save Changes",
+    "plan": "Plan",
+    "planFree": "Free",
+    "planPremium": "Premium",
+    "upgradeToPremium": "Upgrade to Premium"
   },
   "sos": {
     "title": "Family Emergency",
@@ -138,9 +255,28 @@
     "sending": "Sending alert...",
     "active": "Alert active",
     "cancel": "Cancel SOS",
-    "familyNotified": "Family notified",
+    "cancelled": "SOS alert cancelled",
+    "familyNotified": "Family members notified",
     "emailsSent": "Emails sent",
     "nearbyUsers": "Nearby users",
+    "emergency": "EMERGENCY",
+    "alertSent": "SOS ALERT SENT!",
+    "familyReceived": "All your family members have received your location!",
+    "gettingLocation": "Getting your precise GPS location...",
+    "pressIfNeedHelp": "Press if you need urgent help",
+    "locationSent": "Location sent",
+    "viewOnGoogleMaps": "View on Google Maps",
+    "gpsAccurate": "Accurate GPS",
+    "wholeFamily": "Whole Family",
+    "instant": "Instant",
+    "familyAlert": "Family Alert!",
+    "needsHelp": "needs help",
+    "onMyWay": "On my way",
+    "call112": "Call 112",
+    "callEmergencies": "Call 112 (Emergencies)",
+    "audioMessage": "Audio Message",
+    "willRecordAuto": "Will record automatically",
+    "audioRecorded": "Audio recorded",
     "settings": {
       "alertNearby": "Alert nearby users",
       "alertNearbyDesc": "Notify premium users within 5km",
@@ -152,25 +288,36 @@
     "howItWorks": {
       "title": "How does it work?",
       "step1": "Press the SOS button to send alert",
-      "step2": "Audio is recorded and GPS location detected",
+      "step2": "Audio is recorded and your GPS location is detected",
       "step3": "Your family receives critical notification with siren",
       "step4": "Nearby premium users (5km) are alerted"
     }
   },
   "childTracking": {
     "title": "Child Tracking",
-    "subtitle": "Family Yearly Plan",
+    "subtitle": "Annual Family Plan",
     "addMember": "Add Family Member to Track",
     "noMembers": "No family members added",
-    "noMembersDesc": "Add your children, parents or grandparents to locate them anytime",
+    "noMembersDesc": "Add your children, parents or grandparents to be able to locate them at any time",
+    "exclusiveYearly": "Exclusive Annual Plan Feature",
+    "exclusiveYearlyDesc": "Child phone tracking is available exclusively on the Annual Family Plan. Includes:",
+    "onDemandLocation": "On-demand location",
+    "locationHistory": "Location history",
+    "silentModeOptional": "Optional silent mode",
+    "upTo5Members": "Up to 5 members",
+    "upgradeToYearly": "Upgrade to Annual Plan",
+    "savingsNote": "Save €199.89 compared to monthly plan",
+    "howItWorks": "How does it work?",
+    "howItWorksSteps": "1. Add your children with their phone number\n2. Install the ManoProtect app on their devices\n3. Request their location whenever you want (on-demand)\n4. Configure if you want them to receive a notification or not",
     "form": {
       "name": "Name",
       "phone": "Phone number",
       "email": "Email",
-      "emailRequired": "Required - A link will be sent to this email",
+      "emailRequired": "📧 Required - A linking link will be sent to this email",
       "age": "Age",
       "silentMode": "Silent mode",
-      "silentModeDesc": "Won't receive notification when you request their location"
+      "silentModeDesc": "Won't receive notification when you request their location",
+      "autoClassification": "Auto classification"
     },
     "personType": {
       "child": "Child",
@@ -181,7 +328,24 @@
     "status": {
       "linked": "Device linked",
       "pending": "Pending link"
-    }
+    },
+    "inviteLink": "Linking Link",
+    "inviteLinkDesc": "Send this link to link their device",
+    "copyLink": "Copy link",
+    "linkCopied": "Link copied to clipboard",
+    "sendByWhatsApp": "Send via WhatsApp",
+    "sendByEmail": "Send via Email",
+    "inviteSentTo": "Invitation already sent to",
+    "lastKnownLocation": "Last known location",
+    "locateNow": "Locate Now",
+    "locating": "Locating...",
+    "viewHistory": "View History",
+    "historyTitle": "Location History (7 days)",
+    "noHistory": "No location history",
+    "activateNotifications": "Activate notifications",
+    "silentModeActivated": "Silent mode activated",
+    "removeFromTracking": "Remove from family tracking?",
+    "removedFromTracking": "Removed from tracking"
   },
   "scamVerifier": {
     "title": "Scam Verifier",
@@ -189,10 +353,29 @@
     "placeholder": "Paste the suspicious message, number or link here...",
     "analyze": "Analyze",
     "analyzing": "Analyzing...",
+    "enterContent": "Please enter content to analyze",
     "result": {
       "safe": "Looks safe",
       "suspicious": "Suspicious",
       "dangerous": "Dangerous!"
+    }
+  },
+  "faq": {
+    "title": "Frequently Asked Questions",
+    "subtitle": "Find answers to the most common questions about ManoProtect",
+    "searchPlaceholder": "Search question...",
+    "noResults": "No results found",
+    "tryOtherTerms": "Try other search terms",
+    "needMoreHelp": "Can't find what you're looking for?",
+    "supportAvailable": "Our support team is available to help you with any questions",
+    "readyToProtect": "Ready to protect yourself?",
+    "joinUsers": "Join thousands of users who already trust ManoProtect",
+    "startFree": "Start Free",
+    "categories": {
+      "general": "General",
+      "pricing": "Plans & Pricing",
+      "family": "Family Protection",
+      "technical": "Technical"
     }
   },
   "footer": {
@@ -206,5 +389,25 @@
     "contact": "Contact",
     "help": "Help",
     "rights": "All rights reserved"
+  },
+  "errors": {
+    "generic": "An error occurred",
+    "network": "Connection error",
+    "unauthorized": "Unauthorized",
+    "notFound": "Not found",
+    "serverError": "Server error",
+    "tryAgain": "Try again",
+    "invalidCredentials": "Invalid credentials",
+    "emailInUse": "Email already in use",
+    "weakPassword": "Password is too weak"
+  },
+  "notifications": {
+    "success": "Operation successful",
+    "error": "An error occurred",
+    "saved": "Saved successfully",
+    "deleted": "Deleted successfully",
+    "copied": "Copied to clipboard",
+    "sentSuccess": "Sent successfully",
+    "exportSuccess": "Exported successfully"
   }
 }
