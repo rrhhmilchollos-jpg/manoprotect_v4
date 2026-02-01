@@ -5,7 +5,7 @@ import { toast } from 'sonner';
 import { 
   AlertTriangle, MapPin, Mic, MicOff, Phone, Users, 
   Volume2, VolumeX, X, Check, Loader2, Shield,
-  Radio, Navigation, Clock, CheckCircle2
+  Radio, Navigation, Clock, CheckCircle2, Trash2
 } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
