@@ -106,7 +106,6 @@ frontend/node_modules/.cache/default-development/10.pack
 frontend/node_modules/.cache/default-development/14.pack
 # Environment files
 frontend/node_modules/.cache/default-development/8.pack
--e 
-# Environment files
-*.env
-*.env.*
+
+# IMPORTANT: Do NOT ignore .env files - they are required for Emergent deployment
+# Only ignore specific sensitive credential files (not .env)
