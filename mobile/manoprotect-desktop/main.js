@@ -2,7 +2,7 @@ const { app, BrowserWindow, Menu, shell } = require('electron');
 const path = require('path');
 
 // Production URL
-const MANOPROTECT_URL = 'https://manoguard-launch.preview.emergentagent.com';
+const MANOPROTECT_URL = 'https://manoprotect.com';
 
 let mainWindow;
 

@@ -3,7 +3,7 @@
   "appName": "ManoProtect",
   "webDir": "www",
   "server": {
-    "url": "https://manoguard-launch.preview.emergentagent.com",
+    "url": "https://manoprotect.com",
     "cleartext": true
   },
   "plugins": {
