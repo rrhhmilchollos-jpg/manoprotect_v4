@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
+import { useI18n } from '@/i18n/I18nContext';
 import { Shield, Search, AlertTriangle, CheckCircle, Clock, Phone, MessageSquare, Mail, Link as LinkIcon, ArrowLeft, TrendingUp, Users, User, Book, Download, Share2, Flag, Building2, Heart, Settings, Bell, LogOut, Brain, CreditCard, Trophy, Megaphone } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -20,6 +21,7 @@ const API = `${BACKEND_URL}/api`;
 const Dashboard = () => {
   const navigate = useNavigate();
   const { user, isAdmin, isInvestor, logout } = useAuth();
+  const { t } = useI18n();
   const [analyzing, setAnalyzing] = useState(false);
   const [content, setContent] = useState('');
   const [contentType, setContentType] = useState('phone');
@@ -73,7 +75,7 @@ const Dashboard = () => {
 
   const analyzeContent = async () => {
     if (!content.trim()) {
-      toast.error('Por favor ingresa contenido para analizar');
+      toast.error(t('scamVerifier.enterContent'));
       return;
     }
 
@@ -94,9 +96,9 @@ const Dashboard = () => {
         setLastAnalysis(data);
         
         if (data.is_threat) {
-          toast.error(`⚠️ AMENAZA DETECTADA: ${data.risk_level.toUpperCase()}`);
+          toast.error(`⚠️ ${t('dashboard.threatDetected')}: ${data.risk_level.toUpperCase()}`);
         } else {
-          toast.success('✓ Contenido seguro');
+          toast.success(`✓ ${t('dashboard.safeContent')}`);
         }
 
         loadThreats();

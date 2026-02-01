@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
+import { useI18n } from '@/i18n/I18nContext';
 import { Shield, User, Moon, Sun, Bell, Lock, Save, ArrowLeft, Key, Smartphone } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -17,6 +18,7 @@ const API = `${BACKEND_URL}/api`;
 const Profile = () => {
   const navigate = useNavigate();
   const { user: authUser } = useAuth();
+  const { t } = useI18n();
   const [user, setUser] = useState(null);
   const [settings, setSettings] = useState({
     name: '',
@@ -53,7 +55,7 @@ const Profile = () => {
       }
     } catch (error) {
       console.error('Error loading profile:', error);
-      toast.error('Error al cargar el perfil');
+      toast.error(t('errors.generic'));
     } finally {
       setProfileLoading(false);
     }
@@ -76,13 +78,13 @@ const Profile = () => {
       });
       
       if (response.ok) {
-        toast.success('Configuración guardada correctamente');
+        toast.success(t('notifications.saved'));
         loadProfile();
       } else {
-        toast.error('Error al guardar configuración');
+        toast.error(t('errors.generic'));
       }
     } catch (error) {
-      toast.error('Error al guardar configuración');
+      toast.error(t('errors.generic'));
     } finally {
       setLoading(false);
     }
