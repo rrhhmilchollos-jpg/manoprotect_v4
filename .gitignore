@@ -122,3 +122,8 @@ mobile/manoprotect-desktop/node_modules/electron/dist/electron
 # Environment files
 *.env
 *.env.*
+
+# Secrets and credentials
+secrets/
+*.json.bak
+firebase-admin.json
