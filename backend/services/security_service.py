@@ -383,6 +383,7 @@ class SecurityEventTypes:
     SUSPICIOUS_ACTIVITY = "suspicious_activity"
     SESSION_CREATED = "session_created"
     SESSION_EXPIRED = "session_expired"
+    ACCOUNT_DELETION_REQUESTED = "account_deletion_requested"
 
 
 # ============================================
