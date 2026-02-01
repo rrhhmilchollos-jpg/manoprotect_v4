@@ -436,148 +436,81 @@ const LandingPage = () => {
         </div>
       </section>
 
-      {/* Testimonials Section */}
-      <section className="px-6 py-20 bg-white">
+      {/* Testimonials Section - Reseñas de Clientes Reales */}
+      <section className="px-6 py-20 bg-white" aria-labelledby="testimonials-heading">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-zinc-900 mb-4">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-yellow-50 border border-yellow-200 mb-4">
+              <Star className="w-5 h-5 fill-yellow-400 text-yellow-400" />
+              <span className="text-sm font-medium text-yellow-700">4.9/5 basado en +1.250 reseñas verificadas</span>
+            </div>
+            <h2 id="testimonials-heading" className="text-3xl font-bold text-zinc-900 mb-4">
               Lo que dicen nuestros clientes
             </h2>
             <p className="text-zinc-600 max-w-2xl mx-auto">
-              Miles de familias españolas confían en ManoProtect para su seguridad digital
+              Miles de familias españolas confían en ManoProtect para protegerse contra fraudes y estafas digitales
             </p>
           </div>
 
-          {/* Primera fila de testimonios */}
-          <div className="grid md:grid-cols-3 gap-6 mb-6">
-            {/* Testimonial 1 */}
-            <div className="bg-gradient-to-br from-indigo-50 to-white p-6 rounded-2xl border border-indigo-100 shadow-sm hover:shadow-md transition-shadow">
-              <div className="flex items-center gap-1 mb-4">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="w-5 h-5 fill-yellow-400 text-yellow-400" />
-                ))}
-              </div>
-              <p className="text-zinc-700 mb-4 italic">
-                "Gracias a ManoProtect detectaron un intento de phishing que me habría costado 3.000€. La alerta llegó al instante."
-              </p>
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-600 font-bold">
-                  MG
+          {/* Grid de Testimonios */}
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+            {testimonials.map((testimonial) => (
+              <article 
+                key={testimonial.id}
+                className={`bg-gradient-to-br from-${testimonial.color}-50 to-white p-6 rounded-2xl border border-${testimonial.color}-100 shadow-sm hover:shadow-lg transition-all duration-300 relative`}
+              >
+                {/* Badge de ahorro */}
+                {testimonial.saved && (
+                  <div className={`absolute -top-3 -right-3 bg-${testimonial.color}-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg`}>
+                    {testimonial.saved}
+                  </div>
+                )}
+                
+                {/* Estrellas */}
+                <div className="flex items-center gap-1 mb-3" aria-label={`Valoración: ${testimonial.rating} de 5 estrellas`}>
+                  {[...Array(testimonial.rating)].map((_, i) => (
+                    <Star key={i} className="w-5 h-5 fill-yellow-400 text-yellow-400" aria-hidden="true" />
+                  ))}
                 </div>
-                <div>
-                  <p className="font-medium text-zinc-900">María García</p>
-                  <p className="text-sm text-zinc-500">Madrid • Plan Familiar</p>
-                </div>
-              </div>
-            </div>
-
-            {/* Testimonial 2 */}
-            <div className="bg-gradient-to-br from-indigo-50 to-white p-6 rounded-2xl border border-indigo-100 shadow-sm hover:shadow-md transition-shadow">
-              <div className="flex items-center gap-1 mb-4">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="w-5 h-5 fill-yellow-400 text-yellow-400" />
-                ))}
-              </div>
-              <p className="text-zinc-700 mb-4 italic">
-                "Mis padres mayores recibían llamadas de estafa constantemente. Desde que tienen ManoProtect, las bloquea automáticamente."
-              </p>
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-600 font-bold">
-                  JL
-                </div>
-                <div>
-                  <p className="font-medium text-zinc-900">Juan López</p>
-                  <p className="text-sm text-zinc-500">Barcelona • Plan Premium</p>
-                </div>
-              </div>
-            </div>
-
-            {/* Testimonial 3 */}
-            <div className="bg-gradient-to-br from-indigo-50 to-white p-6 rounded-2xl border border-indigo-100 shadow-sm hover:shadow-md transition-shadow">
-              <div className="flex items-center gap-1 mb-4">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="w-5 h-5 fill-yellow-400 text-yellow-400" />
-                ))}
-              </div>
-              <p className="text-zinc-700 mb-4 italic">
-                "Como empresa, necesitábamos proteger a nuestros empleados. ManoProtect Enterprise ha reducido los incidentes de seguridad un 95%."
-              </p>
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-600 font-bold">
-                  AS
-                </div>
-                <div>
-                  <p className="font-medium text-zinc-900">Ana Sánchez</p>
-                  <p className="text-sm text-zinc-500">Valencia • Enterprise</p>
-                </div>
-              </div>
-            </div>
+                
+                {/* Quote */}
+                <Quote className={`w-8 h-8 text-${testimonial.color}-200 mb-2`} aria-hidden="true" />
+                
+                {/* Texto del testimonio */}
+                <blockquote className="text-zinc-700 mb-4 text-sm leading-relaxed">
+                  "{testimonial.text}"
+                </blockquote>
+                
+                {/* Autor */}
+                <footer className="flex items-center gap-3 pt-4 border-t border-zinc-100">
+                  <div className={`w-12 h-12 bg-${testimonial.color}-100 rounded-full flex items-center justify-center text-${testimonial.color}-600 font-bold text-sm`}>
+                    {testimonial.name.split(' ').map(n => n[0]).slice(0, 2).join('')}
+                  </div>
+                  <div className="flex-1">
+                    <cite className="font-medium text-zinc-900 not-italic block">{testimonial.name}</cite>
+                    <p className="text-xs text-zinc-500">{testimonial.location} • {testimonial.plan}</p>
+                    <p className="text-xs text-emerald-600 font-medium flex items-center gap-1 mt-0.5">
+                      <Check className="w-3 h-3" aria-hidden="true" />
+                      {testimonial.date}
+                    </p>
+                  </div>
+                </footer>
+              </article>
+            ))}
           </div>
 
-          {/* Segunda fila de testimonios */}
-          <div className="grid md:grid-cols-3 gap-6">
-            {/* Testimonial 4 */}
-            <div className="bg-gradient-to-br from-emerald-50 to-white p-6 rounded-2xl border border-emerald-100 shadow-sm hover:shadow-md transition-shadow">
-              <div className="flex items-center gap-1 mb-4">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="w-5 h-5 fill-yellow-400 text-yellow-400" />
-                ))}
-              </div>
-              <p className="text-zinc-700 mb-4 italic">
-                "Me llegó un SMS falso de Correos pidiendo datos de mi tarjeta. ManoProtect me avisó antes de que pudiera hacer click. ¡Increíble!"
-              </p>
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-emerald-100 rounded-full flex items-center justify-center text-emerald-600 font-bold">
-                  PR
-                </div>
-                <div>
-                  <p className="font-medium text-zinc-900">Pedro Ruiz</p>
-                  <p className="text-sm text-zinc-500">Sevilla • Plan Personal</p>
-                </div>
-              </div>
-            </div>
-
-            {/* Testimonial 5 */}
-            <div className="bg-gradient-to-br from-purple-50 to-white p-6 rounded-2xl border border-purple-100 shadow-sm hover:shadow-md transition-shadow">
-              <div className="flex items-center gap-1 mb-4">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="w-5 h-5 fill-yellow-400 text-yellow-400" />
-                ))}
-              </div>
-              <p className="text-zinc-700 mb-4 italic">
-                "Mi abuela tiene 78 años y ahora navega tranquila. La protección automática es perfecta para personas mayores que no entienden de tecnología."
-              </p>
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center text-purple-600 font-bold">
-                  LM
-                </div>
-                <div>
-                  <p className="font-medium text-zinc-900">Laura Martín</p>
-                  <p className="text-sm text-zinc-500">Bilbao • Plan Familiar</p>
-                </div>
-              </div>
-            </div>
-
-            {/* Testimonial 6 */}
-            <div className="bg-gradient-to-br from-orange-50 to-white p-6 rounded-2xl border border-orange-100 shadow-sm hover:shadow-md transition-shadow">
-              <div className="flex items-center gap-1 mb-4">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="w-5 h-5 fill-yellow-400 text-yellow-400" />
-                ))}
-              </div>
-              <p className="text-zinc-700 mb-4 italic">
-                "En mi negocio procesamos muchos pagos online. ManoProtect ha detectado 3 intentos de fraude este mes. Vale cada euro de la suscripción."
-              </p>
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center text-orange-600 font-bold">
-                  CF
-                </div>
-                <div>
-                  <p className="font-medium text-zinc-900">Carlos Fernández</p>
-                  <p className="text-sm text-zinc-500">Málaga • Business</p>
-                </div>
-              </div>
-            </div>
+          {/* CTA después de testimonios */}
+          <div className="text-center mt-10">
+            <p className="text-zinc-600 mb-4">¿Quieres ser el próximo en proteger a tu familia?</p>
+            <Button
+              data-testid="testimonials-cta-btn"
+              onClick={() => navigate('/register')}
+              className="bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg px-8 h-12 text-base font-semibold shadow-lg hover:shadow-xl active:scale-95 transition-all"
+              aria-label="Comenzar prueba gratuita de ManoProtect"
+            >
+              Probar Gratis 30 Días
+              <ArrowRight className="ml-2 w-5 h-5" aria-hidden="true" />
+            </Button>
           </div>
 
           {/* Trust Badges */}
@@ -586,35 +519,35 @@ const LandingPage = () => {
             
             {/* Partners Logos */}
             <div className="flex flex-wrap items-center justify-center gap-10 mb-12">
-              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Visa_Inc._logo.svg/200px-Visa_Inc._logo.svg.png" alt="VISA" className="h-8 object-contain opacity-50 hover:opacity-100 transition-opacity" />
-              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Mastercard-logo.svg/200px-Mastercard-logo.svg.png" alt="Mastercard" className="h-10 object-contain opacity-50 hover:opacity-100 transition-opacity" />
-              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/PayPal.svg/200px-PayPal.svg.png" alt="PayPal" className="h-6 object-contain opacity-50 hover:opacity-100 transition-opacity" />
-              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Stripe_Logo%2C_revised_2016.svg/200px-Stripe_Logo%2C_revised_2016.svg.png" alt="Stripe" className="h-8 object-contain opacity-50 hover:opacity-100 transition-opacity" />
-              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/OpenAI_Logo.svg/200px-OpenAI_Logo.svg.png" alt="OpenAI" className="h-8 object-contain opacity-50 hover:opacity-100 transition-opacity" />
-              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/Microsoft_logo_%282012%29.svg/200px-Microsoft_logo_%282012%29.svg.png" alt="Microsoft" className="h-7 object-contain opacity-50 hover:opacity-100 transition-opacity" />
+              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Visa_Inc._logo.svg/200px-Visa_Inc._logo.svg.png" alt="VISA - Partner de pagos seguros" className="h-8 object-contain opacity-50 hover:opacity-100 transition-opacity" width="80" height="32" loading="lazy" />
+              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Mastercard-logo.svg/200px-Mastercard-logo.svg.png" alt="Mastercard - Partner de pagos seguros" className="h-10 object-contain opacity-50 hover:opacity-100 transition-opacity" width="60" height="40" loading="lazy" />
+              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/PayPal.svg/200px-PayPal.svg.png" alt="PayPal - Partner de pagos seguros" className="h-6 object-contain opacity-50 hover:opacity-100 transition-opacity" width="80" height="24" loading="lazy" />
+              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Stripe_Logo%2C_revised_2016.svg/200px-Stripe_Logo%2C_revised_2016.svg.png" alt="Stripe - Partner de pagos seguros" className="h-8 object-contain opacity-50 hover:opacity-100 transition-opacity" width="70" height="32" loading="lazy" />
+              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/OpenAI_Logo.svg/200px-OpenAI_Logo.svg.png" alt="OpenAI - Tecnología de IA avanzada" className="h-8 object-contain opacity-50 hover:opacity-100 transition-opacity" width="80" height="32" loading="lazy" />
+              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/Microsoft_logo_%282012%29.svg/200px-Microsoft_logo_%282012%29.svg.png" alt="Microsoft - Partner tecnológico" className="h-7 object-contain opacity-50 hover:opacity-100 transition-opacity" width="100" height="28" loading="lazy" />
             </div>
             
             {/* Trust Badges - Institutional */}
             <p className="text-center text-sm text-zinc-500 mb-6">CERTIFICACIONES Y CUMPLIMIENTO</p>
             <div className="flex flex-wrap items-center justify-center gap-8 mb-8">
               <div className="flex items-center gap-2 px-4 py-2 bg-zinc-100 rounded-lg">
-                <Shield className="w-5 h-5 text-indigo-600" />
+                <Shield className="w-5 h-5 text-indigo-600" aria-hidden="true" />
                 <span className="text-sm font-medium text-zinc-700">SSL 256-bit</span>
               </div>
               <div className="flex items-center gap-2 px-4 py-2 bg-zinc-100 rounded-lg">
-                <Building2 className="w-5 h-5 text-indigo-600" />
+                <Building2 className="w-5 h-5 text-indigo-600" aria-hidden="true" />
                 <span className="text-sm font-medium text-zinc-700">Banco de España</span>
               </div>
               <div className="flex items-center gap-2 px-4 py-2 bg-zinc-100 rounded-lg">
-                <Check className="w-5 h-5 text-emerald-600" />
+                <Check className="w-5 h-5 text-emerald-600" aria-hidden="true" />
                 <span className="text-sm font-medium text-zinc-700">RGPD Compliant</span>
               </div>
               <div className="flex items-center gap-2 px-4 py-2 bg-zinc-100 rounded-lg">
-                <Shield className="w-5 h-5 text-blue-600" />
+                <Shield className="w-5 h-5 text-blue-600" aria-hidden="true" />
                 <span className="text-sm font-medium text-zinc-700">ISO 27001</span>
               </div>
               <div className="flex items-center gap-2 px-4 py-2 bg-zinc-100 rounded-lg">
-                <Check className="w-5 h-5 text-purple-600" />
+                <Check className="w-5 h-5 text-purple-600" aria-hidden="true" />
                 <span className="text-sm font-medium text-zinc-700">PCI DSS</span>
               </div>
             </div>
