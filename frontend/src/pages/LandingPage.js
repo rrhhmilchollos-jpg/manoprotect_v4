@@ -296,8 +296,11 @@ const LandingPage = () => {
                 <div className="w-48 h-48 rounded-xl overflow-hidden hidden lg:block">
                   <img
                     src="https://customer-assets.emergentagent.com/job_5c97b24f-9a55-4567-9954-bd76179fb951/artifacts/t8tv8klb_alerta.png"
-                    alt="Alertas de seguridad"
+                    alt="Alertas de seguridad ManoProtect"
                     className="w-full h-full object-cover"
+                    width="192"
+                    height="192"
+                    loading="lazy"
                   />
                 </div>
               </div>
