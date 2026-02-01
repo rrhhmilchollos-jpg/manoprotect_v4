@@ -719,6 +719,12 @@ async def get_enterprise_dashboard(request: Request, session_token: Optional[str
         {"name": "RRHH", "employee_count": 6, "threats_blocked": int(threats_blocked * 0.1), "risk_score": 3.2}
     ]
     
+    # Get recent alerts for display (optimized with limit)
+    recent_alerts = await db.threat_analysis.find(
+        {"user_id": user.user_id, "is_threat": True}, 
+        {"_id": 0, "content": 1, "risk_level": 1, "threat_types": 1, "created_at": 1}
+    ).sort("created_at", -1).limit(10).to_list(10)
+    
     return {
         "summary": {
             "total_analyzed": total_threats,
@@ -731,7 +737,7 @@ async def get_enterprise_dashboard(request: Request, session_token: Optional[str
         "threat_types": threat_types_count,
         "trend_data": trend_data,
         "departments": departments,
-        "recent_alerts": threats[:10] if threats else []
+        "recent_alerts": recent_alerts
     }
 
 @api_router.get("/enterprise/reports")
