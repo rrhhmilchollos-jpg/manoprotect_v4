@@ -53,43 +53,6 @@ const ChildTracking = () => {
   }, []);
 
   const loadChildren = async () => {
-      }
-
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          resolve({
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude,
-            accuracy: position.coords.accuracy
-          });
-        },
-        (error) => {
-          let errorMessage = 'Error obteniendo ubicación';
-          switch (error.code) {
-            case error.PERMISSION_DENIED:
-              errorMessage = 'Permiso de ubicación denegado. Por favor, habilita el GPS.';
-              break;
-            case error.POSITION_UNAVAILABLE:
-              errorMessage = 'Información de ubicación no disponible.';
-              break;
-            case error.TIMEOUT:
-              errorMessage = 'Tiempo de espera agotado al obtener ubicación.';
-              break;
-            default:
-              errorMessage = 'Error desconocido al obtener ubicación.';
-          }
-          reject(new Error(errorMessage));
-        },
-        {
-          enableHighAccuracy: true,
-          timeout: 15000,
-          maximumAge: 0
-        }
-      );
-    });
-  };
-
-  const loadChildren = async () => {
     try {
       const response = await axios.get(`${API}/family/children`, {
         withCredentials: true
