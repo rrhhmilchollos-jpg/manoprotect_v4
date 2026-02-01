@@ -251,9 +251,9 @@ const ChildTracking = () => {
             <div>
               <h1 className="text-2xl font-bold flex items-center gap-2">
                 <MapPin className="w-6 h-6 text-indigo-600" />
-                Localización de Niños
+                Localización Familiar
               </h1>
-              <p className="text-sm text-zinc-500">Plan Familiar Anual</p>
+              <p className="text-sm text-zinc-500">Niños, Adultos y Ancianos • Plan Premium</p>
             </div>
           </div>
           <Badge className="bg-indigo-600 text-white">
