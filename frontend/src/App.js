@@ -162,6 +162,7 @@ function AppRouter() {
           <Route path="/auth/callback" element={<AuthCallback />} />
           <Route path="/delete-account" element={<DeleteAccount />} />
           <Route path="/admin/users" element={<AdminUsers />} />
+          <Route path="/health-profile" element={<HealthProfile />} />
           
           {/* Investor Routes */}
           <Route path="/investor/register" element={<InvestorRegister />} />
