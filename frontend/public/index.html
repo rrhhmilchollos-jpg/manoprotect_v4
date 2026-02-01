@@ -5,14 +5,20 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes" />
         <meta name="theme-color" content="#10b981" />
         
-        <!-- Preload Critical Resources for LCP -->
-        <link rel="preload" href="https://static.prod-images.emergentagent.com/jobs/fa8350ac-4103-442a-8e22-a986a8837bc7/images/8f093142c23ed0bcbd1a2fd5219b542440249eb8455292b5ac522882a4ac13e5.png" as="image" fetchpriority="high" />
-        <link rel="preload" href="https://customer-assets.emergentagent.com/job_5c97b24f-9a55-4567-9954-bd76179fb951/artifacts/8y6ab2pd_logo%20App%20Mano.png" as="image" />
+        <!-- Preload Critical Resources for LCP - High Priority -->
+        <link rel="preload" href="https://static.prod-images.emergentagent.com/jobs/fa8350ac-4103-442a-8e22-a986a8837bc7/images/8f093142c23ed0bcbd1a2fd5219b542440249eb8455292b5ac522882a4ac13e5.png" as="image" type="image/png" fetchpriority="high" />
+        <link rel="preload" href="https://customer-assets.emergentagent.com/job_5c97b24f-9a55-4567-9954-bd76179fb951/artifacts/8y6ab2pd_logo%20App%20Mano.png" as="image" type="image/png" fetchpriority="high" />
         
-        <!-- Preconnect to External Origins -->
+        <!-- Preload fonts for faster text rendering -->
+        <link rel="preload" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&display=swap" as="style" />
+        <link rel="preload" href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600&display=swap" as="style" />
+        
+        <!-- Preconnect to External Origins - Early Connection -->
         <link rel="preconnect" href="https://static.prod-images.emergentagent.com" crossorigin />
         <link rel="preconnect" href="https://customer-assets.emergentagent.com" crossorigin />
         <link rel="preconnect" href="https://images.unsplash.com" crossorigin />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
         <link rel="dns-prefetch" href="https://static.prod-images.emergentagent.com" />
         <link rel="dns-prefetch" href="https://customer-assets.emergentagent.com" />
         <link rel="dns-prefetch" href="https://images.unsplash.com" />
