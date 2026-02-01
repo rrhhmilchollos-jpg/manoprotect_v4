@@ -7,11 +7,7 @@
         
         <!-- Preload Critical Resources for LCP - High Priority -->
         <link rel="preload" href="https://static.prod-images.emergentagent.com/jobs/fa8350ac-4103-442a-8e22-a986a8837bc7/images/8f093142c23ed0bcbd1a2fd5219b542440249eb8455292b5ac522882a4ac13e5.png" as="image" type="image/png" fetchpriority="high" />
-        <link rel="preload" href="https://customer-assets.emergentagent.com/job_5c97b24f-9a55-4567-9954-bd76179fb951/artifacts/8y6ab2pd_logo%20App%20Mano.png" as="image" type="image/png" fetchpriority="high" />
-        
-        <!-- Preload fonts for faster text rendering -->
-        <link rel="preload" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&display=swap" as="style" />
-        <link rel="preload" href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600&display=swap" as="style" />
+        <link rel="preload" href="https://customer-assets.emergentagent.com/job_5c97b24f-9a55-4567-9954-bd76179fb951/artifacts/8y6ab2pd_logo%20App%20Mano.png" as="image" type="image/png" />
         
         <!-- Preconnect to External Origins - Early Connection -->
         <link rel="preconnect" href="https://static.prod-images.emergentagent.com" crossorigin />
@@ -22,6 +18,14 @@
         <link rel="dns-prefetch" href="https://static.prod-images.emergentagent.com" />
         <link rel="dns-prefetch" href="https://customer-assets.emergentagent.com" />
         <link rel="dns-prefetch" href="https://images.unsplash.com" />
+        
+        <!-- Google Fonts - Non-blocking with media print trick -->
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&display=swap" media="print" onload="this.media='all'" />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600&display=swap" media="print" onload="this.media='all'" />
+        <noscript>
+            <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&display=swap" />
+            <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600&display=swap" />
+        </noscript>
         
         <!-- SEO Meta Tags -->
         <title>ManoProtect - Protección contra Fraudes y Estafas Digitales | España</title>
