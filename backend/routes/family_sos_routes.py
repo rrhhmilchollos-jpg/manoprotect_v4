@@ -1302,33 +1302,9 @@ async def trigger_premium_sos(
     - Notifies nearby premium users within 5km
     """
     user = await require_auth(request, session_token)
-    features = get_plan_features_for_user(user)
     
-    # Superadmins always have access
-    SUPERADMIN_EMAILS = [
-        "rrhh.milchollos@gmail.com",
-        "info@manoprotect.com",
-        "ivanrubiosolas@gmail.com"
-    ]
-    
-    # Plans that have SOS access
-    ALLOWED_PLANS = [
-        "family-yearly", "family-monthly", "family-quarterly", "family",
-        "premium", "premium-yearly", "premium-monthly", "premium-quarterly",
-        "personal-yearly", "personal-monthly", "personal-quarterly", "personal",
-        "yearly", "monthly", "quarterly", "weekly",
-        "trial-7days", "trial",
-        "business", "business-yearly", "business-monthly",
-        "enterprise", "enterprise-yearly", "enterprise-monthly"
-    ]
-    
-    # Check if user has access to SOS
-    is_superadmin = user.email in SUPERADMIN_EMAILS
-    has_sos_feature = features.get("sos_premium", False) or features.get("sos", False)
-    has_allowed_plan = user.plan in ALLOWED_PLANS
-    has_any_paid_plan = user.plan and user.plan != "free"
-    
-    if not (is_superadmin or has_sos_feature or has_allowed_plan or has_any_paid_plan):
+    # Check access using unified function
+    if not user_has_premium_access(user):
         raise HTTPException(
             status_code=403,
             detail="El SOS Premium requiere Plan Premium o Familiar. Actualiza tu plan para acceder."
