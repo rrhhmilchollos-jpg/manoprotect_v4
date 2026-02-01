@@ -5,7 +5,7 @@ import {
   MapPin, Users, ArrowLeft, Plus, Loader2, Phone, 
   Eye, EyeOff, History, Trash2, Settings, Bell, BellOff,
   ExternalLink, Clock, CheckCircle2, AlertTriangle, Crown,
-  AlertOctagon, Shield, Send, Mail, Copy, MessageSquare
+  Shield, Send, Mail, Copy, MessageSquare
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -52,12 +52,7 @@ const ChildTracking = () => {
     loadChildren();
   }, []);
 
-  // Function to get GPS location
-  const getGPSLocation = () => {
-    return new Promise((resolve, reject) => {
-      if (!navigator.geolocation) {
-        reject(new Error('Geolocalización no soportada por tu navegador'));
-        return;
+  const loadChildren = async () => {
       }
 
       navigator.geolocation.getCurrentPosition(
