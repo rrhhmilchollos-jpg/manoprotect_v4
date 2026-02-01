@@ -387,12 +387,17 @@ const LandingPage = () => {
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="order-2 lg:order-1">
               <img
-                src="https://images.unsplash.com/photo-1752652011717-f06f7ed3927a?crop=entropy&cs=srgb&fm=jpg&q=85&w=600"
+                src="https://images.unsplash.com/photo-1752652011717-f06f7ed3927a?w=600&q=75&fm=webp"
+                srcSet="https://images.unsplash.com/photo-1752652011717-f06f7ed3927a?w=400&q=75&fm=webp 400w,
+                        https://images.unsplash.com/photo-1752652011717-f06f7ed3927a?w=600&q=75&fm=webp 600w,
+                        https://images.unsplash.com/photo-1752652011717-f06f7ed3927a?w=800&q=75&fm=webp 800w"
+                sizes="(max-width: 768px) 400px, 600px"
                 alt="Familia española protegida contra fraudes digitales con ManoProtect"
                 className="w-full rounded-2xl shadow-2xl"
                 width="600"
                 height="400"
                 loading="lazy"
+                decoding="async"
               />
             </div>
             <div className="order-1 lg:order-2 space-y-6">
