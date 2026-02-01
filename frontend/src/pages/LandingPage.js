@@ -165,6 +165,9 @@ const LandingPage = () => {
                   src="https://customer-assets.emergentagent.com/job_5c97b24f-9a55-4567-9954-bd76179fb951/artifacts/8y6ab2pd_logo%20App%20Mano.png" 
                   alt="ManoProtect" 
                   className="h-5 w-auto"
+                  width="20"
+                  height="20"
+                  loading="eager"
                 />
                 <span className="text-sm font-medium text-indigo-700">{t('landing.features.realTimeAlerts.title')}</span>
               </div>
