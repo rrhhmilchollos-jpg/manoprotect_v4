@@ -212,16 +212,20 @@ const LandingPage = () => {
             </div>
 
             <div className="relative max-w-md mx-auto lg:mx-0 lg:max-w-lg">
-              <div className="rounded-2xl overflow-hidden border border-zinc-200 shadow-xl" style={{aspectRatio: '1/1'}}>
+              <div className="rounded-2xl overflow-hidden border border-zinc-200 shadow-xl bg-gradient-to-br from-indigo-100 to-emerald-50" style={{aspectRatio: '1/1', minHeight: '300px'}}>
                 <img
-                  src="https://static.prod-images.emergentagent.com/jobs/fa8350ac-4103-442a-8e22-a986a8837bc7/images/8f093142c23ed0bcbd1a2fd5219b542440249eb8455292b5ac522882a4ac13e5.png"
+                  src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=400&q=70&fm=webp&fit=crop"
+                  srcSet="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=300&q=70&fm=webp&fit=crop 300w,
+                          https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=400&q=70&fm=webp&fit=crop 400w,
+                          https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=500&q=70&fm=webp&fit=crop 500w"
+                  sizes="(max-width: 768px) 300px, 400px"
                   alt="Familia protegida con ManoProtect - Aplicación de seguridad digital"
                   className="w-full h-full object-cover"
-                  width="500"
-                  height="500"
+                  width="400"
+                  height="400"
                   loading="eager"
                   fetchpriority="high"
-                  decoding="sync"
+                  decoding="async"
                 />
               </div>
               <div className="absolute -bottom-4 -right-4 w-20 h-20 bg-indigo-600 rounded-xl opacity-20" aria-hidden="true" />
