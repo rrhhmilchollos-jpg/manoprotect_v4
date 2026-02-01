@@ -139,14 +139,14 @@ async def add_family_member(
     """Add a family member directly"""
     user = await require_auth(request, session_token)
     
-    plan_features = get_plan_features_for_user(user)
-    if plan_features["max_users"] < 2:
-        raise HTTPException(status_code=403, detail="Se requiere plan familiar o superior")
+    if not user_has_premium_access(user):
+        raise HTTPException(status_code=403, detail="Se requiere plan Premium o Familiar")
     
+    plan_features = get_plan_features_for_user(user)
     data = await request.json()
     
     member_count = await _db.family_members.count_documents({"family_owner_id": user.user_id})
-    max_members = plan_features.get("max_users", 5)
+    max_members = plan_features.get("max_users", 5) if user.email not in SUPERADMIN_EMAILS else 999
     if member_count >= max_members:
         raise HTTPException(status_code=400, detail=f"Límite de {max_members} miembros alcanzado")
     
