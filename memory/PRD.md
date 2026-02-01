@@ -1,277 +1,171 @@
-# Proyectos ManoProtect y ManoBank
+# ManoProtect - Product Requirements Document
 
-## Última actualización: 31 de enero de 2026 (sesión 2)
+## Original Problem Statement
+ManoProtect is a comprehensive family protection and financial security application. The platform provides:
+- Family member tracking and emergency SOS features
+- AI-powered threat analysis
+- Scam/fraud detection and reporting
+- Subscription management with Stripe (including 7-day trial)
+- Multi-language support (9 languages)
+- Superadmin management system
+
+## User Personas
+1. **Family Administrators**: Parents/guardians who manage family plans and monitor family members
+2. **Family Members**: Users linked to a family plan with access to protection features
+3. **Premium Users**: Individual or family plan subscribers with full feature access
+4. **Superadmins**: Platform administrators (`info@manoprotect.com`, `rrhh.milchollos@gmail.com`)
+
+## Core Requirements
+
+### Authentication & Authorization
+- JWT-based authentication
+- Role-based access control (user, family_admin, superadmin)
+- Automatic superadmin initialization on server startup
+- Account locking after failed attempts with auto-unlock for superadmins
+
+### Subscription System
+- Free tier with basic features
+- Premium plans (individual, family, enterprise)
+- 7-day free trial with card verification (0€ charge)
+- Stripe webhooks for subscription lifecycle management
+- Automated email notifications for trial events
+
+### Family Features
+- Family member invitation system with unique links
+- Device linking for family members
+- Family-wide SOS emergency alerts
+- Location tracking for family members
+
+### Multi-Language Support (i18n)
+- 9 languages: Spanish, English, French, German, Italian, Portuguese, Chinese, Russian, Arabic
+- Language detection based on user location (ip-api.com)
+- Language switcher in header
+- Landing page fully internationalized
 
 ---
 
-## Arquitectura de Dos Proyectos
+## Completed Work
 
-Los proyectos están completamente separados pero conectados mediante API de antifraude.
+### December 2025 - Session 1
+- ✅ Fixed family invitation flow (end-to-end)
+- ✅ Implemented multi-language support (i18n) with 9 languages
+- ✅ Implemented Stripe 7-day trial with webhooks
+- ✅ Fixed SOS premium plan access for all user types
+- ✅ Implemented automatic superadmin initialization
+- ✅ Generated Google Ads images
 
-```
-/app/
-├── frontend/          # ManoProtect Frontend (puerto 3000)
-├── backend/           # ManoProtect Backend (puerto 8001)
-├── manoprotect-desktop/  # Desktop App para empleados (Electron)
-└── manobank/          # ManoBank - Proyecto independiente
-    ├── frontend/      # ManoBank Frontend (puerto 3001)
-    └── backend/       # ManoBank Backend (puerto 8002)
-```
+### December 2025 - Session 2
+- ✅ **Fixed deployment blocker**: Removed hardcoded Firebase credentials path from `firebase_fraud_service.py`
+- ✅ **Fixed deployment blocker**: Removed `*.env` entries from `.gitignore`
+- ✅ **Deployment verified**: Application ready for production (deployment_agent passed)
 
 ---
 
-# ManoProtect.com
+## Architecture
 
-## Información Legal
-- **Empresa:** STARTBOOKING SL
-- **CIF:** B19427723
-- **App ID (Android):** com.manoprotect.app
-
-## Descripción
-Plataforma de protección contra fraudes y estafas digitales para familias españolas.
-
-## Tecnología
-- Frontend: React + TailwindCSS + Shadcn/UI + Capacitor 6 (Android)
-- Backend: FastAPI (Python)
-- Base de datos: MongoDB (test_database)
-- Desktop App: Electron (Windows/Mac/Linux)
-
-## Funcionalidades ✅
-- Landing page con testimonios y badges de confianza
-- Sistema de autenticación (email + Google OAuth)
-- Dashboard de protección con alertas recientes
-- Verificador de estafas público mejorado
-- **Sistema de alertas por email (28 enero 2026)**
-  - Suscripción gratuita a alertas de fraude
-  - Broadcast de amenazas a todos los suscriptores
-  - Historial de alertas enviadas
-  - Integración con SendGrid
-- **Panel Admin mejorado (28 enero 2026)**
-  - Nueva pestaña "Alertas" para gestionar alertas de seguridad
-  - Crear y enviar alertas masivas desde el panel
-  - Ver estadísticas de suscriptores
-- **✅ Bug Plan Familiar CORREGIDO (28 enero 2026)**
-  - Eliminado archivo duplicado `/app/backend/routes/family.py`
-  - Corregido `/app/backend/routes/__init__.py`
-  - Endpoints funcionando correctamente
-  - 13 tests automatizados pasando (pytest)
-- **✅ SEO/SEM Avanzado (30 enero 2026)**
-  - Meta tags optimizados (título, descripción, keywords)
-  - Schema.org markup (Organization, SoftwareApplication, FAQPage)
-  - Open Graph y Twitter Cards
-  - sitemap.xml y robots.txt configurados
-  - Canonical URLs
-- **✅ Checkout con info empresa (30 enero 2026)**
-  - Descripción del producto en checkout
-  - Datos de STARTBOOKING SL (CIF B19427723)
-  - Período de facturación visible
-- **✅ App Móvil Android COMPLETA (30 enero 2026)**
-  - Capacitor 6 configurado
-  - Keystore generado: `/app/frontend/android/keystores/manoprotect-release.keystore`
-  - Android SDK 34 + Build Tools 34.0.0
-  - Icono de app generado (512x512)
-  - Feature graphic generado (1024x500)
-  - Paquete descargable: `/app/ManoProtect-GooglePlay.zip`
-  - Guía de compilación: `/app/frontend/ANDROID_BUILD_GUIDE.md`
-  - Ficha de Play Store: `/app/frontend/GOOGLE_PLAY_LISTING.md`
-- **✅ Desktop App para Empleados COMPLETA (31 enero 2026)**
-  - Electron app con SQLite local
-  - Funcionalidades: Dashboard, Gestión de amenazas, Clientes, Verificador de estafas, Tickets, Chat interno
-  - Ejecutable Windows compilado: `ManoProtect Desktop.exe` (107MB)
-  - ZIP descargable: `/app/frontend/public/ManoProtect-Desktop-Windows.zip`
-  - Página de descarga: `/empleados/descargar`
-  - **Portal completo para sucursales: `/empleados/portal`**
-  - Credenciales: admin@manoprotect.com / Admin2024!
-- **✅ Localización Familiar Mejorada (31 enero 2026)**
-  - Campo de EDAD añadido al formulario
-  - Clasificación automática: Niño (<18), Adulto (18-64), Anciano (≥65)
-  - Iconos diferenciados por tipo: 👶 👤 👴
-  - Backend actualizado con person_type
-  - Textos actualizados de "Niño" a "Familiar"
-- **✅ Sistema SOS Premium Familiar (31 enero 2026)**
-  - Botón SOS grande (rojo) para emergencias
-  - Grabación de audio automática (~15-20s)
-  - Detección GPS en tiempo real
-  - Notificación a todos los familiares
-  - Alertas a usuarios premium cercanos (5km)
-  - Sirena/sonido en dispositivos familiares
-  - Cancelación/confirmación de alertas
-  - Historial de alertas SOS
-  - Página: /sos-emergency
-- **✅ Bug Enlace Invitación Familiar CORREGIDO (31 enero 2026 - sesión 2)**
-  - Corregido `verify_password_secure()` para soportar hashes bcrypt ($2b$)
-  - El `invite_token` ahora se muestra correctamente en el frontend
-  - Enlace de vinculación visible para miembros pendientes
-  - Botones "Enviar por WhatsApp" y "Enviar por Email" funcionando
-  - Archivo modificado: `/app/backend/services/security_service.py`
-- **✅ Sistema i18n Multiidioma COMPLETO (31 enero 2026 - sesión 2)**
-  - 9 idiomas soportados: Español, Inglés, Francés, Alemán, Italiano, Portugués, Chino, Ruso, Árabe
-  - Detección automática por IP del país del usuario
-  - Selector de idiomas en el header con banderas
-  - Soporte RTL para árabe
-  - Landing page principal traducida a todos los idiomas
-  - Archivos: `/app/frontend/src/i18n/locales/[lang].json`
-- **✅ Sistema Trial 7 Días con Verificación de Tarjeta (31 enero 2026 - sesión 2)**
-  - Verificación de tarjeta con cobro de 0,00€
-  - Cobro automático de €29,99/mes después de 7 días
-  - Cancelación posible antes de los 7 días sin cargo
-  - Endpoints: `/api/create-trial-subscription`, `/api/trial/status/{id}`, `/api/trial/cancel`
-  - Página de éxito: `/trial-success`
-  - Cambio de "Precios" a "Ver Planes" en navegación (todos los idiomas)
-- **✅ Webhook Stripe para Eventos de Trial (31 enero 2026 - sesión 2)**
-  - Maneja eventos: subscription.created, trial_will_end, subscription.updated, subscription.deleted
-  - Actualiza automáticamente el estado del usuario en la BD
-  - Integrado con sistema de emails
-- **✅ Notificaciones Email de Trial (31 enero 2026 - sesión 2)**
-  - Email de bienvenida al iniciar trial
-  - Email de recordatorio 2-3 días antes de que termine
-  - Email de confirmación cuando se activa la suscripción
-  - Email de despedida si cancela el trial
-  - Templates HTML profesionales con branding ManoProtect
-- **✅ Preparación para Despliegue (31 enero 2026 - sesión 2)**
-  - Limpiado .gitignore para permitir archivos .env
-  - Firebase actualizado para usar variables de entorno (FIREBASE_PROJECT_ID, FIREBASE_PRIVATE_KEY, FIREBASE_CLIENT_EMAIL)
-  - Health check de deployment aprobado
-- **✅ Bug SOS Premium CORREGIDO (31 enero 2026 - sesión 2)**
-  - Validación de plan simplificada con función `user_has_premium_access()`
-  - Superadmins siempre tienen acceso: rrhh.milchollos@gmail.com, info@manoprotect.com, ivanrubiosolas@gmail.com
-  - Todos los planes de pago (family, premium, personal, trial, business, enterprise) ahora tienen acceso a SOS y GPS
-  - Eliminada restricción incorrecta que bloqueaba usuarios con plan familiar
-- **✅ Auto-inicialización de Superadmins (31 enero 2026 - sesión 2)**
-  - Al arrancar el servidor se crean/actualizan automáticamente las cuentas superadmin
-  - Se desbloquean automáticamente las cuentas bloqueadas por intentos fallidos
-  - Superadmins configurados:
-    - info@manoprotect.com (password: 19862210Des)
-    - rrhh.milchollos@gmail.com (password: 19862210Des)
-    - ivanrubiosolas@gmail.com (mantiene su password existente)
-- **✅ Proyecto iOS Completo (31 enero 2026)**
-  - Capacitor iOS configurado
-  - Iconos iOS generados (todos los tamaños requeridos)
-  - Proyecto Xcode descargable: `/app/frontend/public/ManoProtect-iOS-Project.zip`
-  - Guía completa: `/app/frontend/public/GUIA_APP_STORE_IOS.md`
-- **✅ Guías de Publicación (31 enero 2026)**
-  - Guía Google Play: `/app/frontend/public/GUIA_GOOGLE_PLAY.md`
-  - Portal de desarrolladores: `/desarrolladores/descargas`
-- **✅ Correcciones AdSense (30 enero 2026)**
-  - Páginas de callback/loading mejoradas con contenido real
-  - Meta tags para excluir páginas sin contenido de ads
-  - robots.txt actualizado para excluir páginas de proceso
-  - Nueva página FAQ con contenido de alta calidad
-  - Sitemap actualizado con todas las páginas públicas
-- Planes y precios con Stripe
-
-## Rutas activas
-- `/` - Landing principal
-- `/login`, `/registro` - Auth
-- `/dashboard` - Panel de usuario
-- `/verificar-estafa` - Verificador público
-- `/pricing` - Planes
-- `/admin` - Panel admin
-
-## API de Fraude (para ManoBank)
+### Backend (FastAPI)
 ```
-POST /api/fraud/check       - Verificar transacción
-POST /api/fraud/report      - Reportar fraude
-GET  /api/fraud/alerts/{id} - Obtener alertas
-GET  /api/fraud/public/scam-stats - Estadísticas
+/app/backend/
+├── server.py                    # Main server with startup events (superadmin init)
+├── routes/
+│   ├── family_sos_routes.py     # Family and SOS features
+│   ├── payments_routes.py       # Stripe subscriptions and webhooks
+│   └── ...
+├── services/
+│   ├── firebase_fraud_service.py # Fraud detection (env vars only)
+│   ├── email_service.py         # SendGrid notifications
+│   └── security_service.py      # Password hashing (bcrypt)
+└── tests/
+    └── test_trial_subscription.py
 ```
 
-## API de Alertas (NUEVO)
+### Frontend (React)
 ```
-POST /api/alerts/subscribe          - Suscribirse a alertas
-POST /api/alerts/unsubscribe        - Darse de baja
-GET  /api/alerts/subscriptions/count - Contador de suscriptores
-POST /api/alerts/broadcast          - Enviar alerta masiva
-GET  /api/alerts/history            - Historial de alertas
+/app/frontend/src/
+├── components/
+│   ├── LanguageSelector.js      # 9-language switcher
+│   └── ui/                      # Shadcn components
+├── i18n/
+│   ├── I18nContext.js           # i18n provider
+│   └── locales/                 # Translation files (9 languages)
+└── pages/
+    ├── LandingPage.js           # Internationalized
+    ├── Pricing.js               # Trial UI
+    └── VincularDispositivo.js   # Device linking
 ```
 
 ---
 
-# ManoBank.es
+## Key API Endpoints
 
-## Descripción
-Banco digital español con protección antifraude integrada mediante ManoProtect.
-
-## Tecnología
-- Frontend: React + TailwindCSS (puerto 3001)
-- Backend: FastAPI (puerto 8002)
-- Base de datos: MongoDB (manobank_db)
-
-## Funcionalidades ✅
-- Landing page
-- Login/Registro de clientes
-- Dashboard de cliente (básico)
-- Portal de empleados (básico)
-- Integración con API de fraude ManoProtect
-
-## Funcionalidades Pendientes 📋
-- Sistema completo de cuentas
-- Transferencias SEPA/Bizum
-- Tarjetas virtuales
-- KYC/Videoverificación
-- Préstamos
-- Gestión de empleados completa
-
-## Rutas
-- `/` - Landing
-- `/login`, `/registro` - Auth clientes
-- `/dashboard` - Panel cliente
-- `/banco` - Portal empleados
-- `/banco/sistema` - Sistema interno
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/create-trial-subscription` | POST | Create Stripe trial session |
+| `/api/webhook/stripe` | POST | Handle Stripe webhooks |
+| `/api/sos/premium/trigger` | POST | Trigger emergency SOS |
+| `/api/family/invite/{memberId}` | GET | Get family invitation info |
+| `/api/family/link-device/{memberId}` | POST | Link device to family member |
 
 ---
 
-## Integración ManoProtect ↔ ManoBank
+## Third-Party Integrations
 
-ManoBank consume la API de ManoProtect para:
-1. **Verificar transacciones** antes de procesarlas
-2. **Consultar base de datos** de estafadores conocidos
-3. **Recibir alertas** de fraude en tiempo real
-4. **Reportar actividades** sospechosas
-
-### Flujo de verificación
-```
-[Cliente ManoBank] → [Backend ManoBank] → [API ManoProtect] → [Respuesta]
-                                              ↓
-                                     Verificación antifraude
-```
+| Service | Purpose | Status |
+|---------|---------|--------|
+| Stripe | Payments & subscriptions | ✅ Active |
+| SendGrid | Transactional emails | ✅ Active |
+| OpenAI GPT-4o | AI threat analysis | ✅ Active |
+| Firebase | Fraud detection database | ✅ Env vars configured |
+| ip-api.com | Geolocation for i18n | ✅ Active |
+| Twilio | SMS verification | ✅ Configured |
 
 ---
 
-## Backlog Global
+## Credentials
 
-### P0 - Crítico
-- (Ninguno)
+### Superadmin Accounts
+- `info@manoprotect.com` / `19862210Des`
+- `rrhh.milchollos@gmail.com` / `19862210Des`
 
-### P1 - Alta
-- [ ] Completar sistema de cuentas ManoBank
-- [ ] Implementar transferencias
-- [ ] Sistema de notificaciones
-
-### P2 - Media
-- [ ] Apps móviles ManoProtect
-- [ ] KYC/Videoverificación ManoBank
-- [ ] Sistema de préstamos
-
-### P3 - Baja
-- [ ] Tarjetas físicas
-- [ ] API pública
-- [ ] Gamificación
+### Stripe Webhook Secret
+- `whsec_yRRSDLvaShBkM8SPwpZA8hQN2jNDBCyW`
 
 ---
 
-## Dominios
+## Prioritized Backlog
 
-- **ManoProtect**: manoprotect.com (activo)
-- **ManoBank**: manobank.es (pendiente configuración)
+### P0 - Critical (Done)
+- ✅ Fix deployment blockers (Firebase credentials, .gitignore)
+
+### P1 - High Priority
+- [ ] Translate entire application (Dashboard.js, Pricing.js, Profile.js, etc.)
+- [ ] Full audit of MongoDB `_id` serialization
+
+### P2 - Medium Priority
+- [ ] Publish mobile app to Google Play and App Store
+- [ ] Complete ManoBank integration
+- [ ] Refactor large files (family_sos_routes.py, ChildTracking.js)
+
+### P3 - Low Priority
+- [ ] Database query optimization
+- [ ] Performance audit
 
 ---
 
-## Credenciales de prueba
+## Known Issues
 
-### ManoProtect
-- Admin: (configurar en producción)
+| Issue | Severity | Status |
+|-------|----------|--------|
+| PostHog `DataCloneError` | Low | Platform issue (not app bug) |
+| Large file sizes | Low | Refactoring needed |
 
-### ManoBank
-- Director: rrhh.milchollos@gmail.com / 19862210Des
-- Subdirector: msolassanchis@gmail.com / Mano2024!
+---
+
+## Testing
+
+### Test Files
+- `/app/backend/tests/test_trial_subscription.py`
+- `/app/test_reports/iteration_25.json`
+
+### Test Credentials
+- Superadmin: `info@manoprotect.com` / `19862210Des`
