@@ -150,8 +150,9 @@ const LandingPage = () => {
                 </Button>
               </>
             )}
-          </nav>
-        </header>
+          </div>
+        </nav>
+      </header>
 
       {/* Hero Section - Main Content */}
       <main id="main-content" role="main">
