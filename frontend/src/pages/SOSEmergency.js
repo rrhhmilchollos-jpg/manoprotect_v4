@@ -335,11 +335,52 @@ export default function SOSEmergency() {
                 <p className="text-red-200 text-sm mb-3">{alert.message}</p>
                 
                 {alert.location && (
-                  <div className="flex items-center gap-2 text-red-200 mb-3">
-                    <MapPin className="w-4 h-4" />
-                    <span className="text-sm">
-                      {alert.location.latitude?.toFixed(6)}, {alert.location.longitude?.toFixed(6)}
-                    </span>
+                  <div className="space-y-2 mb-4">
+                    <div className="flex items-center gap-2 text-red-200">
+                      <MapPin className="w-4 h-4" />
+                      <span className="text-sm">
+                        {alert.location.latitude?.toFixed(6)}, {alert.location.longitude?.toFixed(6)}
+                      </span>
+                    </div>
+                    
+                    {/* Google Maps buttons */}
+                    <div className="flex gap-2">
+                      <Button 
+                        size="sm"
+                        className="flex-1 bg-blue-600 hover:bg-blue-700"
+                        onClick={() => window.open(getGoogleMapsLink(alert.location.latitude, alert.location.longitude), '_blank')}
+                      >
+                        <MapPin className="w-4 h-4 mr-1" />
+                        Ver Ubicación
+                      </Button>
+                      <Button 
+                        size="sm"
+                        className="flex-1 bg-green-600 hover:bg-green-700"
+                        onClick={() => window.open(getGoogleMapsDirections(alert.location.latitude, alert.location.longitude), '_blank')}
+                      >
+                        <Navigation className="w-4 h-4 mr-1" />
+                        Cómo Llegar
+                      </Button>
+                    </div>
+                  </div>
+                )}
+                
+                {/* Audio message if available */}
+                {alert.audio_duration > 0 && (
+                  <div className="mb-3 p-3 bg-red-800/30 rounded-lg">
+                    <p className="text-red-200 text-xs mb-2 flex items-center gap-1">
+                      <Mic className="w-3 h-3" />
+                      Mensaje de voz ({alert.audio_duration}s)
+                    </p>
+                    <Button 
+                      size="sm" 
+                      variant="outline" 
+                      className="w-full border-red-500 text-red-300"
+                      onClick={() => toast.info('Reproduciendo mensaje de emergencia...')}
+                    >
+                      <Volume2 className="w-4 h-4 mr-2" />
+                      Escuchar Mensaje
+                    </Button>
                   </div>
                 )}
                 
