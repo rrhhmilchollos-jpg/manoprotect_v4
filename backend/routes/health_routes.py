@@ -2,12 +2,13 @@
 Health Profile Routes - ManoProtect
 Endpoints for user health information (emergency medical data)
 """
-from fastapi import APIRouter, HTTPException, Request
+from fastapi import APIRouter, HTTPException, Request, Cookie, Depends
 from datetime import datetime, timezone
 from typing import Optional, List
 from pydantic import BaseModel
 
 from core.auth import get_current_user
+from models.all_schemas import User
 
 router = APIRouter()
 _db = None
@@ -36,7 +37,7 @@ class EmergencyContact(BaseModel):
     relationship: str
 
 @router.get("/health/profile")
-async def get_health_profile(request: Request):
+async def get_health_profile(request: Request, user: User = Depends(get_current_user)):
     """Get user's health profile"""
     user = await get_current_user(request)
     if not user:
