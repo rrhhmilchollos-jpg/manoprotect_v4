@@ -1,93 +1,27 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
+import React from 'react';
 
 const DeleteAccount = () => {
-  const [email, setEmail] = useState('');
-  const [reason, setReason] = useState('');
-  const [confirmed, setConfirmed] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const { user, logout } = useAuth();
-  const navigate = useNavigate();
-  const API = process.env.REACT_APP_BACKEND_URL;
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!confirmed) {
-      alert('Debes confirmar que entiendes las consecuencias de eliminar tu cuenta.');
-      return;
-    }
-    
-    setLoading(true);
-    try {
-      const response = await fetch(`${API}/api/auth/delete-account-request`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify({ email, reason })
-      });
-      
-      if (response.ok) {
-        setSubmitted(true);
-        if (user) {
-          setTimeout(() => {
-            logout();
-            navigate('/');
-          }, 5000);
-        }
-      } else {
-        alert('Error al enviar la solicitud. Por favor, inténtalo de nuevo.');
-      }
-    } catch (error) {
-      console.error('Error:', error);
-      alert('Error de conexión. Por favor, inténtalo de nuevo.');
-    }
-    setLoading(false);
-  };
-
-  if (submitted) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-red-50 to-orange-50 flex items-center justify-center p-4">
-        <div className="bg-white rounded-2xl shadow-xl p-8 max-w-md w-full text-center">
-          <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-            </svg>
-          </div>
-          <h2 className="text-2xl font-bold text-gray-800 mb-4">Solicitud Recibida</h2>
-          <p className="text-gray-600 mb-4">
-            Hemos recibido tu solicitud de eliminación de cuenta. Procesaremos tu solicitud en un plazo de <strong>30 días</strong>.
-          </p>
-          <p className="text-gray-500 text-sm">
-            Recibirás un correo de confirmación cuando tu cuenta y datos hayan sido eliminados.
-          </p>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-red-50 to-orange-50 py-12 px-4">
       <div className="max-w-2xl mx-auto">
         {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-gray-800 mb-2">Eliminar Cuenta - ManoProtect</h1>
-          <p className="text-gray-600">Solicita la eliminación de tu cuenta y datos personales</p>
+          <p className="text-gray-600">Información sobre la eliminación de tu cuenta y datos personales</p>
         </div>
 
         {/* Warning Card */}
-        <div className="bg-red-50 border-l-4 border-red-500 p-4 mb-8 rounded-r-lg">
+        <div className="bg-amber-50 border-l-4 border-amber-500 p-4 mb-8 rounded-r-lg">
           <div className="flex">
             <div className="flex-shrink-0">
-              <svg className="h-5 w-5 text-red-500" viewBox="0 0 20 20" fill="currentColor">
+              <svg className="h-5 w-5 text-amber-500" viewBox="0 0 20 20" fill="currentColor">
                 <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
               </svg>
             </div>
             <div className="ml-3">
-              <h3 className="text-sm font-medium text-red-800">Advertencia Importante</h3>
-              <p className="mt-1 text-sm text-red-700">
-                La eliminación de tu cuenta es <strong>permanente e irreversible</strong>. Perderás acceso a todas las funciones de seguridad y seguimiento familiar.
+              <h3 className="text-sm font-medium text-amber-800">Proceso de Eliminación Manual</h3>
+              <p className="mt-1 text-sm text-amber-700">
+                Por motivos de seguridad, la eliminación de cuentas se realiza <strong>únicamente de forma manual</strong> por nuestro equipo de soporte técnico.
               </p>
             </div>
           </div>
@@ -149,93 +83,93 @@ const DeleteAccount = () => {
           </ul>
         </div>
 
-        {/* Deletion Timeline */}
+        {/* How to Request Deletion */}
         <div className="bg-white rounded-2xl shadow-lg p-6 mb-6">
-          <h2 className="text-xl font-semibold text-gray-800 mb-4">Proceso de eliminación</h2>
+          <h2 className="text-xl font-semibold text-gray-800 mb-4">¿Cómo solicitar la eliminación?</h2>
           <div className="space-y-4">
-            <div className="flex items-center">
-              <div className="w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold mr-4">1</div>
-              <span className="text-gray-600">Envías la solicitud de eliminación</span>
+            <div className="flex items-start">
+              <div className="w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold mr-4 flex-shrink-0">1</div>
+              <div>
+                <p className="text-gray-700 font-medium">Contacta con nuestro equipo de soporte</p>
+                <p className="text-gray-500 text-sm">Envía un email a soporte@manoprotect.com indicando tu deseo de eliminar la cuenta</p>
+              </div>
             </div>
-            <div className="flex items-center">
-              <div className="w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold mr-4">2</div>
-              <span className="text-gray-600">Verificamos tu identidad (1-3 días)</span>
+            <div className="flex items-start">
+              <div className="w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold mr-4 flex-shrink-0">2</div>
+              <div>
+                <p className="text-gray-700 font-medium">Verificación de identidad</p>
+                <p className="text-gray-500 text-sm">Te solicitaremos información para verificar que eres el titular de la cuenta</p>
+              </div>
             </div>
-            <div className="flex items-center">
-              <div className="w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold mr-4">3</div>
-              <span className="text-gray-600">Procesamos la eliminación (hasta 30 días)</span>
+            <div className="flex items-start">
+              <div className="w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold mr-4 flex-shrink-0">3</div>
+              <div>
+                <p className="text-gray-700 font-medium">Procesamiento de la solicitud</p>
+                <p className="text-gray-500 text-sm">Nuestro equipo procesará tu solicitud en un plazo máximo de 30 días</p>
+              </div>
             </div>
-            <div className="flex items-center">
-              <div className="w-8 h-8 bg-green-500 text-white rounded-full flex items-center justify-center font-bold mr-4">✓</div>
-              <span className="text-gray-600">Recibes confirmación por email</span>
+            <div className="flex items-start">
+              <div className="w-8 h-8 bg-green-500 text-white rounded-full flex items-center justify-center font-bold mr-4 flex-shrink-0">✓</div>
+              <div>
+                <p className="text-gray-700 font-medium">Confirmación</p>
+                <p className="text-gray-500 text-sm">Recibirás un email de confirmación cuando tu cuenta haya sido eliminada</p>
+              </div>
             </div>
           </div>
         </div>
 
-        {/* Form */}
-        <div className="bg-white rounded-2xl shadow-lg p-6">
-          <h2 className="text-xl font-semibold text-gray-800 mb-4">Solicitar eliminación de cuenta</h2>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Email de tu cuenta *
-              </label>
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                placeholder="tu@email.com"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Motivo de la eliminación (opcional)
-              </label>
-              <select
-                value={reason}
-                onChange={(e) => setReason(e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
-              >
-                <option value="">Selecciona un motivo</option>
-                <option value="no_longer_needed">Ya no necesito el servicio</option>
-                <option value="privacy_concerns">Preocupaciones de privacidad</option>
-                <option value="switching_service">Cambio a otro servicio</option>
-                <option value="too_expensive">El precio es muy alto</option>
-                <option value="not_satisfied">No estoy satisfecho con el servicio</option>
-                <option value="other">Otro motivo</option>
-              </select>
-            </div>
-            <div className="flex items-start">
-              <input
-                type="checkbox"
-                id="confirm"
-                checked={confirmed}
-                onChange={(e) => setConfirmed(e.target.checked)}
-                className="mt-1 h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300 rounded"
-              />
-              <label htmlFor="confirm" className="ml-2 text-sm text-gray-600">
-                Entiendo que esta acción es <strong>permanente e irreversible</strong>, y que perderé acceso a todas las funciones de seguridad y mis datos serán eliminados.
-              </label>
-            </div>
-            <button
-              type="submit"
-              disabled={loading || !confirmed}
-              className={`w-full py-3 px-4 rounded-lg font-semibold text-white transition-colors ${
-                loading || !confirmed
-                  ? 'bg-gray-400 cursor-not-allowed'
-                  : 'bg-red-600 hover:bg-red-700'
-              }`}
+        {/* Contact Card */}
+        <div className="bg-gradient-to-r from-blue-600 to-blue-700 rounded-2xl shadow-lg p-6 mb-6 text-white">
+          <h2 className="text-xl font-semibold mb-4">Contacta con Soporte Técnico</h2>
+          <p className="mb-6 text-blue-100">
+            Para solicitar la eliminación de tu cuenta, por favor contacta con nuestro equipo de soporte. 
+            Estamos aquí para ayudarte.
+          </p>
+          <div className="space-y-3">
+            <a 
+              href="mailto:soporte@manoprotect.com?subject=Solicitud de eliminación de cuenta&body=Hola,%0A%0ASolicito la eliminación de mi cuenta de ManoProtect.%0A%0AEmail de la cuenta:%0A%0AGracias."
+              className="flex items-center justify-center w-full bg-white text-blue-600 font-semibold py-3 px-6 rounded-lg hover:bg-blue-50 transition-colors"
             >
-              {loading ? 'Procesando...' : 'Solicitar Eliminación de Cuenta'}
-            </button>
-          </form>
+              <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+              </svg>
+              Enviar Email a Soporte
+            </a>
+            <p className="text-center text-blue-200 text-sm">
+              soporte@manoprotect.com
+            </p>
+          </div>
         </div>
 
-        {/* Contact */}
+        {/* Disabled Delete Button with Warning */}
+        <div className="bg-white rounded-2xl shadow-lg p-6">
+          <div className="bg-gray-100 border-2 border-dashed border-gray-300 rounded-xl p-6 text-center">
+            <svg className="w-12 h-12 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+            </svg>
+            <h3 className="text-lg font-semibold text-gray-600 mb-2">Eliminación Manual Requerida</h3>
+            <p className="text-gray-500 text-sm mb-4">
+              Por razones de seguridad, no está permitida la auto-eliminación de cuentas. 
+              Debes contactar con nuestro equipo de soporte técnico para procesar tu solicitud.
+            </p>
+            <button 
+              disabled
+              className="w-full bg-gray-300 text-gray-500 font-semibold py-3 px-6 rounded-lg cursor-not-allowed"
+            >
+              <svg className="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+              </svg>
+              Eliminar Cuenta (Contacta con Soporte)
+            </button>
+          </div>
+        </div>
+
+        {/* Footer */}
         <div className="text-center mt-8 text-gray-500 text-sm">
-          <p>¿Tienes preguntas? Contáctanos en <a href="mailto:soporte@manoprotect.com" className="text-blue-600 hover:underline">soporte@manoprotect.com</a></p>
+          <p>¿Tienes preguntas? Estamos disponibles en</p>
+          <a href="mailto:soporte@manoprotect.com" className="text-blue-600 hover:underline font-medium">
+            soporte@manoprotect.com
+          </a>
         </div>
       </div>
     </div>
