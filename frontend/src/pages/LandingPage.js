@@ -576,11 +576,11 @@ const LandingPage = () => {
       </section>
 
       {/* Alert Subscription Section */}
-      <section className="px-6 py-16 bg-zinc-100">
+      <section className="px-6 py-16 bg-zinc-100" aria-labelledby="subscription-heading">
         <div className="max-w-4xl mx-auto">
           <div className="grid md:grid-cols-2 gap-8 items-center">
             <div>
-              <h2 className="text-2xl sm:text-3xl font-bold text-zinc-900 mb-4">
+              <h2 id="subscription-heading" className="text-2xl sm:text-3xl font-bold text-zinc-900 mb-4">
                 Mantente informado sobre las últimas estafas
               </h2>
               <p className="text-zinc-600 mb-4">
