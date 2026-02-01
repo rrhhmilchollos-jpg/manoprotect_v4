@@ -150,11 +150,11 @@ const LandingPage = () => {
                 </Button>
               </>
             )}
-          </div>
-        </div>
-      </header>
+          </nav>
+        </header>
 
-      {/* Hero Section */}
+      {/* Hero Section - Main Content */}
+      <main id="main-content" role="main">
       <section className="relative px-6 py-24 overflow-hidden">
         <div className="grain absolute inset-0 pointer-events-none" />
         <div className="max-w-7xl mx-auto">
