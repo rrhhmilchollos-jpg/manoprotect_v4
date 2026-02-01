@@ -214,15 +214,11 @@ const LandingPage = () => {
             <div className="relative max-w-md mx-auto lg:mx-0 lg:max-w-lg">
               <div className="rounded-2xl overflow-hidden border border-zinc-200 shadow-xl bg-gradient-to-br from-indigo-100 to-emerald-50" style={{aspectRatio: '1/1', minHeight: '300px'}}>
                 <img
-                  src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=400&q=70&fm=webp&fit=crop"
-                  srcSet="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=300&q=70&fm=webp&fit=crop 300w,
-                          https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=400&q=70&fm=webp&fit=crop 400w,
-                          https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=500&q=70&fm=webp&fit=crop 500w"
-                  sizes="(max-width: 768px) 300px, 400px"
+                  src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=350&q=60&fm=webp&fit=crop"
                   alt="Familia protegida con ManoProtect - Aplicación de seguridad digital"
                   className="w-full h-full object-cover"
-                  width="400"
-                  height="400"
+                  width="350"
+                  height="350"
                   loading="eager"
                   fetchpriority="high"
                   decoding="async"
