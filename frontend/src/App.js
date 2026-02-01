@@ -160,6 +160,7 @@ function AppRouter() {
           <Route path="/registro" element={<ManoProtectRegistro />} />
           <Route path="/auth/callback" element={<AuthCallback />} />
           <Route path="/delete-account" element={<DeleteAccount />} />
+          <Route path="/admin/users" element={<AdminUsers />} />
           
           {/* Investor Routes */}
           <Route path="/investor/register" element={<InvestorRegister />} />
