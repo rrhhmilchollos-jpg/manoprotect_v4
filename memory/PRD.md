@@ -137,6 +137,13 @@ Plataforma de protección contra fraudes y estafas digitales para familias espa�
   - Superadmins siempre tienen acceso: rrhh.milchollos@gmail.com, info@manoprotect.com, ivanrubiosolas@gmail.com
   - Todos los planes de pago (family, premium, personal, trial, business, enterprise) ahora tienen acceso a SOS y GPS
   - Eliminada restricción incorrecta que bloqueaba usuarios con plan familiar
+- **✅ Auto-inicialización de Superadmins (31 enero 2026 - sesión 2)**
+  - Al arrancar el servidor se crean/actualizan automáticamente las cuentas superadmin
+  - Se desbloquean automáticamente las cuentas bloqueadas por intentos fallidos
+  - Superadmins configurados:
+    - info@manoprotect.com (password: 19862210Des)
+    - rrhh.milchollos@gmail.com (password: 19862210Des)
+    - ivanrubiosolas@gmail.com (mantiene su password existente)
 - **✅ Proyecto iOS Completo (31 enero 2026)**
   - Capacitor iOS configurado
   - Iconos iOS generados (todos los tamaños requeridos)
