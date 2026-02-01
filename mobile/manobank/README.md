@@ -43,4 +43,4 @@
 
 - **App ID:** com.manobank.app
 - **Nombre:** ManoBank
-- **URL Web:** https://manoguard-launch.preview.emergentagent.com
+- **URL Web:** https://child-tracker-15.preview.emergentagent.com

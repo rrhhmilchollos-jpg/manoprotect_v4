@@ -25,7 +25,7 @@ Todas las apps se conectan al mismo backend:
 
 | Entorno | URL |
 |---------|-----|
-| Preview | https://manoguard-launch.preview.emergentagent.com |
+| Preview | https://child-tracker-15.preview.emergentagent.com |
 | Producción | [Tu dominio de producción] |
 
 ---

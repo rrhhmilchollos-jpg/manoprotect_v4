@@ -11,7 +11,7 @@ import pytest
 import requests
 import os
 
-BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', 'https://manoguard-launch.preview.emergentagent.com')
+BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', 'https://child-tracker-15.preview.emergentagent.com')
 
 class TestPublicScamEndpoints:
     """Test public scam verification endpoints - Firebase Firestore with MongoDB fallback"""

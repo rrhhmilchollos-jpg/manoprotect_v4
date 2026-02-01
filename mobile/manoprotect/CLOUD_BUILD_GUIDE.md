@@ -94,7 +94,7 @@ keytool -genkey -v -keystore manoprotect.keystore -alias manoprotect -keyalg RSA
 
 La app se conecta a:
 ```
-https://manoguard-launch.preview.emergentagent.com
+https://child-tracker-15.preview.emergentagent.com
 ```
 
 Cuando despliegues a producción, actualizar en `capacitor.config.json`:
