@@ -45,8 +45,10 @@ const DescargarDesktop = lazy(() => import('@/pages/DescargarDesktop'));
 const DescargarApps = lazy(() => import('@/pages/DescargarApps'));
 const PortalEmpleados = lazy(() => import('@/pages/PortalEmpleados'));
 
-import CookieConsent from '@/components/CookieConsent';
-import FloatingWhatsApp from '@/components/FloatingWhatsApp';
+// Lazy load non-critical UI components to reduce main thread blocking
+const CookieConsent = lazy(() => import('@/components/CookieConsent'));
+const FloatingWhatsApp = lazy(() => import('@/components/FloatingWhatsApp'));
+
 import UrgencyBanner from '@/components/UrgencyBanner';
 
 import '@/App.css';
@@ -60,6 +62,9 @@ const PageLoader = () => (
     </div>
   </div>
 );
+
+// Empty fallback for non-critical components
+const EmptyFallback = () => null;
 
 // Analytics Page Tracker
 const AnalyticsTracker = () => {
