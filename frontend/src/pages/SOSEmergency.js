@@ -504,38 +504,125 @@ export default function SOSEmergency() {
         </CardContent>
       </Card>
 
-      {/* Audio Recording */}
+      {/* Audio Recording - WhatsApp Style */}
       <Card className="mb-4 bg-zinc-800/50 border-zinc-700">
         <CardContent className="p-4">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-3">
               <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                isRecording ? 'bg-red-500/20 animate-pulse' : audioBlob ? 'bg-emerald-500/20' : 'bg-zinc-700'
+                isRecording ? 'bg-red-500 animate-pulse' : audioBlob ? 'bg-emerald-500/20' : 'bg-zinc-700'
               }`}>
                 {isRecording ? (
-                  <Mic className="w-5 h-5 text-red-400" />
+                  <Mic className="w-5 h-5 text-white" />
+                ) : audioBlob ? (
+                  <CheckCircle2 className="w-5 h-5 text-emerald-400" />
                 ) : (
                   <MicOff className="w-5 h-5 text-zinc-400" />
                 )}
               </div>
               <div>
-                <p className="font-medium text-white">Mensaje de Audio</p>
+                <p className="font-medium text-white">Mensaje de Emergencia</p>
                 <p className="text-xs text-zinc-400">
                   {isRecording 
-                    ? `Grabando... ${recordingTime}s / 20s`
+                    ? `🔴 Grabando... ${recordingTime}s`
                     : audioBlob 
-                      ? `Audio grabado (${recordingTime}s)`
-                      : 'Se grabará automáticamente'}
+                      ? `✅ Audio grabado (${recordingTime}s)`
+                      : 'Graba un mensaje de voz (máx 20s)'}
                 </p>
               </div>
             </div>
-            <Button 
-              variant={isRecording ? "destructive" : "outline"}
-              size="sm"
-              onClick={isRecording ? stopRecording : startRecording}
-            >
-              {isRecording ? 'Parar' : 'Grabar'}
-            </Button>
+          </div>
+          
+          {/* WhatsApp-style recording interface */}
+          <div className="bg-zinc-900 rounded-xl p-4">
+            {isRecording ? (
+              // Recording in progress - WhatsApp style
+              <div className="flex items-center gap-4">
+                <div className="flex-1">
+                  {/* Waveform animation */}
+                  <div className="flex items-center justify-center gap-1 h-12">
+                    {[...Array(20)].map((_, i) => (
+                      <div 
+                        key={i}
+                        className="w-1 bg-red-500 rounded-full animate-pulse"
+                        style={{
+                          height: `${Math.random() * 100}%`,
+                          animationDelay: `${i * 50}ms`,
+                          animationDuration: '0.5s'
+                        }}
+                      />
+                    ))}
+                  </div>
+                  {/* Timer */}
+                  <div className="text-center mt-2">
+                    <span className="text-2xl font-mono text-red-400">
+                      {Math.floor(recordingTime / 60).toString().padStart(2, '0')}:{(recordingTime % 60).toString().padStart(2, '0')}
+                    </span>
+                    <span className="text-zinc-500 text-sm ml-2">/ 00:20</span>
+                  </div>
+                </div>
+                
+                {/* Stop button */}
+                <button
+                  onClick={stopRecording}
+                  className="w-16 h-16 rounded-full bg-red-600 hover:bg-red-700 flex items-center justify-center shadow-lg"
+                >
+                  <div className="w-6 h-6 bg-white rounded" />
+                </button>
+              </div>
+            ) : audioBlob ? (
+              // Audio recorded - playback interface
+              <div className="space-y-3">
+                <div className="flex items-center gap-3">
+                  <button
+                    onClick={() => {
+                      const audio = new Audio(URL.createObjectURL(audioBlob));
+                      audio.play();
+                    }}
+                    className="w-12 h-12 rounded-full bg-emerald-600 hover:bg-emerald-700 flex items-center justify-center"
+                  >
+                    <svg className="w-6 h-6 text-white ml-1" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M8 5v14l11-7z"/>
+                    </svg>
+                  </button>
+                  <div className="flex-1">
+                    <div className="h-2 bg-zinc-700 rounded-full overflow-hidden">
+                      <div className="h-full bg-emerald-500 rounded-full" style={{width: '100%'}} />
+                    </div>
+                    <p className="text-xs text-zinc-400 mt-1">{recordingTime} segundos grabados</p>
+                  </div>
+                  <button
+                    onClick={() => {
+                      setAudioBlob(null);
+                      setRecordingTime(0);
+                    }}
+                    className="text-red-400 hover:text-red-300"
+                  >
+                    <Trash2 className="w-5 h-5" />
+                  </button>
+                </div>
+                <p className="text-xs text-emerald-400 text-center">
+                  ✓ Este audio se enviará junto con tu ubicación a tu familia
+                </p>
+              </div>
+            ) : (
+              // No recording - start button
+              <div className="flex flex-col items-center gap-3">
+                <p className="text-sm text-zinc-400 text-center">
+                  Mantén pulsado para grabar un mensaje de voz describiendo tu emergencia
+                </p>
+                <button
+                  onMouseDown={startRecording}
+                  onMouseUp={stopRecording}
+                  onTouchStart={startRecording}
+                  onTouchEnd={stopRecording}
+                  className="w-20 h-20 rounded-full bg-gradient-to-br from-green-500 to-green-600 hover:from-green-400 hover:to-green-500 flex items-center justify-center shadow-lg active:scale-95 transition-transform"
+                >
+                  <Mic className="w-8 h-8 text-white" />
+                </button>
+                <p className="text-xs text-zinc-500">Pulsa y mantén para grabar</p>
+              </div>
+            )}
           </div>
         </CardContent>
       </Card>
