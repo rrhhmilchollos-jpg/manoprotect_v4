@@ -760,36 +760,52 @@ async def get_enterprise_reports(
     else:
         start_date = now - timedelta(days=365)
     
-    # Get threat analyses in period
-    threats = await db.threat_analysis.find({"user_id": user.user_id}, {"_id": 0}).to_list(1000)
+    # Optimized: Use aggregation with date filter directly in MongoDB
+    stats_pipeline = [
+        {"$match": {"user_id": user.user_id, "created_at": {"$gte": start_date}}},
+        {"$group": {
+            "_id": None,
+            "total_threats": {"$sum": 1},
+            "blocked": {"$sum": {"$cond": [{"$eq": ["$is_threat", True]}, 1, 0]}},
+            "critical": {"$sum": {"$cond": [{"$eq": ["$risk_level", "critical"]}, 1, 0]}},
+            "high": {"$sum": {"$cond": [{"$eq": ["$risk_level", "high"]}, 1, 0]}},
+            "medium": {"$sum": {"$cond": [{"$eq": ["$risk_level", "medium"]}, 1, 0]}},
+            "low": {"$sum": {"$cond": [{"$eq": ["$risk_level", "low"]}, 1, 0]}}
+        }}
+    ]
+    stats_result = await db.threat_analysis.aggregate(stats_pipeline).to_list(1)
     
-    period_threats = []
-    by_type = {}
-    by_risk = {"critical": 0, "high": 0, "medium": 0, "low": 0}
+    if stats_result:
+        stats = stats_result[0]
+        total_threats = stats.get("total_threats", 0)
+        blocked = stats.get("blocked", 0)
+        by_risk = {
+            "critical": stats.get("critical", 0),
+            "high": stats.get("high", 0),
+            "medium": stats.get("medium", 0),
+            "low": stats.get("low", 0)
+        }
+    else:
+        total_threats = 0
+        blocked = 0
+        by_risk = {"critical": 0, "high": 0, "medium": 0, "low": 0}
     
-    for t in threats:
-        created = t.get("created_at")
-        if isinstance(created, str):
-            try:
-                created = datetime.fromisoformat(created.replace('Z', '+00:00'))
-            except:
-                continue
-        if created and created > start_date:
-            period_threats.append(t)
-            # Count by type
-            for tt in t.get("threat_types", []):
-                by_type[tt] = by_type.get(tt, 0) + 1
-            # Count by risk
-            risk = t.get("risk_level", "low")
-            if risk in by_risk:
-                by_risk[risk] += 1
+    # Aggregation for threat types
+    types_pipeline = [
+        {"$match": {"user_id": user.user_id, "created_at": {"$gte": start_date}}},
+        {"$unwind": "$threat_types"},
+        {"$group": {"_id": "$threat_types", "count": {"$sum": 1}}},
+        {"$limit": 20}
+    ]
+    types_result = await db.threat_analysis.aggregate(types_pipeline).to_list(20)
+    by_type = {item["_id"]: item["count"] for item in types_result}
     
     return {
         "period": period,
         "start_date": start_date.isoformat(),
         "end_date": now.isoformat(),
-        "total_threats": len(period_threats),
-        "blocked": len([t for t in period_threats if t.get("is_threat")]),
+        "total_threats": total_threats,
+        "blocked": blocked,
         "by_type": by_type,
         "by_risk": by_risk,
         "generated_at": now.isoformat()
