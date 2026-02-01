@@ -1011,6 +1011,35 @@ async def get_family_children(
     }
 
 
+@router.get("/family/invite/{member_id}")
+async def get_invite_info(member_id: str, token: str):
+    """Get invitation info for linking a family member device (public endpoint)"""
+    # Find the member with matching token
+    member = await _db.family_children.find_one({
+        "child_id": member_id,
+        "invite_token": token
+    }, {"_id": 0})
+    
+    if not member:
+        raise HTTPException(status_code=404, detail="Invitación no válida o expirada")
+    
+    # Get family owner info
+    owner = await _db.users.find_one(
+        {"user_id": member.get("family_owner_id")},
+        {"_id": 0, "name": 1, "email": 1}
+    )
+    
+    return {
+        "valid": True,
+        "member_name": member.get("name"),
+        "member_id": member.get("child_id"),
+        "already_linked": member.get("device_linked", False),
+        "family_owner_name": owner.get("name", "Tu familia") if owner else "Tu familia",
+        "person_type": member.get("person_type", "familiar"),
+        "message": "Vincula tu dispositivo para que tu familia pueda localizarte en caso de emergencia"
+    }
+
+
 @router.post("/family/link-device/{member_id}")
 async def link_family_device(
     member_id: str,
