@@ -213,8 +213,11 @@ const LandingPage = () => {
               <div className="rounded-2xl overflow-hidden border border-zinc-200 shadow-xl">
                 <img
                   src="https://static.prod-images.emergentagent.com/jobs/fa8350ac-4103-442a-8e22-a986a8837bc7/images/8f093142c23ed0bcbd1a2fd5219b542440249eb8455292b5ac522882a4ac13e5.png"
-                  alt="Familia protegida con MANO"
+                  alt="Familia protegida con ManoProtect - Aplicación de seguridad digital"
                   className="w-full h-auto object-cover"
+                  width="400"
+                  height="400"
+                  loading="eager"
                 />
               </div>
               <div className="absolute -bottom-4 -right-4 w-20 h-20 bg-indigo-600 rounded-xl shield-pulse opacity-20" />
