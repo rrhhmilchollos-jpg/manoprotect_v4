@@ -501,6 +501,53 @@ async def forgot_password(request: Request):
     recovery_token = secrets.token_urlsafe(32)
     token_hash = hashlib.sha256(recovery_token.encode()).hexdigest()
     
+
+
+class DeleteAccountRequest(BaseModel):
+    email: str
+    reason: Optional[str] = None
+
+@router.post("/auth/delete-account-request")
+async def request_account_deletion(data: DeleteAccountRequest, request: Request):
+    """Request account deletion - stores the request and schedules deletion"""
+    ip_address, user_agent = get_client_info(request)
+    
+    # Verify user exists
+    user = await _db.users.find_one({"email": data.email}, {"_id": 0})
+    if not user:
+        raise HTTPException(status_code=404, detail="Usuario no encontrado")
+    
+    # Create deletion request
+    deletion_request = {
+        "request_id": f"del_{datetime.now(timezone.utc).strftime('%Y%m%d%H%M%S')}_{user['user_id']}",
+        "user_id": user["user_id"],
+        "email": data.email,
+        "reason": data.reason,
+        "requested_at": datetime.now(timezone.utc),
+        "scheduled_deletion": datetime.now(timezone.utc) + timedelta(days=30),
+        "status": "pending",
+        "ip_address": ip_address,
+        "user_agent": user_agent
+    }
+    
+    await _db.deletion_requests.insert_one(deletion_request)
+    
+    # Log the security event
+    await log_security_event(
+        SecurityEventTypes.ACCOUNT_DELETION_REQUESTED,
+        user["user_id"],
+        data.email,
+        ip_address,
+        user_agent,
+        {"reason": data.reason}
+    )
+    
+    return {
+        "message": "Solicitud de eliminación recibida",
+        "scheduled_deletion": deletion_request["scheduled_deletion"].isoformat(),
+        "request_id": deletion_request["request_id"]
+    }
+
     # Store recovery request
     recovery_doc = {
         "email": email,
