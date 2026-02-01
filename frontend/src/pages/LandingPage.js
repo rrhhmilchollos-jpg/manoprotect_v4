@@ -92,8 +92,8 @@ const LandingPage = () => {
         canonical="https://manoprotect.com"
       />
       {/* Header */}
-      <header className="glass sticky top-0 z-50 px-6 py-4">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
+      <header className="glass sticky top-0 z-50 px-6 py-4" role="banner">
+        <nav className="max-w-7xl mx-auto flex items-center justify-between" aria-label="Navegación principal">
           <div className="flex items-center gap-3">
             <img 
               src="https://customer-assets.emergentagent.com/job_5c97b24f-9a55-4567-9954-bd76179fb951/artifacts/8y6ab2pd_logo%20App%20Mano.png" 
