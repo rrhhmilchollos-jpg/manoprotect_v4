@@ -392,15 +392,15 @@ const LandingPage = () => {
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="order-2 lg:order-1">
               <img
-                src="https://images.unsplash.com/photo-1752652011717-f06f7ed3927a?w=600&q=75&fm=webp"
-                srcSet="https://images.unsplash.com/photo-1752652011717-f06f7ed3927a?w=400&q=75&fm=webp 400w,
-                        https://images.unsplash.com/photo-1752652011717-f06f7ed3927a?w=600&q=75&fm=webp 600w,
-                        https://images.unsplash.com/photo-1752652011717-f06f7ed3927a?w=800&q=75&fm=webp 800w"
-                sizes="(max-width: 768px) 400px, 600px"
+                src="https://images.unsplash.com/photo-1752652011717-f06f7ed3927a?w=500&q=60&fm=webp&fit=crop"
+                srcSet="https://images.unsplash.com/photo-1752652011717-f06f7ed3927a?w=350&q=60&fm=webp&fit=crop 350w,
+                        https://images.unsplash.com/photo-1752652011717-f06f7ed3927a?w=500&q=60&fm=webp&fit=crop 500w,
+                        https://images.unsplash.com/photo-1752652011717-f06f7ed3927a?w=700&q=60&fm=webp&fit=crop 700w"
+                sizes="(max-width: 768px) 350px, 500px"
                 alt="Familia española protegida contra fraudes digitales con ManoProtect"
                 className="w-full rounded-2xl shadow-2xl"
-                width="600"
-                height="400"
+                width="500"
+                height="333"
                 loading="lazy"
                 decoding="async"
               />
