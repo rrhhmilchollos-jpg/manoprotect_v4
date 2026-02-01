@@ -81,7 +81,7 @@ const LandingPage = () => {
       saved: "5.000€+ protegidos",
       color: "orange"
     }
-  ];
+  ], []);
 
   return (
     <div className="min-h-screen bg-zinc-50">
