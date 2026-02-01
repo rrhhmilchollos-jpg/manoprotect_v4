@@ -245,23 +245,67 @@ export default function SOSEmergency() {
   };
 
   const playAlertSound = () => {
-    // Create oscillator for siren effect
+    // Create powerful emergency siren sound - much longer and louder
     const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-    const oscillator = audioContext.createOscillator();
-    const gainNode = audioContext.createGain();
     
-    oscillator.connect(gainNode);
-    gainNode.connect(audioContext.destination);
+    // Create multiple oscillators for a more realistic siren
+    const createSirenCycle = (startTime, duration) => {
+      const oscillator1 = audioContext.createOscillator();
+      const oscillator2 = audioContext.createOscillator();
+      const gainNode = audioContext.createGain();
+      const masterGain = audioContext.createGain();
+      
+      oscillator1.connect(gainNode);
+      oscillator2.connect(gainNode);
+      gainNode.connect(masterGain);
+      masterGain.connect(audioContext.destination);
+      
+      // Main siren frequency sweep
+      oscillator1.type = 'sawtooth';
+      oscillator1.frequency.setValueAtTime(600, startTime);
+      oscillator1.frequency.linearRampToValueAtTime(1400, startTime + duration/2);
+      oscillator1.frequency.linearRampToValueAtTime(600, startTime + duration);
+      
+      // Secondary oscillator for fuller sound
+      oscillator2.type = 'square';
+      oscillator2.frequency.setValueAtTime(400, startTime);
+      oscillator2.frequency.linearRampToValueAtTime(1000, startTime + duration/2);
+      oscillator2.frequency.linearRampToValueAtTime(400, startTime + duration);
+      
+      // Set volume - MUCH LOUDER (0.8 instead of 0.3)
+      masterGain.gain.setValueAtTime(0.8, startTime);
+      gainNode.gain.setValueAtTime(0.6, startTime);
+      
+      oscillator1.start(startTime);
+      oscillator2.start(startTime);
+      oscillator1.stop(startTime + duration);
+      oscillator2.stop(startTime + duration);
+    };
     
-    oscillator.type = 'sine';
-    oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
-    oscillator.frequency.linearRampToValueAtTime(1200, audioContext.currentTime + 0.5);
-    oscillator.frequency.linearRampToValueAtTime(800, audioContext.currentTime + 1);
+    // Play 8 seconds of siren (4 cycles of 2 seconds each)
+    for (let i = 0; i < 4; i++) {
+      createSirenCycle(audioContext.currentTime + (i * 2), 2);
+    }
     
-    gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
-    
-    oscillator.start();
-    oscillator.stop(audioContext.currentTime + 2);
+    // Store context to stop later if needed
+    window.sosAudioContext = audioContext;
+  };
+  
+  const stopAlertSound = () => {
+    if (window.sosAudioContext) {
+      window.sosAudioContext.close();
+      window.sosAudioContext = null;
+    }
+  };
+  
+  // Generate Google Maps link for location
+  const getGoogleMapsLink = (lat, lng) => {
+    return `https://www.google.com/maps?q=${lat},${lng}&z=18`;
+  };
+  
+  // Generate Google Maps directions link
+  const getGoogleMapsDirections = (lat, lng) => {
+    return `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}&travelmode=driving`;
   };
 
   return (
