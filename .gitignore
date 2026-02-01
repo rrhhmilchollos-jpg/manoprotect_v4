@@ -28,11 +28,6 @@ next-env.d.ts
 # Production builds
 /build
 dist/
-dist
-
-# Sensitive credentials (NOT .env files - .env files MUST be committed for Emergent deployment)
-*token.json*
-*credentials.json*
 
 # Logs and debug files
 npm-debug.log*
@@ -60,9 +55,6 @@ chainlit.md
 # Deployment
 .vercel
 
-# Data and databases
-agenthub/agents/youtube/db
-
 # Archive files and large assets
 **/*.zip
 **/*.tar.gz
@@ -74,56 +66,22 @@ agenthub/agents/youtube/db
 
 # Build caches
 .cache/
+frontend/node_modules/.cache/
 
 # Mobile development
 android-sdk/
-frontend/node_modules/.cache/default-development/13.pack
-frontend/node_modules/.cache/default-development/4.pack
-frontend/node_modules/.cache/default-development/17.pack
-frontend/node_modules/.cache/default-development/0.pack
-frontend/node_modules/.cache/default-development/1.pack
-frontend/node_modules/.cache/default-development/2.pack
-frontend/node_modules/.cache/default-development/3.pack
-# Environment files
-manoprotect-desktop/node_modules/electron/dist/electron
-# Environment files
-# Environment files
-manoprotect-desktop/dist/win-unpacked/ManoProtect
-Desktop.exe
-frontend/public/ManoProtect-Desktop-Windows.zip
-frontend/build/ManoProtect-Desktop-Windows.zip
-# Environment files
-frontend/ios/App/App/public/ManoProtect-Desktop-Windows.zip
-frontend/public/ManoProtect-iOS-Project.zip
-frontend/build/ManoProtect-iOS-Project.zip
-frontend/android/app/src/main/assets/public/ManoProtect-iOS-Project.zip
-frontend/android/app/src/main/assets/public/ManoProtect-Desktop-Windows.zip
-frontend/node_modules/.cache/default-development/5.pack
-frontend/node_modules/.cache/default-development/6.pack
-frontend/node_modules/.cache/default-development/7.pack
-frontend/node_modules/.cache/default-development/9.pack
-frontend/node_modules/.cache/default-development/10.pack
-frontend/node_modules/.cache/default-development/14.pack
-# Environment files
-frontend/node_modules/.cache/default-development/8.pack
+
+# Secrets and credentials - CRITICAL for deployment security
+secrets/
+firebase-admin.json
+*credentials.json*
+*token.json*
 
 # IMPORTANT: Do NOT ignore .env files - they are required for Emergent deployment
-# Only ignore specific sensitive credential files (not .env)
-mobile/manoprotect-desktop/node_modules/electron/dist/electron
--e 
-# Environment files
-*.env
-*.env.*
--e 
-# Environment files
-*.env
-*.env.*
--e 
-# Environment files
-*.env
-*.env.*
-
-# Secrets and credentials
-secrets/
-*.json.bak
-firebase-admin.json
+# .env files are managed by Emergent platform
+manoprotect-desktop/dist/win-unpacked/ManoProtect
+Desktop.exe
+manoprotect-desktop/node_modules/electron/dist/electron
+frontend/ios/App/App/public/ManoProtect-Desktop-Windows.zip
+frontend/public/ManoProtect-iOS-Project.zip
+frontend/public/ManoProtect-Desktop-Windows.zip
