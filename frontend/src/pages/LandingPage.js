@@ -210,21 +210,21 @@ const LandingPage = () => {
               </div>
             </div>
 
-            <div className="relative max-w-md mx-auto lg:mx-0">
-              <div className="rounded-2xl overflow-hidden border border-zinc-200 shadow-xl">
+            <div className="relative max-w-md mx-auto lg:mx-0 lg:max-w-lg">
+              <div className="rounded-2xl overflow-hidden border border-zinc-200 shadow-xl" style={{aspectRatio: '1/1'}}>
                 <img
                   src="https://static.prod-images.emergentagent.com/jobs/fa8350ac-4103-442a-8e22-a986a8837bc7/images/8f093142c23ed0bcbd1a2fd5219b542440249eb8455292b5ac522882a4ac13e5.png"
                   alt="Familia protegida con ManoProtect - Aplicación de seguridad digital"
-                  className="w-full h-auto object-cover"
-                  width="400"
-                  height="400"
+                  className="w-full h-full object-cover"
+                  width="500"
+                  height="500"
                   loading="eager"
                   fetchpriority="high"
-                  decoding="async"
+                  decoding="sync"
                 />
               </div>
-              <div className="absolute -bottom-4 -right-4 w-20 h-20 bg-indigo-600 rounded-xl shield-pulse opacity-20" />
-              <div className="absolute -top-4 -left-4 w-16 h-16 bg-emerald-500 rounded-full shield-pulse opacity-20" />
+              <div className="absolute -bottom-4 -right-4 w-20 h-20 bg-indigo-600 rounded-xl opacity-20" aria-hidden="true" />
+              <div className="absolute -top-4 -left-4 w-16 h-16 bg-emerald-500 rounded-full opacity-20" aria-hidden="true" />
             </div>
           </div>
         </div>
