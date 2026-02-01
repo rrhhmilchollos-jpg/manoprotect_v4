@@ -2441,7 +2441,7 @@ async def revoke_api_key(
 public_router = APIRouter(prefix="/api/v1", tags=["public-api"])
 
 # Simple access key for downloading documents (owner access)
-OWNER_DOWNLOAD_KEY = "mano2025investor"
+OWNER_DOWNLOAD_KEY = os.environ.get("OWNER_DOWNLOAD_KEY", "mano2025investor")
 
 @public_router.get("/documents/download-zip")
 async def public_download_documents(key: str = ""):
