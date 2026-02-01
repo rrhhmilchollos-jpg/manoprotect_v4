@@ -13,8 +13,8 @@ const LandingPage = () => {
   const { isAuthenticated, user } = useAuth();
   const { t } = useI18n();
 
-  // Testimonios realistas con fechas y detalles específicos
-  const testimonials = [
+  // Memoize testimonials to prevent unnecessary re-renders
+  const testimonials = useMemo(() => [
     {
       id: 1,
       name: "María García Rodríguez",
