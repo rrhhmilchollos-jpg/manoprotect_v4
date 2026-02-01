@@ -283,6 +283,9 @@ const LandingPage = () => {
                     src="https://customer-assets.emergentagent.com/job_5c97b24f-9a55-4567-9954-bd76179fb951/artifacts/8y6ab2pd_logo%20App%20Mano.png" 
                     alt="ManoProtect" 
                     className="h-10 w-auto mb-4"
+                    width="40"
+                    height="40"
+                    loading="lazy"
                   />
                   <h3 className="text-2xl font-bold mb-3">Para Personas</h3>
                   <p className="text-zinc-600 mb-6">
@@ -291,7 +294,7 @@ const LandingPage = () => {
                   <ul className="space-y-2">
                     {['Análisis en tiempo real', 'Bloqueo automático', 'Historial de amenazas'].map((item, idx) => (
                       <li key={idx} className="flex items-center gap-2 text-sm">
-                        <Check className="w-4 h-4 text-emerald-500" />
+                        <Check className="w-4 h-4 text-emerald-500" aria-hidden="true" />
                         <span>{item}</span>
                       </li>
                     ))}
@@ -305,6 +308,7 @@ const LandingPage = () => {
                     width="192"
                     height="192"
                     loading="lazy"
+                    decoding="async"
                   />
                 </div>
               </div>
@@ -314,10 +318,10 @@ const LandingPage = () => {
             <div className="bento-medium card-hover p-0 rounded-2xl bg-white border border-emerald-200 overflow-hidden">
               <div className="h-48 overflow-hidden">
                 <img
-                  src="https://images.unsplash.com/photo-1758686254056-6cd980b9aaee?w=400&q=75&fm=webp"
-                  srcSet="https://images.unsplash.com/photo-1758686254056-6cd980b9aaee?w=300&q=75&fm=webp 300w,
-                          https://images.unsplash.com/photo-1758686254056-6cd980b9aaee?w=400&q=75&fm=webp 400w"
-                  sizes="(max-width: 768px) 300px, 400px"
+                  src="https://images.unsplash.com/photo-1758686254056-6cd980b9aaee?w=350&q=60&fm=webp&fit=crop"
+                  srcSet="https://images.unsplash.com/photo-1758686254056-6cd980b9aaee?w=250&q=60&fm=webp&fit=crop 250w,
+                          https://images.unsplash.com/photo-1758686254056-6cd980b9aaee?w=350&q=60&fm=webp&fit=crop 350w"
+                  sizes="(max-width: 768px) 250px, 350px"
                   alt="Personas mayores protegidas con ManoProtect"
                   className="w-full h-full object-cover"
                   width="400"
