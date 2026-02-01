@@ -6,6 +6,7 @@ import SEO from '@/components/SEO';
 import AlertSubscription from '@/components/AlertSubscription';
 import LanguageSelector from '@/components/LanguageSelector';
 import { useI18n } from '@/i18n/I18nContext';
+import { useMemo } from 'react';
 
 const LandingPage = () => {
   const navigate = useNavigate();
