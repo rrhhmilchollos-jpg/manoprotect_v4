@@ -3118,6 +3118,11 @@ print("✅ Family & SOS routes loaded")
 api_router.include_router(payments_router)
 print("✅ Payment routes loaded")
 
+# Admin routes for user management
+init_admin_routes(db)
+api_router.include_router(admin_router)
+print("✅ Admin routes loaded")
+
 try:
     from routes.banking_routes import router as banking_router
     api_router.include_router(banking_router)
