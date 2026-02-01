@@ -637,22 +637,22 @@ const LandingPage = () => {
               <h4 className="font-semibold text-white mb-4">Producto</h4>
               <ul className="space-y-2 text-sm">
                 <li>
-                  <button onClick={() => navigate('/how-it-works')} className="hover:text-white transition-colors">
+                  <button onClick={() => navigate('/how-it-works')} className="hover:text-white transition-colors" aria-label="Descubre cómo funciona ManoProtect">
                     Cómo Funciona
                   </button>
                 </li>
                 <li>
-                  <button onClick={() => navigate('/pricing')} className="hover:text-white transition-colors">
+                  <button onClick={() => navigate('/pricing')} className="hover:text-white transition-colors" aria-label="Ver planes y precios de ManoProtect">
                     Precios
                   </button>
                 </li>
                 <li>
-                  <button onClick={() => navigate('/family-mode')} className="hover:text-white transition-colors">
+                  <button onClick={() => navigate('/family-mode')} className="hover:text-white transition-colors" aria-label="Conoce el modo familiar de ManoProtect">
                     Modo Familiar
                   </button>
                 </li>
                 <li>
-                  <button onClick={() => navigate('/investor/register')} className="hover:text-white transition-colors">
+                  <button onClick={() => navigate('/investor/register')} className="hover:text-white transition-colors" aria-label="Información para inversores de ManoProtect">
                     Inversores
                   </button>
                 </li>
@@ -664,22 +664,22 @@ const LandingPage = () => {
               <h4 className="font-semibold text-white mb-4">Legal</h4>
               <ul className="space-y-2 text-sm">
                 <li>
-                  <button onClick={() => navigate('/privacy-policy')} className="hover:text-white transition-colors">
+                  <button onClick={() => navigate('/privacy-policy')} className="hover:text-white transition-colors" aria-label="Leer la política de privacidad de ManoProtect">
                     Política de Privacidad
                   </button>
                 </li>
                 <li>
-                  <button onClick={() => navigate('/terms-of-service')} className="hover:text-white transition-colors">
+                  <button onClick={() => navigate('/terms-of-service')} className="hover:text-white transition-colors" aria-label="Leer los términos y condiciones de ManoProtect">
                     Términos y Condiciones
                   </button>
                 </li>
                 <li>
-                  <button onClick={() => navigate('/refund-policy')} className="hover:text-white transition-colors">
+                  <button onClick={() => navigate('/refund-policy')} className="hover:text-white transition-colors" aria-label="Ver la política de reembolsos de ManoProtect">
                     Política de Reembolsos
                   </button>
                 </li>
                 <li>
-                  <button onClick={() => navigate('/legal-notice')} className="hover:text-white transition-colors">
+                  <button onClick={() => navigate('/legal-notice')} className="hover:text-white transition-colors" aria-label="Leer el aviso legal de ManoProtect">
                     Aviso Legal
                   </button>
                 </li>
