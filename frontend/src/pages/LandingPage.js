@@ -535,14 +535,14 @@ const LandingPage = () => {
           <div className="mt-16 pt-12 border-t border-zinc-200">
             <p className="text-center text-sm text-zinc-500 mb-8">COLABORADORES Y PARTNERS TECNOLÓGICOS</p>
             
-            {/* Partners Logos */}
+            {/* Partners Logos - Optimized sizes */}
             <div className="flex flex-wrap items-center justify-center gap-10 mb-12">
-              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Visa_Inc._logo.svg/200px-Visa_Inc._logo.svg.png" alt="VISA - Partner de pagos seguros" className="h-8 object-contain opacity-50 hover:opacity-100 transition-opacity" width="80" height="32" loading="lazy" />
-              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Mastercard-logo.svg/200px-Mastercard-logo.svg.png" alt="Mastercard - Partner de pagos seguros" className="h-10 object-contain opacity-50 hover:opacity-100 transition-opacity" width="60" height="40" loading="lazy" />
-              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/PayPal.svg/200px-PayPal.svg.png" alt="PayPal - Partner de pagos seguros" className="h-6 object-contain opacity-50 hover:opacity-100 transition-opacity" width="80" height="24" loading="lazy" />
-              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Stripe_Logo%2C_revised_2016.svg/200px-Stripe_Logo%2C_revised_2016.svg.png" alt="Stripe - Partner de pagos seguros" className="h-8 object-contain opacity-50 hover:opacity-100 transition-opacity" width="70" height="32" loading="lazy" />
-              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/OpenAI_Logo.svg/200px-OpenAI_Logo.svg.png" alt="OpenAI - Tecnología de IA avanzada" className="h-8 object-contain opacity-50 hover:opacity-100 transition-opacity" width="80" height="32" loading="lazy" />
-              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/Microsoft_logo_%282012%29.svg/200px-Microsoft_logo_%282012%29.svg.png" alt="Microsoft - Partner tecnológico" className="h-7 object-contain opacity-50 hover:opacity-100 transition-opacity" width="100" height="28" loading="lazy" />
+              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Visa_Inc._logo.svg/100px-Visa_Inc._logo.svg.png" alt="VISA - Partner de pagos seguros" className="h-8 object-contain opacity-50 hover:opacity-100 transition-opacity" width="80" height="32" loading="lazy" decoding="async" />
+              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Mastercard-logo.svg/80px-Mastercard-logo.svg.png" alt="Mastercard - Partner de pagos seguros" className="h-10 object-contain opacity-50 hover:opacity-100 transition-opacity" width="60" height="40" loading="lazy" decoding="async" />
+              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/PayPal.svg/100px-PayPal.svg.png" alt="PayPal - Partner de pagos seguros" className="h-6 object-contain opacity-50 hover:opacity-100 transition-opacity" width="80" height="24" loading="lazy" decoding="async" />
+              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Stripe_Logo%2C_revised_2016.svg/100px-Stripe_Logo%2C_revised_2016.svg.png" alt="Stripe - Partner de pagos seguros" className="h-8 object-contain opacity-50 hover:opacity-100 transition-opacity" width="70" height="32" loading="lazy" decoding="async" />
+              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/OpenAI_Logo.svg/100px-OpenAI_Logo.svg.png" alt="OpenAI - Tecnología de IA avanzada" className="h-8 object-contain opacity-50 hover:opacity-100 transition-opacity" width="80" height="32" loading="lazy" decoding="async" />
+              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/Microsoft_logo_%282012%29.svg/120px-Microsoft_logo_%282012%29.svg.png" alt="Microsoft - Partner tecnológico" className="h-7 object-contain opacity-50 hover:opacity-100 transition-opacity" width="100" height="28" loading="lazy" decoding="async" />
             </div>
             
             {/* Trust Badges - Institutional */}
