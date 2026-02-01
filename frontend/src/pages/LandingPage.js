@@ -310,9 +310,12 @@ const LandingPage = () => {
             <div className="bento-medium card-hover p-0 rounded-2xl bg-white border border-emerald-200 overflow-hidden">
               <div className="h-48 overflow-hidden">
                 <img
-                  src="https://images.unsplash.com/photo-1758686254056-6cd980b9aaee?crop=entropy&cs=srgb&fm=jpg&q=85"
-                  alt="Personas mayores protegidas"
+                  src="https://images.unsplash.com/photo-1758686254056-6cd980b9aaee?crop=entropy&cs=srgb&fm=jpg&q=85&w=400"
+                  alt="Personas mayores protegidas con ManoProtect"
                   className="w-full h-full object-cover"
+                  width="400"
+                  height="192"
+                  loading="lazy"
                 />
               </div>
               <div className="p-6">
