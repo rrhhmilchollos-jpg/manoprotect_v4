@@ -1,12 +1,11 @@
 import { useNavigate } from 'react-router-dom';
-import { Phone, Mail, MessageSquare, Users, Building2, Check, ArrowRight, LogIn, Shield, Sparkles, Star, Quote } from 'lucide-react';
+import { Phone, Mail, MessageSquare, Users, Building2, Check, ArrowRight, LogIn, Shield, Star, Quote } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/context/AuthContext';
 import SEO from '@/components/SEO';
 import AlertSubscription from '@/components/AlertSubscription';
 import LanguageSelector from '@/components/LanguageSelector';
 import { useI18n } from '@/i18n/I18nContext';
-import { lazy, Suspense } from 'react';
 
 const LandingPage = () => {
   const navigate = useNavigate();
