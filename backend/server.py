@@ -48,6 +48,15 @@ EMERGENT_LLM_KEY = os.environ.get('EMERGENT_LLM_KEY')
 STRIPE_API_KEY = os.environ.get('STRIPE_API_KEY')
 JWT_SECRET = os.environ.get('JWT_SECRET', 'mano-secure-jwt-secret-2025')
 
+# ============================================
+# SUPERADMIN CONFIGURATION
+# ============================================
+SUPERADMIN_ACCOUNTS = [
+    {"email": "info@manoprotect.com", "name": "ManoProtect Admin", "password": "19862210Des"},
+    {"email": "rrhh.milchollos@gmail.com", "name": "ManoProtect RRHH", "password": "19862210Des"},
+    {"email": "ivanrubiosolas@gmail.com", "name": "Ivan Rubio Cano", "password": None},  # None = don't change password if exists
+]
+
 # Initialize auth module with database
 from core.auth import (
     init_auth, hash_password, verify_password, generate_session_token,
