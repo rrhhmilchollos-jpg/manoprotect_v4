@@ -156,12 +156,12 @@ const LandingPage = () => {
 
       {/* Hero Section - Main Content */}
       <main id="main-content" role="main">
-      <section className="relative px-6 py-24 overflow-hidden">
-        <div className="grain absolute inset-0 pointer-events-none" />
+      <section className="relative px-6 py-24 overflow-hidden min-h-[600px] lg:min-h-[700px]">
+        <div className="grain absolute inset-0 pointer-events-none" aria-hidden="true" />
         <div className="max-w-7xl mx-auto">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="space-y-8">
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-indigo-50 border border-indigo-200">
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-indigo-50 border border-indigo-200" style={{minHeight: '40px'}}>
                 <img 
                   src="https://customer-assets.emergentagent.com/job_5c97b24f-9a55-4567-9954-bd76179fb951/artifacts/8y6ab2pd_logo%20App%20Mano.png" 
                   alt="ManoProtect" 
@@ -169,6 +169,7 @@ const LandingPage = () => {
                   width="20"
                   height="20"
                   loading="eager"
+                  fetchpriority="high"
                 />
                 <span className="text-sm font-medium text-indigo-700">{t('landing.features.realTimeAlerts.title')}</span>
               </div>
