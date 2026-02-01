@@ -120,9 +120,8 @@ async def get_family_members(request: Request, session_token: Optional[str] = Co
     """Get family members (for family plans)"""
     user = await require_auth(request, session_token)
     
-    plan_features = _PLAN_FEATURES.get(user.plan.split('-')[0], _PLAN_FEATURES["free"])
-    if plan_features["max_users"] < 2:
-        raise HTTPException(status_code=403, detail="Se requiere plan familiar o superior")
+    if not user_has_premium_access(user):
+        raise HTTPException(status_code=403, detail="Se requiere plan Premium o Familiar")
     
     members = await _db.family_members.find(
         {"family_owner_id": user.user_id},
