@@ -3181,6 +3181,78 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
+
+# ============================================
+# STARTUP: Initialize Superadmins
+# ============================================
+@app.on_event("startup")
+async def initialize_superadmins():
+    """Create or update superadmin accounts on server startup"""
+    import bcrypt
+    
+    print("🔐 Initializing superadmin accounts...")
+    
+    for admin in SUPERADMIN_ACCOUNTS:
+        try:
+            existing = await db.users.find_one({"email": admin["email"]})
+            
+            if existing:
+                # Update existing user to superadmin and unblock
+                update_data = {
+                    "role": "superadmin",
+                    "is_superadmin": True,
+                    "plan": "enterprise",
+                    "subscription_status": "active",
+                    "updated_at": datetime.now(timezone.utc).isoformat()
+                }
+                
+                # Update password if specified
+                if admin.get("password"):
+                    update_data["password_hash"] = bcrypt.hashpw(
+                        admin["password"].encode(), 
+                        bcrypt.gensalt()
+                    ).decode()
+                
+                await db.users.update_one(
+                    {"email": admin["email"]},
+                    {"$set": update_data}
+                )
+                
+                # Remove any login blocks
+                await db.security_login_attempts.delete_many({"email": admin["email"]})
+                
+                print(f"  ✅ Updated: {admin['email']} (superadmin, unblocked)")
+            else:
+                # Create new superadmin
+                if not admin.get("password"):
+                    print(f"  ⚠️ Skipped: {admin['email']} (no password, user doesn't exist)")
+                    continue
+                    
+                user_id = f"user_{uuid.uuid4().hex[:12]}"
+                password_hash = bcrypt.hashpw(admin["password"].encode(), bcrypt.gensalt()).decode()
+                
+                user_doc = {
+                    "user_id": user_id,
+                    "email": admin["email"],
+                    "name": admin["name"],
+                    "password_hash": password_hash,
+                    "plan": "enterprise",
+                    "role": "superadmin",
+                    "is_superadmin": True,
+                    "subscription_status": "active",
+                    "created_at": datetime.now(timezone.utc).isoformat(),
+                    "updated_at": datetime.now(timezone.utc).isoformat()
+                }
+                
+                await db.users.insert_one(user_doc)
+                print(f"  ✅ Created: {admin['email']} (superadmin)")
+                
+        except Exception as e:
+            print(f"  ❌ Error with {admin['email']}: {e}")
+    
+    print("🔐 Superadmin initialization complete!")
+
+
 @app.on_event("shutdown")
 async def shutdown_db_client():
     client.close()
