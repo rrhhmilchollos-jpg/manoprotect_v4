@@ -1312,9 +1312,13 @@ async def get_admin_dashboard(request: Request, session_token: Optional[str] = C
     recent_users = await db.users.find({}, {"_id": 0, "password_hash": 0}).sort("created_at", -1).limit(10).to_list(10)
     recent_threats = await db.threats.find({}, {"_id": 0}).sort("created_at", -1).limit(10).to_list(10)
     
-    # Revenue (from successful payments)
-    payments = await db.payment_transactions.find({"payment_status": "paid"}, {"_id": 0}).to_list(1000)
-    total_revenue = sum(p.get("amount", 0) for p in payments)
+    # Revenue (optimized aggregation - calculates sum directly in DB)
+    revenue_pipeline = [
+        {"$match": {"payment_status": "paid"}},
+        {"$group": {"_id": None, "total": {"$sum": "$amount"}}}
+    ]
+    revenue_result = await db.payment_transactions.aggregate(revenue_pipeline).to_list(1)
+    total_revenue = revenue_result[0]["total"] if revenue_result else 0
     
     return {
         "stats": {
