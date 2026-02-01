@@ -94,17 +94,24 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // Login with email/password
-  const login = async (email, password) => {
+  // Login with email/password - with automatic retry on network failure
+  const login = async (email, password, retryCount = 0) => {
     setError(null);
-    setLoading(true);
+    if (retryCount === 0) setLoading(true);
+    
     try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+      
       const response = await fetch(`${API}/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
-        body: JSON.stringify({ email, password })
+        body: JSON.stringify({ email, password }),
+        signal: controller.signal
       });
+      
+      clearTimeout(timeoutId);
 
       let data;
       try {
@@ -123,9 +130,16 @@ export const AuthProvider = ({ children }) => {
       setLoading(false);
       return { success: true, user: data };
     } catch (err) {
+      // Retry once on network failure (failed to fetch, timeout, etc.)
+      if (retryCount < 1 && (err.name === 'AbortError' || err.message === 'Failed to fetch' || err.message.includes('fetch'))) {
+        console.log('Login retry attempt...');
+        await new Promise(resolve => setTimeout(resolve, 500)); // Wait 500ms before retry
+        return login(email, password, retryCount + 1);
+      }
+      
       setError(err.message);
       setLoading(false);
-      return { success: false, error: err.message };
+      return { success: false, error: err.message === 'Failed to fetch' ? 'Error de conexión. Por favor, inténtalo de nuevo.' : err.message };
     }
   };
 
