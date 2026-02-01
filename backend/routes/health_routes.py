@@ -155,9 +155,8 @@ async def get_emergency_card(user_id: str):
     }
 
 @router.delete("/health/profile")
-async def delete_health_profile(request: Request):
+async def delete_health_profile(user: User = Depends(get_current_user)):
     """Delete user's health profile"""
-    user = await get_current_user(request)
     if not user:
         raise HTTPException(status_code=401, detail="No autenticado")
     
