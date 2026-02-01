@@ -163,17 +163,24 @@ export const AuthProvider = ({ children }) => {
     window.location.href = `https://auth.emergentagent.com/?redirect=${encodeURIComponent(redirectUrl)}`;
   };
 
-  // Process Google OAuth session
-  const processGoogleSession = async (sessionId) => {
+  // Process Google OAuth session - with automatic retry
+  const processGoogleSession = async (sessionId, retryCount = 0) => {
     setError(null);
-    setLoading(true);
+    if (retryCount === 0) setLoading(true);
+    
     try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 10000);
+      
       const response = await fetch(`${API}/auth/google/session`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
-        body: JSON.stringify({ session_id: sessionId })
+        body: JSON.stringify({ session_id: sessionId }),
+        signal: controller.signal
       });
+      
+      clearTimeout(timeoutId);
 
       const data = await response.json();
       
@@ -186,9 +193,16 @@ export const AuthProvider = ({ children }) => {
       setLoading(false);
       return { success: true, user: data };
     } catch (err) {
+      // Retry once on network failure
+      if (retryCount < 1 && (err.name === 'AbortError' || err.message === 'Failed to fetch' || err.message.includes('fetch'))) {
+        console.log('Google session retry attempt...');
+        await new Promise(resolve => setTimeout(resolve, 500));
+        return processGoogleSession(sessionId, retryCount + 1);
+      }
+      
       setError(err.message);
       setLoading(false);
-      return { success: false, error: err.message };
+      return { success: false, error: err.message === 'Failed to fetch' ? 'Error de conexión. Por favor, inténtalo de nuevo.' : err.message };
     }
   };
 
