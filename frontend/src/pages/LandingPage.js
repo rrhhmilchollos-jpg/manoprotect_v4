@@ -167,7 +167,7 @@ const LandingPage = () => {
             <div className="space-y-8">
               <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-indigo-50 border border-indigo-200" style={{minHeight: '40px'}}>
                 <img 
-                  src="https://customer-assets.emergentagent.com/job_5c97b24f-9a55-4567-9954-bd76179fb951/artifacts/8y6ab2pd_logo%20App%20Mano.png" 
+                  src={LOGO_URL}
                   alt="ManoProtect" 
                   className="h-5 w-auto"
                   width="20"
