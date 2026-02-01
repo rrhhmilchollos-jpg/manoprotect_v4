@@ -45,6 +45,7 @@ const DescargarDesktop = lazy(() => import('@/pages/DescargarDesktop'));
 const DescargarApps = lazy(() => import('@/pages/DescargarApps'));
 const PortalEmpleados = lazy(() => import('@/pages/PortalEmpleados'));
 const DeleteAccount = lazy(() => import('@/pages/DeleteAccount'));
+const AdminUsers = lazy(() => import('@/pages/AdminUsers'));
 
 // Lazy load non-critical UI components to reduce main thread blocking
 const CookieConsent = lazy(() => import('@/components/CookieConsent'));
