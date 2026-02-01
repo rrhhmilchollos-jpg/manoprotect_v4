@@ -8,6 +8,10 @@ import LanguageSelector from '@/components/LanguageSelector';
 import { useI18n } from '@/i18n/I18nContext';
 import { useMemo } from 'react';
 
+// Brand assets from environment variables
+const LOGO_URL = process.env.REACT_APP_LOGO_URL || 'https://customer-assets.emergentagent.com/job_5c97b24f-9a55-4567-9954-bd76179fb951/artifacts/8y6ab2pd_logo%20App%20Mano.png';
+const ALERT_IMAGE_URL = process.env.REACT_APP_ALERT_IMAGE_URL || 'https://customer-assets.emergentagent.com/job_5c97b24f-9a55-4567-9954-bd76179fb951/artifacts/t8tv8klb_alerta.png';
+
 const LandingPage = () => {
   const navigate = useNavigate();
   const { isAuthenticated, user } = useAuth();
