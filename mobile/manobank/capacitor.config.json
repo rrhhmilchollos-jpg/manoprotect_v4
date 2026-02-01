@@ -3,7 +3,7 @@
   "appName": "ManoBank",
   "webDir": "www",
   "server": {
-    "url": "https://child-tracker-15.preview.emergentagent.com",
+    "url": "https://safety-toolkit-1.preview.emergentagent.com",
     "cleartext": true
   }
 }
