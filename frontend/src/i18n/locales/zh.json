@@ -17,7 +17,19 @@
     "close": "关闭",
     "yes": "是",
     "no": "否",
-    "or": "或"
+    "or": "或",
+    "update": "更新",
+    "confirm": "确认",
+    "view": "查看",
+    "viewAll": "查看全部",
+    "analyze": "分析",
+    "analyzing": "分析中...",
+    "processing": "处理中...",
+    "saving": "保存中...",
+    "share": "分享",
+    "export": "导出",
+    "download": "下载",
+    "upgrade": "升级套餐"
   },
   "nav": {
     "home": "首页",
@@ -29,37 +41,45 @@
     "register": "注册",
     "dashboard": "控制台",
     "logout": "退出",
-    "faq": "常见问题"
+    "faq": "常见问题",
+    "profile": "个人资料",
+    "settings": "设置",
+    "contacts": "联系人",
+    "rewards": "奖励",
+    "family": "家庭",
+    "enterprise": "企业",
+    "admin": "管理",
+    "downloads": "下载"
   },
   "landing": {
     "hero": {
-      "title": "保护您的家人免受数字欺诈和诈骗",
-      "subtitle": "ManoProtect 是您对抗数字欺诈的盾牌。我们保护家庭免受电话诈骗、网络钓鱼、欺诈短信等威胁。",
+      "title": "保护您的家人免受欺诈和数字诈骗",
+      "subtitle": "ManoProtect是您对抗数字欺诈的盾牌。我们保护家庭免受电话诈骗、网络钓鱼、欺诈短信等的侵害。",
       "cta": "免费开始",
       "ctaSecondary": "了解工作原理"
     },
     "features": {
-      "title": "为什么选择 ManoProtect？",
+      "title": "为什么选择ManoProtect？",
       "scamVerifier": {
         "title": "诈骗验证器",
         "description": "即时分析可疑消息、电话和链接"
       },
       "realTimeAlerts": {
         "title": "实时警报",
-        "description": "接收有关新检测到的威胁的通知"
+        "description": "接收有关检测到的新威胁的通知"
       },
       "familyProtection": {
         "title": "家庭保护",
-        "description": "一个计划保护全家，最多5名成员"
+        "description": "一个套餐覆盖全家最多5名成员"
       },
       "database": {
-        "title": "更新数据库",
-        "description": "已识别50,000+诈骗案例，持续增长"
+        "title": "更新的数据库",
+        "description": "已识别50,000+诈骗且持续增长"
       }
     },
     "stats": {
       "familiesProtected": "受保护家庭",
-      "scamsBlocked": "已拦截诈骗",
+      "scamsBlocked": "已阻止诈骗",
       "detectionRate": "检测率"
     },
     "testimonials": {
@@ -69,36 +89,57 @@
   "auth": {
     "login": {
       "title": "登录",
-      "email": "电子邮箱",
+      "email": "邮箱地址",
       "password": "密码",
       "forgotPassword": "忘记密码？",
       "noAccount": "没有账户？",
       "signUp": "注册",
       "withGoogle": "使用Google继续",
-      "button": "登录"
+      "button": "登录",
+      "loggingIn": "登录中...",
+      "welcomeBack": "欢迎回来！",
+      "orWithEmail": "或使用邮箱",
+      "backToHome": "← 返回首页"
     },
     "register": {
       "title": "创建账户",
       "name": "全名",
-      "email": "电子邮箱",
+      "email": "邮箱地址",
       "password": "密码",
       "confirmPassword": "确认密码",
       "hasAccount": "已有账户？",
       "signIn": "登录",
       "withGoogle": "使用Google注册",
       "button": "创建账户",
-      "terms": "注册即表示您同意我们的"
+      "terms": "注册即表示您同意我们的服务条款和隐私政策。",
+      "creating": "创建账户中...",
+      "success": "账户创建成功！",
+      "passwordMinLength": "至少8个字符",
+      "passwordsNotMatch": "密码不匹配",
+      "joinMano": "加入MANO，保护自己免受欺诈"
     }
   },
   "pricing": {
-    "title": "套餐与价格",
+    "title": "套餐和定价",
     "subtitle": "选择最适合您家庭的套餐",
     "monthly": "月付",
     "yearly": "年付",
     "save": "节省",
     "popular": "最受欢迎",
+    "bestValue": "最佳价值",
+    "trial": {
+      "title": "7天免费试用",
+      "badge": "🎁 特别优惠",
+      "description": "以€0.00验证您的卡并享受7天所有高级功能。",
+      "cardVerification": "安全卡验证（无收费）",
+      "fullAccess": "7天完整高级功能访问",
+      "cancelAnytime": "随时取消无任何费用",
+      "afterTrial": "7天后",
+      "button": "免费试用7天",
+      "disclaimer": "继续即表示您同意验证您的卡。如果7天内不取消，将收取€29.99/月。"
+    },
     "free": {
-      "name": "免费",
+      "name": "基础版",
       "price": "€0",
       "description": "开始保护自己"
     },
@@ -108,7 +149,7 @@
     },
     "family": {
       "name": "家庭版",
-      "description": "保护全家人"
+      "description": "保护您的整个家庭"
     },
     "features": {
       "scamVerifier": "诈骗验证器",
@@ -117,60 +158,166 @@
       "prioritySupport": "优先支持",
       "familyMembers": "最多5名成员",
       "childTracking": "家庭定位",
-      "sosEmergency": "紧急SOS"
+      "sosEmergency": "紧急SOS",
+      "unlimitedAnalysis": "无限分析",
+      "aiBlocking": "AI自动阻止",
+      "fullHistory": "完整历史",
+      "dataExport": "数据导出",
+      "noAds": "无广告"
     },
-    "cta": "开始使用"
+    "cta": "开始",
+    "subscribe": "订阅",
+    "investing": "投资您的",
+    "security": "安全",
+    "fraudWarning": "一次欺诈可能让您损失€5,000+。MANO高级版全天候保护您，花费比咖啡还少。",
+    "noCommitment": "无承诺",
+    "guarantee": "15天保证",
+    "perMonth": "/ 月",
+    "perYear": "/ 年"
   },
   "dashboard": {
-    "welcome": "欢迎",
+    "welcome": "您好",
     "protectionStatus": "保护状态",
-    "recentAlerts": "最近警报",
+    "protectionActive": "您的保护已激活。在下方分析可疑内容。",
+    "recentAlerts": "最近安全警报",
     "quickActions": "快速操作",
     "verifyScam": "验证诈骗",
     "familyMembers": "家庭成员",
-    "settings": "设置"
+    "settings": "设置",
+    "stats": {
+      "totalAnalyzed": "总分析数",
+      "threatsBlocked": "已阻止威胁",
+      "critical": "严重",
+      "high": "高"
+    },
+    "tabs": {
+      "aiAnalyzer": "AI分析器",
+      "secureBanking": "安全银行",
+      "history": "历史"
+    },
+    "quickAnalysis": "快速分析",
+    "quickAnalysisDesc": "输入电话号码、消息、邮箱或链接以验证是否为威胁",
+    "contentTypes": {
+      "phone": "电话",
+      "sms": "短信",
+      "email": "邮箱",
+      "url": "链接"
+    },
+    "threatDetected": "检测到威胁",
+    "safeContent": "安全内容",
+    "level": "级别",
+    "threatTypes": "威胁类型",
+    "recommendation": "建议",
+    "analysis": "分析",
+    "threatHistory": "威胁历史",
+    "lastThreats": "最近检测到的威胁",
+    "exportCSV": "导出CSV",
+    "noThreats": "尚未检测到威胁。您受到保护！",
+    "falsePositive": "误报",
+    "investorAccess": {
+      "title": "已验证投资者访问",
+      "active": "活跃",
+      "description": "您可以访问机密文档：商业计划、财务模型、演示文稿和B2B档案。",
+      "goToDownloads": "前往下载"
+    }
+  },
+  "profile": {
+    "title": "个人资料和设置",
+    "personalInfo": "个人信息",
+    "fullName": "全名",
+    "email": "邮箱",
+    "emailNoChange": "邮箱无法更改",
+    "phone": "电话",
+    "pushNotifications": "推送通知",
+    "pushNotificationsDesc": "在浏览器中接收即时警报",
+    "preferences": "偏好和安全",
+    "preferencesDesc": "配置ManoProtect如何保护您",
+    "darkMode": "深色模式",
+    "darkModeDesc": "界面深色主题",
+    "emailAlerts": "邮箱警报",
+    "emailAlertsDesc": "通过邮箱接收威胁摘要",
+    "autoBlock": "自动阻止",
+    "autoBlockDesc": "自动阻止严重威胁",
+    "yourProtection": "您的保护",
+    "analyzed": "已分析",
+    "blocked": "已阻止",
+    "saveChanges": "保存更改",
+    "plan": "套餐",
+    "planFree": "免费",
+    "planPremium": "高级",
+    "upgradeToPremium": "升级到高级版"
   },
   "sos": {
     "title": "家庭紧急情况",
     "button": "SOS",
-    "subtitle": "按下按钮将您的精确位置发送给所有家庭成员",
+    "subtitle": "按下按钮将您的确切位置发送给所有家庭成员",
     "recording": "录制中...",
     "sending": "发送警报中...",
-    "active": "警报激活",
+    "active": "警报活跃",
     "cancel": "取消SOS",
-    "familyNotified": "已通知家人",
+    "cancelled": "SOS警报已取消",
+    "familyNotified": "已通知家庭成员",
     "emailsSent": "已发送邮件",
     "nearbyUsers": "附近用户",
+    "emergency": "紧急",
+    "alertSent": "SOS警报已发送！",
+    "familyReceived": "所有家庭成员都已收到您的位置！",
+    "gettingLocation": "获取您的精确GPS位置...",
+    "pressIfNeedHelp": "如需紧急帮助请按下",
+    "locationSent": "位置已发送",
+    "viewOnGoogleMaps": "在Google地图查看",
+    "gpsAccurate": "精确GPS",
+    "wholeFamily": "全家",
+    "instant": "即时",
+    "familyAlert": "家庭警报！",
+    "needsHelp": "需要帮助",
+    "onMyWay": "我正在路上",
+    "call112": "拨打112",
+    "callEmergencies": "拨打112（紧急服务）",
+    "audioMessage": "语音消息",
+    "willRecordAuto": "将自动录制",
+    "audioRecorded": "已录制音频",
     "settings": {
       "alertNearby": "提醒附近用户",
       "alertNearbyDesc": "通知5公里内的高级用户",
       "soundEnabled": "警报声音",
-      "soundEnabledDesc": "发送SOS时播放警报声",
-      "autoRecord": "自动录音",
-      "autoRecordDesc": "按下SOS时录制音频"
+      "soundEnabledDesc": "发送SOS时播放警报",
+      "autoRecord": "自动录制",
+      "autoRecordDesc": "按SOS时录制音频"
     },
     "howItWorks": {
       "title": "如何工作？",
-      "step1": "按下SOS按钮发送警报",
-      "step2": "录制音频并检测GPS位置",
-      "step3": "您的家人收到带有警报声的紧急通知",
-      "step4": "附近的高级用户（5公里）收到警报"
+      "step1": "按SOS按钮发送警报",
+      "step2": "录制音频并检测您的GPS位置",
+      "step3": "您的家人收到带警报的紧急通知",
+      "step4": "附近（5公里）的高级用户被提醒"
     }
   },
   "childTracking": {
-    "title": "儿童定位",
-    "subtitle": "家庭年度套餐",
-    "addMember": "添加要定位的家庭成员",
+    "title": "儿童追踪",
+    "subtitle": "年度家庭套餐",
+    "addMember": "添加要追踪的家庭成员",
     "noMembers": "未添加家庭成员",
-    "noMembersDesc": "添加您的孩子、父母或祖父母，随时定位他们",
+    "noMembersDesc": "添加您的孩子、父母或祖父母，以便随时定位他们",
+    "exclusiveYearly": "年度套餐独家功能",
+    "exclusiveYearlyDesc": "通过电话追踪儿童仅在年度家庭套餐中提供。包括：",
+    "onDemandLocation": "按需定位",
+    "locationHistory": "位置历史",
+    "silentModeOptional": "可选静音模式",
+    "upTo5Members": "最多5名成员",
+    "upgradeToYearly": "升级到年度套餐",
+    "savingsNote": "比月度套餐节省€199.89",
+    "howItWorks": "如何工作？",
+    "howItWorksSteps": "1. 使用他们的电话号码添加您的孩子\n2. 在他们的设备上安装ManoProtect应用\n3. 随时请求他们的位置（按需）\n4. 配置他们是否应该收到通知",
     "form": {
       "name": "姓名",
       "phone": "电话号码",
-      "email": "电子邮箱",
-      "emailRequired": "必填 - 链接将发送到此邮箱",
+      "email": "邮箱",
+      "emailRequired": "📧 必填 - 链接将发送到此邮箱",
       "age": "年龄",
       "silentMode": "静音模式",
-      "silentModeDesc": "当您请求其位置时不会收到通知"
+      "silentModeDesc": "当您请求他们的位置时不会收到通知",
+      "autoClassification": "自动分类"
     },
     "personType": {
       "child": "儿童",
@@ -179,9 +326,26 @@
       "unknown": "家庭成员"
     },
     "status": {
-      "linked": "设备已连接",
-      "pending": "待连接"
-    }
+      "linked": "设备已链接",
+      "pending": "待链接"
+    },
+    "inviteLink": "链接链接",
+    "inviteLinkDesc": "发送此链接以链接他们的设备",
+    "copyLink": "复制链接",
+    "linkCopied": "链接已复制到剪贴板",
+    "sendByWhatsApp": "通过WhatsApp发送",
+    "sendByEmail": "通过邮箱发送",
+    "inviteSentTo": "邀请已发送到",
+    "lastKnownLocation": "最后已知位置",
+    "locateNow": "立即定位",
+    "locating": "定位中...",
+    "viewHistory": "查看历史",
+    "historyTitle": "位置历史（7天）",
+    "noHistory": "无位置历史",
+    "activateNotifications": "激活通知",
+    "silentModeActivated": "静音模式已激活",
+    "removeFromTracking": "从家庭追踪中移除？",
+    "removedFromTracking": "已从追踪中移除"
   },
   "scamVerifier": {
     "title": "诈骗验证器",
@@ -189,10 +353,29 @@
     "placeholder": "在此粘贴可疑消息、号码或链接...",
     "analyze": "分析",
     "analyzing": "分析中...",
+    "enterContent": "请输入要分析的内容",
     "result": {
       "safe": "看起来安全",
       "suspicious": "可疑",
       "dangerous": "危险！"
+    }
+  },
+  "faq": {
+    "title": "常见问题",
+    "subtitle": "找到关于ManoProtect最常见问题的答案",
+    "searchPlaceholder": "搜索问题...",
+    "noResults": "未找到结果",
+    "tryOtherTerms": "尝试其他搜索词",
+    "needMoreHelp": "找不到您要找的内容？",
+    "supportAvailable": "我们的支持团队随时为您解答任何问题",
+    "readyToProtect": "准备好保护自己了吗？",
+    "joinUsers": "加入数千名已经信任ManoProtect的用户",
+    "startFree": "免费开始",
+    "categories": {
+      "general": "通用",
+      "pricing": "套餐和定价",
+      "family": "家庭保护",
+      "technical": "技术"
     }
   },
   "footer": {
@@ -203,8 +386,28 @@
     "termsOfService": "服务条款",
     "refundPolicy": "退款政策",
     "legalNotice": "法律声明",
-    "contact": "联系我们",
+    "contact": "联系",
     "help": "帮助",
-    "rights": "版权所有"
+    "rights": "保留所有权利"
+  },
+  "errors": {
+    "generic": "发生错误",
+    "network": "连接错误",
+    "unauthorized": "未授权",
+    "notFound": "未找到",
+    "serverError": "服务器错误",
+    "tryAgain": "重试",
+    "invalidCredentials": "无效凭据",
+    "emailInUse": "邮箱已被使用",
+    "weakPassword": "密码太弱"
+  },
+  "notifications": {
+    "success": "操作成功",
+    "error": "发生错误",
+    "saved": "保存成功",
+    "deleted": "删除成功",
+    "copied": "已复制到剪贴板",
+    "sentSuccess": "发送成功",
+    "exportSuccess": "导出成功"
   }
 }

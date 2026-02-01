@@ -17,7 +17,19 @@
     "close": "إغلاق",
     "yes": "نعم",
     "no": "لا",
-    "or": "أو"
+    "or": "أو",
+    "update": "تحديث",
+    "confirm": "تأكيد",
+    "view": "عرض",
+    "viewAll": "عرض الكل",
+    "analyze": "تحليل",
+    "analyzing": "جاري التحليل...",
+    "processing": "جاري المعالجة...",
+    "saving": "جاري الحفظ...",
+    "share": "مشاركة",
+    "export": "تصدير",
+    "download": "تحميل",
+    "upgrade": "ترقية الخطة"
   },
   "nav": {
     "home": "الرئيسية",
@@ -29,37 +41,45 @@
     "register": "التسجيل",
     "dashboard": "لوحة التحكم",
     "logout": "تسجيل الخروج",
-    "faq": "الأسئلة الشائعة"
+    "faq": "الأسئلة الشائعة",
+    "profile": "الملف الشخصي",
+    "settings": "الإعدادات",
+    "contacts": "جهات الاتصال",
+    "rewards": "المكافآت",
+    "family": "العائلة",
+    "enterprise": "الشركات",
+    "admin": "الإدارة",
+    "downloads": "التحميلات"
   },
   "landing": {
     "hero": {
-      "title": "احمِ عائلتك من الاحتيال الرقمي والنصب",
-      "subtitle": "ManoProtect هو درعك ضد الاحتيال الرقمي. نحن نحمي العائلات من المكالمات الاحتيالية والتصيد والرسائل النصية المزيفة والمزيد.",
+      "title": "احمِ عائلتك من الاحتيال والخداع الرقمي",
+      "subtitle": "ManoProtect هو درعك ضد الاحتيال الرقمي. نحمي العائلات من عمليات الاحتيال الهاتفي والتصيد الاحتيالي والرسائل النصية الاحتيالية وأكثر من ذلك.",
       "cta": "ابدأ مجاناً",
       "ctaSecondary": "شاهد كيف يعمل"
     },
     "features": {
       "title": "لماذا ManoProtect؟",
       "scamVerifier": {
-        "title": "كاشف الاحتيال",
+        "title": "مدقق الاحتيال",
         "description": "حلل الرسائل والمكالمات والروابط المشبوهة فوراً"
       },
       "realTimeAlerts": {
         "title": "تنبيهات فورية",
-        "description": "احصل على إشعارات حول التهديدات الجديدة المكتشفة"
+        "description": "استلم إشعارات حول التهديدات الجديدة المكتشفة"
       },
       "familyProtection": {
         "title": "حماية العائلة",
-        "description": "خطة واحدة لجميع أفراد العائلة حتى 5 أعضاء"
+        "description": "خطة واحدة لكل العائلة حتى 5 أفراد"
       },
       "database": {
         "title": "قاعدة بيانات محدثة",
-        "description": "+50,000 عملية احتيال تم التعرف عليها وفي تزايد"
+        "description": "أكثر من 50,000 عملية احتيال تم تحديدها ومتزايدة"
       }
     },
     "stats": {
       "familiesProtected": "عائلات محمية",
-      "scamsBlocked": "عمليات احتيال محظورة",
+      "scamsBlocked": "احتيالات محظورة",
       "detectionRate": "معدل الكشف"
     },
     "testimonials": {
@@ -75,7 +95,11 @@
       "noAccount": "ليس لديك حساب؟",
       "signUp": "سجل الآن",
       "withGoogle": "المتابعة مع Google",
-      "button": "تسجيل الدخول"
+      "button": "تسجيل الدخول",
+      "loggingIn": "جاري تسجيل الدخول...",
+      "welcomeBack": "مرحباً بعودتك!",
+      "orWithEmail": "أو باستخدام البريد",
+      "backToHome": "← العودة للرئيسية"
     },
     "register": {
       "title": "إنشاء حساب",
@@ -84,10 +108,15 @@
       "password": "كلمة المرور",
       "confirmPassword": "تأكيد كلمة المرور",
       "hasAccount": "لديك حساب بالفعل؟",
-      "signIn": "تسجيل الدخول",
+      "signIn": "سجل دخولك",
       "withGoogle": "التسجيل مع Google",
       "button": "إنشاء حساب",
-      "terms": "بالتسجيل، أنت توافق على"
+      "terms": "بالتسجيل، فإنك توافق على شروط الخدمة وسياسة الخصوصية.",
+      "creating": "جاري إنشاء الحساب...",
+      "success": "تم إنشاء الحساب بنجاح!",
+      "passwordMinLength": "8 أحرف على الأقل",
+      "passwordsNotMatch": "كلمات المرور غير متطابقة",
+      "joinMano": "انضم إلى MANO واحمِ نفسك من الاحتيال"
     }
   },
   "pricing": {
@@ -97,38 +126,126 @@
     "yearly": "سنوي",
     "save": "وفر",
     "popular": "الأكثر شعبية",
+    "bestValue": "أفضل قيمة",
+    "trial": {
+      "title": "تجربة 7 أيام مجاناً",
+      "badge": "🎁 عرض خاص",
+      "description": "تحقق من بطاقتك برسوم €0.00 واحصل على وصول كامل لميزات Premium لمدة 7 أيام.",
+      "cardVerification": "تحقق آمن من البطاقة (بدون رسوم)",
+      "fullAccess": "وصول كامل إلى Premium لمدة 7 أيام",
+      "cancelAnytime": "إلغاء في أي وقت بدون رسوم",
+      "afterTrial": "بعد 7 أيام",
+      "button": "جرب 7 أيام مجاناً",
+      "disclaimer": "بالمتابعة، توافق على التحقق من بطاقتك. إذا لم تلغِ خلال 7 أيام، سيتم خصم €29.99/شهر."
+    },
     "free": {
-      "name": "مجاني",
+      "name": "الأساسي",
       "price": "€0",
       "description": "لبدء حماية نفسك"
     },
     "premium": {
-      "name": "مميز",
+      "name": "Premium",
       "description": "حماية فردية كاملة"
     },
     "family": {
-      "name": "عائلي",
+      "name": "العائلي",
       "description": "احمِ عائلتك بأكملها"
     },
     "features": {
-      "scamVerifier": "كاشف الاحتيال",
+      "scamVerifier": "مدقق الاحتيال",
       "basicAlerts": "تنبيهات أساسية",
       "realTimeAlerts": "تنبيهات فورية",
-      "prioritySupport": "دعم أولوي",
-      "familyMembers": "حتى 5 أعضاء",
-      "childTracking": "تتبع العائلة",
-      "sosEmergency": "SOS طوارئ"
+      "prioritySupport": "دعم ذو أولوية",
+      "familyMembers": "حتى 5 أفراد",
+      "childTracking": "موقع العائلة",
+      "sosEmergency": "SOS طوارئ",
+      "unlimitedAnalysis": "تحليلات غير محدودة",
+      "aiBlocking": "حظر تلقائي بالذكاء الاصطناعي",
+      "fullHistory": "سجل كامل",
+      "dataExport": "تصدير البيانات",
+      "noAds": "بدون إعلانات"
     },
-    "cta": "ابدأ الآن"
+    "cta": "ابدأ",
+    "subscribe": "اشترك",
+    "investing": "استثمر في",
+    "security": "أمانك",
+    "fraudWarning": "عملية احتيال واحدة قد تكلفك €5,000+. MANO Premium يحميك على مدار الساعة بأقل مما تنفقه على القهوة.",
+    "noCommitment": "بدون التزام",
+    "guarantee": "ضمان 15 يوم",
+    "perMonth": "/ شهر",
+    "perYear": "/ سنة"
   },
   "dashboard": {
     "welcome": "مرحباً",
     "protectionStatus": "حالة الحماية",
-    "recentAlerts": "التنبيهات الأخيرة",
+    "protectionActive": "حمايتك نشطة. حلل المحتوى المشبوه أدناه.",
+    "recentAlerts": "تنبيهات الأمان الأخيرة",
     "quickActions": "إجراءات سريعة",
     "verifyScam": "تحقق من الاحتيال",
     "familyMembers": "أفراد العائلة",
-    "settings": "الإعدادات"
+    "settings": "الإعدادات",
+    "stats": {
+      "totalAnalyzed": "إجمالي التحليلات",
+      "threatsBlocked": "التهديدات المحظورة",
+      "critical": "حرجة",
+      "high": "عالية"
+    },
+    "tabs": {
+      "aiAnalyzer": "محلل الذكاء الاصطناعي",
+      "secureBanking": "خدمات بنكية آمنة",
+      "history": "السجل"
+    },
+    "quickAnalysis": "تحليل سريع",
+    "quickAnalysisDesc": "أدخل رقم هاتف أو رسالة أو بريد إلكتروني أو رابط للتحقق مما إذا كان تهديداً",
+    "contentTypes": {
+      "phone": "هاتف",
+      "sms": "رسالة نصية",
+      "email": "بريد إلكتروني",
+      "url": "رابط"
+    },
+    "threatDetected": "تم اكتشاف تهديد",
+    "safeContent": "محتوى آمن",
+    "level": "المستوى",
+    "threatTypes": "أنواع التهديدات",
+    "recommendation": "التوصية",
+    "analysis": "التحليل",
+    "threatHistory": "سجل التهديدات",
+    "lastThreats": "آخر التهديدات المكتشفة",
+    "exportCSV": "تصدير CSV",
+    "noThreats": "لم يتم اكتشاف تهديدات بعد. أنت محمي!",
+    "falsePositive": "إنذار كاذب",
+    "investorAccess": {
+      "title": "وصول المستثمر المُتحقق منه",
+      "active": "نشط",
+      "description": "لديك وصول إلى الوثائق السرية: خطة العمل، النموذج المالي، عرض المستثمرين وملف B2B.",
+      "goToDownloads": "الذهاب للتحميلات"
+    }
+  },
+  "profile": {
+    "title": "الملف الشخصي والإعدادات",
+    "personalInfo": "المعلومات الشخصية",
+    "fullName": "الاسم الكامل",
+    "email": "البريد الإلكتروني",
+    "emailNoChange": "لا يمكن تغيير البريد الإلكتروني",
+    "phone": "الهاتف",
+    "pushNotifications": "إشعارات الدفع",
+    "pushNotificationsDesc": "استلم تنبيهات فورية في متصفحك",
+    "preferences": "التفضيلات والأمان",
+    "preferencesDesc": "اضبط كيف يحميك ManoProtect",
+    "darkMode": "الوضع الداكن",
+    "darkModeDesc": "سمة داكنة للواجهة",
+    "emailAlerts": "تنبيهات البريد",
+    "emailAlertsDesc": "استلم ملخص التهديدات عبر البريد",
+    "autoBlock": "الحظر التلقائي",
+    "autoBlockDesc": "حظر التهديدات الحرجة تلقائياً",
+    "yourProtection": "حمايتك",
+    "analyzed": "تم تحليلها",
+    "blocked": "محظورة",
+    "saveChanges": "حفظ التغييرات",
+    "plan": "الخطة",
+    "planFree": "مجاني",
+    "planPremium": "Premium",
+    "upgradeToPremium": "الترقية إلى Premium"
   },
   "sos": {
     "title": "طوارئ عائلية",
@@ -138,61 +255,127 @@
     "sending": "جاري إرسال التنبيه...",
     "active": "التنبيه نشط",
     "cancel": "إلغاء SOS",
-    "familyNotified": "تم إخطار العائلة",
-    "emailsSent": "رسائل مرسلة",
+    "cancelled": "تم إلغاء تنبيه SOS",
+    "familyNotified": "تم إخطار أفراد العائلة",
+    "emailsSent": "رسائل مُرسلة",
     "nearbyUsers": "مستخدمون قريبون",
+    "emergency": "طوارئ",
+    "alertSent": "تم إرسال تنبيه SOS!",
+    "familyReceived": "استلم جميع أفراد عائلتك موقعك!",
+    "gettingLocation": "جاري الحصول على موقع GPS الدقيق...",
+    "pressIfNeedHelp": "اضغط إذا كنت بحاجة لمساعدة عاجلة",
+    "locationSent": "تم إرسال الموقع",
+    "viewOnGoogleMaps": "عرض على خرائط Google",
+    "gpsAccurate": "GPS دقيق",
+    "wholeFamily": "كل العائلة",
+    "instant": "فوري",
+    "familyAlert": "تنبيه عائلي!",
+    "needsHelp": "يحتاج مساعدة",
+    "onMyWay": "أنا في الطريق",
+    "call112": "اتصل بـ 112",
+    "callEmergencies": "اتصل بـ 112 (الطوارئ)",
+    "audioMessage": "رسالة صوتية",
+    "willRecordAuto": "سيتم التسجيل تلقائياً",
+    "audioRecorded": "تم تسجيل الصوت",
     "settings": {
       "alertNearby": "تنبيه المستخدمين القريبين",
-      "alertNearbyDesc": "إخطار المستخدمين المميزين في نطاق 5 كم",
+      "alertNearbyDesc": "إخطار مستخدمي Premium في نطاق 5 كم",
       "soundEnabled": "صوت التنبيه",
-      "soundEnabledDesc": "تشغيل صفارة إنذار عند إرسال SOS",
+      "soundEnabledDesc": "تشغيل صفارة عند إرسال SOS",
       "autoRecord": "تسجيل تلقائي",
       "autoRecordDesc": "تسجيل الصوت عند الضغط على SOS"
     },
     "howItWorks": {
       "title": "كيف يعمل؟",
       "step1": "اضغط زر SOS لإرسال التنبيه",
-      "step2": "يتم تسجيل الصوت وتحديد موقع GPS",
-      "step3": "تتلقى عائلتك إشعاراً حرجاً مع صفارة إنذار",
-      "step4": "يتم تنبيه المستخدمين المميزين القريبين (5 كم)"
+      "step2": "يتم تسجيل الصوت واكتشاف موقع GPS الخاص بك",
+      "step3": "تستلم عائلتك إشعاراً حرجاً مع صفارة",
+      "step4": "يتم تنبيه مستخدمي Premium القريبين (5 كم)"
     }
   },
   "childTracking": {
     "title": "تتبع الأطفال",
-    "subtitle": "الخطة العائلية السنوية",
-    "addMember": "إضافة فرد للتتبع",
-    "noMembers": "لم يتم إضافة أفراد",
-    "noMembersDesc": "أضف أطفالك أو والديك أو أجدادك لتحديد موقعهم في أي وقت",
+    "subtitle": "خطة العائلة السنوية",
+    "addMember": "إضافة فرد من العائلة للتتبع",
+    "noMembers": "لم تتم إضافة أفراد العائلة",
+    "noMembersDesc": "أضف أطفالك أو والديك أو أجدادك لتتمكن من تحديد موقعهم في أي وقت",
+    "exclusiveYearly": "ميزة حصرية للخطة السنوية",
+    "exclusiveYearlyDesc": "تتبع الأطفال عبر الهاتف متاح حصرياً في خطة العائلة السنوية. يشمل:",
+    "onDemandLocation": "موقع عند الطلب",
+    "locationHistory": "سجل المواقع",
+    "silentModeOptional": "وضع صامت اختياري",
+    "upTo5Members": "حتى 5 أفراد",
+    "upgradeToYearly": "الترقية للخطة السنوية",
+    "savingsNote": "وفر €199.89 مقارنة بالخطة الشهرية",
+    "howItWorks": "كيف يعمل؟",
+    "howItWorksSteps": "1. أضف أطفالك برقم هاتفهم\n2. ثبت تطبيق ManoProtect على أجهزتهم\n3. اطلب موقعهم متى شئت (عند الطلب)\n4. اضبط إذا كانوا سيستلمون إشعاراً أم لا",
     "form": {
       "name": "الاسم",
       "phone": "رقم الهاتف",
       "email": "البريد الإلكتروني",
-      "emailRequired": "مطلوب - سيتم إرسال رابط إلى هذا البريد",
+      "emailRequired": "📧 مطلوب - سيتم إرسال رابط الربط إلى هذا البريد",
       "age": "العمر",
       "silentMode": "الوضع الصامت",
-      "silentModeDesc": "لن يتلقى إشعاراً عند طلب موقعه"
+      "silentModeDesc": "لن يستلم إشعاراً عندما تطلب موقعه",
+      "autoClassification": "تصنيف تلقائي"
     },
     "personType": {
       "child": "طفل",
       "adult": "بالغ",
       "elderly": "مسن",
-      "unknown": "فرد العائلة"
+      "unknown": "فرد من العائلة"
     },
     "status": {
-      "linked": "الجهاز متصل",
+      "linked": "الجهاز مرتبط",
       "pending": "في انتظار الربط"
-    }
+    },
+    "inviteLink": "رابط الربط",
+    "inviteLinkDesc": "أرسل هذا الرابط لربط جهازهم",
+    "copyLink": "نسخ الرابط",
+    "linkCopied": "تم نسخ الرابط للحافظة",
+    "sendByWhatsApp": "إرسال عبر WhatsApp",
+    "sendByEmail": "إرسال عبر البريد",
+    "inviteSentTo": "تم إرسال الدعوة بالفعل إلى",
+    "lastKnownLocation": "آخر موقع معروف",
+    "locateNow": "تحديد الموقع الآن",
+    "locating": "جاري تحديد الموقع...",
+    "viewHistory": "عرض السجل",
+    "historyTitle": "سجل المواقع (7 أيام)",
+    "noHistory": "لا يوجد سجل مواقع",
+    "activateNotifications": "تفعيل الإشعارات",
+    "silentModeActivated": "تم تفعيل الوضع الصامت",
+    "removeFromTracking": "إزالة من التتبع العائلي؟",
+    "removedFromTracking": "تمت الإزالة من التتبع"
   },
   "scamVerifier": {
-    "title": "كاشف الاحتيال",
+    "title": "مدقق الاحتيال",
     "subtitle": "حلل الرسائل أو المكالمات أو الروابط المشبوهة",
     "placeholder": "الصق هنا الرسالة أو الرقم أو الرابط المشبوه...",
     "analyze": "تحليل",
     "analyzing": "جاري التحليل...",
+    "enterContent": "الرجاء إدخال محتوى للتحليل",
     "result": {
       "safe": "يبدو آمناً",
       "suspicious": "مشبوه",
       "dangerous": "خطير!"
+    }
+  },
+  "faq": {
+    "title": "الأسئلة الشائعة",
+    "subtitle": "اعثر على إجابات للأسئلة الأكثر شيوعاً حول ManoProtect",
+    "searchPlaceholder": "البحث عن سؤال...",
+    "noResults": "لم يتم العثور على نتائج",
+    "tryOtherTerms": "جرب مصطلحات بحث أخرى",
+    "needMoreHelp": "لم تجد ما تبحث عنه؟",
+    "supportAvailable": "فريق الدعم لدينا متاح لمساعدتك في أي أسئلة",
+    "readyToProtect": "مستعد لحماية نفسك؟",
+    "joinUsers": "انضم لآلاف المستخدمين الذين يثقون بالفعل في ManoProtect",
+    "startFree": "ابدأ مجاناً",
+    "categories": {
+      "general": "عام",
+      "pricing": "الخطط والأسعار",
+      "family": "حماية العائلة",
+      "technical": "تقني"
     }
   },
   "footer": {
@@ -204,7 +387,27 @@
     "refundPolicy": "سياسة الاسترداد",
     "legalNotice": "إشعار قانوني",
     "contact": "اتصل بنا",
-    "help": "مساعدة",
+    "help": "المساعدة",
     "rights": "جميع الحقوق محفوظة"
+  },
+  "errors": {
+    "generic": "حدث خطأ",
+    "network": "خطأ في الاتصال",
+    "unauthorized": "غير مصرح",
+    "notFound": "غير موجود",
+    "serverError": "خطأ في الخادم",
+    "tryAgain": "حاول مرة أخرى",
+    "invalidCredentials": "بيانات اعتماد غير صالحة",
+    "emailInUse": "البريد الإلكتروني مستخدم بالفعل",
+    "weakPassword": "كلمة المرور ضعيفة جداً"
+  },
+  "notifications": {
+    "success": "تمت العملية بنجاح",
+    "error": "حدث خطأ",
+    "saved": "تم الحفظ بنجاح",
+    "deleted": "تم الحذف بنجاح",
+    "copied": "تم النسخ للحافظة",
+    "sentSuccess": "تم الإرسال بنجاح",
+    "exportSuccess": "تم التصدير بنجاح"
   }
 }
