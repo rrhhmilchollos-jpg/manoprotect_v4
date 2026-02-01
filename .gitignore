@@ -109,3 +109,4 @@ frontend/node_modules/.cache/default-development/8.pack
 
 # IMPORTANT: Do NOT ignore .env files - they are required for Emergent deployment
 # Only ignore specific sensitive credential files (not .env)
+mobile/manoprotect-desktop/node_modules/electron/dist/electron
