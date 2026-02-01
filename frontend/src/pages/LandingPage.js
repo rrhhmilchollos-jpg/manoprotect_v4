@@ -219,6 +219,8 @@ const LandingPage = () => {
                   width="400"
                   height="400"
                   loading="eager"
+                  fetchpriority="high"
+                  decoding="async"
                 />
               </div>
               <div className="absolute -bottom-4 -right-4 w-20 h-20 bg-indigo-600 rounded-xl shield-pulse opacity-20" />
