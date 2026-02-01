@@ -643,44 +643,63 @@ async def get_enterprise_dashboard(request: Request, session_token: Optional[str
     """Get enterprise dashboard with advanced metrics"""
     user = await require_auth(request, session_token)
     
-    # Get all threat analyses for the organization
-    threats = await db.threat_analysis.find({"user_id": user.user_id}, {"_id": 0}).to_list(1000)
-    
-    # Calculate metrics
-    total_threats = len(threats)
-    threats_blocked = len([t for t in threats if t.get("is_threat")])
-    
-    # Risk distribution
-    risk_counts = {"critical": 0, "high": 0, "medium": 0, "low": 0}
-    for t in threats:
-        level = t.get("risk_level", "low")
-        if level in risk_counts:
-            risk_counts[level] += 1
-    
-    # Threat types distribution
-    threat_types_count = {}
-    for t in threats:
-        for tt in t.get("threat_types", []):
-            threat_types_count[tt] = threat_types_count.get(tt, 0) + 1
-    
-    # Calculate money saved (estimated €500 per blocked threat)
-    money_saved = threats_blocked * 500
-    
-    # Time-based analysis (last 30 days)
+    # Optimized: Use aggregation pipeline to calculate metrics in DB
     now = datetime.now(timezone.utc)
     thirty_days_ago = now - timedelta(days=30)
     
-    daily_threats = {}
-    for t in threats:
-        created = t.get("created_at")
-        if isinstance(created, str):
-            try:
-                created = datetime.fromisoformat(created.replace('Z', '+00:00'))
-            except:
-                continue
-        if created and created > thirty_days_ago:
-            day_key = created.strftime("%Y-%m-%d")
-            daily_threats[day_key] = daily_threats.get(day_key, 0) + 1
+    # Aggregation for total counts and risk distribution
+    stats_pipeline = [
+        {"$match": {"user_id": user.user_id}},
+        {"$group": {
+            "_id": None,
+            "total_threats": {"$sum": 1},
+            "threats_blocked": {"$sum": {"$cond": [{"$eq": ["$is_threat", True]}, 1, 0]}},
+            "critical": {"$sum": {"$cond": [{"$eq": ["$risk_level", "critical"]}, 1, 0]}},
+            "high": {"$sum": {"$cond": [{"$eq": ["$risk_level", "high"]}, 1, 0]}},
+            "medium": {"$sum": {"$cond": [{"$eq": ["$risk_level", "medium"]}, 1, 0]}},
+            "low": {"$sum": {"$cond": [{"$eq": ["$risk_level", "low"]}, 1, 0]}}
+        }}
+    ]
+    stats_result = await db.threat_analysis.aggregate(stats_pipeline).to_list(1)
+    
+    if stats_result:
+        stats = stats_result[0]
+        total_threats = stats.get("total_threats", 0)
+        threats_blocked = stats.get("threats_blocked", 0)
+        risk_counts = {
+            "critical": stats.get("critical", 0),
+            "high": stats.get("high", 0),
+            "medium": stats.get("medium", 0),
+            "low": stats.get("low", 0)
+        }
+    else:
+        total_threats = 0
+        threats_blocked = 0
+        risk_counts = {"critical": 0, "high": 0, "medium": 0, "low": 0}
+    
+    # Aggregation for threat types (limited to recent 100 for performance)
+    threat_types_pipeline = [
+        {"$match": {"user_id": user.user_id}},
+        {"$unwind": "$threat_types"},
+        {"$group": {"_id": "$threat_types", "count": {"$sum": 1}}},
+        {"$limit": 20}
+    ]
+    threat_types_result = await db.threat_analysis.aggregate(threat_types_pipeline).to_list(20)
+    threat_types_count = {item["_id"]: item["count"] for item in threat_types_result}
+    
+    # Aggregation for daily trends (last 30 days only)
+    daily_pipeline = [
+        {"$match": {"user_id": user.user_id, "created_at": {"$gte": thirty_days_ago}}},
+        {"$group": {
+            "_id": {"$dateToString": {"format": "%Y-%m-%d", "date": "$created_at"}},
+            "count": {"$sum": 1}
+        }}
+    ]
+    daily_result = await db.threat_analysis.aggregate(daily_pipeline).to_list(30)
+    daily_threats = {item["_id"]: item["count"] for item in daily_result if item["_id"]}
+    
+    # Calculate money saved (estimated €500 per blocked threat)
+    money_saved = threats_blocked * 500
     
     # Generate last 30 days trend
     trend_data = []
