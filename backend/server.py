@@ -49,11 +49,11 @@ STRIPE_API_KEY = os.environ.get('STRIPE_API_KEY')
 JWT_SECRET = os.environ.get('JWT_SECRET', 'mano-secure-jwt-secret-2025')
 
 # ============================================
-# SUPERADMIN CONFIGURATION
+# SUPERADMIN CONFIGURATION (passwords from env)
 # ============================================
 SUPERADMIN_ACCOUNTS = [
-    {"email": "info@manoprotect.com", "name": "ManoProtect Admin", "password": "19862210Des"},
-    {"email": "rrhh.milchollos@gmail.com", "name": "ManoProtect RRHH", "password": "19862210Des"},
+    {"email": "info@manoprotect.com", "name": "ManoProtect Admin", "password": os.environ.get('SUPERADMIN_PASSWORD_1', '19862210Des')},
+    {"email": "rrhh.milchollos@gmail.com", "name": "ManoProtect RRHH", "password": os.environ.get('SUPERADMIN_PASSWORD_2', '19862210Des')},
     {"email": "ivanrubiosolas@gmail.com", "name": "Ivan Rubio Cano", "password": None},  # None = don't change password if exists
 ]
 
