@@ -6,7 +6,7 @@ import pytest
 import requests
 import os
 
-BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', 'https://manoprotect-family.preview.emergentagent.com')
+BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', 'https://manoguard-launch.preview.emergentagent.com')
 
 # Test credentials for bank employee (superadmin/director)
 EMPLOYEE_EMAIL = "rrhh.milchollos@gmail.com"

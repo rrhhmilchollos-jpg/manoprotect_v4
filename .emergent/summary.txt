@@ -1,74 +1,75 @@
 <analysis>**original_problem_statement:**
-The user's initial goal was to fix a critical bug in the **ManoProtect** application's family plan feature. After that was resolved, the user requested a series of new features which have been progressively built. The latest requests included:
-1.  **Fix Child Locator**: The feature for adding family members (children) was broken. It needed to be fixed and enhanced with an age field.
-2.  **Create Employee Portal**: A new, separate portal for employees was requested to download the desktop () and mobile () applications.
-3.  **Implement Family SOS System**: A comprehensive emergency SOS system based on user-provided diagrams, including features like location sharing, alerts, siren activation, and notifications to nearby premium users.
-4.  **Email Notifications**: Implement email sending for both SOS alerts and for sending invitation links to new family members.
-5.  **Google Ads Assets**: Generate correctly sized images (rectangular, square, logos) in Spanish for a Google Ads campaign.
-6.  **Automatic Translation**: Implement a system to automatically translate the website's content based on the user's country, detected via IP address, and provide a manual language switcher.
-7.  **Manually Add Family Member**: Add 'Maria Deseada Solas Sanchis' to the user's (Ivan Rubio Cano) family group in the database.
-8.  **Display Invitation Link**: After adding a new family member, the UI should display a shareable invitation link for them to join the family group.
+The user's initial goal was to resolve a critical bug in the family plan invitation link. After fixing it, the user requested a series of new features and fixes:
+1.  **Multi-Language Support**: Implement a full internationalization (i18n) system to support 9 languages (Spanish, English, French, German, Italian, Portuguese, Chinese, Russian, and Arabic) and translate the main landing page.
+2.  **Stripe 7-Day Trial**: Implement a 7-day free trial system. This includes verifying a user's credit card with a 0€ charge, automatically billing them for a monthly plan after the trial ends, and allowing cancellation.
+3.  **Stripe Webhooks**: Configure Stripe webhooks to handle trial lifecycle events (start, end, cancellation) and send corresponding email notifications.
+4.  **Google Ads Images**: Re-generate and provide accessible download links for Google Ads images, as the user was unable to download them previously.
+5.  **SOS Plan Access Bug**: Fix a bug where users with premium family plans were incorrectly denied access to the SOS emergency feature. The fix should also grant access to superadmins and users on the new 7-day trial.
+6.  **Superadmin Login Issues**: Resolve login failures for superadmin accounts (, ). This involved creating a system to automatically create/update these users on server startup to ensure they exist, are unlocked, and have the correct permissions, making the application ready for production deployment.
+7.  **End-to-End Invitation Flow Verification**: Ensure the entire family member invitation flow is fully functional, from generating the link to a new member successfully joining the group.
+8.  **Production Deployment Readiness**: Prepare the application for a live deployment by fixing any identified blockers.
 
 **User's preferred language**: Spanish
 
 **what currently exists?**
-The ManoProtect application is a full-stack React/FastAPI app. The latest session added several major features:
--   A Child Locator page () that has been fixed and now includes fields for age and person type.
--   A new Employee Portal () with links to download the Windows desktop app and Android APK.
--   A complete Family SOS system with backend logic in  and a new frontend page at .
--   Email notifications using SendGrid are integrated for SOS alerts and for sending invitation links to new family members.
--   An internationalization (i18n) system is in place for automatic language detection via IP address, with a language switcher in the header.
--   The user and 'Maria' have been linked in a family group in the database.
--   The UI for displaying a family invitation link exists in the code but is not functional because the backend does not supply the necessary data.
+The ManoProtect application is a full-stack React/FastAPI app. The latest session implemented several major features and fixes:
+-   A multi-language system supporting 9 languages is now live, with a language switcher in the header and the landing page translated.
+-   A complete 7-day free trial system using Stripe is integrated. This includes UI elements on the pricing page, backend logic to handle trial subscriptions, and Stripe webhook handlers in  for managing the trial lifecycle.
+-   Automated email notifications via SendGrid are set up for trial events (welcome, trial ending soon, cancellation).
+-   A robust access control helper function () has been implemented in  to correctly manage feature access based on user plan and role.
+-   A server startup script in  now automatically creates/updates the superadmin accounts, ensuring they are ready for production without manual database setup.
+-   The entire family member invitation flow is fully functional, including the backend endpoints ( and ) and the frontend page ().
+-   The AI threat analyzer has been verified as active and functional.
+-   The application is nearly ready for production deployment, but is blocked by two recurring critical issues.
 
 **Last working item**:
--   **Last item agent was working**: The user reported that after adding a new family member, the shareable invitation link was not appearing on the  page as expected. The agent correctly identified that the backend API was not sending the  to the frontend, which is required to display the link.
--   **Status**: IN PROGRESS
+-   **Last item agent was working**: The user requested a final readiness check before deployment. The agent ran the , which identified two critical, recurring blockers that prevent a safe deployment to production. The agent was about to begin fixing these issues.
+-   **Status**: NOT STARTED
 -   **Agent Testing Done**: N
--   **Which testing method agent to use?**: First, use  to test the backend endpoint that fetches family members to ensure it now includes the . After confirming the backend fix, use the  tool on the  page (while logged in) to visually verify that the invitation link and sharing buttons appear for the pending family member.
--   **User Testing Done**: Y (User confirmed the link is missing).
+-   **Which testing method agent to use?**: After applying the fixes, the agent must restart the backend and then run the  again to confirm the blockers are resolved before proceeding.
+-   **User Testing Done**: N
 
 **All Pending/In progress Issue list**:
--   **Issue 1: Invitation link for pending family members is not displayed (P0)**
-    -   **Description**: The core logic for family invitations is broken. The frontend cannot display the shareable link because the backend API endpoint responsible for fetching the list of family members does not include the  in its response.
-    -   **Attempted fixes**: The agent implemented the frontend UI to display the link, but it's hidden because the data is missing.
+-   **Issue 1: Deployment Blocked by Critical Issues (P0)**
+    -   **Description**: The deployment agent has identified two recurring blockers:
+        1.  **Hardcoded Credentials**: The Firebase service account key is loaded from a hardcoded file path in  instead of from environment variables.
+        2.  **Incorrect **: The top-level  file contains entries () that prevent essential environment configuration files from being included in the deployment package.
+    -   **Attempted fixes**: The agent fixed these exact issues earlier in the session, but they have reappeared, indicating the fixes were reverted or lost.
     -   **Next debug checklist**:
-        1.  Edit .
-        2.  Locate the function  (or similar) which corresponds to the  endpoint.
-        3.  Modify the database query or the response model serialization to ensure that the  field is included in the JSON response for each family member who has a status of pending.
-        4.  Restart the backend and test the endpoint with  to confirm the token is present.
-        5.  Verify the frontend at  correctly uses this token to display the invitation section.
-    -   **Why fix this issue and what will be achieved with the fix?**: This is a critical blocker for the family management feature. Without this fix, users cannot invite family members to their group, rendering the feature unusable.
+        1.  Edit  to load the Firebase credentials from environment variables.
+        2.  Edit  and remove all lines that broadly ignore  files (like  or ).
+        3.  After applying the fixes, restart the backend (backend: stopped
+backend: started) to ensure no regressions were introduced.
+        4.  Run the  one more time to get a green health check.
+    -   **Why fix this issue and what will be achieved with the fix?**: This is a hard blocker for production deployment. Fixing it will make the application deployable and secure.
     -   **Status**: IN PROGRESS
-    -   **Is recurring issue?**: N
-    -   **Should Test frontend/backend/both after fix?**: Both.
-    -   **Blocked on other issue**: None.
+    -   **Is recurring issue?**: Y
+    -   **Should Test frontend/backend/both after fix?**: Backend
+    -   **Blocked on other issue**: None
 
 **In progress Task List**:
 -   None.
 
 **Upcoming and Future Tasks**
 -   **Upcoming Tasks:**
-    -   **P1: Full E2E Test of Family Invitation Flow**: After fixing the missing link, guide the user to test the complete flow: add a member, copy the link, open it in an incognito window, and confirm the member's status changes from Pendiente vincular to Vinculado.
-    -   **P1: Translate Entire Application**: The i18n framework is in place, but only a few text elements are translated. The next step is to extract all hardcoded strings from the React components into the translation files (, ) and replace them with the  function.
+    -   **P1: Translate Entire Application**: The i18n framework is in place. The next step is to extract all remaining hardcoded strings from all React components and pages (e.g., , , ) into the translation files () and replace them with the  function.
 -   **Future Tasks:**
-    -   **P2: Finalize Mobile App Publishing**: The original goal of publishing to Google Play and the App Store still needs to be completed. This involves using the generated project ZIPs and following the provided guides.
+    -   **P2: Finalize Mobile App Publishing**: The original goal of publishing to Google Play and the App Store still needs to be completed.
     -   **P2: Complete ManoBank System**: Integrate the disconnected routes and components related to the ManoBank project.
-    -   **P2: Refactor Large Code Files**: Both  and  have become very large and handle multiple responsibilities. They should be broken down into smaller, more manageable modules and components.
+    -   **P2: Refactor Large Code Files**: Both  and  are very large and should be broken down into smaller, more manageable modules and components.
 
 **Completed work in this session**
--   **Child Locator Feature Fixed**: Repaired the form for adding family members and added  and  fields.
--   **Employee Download Portal Created**: A new page at  provides download links for the Windows and Android applications.
--   **Family SOS System Implemented**: A new feature for emergency alerts with location sharing, notifications, and a dedicated UI page () has been built.
--   **Email Notifications Integrated**: SendGrid is now used to send emails for SOS alerts and family member invitation links.
--   **Family Invitation Flow Created**: Backend logic generates unique invitation tokens, and a frontend page () allows new members to link their devices. The email field is now mandatory when adding a member.
--   **Google Ads Images Generated**: Created and provided URLs for all required ad images in Spanish.
--   **Automatic Translation (i18n) System**: Implemented a framework for IP-based language detection and a manual language switcher in the UI.
+-   **Bug Fix: Family Invitation Flow (End-to-End)**: Fixed a login bug ( password verification) and implemented the missing  endpoint, making the entire family invitation flow fully operational.
+-   **Feature: Multi-Language Support (i18n)**: Added support for 7 new languages (total 9), updated the language switcher, and internationalized the main landing page.
+-   **Feature: Stripe 7-Day Trial & Webhooks**: Implemented the complete 7-day trial flow with card verification, automatic billing, and webhook-driven email notifications for key trial events.
+-   **Bug Fix: SOS Premium Plan Access**: Refactored access control logic in  to correctly grant SOS access to all premium plans, trial users, and superadmins.
+-   **Feature: Automatic Superadmin Initialization**: Implemented a startup script in  to automatically create/update superadmin accounts, making the app production-ready.
+-   **Task: Google Ads Images Provided**: Re-generated and provided new, accessible download links for all required Google Ads images.
 
 **Earlier issues found/mentioned but not fixed**
--   **PostHog **: The user repeatedly reported a console error originating from the  script. While the agent attempted to suppress it with a global error handler, it may still appear. This is an issue with the Emergent preview environment, not the application itself, but it is a recurring user annoyance.
--   ** Serialization Audit**: A full audit of all MongoDB queries for potential  field JSON serialization errors has not been performed. This remains a technical debt item.
--   **Database Query Optimization**: A previous deployment agent noted that some database queries in  could be optimized for performance.
+-   **PostHog **: A recurring console error in the preview environment. The user should be reminded this is a platform issue, not an application bug.
+-   ** Serialization Audit**: A full audit of all MongoDB queries for potential  field serialization errors has not been performed.
+-   **Database Query Optimization**: Some database queries could be optimized for performance.
 
 **Known issue recurrence from previous fork**
 -   None.
@@ -77,29 +78,24 @@ The ManoProtect application is a full-stack React/FastAPI app. The latest sessio
 
 
 **Key Technical Concepts**
--   **FastAPI & Pydantic**: For building the backend API and defining data models.
--   **React & Hooks**: For building the frontend UI (, ).
--   **Axios**: For frontend to backend API communication.
--   **Motor (MongoDB)**: For asynchronous database operations.
--   **SendGrid**: For sending transactional emails.
--   **i18n Pattern**: Using React Context and a provider to manage application-wide translations and language state. Geolocation via .
+-   **FastAPI Startup Events**: Used to initialize application state (e.g., create superusers).
+-   **Stripe Subscriptions & Trials**: Using  to create free trials that automatically convert to paid plans.
+-   **Stripe Webhooks**: Listening to events like  to trigger business logic (e.g., sending reminder emails).
+-   **Centralized Authorization**: Using a helper function () to enforce access control consistently across multiple endpoints.
+-   **Bcrypt Hashing**:  is used for password hashing and verification. A bug fix was required to support  hashes.
 
 **key DB schema**
--   ****: The schema was modified to include:
-    -    (Now mandatory)
-    -   
-    -    (e.g., Adulto, Niño)
-    -    (pending, linked)
-    -    (Used for the one-time invitation link)
+-   ****: The  field is now used to identify  users. The  field is used to manage trial, free, and premium states.
+-   ****: The  field (, ) and  are now fully functional and tested end-to-end.
 
 **changes in tech stack**
--   A custom internationalization (i18n) solution was built using React Context and an external IP lookup API ().
+-   None.
 
 **All files of reference**
--   **File to Fix (Backend)**:  (specifically the function that handles ).
--   **File to Verify (Frontend)**: 
--   **Key Modified/New Files**:
+-   **Files to Fix**:
     -   
+    -   
+-   **Key Modified Files**:
     -   
     -   
     -   
@@ -107,53 +103,55 @@ The ManoProtect application is a full-stack React/FastAPI app. The latest sessio
     -   
 
 **Areas that need refactoring**:
--   ****: This file has become a god object for all family-related logic. It should be split into separate routers for family management, SOS features, etc., to improve maintainability.
--   ****: This React component is overly complex, managing the member list, add-form, SOS button, and invitation link logic. It should be broken down into smaller, specialized components.
+-    and  remain large and could be broken down into smaller modules/components for better maintainability.
 
 **key api endpoints**
--   : **(NEEDS FIX)** Fetches family members; must be modified to return .
--   : Adds a family member and triggers an invitation email.
--   : Endpoint used by the invitation link to associate a device with a family member.
--   : Activates a premium SOS alert.
+-   : **NEW** - Creates a Stripe session for the 7-day trial.
+-   : **ENHANCED** - Handles Stripe events for trials and subscriptions, using the  for verification.
+-   : **FIXED** - Now uses the refactored, more permissive authorization logic.
+-   : **NEW** - Retrieves information for a specific family invitation link.
 
 **Critical Info for New Agent**
--   **Your immediate priority is fixing the missing invitation link.** The user is blocked and cannot test the family invitation flow until the link is visible on the UI. The root cause is the backend API not returning the .
--   The user is very attentive and tests features immediately. Ensure your fixes are tested before presenting them as complete.
--   Be prepared to politely explain that the PostHog error and the trouble accessing your work message are part of the preview environment and not bugs in the ManoProtect application. The user has reported these multiple times.
+-   **Your immediate and only priority is to fix the two deployment blockers.** They are recurring issues, but the fix is known and can be found in the chat history (messages ~290-300).
+-   Once the blockers are resolved, you must run the  again to confirm the application is ready for production. Do not proceed to other tasks until the deployment health check passes.
+-   The user is ready to deploy to production. All subsequent actions should be taken with the live environment in mind. The startup script in  is critical for ensuring superadmin accounts are correctly configured post-deployment.
 
 **documents and test reports created in this job**
--   
--   
+-    (Trial Subscription Feature Test)
+-    (Updated throughout the session)
 
 **Last 10 User Messages and any pending HUMAN messages**
-1.  **User**: Reports the invitation link is missing for Maria.
-2.  **User**: Asks for himself and Maria to be added to the family group.
-3.  **User**: Reports seeing the you are having trouble accessing your work error.
-4.  **User**: Asks for automatic translation based on IP and a language switcher.
-5.  **User**: Asks for the Google Ads images to be in Spanish.
-6.  **User**: Asks for Google Ads images to be created.
-7.  **User**: States that the email field must be mandatory when adding a family member.
-8.  **User**: Asks if the family invitation link system has been created yet.
-9.  **User**: Reports a  from .
-10. **User**: Asks for the full Family SOS system from the diagrams to be implemented.
+1.  **User**: Asks if the family invitation link () is fully working. (Status: Completed; agent verified the full flow).
+2.  **User**: Asks the agent to prepare everything for the production redeploy now. (Status: In Progress; led to the auto-superadmin feature).
+3.  **User**: States that they want all changes deployed to production, not previews. (Status: Acknowledged).
+4.  **User**: Reports invalid credentials when trying to log in with . (Status: Completed; agent identified the account was locked in prod and implemented the auto-create/unlock script for deployment).
+5.  **User**: Asks the agent to fix the invalid credentials issue and any related problems. (Status: Completed).
+6.  **User**: Reports that the SOS feature gives an error for family plan users and asks for a fix for all users, including superadmins. (Status: Completed; agent refactored the access control logic).
+7.  **User**: Reports being unable to download the Google Ads images. (Status: Completed; agent provided new links hosted on the preview server).
+8.  **User**: Asks the agent to re-provide the Google Ads images. (Status: Completed).
+9.  **User**: Says they have canceled the Create Meter screen in Stripe and are ready to stop there after redeploying. (Status: Acknowledged).
+10. **User**: Asks for guidance on a Stripe Create Meter screen they encountered. (Status: Completed; agent advised them to ignore it as it's for usage-based billing, not their model).
 
 **Project Health Check:**
--   **Broken**: The family member invitation flow is critically broken because the shareable invitation link is not being sent from the backend to the frontend, preventing users from adding members to their family plan.
+-   **Broken**: Deployment is blocked by two recurring critical issues related to hardcoded credentials and an incorrect  file.
 
 **3rd Party Integrations**
--   **SendGrid**: Used for sending transactional emails (SOS alerts, family invitations). The API key is stored in .
--   **ip-api.com**: A free API used by the new i18n system to look up a user's country code based on their IP address for automatic language selection.
+-   **Stripe**: For payment processing and subscriptions. Now configured with a 7-day trial, webhooks, and a secret key.
+-   **SendGrid**: For transactional emails (SOS alerts, trial notifications, family invitations).
+-   **OpenAI GPT-4o**: Powers the AI threat analyzer via .
+-   **ip-api.com**: Used for IP-based geolocation for the i18n system.
+-   **Firebase**: Used by . **(Deployment Blocker)**.
 
 **Testing status**
--   **Testing agent used after significant changes**: YES, the testing agent was used to validate the Family SOS feature ().
+-   **Testing agent used after significant changes**: YES. The agent was used to test the Stripe trial feature and successfully found and fixed a frontend bug in .
 -   **Troubleshoot agent used after agent stuck in loop**: NO
--   **Test files created**: None.
--   **Known regressions**: The UI for family invitations is broken due to the missing  from the backend.
+-   **Test files created**: 
+-   **Known regressions**: The two deployment blockers ( and hardcoded Firebase credentials) have recurred after being fixed once.
 
 **Credentials to test flow:**
--   **Primary User**: 
--   **Test Family Member**: 
--   **SendGrid API Key**: Located in .
+-   **Superadmin User 1**:  / 
+-   **Superadmin User 2**:  / 
+-   **Stripe Webhook Secret**:  (Stored in )
 
 **What agent forgot to execute**
--   After creating the frontend UI to display the family invitation link, the agent forgot to modify the corresponding backend API endpoint () to actually include the  in the data it sends. This oversight is the direct cause of the current primary bug.</analysis>
+-   The agent did not forget to execute anything, but the fixes applied to resolve the initial deployment blockers (related to  and Firebase credentials) were somehow lost or overwritten before the final deployment check. The top priority is to re-apply these fixes and ensure they persist.</analysis>
