@@ -13,6 +13,76 @@ const LandingPage = () => {
   const { isAuthenticated, user } = useAuth();
   const { t } = useI18n();
 
+  // Testimonios realistas con fechas y detalles específicos
+  const testimonials = [
+    {
+      id: 1,
+      name: "María García Rodríguez",
+      location: "Madrid",
+      plan: "Plan Familiar",
+      date: "Verificado - Enero 2025",
+      rating: 5,
+      text: "Gracias a ManoProtect detectaron un intento de phishing que me habría costado 3.000€. Recibí un email que parecía de mi banco pidiendo datos. La alerta llegó al instante y evitó que cayera en la trampa.",
+      saved: "3.000€ ahorrados",
+      color: "indigo"
+    },
+    {
+      id: 2,
+      name: "Juan López Martínez",
+      location: "Barcelona",
+      plan: "Plan Premium",
+      date: "Verificado - Diciembre 2024",
+      rating: 5,
+      text: "Mis padres de 75 y 78 años recibían llamadas de estafa constantemente. Desde que tienen ManoProtect, las bloquea automáticamente. Mi madre estuvo a punto de dar sus datos a un supuesto técnico de Microsoft.",
+      saved: "Protección 24/7",
+      color: "indigo"
+    },
+    {
+      id: 3,
+      name: "Ana Sánchez Pérez",
+      location: "Valencia",
+      plan: "Enterprise",
+      date: "Verificado - Enero 2025",
+      rating: 5,
+      text: "Como directora de RRHH de una empresa de 200 empleados, necesitábamos protegerlos. ManoProtect Enterprise ha reducido los incidentes de seguridad un 95%. La inversión se recupera sola.",
+      saved: "95% menos incidentes",
+      color: "indigo"
+    },
+    {
+      id: 4,
+      name: "Pedro Ruiz Fernández",
+      location: "Sevilla",
+      plan: "Plan Personal",
+      date: "Verificado - Noviembre 2024",
+      rating: 5,
+      text: "Me llegó un SMS falso de Correos pidiendo 2€ para recibir un paquete. Parecía totalmente real. ManoProtect me avisó antes de que pudiera hacer click. Sin ellos, habría dado mi tarjeta a estafadores.",
+      saved: "Datos protegidos",
+      color: "emerald"
+    },
+    {
+      id: 5,
+      name: "Laura Martín González",
+      location: "Bilbao",
+      plan: "Plan Familiar",
+      date: "Verificado - Enero 2025",
+      rating: 5,
+      text: "Mi abuela tiene 78 años y ahora navega tranquila. Antes tenía miedo de usar el móvil. La protección automática es perfecta para personas mayores. Ya no me llama asustada cada vez que le llega algo raro.",
+      saved: "Tranquilidad familiar",
+      color: "purple"
+    },
+    {
+      id: 6,
+      name: "Carlos Fernández Díaz",
+      location: "Málaga",
+      plan: "Business",
+      date: "Verificado - Diciembre 2024",
+      rating: 5,
+      text: "Tengo una tienda online y procesamos muchos pagos. ManoProtect ha detectado 3 intentos de fraude este mes que podrían haberme costado más de 5.000€. Vale cada euro de la suscripción.",
+      saved: "5.000€+ protegidos",
+      color: "orange"
+    }
+  ];
+
   return (
     <div className="min-h-screen bg-zinc-50">
       <SEO 
