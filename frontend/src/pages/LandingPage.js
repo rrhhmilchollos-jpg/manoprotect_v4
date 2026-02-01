@@ -351,10 +351,10 @@ const LandingPage = () => {
             <div className="bento-small card-hover p-0 rounded-2xl bg-white border border-indigo-200 overflow-hidden">
               <div className="h-32 overflow-hidden">
                 <img
-                  src="https://images.unsplash.com/photo-1709715357520-5e1047a2b691?w=300&q=75&fm=webp"
+                  src="https://images.unsplash.com/photo-1709715357520-5e1047a2b691?w=280&q=60&fm=webp&fit=crop"
                   alt="Equipo empresarial protegido con ManoProtect Enterprise"
                   className="w-full h-full object-cover"
-                  width="300"
+                  width="280"
                   height="128"
                   loading="lazy"
                   decoding="async"
