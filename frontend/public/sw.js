@@ -1,26 +1,41 @@
 // MANO - Progressive Web App Service Worker
-// Version 2.0 - Full PWA support with offline capabilities
+// Version 3.0 - Optimized caching for performance
 
-const CACHE_NAME = 'mano-pwa-v2';
+const CACHE_NAME = 'mano-pwa-v3';
 const OFFLINE_URL = '/offline.html';
+
+// Cache duration for different asset types (in seconds)
+const CACHE_DURATIONS = {
+  images: 30 * 24 * 60 * 60, // 30 days
+  fonts: 365 * 24 * 60 * 60, // 1 year
+  styles: 7 * 24 * 60 * 60,  // 7 days
+  scripts: 7 * 24 * 60 * 60, // 7 days
+  api: 5 * 60,               // 5 minutes
+};
 
 // Assets to cache for offline use
 const STATIC_ASSETS = [
   '/',
   '/index.html',
   '/offline.html',
-  '/manifest.json',
-  '/static/js/main.js',
-  '/static/css/main.css'
+  '/manifest.json'
+];
+
+// Image domains to cache aggressively
+const IMAGE_DOMAINS = [
+  'static.prod-images.emergentagent.com',
+  'customer-assets.emergentagent.com',
+  'images.unsplash.com',
+  'upload.wikimedia.org'
 ];
 
 // Dynamic cache for API responses
 const API_CACHE = 'mano-api-cache-v1';
-const API_CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
+const IMAGE_CACHE = 'mano-images-v1';
 
 // Install event - cache static assets
 self.addEventListener('install', (event) => {
-  console.log('[SW] Installing MANO PWA Service Worker...');
+  console.log('[SW] Installing MANO PWA Service Worker v3...');
   
   event.waitUntil(
     caches.open(CACHE_NAME)
