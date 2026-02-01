@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
+import { useI18n } from '@/i18n/I18nContext';
 import { Mail, Lock, User, Eye, EyeOff, Loader2, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -10,6 +11,7 @@ import { toast } from 'sonner';
 const Register = () => {
   const navigate = useNavigate();
   const { register, loginWithGoogle, isAuthenticated } = useAuth();
+  const { t } = useI18n();
   
   const [formData, setFormData] = useState({
     name: '',
@@ -27,7 +29,7 @@ const Register = () => {
   }
 
   const passwordRequirements = [
-    { met: formData.password.length >= 8, text: 'Al menos 8 caracteres' }
+    { met: formData.password.length >= 8, text: t('auth.register.passwordMinLength') }
   ];
 
   const handleChange = (e) => {
@@ -38,12 +40,12 @@ const Register = () => {
     e.preventDefault();
     
     if (formData.password !== formData.confirmPassword) {
-      toast.error('Las contraseñas no coinciden');
+      toast.error(t('auth.register.passwordsNotMatch'));
       return;
     }
 
     if (formData.password.length < 8) {
-      toast.error('La contraseña debe tener al menos 8 caracteres');
+      toast.error(t('auth.register.passwordMinLength'));
       return;
     }
 
@@ -52,7 +54,7 @@ const Register = () => {
     const result = await register(formData.email, formData.name, formData.password);
     
     if (result.success) {
-      toast.success('¡Cuenta creada exitosamente!');
+      toast.success(t('auth.register.success'));
       navigate('/dashboard');
     } else {
       toast.error(result.error);
@@ -77,8 +79,8 @@ const Register = () => {
               onClick={() => navigate('/')}
             />
           </div>
-          <CardTitle className="text-2xl font-bold">Crear Cuenta</CardTitle>
-          <CardDescription>Únete a MANO y protégete contra fraudes</CardDescription>
+          <CardTitle className="text-2xl font-bold">{t('auth.register.title')}</CardTitle>
+          <CardDescription>{t('auth.register.joinMano')}</CardDescription>
         </CardHeader>
         
         <CardContent className="space-y-6">
@@ -96,7 +98,7 @@ const Register = () => {
               <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
               <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
             </svg>
-            Registrarse con Google
+            {t('auth.register.withGoogle')}
           </Button>
 
           <div className="relative">
@@ -104,14 +106,14 @@ const Register = () => {
               <span className="w-full border-t border-zinc-300" />
             </div>
             <div className="relative flex justify-center text-sm">
-              <span className="bg-white px-4 text-zinc-500">O con email</span>
+              <span className="bg-white px-4 text-zinc-500">{t('auth.login.orWithEmail')}</span>
             </div>
           </div>
 
           {/* Registration Form */}
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
-              <label className="text-sm font-medium text-zinc-700">Nombre completo</label>
+              <label className="text-sm font-medium text-zinc-700">{t('auth.register.name')}</label>
               <div className="relative">
                 <User className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-zinc-400" />
                 <Input
@@ -128,7 +130,7 @@ const Register = () => {
             </div>
 
             <div className="space-y-2">
-              <label className="text-sm font-medium text-zinc-700">Email</label>
+              <label className="text-sm font-medium text-zinc-700">{t('auth.register.email')}</label>
               <div className="relative">
                 <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-zinc-400" />
                 <Input
@@ -145,7 +147,7 @@ const Register = () => {
             </div>
 
             <div className="space-y-2">
-              <label className="text-sm font-medium text-zinc-700">Contraseña</label>
+              <label className="text-sm font-medium text-zinc-700">{t('auth.register.password')}</label>
               <div className="relative">
                 <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-zinc-400" />
                 <Input
@@ -177,7 +179,7 @@ const Register = () => {
             </div>
 
             <div className="space-y-2">
-              <label className="text-sm font-medium text-zinc-700">Confirmar contraseña</label>
+              <label className="text-sm font-medium text-zinc-700">{t('auth.register.confirmPassword')}</label>
               <div className="relative">
                 <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-zinc-400" />
                 <Input
@@ -200,27 +202,27 @@ const Register = () => {
               data-testid="register-submit-btn"
             >
               {loading ? (
-                <><Loader2 className="w-5 h-5 mr-2 animate-spin" /> Creando cuenta...</>
+                <><Loader2 className="w-5 h-5 mr-2 animate-spin" /> {t('auth.register.creating')}</>
               ) : (
-                'Crear Cuenta Gratis'
+                t('auth.register.button')
               )}
             </Button>
           </form>
 
           <p className="text-xs text-zinc-500 text-center">
-            Al registrarte, aceptas nuestros términos de servicio y política de privacidad.
+            {t('auth.register.terms')}
           </p>
 
           <div className="text-center text-sm text-zinc-600">
-            ¿Ya tienes cuenta?{' '}
+            {t('auth.register.hasAccount')}{' '}
             <Link to="/login" className="text-indigo-600 hover:underline font-medium">
-              Inicia sesión
+              {t('auth.register.signIn')}
             </Link>
           </div>
 
           <div className="text-center">
             <Link to="/" className="text-sm text-zinc-500 hover:text-zinc-700">
-              ← Volver al inicio
+              {t('auth.login.backToHome')}
             </Link>
           </div>
         </CardContent>
