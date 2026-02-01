@@ -609,9 +609,10 @@ const LandingPage = () => {
           </div>
         </div>
       </section>
+      </main>
 
       {/* Footer */}
-      <footer className="px-6 py-12 bg-zinc-900 text-zinc-400">
+      <footer className="px-6 py-12 bg-zinc-900 text-zinc-400" role="contentinfo">
         <div className="max-w-7xl mx-auto">
           <div className="grid md:grid-cols-4 gap-8 mb-8">
             {/* Logo y descripción */}
