@@ -1,52 +1,65 @@
 import { BrowserRouter, Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import { Toaster } from 'sonner';
 import { AuthProvider, useAuth } from '@/context/AuthContext';
-import { useEffect } from 'react';
+import { useEffect, lazy, Suspense } from 'react';
 
 // Firebase Analytics
 import { logAnalyticsEvent, AnalyticsEvents } from '@/services/firebase';
 
-// Pages - ManoProtect Only
+// Critical Pages - Load immediately
 import LandingPage from '@/pages/LandingPage';
-import Dashboard from '@/pages/Dashboard';
-import HowItWorks from '@/pages/HowItWorks';
-import FamilyMode from '@/pages/FamilyMode';
-import Contacts from '@/pages/Contacts';
-import Profile from '@/pages/Profile';
-import Knowledge from '@/pages/Knowledge';
-import Community from '@/pages/Community';
-import Pricing from '@/pages/Pricing';
-import PaymentSuccess from '@/pages/PaymentSuccess';
-import TrialSuccess from '@/pages/TrialSuccess';
-import Downloads from '@/pages/Downloads';
 import Login from '@/pages/Login';
 import Register from '@/pages/Register';
-import AuthCallback from '@/pages/AuthCallback';
-import InvestorRegister from '@/pages/InvestorRegister';
-import AdminPanel from '@/pages/AdminPanel';
-import EnterpriseDashboard from '@/pages/EnterpriseDashboard';
-import FamilyAdmin from '@/pages/FamilyAdmin';
-import ChildTracking from '@/pages/ChildTracking';
-import SOSEmergency from '@/pages/SOSEmergency';
-import VincularDispositivo from '@/pages/VincularDispositivo';
-import Rewards from '@/pages/Rewards';
-import PrivacyPolicy from '@/pages/PrivacyPolicy';
-import TermsOfService from '@/pages/TermsOfService';
-import RefundPolicy from '@/pages/RefundPolicy';
-import LegalNotice from '@/pages/LegalNotice';
-import LandingPromo from '@/pages/LandingPromo';
-import RecuperarPassword from '@/pages/RecuperarPassword';
-import VerificarEstafa from '@/pages/VerificarEstafa';
-import ManoProtectRegistro from '@/pages/ManoProtectRegistro';
-import FAQ from '@/pages/FAQ';
-import DescargarDesktop from '@/pages/DescargarDesktop';
-import DescargarApps from '@/pages/DescargarApps';
-import PortalEmpleados from '@/pages/PortalEmpleados';
+
+// Lazy load non-critical pages to reduce initial bundle size
+const Dashboard = lazy(() => import('@/pages/Dashboard'));
+const HowItWorks = lazy(() => import('@/pages/HowItWorks'));
+const FamilyMode = lazy(() => import('@/pages/FamilyMode'));
+const Contacts = lazy(() => import('@/pages/Contacts'));
+const Profile = lazy(() => import('@/pages/Profile'));
+const Knowledge = lazy(() => import('@/pages/Knowledge'));
+const Community = lazy(() => import('@/pages/Community'));
+const Pricing = lazy(() => import('@/pages/Pricing'));
+const PaymentSuccess = lazy(() => import('@/pages/PaymentSuccess'));
+const TrialSuccess = lazy(() => import('@/pages/TrialSuccess'));
+const Downloads = lazy(() => import('@/pages/Downloads'));
+const AuthCallback = lazy(() => import('@/pages/AuthCallback'));
+const InvestorRegister = lazy(() => import('@/pages/InvestorRegister'));
+const AdminPanel = lazy(() => import('@/pages/AdminPanel'));
+const EnterpriseDashboard = lazy(() => import('@/pages/EnterpriseDashboard'));
+const FamilyAdmin = lazy(() => import('@/pages/FamilyAdmin'));
+const ChildTracking = lazy(() => import('@/pages/ChildTracking'));
+const SOSEmergency = lazy(() => import('@/pages/SOSEmergency'));
+const VincularDispositivo = lazy(() => import('@/pages/VincularDispositivo'));
+const Rewards = lazy(() => import('@/pages/Rewards'));
+const PrivacyPolicy = lazy(() => import('@/pages/PrivacyPolicy'));
+const TermsOfService = lazy(() => import('@/pages/TermsOfService'));
+const RefundPolicy = lazy(() => import('@/pages/RefundPolicy'));
+const LegalNotice = lazy(() => import('@/pages/LegalNotice'));
+const LandingPromo = lazy(() => import('@/pages/LandingPromo'));
+const RecuperarPassword = lazy(() => import('@/pages/RecuperarPassword'));
+const VerificarEstafa = lazy(() => import('@/pages/VerificarEstafa'));
+const ManoProtectRegistro = lazy(() => import('@/pages/ManoProtectRegistro'));
+const FAQ = lazy(() => import('@/pages/FAQ'));
+const DescargarDesktop = lazy(() => import('@/pages/DescargarDesktop'));
+const DescargarApps = lazy(() => import('@/pages/DescargarApps'));
+const PortalEmpleados = lazy(() => import('@/pages/PortalEmpleados'));
+
 import CookieConsent from '@/components/CookieConsent';
 import FloatingWhatsApp from '@/components/FloatingWhatsApp';
 import UrgencyBanner from '@/components/UrgencyBanner';
 
 import '@/App.css';
+
+// Loading fallback for lazy-loaded pages
+const PageLoader = () => (
+  <div className="min-h-screen bg-zinc-50 flex items-center justify-center">
+    <div className="flex flex-col items-center gap-4">
+      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
+      <p className="text-zinc-500 text-sm">Cargando...</p>
+    </div>
+  </div>
+);
 
 // Analytics Page Tracker
 const AnalyticsTracker = () => {
