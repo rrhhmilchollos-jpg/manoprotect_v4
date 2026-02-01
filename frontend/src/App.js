@@ -276,8 +276,13 @@ function App() {
           />
           <Toaster position="top-center" richColors />
           <AppRouter />
-          <FloatingWhatsApp />
-          <CookieConsent />
+          {/* Defer non-critical UI components */}
+          <Suspense fallback={<EmptyFallback />}>
+            <FloatingWhatsApp />
+          </Suspense>
+          <Suspense fallback={<EmptyFallback />}>
+            <CookieConsent />
+          </Suspense>
         </AuthProvider>
       </BrowserRouter>
     </div>
