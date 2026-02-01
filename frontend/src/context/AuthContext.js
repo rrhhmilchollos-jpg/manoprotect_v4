@@ -64,16 +64,22 @@ export const AuthProvider = ({ children }) => {
     checkAuth();
   }, [checkAuth]);
 
-  // Register with email/password
-  const register = async (email, name, password) => {
+  // Register with email/password - with automatic retry on network failure
+  const register = async (email, name, password, retryCount = 0) => {
     setError(null);
     try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+      
       const response = await fetch(`${API}/auth/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
-        body: JSON.stringify({ email, name, password })
+        body: JSON.stringify({ email, name, password }),
+        signal: controller.signal
       });
+      
+      clearTimeout(timeoutId);
 
       let data;
       try {
@@ -89,8 +95,15 @@ export const AuthProvider = ({ children }) => {
       setUser(data);
       return { success: true, user: data };
     } catch (err) {
+      // Retry once on network failure
+      if (retryCount < 1 && (err.name === 'AbortError' || err.message === 'Failed to fetch' || err.message.includes('fetch'))) {
+        console.log('Register retry attempt...');
+        await new Promise(resolve => setTimeout(resolve, 500));
+        return register(email, name, password, retryCount + 1);
+      }
+      
       setError(err.message);
-      return { success: false, error: err.message };
+      return { success: false, error: err.message === 'Failed to fetch' ? 'Error de conexión. Por favor, inténtalo de nuevo.' : err.message };
     }
   };
 
