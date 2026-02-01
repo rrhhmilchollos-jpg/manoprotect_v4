@@ -37,9 +37,8 @@ class EmergencyContact(BaseModel):
     relationship: str
 
 @router.get("/health/profile")
-async def get_health_profile(request: Request, user: User = Depends(get_current_user)):
+async def get_health_profile(user: User = Depends(get_current_user)):
     """Get user's health profile"""
-    user = await get_current_user(request)
     if not user:
         raise HTTPException(status_code=401, detail="No autenticado")
     
@@ -71,9 +70,8 @@ async def get_health_profile(request: Request, user: User = Depends(get_current_
     return profile
 
 @router.put("/health/profile")
-async def update_health_profile(data: HealthProfile, request: Request):
+async def update_health_profile(data: HealthProfile, user: User = Depends(get_current_user)):
     """Update user's health profile"""
-    user = await get_current_user(request)
     if not user:
         raise HTTPException(status_code=401, detail="No autenticado")
     
