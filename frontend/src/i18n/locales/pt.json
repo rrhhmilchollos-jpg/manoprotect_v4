@@ -17,50 +17,70 @@
     "close": "Fechar",
     "yes": "Sim",
     "no": "Não",
-    "or": "ou"
+    "or": "ou",
+    "update": "Atualizar",
+    "confirm": "Confirmar",
+    "view": "Ver",
+    "viewAll": "Ver tudo",
+    "analyze": "Analisar",
+    "analyzing": "Analisando...",
+    "processing": "Processando...",
+    "saving": "Salvando...",
+    "share": "Compartilhar",
+    "export": "Exportar",
+    "download": "Baixar",
+    "upgrade": "Atualizar plano"
   },
   "nav": {
     "home": "Início",
-    "howItWorks": "Como Funciona",
-    "pricing": "Ver Planos",
-    "knowledge": "Aprenda",
+    "howItWorks": "Como funciona",
+    "pricing": "Ver planos",
+    "knowledge": "Aprender",
     "community": "Comunidade",
     "login": "Entrar",
     "register": "Cadastrar",
     "dashboard": "Painel",
     "logout": "Sair",
-    "faq": "FAQ"
+    "faq": "FAQ",
+    "profile": "Perfil",
+    "settings": "Configurações",
+    "contacts": "Contatos",
+    "rewards": "Recompensas",
+    "family": "Família",
+    "enterprise": "Empresas",
+    "admin": "Admin",
+    "downloads": "Downloads"
   },
   "landing": {
     "hero": {
-      "title": "Proteja sua família contra fraudes e golpes digitais",
-      "subtitle": "ManoProtect é seu escudo contra fraudes digitais. Protegemos famílias contra golpes telefônicos, phishing, SMS fraudulentos e muito mais.",
-      "cta": "Começar Grátis",
-      "ctaSecondary": "Veja Como Funciona"
+      "title": "Proteja sua família de fraudes e golpes digitais",
+      "subtitle": "ManoProtect é seu escudo contra fraudes digitais. Protegemos famílias de golpes telefônicos, phishing, SMS fraudulentos e muito mais.",
+      "cta": "Começar grátis",
+      "ctaSecondary": "Veja como funciona"
     },
     "features": {
       "title": "Por que ManoProtect?",
       "scamVerifier": {
-        "title": "Verificador de Golpes",
-        "description": "Analise instantaneamente mensagens, chamadas e links suspeitos"
+        "title": "Verificador de golpes",
+        "description": "Analise mensagens, chamadas e links suspeitos instantaneamente"
       },
       "realTimeAlerts": {
-        "title": "Alertas em Tempo Real",
+        "title": "Alertas em tempo real",
         "description": "Receba notificações sobre novas ameaças detectadas"
       },
       "familyProtection": {
-        "title": "Proteção Familiar",
+        "title": "Proteção familiar",
         "description": "Um plano para toda a família com até 5 membros"
       },
       "database": {
-        "title": "Banco de Dados Atualizado",
+        "title": "Banco de dados atualizado",
         "description": "+50.000 golpes identificados e crescendo"
       }
     },
     "stats": {
-      "familiesProtected": "Famílias Protegidas",
-      "scamsBlocked": "Golpes Bloqueados",
-      "detectionRate": "Taxa de Detecção"
+      "familiesProtected": "Famílias protegidas",
+      "scamsBlocked": "Golpes bloqueados",
+      "detectionRate": "Taxa de detecção"
     },
     "testimonials": {
       "title": "O que nossos usuários dizem"
@@ -72,34 +92,55 @@
       "email": "Endereço de email",
       "password": "Senha",
       "forgotPassword": "Esqueceu sua senha?",
-      "noAccount": "Não tem conta?",
+      "noAccount": "Não tem uma conta?",
       "signUp": "Cadastre-se",
       "withGoogle": "Continuar com Google",
-      "button": "Entrar"
+      "button": "Entrar",
+      "loggingIn": "Entrando...",
+      "welcomeBack": "Bem-vindo de volta!",
+      "orWithEmail": "Ou com email",
+      "backToHome": "← Voltar ao início"
     },
     "register": {
-      "title": "Criar Conta",
+      "title": "Criar conta",
       "name": "Nome completo",
       "email": "Endereço de email",
       "password": "Senha",
       "confirmPassword": "Confirmar senha",
       "hasAccount": "Já tem uma conta?",
-      "signIn": "Entrar",
+      "signIn": "Entre",
       "withGoogle": "Cadastrar com Google",
-      "button": "Criar Conta",
-      "terms": "Ao se cadastrar, você aceita nossos"
+      "button": "Criar conta",
+      "terms": "Ao se cadastrar, você aceita nossos termos de serviço e política de privacidade.",
+      "creating": "Criando conta...",
+      "success": "Conta criada com sucesso!",
+      "passwordMinLength": "Pelo menos 8 caracteres",
+      "passwordsNotMatch": "As senhas não coincidem",
+      "joinMano": "Junte-se ao MANO e proteja-se contra fraudes"
     }
   },
   "pricing": {
-    "title": "Planos e Preços",
+    "title": "Planos e preços",
     "subtitle": "Escolha o plano que melhor se adapta à sua família",
     "monthly": "Mensal",
     "yearly": "Anual",
     "save": "Economize",
-    "popular": "Mais Popular",
+    "popular": "Mais popular",
+    "bestValue": "Melhor valor",
+    "trial": {
+      "title": "Teste GRÁTIS de 7 dias",
+      "badge": "🎁 OFERTA ESPECIAL",
+      "description": "Verifique seu cartão com uma cobrança de €0,00 e acesse todas as funcionalidades Premium por 7 dias.",
+      "cardVerification": "Verificação segura do cartão (sem cobrança)",
+      "fullAccess": "Acesso completo ao Premium por 7 dias",
+      "cancelAnytime": "Cancele a qualquer momento sem custos",
+      "afterTrial": "Após 7 dias",
+      "button": "Testar 7 dias grátis",
+      "disclaimer": "Ao continuar, você aceita que seu cartão será verificado. Se não cancelar em 7 dias, serão cobrados €29,99/mês."
+    },
     "free": {
-      "name": "Grátis",
-      "price": "0€",
+      "name": "Básico",
+      "price": "€0",
       "description": "Para começar a se proteger"
     },
     "premium": {
@@ -108,7 +149,7 @@
     },
     "family": {
       "name": "Família",
-      "description": "Proteja toda sua família"
+      "description": "Proteja toda a sua família"
     },
     "features": {
       "scamVerifier": "Verificador de golpes",
@@ -117,33 +158,128 @@
       "prioritySupport": "Suporte prioritário",
       "familyMembers": "Até 5 membros",
       "childTracking": "Localização familiar",
-      "sosEmergency": "SOS de emergência"
+      "sosEmergency": "SOS de emergência",
+      "unlimitedAnalysis": "Análises ilimitadas",
+      "aiBlocking": "Bloqueio automático IA",
+      "fullHistory": "Histórico completo",
+      "dataExport": "Exportação de dados",
+      "noAds": "Sem anúncios"
     },
-    "cta": "Começar"
+    "cta": "Começar",
+    "subscribe": "Assinar",
+    "investing": "Invista na sua",
+    "security": "Segurança",
+    "fraudWarning": "Uma única fraude pode custar €5.000+. MANO Premium protege você 24/7 por menos do que você gasta com café.",
+    "noCommitment": "Sem compromisso",
+    "guarantee": "Garantia de 15 dias",
+    "perMonth": "/ mês",
+    "perYear": "/ ano"
   },
   "dashboard": {
-    "welcome": "Bem-vindo",
-    "protectionStatus": "Status de Proteção",
-    "recentAlerts": "Alertas Recentes",
-    "quickActions": "Ações Rápidas",
-    "verifyScam": "Verificar Golpe",
-    "familyMembers": "Membros da Família",
-    "settings": "Configurações"
+    "welcome": "Olá",
+    "protectionStatus": "Status de proteção",
+    "protectionActive": "Sua proteção está ativa. Analise conteúdo suspeito abaixo.",
+    "recentAlerts": "Alertas de segurança recentes",
+    "quickActions": "Ações rápidas",
+    "verifyScam": "Verificar golpe",
+    "familyMembers": "Membros da família",
+    "settings": "Configurações",
+    "stats": {
+      "totalAnalyzed": "Total analisado",
+      "threatsBlocked": "Ameaças bloqueadas",
+      "critical": "Críticas",
+      "high": "Altas"
+    },
+    "tabs": {
+      "aiAnalyzer": "Analisador IA",
+      "secureBanking": "Banco seguro",
+      "history": "Histórico"
+    },
+    "quickAnalysis": "Análise rápida",
+    "quickAnalysisDesc": "Digite um número de telefone, mensagem, email ou link para verificar se é uma ameaça",
+    "contentTypes": {
+      "phone": "Telefone",
+      "sms": "SMS",
+      "email": "Email",
+      "url": "Link"
+    },
+    "threatDetected": "AMEAÇA DETECTADA",
+    "safeContent": "CONTEÚDO SEGURO",
+    "level": "Nível",
+    "threatTypes": "Tipos de ameaça",
+    "recommendation": "Recomendação",
+    "analysis": "Análise",
+    "threatHistory": "Histórico de ameaças",
+    "lastThreats": "Últimas ameaças detectadas",
+    "exportCSV": "Exportar CSV",
+    "noThreats": "Nenhuma ameaça detectada ainda. Você está protegido!",
+    "falsePositive": "Falso positivo",
+    "investorAccess": {
+      "title": "Acesso de investidor verificado",
+      "active": "ATIVO",
+      "description": "Você tem acesso à documentação confidencial: Plano de Negócios, Modelo Financeiro, Pitch Deck e Dossiê B2B.",
+      "goToDownloads": "Ir para downloads"
+    }
+  },
+  "profile": {
+    "title": "Perfil e configurações",
+    "personalInfo": "Informações pessoais",
+    "fullName": "Nome completo",
+    "email": "Email",
+    "emailNoChange": "O email não pode ser alterado",
+    "phone": "Telefone",
+    "pushNotifications": "Notificações push",
+    "pushNotificationsDesc": "Receba alertas instantâneos no seu navegador",
+    "preferences": "Preferências e segurança",
+    "preferencesDesc": "Configure como o ManoProtect protege você",
+    "darkMode": "Modo escuro",
+    "darkModeDesc": "Tema escuro para a interface",
+    "emailAlerts": "Alertas por email",
+    "emailAlertsDesc": "Receber resumo de ameaças por email",
+    "autoBlock": "Bloqueio automático",
+    "autoBlockDesc": "Bloquear automaticamente ameaças críticas",
+    "yourProtection": "Sua proteção",
+    "analyzed": "Analisados",
+    "blocked": "Bloqueados",
+    "saveChanges": "Salvar alterações",
+    "plan": "Plano",
+    "planFree": "Grátis",
+    "planPremium": "Premium",
+    "upgradeToPremium": "Atualizar para Premium"
   },
   "sos": {
-    "title": "Emergência Familiar",
+    "title": "Emergência familiar",
     "button": "SOS",
-    "subtitle": "Pressione o botão para enviar sua localização exata para todos os membros da família",
+    "subtitle": "Pressione o botão para enviar sua localização exata a todos os membros da família",
     "recording": "Gravando...",
     "sending": "Enviando alerta...",
     "active": "Alerta ativo",
     "cancel": "Cancelar SOS",
-    "familyNotified": "Família notificada",
+    "cancelled": "Alerta SOS cancelado",
+    "familyNotified": "Familiares notificados",
     "emailsSent": "Emails enviados",
     "nearbyUsers": "Usuários próximos",
+    "emergency": "EMERGÊNCIA",
+    "alertSent": "ALERTA SOS ENVIADO!",
+    "familyReceived": "Todos os seus familiares receberam sua localização!",
+    "gettingLocation": "Obtendo sua localização GPS precisa...",
+    "pressIfNeedHelp": "Pressione se precisar de ajuda urgente",
+    "locationSent": "Localização enviada",
+    "viewOnGoogleMaps": "Ver no Google Maps",
+    "gpsAccurate": "GPS preciso",
+    "wholeFamily": "Toda a família",
+    "instant": "Instantâneo",
+    "familyAlert": "Alerta familiar!",
+    "needsHelp": "precisa de ajuda",
+    "onMyWay": "Estou a caminho",
+    "call112": "Ligar 112",
+    "callEmergencies": "Ligar para o 112 (Emergências)",
+    "audioMessage": "Mensagem de áudio",
+    "willRecordAuto": "Será gravado automaticamente",
+    "audioRecorded": "Áudio gravado",
     "settings": {
       "alertNearby": "Alertar usuários próximos",
-      "alertNearbyDesc": "Notificar usuários premium em 5km",
+      "alertNearbyDesc": "Notificar usuários premium em 5 km",
       "soundEnabled": "Som de alerta",
       "soundEnabledDesc": "Tocar sirene ao enviar SOS",
       "autoRecord": "Gravação automática",
@@ -152,59 +288,126 @@
     "howItWorks": {
       "title": "Como funciona?",
       "step1": "Pressione o botão SOS para enviar alerta",
-      "step2": "O áudio é gravado e a localização GPS detectada",
+      "step2": "O áudio é gravado e sua localização GPS detectada",
       "step3": "Sua família recebe notificação crítica com sirene",
-      "step4": "Usuários premium próximos (5km) são alertados"
+      "step4": "Usuários premium próximos (5 km) são alertados"
     }
   },
   "childTracking": {
-    "title": "Localização de Crianças",
-    "subtitle": "Plano Família Anual",
-    "addMember": "Adicionar Membro para Localizar",
-    "noMembers": "Nenhum membro adicionado",
-    "noMembersDesc": "Adicione seus filhos, pais ou avós para localizá-los a qualquer momento",
+    "title": "Localização de crianças",
+    "subtitle": "Plano familiar anual",
+    "addMember": "Adicionar familiar para localizar",
+    "noMembers": "Nenhum familiar adicionado",
+    "noMembersDesc": "Adicione seus filhos, pais ou avós para poder localizá-los a qualquer momento",
+    "exclusiveYearly": "Recurso exclusivo do plano anual",
+    "exclusiveYearlyDesc": "A localização de crianças por telefone está disponível exclusivamente no plano familiar anual. Inclui:",
+    "onDemandLocation": "Localização sob demanda",
+    "locationHistory": "Histórico de localização",
+    "silentModeOptional": "Modo silencioso opcional",
+    "upTo5Members": "Até 5 membros",
+    "upgradeToYearly": "Atualizar para plano anual",
+    "savingsNote": "Economize €199,89 em relação ao plano mensal",
+    "howItWorks": "Como funciona?",
+    "howItWorksSteps": "1. Adicione seus filhos com o número de telefone\n2. Instale o app ManoProtect nos dispositivos deles\n3. Solicite a localização quando quiser (sob demanda)\n4. Configure se devem receber notificação ou não",
     "form": {
       "name": "Nome",
       "phone": "Número de telefone",
       "email": "Email",
-      "emailRequired": "Obrigatório - Um link será enviado para este email",
+      "emailRequired": "📧 Obrigatório - Um link de vinculação será enviado para este email",
       "age": "Idade",
       "silentMode": "Modo silencioso",
-      "silentModeDesc": "Não receberá notificação quando você solicitar sua localização"
+      "silentModeDesc": "Não receberá notificação quando você solicitar a localização",
+      "autoClassification": "Classificação automática"
     },
     "personType": {
       "child": "Criança",
       "adult": "Adulto",
       "elderly": "Idoso",
-      "unknown": "Membro da família"
+      "unknown": "Familiar"
     },
     "status": {
       "linked": "Dispositivo vinculado",
-      "pending": "Pendente de vínculo"
-    }
+      "pending": "Pendente de vinculação"
+    },
+    "inviteLink": "Link de vinculação",
+    "inviteLinkDesc": "Envie este link para vincular o dispositivo",
+    "copyLink": "Copiar link",
+    "linkCopied": "Link copiado para a área de transferência",
+    "sendByWhatsApp": "Enviar por WhatsApp",
+    "sendByEmail": "Enviar por email",
+    "inviteSentTo": "Convite já enviado para",
+    "lastKnownLocation": "Última localização conhecida",
+    "locateNow": "Localizar agora",
+    "locating": "Localizando...",
+    "viewHistory": "Ver histórico",
+    "historyTitle": "Histórico de localização (7 dias)",
+    "noHistory": "Nenhum histórico de localização",
+    "activateNotifications": "Ativar notificações",
+    "silentModeActivated": "Modo silencioso ativado",
+    "removeFromTracking": "Remover do rastreamento familiar?",
+    "removedFromTracking": "Removido do rastreamento"
   },
   "scamVerifier": {
-    "title": "Verificador de Golpes",
+    "title": "Verificador de golpes",
     "subtitle": "Analise mensagens, chamadas ou links suspeitos",
     "placeholder": "Cole aqui a mensagem, número ou link suspeito...",
     "analyze": "Analisar",
     "analyzing": "Analisando...",
+    "enterContent": "Por favor, insira conteúdo para analisar",
     "result": {
       "safe": "Parece seguro",
       "suspicious": "Suspeito",
       "dangerous": "Perigoso!"
     }
   },
+  "faq": {
+    "title": "Perguntas frequentes",
+    "subtitle": "Encontre respostas para as perguntas mais comuns sobre o ManoProtect",
+    "searchPlaceholder": "Pesquisar pergunta...",
+    "noResults": "Nenhum resultado encontrado",
+    "tryOtherTerms": "Tente outros termos de pesquisa",
+    "needMoreHelp": "Não encontra o que procura?",
+    "supportAvailable": "Nossa equipe de suporte está disponível para ajudá-lo com qualquer dúvida",
+    "readyToProtect": "Pronto para se proteger?",
+    "joinUsers": "Junte-se a milhares de usuários que já confiam no ManoProtect",
+    "startFree": "Começar grátis",
+    "categories": {
+      "general": "Geral",
+      "pricing": "Planos e preços",
+      "family": "Proteção familiar",
+      "technical": "Técnico"
+    }
+  },
   "footer": {
     "company": "Empresa",
     "legal": "Legal",
     "support": "Suporte",
-    "privacyPolicy": "Política de Privacidade",
-    "termsOfService": "Termos de Serviço",
-    "refundPolicy": "Política de Reembolso",
-    "legalNotice": "Aviso Legal",
+    "privacyPolicy": "Política de privacidade",
+    "termsOfService": "Termos de serviço",
+    "refundPolicy": "Política de reembolso",
+    "legalNotice": "Aviso legal",
     "contact": "Contato",
     "help": "Ajuda",
     "rights": "Todos os direitos reservados"
+  },
+  "errors": {
+    "generic": "Ocorreu um erro",
+    "network": "Erro de conexão",
+    "unauthorized": "Não autorizado",
+    "notFound": "Não encontrado",
+    "serverError": "Erro do servidor",
+    "tryAgain": "Tentar novamente",
+    "invalidCredentials": "Credenciais inválidas",
+    "emailInUse": "Email já em uso",
+    "weakPassword": "A senha é muito fraca"
+  },
+  "notifications": {
+    "success": "Operação bem-sucedida",
+    "error": "Ocorreu um erro",
+    "saved": "Salvo com sucesso",
+    "deleted": "Excluído com sucesso",
+    "copied": "Copiado para a área de transferência",
+    "sentSuccess": "Enviado com sucesso",
+    "exportSuccess": "Exportado com sucesso"
   }
 }
