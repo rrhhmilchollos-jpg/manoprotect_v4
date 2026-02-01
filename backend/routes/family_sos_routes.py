@@ -401,11 +401,8 @@ async def send_sos_alert(
     """Send SOS alert with GPS location (family plan only)"""
     user = await require_auth(request, session_token)
     
-    plan_key = user.plan.split('-')[0] if '-' in user.plan else user.plan
-    plan_features = _PLAN_FEATURES.get(plan_key, _PLAN_FEATURES["free"])
-    
-    if not plan_features.get("sos"):
-        raise HTTPException(status_code=403, detail="La función SOS requiere plan familiar o superior")
+    if not user_has_premium_access(user):
+        raise HTTPException(status_code=403, detail="La función SOS requiere plan Premium o Familiar")
     
     alert_id = f"sos_{uuid.uuid4().hex[:12]}"
     sos_alert = {
