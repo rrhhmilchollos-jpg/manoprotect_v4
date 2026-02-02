@@ -158,6 +158,7 @@ from routes.admin_routes import router as admin_router, init_db as init_admin_ro
 from routes.health_routes import router as health_router, init_db as init_health_routes
 from routes.audio_routes import router as audio_router, init_db as init_audio_routes
 from routes.device_routes import router as device_router, init_db as init_device_routes
+from routes.push_routes import router as push_router, init_db as init_push_routes
 
 # Banking and Compliance services - RESERVED for ManoBank.es
 # from services.compliance_service import init_compliance_service
