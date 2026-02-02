@@ -579,6 +579,110 @@ async def get_sos_history(
     return {"alerts": alerts}
 
 
+@router.get("/sos/alert/{alert_id}")
+async def get_sos_alert_details(
+    alert_id: str,
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Get details of a specific SOS alert (for family members receiving alerts)"""
+    user = await require_auth(request, session_token)
+    
+    # Find the alert
+    alert = await _db.sos_alerts.find_one(
+        {"alert_id": alert_id},
+        {"_id": 0}
+    )
+    
+    if not alert:
+        raise HTTPException(status_code=404, detail="Alerta no encontrada")
+    
+    # Check if user is authorized to see this alert
+    # User must be a family member or trusted contact of the alert sender
+    alert_user_id = alert.get("user_id")
+    
+    # Check if receiver is in family members
+    is_family = await _db.family_members.find_one({
+        "family_owner_id": alert_user_id,
+        "$or": [
+            {"user_id": user.user_id},
+            {"email": user.email}
+        ]
+    })
+    
+    # Check if receiver is a trusted contact
+    is_trusted = await _db.trusted_contacts.find_one({
+        "user_id": alert_user_id,
+        "$or": [
+            {"contact_id": user.user_id},
+            {"email": user.email}
+        ]
+    })
+    
+    # Also allow the sender to see their own alert
+    is_sender = alert_user_id == user.user_id
+    
+    if not (is_family or is_trusted or is_sender):
+        raise HTTPException(status_code=403, detail="No tienes permiso para ver esta alerta")
+    
+    # Get sender's phone for call button
+    sender = await _db.users.find_one(
+        {"user_id": alert_user_id},
+        {"_id": 0, "phone": 1, "name": 1, "email": 1}
+    )
+    
+    return {
+        **alert,
+        "user_phone": sender.get("phone") if sender else None
+    }
+
+
+@router.post("/sos/alert/{alert_id}/acknowledge")
+async def acknowledge_sos_alert(
+    alert_id: str,
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Acknowledge receipt of an SOS alert"""
+    user = await require_auth(request, session_token)
+    
+    # Update the alert with acknowledgment
+    result = await _db.sos_alerts.update_one(
+        {"alert_id": alert_id},
+        {
+            "$push": {
+                "acknowledged_by": {
+                    "user_id": user.user_id,
+                    "user_name": user.name,
+                    "acknowledged_at": datetime.now(timezone.utc).isoformat()
+                }
+            }
+        }
+    )
+    
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Alerta no encontrada")
+    
+    # Notify the alert sender that someone received their SOS
+    alert = await _db.sos_alerts.find_one({"alert_id": alert_id}, {"_id": 0})
+    if alert:
+        await _db.notifications.insert_one({
+            "notification_id": f"notif_{uuid.uuid4().hex[:12]}",
+            "user_id": alert.get("user_id"),
+            "type": "sos_acknowledged",
+            "title": "✅ Ayuda en camino",
+            "message": f"{user.name} ha recibido tu alerta SOS y está al tanto",
+            "data": {
+                "alert_id": alert_id,
+                "acknowledged_by": user.name
+            },
+            "read": False,
+            "created_at": datetime.now(timezone.utc).isoformat()
+        })
+    
+    return {"message": "Alerta confirmada", "acknowledged": True}
+
+
 @router.get("/family/contacts-shared")
 async def get_family_shared_contacts(
     request: Request,
