@@ -1029,7 +1029,7 @@ const AdminPanel = () => {
                   <div className="p-4 bg-amber-50 rounded-lg border border-amber-200">
                     <h3 className="font-semibold text-amber-800 mb-2">⚠️ Nota Importante</h3>
                     <p className="text-sm text-amber-700">
-                      La base de datos MongoDB está alojada en el servidor de Emergent. 
+                      La base de datos MongoDB está alojada en servidores seguros. 
                       Para acceso directo a la base de datos (consultas avanzadas, exports, etc.), 
                       puedes usar herramientas como MongoDB Compass conectando a la URL indicada arriba 
                       cuando la aplicación esté desplegada.

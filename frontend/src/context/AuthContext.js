@@ -156,7 +156,7 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // Login with Google (redirect to Emergent Auth)
+  // Login with Google
   const loginWithGoogle = () => {
     // REMINDER: DO NOT HARDCODE THE URL, OR ADD ANY FALLBACKS OR REDIRECT URLS, THIS BREAKS THE AUTH
     const redirectUrl = window.location.origin + '/auth/callback';
