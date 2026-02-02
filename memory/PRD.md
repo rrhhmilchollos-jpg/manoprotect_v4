@@ -1,202 +1,182 @@
-# ManoProtect - Product Requirements Document
+# ManoProtect - PRD (Product Requirements Document)
 
-## Original Problem Statement
-ManoProtect is a comprehensive family protection and financial security application. The platform provides:
-- Family member tracking and emergency SOS features
-- AI-powered threat analysis
-- Scam/fraud detection and reporting
-- Subscription management with Stripe (including 7-day trial)
-- Multi-language support (9 languages)
-- Superadmin management system
+## Descripción General
+ManoProtect es una aplicación de seguridad familiar con funciones de SOS de emergencia, seguimiento en tiempo real, y perfil de salud para emergencias.
 
-## User Personas
-1. **Family Administrators**: Parents/guardians who manage family plans and monitor family members
-2. **Family Members**: Users linked to a family plan with access to protection features
-3. **Premium Users**: Individual or family plan subscribers with full feature access
-4. **Superadmins**: Platform administrators (`info@manoprotect.com`, `rrhh.milchollos@gmail.com`)
-
-## Core Requirements
-
-### Authentication & Authorization
-- JWT-based authentication
-- Role-based access control (user, family_admin, superadmin)
-- Automatic superadmin initialization on server startup
-- Account locking after failed attempts with auto-unlock for superadmins
-
-### Subscription System
-- Free tier with basic features
-- Premium plans (individual, family, enterprise)
-- 7-day free trial with card verification (0€ charge)
-- Stripe webhooks for subscription lifecycle management
-- Automated email notifications for trial events
-
-### Family Features
-- Family member invitation system with unique links
-- Device linking for family members
-- Family-wide SOS emergency alerts
-- Location tracking for family members
-
-### Multi-Language Support (i18n)
-- 9 languages: Spanish, English, French, German, Italian, Portuguese, Chinese, Russian, Arabic
-- Language detection based on user location (ip-api.com)
-- Language switcher in header
-- Landing page fully internationalized
+**URL de Producción:** https://manoprotect.com
+**URL de Preview:** https://safety-toolkit-1.preview.emergentagent.com
 
 ---
 
-## Completed Work
+## Funcionalidades Implementadas
 
-### December 2025 - Session 1
-- ✅ Fixed family invitation flow (end-to-end)
-- ✅ Implemented multi-language support (i18n) with 9 languages
-- ✅ Implemented Stripe 7-day trial with webhooks
-- ✅ Fixed SOS premium plan access for all user types
-- ✅ Implemented automatic superadmin initialization
-- ✅ Generated Google Ads images
+### 🆘 Sistema SOS de Emergencia
+- Botón SOS de emergencia con ubicación en tiempo real
+- Sirena de alerta integrada
+- Grabación de audio durante emergencias
+- Notificaciones automáticas a contactos de emergencia
+- Envío de SMS y email al activar SOS
 
-### December 2025 - Session 2
-- ✅ **Fixed deployment blocker**: Removed hardcoded Firebase credentials path from `firebase_fraud_service.py`
-- ✅ **Fixed deployment blocker**: Removed `*.env` entries from `.gitignore`
-- ✅ **Deployment verified**: Application ready for production (deployment_agent passed)
+### 📍 Seguimiento Familiar
+- Ubicación en tiempo real de familiares
+- Historial de ubicaciones
+- Zonas seguras personalizables
+- Alertas al entrar/salir de zonas
 
-### February 2026 - Session 3
-- ✅ **Complete i18n translation**: Created comprehensive translation files for all 9 languages (ES, EN, FR, DE, IT, PT, ZH, RU, AR) with 300+ translation keys covering:
-  - Common UI elements
-  - Navigation
-  - Landing page
-  - Authentication (Login/Register)
-  - Pricing page with trial system
-  - Dashboard
-  - Profile & settings
-  - SOS emergency feature
-  - Child tracking
-  - Scam verifier
-  - FAQ
-  - Footer
-  - Error messages
-  - Notifications
-- ✅ **Updated Login.js**: Fully internationalized with t() function
-- ✅ **Updated Register.js**: Fully internationalized with t() function
-- ✅ **Updated Dashboard.js**: Added i18n support
-- ✅ **Updated Profile.js**: Added i18n support
-- ✅ **Updated Pricing.js**: Added i18n support
-- ✅ **Deployment Verified**: All blockers fixed, app ready for production
-- ✅ **Backend API**: Working correctly
-- ✅ **Superadmin Login**: Verified working (info@manoprotect.com)
-- ✅ **No hardcoded credentials**: Firebase service uses env vars only
-- ✅ **Correct .gitignore**: No blocking of .env files
-- ✅ **Removed duplicate SOS button**: Eliminated first SOS button from ChildTracking.js, kept only the redirect button to /sos-emergency
-- ✅ **Database queries optimized**: All queries now use MongoDB aggregation pipelines
-- ✅ **Mobile app configured**: Capacitor project created for Android/iOS at `/app/mobile/manoprotect/`
-- ✅ **Desktop app configured**: Electron project created for Windows/Mac/Linux at `/app/mobile/manoprotect-desktop/`
+### 🏥 Perfil de Salud (NUEVO - 02/02/2026)
+- Grupo sanguíneo
+- Alergias
+- Condiciones crónicas
+- Medicamentos actuales
+- Información del médico
+- Hospital preferido
+- Notas de emergencia
+- Donante de órganos
+- **Endpoints:** `/api/health/profile`, `/api/health/emergency-card/{user_id}`
+- **Frontend:** `/health-profile`
+
+### 🎙️ Sistema de Audios (NUEVO - 02/02/2026)
+- Carpetas individuales por usuario/familia
+- Almacenamiento organizado en `/app/backend/uploads/audio/`
+- Panel de administración para supervisión
+- **Endpoints:** `/api/audio/upload`, `/api/audio/list`, `/api/admin/audio/*`
+- **Frontend:** `/admin/audios`
+
+### 📱 Gestión de Dispositivos e IPs (NUEVO - 02/02/2026)
+- Registro de dispositivos por usuario
+- Bloqueo de IPs sospechosas
+- Bloqueo de dispositivos
+- Historial de actividad por IP
+- **Endpoints:** `/api/device/*`, `/api/admin/device/*`
+- **Frontend:** `/admin/devices`
+
+### 👥 Panel de Administración de Usuarios (NUEVO - 02/02/2026)
+- Lista completa de usuarios
+- Cambio de planes (Free/Premium/Enterprise)
+- Cambio de roles (User/Admin/Superadmin)
+- Activar/Desactivar cuentas
+- Eliminación de usuarios
+- **Endpoints:** `/api/admin/users`, `/api/admin/users/{user_id}`
+- **Frontend:** `/admin/users`
+
+### 🗑️ Eliminación de Cuenta (NUEVO - 02/02/2026)
+- Página informativa de eliminación
+- Proceso manual (contactar soporte)
+- Botón deshabilitado por seguridad
+- **Frontend:** `/delete-account`
+- **Endpoint:** `/api/auth/delete-account-request`
+
+### 💳 Pagos
+- Integración con Stripe
+- Planes: Free, Basic, Premium, Enterprise
+
+### 🔐 Autenticación
+- Login con email/contraseña
+- Cuenta de prueba para Google: `reviewer@manoprotect.com` / `ReviewMano2025!`
 
 ---
 
-## Architecture
+## Arquitectura Técnica
 
 ### Backend (FastAPI)
 ```
 /app/backend/
-├── server.py                    # Main server with startup events (superadmin init)
+├── server.py                    # Servidor principal
 ├── routes/
-│   ├── family_sos_routes.py     # Family and SOS features
-│   ├── payments_routes.py       # Stripe subscriptions and webhooks
-│   └── ...
-├── services/
-│   ├── firebase_fraud_service.py # Fraud detection (env vars only)
-│   ├── email_service.py         # SendGrid notifications
-│   └── security_service.py      # Password hashing (bcrypt)
-└── tests/
-    └── test_trial_subscription.py
+│   ├── auth_routes.py           # Autenticación
+│   ├── admin_routes.py          # Gestión de usuarios (NUEVO)
+│   ├── health_routes.py         # Perfil de salud (NUEVO)
+│   ├── audio_routes.py          # Almacenamiento de audios (NUEVO)
+│   ├── device_routes.py         # Gestión de dispositivos (NUEVO)
+│   ├── family_sos_routes.py     # SOS y familia
+│   └── payments_routes.py       # Pagos Stripe
+├── uploads/
+│   └── audio/                   # Carpetas de audio por usuario (NUEVO)
+└── .env                         # Variables de entorno
 ```
 
 ### Frontend (React)
 ```
 /app/frontend/src/
-├── components/
-│   ├── LanguageSelector.js      # 9-language switcher
-│   └── ui/                      # Shadcn components
-├── i18n/
-│   ├── I18nContext.js           # i18n provider
-│   └── locales/                 # Translation files (9 languages)
-└── pages/
-    ├── LandingPage.js           # Internationalized
-    ├── Pricing.js               # Trial UI
-    └── VincularDispositivo.js   # Device linking
+├── pages/
+│   ├── DeleteAccount.js         # Eliminación de cuenta (NUEVO)
+│   ├── AdminUsers.js            # Panel admin usuarios (NUEVO)
+│   ├── AdminAudios.js           # Panel admin audios (NUEVO)
+│   ├── AdminDevices.js          # Panel admin dispositivos (NUEVO)
+│   ├── HealthProfile.js         # Perfil de salud (NUEVO)
+│   ├── SOSEmergency.js          # Pantalla SOS
+│   └── LandingPage.js           # Página principal
+└── App.js                       # Rutas
 ```
 
 ---
 
-## Key API Endpoints
+## Rutas de Admin (Solo para superadmin/admin)
 
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/api/create-trial-subscription` | POST | Create Stripe trial session |
-| `/api/webhook/stripe` | POST | Handle Stripe webhooks |
-| `/api/sos/premium/trigger` | POST | Trigger emergency SOS |
-| `/api/family/invite/{memberId}` | GET | Get family invitation info |
-| `/api/family/link-device/{memberId}` | POST | Link device to family member |
+| Ruta | Descripción |
+|------|-------------|
+| `/admin/users` | Gestión de usuarios |
+| `/admin/audios` | Supervisión de audios SOS |
+| `/admin/devices` | Control de IPs y dispositivos |
 
 ---
 
-## Third-Party Integrations
+## Google Play Store - Estado
 
-| Service | Purpose | Status |
-|---------|---------|--------|
-| Stripe | Payments & subscriptions | ✅ Active |
-| SendGrid | Transactional emails | ✅ Active |
-| OpenAI GPT-4o | AI threat analysis | ✅ Active |
-| Firebase | Fraud detection database | ✅ Env vars configured |
-| ip-api.com | Geolocation for i18n | ✅ Active |
-| Twilio | SMS verification | ✅ Configured |
+### ✅ Completado
+- [x] Ficha de Play Store configurada
+- [x] Icono 512x512
+- [x] Screenshots (teléfono, tablet, Chromebook, XR)
+- [x] Descripción corta y larga
+- [x] Clasificación de contenido (PEGI 3)
+- [x] Política de privacidad
+- [x] Seguridad de datos
+- [x] Audiencia objetivo (16+)
+- [x] Categoría: Herramientas
+- [x] Países: 177 seleccionados
+- [x] App Bundle subido (1.0.0.0)
+- [x] Credenciales de prueba para revisores
 
----
-
-## Credentials
-
-### Superadmin Accounts
-- `info@manoprotect.com` / `19862210Des`
-- `rrhh.milchollos@gmail.com` / `19862210Des`
-
-### Stripe Webhook Secret
-- `whsec_yRRSDLvaShBkM8SPwpZA8hQN2jNDBCyW`
-
----
-
-## Prioritized Backlog
-
-### P0 - Critical (Done)
-- ✅ Fix deployment blockers (Firebase credentials, .gitignore)
-
-### P1 - High Priority
-- [ ] Translate entire application (Dashboard.js, Pricing.js, Profile.js, etc.)
-- [ ] Full audit of MongoDB `_id` serialization
-
-### P2 - Medium Priority
-- [ ] Publish mobile app to Google Play and App Store
-- [ ] Complete ManoBank integration
-- [ ] Refactor large files (family_sos_routes.py, ChildTracking.js)
-
-### P3 - Low Priority
-- [ ] Database query optimization
-- [ ] Performance audit
+### ⏳ Pendiente
+- [ ] Verificación de cuenta de desarrollador (Google está verificando)
+- [ ] Aprobación final de Google
+- [ ] Publicación en producción
 
 ---
 
-## Known Issues
+## Credenciales
 
-| Issue | Severity | Status |
-|-------|----------|--------|
-| PostHog `DataCloneError` | Low | Platform issue (not app bug) |
-| Large file sizes | Low | Refactoring needed |
+### Cuenta de prueba para Google Play Review
+- **Email:** reviewer@manoprotect.com
+- **Password:** ReviewMano2025!
+- **Plan:** Premium
+
+### Superadmin
+- **Email:** info@manoprotect.com
+- **Password:** 19862210Des
 
 ---
 
-## Testing
+## Assets de Google Play Store
 
-### Test Files
-- `/app/backend/tests/test_trial_subscription.py`
-- `/app/test_reports/iteration_25.json`
+Todos disponibles en:
+- Icono: `/app/frontend/public/manoprotect_icon_512x512.png`
+- Feature: `/app/frontend/public/manoprotect_feature_1024x500.png`
+- Screenshots teléfono: `/app/frontend/public/screenshot_phone_*.png`
+- Screenshots tablet 7": `/app/frontend/public/tablet7_*.png`
+- Screenshots tablet 10": `/app/frontend/public/tablet10_*.png`
+- Screenshots Chromebook: `/app/frontend/public/chromebook_*.png`
+- Screenshots Android XR: `/app/frontend/public/androidxr_*.png`
 
-### Test Credentials
-- Superadmin: `info@manoprotect.com` / `19862210Des`
+---
+
+## Próximos Pasos
+
+1. **Esperar verificación de Google** (1-7 días)
+2. **Publicar en Google Play** cuando aprueben la cuenta
+3. **Generar .aab para iOS** con PWABuilder para App Store
+4. **Completar sistema ManoBank** (rutas desconectadas)
+
+---
+
+## Última actualización: 02/02/2026
