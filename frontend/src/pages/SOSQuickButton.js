@@ -4,6 +4,7 @@ import { useAuth } from '@/context/AuthContext';
 import { Phone, MapPin, Share2, Download, AlertTriangle, Shield, Volume2, VolumeX } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
+import sosWebSocket from '@/services/sosWebSocket';
 
 const API = process.env.REACT_APP_BACKEND_URL + '/api';
 
@@ -15,26 +16,66 @@ const SOSQuickButton = () => {
   const [location, setLocation] = useState(null);
   const [sosActive, setSosActive] = useState(false);
   const [sirenPlaying, setSirenPlaying] = useState(false);
+  const [helpOnWay, setHelpOnWay] = useState(null);
+  const [wsConnected, setWsConnected] = useState(false);
   const audioContextRef = useRef(null);
   const sirenIntervalRef = useRef(null);
   const countdownRef = useRef(null);
+  const alertIdRef = useRef(null);
 
-  // Get current location
+  // Connect WebSocket when user is authenticated
+  useEffect(() => {
+    if (user?.user_id) {
+      sosWebSocket.connect(user.user_id, user.name || user.email);
+      
+      // Set callback for acknowledgments
+      sosWebSocket.setOnSOSAcknowledged((data) => {
+        setHelpOnWay(data.acknowledged_by);
+        toast.success(`${data.acknowledged_by} ha recibido tu alerta`);
+      });
+
+      // Check connection status
+      const checkConnection = setInterval(() => {
+        setWsConnected(sosWebSocket.isSocketConnected());
+      }, 2000);
+
+      return () => {
+        clearInterval(checkConnection);
+        sosWebSocket.disconnect();
+      };
+    }
+  }, [user]);
+
+  // Get current location with high accuracy
   useEffect(() => {
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
+      // Watch position for continuous updates
+      const watchId = navigator.geolocation.watchPosition(
         (pos) => {
-          setLocation({
+          const newLocation = {
             latitude: pos.coords.latitude,
             longitude: pos.coords.longitude,
-            accuracy: pos.coords.accuracy
-          });
+            accuracy: pos.coords.accuracy,
+            timestamp: new Date().toISOString()
+          };
+          setLocation(newLocation);
+          
+          // Send location update if SOS is active
+          if (sosActive && alertIdRef.current) {
+            sosWebSocket.updateLocation(alertIdRef.current, newLocation);
+          }
         },
         (err) => console.error('Location error:', err),
-        { enableHighAccuracy: true }
+        { 
+          enableHighAccuracy: true,
+          timeout: 10000,
+          maximumAge: 0
+        }
       );
+
+      return () => navigator.geolocation.clearWatch(watchId);
     }
-  }, []);
+  }, [sosActive]);
 
   // Cleanup on unmount
   useEffect(() => {
