@@ -182,7 +182,10 @@ const SOSAlertReceived = () => {
     stopSiren();
     setAcknowledged(true);
     
-    // Mark alert as acknowledged in backend
+    // Notify via WebSocket (instant notification to sender)
+    sosWebSocket.acknowledgeSOS(alertId);
+    
+    // Also mark alert as acknowledged in backend
     try {
       await fetch(`${API}/sos/alert/${alertId}/acknowledge`, {
         method: 'POST',
