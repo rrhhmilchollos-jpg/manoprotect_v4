@@ -114,7 +114,7 @@ const FAQ = () => {
         <div className="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3 cursor-pointer" onClick={() => navigate('/')}>
             <img 
-              src="https://customer-assets.emergentagent.com/job_5c97b24f-9a55-4567-9954-bd76179fb951/artifacts/8y6ab2pd_logo%20App%20Mano.png" 
+              src="/manoprotect_logo.png" 
               alt="ManoProtect Logo" 
               className="h-8 w-auto" 
             />
