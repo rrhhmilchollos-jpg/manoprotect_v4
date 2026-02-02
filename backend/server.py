@@ -169,6 +169,28 @@ from routes.push_routes import router as push_router, init_db as init_push_route
 # init_banking_core_routes(db, require_admin)
 
 # ============================================
+# HEALTH CHECK ENDPOINT (for production monitoring)
+# ============================================
+
+@api_router.get("/health")
+async def health_check():
+    """Health check endpoint for production monitoring"""
+    try:
+        # Test database connection
+        await db.command("ping")
+        db_status = "healthy"
+    except Exception as e:
+        db_status = f"unhealthy: {str(e)}"
+    
+    return {
+        "status": "healthy" if db_status == "healthy" else "degraded",
+        "service": "manoprotect-api",
+        "version": "1.0.0",
+        "database": db_status,
+        "timestamp": datetime.now(timezone.utc).isoformat()
+    }
+
+# ============================================
 # COMMUNITY ROUTES
 # ============================================
 
