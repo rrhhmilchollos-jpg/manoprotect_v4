@@ -36,6 +36,34 @@
       "purpose": "maskable"
     }
   ],
+  "shortcuts": [
+    {
+      "name": "🆘 Botón SOS",
+      "short_name": "SOS",
+      "description": "Activa alerta de emergencia con un toque",
+      "url": "/sos-quick",
+      "icons": [
+        {
+          "src": "/icons/sos-icon-192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Panel Familiar",
+      "short_name": "Familia",
+      "description": "Gestiona la protección de tu familia",
+      "url": "/family-admin",
+      "icons": [
+        {
+          "src": "/icons/icon-192x192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    }
+  ],
   "screenshots": [
     {
       "src": "/screenshots/dashboard.png",
