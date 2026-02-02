@@ -259,6 +259,10 @@ function AppRouter() {
           } 
         />
         <Route 
+          path="/sos-quick" 
+          element={<SOSQuickButton />} 
+        />
+        <Route 
           path="/vincular/:memberId" 
           element={<VincularDispositivo />} 
         />
