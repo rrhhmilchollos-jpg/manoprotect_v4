@@ -3142,6 +3142,11 @@ init_device_routes(db)
 api_router.include_router(device_router)
 print("✅ Device management routes loaded")
 
+# Push notification routes
+init_push_routes(db)
+api_router.include_router(push_router)
+print("✅ Push notification routes loaded")
+
 try:
     from routes.banking_routes import router as banking_router
     api_router.include_router(banking_router)
