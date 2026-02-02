@@ -114,6 +114,33 @@ const ProtectedRoute = ({ children, requireInvestor = false, requireAdmin = fals
   return children;
 };
 
+// SOS Alert Listener - Listens for Service Worker messages
+const SOSAlertListener = () => {
+  const navigate = useNavigate();
+  
+  useEffect(() => {
+    if ('serviceWorker' in navigator) {
+      const handleMessage = (event) => {
+        if (event.data?.type === 'SOS_ALERT' || event.data?.type === 'NAVIGATE') {
+          const url = event.data.url;
+          if (url && event.data.isSOSAlert !== false) {
+            // Navigate to the SOS alert page
+            navigate(url);
+          }
+        }
+      };
+      
+      navigator.serviceWorker.addEventListener('message', handleMessage);
+      
+      return () => {
+        navigator.serviceWorker.removeEventListener('message', handleMessage);
+      };
+    }
+  }, [navigate]);
+  
+  return null;
+};
+
 // App Router - ManoProtect.com Only
 function AppRouter() {
   const location = useLocation();
@@ -130,6 +157,7 @@ function AppRouter() {
   return (
     <>
       <AnalyticsTracker />
+      <SOSAlertListener />
       <Suspense fallback={<PageLoader />}>
         <Routes>
           {/* Public Routes */}
