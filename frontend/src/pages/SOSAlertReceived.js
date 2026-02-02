@@ -7,6 +7,7 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import sosWebSocket from '@/services/sosWebSocket';
 
 const API = process.env.REACT_APP_BACKEND_URL + '/api';
 
@@ -19,8 +20,40 @@ const SOSAlertReceived = () => {
   const [loading, setLoading] = useState(true);
   const [sirenPlaying, setSirenPlaying] = useState(true);
   const [acknowledged, setAcknowledged] = useState(false);
+  const [liveLocation, setLiveLocation] = useState(null);
   const audioContextRef = useRef(null);
   const sirenIntervalRef = useRef(null);
+
+  // Connect WebSocket for real-time location updates
+  useEffect(() => {
+    if (user?.user_id) {
+      sosWebSocket.connect(user.user_id, user.name || user.email);
+      
+      // Listen for location updates
+      sosWebSocket.setOnLocationUpdate((data) => {
+        if (data.alert_id === alertId) {
+          setLiveLocation(data.location);
+          // Update alertData with new location
+          setAlertData(prev => prev ? {
+            ...prev,
+            location: data.location
+          } : prev);
+        }
+      });
+
+      // Listen for SOS resolved
+      sosWebSocket.setOnSOSResolved((data) => {
+        if (data.alert_id === alertId) {
+          stopSiren();
+          setAcknowledged(true);
+        }
+      });
+
+      return () => {
+        sosWebSocket.disconnect();
+      };
+    }
+  }, [user, alertId]);
 
   // Play emergency siren sound for family members
   const playSiren = () => {
