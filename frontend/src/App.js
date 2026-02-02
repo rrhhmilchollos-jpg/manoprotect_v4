@@ -49,6 +49,7 @@ const AdminUsers = lazy(() => import('@/pages/AdminUsers'));
 const HealthProfile = lazy(() => import('@/pages/HealthProfile'));
 const AdminAudios = lazy(() => import('@/pages/AdminAudios'));
 const AdminDevices = lazy(() => import('@/pages/AdminDevices'));
+const SOSAlertReceived = lazy(() => import('@/pages/SOSAlertReceived'));
 
 // Lazy load non-critical UI components to reduce main thread blocking
 const CookieConsent = lazy(() => import('@/components/CookieConsent'));
