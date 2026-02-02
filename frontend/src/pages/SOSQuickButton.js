@@ -181,7 +181,11 @@ const SOSQuickButton = () => {
   const activateSOS = async () => {
     setIsActivating(false);
     setSosActive(true);
-    playSiren();
+    setHelpOnWay(null);
+    
+    // Generate alert ID
+    const alertId = `sos_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    alertIdRef.current = alertId;
 
     // Vibrate continuously
     if ('vibrate' in navigator) {
@@ -189,6 +193,7 @@ const SOSQuickButton = () => {
     }
 
     try {
+      // Send via API (for push notifications and database)
       const response = await fetch(`${API}/sos/alert`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -203,19 +208,37 @@ const SOSQuickButton = () => {
 
       if (response.ok) {
         const data = await response.json();
+        alertIdRef.current = data.alert_id || alertId;
+        
+        // Also send via WebSocket for real-time delivery
+        sosWebSocket.activateSOS(alertIdRef.current, location, '¡EMERGENCIA! Necesito ayuda urgente.');
+        
         toast.success(`SOS enviado a ${data.contacts_notified} contactos`);
+        
+        if (data.push_notifications_sent > 0) {
+          toast.info(`${data.push_notifications_sent} notificaciones push enviadas`);
+        }
       } else {
         toast.error('Error al enviar SOS. Llama al 112.');
       }
     } catch (error) {
       console.error('SOS Error:', error);
-      toast.error('Error de conexión. Llama al 112.');
+      // Still try WebSocket even if API fails
+      sosWebSocket.activateSOS(alertId, location, '¡EMERGENCIA! Necesito ayuda urgente.');
+      toast.error('Error de conexión. SOS enviado por WebSocket. Llama al 112.');
     }
   };
 
   const deactivateSOS = () => {
     setSosActive(false);
+    setHelpOnWay(null);
     stopSiren();
+    
+    // Notify via WebSocket
+    if (alertIdRef.current) {
+      sosWebSocket.deactivateSOS(alertIdRef.current);
+    }
+    
     if ('vibrate' in navigator) navigator.vibrate(0);
   };
 
