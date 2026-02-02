@@ -164,6 +164,7 @@ function AppRouter() {
           <Route path="/delete-account" element={<DeleteAccount />} />
           <Route path="/admin/users" element={<AdminUsers />} />
           <Route path="/health-profile" element={<HealthProfile />} />
+          <Route path="/admin/audios" element={<AdminAudios />} />
           
           {/* Investor Routes */}
           <Route path="/investor/register" element={<InvestorRegister />} />
