@@ -4,6 +4,7 @@
  */
 import { initializeApp, getApps } from 'firebase/app';
 import { getMessaging, getToken, onMessage } from 'firebase/messaging';
+import { getAnalytics, logEvent } from 'firebase/analytics';
 
 // Firebase configuration from environment
 const firebaseConfig = {
@@ -16,9 +17,22 @@ const firebaseConfig = {
   measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID
 };
 
+// Analytics event names
+export const AnalyticsEvents = {
+  PAGE_VIEW: 'page_view',
+  LOGIN: 'login',
+  SIGNUP: 'sign_up',
+  SOS_ACTIVATED: 'sos_activated',
+  SOS_DEACTIVATED: 'sos_deactivated',
+  PLAN_SELECTED: 'plan_selected',
+  CHECKOUT_STARTED: 'checkout_started',
+  CHECKOUT_COMPLETED: 'checkout_completed'
+};
+
 // Initialize Firebase (singleton pattern)
 let app = null;
 let messaging = null;
+let analytics = null;
 
 export function getFirebaseApp() {
   if (!app && getApps().length === 0) {
@@ -27,6 +41,31 @@ export function getFirebaseApp() {
     app = getApps()[0];
   }
   return app;
+}
+
+// Initialize analytics
+export function getFirebaseAnalytics() {
+  if (!analytics && typeof window !== 'undefined') {
+    try {
+      const firebaseApp = getFirebaseApp();
+      analytics = getAnalytics(firebaseApp);
+    } catch (error) {
+      console.error('Error initializing Analytics:', error);
+    }
+  }
+  return analytics;
+}
+
+// Log analytics event
+export function logAnalyticsEvent(eventName, params = {}) {
+  try {
+    const analyticsInstance = getFirebaseAnalytics();
+    if (analyticsInstance) {
+      logEvent(analyticsInstance, eventName, params);
+    }
+  } catch (error) {
+    console.error('Error logging analytics event:', error);
+  }
 }
 
 export function getFirebaseMessaging() {
