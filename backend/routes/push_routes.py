@@ -103,6 +103,31 @@ async def get_push_status(user: User = Depends(get_current_user)):
         "subscription_count": len(subscriptions)
     }
 
+
+class FCMTokenRequest(BaseModel):
+    fcm_token: str
+    platform: str = "web"
+
+
+@router.post("/push/register-fcm")
+async def register_fcm_token(data: FCMTokenRequest, user: User = Depends(get_current_user)):
+    """Register FCM token for Firebase Cloud Messaging"""
+    if not user:
+        raise HTTPException(status_code=401, detail="No autenticado")
+    
+    try:
+        from services.emergency_notifications import register_fcm_token as save_fcm_token
+        success = await save_fcm_token(_db, user.user_id, data.fcm_token, data.platform)
+        
+        if success:
+            return {"message": "Token FCM registrado correctamente", "success": True}
+        else:
+            return {"message": "Error al registrar token FCM", "success": False}
+    except Exception as e:
+        print(f"Error registering FCM token: {e}")
+        return {"message": str(e), "success": False}
+
+
 async def send_push_notification(user_id: str, notification: dict):
     """
     Send push notification to a user
