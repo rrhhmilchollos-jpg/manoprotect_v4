@@ -199,6 +199,7 @@ class SOSRequest(BaseModel):
 class SOSAlertRequest(BaseModel):
     latitude: float
     longitude: float
+    accuracy: Optional[float] = 0
     message: Optional[str] = None
     silent: bool = False
 
@@ -206,6 +207,7 @@ class SOSAlertRequest(BaseModel):
 class LocationUpdate(BaseModel):
     latitude: float
     longitude: float
+    accuracy: Optional[float] = 0
 
 
 # ============================================
