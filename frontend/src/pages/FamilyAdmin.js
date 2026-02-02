@@ -304,6 +304,11 @@ const FamilyAdmin = () => {
           </CardContent>
         </Card>
 
+        {/* Push Notification Settings */}
+        <div className="mb-8">
+          <PushNotificationSettings />
+        </div>
+
         <div className="grid lg:grid-cols-3 gap-6">
           {/* Members List */}
           <div className="lg:col-span-2">
