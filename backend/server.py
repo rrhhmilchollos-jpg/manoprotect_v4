@@ -44,6 +44,13 @@ db = client[os.environ['DB_NAME']]
 app = FastAPI()
 api_router = APIRouter(prefix="/api")
 
+# Initialize WebSocket manager
+from services.websocket_manager import sio, init_websocket, get_socketio_app
+init_websocket(db)
+
+# Mount Socket.IO at /ws
+socket_app = get_socketio_app()
+
 EMERGENT_LLM_KEY = os.environ.get('EMERGENT_LLM_KEY')
 STRIPE_API_KEY = os.environ.get('STRIPE_API_KEY')
 JWT_SECRET = os.environ.get('JWT_SECRET', 'mano-secure-jwt-secret-2025')
