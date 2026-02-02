@@ -156,6 +156,7 @@ init_family_routes(db, PLAN_FEATURES)
 from routes.payments_routes import router as payments_router
 from routes.admin_routes import router as admin_router, init_db as init_admin_routes
 from routes.health_routes import router as health_router, init_db as init_health_routes
+from routes.audio_routes import router as audio_router, init_db as init_audio_routes
 
 # Banking and Compliance services - RESERVED for ManoBank.es
 # from services.compliance_service import init_compliance_service
