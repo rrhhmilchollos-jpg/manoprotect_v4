@@ -3130,6 +3130,11 @@ init_health_routes(db)
 api_router.include_router(health_router)
 print("✅ Health profile routes loaded")
 
+# Audio storage routes
+init_audio_routes(db)
+api_router.include_router(audio_router)
+print("✅ Audio storage routes loaded")
+
 try:
     from routes.banking_routes import router as banking_router
     api_router.include_router(banking_router)
