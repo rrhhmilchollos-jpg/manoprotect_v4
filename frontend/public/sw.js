@@ -270,23 +270,61 @@ self.addEventListener('push', (event) => {
     console.error('[SW] Error parsing push data:', e);
   }
   
+  // Check if this is an SOS alert - needs urgent handling
+  const isSOSAlert = data.data?.type === 'sos_alert' || data.tag?.startsWith('sos-');
+  
   const options = {
     body: data.body,
     icon: data.icon || '/icons/icon-192x192.png',
     badge: data.badge || '/icons/badge-72x72.png',
     tag: data.tag || 'mano-notification',
     data: data.data || {},
-    vibrate: [200, 100, 200],
-    requireInteraction: data.requireInteraction || false,
+    vibrate: isSOSAlert ? [500, 200, 500, 200, 500, 200, 500, 200, 500] : [200, 100, 200],
+    requireInteraction: isSOSAlert ? true : (data.requireInteraction || false),
     actions: data.actions || [
       { action: 'view', title: 'Ver detalles' },
       { action: 'dismiss', title: 'Descartar' }
-    ]
+    ],
+    // Make SOS alerts more urgent
+    urgent: isSOSAlert,
+    renotify: isSOSAlert,
+    silent: false
   };
   
-  event.waitUntil(
-    self.registration.showNotification(data.title, options)
-  );
+  // For SOS alerts, try to open the alert page immediately
+  if (isSOSAlert) {
+    const alertUrl = data.data?.url || `/sos-alert?alert=${data.data?.alert_id || ''}`;
+    
+    event.waitUntil(
+      Promise.all([
+        // Show the notification
+        self.registration.showNotification(data.title, options),
+        // Try to open or focus a window with the alert
+        clients.matchAll({ type: 'window', includeUncontrolled: true })
+          .then((windowClients) => {
+            // If there's already an open window, navigate it to the alert
+            for (const client of windowClients) {
+              if (client.url.includes(self.location.origin) && 'focus' in client) {
+                client.postMessage({
+                  type: 'SOS_ALERT',
+                  data: data.data,
+                  url: alertUrl
+                });
+                return client.focus();
+              }
+            }
+            // Otherwise, open a new window
+            if (clients.openWindow) {
+              return clients.openWindow(alertUrl);
+            }
+          })
+      ])
+    );
+  } else {
+    event.waitUntil(
+      self.registration.showNotification(data.title, options)
+    );
+  }
 });
 
 // Notification click event
