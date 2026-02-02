@@ -94,7 +94,7 @@ keytool -genkey -v -keystore manoprotect.keystore -alias manoprotect -keyalg RSA
 
 La app se conecta a:
 ```
-https://safety-toolkit-1.preview.emergentagent.com
+https://manoprotect-app.preview.emergentagent.com
 ```
 
 Cuando despliegues a producción, actualizar en `capacitor.config.json`:

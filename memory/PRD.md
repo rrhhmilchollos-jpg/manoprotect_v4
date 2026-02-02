@@ -4,7 +4,7 @@
 ManoProtect es una aplicación de seguridad familiar con funciones de SOS de emergencia, seguimiento en tiempo real, y perfil de salud para emergencias.
 
 **URL de Producción:** https://manoprotect.com
-**URL de Preview:** https://safety-toolkit-1.preview.emergentagent.com
+**URL de Preview:** https://manoprotect-app.preview.emergentagent.com
 
 ---
 
