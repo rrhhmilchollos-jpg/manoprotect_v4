@@ -414,9 +414,17 @@ const SOSQuickButton = () => {
         {/* Status Info */}
         <div className="text-center text-white mb-6">
           {sosActive ? (
-            <div className="bg-green-600/30 rounded-xl px-6 py-4">
-              <p className="text-xl font-bold text-green-400">✓ ALERTA ENVIADA</p>
-              <p className="text-green-200 text-sm">Tus contactos han sido notificados</p>
+            <div className="space-y-3">
+              <div className="bg-green-600/30 rounded-xl px-6 py-4">
+                <p className="text-xl font-bold text-green-400">✓ ALERTA ENVIADA</p>
+                <p className="text-green-200 text-sm">Tus contactos han sido notificados</p>
+              </div>
+              {helpOnWay && (
+                <div className="bg-blue-600/30 rounded-xl px-6 py-4 animate-pulse">
+                  <p className="text-xl font-bold text-blue-400">🚨 AYUDA EN CAMINO</p>
+                  <p className="text-blue-200 text-sm">{helpOnWay} ha recibido tu alerta</p>
+                </div>
+              )}
             </div>
           ) : isActivating ? (
             <div className="bg-orange-600/30 rounded-xl px-6 py-4">
@@ -431,13 +439,19 @@ const SOSQuickButton = () => {
           )}
         </div>
 
-        {/* Location Status */}
-        {location && (
-          <div className="flex items-center gap-2 text-zinc-400 text-sm mb-6">
-            <MapPin className="w-4 h-4 text-green-500" />
-            <span>GPS activo • Precisión: {Math.round(location.accuracy)}m</span>
+        {/* Connection & Location Status */}
+        <div className="flex flex-col items-center gap-2 mb-6">
+          {location && (
+            <div className="flex items-center gap-2 text-zinc-400 text-sm">
+              <MapPin className="w-4 h-4 text-green-500" />
+              <span>GPS activo • Precisión: {Math.round(location.accuracy)}m</span>
+            </div>
+          )}
+          <div className="flex items-center gap-2 text-zinc-500 text-xs">
+            <div className={`w-2 h-2 rounded-full ${wsConnected ? 'bg-green-500' : 'bg-yellow-500'}`} />
+            <span>{wsConnected ? 'Conexión en tiempo real activa' : 'Conectando...'}</span>
           </div>
-        )}
+        </div>
 
         {/* Quick Actions */}
         <div className="w-full max-w-xs space-y-3">
