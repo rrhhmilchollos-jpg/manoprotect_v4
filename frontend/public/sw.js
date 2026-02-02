@@ -333,7 +333,24 @@ self.addEventListener('notificationclick', (event) => {
   
   event.notification.close();
   
-  const urlToOpen = event.notification.data?.url || '/dashboard';
+  // Check if this is an SOS alert
+  const isSOSAlert = event.notification.data?.type === 'sos_alert';
+  const alertId = event.notification.data?.alert_id;
+  
+  // Determine URL based on notification type and action
+  let urlToOpen;
+  if (isSOSAlert) {
+    urlToOpen = `/sos-alert?alert=${alertId || ''}`;
+  } else {
+    urlToOpen = event.notification.data?.url || '/dashboard';
+  }
+  
+  // Handle different actions
+  if (event.action === 'call' && event.notification.data?.user_phone) {
+    urlToOpen = `tel:${event.notification.data.user_phone}`;
+  } else if (event.action === 'dismiss') {
+    return; // Just close the notification
+  }
   
   event.waitUntil(
     clients.matchAll({ type: 'window', includeUncontrolled: true })
@@ -341,6 +358,12 @@ self.addEventListener('notificationclick', (event) => {
         // Focus existing window if available
         for (const client of windowClients) {
           if (client.url.includes(self.location.origin) && 'focus' in client) {
+            // Send message to client to navigate
+            client.postMessage({
+              type: 'NAVIGATE',
+              url: urlToOpen,
+              isSOSAlert: isSOSAlert
+            });
             client.navigate(urlToOpen);
             return client.focus();
           }
