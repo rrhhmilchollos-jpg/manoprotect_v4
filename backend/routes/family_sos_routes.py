@@ -435,12 +435,14 @@ async def send_sos_alert(
     ).to_list(10)
     
     notifications_sent = []
+    push_notifications_sent = 0
     all_contacts = family_members + trusted_contacts
     
     for contact in all_contacts:
+        contact_user_id = contact.get("user_id") or contact.get("contact_id")
         notification = {
             "notification_id": f"notif_{uuid.uuid4().hex[:12]}",
-            "user_id": contact.get("user_id") or contact.get("contact_id"),
+            "user_id": contact_user_id,
             "type": "sos_alert",
             "title": "🆘 ALERTA SOS",
             "message": f"{user.name} ha enviado una alerta de emergencia: {data.message}",
@@ -454,6 +456,33 @@ async def send_sos_alert(
         }
         await _db.notifications.insert_one(notification)
         notifications_sent.append(contact.get("name") or contact.get("email"))
+        
+        # Send push notification to the contact
+        try:
+            from routes.push_routes import send_push_notification
+            push_count = await send_push_notification(contact_user_id, {
+                "title": "🚨 ¡ALERTA SOS!",
+                "body": f"{user.name} ha activado una alerta de emergencia",
+                "icon": "/manoprotect_icon_512x512.png",
+                "badge": "/manoprotect_icon_512x512.png",
+                "tag": f"sos-{alert_id}",
+                "requireInteraction": True,
+                "vibrate": [200, 100, 200, 100, 200],
+                "data": {
+                    "type": "sos_alert",
+                    "alert_id": alert_id,
+                    "user_name": user.name,
+                    "location": sos_alert["location"],
+                    "url": f"/sos-emergency?alert={alert_id}"
+                },
+                "actions": [
+                    {"action": "view", "title": "Ver ubicación"},
+                    {"action": "call", "title": "Llamar"}
+                ]
+            })
+            push_notifications_sent += push_count
+        except Exception as e:
+            print(f"Error sending push notification: {e}")
     
     return {
         "success": True,
@@ -461,6 +490,7 @@ async def send_sos_alert(
         "message": "Alerta SOS enviada correctamente",
         "location": sos_alert["location"],
         "contacts_notified": len(notifications_sent),
+        "push_notifications_sent": push_notifications_sent,
         "contacts": notifications_sent
     }
 
