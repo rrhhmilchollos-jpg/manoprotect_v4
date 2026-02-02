@@ -3253,6 +3253,10 @@ except ImportError as e:
 app.include_router(api_router)
 app.include_router(public_router)
 
+# Mount Socket.IO for real-time WebSocket communication
+app.mount('/ws', socket_app)
+print("✅ WebSocket server mounted at /ws")
+
 # Configure CORS - read from environment for deployment flexibility
 cors_origins_env = os.environ.get('CORS_ORIGINS', '*')
 if cors_origins_env == '*':
