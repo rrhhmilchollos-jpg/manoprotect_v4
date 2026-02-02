@@ -189,35 +189,18 @@
             button{font-family:inherit}
         </style>
         
-        <!-- Emergent Development Tools - Only load in iframe/preview mode -->
+        <!-- Development Tools - Only load in development/preview mode -->
         <script>
             (function() {
-                // Only load Emergent scripts in development/preview environment
-                var isEmergentPreview = window.self !== window.top || 
-                    window.location.hostname.includes('preview.emergentagent.com') ||
-                    window.location.hostname === 'localhost';
+                // Only load development scripts when NOT in production
+                var isProduction = window.location.hostname === 'manoprotect.com' || 
+                    window.location.hostname === 'www.manoprotect.com';
                 
-                if (isEmergentPreview && window.location.hostname !== 'manoprotect.com' && window.location.hostname !== 'www.manoprotect.com') {
-                    // Load Emergent main script
-                    var emergentScript = document.createElement('script');
-                    emergentScript.src = 'https://assets.emergent.sh/scripts/emergent-main.js';
-                    emergentScript.onerror = function() { console.log('Emergent script not available'); };
-                    document.head.appendChild(emergentScript);
-                    
-                    // Load debug monitor in iframe
-                    if (window.self !== window.top) {
-                        var debugMonitorScript = document.createElement('script');
-                        debugMonitorScript.src = 'https://assets.emergent.sh/scripts/debug-monitor.js';
-                        debugMonitorScript.onerror = function() { console.log('Debug monitor not available'); };
-                        document.head.appendChild(debugMonitorScript);
-                        
-                        window.tailwind = window.tailwind || {};
-                        tailwind.config = { corePlugins: { preflight: false } };
-                        var tailwindScript = document.createElement('script');
-                        tailwindScript.src = 'https://cdn.tailwindcss.com';
-                        document.head.appendChild(tailwindScript);
-                    }
+                if (!isProduction && window.location.hostname === 'localhost') {
+                    // Development mode only
+                    console.log('ManoProtect - Development Mode');
                 }
+            })();
             })();
         </script>
         
