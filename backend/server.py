@@ -3136,6 +3136,11 @@ init_audio_routes(db)
 api_router.include_router(audio_router)
 print("✅ Audio storage routes loaded")
 
+# Device management routes
+init_device_routes(db)
+api_router.include_router(device_router)
+print("✅ Device management routes loaded")
+
 try:
     from routes.banking_routes import router as banking_router
     api_router.include_router(banking_router)
