@@ -23,8 +23,6 @@ const STATIC_ASSETS = [
 
 // Image domains to cache aggressively
 const IMAGE_DOMAINS = [
-  'static.prod-images.emergentagent.com',
-  'customer-assets.emergentagent.com',
   'images.unsplash.com',
   'upload.wikimedia.org'
 ];
