@@ -14,6 +14,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Switch } from '@/components/ui/switch';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
 import { toast } from 'sonner';
+import PushNotificationSettings from '@/components/PushNotificationSettings';
 
 const API = process.env.REACT_APP_BACKEND_URL + '/api';
 
