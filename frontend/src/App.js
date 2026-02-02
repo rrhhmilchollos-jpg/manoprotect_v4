@@ -222,6 +222,14 @@ function AppRouter() {
           } 
         />
         <Route 
+          path="/sos-alert" 
+          element={
+            <ProtectedRoute>
+              <SOSAlertReceived />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
           path="/vincular/:memberId" 
           element={<VincularDispositivo />} 
         />
