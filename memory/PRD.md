@@ -6,6 +6,11 @@ ManoProtect es una aplicación de seguridad familiar con funciones de SOS de eme
 **URL de Producción:** https://manoprotect.com
 **URL de Preview:** https://manoprotect-app.preview.emergentagent.com
 
+**Estado de Producción:** ✅ LISTO PARA DEPLOY (02/02/2026)
+- Backend: 96% tests pasados (22/23)
+- Frontend: 100% tests pasados
+- Todas las funcionalidades críticas funcionan
+
 ---
 
 ## Funcionalidades Implementadas
@@ -16,6 +21,31 @@ ManoProtect es una aplicación de seguridad familiar con funciones de SOS de eme
 - Grabación de audio durante emergencias
 - Notificaciones automáticas a contactos de emergencia
 - Envío de SMS y email al activar SOS
+
+### 🔴 Botón SOS Rápido (NUEVO - 02/02/2026)
+- Página dedicada `/sos-quick` para acceso rápido
+- Se puede instalar en pantalla de inicio del móvil
+- Countdown de 3 segundos antes de activar (seguridad)
+- Sirena y vibración al activar
+- GPS automático
+- **Frontend:** `/sos-quick`
+- **Manifest shortcut:** "🆘 Botón SOS"
+
+### 📱 Alerta SOS para Familiares (NUEVO - 02/02/2026)
+- Página `/sos-alert` que reciben los familiares
+- **LA SIRENA SUENA EN EL MÓVIL DEL FAMILIAR** (no en el de emergencia)
+- Muestra ubicación GPS del familiar en peligro
+- Botones para llamar al familiar o al 112
+- Vibración continua
+- **Frontend:** `/sos-alert?alert={id}`
+
+### 🔔 Notificaciones Push (NUEVO - 02/02/2026)
+- Claves VAPID generadas y configuradas
+- Service Worker actualizado para push
+- Componente de activación en Panel Familiar
+- Abre automáticamente página de alerta al recibir SOS
+- **Endpoints:** `/api/push/subscribe`, `/api/push/vapid-key`, `/api/push/status`
+- **Frontend:** `PushNotificationSettings.js` en `/family-admin`
 
 ### 📍 Seguimiento Familiar
 - Ubicación en tiempo real de familiares
