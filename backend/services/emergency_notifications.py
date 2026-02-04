@@ -267,14 +267,33 @@ async def send_sos_notifications(
     contacts_without_fcm = []
     
     for contact in contacts:
-        contact_user_id = contact.get('user_id') or contact.get('contact_id')
+        contact_user_id = contact.get('user_id') or contact.get('contact_id') or contact.get('id')
+        contact_email = contact.get('email')
         
-        # Get FCM token from database
-        if db and contact_user_id:
-            fcm_sub = await db.fcm_tokens.find_one(
-                {"user_id": contact_user_id},
-                {"_id": 0, "fcm_token": 1}
-            )
+        # Get FCM token from database - try multiple methods
+        if db:
+            fcm_sub = None
+            
+            # Try by user_id first
+            if contact_user_id:
+                fcm_sub = await db.fcm_tokens.find_one(
+                    {"user_id": contact_user_id},
+                    {"_id": 0, "fcm_token": 1}
+                )
+            
+            # Try by email if no user_id match
+            if not fcm_sub and contact_email:
+                # Find user by email first
+                user_doc = await db.users.find_one(
+                    {"email": contact_email.lower()},
+                    {"_id": 0, "user_id": 1}
+                )
+                if user_doc:
+                    fcm_sub = await db.fcm_tokens.find_one(
+                        {"user_id": user_doc["user_id"]},
+                        {"_id": 0, "fcm_token": 1}
+                    )
+            
             if fcm_sub and fcm_sub.get('fcm_token'):
                 fcm_tokens.append(fcm_sub['fcm_token'])
             else:

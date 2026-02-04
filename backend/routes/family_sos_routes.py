@@ -432,18 +432,42 @@ async def send_sos_alert(
     
     await _db.sos_alerts.insert_one(sos_alert)
     
-    # Get all emergency contacts
+    # Get all emergency contacts from multiple sources
+    # 1. Family members (check both field names for compatibility)
     family_members = await _db.family_members.find(
-        {"family_owner_id": user.user_id, "emergency_contact": True},
+        {"family_owner_id": user.user_id},
         {"_id": 0}
-    ).to_list(10)
+    ).to_list(20)
     
+    # 2. Trusted contacts
     trusted_contacts = await _db.trusted_contacts.find(
         {"user_id": user.user_id},
         {"_id": 0}
     ).to_list(10)
     
-    all_contacts = family_members + trusted_contacts
+    # 3. Regular contacts marked as emergency (check both is_emergency and emergency_contact)
+    emergency_contacts = await _db.contacts.find(
+        {
+            "user_id": user.user_id,
+            "$or": [
+                {"is_emergency": True},
+                {"emergency_contact": True},
+                {"receive_alerts": True}
+            ]
+        },
+        {"_id": 0}
+    ).to_list(20)
+    
+    # Combine all contacts, removing duplicates by phone/email
+    all_contacts = []
+    seen_identifiers = set()
+    
+    for contact in family_members + trusted_contacts + emergency_contacts:
+        # Create identifier from phone or email
+        identifier = contact.get("phone") or contact.get("email") or contact.get("id")
+        if identifier and identifier not in seen_identifiers:
+            seen_identifiers.add(identifier)
+            all_contacts.append(contact)
     notifications_sent = []
     
     # Store in-app notifications
