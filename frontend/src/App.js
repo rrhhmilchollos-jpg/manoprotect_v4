@@ -165,6 +165,7 @@ function AppRouter() {
           <Route path="/" element={<LandingPage />} />
           <Route path="/how-it-works" element={<HowItWorks />} />
           <Route path="/pricing" element={<Pricing />} />
+          <Route path="/plans" element={<Pricing />} />
           <Route path="/payment-success" element={<PaymentSuccess />} />
           <Route path="/trial-success" element={<TrialSuccess />} />
           <Route path="/knowledge" element={<Knowledge />} />
