@@ -368,6 +368,7 @@ function App() {
           />
           <Toaster position="top-center" richColors />
           <PushNotificationPrompt />
+          <InterstitialAdManager />
           <AppRouter />
           {/* Defer non-critical UI components */}
           <Suspense fallback={<EmptyFallback />}>
