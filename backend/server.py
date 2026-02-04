@@ -53,14 +53,16 @@ socket_app = get_socketio_app()
 
 EMERGENT_LLM_KEY = os.environ.get('EMERGENT_LLM_KEY')
 STRIPE_API_KEY = os.environ.get('STRIPE_API_KEY')
-JWT_SECRET = os.environ.get('JWT_SECRET', 'mano-secure-jwt-secret-2025')
+JWT_SECRET = os.environ.get('JWT_SECRET')
+if not JWT_SECRET:
+    raise ValueError("JWT_SECRET environment variable is required")
 
 # ============================================
 # SUPERADMIN CONFIGURATION (passwords from env)
 # ============================================
 SUPERADMIN_ACCOUNTS = [
-    {"email": "info@manoprotect.com", "name": "ManoProtect Admin", "password": os.environ.get('SUPERADMIN_PASSWORD_1', '19862210Des')},
-    {"email": "rrhh.milchollos@gmail.com", "name": "ManoProtect RRHH", "password": os.environ.get('SUPERADMIN_PASSWORD_2', '19862210Des')},
+    {"email": "info@manoprotect.com", "name": "ManoProtect Admin", "password": os.environ.get('SUPERADMIN_PASSWORD_1')},
+    {"email": "rrhh.milchollos@gmail.com", "name": "ManoProtect RRHH", "password": os.environ.get('SUPERADMIN_PASSWORD_2')},
     {"email": "ivanrubiosolas@gmail.com", "name": "Ivan Rubio Cano", "password": None},  # None = don't change password if exists
 ]
 
@@ -2135,9 +2137,9 @@ async def get_document_downloads(
 from pywebpush import webpush, WebPushException
 import json
 
-# Generate VAPID keys (in production, store these securely)
-VAPID_PRIVATE_KEY = os.environ.get('VAPID_PRIVATE_KEY', 'cMCW8hLpP7Zl4l2n3Vh6_qJmJgwJJA-2VR-SqVGKlzE')
-VAPID_PUBLIC_KEY = os.environ.get('VAPID_PUBLIC_KEY', 'BNbxGYNMhEIi4d00Zc4Y-nLcQ6x8_V9P2z8gYJJ6zyZa0R0vWxyXlB8Gx9LzY8hFJhY0Q3c6BXGz0PjZkL8Jbyo')
+# VAPID keys from environment (required for push notifications)
+VAPID_PRIVATE_KEY = os.environ.get('VAPID_PRIVATE_KEY')
+VAPID_PUBLIC_KEY = os.environ.get('VAPID_PUBLIC_KEY')
 VAPID_CLAIMS = {"sub": "mailto:alerts@mano-protect.com"}
 
 @api_router.get("/push/vapid-public-key")
@@ -2573,7 +2575,7 @@ async def revoke_api_key(
 public_router = APIRouter(prefix="/api/v1", tags=["public-api"])
 
 # Simple access key for downloading documents (owner access)
-OWNER_DOWNLOAD_KEY = os.environ.get("OWNER_DOWNLOAD_KEY", "mano2025investor")
+OWNER_DOWNLOAD_KEY = os.environ.get("OWNER_DOWNLOAD_KEY")
 
 @public_router.get("/documents/download-zip")
 async def public_download_documents(key: str = ""):
