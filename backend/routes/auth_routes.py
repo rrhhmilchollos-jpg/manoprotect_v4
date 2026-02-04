@@ -37,14 +37,19 @@ router = APIRouter(tags=["Authentication"])
 
 # Database reference - set during initialization
 _db = None
-_twilio_client = None
+_sms_configured = False
 
 
-def init_auth_routes(db, twilio_client=None):
-    """Initialize routes with database connection and optional Twilio"""
-    global _db, _twilio_client
+def init_auth_routes(db, sms_client=None):
+    """Initialize routes with database connection"""
+    global _db, _sms_configured
     _db = db
-    _twilio_client = twilio_client
+    # Check if Infobip is configured
+    try:
+        from services.infobip_sms import is_configured
+        _sms_configured = is_configured()
+    except:
+        _sms_configured = False
 
 
 def get_client_info(request: Request) -> tuple:
