@@ -18,6 +18,7 @@ import WhatsAppManager from '@/components/WhatsAppManager';
 import APIKeyManager from '@/components/APIKeyManager';
 import AlertsManager from '@/components/AlertsManager';
 import { SubscriptionBadge } from '@/components/SubscriptionBadge';
+import AdMobDashboard from '@/components/admin/AdMobDashboard';
 
 const API = process.env.REACT_APP_BACKEND_URL + '/api';
 
