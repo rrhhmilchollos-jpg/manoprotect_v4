@@ -248,6 +248,22 @@ function AppRouter() {
           } 
         />
         <Route 
+          path="/safe-zones" 
+          element={
+            <ProtectedRoute>
+              <SafeZones />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/zonas-seguras" 
+          element={
+            <ProtectedRoute>
+              <SafeZones />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
           path="/sos-emergency" 
           element={
             <ProtectedRoute>
