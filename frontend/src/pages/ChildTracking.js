@@ -641,11 +641,12 @@ const ChildTracking = () => {
                       onClick={() => handleLocateChild(child)}
                       disabled={locatingChild === child.child_id || !child.device_linked}
                       className="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white"
+                      data-testid={`locate-${child.child_id}`}
                     >
                       {locatingChild === child.child_id ? (
-                        <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Localizando...</>
+                        <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Enviando solicitud...</>
                       ) : (
-                        <><MapPin className="w-4 h-4 mr-2" /> Localizar Ahora</>
+                        <><Send className="w-4 h-4 mr-2" /> Solicitar Ubicación</>
                       )}
                     </Button>
                     <Button
@@ -655,9 +656,14 @@ const ChildTracking = () => {
                       className="flex-1"
                     >
                       <History className="w-4 h-4 mr-2" />
-                      Ver Historial
+                      Historial
                     </Button>
                   </div>
+                  {!child.device_linked && (
+                    <p className="text-xs text-amber-600 mt-2 text-center">
+                      El familiar debe instalar ManoProtect y vincular su dispositivo
+                    </p>
+                  )}
                 </CardContent>
               </Card>
             ))}
