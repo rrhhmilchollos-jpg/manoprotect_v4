@@ -126,13 +126,22 @@ const ChildTracking = () => {
         { withCredentials: true }
       );
       
-      toast.success(response.data.message);
+      // Show detailed message about what was sent
+      const { fcm_sent, sms_sent, message } = response.data;
       
-      // Simulate location received (in real app, this would come from push notification)
+      if (fcm_sent) {
+        toast.success(`📱 Notificación enviada a ${child.name}. Esperando respuesta...`);
+      } else if (sms_sent) {
+        toast.success(`📨 SMS enviado a ${child.name}. Esperando respuesta...`);
+      } else {
+        toast.info(message || 'Solicitud enviada');
+      }
+      
+      // Reload after a delay to check for response
       setTimeout(() => {
         loadChildren();
         setLocatingChild(null);
-      }, 2000);
+      }, 3000);
     } catch (error) {
       toast.error(error.response?.data?.detail || 'Error al solicitar ubicación');
       setLocatingChild(null);
