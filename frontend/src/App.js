@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route, useLocation, Navigate, useNavigate } from 'react-router-dom';
 import { Toaster } from 'sonner';
+import PushNotificationPrompt from '@/components/PushNotificationPrompt';
 import { AuthProvider, useAuth } from '@/context/AuthContext';
 import { useEffect, lazy, Suspense } from 'react';
 
