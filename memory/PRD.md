@@ -33,7 +33,20 @@ El SMS backup está implementado correctamente pero Twilio reporta:
 
 ---
 
-## ✅ Implementaciones Completadas Hoy (04/02/2026)
+## ✅ Implementaciones Completadas (04/02/2026)
+
+### 📖 Página de Instrucciones para Familiares (NUEVO)
+- Nueva ruta `/instrucciones-familiares` 
+- Guía paso a paso con 4 secciones expandibles
+- Botón para compartir por WhatsApp
+- Botón para copiar enlace de registro
+- Requisitos del dispositivo y FAQ incluidos
+- **Propósito**: Facilitar que los familiares configuren correctamente sus cuentas para recibir alertas SOS
+
+### 🔧 Mejora en Mensajes de Error de Registro (NUEVO)
+- AuthContext.js actualizado para parsear correctamente errores del backend
+- Soporta errores de: password débil, email duplicado, campos faltantes
+- Muestra mensajes específicos en lugar de "Error de conexión" genérico
 
 ### 🔧 Bug Fixes SOS
 - Query de contactos usa `is_emergency OR receive_alerts OR emergency_contact`
