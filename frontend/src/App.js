@@ -52,6 +52,7 @@ const AdminDevices = lazy(() => import('@/pages/AdminDevices'));
 const SOSAlertReceived = lazy(() => import('@/pages/SOSAlertReceived'));
 const SOSQuickButton = lazy(() => import('@/pages/SOSQuickButton'));
 const InstruccionesFamiliares = lazy(() => import('@/pages/InstruccionesFamiliares'));
+const CompartirUbicacion = lazy(() => import('@/pages/CompartirUbicacion'));
 
 // Lazy load non-critical UI components to reduce main thread blocking
 const CookieConsent = lazy(() => import('@/components/CookieConsent'));
