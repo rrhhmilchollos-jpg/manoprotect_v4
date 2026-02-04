@@ -406,6 +406,13 @@ const Dashboard = () => {
           </Card>
         )}
 
+        {/* Native Ad Banner */}
+        {user?.plan === 'free' && (
+          <div className="mb-8">
+            <NativeAdBanner position="dashboard" />
+          </div>
+        )}
+
         {/* Investor Access Banner */}
         {isInvestor && (
           <Card className="mb-8 border-2 border-amber-400 bg-gradient-to-r from-amber-50 to-yellow-50 shadow-lg">
