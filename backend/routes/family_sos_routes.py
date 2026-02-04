@@ -1297,7 +1297,7 @@ async def locate_child(
     silent: bool = False,
     session_token: Optional[str] = Cookie(None)
 ):
-    """Request location of a child (Family Yearly only)"""
+    """Request location of a child - sends push notification to get location"""
     user = await require_auth(request, session_token)
     features = get_plan_features_for_user(user)
     
@@ -1329,13 +1329,72 @@ async def locate_child(
     
     await _db.location_requests.insert_one(location_request)
     
+    # Get child's user_id to send push notification
+    child_user = await _db.users.find_one(
+        {"$or": [
+            {"phone": child.get("phone")},
+            {"email": child.get("email")}
+        ]},
+        {"_id": 0, "user_id": 1}
+    )
+    
+    fcm_sent = False
+    sms_sent = False
+    
+    if child_user:
+        # Try to send FCM push notification
+        fcm_token = await _db.push_subscriptions.find_one(
+            {"user_id": child_user["user_id"]},
+            {"_id": 0, "fcm_token": 1}
+        )
+        
+        if fcm_token and fcm_token.get("fcm_token"):
+            try:
+                from services.emergency_notifications import send_fcm_high_priority
+                fcm_result = await send_fcm_high_priority(
+                    fcm_tokens=[fcm_token["fcm_token"]],
+                    title="📍 Solicitud de Ubicación" if not use_silent else "📍",
+                    body=f"{user.name} necesita saber tu ubicación" if not use_silent else "Compartiendo ubicación...",
+                    data={
+                        "type": "location_request",
+                        "request_id": location_request["request_id"],
+                        "requester_name": user.name,
+                        "requester_id": user.user_id,
+                        "silent": str(use_silent),
+                        "action": "share_location"
+                    }
+                )
+                if fcm_result.get("success", 0) > 0:
+                    fcm_sent = True
+            except Exception as e:
+                print(f"FCM error: {e}")
+    
+    # Send SMS as backup with location request link
+    if child.get("phone") and not use_silent:
+        try:
+            from services.infobip_sms import send_sms
+            sms_result = await send_sms(
+                phone_number=child["phone"],
+                message=f"ManoProtect: {user.name} solicita tu ubicacion. Abre la app para compartirla: {os.environ.get('FRONTEND_URL', 'https://manoprotect.com')}/compartir-ubicacion?req={location_request['request_id']}"
+            )
+            if sms_result.get("success"):
+                sms_sent = True
+        except Exception as e:
+            print(f"SMS error: {e}")
+    
+    # Create in-app notification
     if not use_silent:
         notification = {
             "notification_id": f"notif_{uuid.uuid4().hex[:12]}",
             "target_phone": child.get("phone"),
+            "user_id": child_user["user_id"] if child_user else None,
             "type": "location_request",
             "title": "📍 Solicitud de ubicación",
-            "message": f"{user.name} ha solicitado ver tu ubicación",
+            "message": f"{user.name} necesita saber dónde estás. Pulsa para compartir tu ubicación.",
+            "data": {
+                "request_id": location_request["request_id"],
+                "action": "share_location"
+            },
             "read": False,
             "created_at": datetime.now(timezone.utc).isoformat()
         }
@@ -1346,8 +1405,11 @@ async def locate_child(
         "request_id": location_request["request_id"],
         "child_name": child.get("name"),
         "silent_mode": use_silent,
-        "message": "Solicitud de ubicación enviada" if not use_silent else "Solicitud de ubicación enviada (modo silencioso)",
-        "note": "La ubicación aparecerá cuando el dispositivo del niño responda"
+        "fcm_sent": fcm_sent,
+        "sms_sent": sms_sent,
+        "message": f"Solicitud enviada a {child.get('name')}. " + 
+                   ("Recibirá una notificación push." if fcm_sent else "Se le ha enviado un SMS.") if not use_silent 
+                   else "Solicitando ubicación silenciosamente..."
     }
 
 
