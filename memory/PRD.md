@@ -8,7 +8,7 @@
 - Errores menores: 0
 
 **URL de Producción:** https://manoprotect.com
-**URL de Preview:** https://manoprotect-app.preview.emergentagent.com
+**URL de Preview:** https://family-safety-8.preview.emergentagent.com
 
 ---
 
