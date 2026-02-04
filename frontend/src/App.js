@@ -147,6 +147,16 @@ const SOSAlertListener = () => {
   return null;
 };
 
+// Interstitial Ad Manager - Shows promotional ads for free users
+const InterstitialAdManager = () => {
+  const { user } = useAuth();
+  const { showAd, closeAd } = useInterstitialAd(user);
+  
+  if (!showAd) return null;
+  
+  return <InterstitialAd user={user} onClose={closeAd} />;
+};
+
 // App Router - ManoProtect.com Only
 function AppRouter() {
   const location = useLocation();
