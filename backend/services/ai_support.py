@@ -110,7 +110,7 @@ async def get_ai_response(user_message: str, session_id: str, db=None) -> dict:
         should_escalate = any(kw in user_message.lower() for kw in escalate_keywords)
         
         # Store in database if available
-        if db:
+        if db is not None:
             await db.chat_history.insert_one({
                 "chat_id": f"chat_{uuid.uuid4().hex[:12]}",
                 "session_id": session_id,
