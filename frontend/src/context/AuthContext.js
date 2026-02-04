@@ -95,7 +95,12 @@ export const AuthProvider = ({ children }) => {
           if (typeof data.detail === 'string') {
             errorMessage = data.detail;
           } else if (data.detail.message) {
-            errorMessage = data.detail.message;
+            // Password validation errors with feedback
+            if (data.detail.feedback && Array.isArray(data.detail.feedback)) {
+              errorMessage = `${data.detail.message}: ${data.detail.feedback.join(', ')}`;
+            } else {
+              errorMessage = data.detail.message;
+            }
           } else if (Array.isArray(data.detail)) {
             // Pydantic validation errors
             errorMessage = data.detail.map(e => e.msg || e.message).join('. ');
