@@ -62,6 +62,13 @@
     
     <!-- Páginas legales - Necesarias para AdSense -->
     <url>
+        <loc>https://manoprotect.com/sos-quick</loc>
+        <lastmod>2026-02-04</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    
+    <url>
         <loc>https://manoprotect.com/privacy-policy</loc>
         <lastmod>2026-01-30</lastmod>
         <changefreq>monthly</changefreq>
