@@ -1,160 +1,239 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MANO - Sin Conexión</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-    
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-      background: linear-gradient(135deg, #18181b 0%, #27272a 100%);
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      padding: 20px;
-    }
-    
-    .container {
-      text-align: center;
-      max-width: 400px;
-    }
-    
-    .icon {
-      width: 80px;
-      height: 80px;
-      margin-bottom: 24px;
-      opacity: 0.8;
-    }
-    
-    h1 {
-      font-size: 24px;
-      margin-bottom: 12px;
-      color: #f4f4f5;
-    }
-    
-    p {
-      color: #a1a1aa;
-      margin-bottom: 24px;
-      line-height: 1.6;
-    }
-    
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 12px 24px;
-      background: #4f46e5;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      font-size: 16px;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-    
-    .btn:hover {
-      background: #4338ca;
-    }
-    
-    .status {
-      margin-top: 32px;
-      padding: 16px;
-      background: rgba(255, 255, 255, 0.05);
-      border-radius: 8px;
-      font-size: 14px;
-    }
-    
-    .status-dot {
-      display: inline-block;
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: #ef4444;
-      margin-right: 8px;
-      animation: pulse 2s infinite;
-    }
-    
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.5; }
-    }
-    
-    .features {
-      margin-top: 32px;
-      text-align: left;
-    }
-    
-    .features h3 {
-      font-size: 14px;
-      color: #71717a;
-      margin-bottom: 12px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-    
-    .feature-list {
-      list-style: none;
-    }
-    
-    .feature-list li {
-      padding: 8px 0;
-      color: #a1a1aa;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    
-    .check {
-      color: #22c55e;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ManoProtect - Sin conexión</title>
+    <meta name="theme-color" content="#6366f1">
+    <link rel="icon" href="/favicon.ico">
+    <link rel="manifest" href="/manifest.json">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 24px;
+            padding: 48px 32px;
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+        
+        .icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+        }
+        
+        .icon svg {
+            width: 40px;
+            height: 40px;
+            color: white;
+        }
+        
+        h1 {
+            font-size: 24px;
+            color: #1f2937;
+            margin-bottom: 12px;
+        }
+        
+        p {
+            color: #6b7280;
+            margin-bottom: 24px;
+            line-height: 1.6;
+        }
+        
+        .status {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 16px;
+            background: #fef3c7;
+            border-radius: 12px;
+            margin-bottom: 24px;
+        }
+        
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: #f59e0b;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        .status-text {
+            color: #92400e;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        button {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            color: white;
+            border: none;
+            padding: 14px 32px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            width: 100%;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(99, 102, 241, 0.3);
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+        
+        .features {
+            margin-top: 32px;
+            padding-top: 24px;
+            border-top: 1px solid #e5e7eb;
+        }
+        
+        .features-title {
+            font-size: 12px;
+            color: #9ca3af;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 16px;
+        }
+        
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: #f9fafb;
+            border-radius: 10px;
+            margin-bottom: 8px;
+        }
+        
+        .feature-icon {
+            width: 32px;
+            height: 32px;
+            background: white;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        
+        .feature-text {
+            font-size: 14px;
+            color: #4b5563;
+            text-align: left;
+        }
+        
+        .sos-button {
+            margin-top: 24px;
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        }
+        
+        .sos-button:hover {
+            box-shadow: 0 10px 20px rgba(239, 68, 68, 0.3);
+        }
+    </style>
 </head>
 <body>
-  <div class="container">
-    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-      <path d="M1 1l22 22M16.72 11.06A10.94 10.94 0 0 1 19 12.55M5 12.55a10.94 10.94 0 0 1 5.17-2.39M10.71 5.05A16 16 0 0 1 22.58 9M1.42 9a15.91 15.91 0 0 1 4.7-2.88M8.53 16.11a6 6 0 0 1 6.95 0M12 20h.01"/>
-    </svg>
-    
-    <h1>Sin conexión a internet</h1>
-    <p>
-      Parece que no tienes conexión a internet. Algunas funciones de MANO no están disponibles en modo offline.
-    </p>
-    
-    <button class="btn" onclick="window.location.reload()">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
-      </svg>
-      Reintentar conexión
-    </button>
-    
-    <div class="status">
-      <span class="status-dot"></span>
-      Esperando conexión...
+    <div class="container">
+        <div class="icon">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636a9 9 0 010 12.728m0 0l-2.829-2.829m2.829 2.829L21 21M15.536 8.464a5 5 0 010 7.072m0 0l-2.829-2.829m-4.243 2.829a4.978 4.978 0 01-1.414-2.83m-1.414 5.658a9 9 0 01-2.167-9.238m7.824 2.167a1 1 0 111.414 1.414m-1.414-1.414L3 3m8.293 8.293l1.414 1.414"/>
+            </svg>
+        </div>
+        
+        <h1>Sin conexión</h1>
+        <p>No se puede conectar a internet. Verifica tu conexión WiFi o datos móviles.</p>
+        
+        <div class="status">
+            <div class="status-dot"></div>
+            <span class="status-text">Esperando conexión...</span>
+        </div>
+        
+        <button onclick="location.reload()">
+            Reintentar conexión
+        </button>
+        
+        <div class="features">
+            <div class="features-title">Mientras tanto puedes</div>
+            
+            <div class="feature-item">
+                <div class="feature-icon">📱</div>
+                <div class="feature-text">Verificar tu conexión WiFi o datos móviles</div>
+            </div>
+            
+            <div class="feature-item">
+                <div class="feature-icon">✈️</div>
+                <div class="feature-text">Desactivar el modo avión si está activado</div>
+            </div>
+            
+            <div class="feature-item">
+                <div class="feature-icon">🔄</div>
+                <div class="feature-text">Reiniciar el router o dispositivo</div>
+            </div>
+        </div>
+        
+        <button class="sos-button" onclick="handleSOSOffline()">
+            🚨 Emergencia SOS
+        </button>
     </div>
     
-    <div class="features">
-      <h3>Disponible offline:</h3>
-      <ul class="feature-list">
-        <li><span class="check">✓</span> Ver historial de amenazas en caché</li>
-        <li><span class="check">✓</span> Consultar guías de seguridad</li>
-        <li><span class="check">✓</span> Acceder a contactos de emergencia</li>
-      </ul>
-    </div>
-  </div>
-  
-  <script>
-    // Check connection status
-    window.addEventListener('online', () => {
-      window.location.reload();
-    });
-  </script>
+    <script>
+        // Auto-retry connection every 5 seconds
+        setInterval(() => {
+            fetch('/api/health', { method: 'HEAD' })
+                .then(() => {
+                    location.reload();
+                })
+                .catch(() => {
+                    // Still offline
+                });
+        }, 5000);
+        
+        // Offline SOS handler
+        function handleSOSOffline() {
+            // Try to make emergency call
+            if (confirm('¿Quieres llamar a emergencias (112)?')) {
+                window.location.href = 'tel:112';
+            }
+        }
+        
+        // Check online status
+        window.addEventListener('online', () => {
+            location.reload();
+        });
+    </script>
 </body>
 </html>
