@@ -947,6 +947,11 @@ const AdminPanel = () => {
             <AlertsManager />
           </TabsContent>
 
+          {/* AdMob Dashboard Tab */}
+          <TabsContent value="admob">
+            <AdMobDashboard />
+          </TabsContent>
+
           {/* Database Info Tab */}
           <TabsContent value="database">
             <Card className="bg-white">
