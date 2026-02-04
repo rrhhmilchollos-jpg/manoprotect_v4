@@ -1413,6 +1413,138 @@ async def locate_child(
     }
 
 
+@router.get("/family/location-request/{request_id}")
+async def get_location_request(
+    request_id: str,
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Get info about a location request"""
+    loc_request = await _db.location_requests.find_one(
+        {"request_id": request_id},
+        {"_id": 0}
+    )
+    
+    if not loc_request:
+        raise HTTPException(status_code=404, detail="Solicitud no encontrada")
+    
+    return {
+        "request_id": request_id,
+        "requester_name": loc_request.get("requester_name"),
+        "created_at": loc_request.get("created_at"),
+        "status": loc_request.get("status")
+    }
+
+
+@router.post("/family/share-location")
+async def share_location_response(
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Share location in response to a request"""
+    body = await request.json()
+    request_id = body.get("request_id")
+    latitude = body.get("latitude")
+    longitude = body.get("longitude")
+    accuracy = body.get("accuracy", 0)
+    address = body.get("address", "")
+    
+    if not request_id or not latitude or not longitude:
+        raise HTTPException(status_code=400, detail="Faltan datos requeridos")
+    
+    # Find the location request
+    loc_request = await _db.location_requests.find_one(
+        {"request_id": request_id},
+        {"_id": 0}
+    )
+    
+    if not loc_request:
+        raise HTTPException(status_code=404, detail="Solicitud no encontrada")
+    
+    # Update request with location
+    location_data = {
+        "latitude": latitude,
+        "longitude": longitude,
+        "accuracy": accuracy,
+        "address": address,
+        "google_maps_url": f"https://maps.google.com/?q={latitude},{longitude}",
+        "timestamp": datetime.now(timezone.utc).isoformat()
+    }
+    
+    await _db.location_requests.update_one(
+        {"request_id": request_id},
+        {
+            "$set": {
+                "status": "completed",
+                "location": location_data,
+                "completed_at": datetime.now(timezone.utc).isoformat()
+            }
+        }
+    )
+    
+    # Also update child's last known location if child_id exists
+    if loc_request.get("child_id"):
+        await _db.family_children.update_one(
+            {"child_id": loc_request["child_id"]},
+            {"$set": {"last_location": location_data}}
+        )
+        
+        # Save to location history
+        await _db.location_history.insert_one({
+            "child_id": loc_request["child_id"],
+            "location": location_data,
+            "triggered_by": "request",
+            "request_id": request_id,
+            "created_at": datetime.now(timezone.utc).isoformat()
+        })
+    
+    # Notify the requester
+    requester_id = loc_request.get("requester_id")
+    if requester_id:
+        # Try to send FCM notification to requester
+        fcm_token = await _db.push_subscriptions.find_one(
+            {"user_id": requester_id},
+            {"_id": 0, "fcm_token": 1}
+        )
+        
+        if fcm_token and fcm_token.get("fcm_token"):
+            try:
+                from services.emergency_notifications import send_fcm_high_priority
+                await send_fcm_high_priority(
+                    fcm_tokens=[fcm_token["fcm_token"]],
+                    title="📍 Ubicación recibida",
+                    body=f"Ya puedes ver la ubicación. {address[:50] if address else ''}",
+                    data={
+                        "type": "location_received",
+                        "request_id": request_id,
+                        "latitude": str(latitude),
+                        "longitude": str(longitude),
+                        "address": address,
+                        "google_maps_url": f"https://maps.google.com/?q={latitude},{longitude}"
+                    }
+                )
+            except Exception as e:
+                print(f"FCM error notifying requester: {e}")
+        
+        # Create in-app notification
+        await _db.notifications.insert_one({
+            "notification_id": f"notif_{uuid.uuid4().hex[:12]}",
+            "user_id": requester_id,
+            "type": "location_received",
+            "title": "📍 Ubicación recibida",
+            "message": f"Ubicación compartida: {address}" if address else "Ubicación compartida",
+            "data": location_data,
+            "read": False,
+            "created_at": datetime.now(timezone.utc).isoformat()
+        })
+    
+    return {
+        "success": True,
+        "message": "Ubicación compartida correctamente"
+    }
+
+
+
 @router.post("/family/children/{child_id}/update-location")
 async def update_child_location(
     child_id: str,
