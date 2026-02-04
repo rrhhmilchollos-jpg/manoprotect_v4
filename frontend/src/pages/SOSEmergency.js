@@ -200,10 +200,7 @@ export default function SOSEmergency() {
         : '¡Alerta SOS enviada! Tu familia ha sido notificada.';
       toast.success(emailMsg);
       
-      // Play alert sound
-      if (settings.soundEnabled) {
-        playAlertSound();
-      }
+      // NOTE: Siren should NOT play here - it plays on RECEIVER's device only
       
     } catch (error) {
       setSosStatus('idle');
