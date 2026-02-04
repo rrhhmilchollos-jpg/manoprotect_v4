@@ -14,6 +14,7 @@ import ThreatAnalyzer from '@/components/ThreatAnalyzer';
 import BankingDashboard from '@/components/BankingDashboard';
 import AlertSubscription from '@/components/AlertSubscription';
 import { SubscriptionBadge, SubscriptionBadgeCard } from '@/components/SubscriptionBadge';
+import NativeAdBanner from '@/components/ads/NativeAdBanner';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
