@@ -2368,11 +2368,75 @@ async def get_whatsapp_queue(
 # ============================================
 # REAL-TIME METRICS (Server-Sent Events)
 # ============================================
+# AI SUPPORT CHAT ROUTES
+# ============================================
+
+from pydantic import BaseModel as PydanticBaseModel
+
+class ChatMessage(PydanticBaseModel):
+    message: str
+    session_id: Optional[str] = None
+
+@api_router.post("/chat/message")
+async def send_chat_message(
+    data: ChatMessage,
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Send a message to the AI support assistant"""
+    from services.ai_support import get_ai_response
+    
+    # Get user if authenticated (optional for chat)
+    user = await get_current_user(request, session_token)
+    
+    # Use user_id as session if authenticated, otherwise use provided or generate
+    session_id = data.session_id
+    if not session_id:
+        if user:
+            session_id = user.user_id
+        else:
+            session_id = f"anon_{uuid.uuid4().hex[:8]}"
+    
+    # Get AI response
+    result = await get_ai_response(
+        user_message=data.message,
+        session_id=session_id,
+        db=db
+    )
+    
+    return {
+        "success": True,
+        "response": result["response"],
+        "session_id": result["session_id"],
+        "escalate_to_human": result.get("escalate_to_human", False)
+    }
+
+
+@api_router.get("/chat/quick-responses")
+async def get_quick_responses():
+    """Get quick response options for the chat widget"""
+    from services.ai_support import get_quick_responses
+    return {"responses": get_quick_responses()}
+
+
+@api_router.delete("/chat/session/{session_id}")
+async def clear_chat_session(
+    session_id: str,
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Clear chat history for a session"""
+    from services.ai_support import clear_session
+    clear_session(session_id)
+    return {"success": True, "message": "Sesión limpiada"}
+
+
+# ============================================
+# REAL-TIME METRICS STREAM
+# ============================================
 
 from starlette.responses import StreamingResponse
 import asyncio
-
-@api_router.get("/metrics/stream")
 async def stream_metrics(
     request: Request,
     session_token: Optional[str] = Cookie(None)
