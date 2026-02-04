@@ -1,10 +1,12 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
-import { Phone, MapPin, Share2, Download, AlertTriangle, Shield } from 'lucide-react';
+import { Phone, MapPin, Share2, Download, AlertTriangle, Shield, Navigation } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import sosWebSocket from '@/services/sosWebSocket';
+import { getCompleteLocation, watchPosition, clearWatch } from '@/services/geolocation';
+import LiveLocationMap from '@/components/LiveLocationMap';
 
 const API = process.env.REACT_APP_BACKEND_URL + '/api';
 
@@ -14,11 +16,15 @@ const SOSQuickButton = () => {
   const [isActivating, setIsActivating] = useState(false);
   const [countdown, setCountdown] = useState(null);
   const [location, setLocation] = useState(null);
+  const [address, setAddress] = useState('');
+  const [addressDetails, setAddressDetails] = useState(null);
+  const [loadingLocation, setLoadingLocation] = useState(true);
   const [sosActive, setSosActive] = useState(false);
   const [helpOnWay, setHelpOnWay] = useState(null);
   const [wsConnected, setWsConnected] = useState(false);
   const countdownRef = useRef(null);
   const alertIdRef = useRef(null);
+  const watchIdRef = useRef(null);
 
   // Connect WebSocket when user is authenticated
   useEffect(() => {
