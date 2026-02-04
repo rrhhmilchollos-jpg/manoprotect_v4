@@ -327,25 +327,14 @@ async def send_sos_notifications(
         results["fcm_sent"] = fcm_results.get("success", 0)
         results["fcm_failed"] = fcm_results.get("failure", 0)
     
-    # 2. Send SMS to contacts without FCM token OR if FCM failed
-    sms_recipients = []
+    # 2. Send SMS to ALL contacts as backup (SMS is the most reliable for emergencies)
+    # Collect all phone numbers
+    all_phone_numbers = list(set(phone_numbers))  # Remove duplicates
     
-    # Contacts without FCM token
-    for contact in contacts_without_fcm:
-        if contact.get('phone'):
-            sms_recipients.append(contact['phone'])
-    
-    # If FCM failed for some, send SMS as backup
-    if results["fcm_failed"] > 0:
-        for contact in contacts:
-            phone = contact.get('phone')
-            if phone and phone not in sms_recipients:
-                sms_recipients.append(phone)
-    
-    # Send SMS
-    if sms_recipients:
+    if all_phone_numbers:
+        print(f"📱 Sending SMS to {len(all_phone_numbers)} phone numbers as backup")
         sms_results = await send_sms_emergency(
-            phone_numbers=sms_recipients,
+            phone_numbers=all_phone_numbers,
             sender_name=sender_name,
             message=message,
             location_url=location_url
@@ -353,6 +342,8 @@ async def send_sos_notifications(
         
         results["sms_sent"] = sms_results.get("success", 0)
         results["sms_failed"] = sms_results.get("failure", 0)
+    else:
+        print("⚠️ No phone numbers available for SMS backup")
     
     print(f"📊 SOS Notifications Summary: FCM={results['fcm_sent']}, SMS={results['sms_sent']}")
     
