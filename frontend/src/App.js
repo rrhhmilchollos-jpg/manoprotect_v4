@@ -270,6 +270,10 @@ function AppRouter() {
           element={<InstruccionesFamiliares />} 
         />
         <Route 
+          path="/compartir-ubicacion" 
+          element={<CompartirUbicacion />} 
+        />
+        <Route 
           path="/vincular/:memberId" 
           element={<VincularDispositivo />} 
         />
