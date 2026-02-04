@@ -134,19 +134,19 @@ from routes.auth_routes import router as auth_router, init_auth_routes
 from services.security_service import init_security_service
 init_security_service(db)
 
-# Initialize Twilio for SMS 2FA
-twilio_client = None
+# Initialize Infobip SMS
+infobip_configured = False
 try:
-    from twilio.rest import Client as TwilioClient
-    twilio_sid = os.environ.get('TWILIO_ACCOUNT_SID')
-    twilio_token = os.environ.get('TWILIO_AUTH_TOKEN')
-    if twilio_sid and twilio_token:
-        twilio_client = TwilioClient(twilio_sid, twilio_token)
-        print("✅ Twilio SMS initialized")
+    from services.infobip_sms import is_configured
+    infobip_configured = is_configured()
+    if infobip_configured:
+        print("✅ Infobip SMS initialized")
+    else:
+        print("⚠️ Infobip SMS not configured (add INFOBIP_API_KEY to .env)")
 except Exception as e:
-    print(f"⚠️ Twilio not available: {e}")
+    print(f"⚠️ Infobip not available: {e}")
 
-init_auth_routes(db, twilio_client)
+init_auth_routes(db, None)  # SMS handled separately via Infobip
 
 from routes.investor_routes import router as investor_router, init_investor_routes
 init_investor_routes(db)
