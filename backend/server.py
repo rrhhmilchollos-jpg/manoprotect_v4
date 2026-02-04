@@ -1408,6 +1408,104 @@ async def get_admin_dashboard(request: Request, session_token: Optional[str] = C
         "recent_threats": recent_threats[:5]
     }
 
+
+@api_router.get("/admin/services-status")
+async def get_services_status(request: Request, session_token: Optional[str] = Cookie(None)):
+    """Check status of all external services (Twilio, Firebase, Stripe)"""
+    await require_admin(request, session_token)
+    
+    services = {
+        "twilio": {"status": "unknown", "message": "", "configured": False},
+        "firebase": {"status": "unknown", "message": "", "configured": False},
+        "stripe": {"status": "unknown", "message": "", "configured": False},
+        "mongodb": {"status": "ok", "message": "Conectado", "configured": True}
+    }
+    
+    # Check Twilio
+    twilio_sid = os.environ.get('TWILIO_ACCOUNT_SID')
+    twilio_token = os.environ.get('TWILIO_AUTH_TOKEN')
+    twilio_phone = os.environ.get('TWILIO_PHONE_NUMBER')
+    
+    if twilio_sid and twilio_token and twilio_phone:
+        services["twilio"]["configured"] = True
+        try:
+            from twilio.rest import Client as TwilioClient
+            twilio_client = TwilioClient(twilio_sid, twilio_token)
+            # Verify account
+            account = twilio_client.api.accounts(twilio_sid).fetch()
+            if account.status == "active":
+                # Check if phone number belongs to account
+                try:
+                    numbers = twilio_client.incoming_phone_numbers.list(phone_number=twilio_phone, limit=1)
+                    if numbers:
+                        services["twilio"]["status"] = "ok"
+                        services["twilio"]["message"] = f"Activo - Número {twilio_phone} verificado"
+                    else:
+                        services["twilio"]["status"] = "warning"
+                        services["twilio"]["message"] = f"Cuenta activa pero número {twilio_phone} no encontrado en la cuenta. Verifica la configuración."
+                except Exception as phone_error:
+                    services["twilio"]["status"] = "warning"
+                    services["twilio"]["message"] = f"Cuenta activa pero no se pudo verificar el número: {str(phone_error)}"
+            else:
+                services["twilio"]["status"] = "error"
+                services["twilio"]["message"] = f"Cuenta no activa: {account.status}"
+        except Exception as e:
+            services["twilio"]["status"] = "error"
+            services["twilio"]["message"] = f"Error: {str(e)}"
+    else:
+        services["twilio"]["message"] = "Credenciales no configuradas en .env"
+    
+    # Check Firebase
+    firebase_cred_path = os.path.join(os.path.dirname(__file__), 'firebase-admin-sdk.json')
+    if os.path.exists(firebase_cred_path):
+        services["firebase"]["configured"] = True
+        try:
+            import firebase_admin
+            from firebase_admin import credentials
+            # Check if already initialized
+            try:
+                firebase_admin.get_app()
+                services["firebase"]["status"] = "ok"
+                services["firebase"]["message"] = "Firebase Admin SDK inicializado"
+            except ValueError:
+                # Not initialized, try to initialize
+                cred = credentials.Certificate(firebase_cred_path)
+                firebase_admin.initialize_app(cred)
+                services["firebase"]["status"] = "ok"
+                services["firebase"]["message"] = "Firebase Admin SDK inicializado correctamente"
+        except Exception as e:
+            services["firebase"]["status"] = "error"
+            services["firebase"]["message"] = f"Error: {str(e)}"
+    else:
+        services["firebase"]["message"] = "Archivo firebase-admin-sdk.json no encontrado"
+    
+    # Check Stripe
+    stripe_key = os.environ.get('STRIPE_API_KEY')
+    if stripe_key:
+        services["stripe"]["configured"] = True
+        try:
+            import stripe
+            stripe.api_key = stripe_key
+            # Quick test - get account info
+            account = stripe.Account.retrieve()
+            services["stripe"]["status"] = "ok"
+            services["stripe"]["message"] = f"Conectado - {account.get('business_profile', {}).get('name', 'Cuenta activa')}"
+        except Exception as e:
+            services["stripe"]["status"] = "error"
+            services["stripe"]["message"] = f"Error: {str(e)}"
+    else:
+        services["stripe"]["message"] = "STRIPE_API_KEY no configurada"
+    
+    # Overall status
+    all_ok = all(s["status"] == "ok" for s in services.values())
+    any_error = any(s["status"] == "error" for s in services.values())
+    
+    return {
+        "overall_status": "ok" if all_ok else ("error" if any_error else "warning"),
+        "services": services,
+        "timestamp": datetime.now(timezone.utc).isoformat()
+    }
+
 @api_router.get("/admin/users")
 async def get_admin_users(
     request: Request,
