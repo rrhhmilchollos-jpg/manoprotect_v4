@@ -51,6 +51,7 @@ const AdminAudios = lazy(() => import('@/pages/AdminAudios'));
 const AdminDevices = lazy(() => import('@/pages/AdminDevices'));
 const SOSAlertReceived = lazy(() => import('@/pages/SOSAlertReceived'));
 const SOSQuickButton = lazy(() => import('@/pages/SOSQuickButton'));
+const InstruccionesFamiliares = lazy(() => import('@/pages/InstruccionesFamiliares'));
 
 // Lazy load non-critical UI components to reduce main thread blocking
 const CookieConsent = lazy(() => import('@/components/CookieConsent'));
@@ -262,6 +263,10 @@ function AppRouter() {
         <Route 
           path="/sos-quick" 
           element={<SOSQuickButton />} 
+        />
+        <Route 
+          path="/instrucciones-familiares" 
+          element={<InstruccionesFamiliares />} 
         />
         <Route 
           path="/vincular/:memberId" 
