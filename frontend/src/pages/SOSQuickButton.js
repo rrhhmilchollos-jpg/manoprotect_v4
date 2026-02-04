@@ -165,7 +165,6 @@ const SOSQuickButton = () => {
   const deactivateSOS = () => {
     setSosActive(false);
     setHelpOnWay(null);
-    stopSiren();
     
     // Notify via WebSocket
     if (alertIdRef.current) {
