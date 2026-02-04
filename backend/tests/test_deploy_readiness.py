@@ -96,7 +96,7 @@ class TestAuthenticatedAdmin:
         assert "overall_status" in data, "overall_status key not in response"
         
         services = data["services"]
-        assert "twilio" in services, "twilio not in services"
+        assert "infobip" in services, "infobip not in services"
         assert "firebase" in services, "firebase not in services"
         assert "stripe" in services, "stripe not in services"
         assert "mongodb" in services, "mongodb not in services"
