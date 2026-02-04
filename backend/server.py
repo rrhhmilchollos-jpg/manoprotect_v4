@@ -3244,6 +3244,10 @@ print("✅ Profile & Contacts routes loaded")
 api_router.include_router(family_sos_router)
 print("✅ Family & SOS routes loaded")
 
+# Geofencing routes
+api_router.include_router(geofence_router)
+print("✅ Geofencing routes loaded")
+
 # Payment routes (Stripe)
 api_router.include_router(payments_router)
 print("✅ Payment routes loaded")
