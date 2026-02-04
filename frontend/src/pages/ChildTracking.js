@@ -307,21 +307,34 @@ const ChildTracking = () => {
           </CardContent>
         </Card>
 
-        {/* Info Card */}
-        <Card className="mb-6 bg-blue-50 border-blue-200">
-          <CardContent className="p-4">
-            <div className="flex items-start gap-3">
-              <Phone className="w-6 h-6 text-blue-600 flex-shrink-0 mt-1" />
-              <div>
-                <p className="font-medium text-blue-800">¿Cómo funciona?</p>
-                <p className="text-sm text-blue-600">
-                  1. Añade a tus hijos con su número de teléfono<br/>
-                  2. Instala la app ManoProtect en sus dispositivos<br/>
-                  3. Solicita su ubicación cuando quieras (bajo demanda)<br/>
-                  4. Configura si quieres que reciban notificación o no
-                </p>
+        {/* Info Card - How it works */}
+        <Card className="mb-6 bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200">
+          <CardContent className="p-5">
+            <h4 className="font-bold text-blue-800 mb-3 flex items-center gap-2">
+              <Shield className="w-5 h-5" />
+              ¿Cómo funciona la localización?
+            </h4>
+            <div className="grid sm:grid-cols-2 gap-4 text-sm">
+              <div className="flex items-start gap-3">
+                <div className="w-6 h-6 bg-blue-600 text-white rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0">1</div>
+                <p className="text-blue-700">Añade a tu familiar con su número de teléfono</p>
+              </div>
+              <div className="flex items-start gap-3">
+                <div className="w-6 h-6 bg-blue-600 text-white rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0">2</div>
+                <p className="text-blue-700">Ellos instalan ManoProtect en su móvil</p>
+              </div>
+              <div className="flex items-start gap-3">
+                <div className="w-6 h-6 bg-blue-600 text-white rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0">3</div>
+                <p className="text-blue-700">Pulsa "Solicitar Ubicación" cuando necesites saber dónde están</p>
+              </div>
+              <div className="flex items-start gap-3">
+                <div className="w-6 h-6 bg-blue-600 text-white rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0">4</div>
+                <p className="text-blue-700">Recibirás su ubicación exacta con mapa y dirección</p>
               </div>
             </div>
+            <p className="text-xs text-blue-600 mt-3 pt-3 border-t border-blue-200">
+              💡 El modo silencioso permite localizar sin que el familiar reciba notificación visible
+            </p>
           </CardContent>
         </Card>
 
