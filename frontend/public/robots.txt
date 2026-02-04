@@ -1,55 +1,33 @@
-# ManoProtect Sitemap
-# https://manoprotect.com
+# ManoProtect Robots.txt
+# https://www.manoprotect.com
 
 User-agent: *
 Allow: /
-Allow: /verificar-estafa
-Allow: /pricing
-Allow: /login
-Allow: /registro
-Allow: /how-it-works
-Allow: /knowledge
-Allow: /community
-Allow: /privacy-policy
-Allow: /terms-of-service
-Allow: /refund-policy
-Allow: /legal-notice
-
-# Disallow pages without substantial content (AdSense compliance)
-Disallow: /auth/callback
-Disallow: /payment-success
 Disallow: /api/
+Disallow: /admin/
+Disallow: /dashboard/
+Disallow: /sos-alert
+Disallow: /private/
+Disallow: /*.json$
+Disallow: /static/js/*.map
 
-# Disallow authenticated/private pages
-Disallow: /dashboard
-Disallow: /admin
-Disallow: /family-admin
-Disallow: /family-mode
-Disallow: /child-tracking
-Disallow: /enterprise
-Disallow: /profile
-Disallow: /rewards
-Disallow: /contacts
-Disallow: /downloads
-
-# Sitemap location
-Sitemap: https://manoprotect.com/sitemap.xml
-
-# Google specific
+# Googlebot specific
 User-agent: Googlebot
 Allow: /
-Crawl-delay: 0
+Disallow: /api/
+Disallow: /admin/
 
-# Bing specific
+# Bingbot
 User-agent: Bingbot
 Allow: /
+Disallow: /api/
+Disallow: /admin/
+
+# Sitemap location
+Sitemap: https://www.manoprotect.com/sitemap.xml
+
+# Crawl-delay for respectful crawling
 Crawl-delay: 1
 
-# Ad crawlers - exclude processing pages
-User-agent: Mediapartners-Google
-Disallow: /auth/callback
-Disallow: /payment-success
-
-User-agent: AdsBot-Google
-Disallow: /auth/callback
-Disallow: /payment-success
+# Host directive
+Host: https://www.manoprotect.com
