@@ -601,7 +601,7 @@ async def reset_password(request: Request):
     recovery = await _db.password_recovery.find_one({
         "token_hash": token_hash,
         "used": False
-    })
+    }, {"_id": 0})
     
     if not recovery:
         raise HTTPException(status_code=400, detail="Token inválido o expirado")
