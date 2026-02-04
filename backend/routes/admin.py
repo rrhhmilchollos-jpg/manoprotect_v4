@@ -105,7 +105,7 @@ async def update_user_plan(
     if plan not in valid_plans:
         raise HTTPException(status_code=400, detail=f"Plan inválido. Planes válidos: {', '.join(valid_plans)}")
     
-    user = await db.users.find_one({"user_id": user_id})
+    user = await db.users.find_one({"user_id": user_id}, {"_id": 0})
     if not user:
         raise HTTPException(status_code=404, detail="Usuario no encontrado")
     
