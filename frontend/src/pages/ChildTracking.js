@@ -273,39 +273,33 @@ const ChildTracking = () => {
       </header>
 
       <div className="max-w-4xl mx-auto px-6 py-8">
-        {/* SOS Emergency Button Card */}
+        {/* SOS Emergency Button Card - YOUR emergency, sends YOUR location to family */}
         <Card className="mb-6 bg-gradient-to-br from-red-600 to-red-700 border-0 shadow-lg shadow-red-500/30">
-          <CardContent className="p-6 text-center">
-            <h3 className="text-xl font-bold text-white mb-2">EMERGENCIA FAMILIAR</h3>
-            <p className="text-red-100 text-sm mb-4">
-              Pulsa el botón para enviar tu ubicación exacta a todos tus familiares
-            </p>
-            
-            <Button
-              onClick={() => navigate('/sos-emergency')}
-              className="w-32 h-32 rounded-full bg-white hover:bg-red-100 text-red-600 text-3xl font-black shadow-xl mx-auto flex flex-col items-center justify-center"
-              data-testid="sos-main-button"
-            >
-              <span className="text-4xl">SOS</span>
-              <span className="text-xs font-normal mt-1">⚠️ Pulsa si necesitas ayuda urgente</span>
-            </Button>
-            
-            <div className="grid grid-cols-3 gap-2 mt-6 text-white text-xs">
-              <div className="flex flex-col items-center">
-                <MapPin className="w-5 h-5 mb-1" />
-                <span>GPS Preciso</span>
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between">
+              <div className="text-white">
+                <h3 className="text-xl font-bold mb-1">¿Necesitas ayuda urgente?</h3>
+                <p className="text-red-100 text-sm">
+                  Este botón envía TU ubicación a todos tus familiares
+                </p>
               </div>
-              <div className="flex flex-col items-center">
-                <Users className="w-5 h-5 mb-1" />
-                <span>Toda la Familia</span>
-              </div>
-              <div className="flex flex-col items-center">
-                <Send className="w-5 h-5 mb-1" />
-                <span>Instantáneo</span>
-              </div>
+              <Button
+                onClick={() => navigate('/sos-quick')}
+                className="w-20 h-20 rounded-full bg-white hover:bg-red-100 text-red-600 font-black shadow-xl flex flex-col items-center justify-center"
+                data-testid="sos-main-button"
+              >
+                <span className="text-2xl">SOS</span>
+              </Button>
             </div>
           </CardContent>
         </Card>
+
+        {/* Separator */}
+        <div className="flex items-center gap-4 mb-6">
+          <div className="flex-1 h-px bg-zinc-200"></div>
+          <span className="text-zinc-500 text-sm font-medium">Localizar a tus familiares</span>
+          <div className="flex-1 h-px bg-zinc-200"></div>
+        </div>
 
         {/* Info Card - How it works */}
         <Card className="mb-6 bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200">
