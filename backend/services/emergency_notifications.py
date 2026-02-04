@@ -179,6 +179,7 @@ async def send_sms_emergency(
     """
     client = get_twilio_client()
     if not client:
+        print("⚠️ Twilio not configured - SMS not sent")
         return {"success": False, "error": "Twilio not configured"}
     
     # Get Twilio phone number
@@ -190,8 +191,11 @@ async def send_sms_emergency(
         "errors": []
     }
     
+    print(f"📱 Attempting to send SMS to {len(phone_numbers)} numbers via {twilio_number}")
+    
     for phone in phone_numbers:
         if not phone or len(phone) < 9:
+            print(f"⚠️ Invalid phone number skipped: {phone}")
             continue
             
         # Format phone number
@@ -222,8 +226,13 @@ async def send_sms_emergency(
             
         except Exception as e:
             results["failure"] += 1
-            results["errors"].append(f"{phone}: {str(e)}")
-            print(f"❌ SMS error to {phone}: {e}")
+            error_msg = str(e)
+            results["errors"].append(f"{phone}: {error_msg}")
+            print(f"❌ SMS error to {phone}: {error_msg}")
+            
+            # Check if it's a Twilio config error
+            if "Mismatch" in error_msg or "not a valid" in error_msg:
+                print("⚠️ TWILIO CONFIG ERROR: Please verify your Twilio phone number and account settings")
     
     return results
 
