@@ -30,6 +30,7 @@ const AdminPanel = lazy(() => import('@/pages/AdminPanel'));
 const EnterpriseDashboard = lazy(() => import('@/pages/EnterpriseDashboard'));
 const FamilyAdmin = lazy(() => import('@/pages/FamilyAdmin'));
 const ChildTracking = lazy(() => import('@/pages/ChildTracking'));
+const SafeZones = lazy(() => import('@/pages/SafeZones'));
 const SOSEmergency = lazy(() => import('@/pages/SOSEmergency'));
 const VincularDispositivo = lazy(() => import('@/pages/VincularDispositivo'));
 const Rewards = lazy(() => import('@/pages/Rewards'));
