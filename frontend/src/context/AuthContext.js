@@ -89,7 +89,19 @@ export const AuthProvider = ({ children }) => {
       }
       
       if (!response.ok) {
-        throw new Error(data.detail || 'Error al registrar');
+        // Handle different error formats from backend
+        let errorMessage = 'Error al registrar';
+        if (data.detail) {
+          if (typeof data.detail === 'string') {
+            errorMessage = data.detail;
+          } else if (data.detail.message) {
+            errorMessage = data.detail.message;
+          } else if (Array.isArray(data.detail)) {
+            // Pydantic validation errors
+            errorMessage = data.detail.map(e => e.msg || e.message).join('. ');
+          }
+        }
+        throw new Error(errorMessage);
       }
 
       setUser(data);
