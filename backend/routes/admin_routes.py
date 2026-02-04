@@ -76,7 +76,7 @@ async def update_user(user_id: str, data: UserUpdate, request: Request):
         raise HTTPException(status_code=403, detail="Acceso denegado")
     
     # Find user
-    user = await _db.users.find_one({"user_id": user_id})
+    user = await _db.users.find_one({"user_id": user_id}, {"_id": 0})
     if not user:
         raise HTTPException(status_code=404, detail="Usuario no encontrado")
     
@@ -123,7 +123,7 @@ async def delete_user(user_id: str, request: Request):
         raise HTTPException(status_code=403, detail="Acceso denegado")
     
     # Find user
-    user = await _db.users.find_one({"user_id": user_id})
+    user = await _db.users.find_one({"user_id": user_id}, {"_id": 0})
     if not user:
         raise HTTPException(status_code=404, detail="Usuario no encontrado")
     
