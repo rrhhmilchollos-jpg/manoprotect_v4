@@ -15,11 +15,8 @@ const SOSQuickButton = () => {
   const [countdown, setCountdown] = useState(null);
   const [location, setLocation] = useState(null);
   const [sosActive, setSosActive] = useState(false);
-  const [sirenPlaying, setSirenPlaying] = useState(false);
   const [helpOnWay, setHelpOnWay] = useState(null);
   const [wsConnected, setWsConnected] = useState(false);
-  const audioContextRef = useRef(null);
-  const sirenIntervalRef = useRef(null);
   const countdownRef = useRef(null);
   const alertIdRef = useRef(null);
 
