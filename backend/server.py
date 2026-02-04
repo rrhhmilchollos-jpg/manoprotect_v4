@@ -161,6 +161,10 @@ init_profile_routes(db)
 from routes.family_sos_routes import router as family_sos_router, init_family_routes
 init_family_routes(db, PLAN_FEATURES)
 
+# Geofencing Routes
+from routes.geofence_routes import router as geofence_router, init_geofence_routes
+init_geofence_routes(db)
+
 # Payment Routes (Stripe)
 from routes.payments_routes import router as payments_router
 from routes.admin_routes import router as admin_router, init_db as init_admin_routes
