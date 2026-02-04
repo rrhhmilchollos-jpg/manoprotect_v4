@@ -1,6 +1,6 @@
 """
 ManoProtect - Emergency Notification Service
-FCM High Priority + SMS Backup for 100% reliable SOS alerts
+FCM High Priority + Infobip SMS Backup for 100% reliable SOS alerts
 """
 import os
 import json
@@ -9,11 +9,12 @@ from datetime import datetime, timezone
 from typing import Optional, List, Dict
 import firebase_admin
 from firebase_admin import credentials, messaging
-from twilio.rest import Client as TwilioClient
+
+# Import Infobip SMS service
+from services.infobip_sms import send_sms, send_sos_alert as send_sos_sms, is_configured as infobip_configured
 
 # Initialize Firebase Admin SDK
 _firebase_initialized = False
-_twilio_client = None
 
 def init_firebase():
     """Initialize Firebase Admin SDK"""
@@ -33,27 +34,20 @@ def init_firebase():
             print("❌ Firebase Admin SDK JSON not found")
             return False
     except Exception as e:
+        if "already exists" in str(e):
+            _firebase_initialized = True
+            return True
         print(f"❌ Firebase init error: {e}")
         return False
 
-def get_twilio_client():
-    """Get Twilio client"""
-    global _twilio_client
-    if _twilio_client:
-        return _twilio_client
-    
-    account_sid = os.environ.get('TWILIO_ACCOUNT_SID')
-    auth_token = os.environ.get('TWILIO_AUTH_TOKEN')
-    
-    if account_sid and auth_token:
-        _twilio_client = TwilioClient(account_sid, auth_token)
-        print("✅ Twilio client initialized")
-        return _twilio_client
-    return None
-
 # Initialize on module load
 init_firebase()
-get_twilio_client()
+
+# Check Infobip configuration
+if infobip_configured():
+    print("✅ Infobip SMS initialized")
+else:
+    print("⚠️ Infobip SMS not configured")
 
 
 async def send_fcm_high_priority(
@@ -71,7 +65,7 @@ async def send_fcm_high_priority(
         init_firebase()
     
     if not fcm_tokens:
-        return {"success": False, "error": "No FCM tokens provided"}
+        return {"success": 0, "failure": 0, "errors": ["No FCM tokens provided"]}
     
     results = {
         "success": 0,
@@ -91,17 +85,17 @@ async def send_fcm_high_priority(
                 ),
                 data=data or {},
                 android=messaging.AndroidConfig(
-                    priority='high',  # HIGH PRIORITY - immediate delivery
-                    ttl=0,  # No delay
+                    priority='high',
+                    ttl=0,
                     notification=messaging.AndroidNotification(
                         title=title,
                         body=body,
                         icon='ic_notification',
-                        color='#DC2626',  # Red for emergency
+                        color='#DC2626',
                         sound='default',
-                        priority='max',  # Maximum priority
+                        priority='max',
                         visibility='public',
-                        channel_id='sos_emergency',  # Emergency channel
+                        channel_id='sos_emergency',
                         tag='sos_alert',
                         click_action='OPEN_SOS_ALERT'
                     )
@@ -136,7 +130,7 @@ async def send_fcm_high_priority(
                 ),
                 apns=messaging.APNSConfig(
                     headers={
-                        'apns-priority': '10',  # Immediate delivery
+                        'apns-priority': '10',
                         'apns-push-type': 'alert'
                     },
                     payload=messaging.APNSPayload(
@@ -155,7 +149,6 @@ async def send_fcm_high_priority(
                 )
             )
             
-            # Send synchronously (Firebase Admin SDK is sync)
             response = messaging.send(message)
             results["success"] += 1
             print(f"✅ FCM sent: {response}")
@@ -175,15 +168,11 @@ async def send_sms_emergency(
     location_url: str = None
 ) -> Dict:
     """
-    Send emergency SMS via Twilio as backup
+    Send emergency SMS via Infobip as backup
     """
-    client = get_twilio_client()
-    if not client:
-        print("⚠️ Twilio not configured - SMS not sent")
-        return {"success": False, "error": "Twilio not configured"}
-    
-    # Get Twilio phone number
-    twilio_number = os.environ.get('TWILIO_PHONE_NUMBER', '+12513137701')
+    if not infobip_configured():
+        print("⚠️ Infobip not configured - SMS not sent")
+        return {"success": 0, "failure": 0, "errors": ["Infobip not configured"]}
     
     results = {
         "success": 0,
@@ -191,48 +180,33 @@ async def send_sms_emergency(
         "errors": []
     }
     
-    print(f"📱 Attempting to send SMS to {len(phone_numbers)} numbers via {twilio_number}")
+    print(f"📱 Sending SMS to {len(phone_numbers)} phone numbers via Infobip")
     
     for phone in phone_numbers:
         if not phone or len(phone) < 9:
             print(f"⚠️ Invalid phone number skipped: {phone}")
             continue
-            
-        # Format phone number
-        if not phone.startswith('+'):
-            if phone.startswith('34'):
-                phone = '+' + phone
-            else:
-                phone = '+34' + phone.lstrip('0')
         
         try:
-            # Compose emergency message
-            sms_body = f"🚨 EMERGENCIA SOS - ManoProtect\n\n"
-            sms_body += f"{sender_name} ha activado una alerta de emergencia.\n\n"
-            sms_body += f"{message}\n\n"
-            if location_url:
-                sms_body += f"📍 Ubicación: {location_url}\n\n"
-            sms_body += "Abre la app ManoProtect para más detalles."
-            
-            # Send SMS
-            sms = client.messages.create(
-                body=sms_body,
-                from_=twilio_number,
-                to=phone
+            result = await send_sos_sms(
+                phone_number=phone,
+                sender_name=sender_name,
+                location_url=location_url,
+                message=message
             )
             
-            results["success"] += 1
-            print(f"✅ SMS sent to {phone}: {sms.sid}")
-            
+            if result.get("success"):
+                results["success"] += 1
+                print(f"✅ SMS sent to {phone[-4:].rjust(len(phone), '*')}")
+            else:
+                results["failure"] += 1
+                results["errors"].append(f"{phone}: {result.get('error', 'Unknown error')}")
+                print(f"❌ SMS error to {phone}: {result.get('error')}")
+                
         except Exception as e:
             results["failure"] += 1
-            error_msg = str(e)
-            results["errors"].append(f"{phone}: {error_msg}")
-            print(f"❌ SMS error to {phone}: {error_msg}")
-            
-            # Check if it's a Twilio config error
-            if "Mismatch" in error_msg or "not a valid" in error_msg:
-                print("⚠️ TWILIO CONFIG ERROR: Please verify your Twilio phone number and account settings")
+            results["errors"].append(f"{phone}: {str(e)}")
+            print(f"❌ SMS exception to {phone}: {e}")
     
     return results
 
@@ -249,7 +223,7 @@ async def send_sos_notifications(
     """
     Main function to send SOS notifications through all channels:
     1. FCM High Priority (instant even with app closed)
-    2. SMS Backup (if FCM fails or no token)
+    2. Infobip SMS Backup (if FCM fails or no token)
     
     Returns summary of all notifications sent
     """
@@ -273,26 +247,28 @@ async def send_sos_notifications(
     # Collect FCM tokens and phone numbers
     fcm_tokens = []
     phone_numbers = []
-    contacts_without_fcm = []
     
     for contact in contacts:
-        contact_user_id = contact.get('user_id') or contact.get('contact_id') or contact.get('id')
-        contact_email = contact.get('email')
+        contact_user_id = contact.get('user_id') or contact.get('contact_id') or contact.get('id') or contact.get('member_user_id')
+        contact_email = contact.get('email') or contact.get('member_email')
         
-        # Get FCM token from database - try multiple methods
-        if db is not None:
-            fcm_sub = None
+        # Get FCM token from database
+        if db is not None and contact_user_id:
+            # Try fcm_tokens collection first
+            fcm_sub = await db.fcm_tokens.find_one(
+                {"user_id": contact_user_id},
+                {"_id": 0, "fcm_token": 1}
+            )
             
-            # Try by user_id first
-            if contact_user_id:
-                fcm_sub = await db.fcm_tokens.find_one(
+            # Try push_subscriptions as fallback
+            if not fcm_sub:
+                fcm_sub = await db.push_subscriptions.find_one(
                     {"user_id": contact_user_id},
                     {"_id": 0, "fcm_token": 1}
                 )
             
             # Try by email if no user_id match
             if not fcm_sub and contact_email:
-                # Find user by email first
                 user_doc = await db.users.find_one(
                     {"email": contact_email.lower()},
                     {"_id": 0, "user_id": 1}
@@ -302,14 +278,17 @@ async def send_sos_notifications(
                         {"user_id": user_doc["user_id"]},
                         {"_id": 0, "fcm_token": 1}
                     )
+                    if not fcm_sub:
+                        fcm_sub = await db.push_subscriptions.find_one(
+                            {"user_id": user_doc["user_id"]},
+                            {"_id": 0, "fcm_token": 1}
+                        )
             
             if fcm_sub and fcm_sub.get('fcm_token'):
                 fcm_tokens.append(fcm_sub['fcm_token'])
-            else:
-                contacts_without_fcm.append(contact)
         
         # Always collect phone for SMS backup
-        phone = contact.get('phone')
+        phone = contact.get('phone') or contact.get('member_phone')
         if phone:
             phone_numbers.append(phone)
     
@@ -336,9 +315,8 @@ async def send_sos_notifications(
         results["fcm_sent"] = fcm_results.get("success", 0)
         results["fcm_failed"] = fcm_results.get("failure", 0)
     
-    # 2. Send SMS to ALL contacts as backup (SMS is the most reliable for emergencies)
-    # Collect all phone numbers
-    all_phone_numbers = list(set(phone_numbers))  # Remove duplicates
+    # 2. Send SMS to ALL contacts as backup via Infobip
+    all_phone_numbers = list(set(phone_numbers))
     
     if all_phone_numbers:
         print(f"📱 Sending SMS to {len(all_phone_numbers)} phone numbers as backup")
