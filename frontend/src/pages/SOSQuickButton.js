@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
-import { Phone, MapPin, Share2, Download, AlertTriangle, Shield, Volume2, VolumeX } from 'lucide-react';
+import { Phone, MapPin, Share2, Download, AlertTriangle, Shield } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import sosWebSocket from '@/services/sosWebSocket';
