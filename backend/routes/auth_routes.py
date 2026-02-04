@@ -308,12 +308,11 @@ async def send_2fa_code(request: Request):
     # Create OTP session
     otp_data = await create_otp_session(user_id, user["email"], phone, "login")
     
-    # Send SMS via Twilio if available
-    if _twilio_client:
+    # Send SMS via Infobip if available
+    if _sms_configured:
         try:
-            from services.twilio_sms import send_sms
-            message = f"ManoProtect - Tu código de verificación es: {otp_data['otp_code']}. Válido por {otp_data['expires_in_minutes']} minutos. No lo compartas con nadie."
-            await send_sms(phone, message)
+            from services.infobip_sms import send_verification_code
+            await send_verification_code(phone, otp_data['otp_code'])
         except Exception as e:
             print(f"Error sending SMS: {e}")
     
@@ -330,7 +329,7 @@ async def send_2fa_code(request: Request):
         "message": "Código enviado",
         "expires_in_minutes": otp_data["expires_in_minutes"],
         # Only for testing - remove in production
-        "debug_code": otp_data["otp_code"] if not _twilio_client else None
+        "debug_code": otp_data["otp_code"] if not _sms_configured else None
     }
 
 
