@@ -120,3 +120,7 @@ frontend/node_modules/.cache/default-development/0.pack
 *.env.*
 frontend/build/ManoProtect-iOS-Project.zip
 frontend/build/ManoProtect-Desktop-Windows.zip
+-e 
+# Environment files
+*.env
+*.env.*
