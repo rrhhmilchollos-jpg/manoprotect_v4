@@ -161,7 +161,8 @@ const SOSQuickButton = () => {
           latitude: location?.latitude || 0,
           longitude: location?.longitude || 0,
           accuracy: location?.accuracy || 0,
-          message: '¡EMERGENCIA! Necesito ayuda urgente.'
+          address: address || '',
+          message: `¡EMERGENCIA! Necesito ayuda urgente. ${address ? `Estoy en: ${address}` : ''}`
         })
       });
 
