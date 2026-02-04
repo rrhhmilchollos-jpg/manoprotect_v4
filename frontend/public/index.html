@@ -1,31 +1,29 @@
 <!doctype html>
 <html lang="es">
     <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes" />
-        <meta name="theme-color" content="#10b981" />
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5, user-scalable=yes" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="theme-color" content="#6366f1" />
         
         <!-- Preload Critical Resources for LCP - High Priority -->
-        <link rel="preload" href="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=350&q=60&fm=webp&fit=crop" as="image" type="image/webp" fetchpriority="high" />
+        <link rel="preload" href="/manoprotect_logo.png" as="image" fetchpriority="high" />
         
         <!-- Preconnect to External Origins - Early Connection -->
         <link rel="preconnect" href="https://images.unsplash.com" crossorigin />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
         <link rel="dns-prefetch" href="https://images.unsplash.com" />
+        <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
         
         <!-- Google Fonts - Non-blocking with media print trick -->
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&display=swap" media="print" onload="this.media='all'" />
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600&display=swap" media="print" onload="this.media='all'" />
-        <noscript>
-            <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&display=swap" />
-            <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600&display=swap" />
-        </noscript>
         
-        <!-- SEO Meta Tags -->
-        <title>ManoProtect - Protección contra Fraudes y Estafas Digitales | España</title>
-        <meta name="description" content="ManoProtect protege a tu familia contra fraudes, phishing, smishing y estafas digitales en tiempo real. Plataforma líder en España con IA avanzada. Prueba gratis." />
-        <meta name="keywords" content="protección fraudes, anti phishing, detectar estafas, seguridad digital, protección familiar, alertas fraude, verificar estafas, smishing, vishing, España" />
+        <!-- SEO Meta Tags - Optimizados -->
+        <title>ManoProtect - Protección Familiar contra Fraudes Digitales | España</title>
+        <meta name="description" content="Protege a tu familia contra fraudes, phishing y estafas digitales en tiempo real. IA avanzada, alertas instantáneas. Prueba gratis 15 días." />
+        <meta name="keywords" content="protección fraudes, anti phishing, detectar estafas, seguridad digital, protección familiar, alertas fraude, smishing, vishing, España" />
         <meta name="author" content="STARTBOOKING SL" />
         <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
         <meta name="googlebot" content="index, follow" />
@@ -33,64 +31,86 @@
         <meta name="google-adsense-account" content="ca-pub-7713974112203810" />
         <meta name="rating" content="general" />
         <meta name="distribution" content="global" />
-        <link rel="canonical" href="https://manoprotect.com/" />
+        <meta name="revisit-after" content="7 days" />
+        <meta name="language" content="Spanish" />
+        <meta name="geo.region" content="ES" />
+        <meta name="geo.placename" content="España" />
+        <link rel="canonical" href="https://www.manoprotect.com/" />
+        <link rel="alternate" hreflang="es" href="https://www.manoprotect.com/" />
+        <link rel="alternate" hreflang="x-default" href="https://www.manoprotect.com/" />
         
-        <!-- Open Graph / Facebook -->
+        <!-- Open Graph / Facebook - Optimizado -->
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://manoprotect.com/" />
-        <meta property="og:title" content="ManoProtect - Protección contra Fraudes y Estafas Digitales" />
-        <meta property="og:description" content="Protege a tu familia contra fraudes, phishing y estafas digitales en tiempo real. Plataforma líder en España con IA avanzada." />
-        <meta property="og:image" content="https://manoprotect.com/og-image.png" />
+        <meta property="og:url" content="https://www.manoprotect.com/" />
+        <meta property="og:title" content="ManoProtect - Protección Familiar contra Fraudes Digitales" />
+        <meta property="og:description" content="Protege a tu familia contra fraudes, phishing y estafas digitales en tiempo real. IA avanzada para detectar amenazas." />
+        <meta property="og:image" content="https://www.manoprotect.com/og-image.png" />
+        <meta property="og:image:secure_url" content="https://www.manoprotect.com/og-image.png" />
+        <meta property="og:image:type" content="image/png" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
+        <meta property="og:image:alt" content="ManoProtect - Protección familiar digital" />
         <meta property="og:locale" content="es_ES" />
         <meta property="og:site_name" content="ManoProtect" />
         
-        <!-- Twitter -->
+        <!-- Twitter Cards - Optimizado -->
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:url" content="https://manoprotect.com/" />
-        <meta name="twitter:title" content="ManoProtect - Protección contra Fraudes y Estafas Digitales" />
-        <meta name="twitter:description" content="Protege a tu familia contra fraudes, phishing y estafas digitales en tiempo real. IA avanzada para detectar amenazas." />
-        <meta name="twitter:image" content="https://manoprotect.com/og-image.png" />
+        <meta name="twitter:site" content="@manoprotect" />
+        <meta name="twitter:creator" content="@manoprotect" />
+        <meta name="twitter:url" content="https://www.manoprotect.com/" />
+        <meta name="twitter:title" content="ManoProtect - Protección Familiar contra Fraudes" />
+        <meta name="twitter:description" content="Protege a tu familia contra fraudes y estafas digitales. IA avanzada para detectar amenazas en tiempo real." />
+        <meta name="twitter:image" content="https://www.manoprotect.com/og-image.png" />
+        <meta name="twitter:image:alt" content="ManoProtect - Protección familiar digital" />
         
-        <!-- Schema.org Organization -->
+        <!-- Schema.org Organization - Mejorado -->
         <script type="application/ld+json">
         {
             "@context": "https://schema.org",
             "@type": "Organization",
             "name": "ManoProtect",
             "legalName": "STARTBOOKING SL",
-            "url": "https://manoprotect.com",
-            "logo": "https://manoprotect.com/logo.png",
+            "url": "https://www.manoprotect.com",
+            "logo": "https://www.manoprotect.com/manoprotect_logo.png",
             "description": "Plataforma líder en España de protección contra fraudes y estafas digitales",
             "foundingDate": "2024",
             "address": {
                 "@type": "PostalAddress",
-                "addressCountry": "ES"
+                "addressCountry": "ES",
+                "addressLocality": "Madrid"
             },
             "contactPoint": {
                 "@type": "ContactPoint",
+                "telephone": "+34-601-510-950",
                 "contactType": "customer service",
-                "availableLanguage": ["Spanish", "English"]
+                "email": "info@manoprotect.com",
+                "availableLanguage": ["Spanish", "English"],
+                "areaServed": "ES"
             },
-            "sameAs": []
+            "sameAs": [
+                "https://twitter.com/manoprotect",
+                "https://www.linkedin.com/company/manoprotect"
+            ]
         }
         </script>
         
-        <!-- Schema.org SoftwareApplication -->
+        <!-- Schema.org SoftwareApplication - Mejorado -->
         <script type="application/ld+json">
         {
             "@context": "https://schema.org",
             "@type": "SoftwareApplication",
             "name": "ManoProtect",
-            "operatingSystem": "Web, Android, iOS",
+            "url": "https://www.manoprotect.com",
+            "operatingSystem": "ANDROID, IOS, Web",
             "applicationCategory": "SecurityApplication",
+            "description": "Aplicación de protección contra fraudes digitales para familias",
             "offers": {
                 "@type": "AggregateOffer",
                 "lowPrice": "0",
                 "highPrice": "399.99",
                 "priceCurrency": "EUR",
-                "offerCount": "6"
+                "offerCount": "3",
+                "availability": "https://schema.org/InStock"
             },
             "aggregateRating": {
                 "@type": "AggregateRating",
@@ -101,12 +121,14 @@
             },
             "provider": {
                 "@type": "Organization",
-                "name": "STARTBOOKING SL"
-            }
+                "name": "STARTBOOKING SL",
+                "url": "https://www.manoprotect.com"
+            },
+            "screenshot": "https://www.manoprotect.com/og-image.png"
         }
         </script>
         
-        <!-- Schema.org FAQPage -->
+        <!-- Schema.org FAQPage - Actualizado -->
         <script type="application/ld+json">
         {
             "@context": "https://schema.org",
@@ -117,34 +139,49 @@
                     "name": "¿Qué es ManoProtect?",
                     "acceptedAnswer": {
                         "@type": "Answer",
-                        "text": "ManoProtect es una plataforma de seguridad digital que protege a familias y empresas contra fraudes, phishing, smishing y otras estafas digitales usando inteligencia artificial avanzada."
+                        "text": "ManoProtect es una plataforma de seguridad digital que protege a familias contra fraudes, phishing, smishing y otras estafas digitales usando inteligencia artificial avanzada."
                     }
                 },
                 {
                     "@type": "Question",
-                    "name": "¿Cómo funciona la protección contra fraudes?",
+                    "name": "¿Puedo cancelar en cualquier momento?",
                     "acceptedAnswer": {
                         "@type": "Answer",
-                        "text": "ManoProtect analiza en tiempo real mensajes, correos y enlaces sospechosos usando IA. Detecta patrones de fraude y alerta inmediatamente al usuario antes de que pueda ser víctima de una estafa."
+                        "text": "Sí, sin preguntas. Cancela desde tu perfil y seguirás teniendo acceso hasta el final del período pagado."
                     }
                 },
                 {
                     "@type": "Question",
-                    "name": "¿ManoProtect tiene plan familiar?",
+                    "name": "¿Qué incluye la garantía de 15 días?",
                     "acceptedAnswer": {
                         "@type": "Answer",
-                        "text": "Sí, ofrecemos planes familiares que protegen hasta 5 miembros de la familia, incluyendo funciones especiales para personas mayores y localización de niños."
+                        "text": "Si no estás satisfecho, te devolvemos el 100% del importe. Sin letra pequeña, sin complicaciones."
                     }
                 },
                 {
                     "@type": "Question",
-                    "name": "¿Cuánto cuesta ManoProtect?",
+                    "name": "¿Cómo funciona el botón SOS?",
                     "acceptedAnswer": {
                         "@type": "Answer",
-                        "text": "Ofrecemos un plan básico gratuito y planes premium desde 9,99€/semana. Los planes familiares comienzan en 49,99€/mes con todas las funcionalidades incluidas."
+                        "text": "Al pulsarlo, se envía tu ubicación GPS a tus contactos de emergencia y suena una alarma en sus dispositivos."
                     }
                 }
             ]
+        }
+        </script>
+        
+        <!-- Schema.org WebSite with SearchAction -->
+        <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "WebSite",
+            "name": "ManoProtect",
+            "url": "https://www.manoprotect.com",
+            "potentialAction": {
+                "@type": "SearchAction",
+                "target": "https://www.manoprotect.com/search?q={search_term_string}",
+                "query-input": "required name=search_term_string"
+            }
         }
         </script>
         
@@ -154,8 +191,9 @@
         <meta name="apple-mobile-web-app-title" content="ManoProtect" />
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="application-name" content="ManoProtect" />
-        <meta name="msapplication-TileColor" content="#10b981" />
+        <meta name="msapplication-TileColor" content="#6366f1" />
         <meta name="msapplication-tap-highlight" content="no" />
+        <meta name="format-detection" content="telephone=no" />
         
         <!-- Apple Touch Icons -->
         <link rel="apple-touch-icon" href="/icons/icon-152x152.png" />
