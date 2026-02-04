@@ -206,6 +206,16 @@ Usuario pulsa SOS → Backend → WebSocket + FCM + SMS → Familiar recibe:
 
 ## Changelog
 
+### 04/02/2026 - Instrucciones Familiares + Mejora Errores
+- **ADDED**: Nueva página `/instrucciones-familiares` con guía paso a paso
+  - 4 pasos expandibles: Registrarse, Notificaciones, Vincular, Verificar
+  - Compartir por WhatsApp y copiar enlace
+  - FAQ y requisitos del dispositivo
+- **IMPROVED**: Mensajes de error en registro muestran detalle del backend
+  - Soporta errores de validación de contraseña con feedback
+  - Soporta errores de email duplicado
+  - Soporta errores de Pydantic
+
 ### 04/02/2026 - Bug Fix SOS + AdMob
 - **FIXED**: Bug crítico - contactos de emergencia no se encontraban
   - Query ahora usa `is_emergency OR receive_alerts OR emergency_contact`
