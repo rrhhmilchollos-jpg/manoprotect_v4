@@ -46,12 +46,15 @@ El SMS backup está implementado correctamente pero Twilio reporta:
 - Servicio: `/src/services/admob.js`
 - Anuncios solo para usuarios plan "free"
 
-### 🔍 SEO Expansivo
-- Meta tags Open Graph y Twitter Cards
-- `sitemap.xml` con todas las páginas públicas
-- `robots.txt` optimizado para crawlers
-- Schema.org estructurado (Organization, SoftwareApplication, FAQPage)
-- `google-adsense-account` actualizado en index.html
+### 🔍 SEO Expansivo Completo (04/02/2026)
+- Meta tags actualizados (Open Graph, Twitter Cards, google-adsense-account)
+- `sitemap.xml` con todas las URLs importantes e imagen OG
+- `robots.txt` optimizado para crawlers (Googlebot, Bingbot)
+- Schema.org estructurado: Organization, SoftwareApplication, FAQPage, WebSite
+- Imagen OG generada: `/og-image.png` (1536x1024)
+- Canonical URLs con www
+- hreflang para español
+- Noscript content completo para SEO
 
 ### 🔐 Panel de Estado de Servicios
 - Nuevo endpoint: `GET /api/admin/services-status`
