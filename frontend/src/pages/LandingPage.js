@@ -110,13 +110,13 @@ const LandingPage = () => {
           </div>
           <div className="flex items-center gap-3">
             <LanguageSelector className="mr-2" />
+            {/* Botón de Precios DESTACADO */}
             <Button
               data-testid="header-pricing-btn"
-              onClick={() => navigate('/pricing')}
-              variant="ghost"
-              className="text-zinc-700 hover:text-indigo-600 rounded-lg px-4 h-10"
+              onClick={() => navigate('/plans')}
+              className="bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg px-5 h-10 font-semibold shadow-sm"
             >
-              {t('nav.pricing')}
+              💰 Ver Precios
             </Button>
             <Button
               data-testid="header-investors-btn"
