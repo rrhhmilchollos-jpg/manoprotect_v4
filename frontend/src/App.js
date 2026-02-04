@@ -372,7 +372,7 @@ function App() {
           <AppRouter />
           {/* Defer non-critical UI components */}
           <Suspense fallback={<EmptyFallback />}>
-            <FloatingWhatsApp />
+            <AIChatWidget />
           </Suspense>
           <Suspense fallback={<EmptyFallback />}>
             <CookieConsent />
