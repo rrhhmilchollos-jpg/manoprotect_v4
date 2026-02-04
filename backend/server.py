@@ -1701,7 +1701,7 @@ async def update_user_status(
         raise HTTPException(status_code=400, detail="No puedes desactivar tu propia cuenta")
     
     # Get current user
-    user = await db.users.find_one({"user_id": user_id})
+    user = await db.users.find_one({"user_id": user_id}, {"_id": 0})
     if not user:
         raise HTTPException(status_code=404, detail="Usuario no encontrado")
     
