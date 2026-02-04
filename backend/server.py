@@ -1549,7 +1549,7 @@ async def update_user_role(
     
     # Only allow superadmin role for the designated email
     if role == "superadmin":
-        target_user = await db.users.find_one({"user_id": user_id})
+        target_user = await db.users.find_one({"user_id": user_id}, {"_id": 0})
         if target_user and target_user.get("email") != SUPERADMIN_EMAIL:
             raise HTTPException(
                 status_code=403, 
