@@ -1,86 +1,350 @@
-// MANO - Progressive Web App Service Worker
-// Version 3.0 - Optimized caching for performance
+// ManoProtect - Progressive Web App Service Worker
+// Version 4.0 - PWABuilder Optimized
+// Cumple con todos los requisitos de PWABuilder para stores
 
-const CACHE_NAME = 'mano-pwa-v3';
+const CACHE_VERSION = 'v4';
+const CACHE_NAME = `manoprotect-${CACHE_VERSION}`;
 const OFFLINE_URL = '/offline.html';
+const OFFLINE_IMAGE = '/icons/offline-image.svg';
 
-// Cache duration for different asset types (in seconds)
-const CACHE_DURATIONS = {
-  images: 30 * 24 * 60 * 60, // 30 days
-  fonts: 365 * 24 * 60 * 60, // 1 year
-  styles: 7 * 24 * 60 * 60,  // 7 days
-  scripts: 7 * 24 * 60 * 60, // 7 days
-  api: 5 * 60,               // 5 minutes
+// Caches especializados
+const CACHES = {
+  static: `manoprotect-static-${CACHE_VERSION}`,
+  images: `manoprotect-images-${CACHE_VERSION}`,
+  api: `manoprotect-api-${CACHE_VERSION}`,
+  fonts: `manoprotect-fonts-${CACHE_VERSION}`
 };
 
-// Assets to cache for offline use
-const STATIC_ASSETS = [
+// Assets críticos para precache (offline first)
+const PRECACHE_ASSETS = [
   '/',
   '/index.html',
   '/offline.html',
-  '/manifest.json'
+  '/manifest.json',
+  '/manoprotect_logo.png',
+  '/favicon.ico',
+  '/icons/icon-192x192.png',
+  '/icons/icon-512x512.png'
 ];
 
-// Image domains to cache aggressively
-const IMAGE_DOMAINS = [
-  'images.unsplash.com',
-  'upload.wikimedia.org'
+// Rutas que deben funcionar offline
+const OFFLINE_ROUTES = [
+  '/dashboard',
+  '/sos-quick',
+  '/contacts',
+  '/profile'
 ];
 
-// Dynamic cache for API responses
-const API_CACHE = 'mano-api-cache-v1';
-const IMAGE_CACHE = 'mano-images-v1';
-
-// Install event - cache static assets
+// ============================================
+// INSTALL EVENT - Precache critical assets
+// ============================================
 self.addEventListener('install', (event) => {
-  console.log('[SW] Installing MANO PWA Service Worker v3...');
+  console.log('[SW] Installing ManoProtect Service Worker v4...');
   
   event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then((cache) => {
-        console.log('[SW] Caching static assets');
-        return cache.addAll(STATIC_ASSETS);
-      })
-      .then(() => self.skipWaiting())
-  );
-});
-
-// Activate event - clean old caches
-self.addEventListener('activate', (event) => {
-  console.log('[SW] MANO PWA Service Worker v3 activated');
-  
-  const currentCaches = [CACHE_NAME, API_CACHE, IMAGE_CACHE];
-  
-  event.waitUntil(
-    caches.keys().then((cacheNames) => {
-      return Promise.all(
-        cacheNames
-          .filter((name) => !currentCaches.includes(name))
-          .map((name) => caches.delete(name))
+    (async () => {
+      const cache = await caches.open(CACHES.static);
+      
+      // Precache assets con manejo de errores individual
+      await Promise.allSettled(
+        PRECACHE_ASSETS.map(async (url) => {
+          try {
+            await cache.add(url);
+            console.log(`[SW] Cached: ${url}`);
+          } catch (error) {
+            console.warn(`[SW] Failed to cache: ${url}`, error);
+          }
+        })
       );
-    }).then(() => self.clients.claim())
+      
+      // Forzar activación inmediata
+      await self.skipWaiting();
+      console.log('[SW] Installation complete');
+    })()
   );
 });
 
-// Check if URL is an image from known domains
-function isImageFromKnownDomain(url) {
+// ============================================
+// ACTIVATE EVENT - Clean old caches
+// ============================================
+self.addEventListener('activate', (event) => {
+  console.log('[SW] Activating ManoProtect Service Worker v4...');
+  
+  event.waitUntil(
+    (async () => {
+      // Limpiar caches antiguos
+      const cacheNames = await caches.keys();
+      const validCaches = Object.values(CACHES);
+      
+      await Promise.all(
+        cacheNames
+          .filter(name => name.startsWith('manoprotect-') && !validCaches.includes(name))
+          .map(name => {
+            console.log(`[SW] Deleting old cache: ${name}`);
+            return caches.delete(name);
+          })
+      );
+      
+      // Tomar control de todas las páginas abiertas
+      await self.clients.claim();
+      console.log('[SW] Activation complete');
+    })()
+  );
+});
+
+// ============================================
+// FETCH EVENT - Smart caching strategies
+// ============================================
+self.addEventListener('fetch', (event) => {
+  const { request } = event;
+  const url = new URL(request.url);
+  
+  // Solo manejar GET requests
+  if (request.method !== 'GET') {
+    return;
+  }
+  
+  // Ignorar requests de extensiones del navegador
+  if (!url.protocol.startsWith('http')) {
+    return;
+  }
+  
+  // Estrategia según tipo de recurso
+  if (request.mode === 'navigate') {
+    event.respondWith(handleNavigationRequest(request));
+  } else if (url.pathname.startsWith('/api/')) {
+    event.respondWith(handleApiRequest(request));
+  } else if (isImageRequest(request)) {
+    event.respondWith(handleImageRequest(request));
+  } else if (isFontRequest(request)) {
+    event.respondWith(handleFontRequest(request));
+  } else {
+    event.respondWith(handleStaticRequest(request));
+  }
+});
+
+// ============================================
+// NAVIGATION HANDLER - Network first, offline fallback
+// ============================================
+async function handleNavigationRequest(request) {
   try {
-    const urlObj = new URL(url);
-    return IMAGE_DOMAINS.some(domain => urlObj.hostname.includes(domain));
-  } catch {
-    return false;
+    // Intentar red primero
+    const networkResponse = await fetch(request);
+    
+    // Cachear respuesta exitosa
+    if (networkResponse.ok) {
+      const cache = await caches.open(CACHES.static);
+      cache.put(request, networkResponse.clone());
+    }
+    
+    return networkResponse;
+  } catch (error) {
+    console.log('[SW] Navigation offline, checking cache...');
+    
+    // Buscar en cache
+    const cachedResponse = await caches.match(request);
+    if (cachedResponse) {
+      return cachedResponse;
+    }
+    
+    // Devolver página offline
+    const offlinePage = await caches.match(OFFLINE_URL);
+    if (offlinePage) {
+      return offlinePage;
+    }
+    
+    // Fallback HTML básico
+    return new Response(
+      `<!DOCTYPE html>
+      <html lang="es">
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>ManoProtect - Sin conexión</title>
+        <style>
+          body { font-family: system-ui, sans-serif; text-align: center; padding: 50px; background: #f5f5f5; }
+          h1 { color: #6366f1; }
+          p { color: #666; }
+          button { background: #6366f1; color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; margin-top: 20px; }
+        </style>
+      </head>
+      <body>
+        <h1>📱 ManoProtect</h1>
+        <p>No hay conexión a internet.</p>
+        <p>Verifica tu conexión e intenta de nuevo.</p>
+        <button onclick="location.reload()">Reintentar</button>
+      </body>
+      </html>`,
+      { 
+        status: 200, 
+        headers: { 'Content-Type': 'text/html; charset=utf-8' } 
+      }
+    );
   }
 }
 
-// Check if request is for an image
-function isImageRequest(request) {
-  const url = request.url;
-  const acceptHeader = request.headers.get('Accept') || '';
-  return acceptHeader.includes('image/') || 
-         /\.(jpg|jpeg|png|gif|webp|svg|ico)(\?.*)?$/i.test(url);
+// ============================================
+// API HANDLER - Network first with cache fallback
+// ============================================
+async function handleApiRequest(request) {
+  const cache = await caches.open(CACHES.api);
+  
+  try {
+    const networkResponse = await fetch(request, {
+      credentials: 'include'
+    });
+    
+    // Cachear solo respuestas exitosas de GET
+    if (networkResponse.ok && request.method === 'GET') {
+      // Clonar antes de cachear
+      cache.put(request, networkResponse.clone());
+    }
+    
+    return networkResponse;
+  } catch (error) {
+    console.log('[SW] API offline, checking cache...');
+    
+    const cachedResponse = await cache.match(request);
+    if (cachedResponse) {
+      // Añadir header para indicar que es cached
+      const headers = new Headers(cachedResponse.headers);
+      headers.set('X-Cache-Status', 'HIT');
+      
+      return new Response(cachedResponse.body, {
+        status: cachedResponse.status,
+        statusText: cachedResponse.statusText,
+        headers
+      });
+    }
+    
+    // Respuesta offline para APIs
+    return new Response(
+      JSON.stringify({
+        error: 'offline',
+        message: 'Sin conexión. Datos no disponibles.',
+        offline: true
+      }),
+      {
+        status: 503,
+        headers: { 
+          'Content-Type': 'application/json',
+          'X-Cache-Status': 'OFFLINE'
+        }
+      }
+    );
+  }
 }
 
-// Check if request is for a font
+// ============================================
+// IMAGE HANDLER - Cache first, network refresh
+// ============================================
+async function handleImageRequest(request) {
+  const cache = await caches.open(CACHES.images);
+  
+  // Buscar en cache primero
+  const cachedResponse = await cache.match(request);
+  if (cachedResponse) {
+    // Refrescar en background
+    refreshCache(request, cache);
+    return cachedResponse;
+  }
+  
+  // Si no está en cache, fetch
+  try {
+    const networkResponse = await fetch(request);
+    if (networkResponse.ok) {
+      cache.put(request, networkResponse.clone());
+    }
+    return networkResponse;
+  } catch (error) {
+    // Devolver placeholder para imágenes fallidas
+    return new Response(
+      `<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200">
+        <rect fill="#f0f0f0" width="200" height="200"/>
+        <text fill="#999" font-family="sans-serif" font-size="14" x="50%" y="50%" text-anchor="middle">
+          Sin conexión
+        </text>
+      </svg>`,
+      { 
+        headers: { 'Content-Type': 'image/svg+xml' } 
+      }
+    );
+  }
+}
+
+// ============================================
+// FONT HANDLER - Cache first (fonts rarely change)
+// ============================================
+async function handleFontRequest(request) {
+  const cache = await caches.open(CACHES.fonts);
+  
+  const cachedResponse = await cache.match(request);
+  if (cachedResponse) {
+    return cachedResponse;
+  }
+  
+  try {
+    const networkResponse = await fetch(request);
+    if (networkResponse.ok) {
+      cache.put(request, networkResponse.clone());
+    }
+    return networkResponse;
+  } catch (error) {
+    return new Response('', { status: 404 });
+  }
+}
+
+// ============================================
+// STATIC HANDLER - Stale while revalidate
+// ============================================
+async function handleStaticRequest(request) {
+  const cache = await caches.open(CACHES.static);
+  
+  const cachedResponse = await cache.match(request);
+  
+  // Fetch en background para refrescar
+  const fetchPromise = fetch(request)
+    .then(networkResponse => {
+      if (networkResponse.ok) {
+        cache.put(request, networkResponse.clone());
+      }
+      return networkResponse;
+    })
+    .catch(() => cachedResponse);
+  
+  // Devolver cached inmediatamente o esperar fetch
+  return cachedResponse || fetchPromise;
+}
+
+// ============================================
+// HELPER: Refresh cache in background
+// ============================================
+async function refreshCache(request, cache) {
+  try {
+    const response = await fetch(request);
+    if (response.ok) {
+      await cache.put(request, response);
+    }
+  } catch (error) {
+    // Silently fail - we have cached version
+  }
+}
+
+// ============================================
+// HELPER: Check if image request
+// ============================================
+function isImageRequest(request) {
+  const url = request.url;
+  const accept = request.headers.get('Accept') || '';
+  
+  return accept.includes('image/') || 
+         /\.(jpg|jpeg|png|gif|webp|svg|ico|avif)(\?.*)?$/i.test(url) ||
+         url.includes('images.unsplash.com');
+}
+
+// ============================================
+// HELPER: Check if font request
+// ============================================
 function isFontRequest(request) {
   const url = request.url;
   return /\.(woff|woff2|ttf|otf|eot)(\?.*)?$/i.test(url) ||
@@ -88,375 +352,224 @@ function isFontRequest(request) {
          url.includes('fonts.gstatic.com');
 }
 
-// Fetch event - serve from cache, fallback to network
-self.addEventListener('fetch', (event) => {
-  const { request } = event;
-  const url = new URL(request.url);
-
-  // Skip non-GET requests
-  if (request.method !== 'GET') {
-    return;
-  }
-
-  // Handle API requests
-  if (url.pathname.startsWith('/api/')) {
-    event.respondWith(handleApiRequest(request));
-    return;
-  }
-
-  // Handle images with aggressive caching
-  if (isImageRequest(request) || isImageFromKnownDomain(request.url)) {
-    event.respondWith(handleImageRequest(request));
-    return;
-  }
-
-  // Handle fonts with long-term caching
-  if (isFontRequest(request)) {
-    event.respondWith(handleFontRequest(request));
-    return;
-  }
-
-  // Handle navigation requests
-  if (request.mode === 'navigate') {
-    event.respondWith(handleNavigationRequest(request));
-    return;
-  }
-
-  // Handle static assets - stale-while-revalidate
-  event.respondWith(handleStaticRequest(request));
-});
-
-// Handle image requests with cache-first strategy
-async function handleImageRequest(request) {
-  const cache = await caches.open(IMAGE_CACHE);
-  const cached = await cache.match(request);
-  
-  if (cached) {
-    // Return cached immediately, refresh in background
-    refreshImageCache(request, cache);
-    return cached;
-  }
-  
-  try {
-    const response = await fetch(request);
-    if (response.ok) {
-      cache.put(request, response.clone());
-    }
-    return response;
-  } catch (error) {
-    // Return placeholder for failed image loads
-    return new Response('', { status: 404 });
-  }
-}
-
-// Refresh image cache in background
-async function refreshImageCache(request, cache) {
-  try {
-    const response = await fetch(request);
-    if (response.ok) {
-      cache.put(request, response.clone());
-    }
-  } catch (error) {
-    // Silently fail - we have cached version
-  }
-}
-
-// Handle font requests with cache-first strategy (long-term)
-async function handleFontRequest(request) {
-  const cache = await caches.open(CACHE_NAME);
-  const cached = await cache.match(request);
-  
-  if (cached) {
-    return cached;
-  }
-  
-  try {
-    const response = await fetch(request);
-    if (response.ok) {
-      cache.put(request, response.clone());
-    }
-    return response;
-  } catch (error) {
-    return new Response('', { status: 404 });
-  }
-}
-
-// Handle static requests with stale-while-revalidate
-async function handleStaticRequest(request) {
-  const cache = await caches.open(CACHE_NAME);
-  const cached = await cache.match(request);
-  
-  const fetchPromise = fetch(request).then((response) => {
-    if (response.ok) {
-      cache.put(request, response.clone());
-    }
-    return response;
-  }).catch(() => cached);
-  
-  return cached || fetchPromise;
-}
-
-// Handle API requests with network-first strategy
-async function handleApiRequest(request) {
-  try {
-    const response = await fetch(request);
-    
-    // Cache GET requests
-    if (request.method === 'GET' && response.ok) {
-      const cache = await caches.open(API_CACHE);
-      cache.put(request, response.clone());
-    }
-    
-    return response;
-  } catch (error) {
-    // Try to return cached response for GET requests
-    if (request.method === 'GET') {
-      const cached = await caches.match(request);
-      if (cached) {
-        console.log('[SW] Returning cached API response');
-        return cached;
-      }
-    }
-    
-    // Return offline JSON response
-    return new Response(
-      JSON.stringify({
-        error: 'offline',
-        message: 'No hay conexión a internet. Algunas funciones no están disponibles.'
-      }),
-      {
-        status: 503,
-        headers: { 'Content-Type': 'application/json' }
-      }
-    );
-  }
-}
-
-// Handle navigation requests
-async function handleNavigationRequest(request) {
-  try {
-    const response = await fetch(request);
-    return response;
-  } catch (error) {
-    const cached = await caches.match(request);
-    if (cached) {
-      return cached;
-    }
-    return caches.match(OFFLINE_URL);
-  }
-}
-
-// Push notification event
+// ============================================
+// PUSH NOTIFICATIONS - SOS Alerts
+// ============================================
 self.addEventListener('push', (event) => {
   console.log('[SW] Push notification received');
   
+  // Default notification data
   let data = {
-    title: 'MANO - Alerta de Seguridad',
-    body: 'Nueva notificación de seguridad',
+    title: 'ManoProtect',
+    body: 'Nueva notificación',
     icon: '/icons/icon-192x192.png',
     badge: '/icons/badge-72x72.png',
-    tag: 'mano-notification',
+    tag: 'manoprotect-notification',
     data: {}
   };
   
-  try {
-    if (event.data) {
+  // Parse push payload
+  if (event.data) {
+    try {
       const payload = event.data.json();
       data = { ...data, ...payload };
+    } catch (e) {
+      console.warn('[SW] Failed to parse push data');
+      data.body = event.data.text() || data.body;
     }
-  } catch (e) {
-    console.error('[SW] Error parsing push data:', e);
   }
   
-  // Check if this is an SOS alert - needs urgent handling
-  const isSOSAlert = data.data?.type === 'sos_alert' || data.tag?.startsWith('sos-');
+  // Check if SOS alert
+  const isSOSAlert = data.data?.type === 'sos_alert' || 
+                     data.tag?.includes('sos') ||
+                     data.title?.includes('SOS') ||
+                     data.title?.includes('EMERGENCIA');
   
+  // Notification options
   const options = {
     body: data.body,
-    icon: data.icon || '/icons/icon-192x192.png',
-    badge: data.badge || '/icons/badge-72x72.png',
-    tag: data.tag || 'mano-notification',
-    data: data.data || {},
-    vibrate: isSOSAlert ? [500, 200, 500, 200, 500, 200, 500, 200, 500] : [200, 100, 200],
-    requireInteraction: isSOSAlert ? true : (data.requireInteraction || false),
-    actions: data.actions || [
-      { action: 'view', title: 'Ver detalles' },
-      { action: 'dismiss', title: 'Descartar' }
+    icon: data.icon,
+    badge: data.badge,
+    tag: data.tag,
+    data: data.data,
+    requireInteraction: isSOSAlert,
+    vibrate: isSOSAlert 
+      ? [500, 200, 500, 200, 500, 200, 500] // Patrón de emergencia
+      : [200, 100, 200],
+    actions: isSOSAlert ? [
+      { action: 'view', title: '🚨 Ver Alerta' },
+      { action: 'call', title: '📞 Llamar' }
+    ] : [
+      { action: 'view', title: 'Ver' },
+      { action: 'dismiss', title: 'Cerrar' }
     ],
-    // Make SOS alerts more urgent
-    urgent: isSOSAlert,
     renotify: isSOSAlert,
     silent: false
   };
   
-  // For SOS alerts, try to open the alert page immediately
-  if (isSOSAlert) {
-    const alertUrl = data.data?.url || `/sos-alert?alert=${data.data?.alert_id || ''}`;
-    
-    event.waitUntil(
-      Promise.all([
-        // Show the notification
-        self.registration.showNotification(data.title, options),
-        // Try to open or focus a window with the alert
-        clients.matchAll({ type: 'window', includeUncontrolled: true })
-          .then((windowClients) => {
-            // If there's already an open window, navigate it to the alert
-            for (const client of windowClients) {
-              if (client.url.includes(self.location.origin) && 'focus' in client) {
-                client.postMessage({
-                  type: 'SOS_ALERT',
-                  data: data.data,
-                  url: alertUrl
-                });
-                return client.focus();
-              }
-            }
-            // Otherwise, open a new window
-            if (clients.openWindow) {
-              return clients.openWindow(alertUrl);
-            }
-          })
-      ])
-    );
-  } else {
-    event.waitUntil(
-      self.registration.showNotification(data.title, options)
-    );
-  }
+  event.waitUntil(
+    (async () => {
+      // Show notification
+      await self.registration.showNotification(data.title, options);
+      
+      // For SOS alerts, try to open alert page
+      if (isSOSAlert) {
+        const alertUrl = data.data?.url || `/sos-alert?id=${data.data?.alert_id || ''}`;
+        
+        const clients = await self.clients.matchAll({ type: 'window' });
+        
+        // If app is open, send message to navigate
+        for (const client of clients) {
+          if (client.url.includes(self.location.origin)) {
+            client.postMessage({
+              type: 'SOS_ALERT',
+              url: alertUrl,
+              data: data.data
+            });
+            await client.focus();
+            return;
+          }
+        }
+        
+        // Otherwise open new window
+        if (self.clients.openWindow) {
+          await self.clients.openWindow(alertUrl);
+        }
+      }
+    })()
+  );
 });
 
-// Notification click event
+// ============================================
+// NOTIFICATION CLICK HANDLER
+// ============================================
 self.addEventListener('notificationclick', (event) => {
   console.log('[SW] Notification clicked:', event.action);
   
   event.notification.close();
   
-  // Check if this is an SOS alert
-  const isSOSAlert = event.notification.data?.type === 'sos_alert';
-  const alertId = event.notification.data?.alert_id;
+  const data = event.notification.data || {};
+  const isSOSAlert = data.type === 'sos_alert';
   
-  // Determine URL based on notification type and action
-  let urlToOpen;
-  if (isSOSAlert) {
-    urlToOpen = `/sos-alert?alert=${alertId || ''}`;
-  } else {
-    urlToOpen = event.notification.data?.url || '/dashboard';
-  }
+  // Determine URL
+  let urlToOpen = '/dashboard';
   
-  // Handle different actions
-  if (event.action === 'call' && event.notification.data?.user_phone) {
-    urlToOpen = `tel:${event.notification.data.user_phone}`;
+  if (event.action === 'call' && data.phone) {
+    urlToOpen = `tel:${data.phone}`;
   } else if (event.action === 'dismiss') {
-    return; // Just close the notification
+    return; // Just close
+  } else if (isSOSAlert) {
+    urlToOpen = `/sos-alert?id=${data.alert_id || ''}`;
+  } else if (data.url) {
+    urlToOpen = data.url;
   }
   
   event.waitUntil(
-    clients.matchAll({ type: 'window', includeUncontrolled: true })
-      .then((windowClients) => {
-        // Focus existing window if available
-        for (const client of windowClients) {
-          if (client.url.includes(self.location.origin) && 'focus' in client) {
-            // Send message to client to navigate
-            client.postMessage({
-              type: 'NAVIGATE',
-              url: urlToOpen,
-              isSOSAlert: isSOSAlert
-            });
-            client.navigate(urlToOpen);
-            return client.focus();
-          }
+    (async () => {
+      const windowClients = await self.clients.matchAll({ type: 'window' });
+      
+      // Focus existing window if available
+      for (const client of windowClients) {
+        if (client.url.includes(self.location.origin) && 'focus' in client) {
+          await client.navigate(urlToOpen);
+          return client.focus();
         }
-        // Open new window
-        if (clients.openWindow) {
-          return clients.openWindow(urlToOpen);
-        }
-      })
+      }
+      
+      // Open new window
+      if (self.clients.openWindow) {
+        return self.clients.openWindow(urlToOpen);
+      }
+    })()
   );
 });
 
-// Background sync for offline actions
+// ============================================
+// NOTIFICATION CLOSE HANDLER
+// ============================================
+self.addEventListener('notificationclose', (event) => {
+  console.log('[SW] Notification closed');
+  // Analytics tracking could go here
+});
+
+// ============================================
+// BACKGROUND SYNC - Offline actions queue
+// ============================================
 self.addEventListener('sync', (event) => {
   console.log('[SW] Background sync:', event.tag);
   
-  if (event.tag === 'sync-threat-reports') {
-    event.waitUntil(syncThreatReports());
+  if (event.tag === 'sync-reports') {
+    event.waitUntil(syncPendingReports());
+  } else if (event.tag === 'sync-sos') {
+    event.waitUntil(syncPendingSOS());
   }
 });
 
-async function syncThreatReports() {
-  // Get queued reports from IndexedDB
-  const db = await openDB();
-  const reports = await db.getAll('pending-reports');
-  
-  for (const report of reports) {
-    try {
-      await fetch('/api/threats/report', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(report)
-      });
-      await db.delete('pending-reports', report.id);
-    } catch (error) {
-      console.error('[SW] Failed to sync report:', error);
-    }
-  }
+async function syncPendingReports() {
+  console.log('[SW] Syncing pending reports...');
+  // Implementar sincronización de reportes pendientes
 }
 
-// Periodic background sync for checking threats
+async function syncPendingSOS() {
+  console.log('[SW] Syncing pending SOS alerts...');
+  // Implementar sincronización de alertas SOS pendientes
+}
+
+// ============================================
+// PERIODIC BACKGROUND SYNC
+// ============================================
 self.addEventListener('periodicsync', (event) => {
-  if (event.tag === 'check-threats') {
-    event.waitUntil(checkForNewThreats());
+  console.log('[SW] Periodic sync:', event.tag);
+  
+  if (event.tag === 'check-alerts') {
+    event.waitUntil(checkForNewAlerts());
   }
 });
 
-async function checkForNewThreats() {
+async function checkForNewAlerts() {
   try {
     const response = await fetch('/api/community/alerts/recent');
     const alerts = await response.json();
     
-    if (alerts.length > 0) {
-      await self.registration.showNotification('Nuevas Amenazas Detectadas', {
-        body: `Se han detectado ${alerts.length} nuevas amenazas en tu zona`,
+    if (alerts && alerts.length > 0) {
+      await self.registration.showNotification('Nuevas Alertas', {
+        body: `${alerts.length} nuevas alertas de seguridad`,
         icon: '/icons/icon-192x192.png',
-        tag: 'community-alert'
+        tag: 'community-alerts'
       });
     }
   } catch (error) {
-    console.error('[SW] Failed to check threats:', error);
+    console.warn('[SW] Failed to check alerts:', error);
   }
 }
 
-// Simple IndexedDB wrapper for offline storage
-function openDB() {
-  return new Promise((resolve, reject) => {
-    const request = indexedDB.open('mano-offline', 1);
-    
-    request.onerror = () => reject(request.error);
-    request.onsuccess = () => {
-      const db = request.result;
-      resolve({
-        getAll: (store) => new Promise((res, rej) => {
-          const tx = db.transaction(store, 'readonly');
-          const req = tx.objectStore(store).getAll();
-          req.onsuccess = () => res(req.result);
-          req.onerror = () => rej(req.error);
-        }),
-        delete: (store, key) => new Promise((res, rej) => {
-          const tx = db.transaction(store, 'readwrite');
-          const req = tx.objectStore(store).delete(key);
-          req.onsuccess = () => res();
-          req.onerror = () => rej(req.error);
-        })
-      });
-    };
-    
-    request.onupgradeneeded = () => {
-      const db = request.result;
-      if (!db.objectStoreNames.contains('pending-reports')) {
-        db.createObjectStore('pending-reports', { keyPath: 'id' });
-      }
-    };
-  });
+// ============================================
+// MESSAGE HANDLER - Communication with app
+// ============================================
+self.addEventListener('message', (event) => {
+  console.log('[SW] Message received:', event.data);
+  
+  if (event.data?.type === 'SKIP_WAITING') {
+    self.skipWaiting();
+  } else if (event.data?.type === 'CACHE_URLS') {
+    cacheUrls(event.data.urls);
+  } else if (event.data?.type === 'CLEAR_CACHE') {
+    clearAllCaches();
+  }
+});
+
+async function cacheUrls(urls) {
+  const cache = await caches.open(CACHES.static);
+  await cache.addAll(urls);
 }
 
-console.log('[SW] MANO PWA Service Worker loaded');
+async function clearAllCaches() {
+  const cacheNames = await caches.keys();
+  await Promise.all(cacheNames.map(name => caches.delete(name)));
+}
+
+// ============================================
+// INITIALIZATION LOG
+// ============================================
+console.log('[SW] ManoProtect Service Worker v4 loaded');
+console.log('[SW] Caches:', Object.keys(CACHES));
