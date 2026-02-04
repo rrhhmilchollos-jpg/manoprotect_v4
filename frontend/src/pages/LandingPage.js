@@ -160,93 +160,187 @@ const LandingPage = () => {
 
       {/* Hero Section - Main Content */}
       <main id="main-content" role="main">
-      <section className="relative px-6 py-24 overflow-hidden min-h-[600px] lg:min-h-[700px]">
+      <section className="relative px-6 py-16 overflow-hidden">
         <div className="grain absolute inset-0 pointer-events-none" aria-hidden="true" />
         <div className="max-w-7xl mx-auto">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div className="space-y-8">
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-indigo-50 border border-indigo-200" style={{minHeight: '40px'}}>
-                <img 
-                  src={LOGO_URL}
-                  alt="ManoProtect" 
-                  className="h-5 w-auto"
-                  width="20"
-                  height="20"
-                  loading="eager"
-                  fetchpriority="high"
-                />
-                <span className="text-sm font-medium text-indigo-700">{t('landing.features.realTimeAlerts.title')}</span>
-              </div>
-              
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight leading-tight">
-                {t('landing.hero.title')}
-              </h1>
-              
-              {/* Descripción clara del producto */}
-              <p className="text-lg text-zinc-600 leading-relaxed max-w-xl">
-                <strong>ManoProtect es una app móvil</strong> que protege a tu familia contra fraudes, estafas y emergencias. 
-                Botón SOS de emergencia, alertas en tiempo real y localización familiar. <strong>Instálala en 2 minutos.</strong>
-              </p>
-              
-              {/* CTAs principales - CLAROS y DIRECTOS */}
-              <div className="flex flex-wrap gap-4">
-                <Button
-                  data-testid="hero-download-btn"
-                  onClick={() => navigate('/register')}
-                  className="bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl px-8 h-14 text-lg font-bold shadow-lg hover:shadow-xl active:scale-95 transition-all"
-                >
-                  🛡️ Crear Cuenta Gratis
-                  <ArrowRight className="w-5 h-5 ml-2" />
-                </Button>
-                <Button
-                  data-testid="hero-pricing-btn"
-                  onClick={() => navigate('/plans')}
-                  variant="outline"
-                  className="border-2 border-emerald-500 text-emerald-600 hover:bg-emerald-50 rounded-xl px-8 h-14 text-lg font-semibold active:scale-95 transition-all"
-                >
-                  Ver Planes y Precios
-                </Button>
-              </div>
-              
-              {/* Beneficio secundario */}
-              <p className="text-sm text-zinc-500 flex items-center gap-2">
-                <Check className="w-4 h-4 text-emerald-500" />
-                7 días gratis · Sin tarjeta · Cancela cuando quieras
-              </p>
+          
+          {/* Main Headline */}
+          <div className="text-center mb-16">
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight leading-tight mb-6">
+              Protección completa para tu familia
+            </h1>
+            <p className="text-lg sm:text-xl text-zinc-600 max-w-3xl mx-auto">
+              ManoProtect te protege de <strong>dos formas</strong>: emergencias reales con botón SOS 
+              y estafas digitales con detección inteligente.
+            </p>
+          </div>
 
-              <div className="flex items-center gap-8 pt-4">
-                <div>
-                  <div className="text-3xl font-bold text-indigo-600">99.8%</div>
-                  <div className="text-sm text-zinc-600">{t('landing.stats.detectionRate')}</div>
+          {/* Two Main Features - Separated */}
+          <div className="grid md:grid-cols-2 gap-8 mb-16">
+            
+            {/* Feature 1: Family Protection / SOS */}
+            <div className="relative bg-gradient-to-br from-red-50 to-orange-50 border-2 border-red-200 rounded-3xl p-8 hover:shadow-xl transition-all">
+              <div className="absolute top-4 right-4 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full">
+                EMERGENCIAS
+              </div>
+              
+              <div className="flex items-center gap-4 mb-6">
+                <div className="w-16 h-16 bg-red-500 rounded-2xl flex items-center justify-center">
+                  <svg className="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                  </svg>
                 </div>
-                <div className="w-px h-12 bg-zinc-200" />
                 <div>
-                  <div className="text-3xl font-bold text-emerald-500">24/7</div>
-                  <div className="text-sm text-zinc-600">{t('pricing.features.realTimeAlerts')}</div>
-                </div>
-                <div className="w-px h-12 bg-zinc-200" />
-                <div>
-                  <div className="text-3xl font-bold text-orange-500">+10K</div>
-                  <div className="text-sm text-zinc-600">{t('landing.stats.scamsBlocked')}</div>
+                  <h2 className="text-2xl font-bold text-zinc-900">Protección Familiar</h2>
+                  <p className="text-red-600 font-medium">Botón SOS + Ubicación en vivo</p>
                 </div>
               </div>
+              
+              <p className="text-zinc-600 mb-6">
+                Cuando un familiar pulse el <strong>botón SOS</strong>, recibirás una alerta instantánea 
+                con su <strong>ubicación exacta en tiempo real</strong>. Ideal para emergencias, accidentes o situaciones de peligro.
+              </p>
+              
+              <ul className="space-y-3 mb-6">
+                <li className="flex items-center gap-3">
+                  <div className="w-6 h-6 bg-red-100 rounded-full flex items-center justify-center">
+                    <Check className="w-4 h-4 text-red-600" />
+                  </div>
+                  <span className="text-zinc-700">Botón SOS con cuenta atrás de 3 segundos</span>
+                </li>
+                <li className="flex items-center gap-3">
+                  <div className="w-6 h-6 bg-red-100 rounded-full flex items-center justify-center">
+                    <Check className="w-4 h-4 text-red-600" />
+                  </div>
+                  <span className="text-zinc-700">GPS en tiempo real con dirección exacta</span>
+                </li>
+                <li className="flex items-center gap-3">
+                  <div className="w-6 h-6 bg-red-100 rounded-full flex items-center justify-center">
+                    <Check className="w-4 h-4 text-red-600" />
+                  </div>
+                  <span className="text-zinc-700">Notificación push + SMS de emergencia</span>
+                </li>
+                <li className="flex items-center gap-3">
+                  <div className="w-6 h-6 bg-red-100 rounded-full flex items-center justify-center">
+                    <Check className="w-4 h-4 text-red-600" />
+                  </div>
+                  <span className="text-zinc-700">Sirena de alerta en el móvil del familiar</span>
+                </li>
+              </ul>
+
+              <Button
+                onClick={() => navigate('/sos-quick')}
+                className="w-full bg-red-500 hover:bg-red-600 text-white rounded-xl h-12 text-lg font-bold"
+              >
+                Ver Botón SOS
+                <ArrowRight className="w-5 h-5 ml-2" />
+              </Button>
             </div>
 
-            <div className="relative max-w-md mx-auto lg:mx-0 lg:max-w-lg">
-              <div className="rounded-2xl overflow-hidden border border-zinc-200 shadow-xl bg-gradient-to-br from-indigo-100 to-emerald-50" style={{aspectRatio: '1/1', minHeight: '300px'}}>
-                <img
-                  src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=350&q=60&fm=webp&fit=crop"
-                  alt="Familia protegida con ManoProtect - Aplicación de seguridad digital"
-                  className="w-full h-full object-cover"
-                  width="350"
-                  height="350"
-                  loading="eager"
-                  fetchpriority="high"
-                  decoding="async"
-                />
+            {/* Feature 2: Fraud Protection */}
+            <div className="relative bg-gradient-to-br from-indigo-50 to-blue-50 border-2 border-indigo-200 rounded-3xl p-8 hover:shadow-xl transition-all">
+              <div className="absolute top-4 right-4 bg-indigo-500 text-white text-xs font-bold px-3 py-1 rounded-full">
+                ESTAFAS
               </div>
-              <div className="absolute -bottom-4 -right-4 w-20 h-20 bg-indigo-600 rounded-xl opacity-20" aria-hidden="true" />
-              <div className="absolute -top-4 -left-4 w-16 h-16 bg-emerald-500 rounded-full opacity-20" aria-hidden="true" />
+              
+              <div className="flex items-center gap-4 mb-6">
+                <div className="w-16 h-16 bg-indigo-500 rounded-2xl flex items-center justify-center">
+                  <Shield className="w-8 h-8 text-white" />
+                </div>
+                <div>
+                  <h2 className="text-2xl font-bold text-zinc-900">Protección Anti-Estafas</h2>
+                  <p className="text-indigo-600 font-medium">Detección con IA en tiempo real</p>
+                </div>
+              </div>
+              
+              <p className="text-zinc-600 mb-6">
+                Detectamos <strong>automáticamente</strong> llamadas fraudulentas, SMS falsos, 
+                emails de phishing y estafas por WhatsApp <strong>antes de que caigas</strong>.
+              </p>
+              
+              <ul className="space-y-3 mb-6">
+                <li className="flex items-center gap-3">
+                  <div className="w-6 h-6 bg-indigo-100 rounded-full flex items-center justify-center">
+                    <Check className="w-4 h-4 text-indigo-600" />
+                  </div>
+                  <span className="text-zinc-700">Detección de phishing (emails falsos)</span>
+                </li>
+                <li className="flex items-center gap-3">
+                  <div className="w-6 h-6 bg-indigo-100 rounded-full flex items-center justify-center">
+                    <Check className="w-4 h-4 text-indigo-600" />
+                  </div>
+                  <span className="text-zinc-700">Detección de smishing (SMS fraudulentos)</span>
+                </li>
+                <li className="flex items-center gap-3">
+                  <div className="w-6 h-6 bg-indigo-100 rounded-full flex items-center justify-center">
+                    <Check className="w-4 h-4 text-indigo-600" />
+                  </div>
+                  <span className="text-zinc-700">Bloqueo de llamadas de vishing</span>
+                </li>
+                <li className="flex items-center gap-3">
+                  <div className="w-6 h-6 bg-indigo-100 rounded-full flex items-center justify-center">
+                    <Check className="w-4 h-4 text-indigo-600" />
+                  </div>
+                  <span className="text-zinc-700">Verificador de enlaces sospechosos</span>
+                </li>
+              </ul>
+
+              <Button
+                onClick={() => navigate('/verificar-estafa')}
+                className="w-full bg-indigo-500 hover:bg-indigo-600 text-white rounded-xl h-12 text-lg font-bold"
+              >
+                Verificar una Estafa
+                <ArrowRight className="w-5 h-5 ml-2" />
+              </Button>
+            </div>
+          </div>
+
+          {/* CTA Section */}
+          <div className="text-center bg-zinc-900 rounded-3xl p-8 md:p-12">
+            <h3 className="text-2xl md:text-3xl font-bold text-white mb-4">
+              Empieza a proteger a tu familia hoy
+            </h3>
+            <p className="text-zinc-400 mb-8 max-w-xl mx-auto">
+              7 días gratis, sin tarjeta de crédito. Cancela cuando quieras.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button
+                data-testid="hero-download-btn"
+                onClick={() => navigate('/register')}
+                className="bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl px-8 h-14 text-lg font-bold shadow-lg"
+              >
+                Crear Cuenta Gratis
+                <ArrowRight className="w-5 h-5 ml-2" />
+              </Button>
+              <Button
+                data-testid="hero-pricing-btn"
+                onClick={() => navigate('/plans')}
+                variant="outline"
+                className="border-2 border-zinc-600 text-white hover:bg-zinc-800 rounded-xl px-8 h-14 text-lg font-semibold"
+              >
+                Ver Planes y Precios
+              </Button>
+            </div>
+            
+            {/* Stats */}
+            <div className="flex flex-wrap justify-center gap-8 md:gap-16 mt-10 pt-8 border-t border-zinc-700">
+              <div>
+                <div className="text-3xl font-bold text-emerald-400">99.8%</div>
+                <div className="text-sm text-zinc-500">{t('landing.stats.detectionRate')}</div>
+              </div>
+              <div>
+                <div className="text-3xl font-bold text-red-400">24/7</div>
+                <div className="text-sm text-zinc-500">Protección continua</div>
+              </div>
+              <div>
+                <div className="text-3xl font-bold text-indigo-400">+10K</div>
+                <div className="text-sm text-zinc-500">{t('landing.stats.scamsBlocked')}</div>
+              </div>
+              <div>
+                <div className="text-3xl font-bold text-orange-400">2 min</div>
+                <div className="text-sm text-zinc-500">Instalación rápida</div>
+              </div>
             </div>
           </div>
         </div>
