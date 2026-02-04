@@ -94,41 +94,16 @@ async def get_ai_response(user_message: str, session_id: str, db=None) -> dict:
         }
     
     try:
-        # Initialize chat with system prompt
+        # Initialize chat with system prompt - use unique session per message for stateless
         chat = LlmChat(
             api_key=api_key,
-            session_id=session_id,
+            session_id=f"{session_id}_{uuid.uuid4().hex[:6]}",
             system_message=MANOPROTECT_SYSTEM_PROMPT
-        ).with_model("openai", "gpt-4o-mini")  # Cost-effective for support
+        ).with_model("openai", "gpt-4o-mini")
         
-        # Load previous messages from session if available
-        if session_id in _chat_sessions:
-            for msg in _chat_sessions[session_id]:
-                if msg["role"] == "user":
-                    await chat.send_message(UserMessage(text=msg["content"]))
-        
-        # Send the new message
+        # Send the message
         user_msg = UserMessage(text=user_message)
         response = await chat.send_message(user_msg)
-        
-        # Store in session history
-        if session_id not in _chat_sessions:
-            _chat_sessions[session_id] = []
-        
-        _chat_sessions[session_id].append({
-            "role": "user",
-            "content": user_message,
-            "timestamp": datetime.now(timezone.utc).isoformat()
-        })
-        _chat_sessions[session_id].append({
-            "role": "assistant",
-            "content": response,
-            "timestamp": datetime.now(timezone.utc).isoformat()
-        })
-        
-        # Keep only last 10 messages to limit context
-        if len(_chat_sessions[session_id]) > 20:
-            _chat_sessions[session_id] = _chat_sessions[session_id][-20:]
         
         # Check if we should escalate to human
         escalate_keywords = ["hablar con persona", "agente humano", "soporte real", "no entiendes", "quiero quejarme"]
@@ -153,6 +128,8 @@ async def get_ai_response(user_message: str, session_id: str, db=None) -> dict:
         
     except Exception as e:
         print(f"AI Support Error: {e}")
+        import traceback
+        traceback.print_exc()
         return {
             "response": "Disculpa, estoy teniendo problemas técnicos. ¿Puedes reformular tu pregunta o contactar con soporte al +34 601 510 950?",
             "session_id": session_id,
