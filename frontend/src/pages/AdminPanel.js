@@ -431,6 +431,10 @@ const AdminPanel = () => {
               <Bell className="w-4 h-4 mr-2" />
               Alertas
             </TabsTrigger>
+            <TabsTrigger value="admob" className="data-[state=active]:bg-amber-100">
+              <TrendingUp className="w-4 h-4 mr-2" />
+              AdMob
+            </TabsTrigger>
             <TabsTrigger value="database" className="data-[state=active]:bg-emerald-100">
               <Database className="w-4 h-4 mr-2" />
               Base de Datos
