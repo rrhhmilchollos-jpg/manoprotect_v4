@@ -33,7 +33,7 @@ class TestRegistrationErrorHandling:
         response = requests.post(f"{BASE_URL}/api/auth/register", json={
             "email": "mrisolaz130@gmail.com",  # Existing email
             "name": "Test User",
-            "password": "ValidPassword123!"
+            "password": "Xk9#mPq2vL!nR"  # Strong password to pass validation
         })
         
         assert response.status_code == 400  # Bad request for duplicate
