@@ -77,73 +77,9 @@ const SOSQuickButton = () => {
   // Cleanup on unmount
   useEffect(() => {
     return () => {
-      stopSiren();
       if (countdownRef.current) clearInterval(countdownRef.current);
     };
   }, []);
-
-  const playSiren = () => {
-    try {
-      const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-      audioContextRef.current = audioContext;
-
-      const createSirenCycle = (startTime, duration) => {
-        const oscillator1 = audioContext.createOscillator();
-        const oscillator2 = audioContext.createOscillator();
-        const gainNode = audioContext.createGain();
-        const masterGain = audioContext.createGain();
-
-        oscillator1.connect(gainNode);
-        oscillator2.connect(gainNode);
-        gainNode.connect(masterGain);
-        masterGain.connect(audioContext.destination);
-
-        oscillator1.type = 'sawtooth';
-        oscillator1.frequency.setValueAtTime(600, startTime);
-        oscillator1.frequency.linearRampToValueAtTime(1200, startTime + duration / 2);
-        oscillator1.frequency.linearRampToValueAtTime(600, startTime + duration);
-
-        oscillator2.type = 'sine';
-        oscillator2.frequency.setValueAtTime(400, startTime);
-        oscillator2.frequency.linearRampToValueAtTime(800, startTime + duration / 2);
-        oscillator2.frequency.linearRampToValueAtTime(400, startTime + duration);
-
-        gainNode.gain.setValueAtTime(0.4, startTime);
-        masterGain.gain.setValueAtTime(0.7, startTime);
-
-        oscillator1.start(startTime);
-        oscillator2.start(startTime);
-        oscillator1.stop(startTime + duration);
-        oscillator2.stop(startTime + duration);
-      };
-
-      const playLoop = () => {
-        if (audioContextRef.current && audioContextRef.current.state !== 'closed') {
-          for (let i = 0; i < 4; i++) {
-            createSirenCycle(audioContextRef.current.currentTime + (i * 1.5), 1.5);
-          }
-        }
-      };
-
-      playLoop();
-      sirenIntervalRef.current = setInterval(playLoop, 6000);
-      setSirenPlaying(true);
-    } catch (error) {
-      console.error('Error playing siren:', error);
-    }
-  };
-
-  const stopSiren = () => {
-    if (sirenIntervalRef.current) {
-      clearInterval(sirenIntervalRef.current);
-      sirenIntervalRef.current = null;
-    }
-    if (audioContextRef.current) {
-      audioContextRef.current.close();
-      audioContextRef.current = null;
-    }
-    setSirenPlaying(false);
-  };
 
   const startCountdown = () => {
     setCountdown(3);
