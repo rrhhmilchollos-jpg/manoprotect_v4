@@ -271,7 +271,7 @@ async def send_sos_notifications(
         contact_email = contact.get('email')
         
         # Get FCM token from database - try multiple methods
-        if db:
+        if db is not None:
             fcm_sub = None
             
             # Try by user_id first
