@@ -462,6 +462,11 @@ async def send_sos_alert(
     all_contacts = []
     seen_identifiers = set()
     
+    # DEBUG
+    print(f"[DEBUG SOS] family_members found: {len(family_members)}")
+    print(f"[DEBUG SOS] trusted_contacts found: {len(trusted_contacts)}")
+    print(f"[DEBUG SOS] emergency_contacts found: {len(emergency_contacts)}")
+    
     for contact in family_members + trusted_contacts + emergency_contacts:
         # Create identifier from phone or email
         identifier = contact.get("phone") or contact.get("email") or contact.get("id")
