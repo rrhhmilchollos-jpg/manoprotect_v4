@@ -1,11 +1,11 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { Shield, Check, Zap, Users, Crown, ArrowRight, Loader2, MapPin, AlertTriangle, Download, FileText } from 'lucide-react';
+import { Shield, Check, Users, ArrowRight, Loader2, HelpCircle, Building2, TrendingUp } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { Switch } from '@/components/ui/switch';
 import { toast } from 'sonner';
-import { useI18n } from '@/i18n/I18nContext';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
@@ -13,11 +13,9 @@ const API = `${BACKEND_URL}/api`;
 const Pricing = () => {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
-  const { t } = useI18n();
-  const [billingCycle, setBillingCycle] = useState('monthly');
+  const [isAnnual, setIsAnnual] = useState(true);
   const [loadingPlan, setLoadingPlan] = useState(null);
   const [checkingPayment, setCheckingPayment] = useState(false);
-  const [loadingTrial, setLoadingTrial] = useState(false);
 
   // Poll payment status function
   const pollPaymentStatus = useCallback(async (sessionId, attempts = 0) => {
@@ -37,9 +35,8 @@ const Pricing = () => {
       const data = await response.json();
 
       if (data.payment_status === 'paid') {
-        toast.success('¡Pago exitoso! Tu suscripción Premium está activa.');
+        toast.success('¡Pago exitoso! Tu suscripción está activa.');
         setCheckingPayment(false);
-        // Clean URL and redirect to dashboard
         setTimeout(() => navigate('/dashboard?success=true'), 1500);
         return;
       } else if (data.status === 'expired') {
@@ -48,7 +45,6 @@ const Pricing = () => {
         return;
       }
 
-      // Continue polling
       setTimeout(() => pollPaymentStatus(sessionId, attempts + 1), pollInterval);
     } catch (error) {
       console.error('Error checking payment status:', error);
@@ -57,219 +53,91 @@ const Pricing = () => {
     }
   }, [navigate]);
 
-  // Check for success/cancel from Stripe redirect
   useEffect(() => {
     const sessionId = searchParams.get('session_id');
     const success = searchParams.get('success');
     const canceled = searchParams.get('canceled');
-    const trialCanceled = searchParams.get('trial_canceled');
 
     if (sessionId && success === 'true') {
       setCheckingPayment(true);
       toast.info('Verificando estado del pago...');
       pollPaymentStatus(sessionId);
-      // Clean URL params
       setSearchParams({});
     } else if (canceled === 'true') {
       toast.info('Pago cancelado. Puedes intentarlo de nuevo cuando quieras.');
       setSearchParams({});
-    } else if (trialCanceled === 'true') {
-      toast.info('Prueba cancelada. Puedes activarla cuando quieras.');
-      setSearchParams({});
     }
   }, [searchParams, setSearchParams, pollPaymentStatus]);
 
-  // Plan de prueba 7 días
-  const trialPlan = {
-    name: 'Prueba 7 Días GRATIS',
-    price: 0,
-    period: '/ 7 días',
-    icon: Zap,
-    color: 'amber',
-    badge: '🎁 PROBAR GRATIS',
-    description: 'Verifica tu tarjeta (0,00€) y prueba todas las funciones Premium durante 7 días. Si no cancelas, se cobrará el plan seleccionado automáticamente.',
-    features: [
-      '✅ Verificación de tarjeta (0,00€)',
-      '✅ Acceso completo 7 días',
-      '✅ Cancela cuando quieras sin cargo',
-      '✅ Todas las funciones Premium',
-      '⚠️ Después: cobro automático del plan'
-    ]
-  };
-
-  const plans = {
-    free: {
+  // Precios simplificados - 3 planes claros
+  const plans = [
+    {
+      id: 'free',
       name: 'Básico',
-      price: 0,
+      description: 'Para empezar a protegerte',
+      monthlyPrice: 0,
+      annualPrice: 0,
       icon: Shield,
       color: 'zinc',
       features: [
-        '10 análisis por mes',
-        'Alertas básicas',
-        'Historial 7 días',
+        'Protección 24/7 básica',
+        '10 análisis de amenazas/mes',
+        'Alertas de seguridad',
         'Base de conocimiento',
         'Soporte por email'
       ],
-      limitations: [
-        'Sin bloqueo automático',
-        'Sin modo familiar',
-        'Sin exportación'
-      ]
+      cta: 'Comenzar Gratis',
+      popular: false
     },
-    weekly: {
-      name: 'Premium Semanal',
-      price: 9.99,
-      period: '/ semana',
-      icon: Zap,
-      color: 'indigo',
-      badge: 'Prueba',
-      users: 'Hasta 2 familiares',
-      features: [
-        '👥 Protección hasta 2 familiares',
-        'Análisis ilimitados',
-        'Bloqueo automático IA',
-        'Historial completo',
-        'Exportación de datos',
-        'Alertas comunitarias',
-        'Soporte prioritario',
-        'Sin anuncios'
-      ]
-    },
-    monthly: {
-      name: 'Premium Mensual',
-      price: 29.99,
-      period: '/ mes',
+    {
+      id: isAnnual ? 'yearly' : 'monthly',
+      name: 'Individual',
+      description: 'La mejor opción para ti y tu familia cercana',
+      monthlyPrice: 29.99,
+      annualPrice: 249.99, // ~20.83/mes
+      annualSavings: 110,
       icon: Shield,
       color: 'indigo',
-      badge: 'Popular',
-      users: 'Hasta 2 familiares',
       features: [
-        '👥 Protección hasta 2 familiares',
-        'Todo de Premium Semanal',
-        'Protección 24/7',
-        'Análisis avanzado IA',
-        'Reportes personalizados',
-        'Configuración avanzada'
-      ],
-      savings: null
-    },
-    quarterly: {
-      name: 'Premium Trimestral',
-      price: 74.99,
-      originalPrice: 89.97,
-      period: '/ 3 meses',
-      icon: Crown,
-      color: 'emerald',
-      badge: 'Ahorro 17%',
-      users: 'Hasta 2 familiares',
-      features: [
-        '👥 Protección hasta 2 familiares',
-        'Todo de Premium Mensual',
-        'Equivale a €25/mes',
-        'Ahorra €15',
-        'Sin interrupciones'
-      ],
-      savings: 15
-    },
-    yearly: {
-      name: 'Premium Anual',
-      price: 249.99,
-      originalPrice: 359.88,
-      period: '/ año',
-      icon: Crown,
-      color: 'indigo',
-      badge: 'Mejor Valor - 31% OFF',
-      popular: true,
-      users: 'Hasta 2 familiares',
-      features: [
-        '👥 Protección hasta 2 familiares',
-        'Todo de Premium Mensual',
-        'Equivale a €20.83/mes',
-        'Ahorra €109.89/año',
-        '2 meses GRATIS',
-        'Garantía satisfacción 15 días'
-      ],
-      savings: 109.89
-    }
-  };
-
-  const familyPlans = {
-    monthly: {
-      name: 'Familiar Mensual',
-      price: 49.99,
-      period: '/ mes',
-      users: '5 usuarios',
-      icon: Users,
-      color: 'emerald',
-      features: [
-        'Hasta 5 miembros familia',
-        'Todo Premium incluido',
-        'Modo Familiar Senior',
-        '🆘 Botón SOS de Emergencia',
-        'Panel administración familiar',
+        'Protección 24/7 avanzada',
+        'Análisis ilimitados con IA',
+        'Bloqueo automático de amenazas',
+        'Hasta 2 familiares incluidos',
+        'Botón SOS de emergencia',
+        'Historial completo',
+        'Sin anuncios',
         'Soporte prioritario'
       ],
-      limitations: [
-        'Sin localización GPS',
-        'Sin tracking de niños',
-        'Sin historial ubicaciones'
-      ],
-      sosDescription: 'Botón SOS básico sin localización GPS'
+      cta: isAnnual ? 'Ahorrar €110/año' : 'Suscribirse',
+      popular: true
     },
-    quarterly: {
-      name: 'Familiar Trimestral',
-      price: 129.99,
-      originalPrice: 149.97,
-      period: '/ 3 meses',
-      users: '5 usuarios',
+    {
+      id: isAnnual ? 'family-yearly' : 'family-monthly',
+      name: 'Familiar',
+      description: 'Protección completa para toda la familia',
+      monthlyPrice: 49.99,
+      annualPrice: 399.99, // ~33.33/mes
+      annualSavings: 200,
       icon: Users,
       color: 'emerald',
-      badge: 'Ahorro 13%',
       features: [
-        'Todo Familiar Mensual',
-        '🆘 Botón SOS + GPS incluido',
-        '📍 Localización bajo demanda',
-        'Equivale a €43.33/mes',
-        'Ahorra €19.98',
-        '5 personas protegidas'
-      ],
-      limitations: [
-        'Sin tracking continuo de niños',
-        'Sin historial de ubicaciones'
-      ],
-      savings: 19.98,
-      sosDescription: 'SOS con GPS pero sin tracking de niños'
-    },
-    yearly: {
-      name: 'Familiar Anual',
-      price: 399.99,
-      originalPrice: 599.88,
-      period: '/ año',
-      users: '5 usuarios',
-      icon: Users,
-      color: 'emerald',
-      badge: '⭐ MÁS COMPLETO - 33% OFF',
-      popular: true,
-      features: [
-        'TODO de planes inferiores',
-        '🆘 Botón SOS + GPS completo',
-        '👶 LOCALIZAR NIÑOS por teléfono',
-        '📍 Tracking bajo demanda',
-        '📊 Historial de ubicaciones',
-        '🔕 Modo silencioso opcional',
-        'Equivale a €33.33/mes',
-        'Ahorra €199.89/año',
+        'Todo de Individual +',
+        'Hasta 5 miembros familia',
+        'Localización GPS en emergencias',
+        'Tracking de niños bajo demanda',
+        'Historial de ubicaciones',
+        'Modo Senior simplificado',
+        'Panel familiar centralizado',
         'Garantía satisfacción 15 días'
       ],
-      savings: 199.89,
-      sosDescription: 'Plan COMPLETO: SOS + GPS + Localización de niños + Historial',
-      isComplete: true
+      cta: isAnnual ? 'Ahorrar €200/año' : 'Proteger Familia',
+      popular: false
     }
-  };
+  ];
 
-  const handleSubscribe = async (planType) => {
-    if (planType === 'free') {
-      navigate('/dashboard');
+  const handleSubscribe = async (planId) => {
+    if (planId === 'free') {
+      navigate('/register');
       return;
     }
 
@@ -278,21 +146,18 @@ const Pricing = () => {
       return;
     }
 
-    setLoadingPlan(planType);
-    toast.info('Conectando con Stripe...');
+    setLoadingPlan(planId);
+    toast.info('Conectando con pasarela de pago...');
 
     try {
-      // Get origin URL from browser (never hardcode)
       const originUrl = window.location.origin;
 
       const response = await fetch(`${API}/create-checkout-session`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
         body: JSON.stringify({
-          plan_type: planType,
+          plan_type: planId,
           origin_url: originUrl
         }),
       });
@@ -305,766 +170,298 @@ const Pricing = () => {
       const data = await response.json();
       
       if (data.checkout_url) {
-        toast.success('Redirigiendo a Stripe...');
+        toast.success('Redirigiendo al pago seguro...');
         window.location.href = data.checkout_url;
       } else {
         throw new Error('No se recibió URL de checkout');
       }
     } catch (error) {
-      console.error('Stripe checkout error:', error);
+      console.error('Checkout error:', error);
       toast.error(`Error: ${error.message}`);
     } finally {
       setLoadingPlan(null);
     }
   };
 
-  // Función para iniciar trial de 7 días
-  const handleStartTrial = async (planAfterTrial = 'monthly') => {
-    if (checkingPayment || loadingTrial) {
-      toast.info('Operación en progreso...');
-      return;
+  const faqs = [
+    {
+      q: '¿Puedo cancelar en cualquier momento?',
+      a: 'Sí, sin preguntas. Cancela desde tu perfil y seguirás teniendo acceso hasta el final del período pagado.'
+    },
+    {
+      q: '¿Qué incluye la garantía de 15 días?',
+      a: 'Si no estás satisfecho, te devolvemos el 100% del importe. Sin letra pequeña, sin complicaciones.'
+    },
+    {
+      q: '¿Cómo funciona el botón SOS?',
+      a: 'Al pulsarlo, se envía tu ubicación GPS a tus contactos de emergencia y suena una alarma en sus dispositivos.'
+    },
+    {
+      q: '¿Puedo cambiar de plan después?',
+      a: 'Sí, puedes subir o bajar de plan cuando quieras. El saldo restante se aplica automáticamente.'
     }
-
-    setLoadingTrial(true);
-    toast.info('Preparando tu prueba gratuita...');
-
-    try {
-      const originUrl = window.location.origin;
-
-      const response = await fetch(`${API}/create-trial-subscription`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-        body: JSON.stringify({
-          plan_after_trial: planAfterTrial,
-          origin_url: originUrl
-        }),
-      });
-
-      const data = await response.json();
-      
-      if (!response.ok) {
-        throw new Error(data.detail || 'Error al crear trial');
-      }
-      
-      if (data.checkout_url) {
-        toast.success(`Redirigiendo para verificar tarjeta (0,00€)...`);
-        window.location.href = data.checkout_url;
-      } else {
-        throw new Error('No se recibió URL de verificación');
-      }
-    } catch (error) {
-      console.error('Trial creation error:', error);
-      if (error.message.includes('iniciar sesión') || error.message.includes('autenticado')) {
-        toast.error('Debes iniciar sesión para activar el trial');
-        navigate('/login?redirect=/pricing&trial=true');
-      } else {
-        toast.error(`Error: ${error.message}`);
-      }
-    } finally {
-      setLoadingTrial(false);
-    }
-  };
+  ];
 
   return (
-    <div className="min-h-screen bg-zinc-50">
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
       {/* Header */}
-      <header className="glass sticky top-0 z-50 px-6 py-4 border-b border-zinc-200">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
+      <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-lg border-b border-slate-200">
+        <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3 cursor-pointer" onClick={() => navigate('/')}>
-            <img 
-              src="/manoprotect_logo.png" 
-              alt="ManoProtect Logo" 
-              className="h-8 w-auto"
-            />
+            <img src="/manoprotect_logo.png" alt="ManoProtect" className="h-8 w-auto" />
           </div>
           <Button
-            data-testid="header-dashboard-btn"
-            onClick={() => navigate('/dashboard')}
-            className="bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg px-6 h-12"
+            onClick={() => navigate('/login')}
+            variant="outline"
+            className="rounded-full px-6"
+            data-testid="header-login-btn"
           >
-            Ir al Dashboard
+            Iniciar Sesión
           </Button>
         </div>
       </header>
 
-      <div className="max-w-7xl mx-auto px-6 py-16">
+      <main className="max-w-6xl mx-auto px-6 py-16">
         {/* Hero */}
         <div className="text-center mb-16">
-          <Badge className="bg-indigo-600 text-white px-4 py-2 text-sm mb-6">
-            Protección Premium que Vale la Pena
-          </Badge>
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6">
-            Invierte en tu <span className="text-indigo-600">Seguridad</span>
+          <h1 className="text-4xl sm:text-5xl font-bold text-slate-900 mb-4">
+            Elige tu protección
           </h1>
-          <p className="text-xl text-zinc-600 max-w-3xl mx-auto mb-8">
-            Un solo fraude puede costarte €5,000+. MANO Premium te protege 24/7 por menos de lo que gastas en café.
+          <p className="text-xl text-slate-600 max-w-2xl mx-auto mb-8">
+            Protección contra fraudes y seguridad familiar. Sin sorpresas, cancela cuando quieras.
           </p>
-          <div className="flex items-center justify-center gap-8 text-sm text-zinc-600">
-            <div className="flex items-center gap-2">
-              <Check className="w-5 h-5 text-emerald-500" />
-              <span>Sin permanencia</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <Check className="w-5 h-5 text-emerald-500" />
-              <span>Cancela cuando quieras</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <Check className="w-5 h-5 text-emerald-500" />
-              <span>Garantía 15 días</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Value Proposition */}
-        <Card className="mb-16 bg-gradient-to-br from-rose-50 to-orange-50 border-rose-200">
-          <CardContent className="p-8">
-            <div className="grid md:grid-cols-3 gap-8 text-center">
-              <div>
-                <div className="text-4xl font-bold text-rose-600 mb-2">€25,000</div>
-                <div className="text-sm text-zinc-700">Pérdida promedio por fraude</div>
-              </div>
-              <div>
-                <div className="text-4xl font-bold text-orange-600 mb-2">2 horas</div>
-                <div className="text-sm text-zinc-700">Tiempo para detectar fraude</div>
-              </div>
-              <div>
-                <div className="text-4xl font-bold text-emerald-600 mb-2">€249/año</div>
-                <div className="text-sm text-zinc-700">MANO Premium - Protección total</div>
-              </div>
-            </div>
-            <div className="mt-6 text-center text-zinc-700 font-medium">
-              💡 Un solo fraude evitado paga 100 años de MANO Premium
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Trial Banner - 7 días gratis */}
-        <Card className="mb-16 bg-gradient-to-br from-amber-50 to-yellow-50 border-amber-300 border-2 relative overflow-hidden">
-          <div className="absolute top-0 right-0 bg-amber-500 text-white px-8 py-2 transform rotate-45 translate-x-8 translate-y-4 text-sm font-bold">
-            GRATIS
-          </div>
-          <CardContent className="p-8">
-            <div className="grid md:grid-cols-2 gap-8 items-center">
-              <div>
-                <Badge className="bg-amber-500 text-white px-4 py-2 text-sm mb-4">
-                  🎁 OFERTA ESPECIAL
-                </Badge>
-                <h3 className="text-3xl font-bold mb-4">Prueba 7 Días GRATIS</h3>
-                <p className="text-zinc-700 mb-4">
-                  Verifica tu tarjeta con un cargo de <strong>0,00€</strong> y accede a todas las funciones Premium durante 7 días.
-                </p>
-                <ul className="space-y-2 mb-6">
-                  <li className="flex items-center gap-2 text-sm">
-                    <Check className="w-4 h-4 text-emerald-500" />
-                    <span>Verificación segura de tarjeta (sin cargo)</span>
-                  </li>
-                  <li className="flex items-center gap-2 text-sm">
-                    <Check className="w-4 h-4 text-emerald-500" />
-                    <span>Acceso completo a Premium durante 7 días</span>
-                  </li>
-                  <li className="flex items-center gap-2 text-sm">
-                    <Check className="w-4 h-4 text-emerald-500" />
-                    <span>Cancela cuando quieras sin ningún cargo</span>
-                  </li>
-                  <li className="flex items-center gap-2 text-sm text-amber-700">
-                    <AlertTriangle className="w-4 h-4" />
-                    <span>Después de 7 días: €29,99/mes (Plan Mensual)</span>
-                  </li>
-                </ul>
-              </div>
-              <div className="text-center">
-                <div className="text-6xl font-bold text-amber-600 mb-2">0,00€</div>
-                <div className="text-zinc-600 mb-6">Verificación de tarjeta</div>
-                <Button
-                  data-testid="start-trial-btn"
-                  onClick={() => handleStartTrial('monthly')}
-                  disabled={loadingTrial}
-                  className="w-full max-w-xs bg-amber-500 hover:bg-amber-600 text-white rounded-lg h-14 text-lg font-bold"
-                >
-                  {loadingTrial ? (
-                    <><Loader2 className="w-5 h-5 mr-2 animate-spin" /> Procesando...</>
-                  ) : (
-                    <>Probar 7 Días Gratis <ArrowRight className="w-5 h-5 ml-2" /></>
-                  )}
-                </Button>
-                <p className="text-xs text-zinc-500 mt-3">
-                  Al continuar, aceptas que se verificará tu tarjeta. Si no cancelas antes de 7 días, se cobrará €29,99/mes.
-                </p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Premium Plans */}
-        <div className="mb-20">
-          <h2 className="text-3xl font-bold text-center mb-4">Planes Premium Individual</h2>
-          <p className="text-center text-lg text-indigo-600 font-medium mb-12">👥 Todos incluyen protección hasta 2 familiares</p>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {/* Weekly */}
-            <Card className="border-2 border-indigo-200 hover:border-indigo-400 transition-all relative">
-              <CardHeader>
-                <Badge className="absolute top-4 right-4 bg-indigo-600 text-white">
-                  {plans.weekly.badge}
-                </Badge>
-                <plans.weekly.icon className="w-10 h-10 text-indigo-600 mb-3" />
-                <CardTitle className="text-xl">{plans.weekly.name}</CardTitle>
-                <div className="text-sm text-indigo-600 font-semibold">{plans.weekly.users}</div>
-                <div className="mt-4">
-                  <span className="text-4xl font-bold">€{plans.weekly.price}</span>
-                  <span className="text-zinc-600">{plans.weekly.period}</span>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <ul className="space-y-3 mb-6">
-                  {plans.weekly.features.map((feature, idx) => (
-                    <li key={idx} className="flex items-start gap-2 text-sm">
-                      <Check className="w-4 h-4 text-emerald-500 flex-shrink-0 mt-0.5" />
-                      <span className={feature.includes('2 familiares') ? 'font-semibold text-indigo-600' : ''}>{feature}</span>
-                    </li>
-                  ))}
-                </ul>
-                <Button
-                  data-testid="subscribe-weekly-btn"
-                  onClick={() => handleSubscribe('weekly')}
-                  disabled={loadingPlan === 'weekly'}
-                  className="w-full bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg h-12"
-                >
-                  {loadingPlan === 'weekly' ? (
-                    <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Procesando...</>
-                  ) : (
-                    'Probar 1 Semana'
-                  )}
-                </Button>
-              </CardContent>
-            </Card>
-
-            {/* Monthly */}
-            <Card className="border-2 border-indigo-300 hover:border-indigo-500 transition-all relative">
-              <CardHeader>
-                <Badge className="absolute top-4 right-4 bg-orange-500 text-white">
-                  {plans.monthly.badge}
-                </Badge>
-                <plans.monthly.icon className="w-10 h-10 text-indigo-600 mb-3" />
-                <CardTitle className="text-xl">{plans.monthly.name}</CardTitle>
-                <div className="text-sm text-indigo-600 font-semibold">{plans.monthly.users}</div>
-                <div className="mt-4">
-                  <span className="text-4xl font-bold">€{plans.monthly.price}</span>
-                  <span className="text-zinc-600">{plans.monthly.period}</span>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <ul className="space-y-3 mb-6">
-                  {plans.monthly.features.map((feature, idx) => (
-                    <li key={idx} className="flex items-start gap-2 text-sm">
-                      <Check className="w-4 h-4 text-emerald-500 flex-shrink-0 mt-0.5" />
-                      <span>{feature}</span>
-                    </li>
-                  ))}
-                </ul>
-                <Button
-                  data-testid="subscribe-monthly-btn"
-                  onClick={() => handleSubscribe('monthly')}
-                  disabled={loadingPlan === 'monthly'}
-                  className="w-full bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg h-12"
-                >
-                  {loadingPlan === 'monthly' ? (
-                    <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Procesando...</>
-                  ) : (
-                    'Suscribirse'
-                  )}
-                </Button>
-              </CardContent>
-            </Card>
-
-            {/* Quarterly */}
-            <Card className="border-2 border-emerald-300 hover:border-emerald-500 transition-all relative">
-              <CardHeader>
-                <Badge className="absolute top-4 right-4 bg-emerald-600 text-white">
-                  {plans.quarterly.badge}
-                </Badge>
-                <plans.quarterly.icon className="w-10 h-10 text-emerald-600 mb-3" />
-                <CardTitle className="text-xl">{plans.quarterly.name}</CardTitle>
-                <div className="text-sm text-emerald-600 font-semibold">{plans.quarterly.users}</div>
-                <div className="mt-4">
-                  <div className="text-sm text-zinc-500 line-through">€{plans.quarterly.originalPrice}</div>
-                  <span className="text-4xl font-bold text-emerald-600">€{plans.quarterly.price}</span>
-                  <span className="text-zinc-600">{plans.quarterly.period}</span>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <ul className="space-y-3 mb-6">
-                  {plans.quarterly.features.map((feature, idx) => (
-                    <li key={idx} className="flex items-start gap-2 text-sm">
-                      <Check className="w-4 h-4 text-emerald-500 flex-shrink-0 mt-0.5" />
-                      <span className={feature.includes('2 familiares') ? 'font-semibold text-indigo-600' : ''}>{feature}</span>
-                    </li>
-                  ))}
-                </ul>
-                <Button
-                  data-testid="subscribe-quarterly-btn"
-                  onClick={() => handleSubscribe('quarterly')}
-                  disabled={loadingPlan === 'quarterly'}
-                  className="w-full bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg h-12"
-                >
-                  {loadingPlan === 'quarterly' ? (
-                    <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Procesando...</>
-                  ) : (
-                    `Ahorrar €${plans.quarterly.savings}`
-                  )}
-                </Button>
-              </CardContent>
-            </Card>
-
-            {/* Yearly - BEST VALUE */}
-            <Card className="border-4 border-indigo-500 hover:border-indigo-600 transition-all relative shadow-xl scale-105">
-              <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                <Badge className="bg-indigo-600 text-white px-4 py-2 text-sm">
-                  {plans.yearly.badge}
-                </Badge>
-              </div>
-              <CardHeader>
-                <plans.yearly.icon className="w-10 h-10 text-indigo-600 mb-3" />
-                <CardTitle className="text-xl">{plans.yearly.name}</CardTitle>
-                <div className="text-sm text-indigo-600 font-semibold">{plans.yearly.users}</div>
-                <div className="mt-4">
-                  <div className="text-sm text-zinc-500 line-through">€{plans.yearly.originalPrice}</div>
-                  <span className="text-4xl font-bold text-indigo-600">€{plans.yearly.price}</span>
-                  <span className="text-zinc-600">{plans.yearly.period}</span>
-                  <div className="text-xs text-emerald-600 font-semibold mt-1">Solo €20.83/mes</div>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <ul className="space-y-3 mb-6">
-                  {plans.yearly.features.map((feature, idx) => (
-                    <li key={idx} className="flex items-start gap-2 text-sm">
-                      <Check className="w-4 h-4 text-emerald-500 flex-shrink-0 mt-0.5" />
-                      <span className={feature.includes('2 familiares') ? 'font-bold text-indigo-600' : 'font-medium'}>{feature}</span>
-                    </li>
-                  ))}
-                </ul>
-                <Button
-                  data-testid="subscribe-yearly-btn"
-                  onClick={() => handleSubscribe('yearly')}
-                  disabled={loadingPlan === 'yearly'}
-                  className="w-full bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg h-12 shadow-lg"
-                >
-                  {loadingPlan === 'yearly' ? (
-                    <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Procesando...</>
-                  ) : (
-                    <>Ahorrar €{plans.yearly.savings}<ArrowRight className="ml-2 w-5 h-5" /></>
-                  )}
-                </Button>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-
-        {/* Family Plans */}
-        <div className="mb-20">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">Planes Familiares Premium</h2>
-            <p className="text-lg text-zinc-600 mb-6">Protege a toda tu familia con un solo plan</p>
-            
-            {/* Child Tracking Feature Highlight - ANNUAL ONLY */}
-            <Card className="max-w-3xl mx-auto bg-gradient-to-r from-indigo-50 via-purple-50 to-pink-50 border-indigo-300 mb-8">
-              <CardContent className="p-6">
-                <div className="flex items-center justify-center gap-2 mb-4">
-                  <Badge className="bg-indigo-600 text-white px-4 py-2">
-                    ⭐ EXCLUSIVO PLAN ANUAL
-                  </Badge>
-                </div>
-                <h3 className="text-xl font-bold text-indigo-700 mb-3">👶 Localización de Niños por Teléfono</h3>
-                <p className="text-zinc-700 mb-4">
-                  <strong>Solo en el Plan Familiar Anual:</strong> Localiza a tus hijos en cualquier momento 
-                  desde su número de teléfono. Incluye historial de ubicaciones y modo silencioso opcional.
-                </p>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-center text-sm">
-                  <div className="bg-white p-3 rounded-lg border border-indigo-200">
-                    <MapPin className="w-5 h-5 text-indigo-500 mx-auto mb-1" />
-                    <div className="font-medium">Bajo demanda</div>
-                  </div>
-                  <div className="bg-white p-3 rounded-lg border border-purple-200">
-                    <Users className="w-5 h-5 text-purple-500 mx-auto mb-1" />
-                    <div className="font-medium">Historial</div>
-                  </div>
-                  <div className="bg-white p-3 rounded-lg border border-pink-200">
-                    <AlertTriangle className="w-5 h-5 text-pink-500 mx-auto mb-1" />
-                    <div className="font-medium">Modo silencioso</div>
-                  </div>
-                  <div className="bg-white p-3 rounded-lg border border-emerald-200">
-                    <Check className="w-5 h-5 text-emerald-500 mx-auto mb-1" />
-                    <div className="font-medium">App en niño</div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
           
-          <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
-            {Object.entries(familyPlans).map(([key, plan]) => (
+          {/* Toggle Mensual/Anual */}
+          <div className="flex items-center justify-center gap-4 mb-4">
+            <span className={`text-sm font-medium ${!isAnnual ? 'text-slate-900' : 'text-slate-500'}`}>
+              Mensual
+            </span>
+            <Switch
+              checked={isAnnual}
+              onCheckedChange={setIsAnnual}
+              className="data-[state=checked]:bg-indigo-600"
+              data-testid="billing-toggle"
+            />
+            <span className={`text-sm font-medium ${isAnnual ? 'text-slate-900' : 'text-slate-500'}`}>
+              Anual
+            </span>
+            {isAnnual && (
+              <Badge className="bg-emerald-100 text-emerald-700 border-emerald-200">
+                Ahorra hasta 33%
+              </Badge>
+            )}
+          </div>
+        </div>
+
+        {/* Plans Grid */}
+        <div className="grid md:grid-cols-3 gap-6 mb-20">
+          {plans.map((plan) => {
+            const price = isAnnual ? plan.annualPrice : plan.monthlyPrice;
+            const monthlyEquivalent = isAnnual && plan.annualPrice > 0 
+              ? (plan.annualPrice / 12).toFixed(2) 
+              : null;
+
+            return (
               <Card 
-                key={key}
-                className={`border-2 hover:border-emerald-500 transition-all relative ${
-                  plan.popular ? 'border-indigo-500 shadow-2xl scale-105 bg-gradient-to-b from-white to-indigo-50' : 'border-emerald-200'
+                key={plan.id}
+                className={`relative transition-all duration-300 hover:shadow-xl ${
+                  plan.popular 
+                    ? 'border-2 border-indigo-500 shadow-lg scale-[1.02]' 
+                    : 'border border-slate-200 hover:border-slate-300'
                 }`}
+                data-testid={`plan-card-${plan.name.toLowerCase()}`}
               >
-                {plan.badge && (
-                  <Badge className={`absolute top-4 right-4 ${plan.popular ? 'bg-indigo-600' : 'bg-emerald-600'} text-white`}>
-                    {plan.badge}
-                  </Badge>
-                )}
-                <CardHeader>
-                  <plan.icon className={`w-10 h-10 ${plan.popular ? 'text-indigo-600' : 'text-emerald-600'} mb-3`} />
-                  <CardTitle className="text-xl">{plan.name}</CardTitle>
-                  <div className="text-sm text-emerald-600 font-semibold">{plan.users}</div>
-                  <div className="mt-4">
-                    {plan.originalPrice && (
-                      <div className="text-sm text-zinc-500 line-through">€{plan.originalPrice}</div>
-                    )}
-                    <span className={`text-4xl font-bold ${plan.popular ? 'text-indigo-600' : 'text-emerald-600'}`}>€{plan.price}</span>
-                    <span className="text-zinc-600">{plan.period}</span>
+                {plan.popular && (
+                  <div className="absolute -top-3 left-1/2 -translate-x-1/2">
+                    <Badge className="bg-indigo-600 text-white px-4 py-1 text-sm font-semibold shadow-lg">
+                      Más Popular
+                    </Badge>
                   </div>
+                )}
+                
+                <CardHeader className="text-center pt-8 pb-4">
+                  <div className={`w-14 h-14 mx-auto mb-4 rounded-2xl flex items-center justify-center ${
+                    plan.popular ? 'bg-indigo-100' : 'bg-slate-100'
+                  }`}>
+                    <plan.icon className={`w-7 h-7 ${
+                      plan.popular ? 'text-indigo-600' : 'text-slate-600'
+                    }`} />
+                  </div>
+                  <CardTitle className="text-2xl font-bold">{plan.name}</CardTitle>
+                  <p className="text-slate-500 text-sm mt-1">{plan.description}</p>
                 </CardHeader>
-                <CardContent>
+
+                <CardContent className="pt-0">
+                  {/* Price */}
+                  <div className="text-center mb-6">
+                    <div className="flex items-baseline justify-center gap-1">
+                      <span className="text-4xl font-bold text-slate-900">
+                        €{price === 0 ? '0' : price.toFixed(2).replace('.', ',')}
+                      </span>
+                      <span className="text-slate-500">
+                        /{isAnnual ? 'año' : 'mes'}
+                      </span>
+                    </div>
+                    {monthlyEquivalent && price > 0 && (
+                      <p className="text-sm text-emerald-600 font-medium mt-1">
+                        Solo €{monthlyEquivalent.replace('.', ',')}/mes
+                      </p>
+                    )}
+                    {isAnnual && plan.annualSavings && (
+                      <p className="text-xs text-slate-500 mt-1">
+                        Ahorras €{plan.annualSavings}/año
+                      </p>
+                    )}
+                  </div>
+
                   {/* Features */}
-                  <ul className="space-y-2 mb-4">
+                  <ul className="space-y-3 mb-8">
                     {plan.features.map((feature, idx) => (
-                      <li key={idx} className="flex items-start gap-2 text-sm">
-                        <Check className="w-4 h-4 text-emerald-500 flex-shrink-0 mt-0.5" />
-                        <span className={
-                          feature.includes('LOCALIZAR') || feature.includes('Tracking') || feature.includes('Historial') || feature.includes('silencioso')
-                            ? 'font-bold text-indigo-600' 
-                            : feature.includes('SOS') || feature.includes('GPS') 
-                              ? 'font-semibold text-red-600' 
-                              : ''
-                        }>{feature}</span>
+                      <li key={idx} className="flex items-start gap-3 text-sm">
+                        <Check className={`w-5 h-5 flex-shrink-0 mt-0.5 ${
+                          plan.popular ? 'text-indigo-500' : 'text-emerald-500'
+                        }`} />
+                        <span className="text-slate-700">{feature}</span>
                       </li>
                     ))}
                   </ul>
-                  
-                  {/* Limitations for non-annual plans */}
-                  {plan.limitations && (
-                    <div className="mb-4 p-3 bg-zinc-50 rounded-lg border border-zinc-200">
-                      <p className="text-xs text-zinc-500 font-medium mb-2">No incluye:</p>
-                      <ul className="space-y-1">
-                        {plan.limitations.map((limit, idx) => (
-                          <li key={idx} className="flex items-center gap-2 text-xs text-zinc-500">
-                            <span className="text-zinc-400">✗</span>
-                            <span>{limit}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-                  
-                  {/* Child Tracking Badge - ANNUAL ONLY */}
-                  {plan.isComplete && (
-                    <div className="bg-indigo-100 border border-indigo-300 rounded-lg p-3 mb-4">
-                      <div className="flex items-center gap-2 text-xs text-indigo-700 font-medium">
-                        <MapPin className="w-4 h-4" />
-                        <span>👶 Localización de niños incluida</span>
-                      </div>
-                    </div>
-                  )}
-                  
-                  {/* SOS Info Badge */}
-                  {!plan.limitations?.includes('Sin localización GPS') && (
-                    <div className="bg-red-50 border border-red-200 rounded-lg p-3 mb-4">
-                      <div className="flex items-center gap-2 text-xs text-red-700">
-                        <AlertTriangle className="w-4 h-4" />
-                        <span>GPS automático al pulsar SOS</span>
-                      </div>
-                    </div>
-                  )}
-                  
+
+                  {/* CTA Button */}
                   <Button
-                    data-testid={`subscribe-family-${key}-btn`}
-                    onClick={() => handleSubscribe(`family-${key}`)}
-                    disabled={loadingPlan === `family-${key}`}
-                    className={`w-full ${plan.popular ? 'bg-indigo-600 hover:bg-indigo-700' : 'bg-emerald-600 hover:bg-emerald-700'} text-white rounded-lg h-12`}
+                    onClick={() => handleSubscribe(plan.id)}
+                    disabled={loadingPlan === plan.id}
+                    className={`w-full h-12 rounded-xl font-semibold transition-all ${
+                      plan.popular
+                        ? 'bg-indigo-600 hover:bg-indigo-700 text-white shadow-lg shadow-indigo-200'
+                        : plan.id === 'free'
+                          ? 'bg-slate-100 hover:bg-slate-200 text-slate-900'
+                          : 'bg-emerald-600 hover:bg-emerald-700 text-white'
+                    }`}
+                    data-testid={`subscribe-${plan.name.toLowerCase()}-btn`}
                   >
-                    {loadingPlan === `family-${key}` ? (
+                    {loadingPlan === plan.id ? (
                       <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Procesando...</>
-                    ) : plan.popular ? (
-                      <>⭐ Obtener Plan Completo</>
                     ) : (
-                      plan.savings ? `Ahorrar €${plan.savings}` : 'Proteger Familia'
+                      <>{plan.cta} <ArrowRight className="w-4 h-4 ml-2" /></>
                     )}
                   </Button>
                 </CardContent>
               </Card>
-            ))}
+            );
+          })}
+        </div>
+
+        {/* Trust Badges */}
+        <div className="flex flex-wrap items-center justify-center gap-8 mb-20 py-8 border-y border-slate-200">
+          <div className="flex items-center gap-2 text-slate-600">
+            <Check className="w-5 h-5 text-emerald-500" />
+            <span className="text-sm font-medium">Sin permanencia</span>
           </div>
-          
-          {/* Comparison note */}
-          <div className="text-center mt-8">
-            <p className="text-sm text-zinc-500">
-              💡 <strong>Consejo:</strong> El Plan Familiar Anual incluye TODAS las funciones de localización y tracking. 
-              ¡Ahorra €199.89 y obtén la protección más completa para tu familia!
-            </p>
+          <div className="flex items-center gap-2 text-slate-600">
+            <Check className="w-5 h-5 text-emerald-500" />
+            <span className="text-sm font-medium">Garantía 15 días</span>
+          </div>
+          <div className="flex items-center gap-2 text-slate-600">
+            <Check className="w-5 h-5 text-emerald-500" />
+            <span className="text-sm font-medium">Pago seguro con Stripe</span>
+          </div>
+          <div className="flex items-center gap-2 text-slate-600">
+            <Check className="w-5 h-5 text-emerald-500" />
+            <span className="text-sm font-medium">Soporte en español</span>
           </div>
         </div>
 
-        {/* Enterprise Custom Plan */}
-        <div className="mb-20">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">Plan Enterprise Custom</h2>
-            <p className="text-lg text-zinc-600">Soluciones personalizadas para bancos y grandes corporaciones</p>
+        {/* FAQ Section */}
+        <div className="max-w-3xl mx-auto mb-20">
+          <div className="text-center mb-10">
+            <HelpCircle className="w-10 h-10 text-indigo-500 mx-auto mb-4" />
+            <h2 className="text-2xl font-bold text-slate-900">Preguntas Frecuentes</h2>
           </div>
-          <Card className="mb-16 max-w-4xl mx-auto border-2 border-amber-300 bg-gradient-to-br from-amber-50 to-yellow-50">
-            <CardHeader>
-              <div className="flex items-center justify-between">
-                <div>
-                  <Badge className="bg-amber-600 text-white px-4 py-2 text-sm mb-4">
-                    Enterprise Custom
-                  </Badge>
-                  <CardTitle className="text-3xl mb-2">Protección Bancaria Avanzada</CardTitle>
-                  <p className="text-zinc-600 text-lg">Integración completa con sistemas bancarios y compliance regulatorio</p>
-                </div>
-                <div className="text-right">
-                  <div className="text-4xl font-bold text-amber-600">Consultar</div>
-                  <div className="text-sm text-zinc-600">Precio personalizado</div>
-                </div>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <div className="grid md:grid-cols-2 gap-8">
-                <div>
-                  <h4 className="font-semibold mb-4 text-amber-600 text-lg">🏦 Características Enterprise:</h4>
-                  <ul className="space-y-3">
-                    {[
-                      'API integración sistemas bancarios',
-                      'Compliance GDPR y PCI-DSS',
-                      'Análisis masivo transacciones',
-                      'Dashboard ejecutivo personalizado',
-                      'Alertas en tiempo real 24/7',
-                      'Soporte técnico dedicado',
-                      'SLA 99.9% uptime garantizado',
-                      'Implementación on-premise disponible'
-                    ].map((feature, idx) => (
-                      <li key={idx} className="flex items-start gap-3 text-sm">
-                        <Check className="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5" />
-                        <span className="font-medium">{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-                <div>
-                  <h4 className="font-semibold mb-4 text-amber-600 text-lg">🎯 Casos de Uso:</h4>
-                  <ul className="space-y-3 mb-6">
-                    {[
-                      'Bancos con +100,000 clientes',
-                      'Detección fraude wire transfers',
-                      'Protección banca online',
-                      'Análisis comportamiento usuarios',
-                      'Prevención lavado de dinero',
-                      'Cumplimiento regulatorio automático'
-                    ].map((useCase, idx) => (
-                      <li key={idx} className="flex items-start gap-3 text-sm">
-                        <Crown className="w-5 h-5 text-amber-500 flex-shrink-0 mt-0.5" />
-                        <span>{useCase}</span>
-                      </li>
-                    ))}
-                  </ul>
-                  <div className="bg-white p-4 rounded-lg border border-amber-200">
-                    <div className="text-sm text-zinc-600 mb-2">Implementación típica:</div>
-                    <div className="text-2xl font-bold text-amber-600">2-4 semanas</div>
-                    <div className="text-xs text-zinc-500">Incluye migración y training</div>
-                  </div>
-                </div>
-              </div>
-              <div className="mt-8 flex flex-col sm:flex-row gap-4">
-                <Button
-                  onClick={() => window.open('mailto:enterprise@manoprotect.com?subject=Solicitud%20Demo%20Enterprise&body=Hola,%20me%20gustaría%20solicitar%20una%20demo%20personalizada%20del%20Plan%20Enterprise.%0A%0ANombre:%0AEmpresa:%0ATeléfono:%0A%0AGracias', '_blank')}
-                  className="flex-1 bg-amber-600 hover:bg-amber-700 text-white rounded-lg h-14 text-lg font-semibold"
-                >
-                  Solicitar Demo Personalizada
-                  <ArrowRight className="ml-2 w-5 h-5" />
-                </Button>
-                <Button
-                  onClick={() => navigate('/downloads')}
-                  variant="outline"
-                  className="flex-1 border-2 border-amber-300 hover:border-amber-400 rounded-lg h-14 text-lg"
-                >
-                  <Download className="mr-2 w-5 h-5" />
-                  Descargar Plan de Negocio
-                </Button>
-              </div>
-              
-              {/* Investor Documents Section */}
-              <div className="mt-8 p-6 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl border border-indigo-200">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-12 h-12 bg-indigo-100 rounded-xl flex items-center justify-center">
-                    <FileText className="w-6 h-6 text-indigo-600" />
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-indigo-900">Documentación para Inversores</h4>
-                    <p className="text-sm text-indigo-600">Acceso exclusivo a información confidencial</p>
-                  </div>
-                </div>
-                <div className="grid sm:grid-cols-2 gap-3">
-                  <button 
-                    onClick={() => navigate('/investor/register')}
-                    className="p-4 bg-white rounded-lg border border-indigo-100 hover:border-indigo-300 hover:shadow-md transition-all text-left group"
-                  >
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="text-sm font-semibold text-gray-900">Plan de Negocio</span>
-                      <Download className="w-4 h-4 text-indigo-500 group-hover:text-indigo-600" />
-                    </div>
-                    <p className="text-xs text-gray-500">120 páginas • Análisis TAM €12B • ROI 100-160x</p>
-                  </button>
-                  <button 
-                    onClick={() => navigate('/investor/register')}
-                    className="p-4 bg-white rounded-lg border border-indigo-100 hover:border-indigo-300 hover:shadow-md transition-all text-left group"
-                  >
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="text-sm font-semibold text-gray-900">Modelo Financiero</span>
-                      <Download className="w-4 h-4 text-emerald-500 group-hover:text-emerald-600" />
-                    </div>
-                    <p className="text-xs text-gray-500">Proyecciones 5 años • LTV/CAC 20x • 89 métricas</p>
-                  </button>
-                  <button 
-                    onClick={() => navigate('/investor/register')}
-                    className="p-4 bg-white rounded-lg border border-indigo-100 hover:border-indigo-300 hover:shadow-md transition-all text-left group"
-                  >
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="text-sm font-semibold text-gray-900">Pitch Deck</span>
-                      <Download className="w-4 h-4 text-orange-500 group-hover:text-orange-600" />
-                    </div>
-                    <p className="text-xs text-gray-500">11 slides • Optimizado VCs • SAM €2.5B</p>
-                  </button>
-                  <button 
-                    onClick={() => navigate('/investor/register')}
-                    className="p-4 bg-white rounded-lg border border-indigo-100 hover:border-indigo-300 hover:shadow-md transition-all text-left group"
-                  >
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="text-sm font-semibold text-gray-900">Dossier B2B</span>
-                      <Download className="w-4 h-4 text-cyan-500 group-hover:text-cyan-600" />
-                    </div>
-                    <p className="text-xs text-gray-500">Casos de uso • Integraciones • Pricing B2B</p>
-                  </button>
-                </div>
-                <p className="text-xs text-indigo-600 mt-4 text-center">
-                  🔒 Requiere registro como inversor verificado • <button onClick={() => navigate('/investor/register')} className="underline hover:text-indigo-800">Solicitar acceso</button>
-                </p>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Free Plan */}
-        <Card className="mb-16 max-w-3xl mx-auto border-zinc-300">
-          <CardHeader>
-            <div className="flex items-center justify-between">
-              <div>
-                <CardTitle className="text-2xl">Plan Básico Gratuito</CardTitle>
-                <p className="text-zinc-600 mt-2">Prueba MANO sin compromiso</p>
-              </div>
-              <div className="text-3xl font-bold">€0</div>
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div className="grid md:grid-cols-2 gap-6">
-              <div>
-                <h4 className="font-semibold mb-3 text-emerald-600">✓ Incluye:</h4>
-                <ul className="space-y-2">
-                  {plans.free.features.map((feature, idx) => (
-                    <li key={idx} className="flex items-center gap-2 text-sm">
-                      <Check className="w-4 h-4 text-emerald-500" />
-                      <span>{feature}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              <div>
-                <h4 className="font-semibold mb-3 text-zinc-600">✗ Limitaciones:</h4>
-                <ul className="space-y-2">
-                  {plans.free.limitations.map((limitation, idx) => (
-                    <li key={idx} className="flex items-center gap-2 text-sm text-zinc-600">
-                      <span className="w-4 h-4 flex items-center justify-center text-zinc-400">✗</span>
-                      <span>{limitation}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-            <Button
-              onClick={() => navigate('/dashboard')}
-              variant="outline"
-              className="w-full mt-6 border-2 border-zinc-300 hover:border-indigo-300 rounded-lg h-12"
-            >
-              Comenzar Gratis
-            </Button>
-          </CardContent>
-        </Card>
-
-        {/* FAQ */}
-        <div className="max-w-3xl mx-auto">
-          <h2 className="text-3xl font-bold text-center mb-12">Preguntas Frecuentes</h2>
           <div className="space-y-4">
-            {[
-              {
-                q: '¿Por qué MANO es más caro que otras apps de seguridad?',
-                a: 'MANO no es un antivirus genérico. Es un sistema de protección contra fraudes con IA avanzada (GPT-5.2) que analiza en tiempo real y previene pérdidas de miles de euros. Un solo fraude evitado justifica años de suscripción.'
-              },
-              {
-                q: '¿Puedo cambiar de plan en cualquier momento?',
-                a: 'Sí, puedes upgrade o downgrade cuando quieras. Si pasas de mensual a anual, el crédito restante se aplica automáticamente.'
-              },
-              {
-                q: '¿Qué incluye la garantía de satisfacción?',
-                a: 'Si no estás satisfecho en los primeros 15 días, te devolvemos el 100% sin preguntas. Sin letra pequeña.'
-              },
-              {
-                q: '¿Cómo funciona el botón SOS con GPS en el plan familiar?',
-                a: 'Cuando cualquier miembro de la familia pulsa el botón SOS de emergencia, la aplicación captura automáticamente su ubicación GPS precisa y la envía instantáneamente a todos los demás miembros del grupo familiar. Así pueden ver exactamente dónde está y acudir en su ayuda. La ubicación solo se comparte cuando se pulsa el botón SOS, respetando la privacidad del usuario.'
-              },
-              {
-                q: '¿El plan familiar incluye modo senior?',
-                a: 'Sí, todos los miembros pueden activar el Modo Familiar Senior con interfaz simplificada, botón SOS grande con localización GPS, y alertas automáticas a otros miembros de la familia.'
-              }
-            ].map((faq, idx) => (
-              <Card key={idx} className="border-zinc-200">
-                <CardHeader>
-                  <CardTitle className="text-lg">{faq.q}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-zinc-600">{faq.a}</p>
+            {faqs.map((faq, idx) => (
+              <Card key={idx} className="border-slate-200">
+                <CardContent className="p-6">
+                  <h3 className="font-semibold text-slate-900 mb-2">{faq.q}</h3>
+                  <p className="text-slate-600 text-sm">{faq.a}</p>
                 </CardContent>
               </Card>
             ))}
           </div>
         </div>
 
-        {/* Final CTA */}
-        <div className="mt-20 text-center">
-          <Card className="max-w-2xl mx-auto bg-gradient-to-br from-indigo-600 to-indigo-700 text-white border-0">
-            <CardContent className="p-12">
-              <h2 className="text-3xl font-bold mb-4">
-                ¿Cuánto vale tu tranquilidad?
-              </h2>
-              <p className="text-indigo-100 text-lg mb-8">
-                Protege lo que más importa. Empieza hoy con garantía de satisfacción.
-              </p>
-              <Button
-                data-testid="subscribe-yearly-final-btn"
-                onClick={() => handleSubscribe('yearly')}
-                disabled={loadingPlan === 'yearly'}
-                className="bg-white text-indigo-600 hover:bg-zinc-50 rounded-lg px-10 h-14 text-lg font-semibold"
-              >
-                {loadingPlan === 'yearly' ? (
-                  <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Procesando...</>
-                ) : (
-                  <>Comenzar Ahora - Plan Anual<ArrowRight className="ml-2 w-5 h-5" /></>
-                )}
-              </Button>
-            </CardContent>
-          </Card>
+        {/* Enterprise & Investors - Footer Section */}
+        <div className="border-t border-slate-200 pt-16">
+          <div className="grid md:grid-cols-2 gap-8">
+            {/* Enterprise */}
+            <Card className="border-slate-200 hover:border-amber-300 transition-all">
+              <CardContent className="p-8">
+                <div className="flex items-center gap-4 mb-4">
+                  <div className="w-12 h-12 bg-amber-100 rounded-xl flex items-center justify-center">
+                    <Building2 className="w-6 h-6 text-amber-600" />
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-slate-900">Enterprise</h3>
+                    <p className="text-sm text-slate-500">Para bancos y corporaciones</p>
+                  </div>
+                </div>
+                <p className="text-slate-600 text-sm mb-4">
+                  Integración API, compliance regulatorio, y soporte dedicado para grandes organizaciones.
+                </p>
+                <Button
+                  onClick={() => window.open('mailto:enterprise@manoprotect.com', '_blank')}
+                  variant="outline"
+                  className="w-full rounded-lg border-amber-300 hover:bg-amber-50 text-amber-700"
+                >
+                  Contactar Ventas
+                </Button>
+              </CardContent>
+            </Card>
+
+            {/* Investors */}
+            <Card className="border-slate-200 hover:border-indigo-300 transition-all">
+              <CardContent className="p-8">
+                <div className="flex items-center gap-4 mb-4">
+                  <div className="w-12 h-12 bg-indigo-100 rounded-xl flex items-center justify-center">
+                    <TrendingUp className="w-6 h-6 text-indigo-600" />
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-slate-900">Inversores</h3>
+                    <p className="text-sm text-slate-500">Oportunidad de inversión</p>
+                  </div>
+                </div>
+                <p className="text-slate-600 text-sm mb-4">
+                  Accede a nuestro plan de negocio, modelo financiero y pitch deck para inversores.
+                </p>
+                <Button
+                  onClick={() => navigate('/investor/register')}
+                  variant="outline"
+                  className="w-full rounded-lg border-indigo-300 hover:bg-indigo-50 text-indigo-700"
+                >
+                  Acceso Inversores
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
         </div>
-      </div>
+      </main>
+
+      {/* Footer */}
+      <footer className="border-t border-slate-200 bg-slate-50 py-8 mt-16">
+        <div className="max-w-6xl mx-auto px-6 text-center text-sm text-slate-500">
+          <p>© 2026 ManoProtect. Todos los derechos reservados.</p>
+          <div className="flex items-center justify-center gap-6 mt-4">
+            <button onClick={() => navigate('/privacy')} className="hover:text-slate-700">
+              Privacidad
+            </button>
+            <button onClick={() => navigate('/terms')} className="hover:text-slate-700">
+              Términos
+            </button>
+            <button onClick={() => navigate('/contact')} className="hover:text-slate-700">
+              Contacto
+            </button>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 };
