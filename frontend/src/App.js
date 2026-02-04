@@ -59,7 +59,7 @@ const CompartirUbicacion = lazy(() => import('@/pages/CompartirUbicacion'));
 
 // Lazy load non-critical UI components to reduce main thread blocking
 const CookieConsent = lazy(() => import('@/components/CookieConsent'));
-const FloatingWhatsApp = lazy(() => import('@/components/FloatingWhatsApp'));
+const AIChatWidget = lazy(() => import('@/components/AIChatWidget'));
 
 import UrgencyBanner from '@/components/UrgencyBanner';
 
