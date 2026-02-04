@@ -49,35 +49,55 @@ const SOSQuickButton = () => {
     }
   }, [user]);
 
-  // Get current location with high accuracy
+  // Get current location with high accuracy and address
   useEffect(() => {
-    if (navigator.geolocation) {
-      // Watch position for continuous updates
-      const watchId = navigator.geolocation.watchPosition(
-        (pos) => {
-          const newLocation = {
-            latitude: pos.coords.latitude,
-            longitude: pos.coords.longitude,
-            accuracy: pos.coords.accuracy,
-            timestamp: new Date().toISOString()
-          };
-          setLocation(newLocation);
-          
-          // Send location update if SOS is active
-          if (sosActive && alertIdRef.current) {
-            sosWebSocket.updateLocation(alertIdRef.current, newLocation);
-          }
-        },
-        (err) => console.error('Location error:', err),
-        { 
-          enableHighAccuracy: true,
-          timeout: 10000,
-          maximumAge: 0
-        }
-      );
-
-      return () => navigator.geolocation.clearWatch(watchId);
-    }
+    const initLocation = async () => {
+      setLoadingLocation(true);
+      try {
+        // Get complete location with address
+        const completeLocation = await getCompleteLocation();
+        setLocation({
+          latitude: completeLocation.latitude,
+          longitude: completeLocation.longitude,
+          accuracy: completeLocation.accuracy,
+          timestamp: new Date().toISOString()
+        });
+        setAddress(completeLocation.address);
+        setAddressDetails(completeLocation.details);
+        setLoadingLocation(false);
+        
+        // Start watching position for updates
+        watchIdRef.current = watchPosition(
+          async (pos) => {
+            const newLocation = {
+              latitude: pos.latitude,
+              longitude: pos.longitude,
+              accuracy: pos.accuracy,
+              timestamp: new Date().toISOString()
+            };
+            setLocation(newLocation);
+            
+            // Send location update if SOS is active
+            if (sosActive && alertIdRef.current) {
+              sosWebSocket.updateLocation(alertIdRef.current, newLocation);
+            }
+          },
+          (err) => console.error('Location watch error:', err)
+        );
+      } catch (error) {
+        console.error('Location error:', error);
+        setLoadingLocation(false);
+        toast.error(error.message || 'Error al obtener ubicación');
+      }
+    };
+    
+    initLocation();
+    
+    return () => {
+      if (watchIdRef.current) {
+        clearWatch(watchIdRef.current);
+      }
+    };
   }, [sosActive]);
 
   // Cleanup on unmount
