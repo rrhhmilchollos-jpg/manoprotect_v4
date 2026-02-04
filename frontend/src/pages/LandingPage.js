@@ -531,18 +531,30 @@ const LandingPage = () => {
             ))}
           </div>
 
-          {/* CTA después de testimonios */}
-          <div className="text-center mt-10">
-            <p className="text-zinc-600 mb-4">¿Quieres ser el próximo en proteger a tu familia?</p>
-            <Button
-              data-testid="testimonials-cta-btn"
-              onClick={() => navigate('/register')}
-              className="bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg px-8 h-12 text-base font-semibold shadow-lg hover:shadow-xl active:scale-95 transition-all"
-              aria-label="Comenzar prueba gratuita de ManoProtect"
-            >
-              Probar Gratis 30 Días
-              <ArrowRight className="ml-2 w-5 h-5" aria-hidden="true" />
-            </Button>
+          {/* CTA después de testimonios - CLARO Y DIRECTO */}
+          <div className="text-center mt-10 p-8 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-2xl">
+            <h3 className="text-2xl font-bold text-white mb-2">¿Listo para proteger a tu familia?</h3>
+            <p className="text-indigo-100 mb-6">Únete a miles de familias que ya confían en ManoProtect</p>
+            <div className="flex flex-wrap justify-center gap-4">
+              <Button
+                data-testid="testimonials-cta-btn"
+                onClick={() => navigate('/register')}
+                className="bg-white text-indigo-600 hover:bg-indigo-50 rounded-xl px-8 h-14 text-lg font-bold shadow-lg hover:shadow-xl active:scale-95 transition-all"
+                aria-label="Comenzar prueba gratuita de ManoProtect"
+              >
+                🛡️ Crear Cuenta Gratis
+                <ArrowRight className="ml-2 w-5 h-5" aria-hidden="true" />
+              </Button>
+              <Button
+                data-testid="testimonials-pricing-btn"
+                onClick={() => navigate('/plans')}
+                variant="outline"
+                className="border-2 border-white text-white hover:bg-white/10 rounded-xl px-8 h-14 text-lg font-semibold active:scale-95 transition-all"
+              >
+                Ver Planes y Precios
+              </Button>
+            </div>
+            <p className="text-indigo-200 text-sm mt-4">✓ 7 días gratis · ✓ Sin tarjeta · ✓ Cancela cuando quieras</p>
           </div>
 
           {/* Trust Badges */}
