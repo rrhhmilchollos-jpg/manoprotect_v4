@@ -41,7 +41,8 @@ class TestRegistrationErrorHandling:
         
         # Check that error contains duplicate email message
         assert "detail" in data
-        assert "ya está registrado" in data["detail"] or "already" in data["detail"].lower()
+        detail_str = str(data["detail"])
+        assert "ya está registrado" in detail_str or "already" in detail_str.lower()
         print(f"✅ Duplicate email error: {data['detail']}")
     
     def test_register_missing_fields_returns_validation_error(self):
