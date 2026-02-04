@@ -389,18 +389,55 @@ const SOSQuickButton = () => {
         </div>
 
         {/* Connection & Location Status */}
-        <div className="flex flex-col items-center gap-2 mb-6">
-          {location && (
+        <div className="flex flex-col items-center gap-2 mb-4">
+          {loadingLocation ? (
             <div className="flex items-center gap-2 text-zinc-400 text-sm">
-              <MapPin className="w-4 h-4 text-green-500" />
-              <span>GPS activo • Precisión: {Math.round(location.accuracy)}m</span>
+              <Navigation className="w-4 h-4 animate-spin" />
+              <span>Obteniendo ubicación precisa...</span>
+            </div>
+          ) : location ? (
+            <div className="w-full max-w-sm space-y-2">
+              <div className="flex items-center gap-2 text-zinc-300 text-sm justify-center">
+                <MapPin className="w-4 h-4 text-green-500" />
+                <span className="truncate">{address || 'Ubicación detectada'}</span>
+              </div>
+              {addressDetails?.city && (
+                <div className="text-xs text-zinc-500 text-center">
+                  {addressDetails.city}{addressDetails.postalCode ? `, ${addressDetails.postalCode}` : ''}
+                  {addressDetails.province ? ` - ${addressDetails.province}` : ''}
+                </div>
+              )}
+              <div className="text-xs text-zinc-600 text-center">
+                GPS: {location.latitude.toFixed(6)}, {location.longitude.toFixed(6)} • Precisión: ±{Math.round(location.accuracy)}m
+              </div>
+            </div>
+          ) : (
+            <div className="flex items-center gap-2 text-red-400 text-sm">
+              <MapPin className="w-4 h-4" />
+              <span>Ubicación no disponible</span>
             </div>
           )}
-          <div className="flex items-center gap-2 text-zinc-500 text-xs">
+          <div className="flex items-center gap-2 text-zinc-500 text-xs mt-2">
             <div className={`w-2 h-2 rounded-full ${wsConnected ? 'bg-green-500' : 'bg-yellow-500'}`} />
             <span>{wsConnected ? 'Conexión en tiempo real activa' : 'Conectando...'}</span>
           </div>
         </div>
+
+        {/* Live Map */}
+        {location && (
+          <div className="w-full max-w-sm mb-6">
+            <LiveLocationMap
+              latitude={location.latitude}
+              longitude={location.longitude}
+              accuracy={location.accuracy}
+              address={address}
+              personName={user?.name || 'Tu ubicación'}
+              isEmergency={sosActive}
+              height="200px"
+              zoom={17}
+            />
+          </div>
+        )}
 
         {/* Quick Actions */}
         <div className="w-full max-w-xs space-y-3">
