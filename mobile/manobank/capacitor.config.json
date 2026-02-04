@@ -3,7 +3,7 @@
   "appName": "ManoBank",
   "webDir": "www",
   "server": {
-    "url": "https://safety-alert-app-1.preview.emergentagent.com",
+    "url": "https://mano-zones.preview.emergentagent.com",
     "cleartext": true
   }
 }
