@@ -1741,9 +1741,9 @@ async def cancel_user_subscription(
     admin = await require_admin(request, session_token)
     
     # Get current user
-    user = await db.users.find_one({"user_id": user_id})
+    user = await db.users.find_one({"user_id": user_id}, {"_id": 0})
     if not user:
-        user = await db.users.find_one({"id": user_id})
+        user = await db.users.find_one({"id": user_id}, {"_id": 0})
     if not user:
         raise HTTPException(status_code=404, detail="Usuario no encontrado")
     
