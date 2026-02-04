@@ -25,7 +25,7 @@ Todas las apps se conectan al mismo backend:
 
 | Entorno | URL |
 |---------|-----|
-| Preview | https://family-safety-8.preview.emergentagent.com |
+| Preview | https://safety-alert-app-1.preview.emergentagent.com |
 | Producción | [Tu dominio de producción] |
 
 ---

@@ -3,7 +3,7 @@
   "appName": "ManoBank",
   "webDir": "www",
   "server": {
-    "url": "https://family-safety-8.preview.emergentagent.com",
+    "url": "https://safety-alert-app-1.preview.emergentagent.com",
     "cleartext": true
   }
 }

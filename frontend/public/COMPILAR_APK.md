@@ -15,7 +15,7 @@ El servidor actual es ARM64 y no puede compilar APKs nativos. Aquí tienes 3 opc
 
 1. **Descarga el proyecto Android:**
    ```
-   https://family-safety-8.preview.emergentagent.com/ManoProtect-Android-Project.zip
+   https://safety-alert-app-1.preview.emergentagent.com/ManoProtect-Android-Project.zip
    ```
 
 2. **Extrae el ZIP** en una carpeta

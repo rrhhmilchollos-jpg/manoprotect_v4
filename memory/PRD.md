@@ -8,7 +8,7 @@
 - Errores menores: 1 (Twilio config - ver notas)
 
 **URL de Producción:** https://manoprotect.com
-**URL de Preview:** https://family-safety-8.preview.emergentagent.com
+**URL de Preview:** https://safety-alert-app-1.preview.emergentagent.com
 
 ---
 
