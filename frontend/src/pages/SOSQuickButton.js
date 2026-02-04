@@ -263,16 +263,6 @@ const SOSQuickButton = () => {
           <span className="text-white font-bold">ManoProtect SOS</span>
         </div>
         <div className="flex items-center gap-2">
-          {sirenPlaying && (
-            <Button
-              onClick={stopSiren}
-              variant="ghost"
-              size="sm"
-              className="text-white hover:bg-white/20"
-            >
-              <Volume2 className="w-5 h-5" />
-            </Button>
-          )}
           <Button
             onClick={installToHomeScreen}
             variant="ghost"
