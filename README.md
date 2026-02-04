@@ -1,6 +1,12 @@
 # ManoProtect - Protección Familiar contra Fraudes Digitales
 
-![ManoProtect Logo](frontend/public/manoprotect_logo.png)
+<p align="center">
+  <img src="frontend/public/manoprotect_logo.png" alt="ManoProtect Logo" width="200"/>
+</p>
+
+<p align="center">
+  <strong>✅ LISTO PARA PRODUCCIÓN - 04/02/2026</strong>
+</p>
 
 ## 🛡️ Descripción
 
