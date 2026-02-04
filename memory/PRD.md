@@ -188,6 +188,8 @@ Usuario pulsa SOS → Backend → WebSocket + FCM + SMS → Familiar recibe:
 - `/frontend/src/App.js` - Rutas principales
 - `/frontend/src/pages/SOSQuickButton.js` - Botón SOS rápido
 - `/frontend/src/pages/SOSAlertReceived.js` - Alerta para familiares
+- `/frontend/src/pages/InstruccionesFamiliares.js` - Guía para familiares (NUEVO)
+- `/frontend/src/context/AuthContext.js` - Autenticación y manejo de errores
 - `/frontend/src/services/sosWebSocket.js` - Cliente WebSocket
 - `/frontend/src/services/firebase.js` - Firebase config
 - `/frontend/public/app-ads.txt` - AdMob configuration
