@@ -463,6 +463,7 @@ async def send_sos_alert(
     seen_identifiers = set()
     
     # DEBUG
+    print(f"[DEBUG SOS] User ID from session: {user.user_id}")
     print(f"[DEBUG SOS] family_members found: {len(family_members)}")
     print(f"[DEBUG SOS] trusted_contacts found: {len(trusted_contacts)}")
     print(f"[DEBUG SOS] emergency_contacts found: {len(emergency_contacts)}")
