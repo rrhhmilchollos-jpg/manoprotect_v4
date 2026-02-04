@@ -182,20 +182,37 @@ const LandingPage = () => {
                 {t('landing.hero.title')}
               </h1>
               
+              {/* Descripción clara del producto */}
               <p className="text-lg text-zinc-600 leading-relaxed max-w-xl">
-                {t('landing.hero.subtitle')}
+                <strong>ManoProtect es una app móvil</strong> que protege a tu familia contra fraudes, estafas y emergencias. 
+                Botón SOS de emergencia, alertas en tiempo real y localización familiar. <strong>Instálala en 2 minutos.</strong>
               </p>
               
+              {/* CTAs principales - CLAROS y DIRECTOS */}
               <div className="flex flex-wrap gap-4">
                 <Button
-                  data-testid="hero-learn-more-btn"
-                  onClick={() => navigate('/how-it-works')}
-                  variant="outline"
-                  className="border-2 border-zinc-300 hover:border-indigo-300 rounded-lg px-8 h-14 text-lg active:scale-95 transition-all"
+                  data-testid="hero-download-btn"
+                  onClick={() => navigate('/register')}
+                  className="bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl px-8 h-14 text-lg font-bold shadow-lg hover:shadow-xl active:scale-95 transition-all"
                 >
-                  {t('landing.hero.ctaSecondary')}
+                  🛡️ Crear Cuenta Gratis
+                  <ArrowRight className="w-5 h-5 ml-2" />
+                </Button>
+                <Button
+                  data-testid="hero-pricing-btn"
+                  onClick={() => navigate('/plans')}
+                  variant="outline"
+                  className="border-2 border-emerald-500 text-emerald-600 hover:bg-emerald-50 rounded-xl px-8 h-14 text-lg font-semibold active:scale-95 transition-all"
+                >
+                  Ver Planes y Precios
                 </Button>
               </div>
+              
+              {/* Beneficio secundario */}
+              <p className="text-sm text-zinc-500 flex items-center gap-2">
+                <Check className="w-4 h-4 text-emerald-500" />
+                7 días gratis · Sin tarjeta · Cancela cuando quieras
+              </p>
 
               <div className="flex items-center gap-8 pt-4">
                 <div>
