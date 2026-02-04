@@ -159,11 +159,12 @@ async def send_sos_alert(phone_number: str, sender_name: str, location_url: str,
     """
     Send emergency SOS alert SMS
     """
-    sms_text = f"🆘 ALERTA SOS - {sender_name} ha activado una emergencia."
+    sms_text = f"ALERTA SOS - {sender_name} ha activado una emergencia."
     if message:
-        sms_text += f"\nMensaje: {message}"
-    sms_text += f"\n📍 Ubicación: {location_url}"
-    sms_text += "\n\n⚠️ Contacta inmediatamente o llama al 112."
+        sms_text += f" Mensaje: {message}"
+    if location_url:
+        sms_text += f" Ubicacion: {location_url}"
+    sms_text += " Contacta inmediatamente o llama al 112."
     
     return await send_sms(phone_number, sms_text)
 
