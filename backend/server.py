@@ -2864,120 +2864,14 @@ async def public_get_stats(request: Request):
     }
 
 # ============================================
-# BANK INTEGRATION (Placeholder)
-# ============================================
-
-@api_router.post("/bank/verify-transaction")
-async def verify_bank_transaction(
-    data: BankAlert,
-    request: Request,
-    session_token: Optional[str] = Cookie(None)
-):
-    """Verify bank transaction for fraud indicators"""
-    user = await require_auth(request, session_token)
-    
-    # Analyze transaction
-    risk_score = 0.0
-    risk_factors = []
-    
-    # High amount
-    if data.amount > 1000:
-        risk_score += 0.2
-        risk_factors.append("Transacción de alto valor")
-    
-    # Suspicious indicators
-    if data.suspicious_indicators:
-        risk_score += len(data.suspicious_indicators) * 0.15
-        risk_factors.extend(data.suspicious_indicators)
-    
-    # Unknown merchant
-    known_merchants = await db.trusted_merchants.find(
-        {"user_id": user.user_id}
-    ).to_list(100)
-    if not any(m.get("name") == data.merchant for m in known_merchants):
-        risk_score += 0.1
-        risk_factors.append("Comercio no reconocido")
-    
-    risk_level = "low"
-    if risk_score > 0.7:
-        risk_level = "critical"
-    elif risk_score > 0.5:
-        risk_level = "high"
-    elif risk_score > 0.3:
-        risk_level = "medium"
-    
-    # Log verification
-    verification = {
-        "user_id": user.user_id,
-        "transaction_id": data.transaction_id,
-        "amount": data.amount,
-        "merchant": data.merchant,
-        "risk_score": risk_score,
-        "risk_level": risk_level,
-        "risk_factors": risk_factors,
-        "verified_at": datetime.now(timezone.utc).isoformat()
-    }
-    await db.bank_verifications.insert_one(verification)
-    
-    # Alert if high risk
-    if risk_level in ["high", "critical"]:
-        await create_notification(
-            user.user_id,
-            "⚠️ Alerta de Transacción Sospechosa",
-            f"Transacción de €{data.amount} en {data.merchant} marcada como {risk_level}",
-            "bank",
-            {"transaction_id": data.transaction_id, "risk_level": risk_level}
-        )
-    
-    return {
-        "transaction_id": data.transaction_id,
-        "risk_score": round(risk_score, 2),
-        "risk_level": risk_level,
-        "risk_factors": risk_factors,
-        "recommendation": "Bloquear transacción" if risk_level in ["high", "critical"] else "Aprobar con precaución" if risk_level == "medium" else "Aprobar"
-    }
-
-@api_router.get("/bank/verifications")
-async def get_bank_verifications(
-    request: Request,
-    session_token: Optional[str] = Cookie(None),
-    limit: int = 50
-):
-    """Get bank verification history"""
-    user = await require_auth(request, session_token)
-    
-    verifications = await db.bank_verifications.find(
-        {"user_id": user.user_id},
-        {"_id": 0}
-    ).sort("verified_at", -1).limit(limit).to_list(limit)
-    
-    return verifications
-
-@api_router.post("/bank/trusted-merchants")
-async def add_trusted_merchant(
-    name: str,
-    request: Request,
-    session_token: Optional[str] = Cookie(None)
-):
-    """Add trusted merchant"""
-    user = await require_auth(request, session_token)
-    
-    await db.trusted_merchants.update_one(
-        {"user_id": user.user_id, "name": name},
-        {"$set": {
-            "user_id": user.user_id,
-            "name": name,
-            "added_at": datetime.now(timezone.utc).isoformat()
-        }},
-        upsert=True
-    )
-    
-    return {"message": f"Comercio '{name}' añadido a la lista de confianza"}
-
-# ============================================
 # BANKING INTEGRATION - RESERVED FOR MANOBANK.ES
 # ============================================
 # Banking features will be available when ManoBank.es is launched
+# All banking endpoints (/bank/*) are disabled for ManoProtect
+
+# ============================================
+# MANOPROTECT ML FRAUD DETECTION
+# ============================================
 
 # ============================================
 # ML FRAUD DETECTION ROUTES
