@@ -746,31 +746,31 @@ const LandingPage = () => {
               </div>
               <div className="flex items-center gap-2 px-4 py-2 bg-zinc-100 rounded-lg">
                 <Shield className="w-5 h-5 text-blue-600" aria-hidden="true" />
-                <span className="text-sm font-medium text-zinc-700">ISO 27001</span>
+                <span className="text-sm font-medium text-zinc-700">Pago Seguro</span>
               </div>
               <div className="flex items-center gap-2 px-4 py-2 bg-zinc-100 rounded-lg">
                 <Check className="w-5 h-5 text-purple-600" aria-hidden="true" />
-                <span className="text-sm font-medium text-zinc-700">PCI DSS</span>
+                <span className="text-sm font-medium text-zinc-700">Stripe</span>
               </div>
             </div>
             
-            {/* Statistics */}
+            {/* Features - No statistics */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-10 p-8 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-2xl">
               <div className="text-center">
-                <div className="text-3xl font-bold text-indigo-600">+15.000</div>
-                <p className="text-sm text-zinc-600 mt-1">Familias Protegidas</p>
+                <div className="text-3xl font-bold text-indigo-600">IA</div>
+                <p className="text-sm text-zinc-600 mt-1">Análisis Inteligente</p>
               </div>
               <div className="text-center">
-                <div className="text-3xl font-bold text-emerald-600">50.000+</div>
-                <p className="text-sm text-zinc-600 mt-1">Estafas Bloqueadas</p>
+                <div className="text-3xl font-bold text-emerald-600">24/7</div>
+                <p className="text-sm text-zinc-600 mt-1">Protección Continua</p>
               </div>
               <div className="text-center">
-                <div className="text-3xl font-bold text-purple-600">4.9/5</div>
-                <p className="text-sm text-zinc-600 mt-1">Valoración Media</p>
+                <div className="text-3xl font-bold text-purple-600">15</div>
+                <p className="text-sm text-zinc-600 mt-1">Días Prueba Gratis</p>
               </div>
               <div className="text-center">
-                <div className="text-3xl font-bold text-orange-600">99.8%</div>
-                <p className="text-sm text-zinc-600 mt-1">Tasa de Detección</p>
+                <div className="text-3xl font-bold text-orange-600">SMS</div>
+                <p className="text-sm text-zinc-600 mt-1">Alertas Instantáneas</p>
               </div>
             </div>
           </div>
