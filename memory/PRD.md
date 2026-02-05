@@ -10,7 +10,6 @@
 ### SMS (Infobip) ✅
 - Saldo: 19.82 EUR
 - SMS de prueba: Recibidos correctamente
-- Alertas SOS: Funcionando
 
 ### Funcionalidades Principales
 
@@ -25,100 +24,112 @@
 #### 👨‍👩‍👧‍👦 Localización Familiar
 - "Solicitar Ubicación" envía notificación al familiar
 - Familiar comparte ubicación desde su móvil
-- Historial de ubicaciones
 
 #### 📍 Geofencing / Zonas Seguras ✅
-- Zonas preconfiguradas: Casa 🏠, Trabajo 💼, Colegio 🏫
-- Zonas personalizadas ilimitadas (premium)
+- Zonas: Casa 🏠, Trabajo 💼, Colegio 🏫 + personalizadas
 - Radio configurable: 50-500 metros
 - Alertas de ENTRADA y SALIDA
-- Restricción: 1 zona gratis, ilimitadas premium
+- 1 zona gratis, ilimitadas premium
 
-#### 🤖 Chat con IA (NUEVO) ✅
-- Widget flotante en toda la app
-- Respuestas 24/7 con GPT-4o-mini
-- Conocimiento completo de ManoProtect
+#### 🤖 Chat con IA + TTS ✅
+- Widget flotante 24/7
+- GPT-4o-mini para respuestas inteligentes
+- **Text-to-Speech** para respuestas habladas (español)
 - Preguntas frecuentes predefinidas
-- Escalamiento a soporte humano vía WhatsApp
-- Historial guardado en MongoDB
+- Escalamiento a WhatsApp humano
 
 #### 📺 Anuncios Intersticiales ✅
 - Para usuarios gratuitos
-- Se muestra después de 3 visitas
-- Skip para usuarios premium
+- Skip automático para premium
 
 #### 🛡️ Anti-Estafas
 - Detección de phishing, smishing, vishing
-- Verificador de enlaces
 
 ---
 
 ## Integraciones
 
-| Servicio | Estado | Credenciales |
-|----------|--------|--------------|
-| Infobip SMS | ✅ 19.82€ | .env configurado |
-| Firebase FCM | ✅ | firebase-admin-sdk.json |
-| Stripe | ✅ | .env configurado |
-| MongoDB | ✅ | .env configurado |
-| OpenStreetMap | ✅ | Gratis |
-| AdMob | ✅ | pub-7713974112203810 |
-| **OpenAI GPT-4o-mini** | ✅ | EMERGENT_LLM_KEY |
+| Servicio | Estado |
+|----------|--------|
+| Infobip SMS | ✅ 19.82€ |
+| Firebase FCM | ✅ |
+| Stripe | ✅ |
+| MongoDB | ✅ |
+| OpenStreetMap | ✅ |
+| AdMob | ✅ |
+| **OpenAI GPT-4o-mini** | ✅ |
+| **Web Speech API (TTS)** | ✅ |
+
+---
+
+## Proyecto Android (Google Play)
+
+Archivos en `/app/android/`:
+- `README.md` - Guía paso a paso
+- `LauncherActivity.java` - Activity con intersticial AdMob
+- `build.gradle.example` - Configuración Gradle
+
+**IDs AdMob:**
+- App ID: `ca-app-pub-7713974112203810~9265947358`
+- Test Intersticial: `ca-app-pub-3940256099942544/1033173712`
+
+---
+
+## Tests
+
+### Backend (pytest)
+- `/app/backend/tests/test_api.py`
+- 8/14 tests pasando (auth, health, chat)
+- Tests con cookies requieren ajuste de httpx
+
+### E2E (Playwright)
+- `/app/frontend/e2e/manoprotect.spec.js`
+- Tests de landing, auth, safe zones, chat
+
+---
+
+## Refactorización
+
+### Completado
+- Documentado en `/app/memory/ARCHITECTURE.md`
+- Plan en `/app/memory/REFACTOR_PLAN.md`
+- Creado `/app/backend/routes/chat_routes.py`
+
+### Pendiente
+- Mover rutas restantes de server.py a módulos
+- Meta: server.py < 500 líneas
 
 ---
 
 ## Archivos Clave
 
-### Backend
-- `/backend/routes/geofence_routes.py` - CRUD Geofencing
-- `/backend/services/ai_support.py` - Chat con IA
-- `/backend/services/infobip_sms.py` - SMS
-- `/backend/services/emergency_notifications.py` - FCM + SMS
-
-### Frontend
-- `/frontend/src/components/AIChatWidget.jsx` - Widget de chat IA
-- `/frontend/src/components/InterstitialAd.jsx` - Anuncios
-- `/frontend/src/pages/SafeZones.js` - Zonas seguras
-- `/frontend/src/components/LiveLocationMap.jsx` - Mapa
-
----
-
-## API Endpoints Chat IA
-
-| Endpoint | Método | Descripción |
-|----------|--------|-------------|
-| `/api/chat/message` | POST | Enviar mensaje al asistente |
-| `/api/chat/quick-responses` | GET | Obtener preguntas frecuentes |
-| `/api/chat/session/{id}` | DELETE | Limpiar historial sesión |
-
----
-
-## Credenciales Test
-
-| Usuario | Email | Password |
-|---------|-------|----------|
-| Admin | info@manoprotect.com | 19862210Des |
-| Test | reviewer@manoprotect.com | ReviewMano2025! |
+| Archivo | Descripción |
+|---------|-------------|
+| `/backend/services/ai_support.py` | Chat IA |
+| `/backend/routes/chat_routes.py` | API chat |
+| `/frontend/src/components/AIChatWidget.jsx` | Widget chat + TTS |
+| `/android/LauncherActivity.java` | Android con AdMob |
+| `/backend/tests/test_api.py` | Tests pytest |
+| `/frontend/e2e/manoprotect.spec.js` | Tests Playwright |
 
 ---
 
 ## Tareas Completadas
 
-- [x] Migración Twilio → Infobip
-- [x] Sistema SOS con GPS preciso
-- [x] Notificaciones Push FCM
-- [x] Localización familiar bajo demanda
+- [x] Sistema SOS completo
 - [x] Geofencing / Zonas Seguras
-- [x] Anuncios Intersticiales AdMob
-- [x] Auditoría _id MongoDB
-- [x] **Chat con IA (GPT-4o-mini)** (05/02/2026)
+- [x] Chat con IA (GPT-4o-mini)
+- [x] **Text-to-Speech** para chat
+- [x] **Configuración Android Studio** para Google Play
+- [x] **Tests E2E** con Playwright
+- [x] **Tests Backend** con pytest
+- [x] Plan de refactorización documentado
 
 ## Tareas Pendientes
 
-- [ ] Preparar proyecto Android Studio para Google Play
-- [ ] Refactorización profunda server.py
-- [ ] Tests unitarios y E2E
-- [ ] Índices MongoDB
+- [ ] Ejecutar refactorización completa de server.py
+- [ ] Configurar CI/CD para tests automáticos
+- [ ] Crear índices MongoDB para optimización
 
 ---
 
@@ -126,3 +137,4 @@
 
 1. **Save to Github** → manoprotect.com / main
 2. **Deploy** → Producción
+3. **Google Play** → Seguir `/app/android/README.md`
