@@ -1,140 +1,80 @@
-# ManoProtect - PRD Final v2.4
+# ManoProtect - Product Requirements Document
 
-## ✅ PRODUCCIÓN LISTA - COMPLETAMENTE OPTIMIZADA Y TESTEADA
-**Última actualización:** 05/02/2026
-**Tests:** 100% Backend (14/14) | 100% Frontend (5/5)
-**Conversión:** 12 componentes de optimización implementados
-**Confianza:** 6 componentes de trust building implementados
+## Información General
+- **Nombre**: ManoProtect
+- **Empresa**: STARTBOOKING SL
+- **Descripción**: Aplicación de protección contra fraudes digitales para familias españolas
 
----
+## Estado Actual: Preparación para Google Play (Febrero 2025)
 
-## Publicidad Multi-Plataforma ✅ NUEVO
+### ✅ Completado
 
-### Píxeles de Tracking Instalados
-| Plataforma | Archivo | Eventos |
-|------------|---------|---------|
-| **Facebook/Instagram** | `/ads/facebook-pixel.js` | Registro, Compra, Lead, ViewContent |
-| **TikTok** | `/ads/tiktok-pixel.js` | Registro, Compra, Download, Contact |
-| **Twitter/X** | `/ads/twitter-pixel.js` | Signup, Purchase, Lead |
-| **LinkedIn** | `/ads/linkedin-pixel.js` | B2B Lead, Purchase |
-| **Snapchat** | `/ads/snapchat-pixel.js` | App Install, Purchase |
-| **Pinterest** | `/ads/pinterest-pixel.js` | Checkout, Lead |
-| **Google Ads** | `/google-ads/conversion-tracking.js` | Conversiones, Remarketing |
+#### Limpieza de Políticas Google Play (Feb 2025)
+- [x] Eliminado contenido engañoso (estadísticas falsas, certificaciones falsas)
+- [x] Testimonios reales de Google (Selomit, María Deseada Solas Sanchis)
+- [x] Período de prueba actualizado a 7 días en toda la app
+- [x] AggregateRating falso eliminado del Schema.org
+- [x] Errores de consola corregidos (scripts ads comentados)
 
-### Gestor Unificado
-- **Archivo:** `/ads/unified-ads-manager.js`
-- Envía eventos a TODAS las plataformas simultáneamente
-- API simple: `ManoAds.trackSignUp()`, `ManoAds.trackPurchase()`
+#### Icono de Alta Calidad (Feb 2025)
+- [x] Nuevo icono 512x512 generado sin pixelación
+- [x] Todos los tamaños PWA actualizados (72-512px)
+- [x] Escudo verde/morado con mano de protección
 
-### Anuncios Bonificados (Rewarded)
-- **Archivo:** `/ads/rewarded-ads.js`
-- **Componente:** `/src/components/RewardedAdsPanel.jsx`
-- **Recompensas:**
-  - 👑 1 Día Premium Gratis
-  - 📍 Zona Segura Extra
-  - 🔍 Análisis de Amenaza Gratis
-- **Límite:** 5 anuncios/día por usuario
+#### Documentación Android (Feb 2025)
+- [x] Guía AAB actualizada (`/app/android/GENERAR_AAB_GUIA.md`)
+- [x] Archivos configuración TWA (`twa-manifest.json`, `strings.xml`, `colors.xml`)
+- [x] Instrucciones para evitar error "SB StartBooking"
 
----
+### ⏳ Pendiente
 
-## Optimizaciones Completadas
+#### P0 - Bloqueante
+- [ ] Generar nuevo .aab con branding ManoProtect (usuario debe hacer localmente)
+- [ ] Subir a Google Play Console y solicitar revisión
 
-### SEO Expansivo ✅
-- Sitemap.xml (15+ URLs)
-- Robots.txt optimizado
-- Schema.org JSON-LD
-- Open Graph + Twitter Cards
-- Meta tags completos
+#### P1 - Próximos pasos
+- [ ] Configurar Pixel IDs de ads cuando estén disponibles
+- [ ] Completar refactorización de `server.py`
 
-### BigData & Analytics ✅
-- DataLayer para GTM
-- Scroll depth tracking
-- Time on page
-- Performance metrics
-- E-commerce tracking
+#### P2 - Backlog
+- [ ] Eliminar archivos .jsx de componentes removidos
+- [ ] Configurar CI/CD
 
-### Google Play Console ✅
-- AndroidManifest.xml completo
-- LauncherActivity.java con AdMob
-- MyFirebaseMessagingService.java
-- Guía: `/android/GOOGLE_PLAY_SETUP.md`
-
-### CI/CD ✅
-- GitHub Actions pipeline
-- Tests automáticos
-
-### MongoDB ✅
-- 104 índices creados
-
----
-
-## Funcionalidades
-
-- 🆘 Sistema SOS
-- 📍 Geofencing / Zonas Seguras
-- 🤖 Chat con IA + TTS
-- 👨‍👩‍👧‍👦 Protección Familiar
-- 🛡️ Anti-Estafas
-- 📺 Anuncios Intersticiales
-- 🎁 Anuncios Bonificados
-
----
-
-## Integraciones
-
-| Servicio | Estado |
-|----------|--------|
-| Infobip SMS | ✅ |
-| Firebase FCM | ✅ |
-| Stripe | ✅ |
-| MongoDB | ✅ |
-| OpenStreetMap | ✅ |
-| AdMob | ✅ |
-| OpenAI GPT-4o-mini | ✅ |
-| Google Tag Manager | ✅ |
-| **Facebook Pixel** | ✅ |
-| **TikTok Pixel** | ✅ |
-| **Twitter Pixel** | ✅ |
-| **LinkedIn Insight** | ✅ |
-| **Snapchat Pixel** | ✅ |
-| **Pinterest Tag** | ✅ |
-
----
-
-## Archivos de Ads
+## Arquitectura
 
 ```
-/frontend/public/ads/
-├── facebook-pixel.js
-├── tiktok-pixel.js
-├── twitter-pixel.js
-├── linkedin-pixel.js
-├── snapchat-pixel.js
-├── pinterest-pixel.js
-├── unified-ads-manager.js
-├── rewarded-ads.js
-└── README.md (guía configuración)
+/app/
+├── android/                    # Configuración Android/TWA
+│   ├── GENERAR_AAB_GUIA.md    # Guía actualizada
+│   ├── twa-manifest.json      # Config Bubblewrap
+│   └── res/values/            # Strings y colores
+├── backend/
+│   ├── server.py              # API principal FastAPI
+│   └── routes/                # Rutas modulares
+├── frontend/
+│   └── public/
+│       ├── manifest.json      # PWA manifest
+│       ├── icons/             # Iconos actualizados
+│       └── manoprotect_icon_512x512.png  # Para Google Play
+└── memory/
+    └── PRD.md                 # Este documento
 ```
 
----
+## Integraciones Activas
+- Infobip (SMS)
+- Firebase Cloud Messaging (Push)
+- Stripe (Pagos)
+- Emergent LLM (Chatbot IA)
+- OpenStreetMap/Leaflet (Mapas)
 
-## Deploy
+## Credenciales de Prueba
+- **Superadmin**: info@manoprotect.com / 19862210Des
 
-1. ✅ Build frontend exitoso
-2. ✅ Backend funcionando
-3. ✅ Todos los píxeles instalados
-4. → Configurar IDs reales de píxeles
-5. → Deploy a producción
-6. → Google Play (seguir guía)
-
----
-
-## Credenciales Test
-
-| Usuario | Email | Password |
-|---------|-------|----------|
-| Admin | info@manoprotect.com | 19862210Des |
+## Notas Importantes
+- El período de prueba es **7 días** (no 15, no 30)
+- No agregar estadísticas sin verificación
+- Testimonios deben ser reales y verificables
+- El .aab debe generarse con nombre "ManoProtect", no "StartBooking"
 
 ---
-
-## 🚀 LISTO PARA DEPLOY
+*Última actualización: 5 Febrero 2025*
