@@ -8,6 +8,22 @@ import LanguageSelector from '@/components/LanguageSelector';
 import { useI18n } from '@/i18n/I18nContext';
 import { useMemo } from 'react';
 
+// Conversion optimization components
+import {
+  ExitIntentPopup,
+  UrgencyCountdown,
+  SocialProofNotifications,
+  SavingsCalculator,
+  TrustBadges,
+  LiveStatsCounter,
+  ScarcityIndicator,
+  PlanQuiz,
+  TestimonialsCarousel,
+  ComparisonTable,
+  StickyMobileCTA,
+  ProactiveChat
+} from '@/components/conversion';
+
 // Brand assets from environment variables
 const LOGO_URL = process.env.REACT_APP_LOGO_URL || '/manoprotect_logo.png';
 const ALERT_IMAGE_URL = process.env.REACT_APP_ALERT_IMAGE_URL || '/manoprotect_alert.png';
