@@ -867,152 +867,15 @@ async def mark_alert_read(
     return {"message": "Alerta marcada como leída"}
 
 # ============================================
-# NOTIFICATIONS ROUTES
+# NOTIFICATIONS - Using routes/notifications_routes.py
+# (Legacy routes removed - all notification functionality in modular router)
+# Helper function kept for internal use
 # ============================================
 
-@api_router.post("/notifications/subscribe")
-async def subscribe_push(
-    data: SubscriptionRequest,
-    request: Request,
-    session_token: Optional[str] = Cookie(None)
-):
-    """Subscribe to push notifications"""
-    user = await require_auth(request, session_token)
-    
-    # Check if already subscribed
-    existing = await db.push_subscriptions.find_one(
-        {"user_id": user.user_id, "endpoint": data.endpoint}
-    )
-    
-    if existing:
-        return {"message": "Ya estás suscrito a notificaciones"}
-    
-    subscription = NotificationSubscription(
-        user_id=user.user_id,
-        endpoint=data.endpoint,
-        keys=data.keys
-    )
-    
-    doc = subscription.model_dump()
-    doc['created_at'] = doc['created_at'].isoformat()
-    await db.push_subscriptions.insert_one(doc)
-    
-    return {"message": "Suscripción a notificaciones activada"}
-
-@api_router.delete("/notifications/unsubscribe")
-async def unsubscribe_push(
-    request: Request,
-    session_token: Optional[str] = Cookie(None)
-):
-    """Unsubscribe from push notifications"""
-    user = await require_auth(request, session_token)
-    
-    await db.push_subscriptions.delete_many({"user_id": user.user_id})
-    
-    return {"message": "Suscripción cancelada"}
-
-@api_router.get("/notifications")
-async def get_notifications(
-    request: Request,
-    session_token: Optional[str] = Cookie(None),
-    limit: int = 50
-):
-    """Get user notifications"""
-    user = await require_auth(request, session_token)
-    
-    notifications = await db.notifications.find(
-        {"user_id": user.user_id},
-        {"_id": 0}
-    ).sort("created_at", -1).limit(limit).to_list(limit)
-    
-    unread_count = await db.notifications.count_documents({
-        "user_id": user.user_id,
-        "is_read": False
-    })
-    
-    return {
-        "notifications": notifications,
-        "unread_count": unread_count
-    }
-
-@api_router.post("/notifications/{notification_id}/read")
-async def mark_notification_read(
-    notification_id: str,
-    request: Request,
-    session_token: Optional[str] = Cookie(None)
-):
-    """Mark notification as read"""
-    user = await require_auth(request, session_token)
-    
-    await db.notifications.update_one(
-        {"id": notification_id, "user_id": user.user_id},
-        {"$set": {"is_read": True}}
-    )
-    
-    return {"message": "Notificación marcada como leída"}
-
-@api_router.post("/notifications/read-all")
-async def mark_all_notifications_read(
-    request: Request,
-    session_token: Optional[str] = Cookie(None)
-):
-    """Mark all notifications as read"""
-    user = await require_auth(request, session_token)
-    
-    await db.notifications.update_many(
-        {"user_id": user.user_id, "is_read": False},
-        {"$set": {"is_read": True}}
-    )
-    
-    return {"message": "Todas las notificaciones marcadas como leídas"}
-
-@api_router.get("/notifications/preferences")
-async def get_notification_preferences(
-    request: Request,
-    session_token: Optional[str] = Cookie(None)
-):
-    """Get notification preferences"""
-    user = await require_auth(request, session_token)
-    
-    prefs = await db.notification_preferences.find_one(
-        {"user_id": user.user_id},
-        {"_id": 0}
-    )
-    
-    if not prefs:
-        prefs = {
-            "email_notifications": True,
-            "push_notifications": True,
-            "threat_alerts": True,
-            "family_alerts": True,
-            "marketing": False
-        }
-    
-    return prefs
-
-@api_router.patch("/notifications/preferences")
-async def update_notification_preferences(
-    data: NotificationPreferences,
-    request: Request,
-    session_token: Optional[str] = Cookie(None)
-):
-    """Update notification preferences"""
-    user = await require_auth(request, session_token)
-    
-    prefs_data = data.model_dump()
-    prefs_data["user_id"] = user.user_id
-    
-    await db.notification_preferences.update_one(
-        {"user_id": user.user_id},
-        {"$set": prefs_data},
-        upsert=True
-    )
-    
-    return {"message": "Preferencias actualizadas"}
-
-# Helper function to create notification
+# Helper function to create notification (used internally by other modules)
 async def create_notification(user_id: str, title: str, body: str, notification_type: str, data: dict = {}):
     """Create and store a notification"""
+    from models.all_schemas import Notification
     notification = Notification(
         user_id=user_id,
         title=title,
