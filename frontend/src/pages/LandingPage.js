@@ -653,42 +653,14 @@ const LandingPage = () => {
             <p className="text-indigo-200 text-sm mt-4">✓ 7 días gratis · ✓ Sin tarjeta · ✓ Cancela cuando quieras</p>
           </div>
 
-          {/* Trust Badges */}
+          {/* Security Features - Only verifiable claims */}
           <div className="mt-16 pt-12 border-t border-zinc-200">
-            <p className="text-center text-sm text-zinc-500 mb-8">COLABORADORES Y PARTNERS TECNOLÓGICOS</p>
+            <p className="text-center text-sm text-zinc-500 mb-8">CARACTERÍSTICAS DE SEGURIDAD</p>
             
-            {/* Partners Logos - Text-based for performance */}
-            <div className="flex flex-wrap items-center justify-center gap-8 mb-12">
-              <div className="flex items-center gap-2 text-zinc-400 hover:text-zinc-600 transition-colors">
-                <span className="text-2xl font-bold tracking-tight">VISA</span>
-              </div>
-              <div className="flex items-center gap-2 text-zinc-400 hover:text-zinc-600 transition-colors">
-                <span className="text-xl font-bold">mastercard</span>
-              </div>
-              <div className="flex items-center gap-2 text-zinc-400 hover:text-zinc-600 transition-colors">
-                <span className="text-xl font-bold italic">PayPal</span>
-              </div>
-              <div className="flex items-center gap-2 text-zinc-400 hover:text-zinc-600 transition-colors">
-                <span className="text-xl font-bold">stripe</span>
-              </div>
-              <div className="flex items-center gap-2 text-zinc-400 hover:text-zinc-600 transition-colors">
-                <span className="text-xl font-bold">OpenAI</span>
-              </div>
-              <div className="flex items-center gap-2 text-zinc-400 hover:text-zinc-600 transition-colors">
-                <span className="text-xl font-bold">Microsoft</span>
-              </div>
-            </div>
-            
-            {/* Trust Badges - Institutional */}
-            <p className="text-center text-sm text-zinc-500 mb-6">CERTIFICACIONES Y CUMPLIMIENTO</p>
             <div className="flex flex-wrap items-center justify-center gap-8 mb-8">
               <div className="flex items-center gap-2 px-4 py-2 bg-zinc-100 rounded-lg">
                 <Shield className="w-5 h-5 text-indigo-600" aria-hidden="true" />
-                <span className="text-sm font-medium text-zinc-700">SSL 256-bit</span>
-              </div>
-              <div className="flex items-center gap-2 px-4 py-2 bg-zinc-100 rounded-lg">
-                <Building2 className="w-5 h-5 text-indigo-600" aria-hidden="true" />
-                <span className="text-sm font-medium text-zinc-700">Banco de España</span>
+                <span className="text-sm font-medium text-zinc-700">Conexión SSL Segura</span>
               </div>
               <div className="flex items-center gap-2 px-4 py-2 bg-zinc-100 rounded-lg">
                 <Check className="w-5 h-5 text-emerald-600" aria-hidden="true" />
@@ -696,11 +668,7 @@ const LandingPage = () => {
               </div>
               <div className="flex items-center gap-2 px-4 py-2 bg-zinc-100 rounded-lg">
                 <Shield className="w-5 h-5 text-blue-600" aria-hidden="true" />
-                <span className="text-sm font-medium text-zinc-700">Pago Seguro</span>
-              </div>
-              <div className="flex items-center gap-2 px-4 py-2 bg-zinc-100 rounded-lg">
-                <Check className="w-5 h-5 text-purple-600" aria-hidden="true" />
-                <span className="text-sm font-medium text-zinc-700">Stripe</span>
+                <span className="text-sm font-medium text-zinc-700">Pagos con Stripe</span>
               </div>
             </div>
             
@@ -715,7 +683,7 @@ const LandingPage = () => {
                 <p className="text-sm text-zinc-600 mt-1">Protección Continua</p>
               </div>
               <div className="text-center">
-                <div className="text-3xl font-bold text-purple-600">15</div>
+                <div className="text-3xl font-bold text-purple-600">7</div>
                 <p className="text-sm text-zinc-600 mt-1">Días Prueba Gratis</p>
               </div>
               <div className="text-center">
