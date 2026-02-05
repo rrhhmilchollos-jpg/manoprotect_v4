@@ -185,6 +185,10 @@ init_chat_routes(db)
 from routes.employee_portal_routes import router as employee_portal_router, init_employee_routes
 init_employee_routes(db)
 
+# Enterprise Routes (Dashboard & Reports)
+from routes.enterprise_routes import router as enterprise_router, init_enterprise_routes
+init_enterprise_routes(db)
+
 # Payment Routes (Stripe)
 from routes.payments_routes import router as payments_router
 from routes.admin_routes import router as admin_router, init_db as init_admin_routes
