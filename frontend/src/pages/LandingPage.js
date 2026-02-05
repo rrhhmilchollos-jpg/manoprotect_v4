@@ -8,29 +8,20 @@ import LanguageSelector from '@/components/LanguageSelector';
 import { useI18n } from '@/i18n/I18nContext';
 import { useMemo } from 'react';
 
-// Conversion optimization components
+// Conversion optimization components (solo los honestos)
 import {
   ExitIntentPopup,
-  UrgencyCountdown,
-  SocialProofNotifications,
   SavingsCalculator,
   TrustBadges,
-  LiveStatsCounter,
   ScarcityIndicator,
   PlanQuiz,
-  TestimonialsCarousel,
   ComparisonTable,
   StickyMobileCTA,
   ProactiveChat
 } from '@/components/conversion';
 
-// Trust building components
+// Trust building components (solo los honestos)
 import {
-  MediaLogos,
-  ReviewsWidget,
-  CertificationsSection,
-  VideoTestimonials,
-  SuccessCases,
   LiveChatWidget
 } from '@/components/trust';
 
