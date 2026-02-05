@@ -79,54 +79,15 @@ firebase-admin.json
 
 # IMPORTANT: Do NOT ignore .env files - they are required for Emergent deployment
 # .env files are managed by Emergent platform
+
+# Large binary files
+manoprotect-desktop/dist/win-unpacked/
+manoprotect-desktop/node_modules/electron/dist/
 manoprotect-desktop/dist/win-unpacked/ManoProtect
 Desktop.exe
 manoprotect-desktop/node_modules/electron/dist/electron
+frontend/node_modules/.cache/default-development/8.pack
+frontend/node_modules/.cache/default-development/0.pack
 frontend/ios/App/App/public/ManoProtect-Desktop-Windows.zip
 frontend/public/ManoProtect-iOS-Project.zip
 frontend/public/ManoProtect-Desktop-Windows.zip
-frontend/node_modules/.cache/default-development/0.pack
--e 
-# Environment files
-*.env
-*.env.*
--e 
-# Environment files
-*.env
-*.env.*
--e 
-# Environment files
-*.env
-*.env.*
--e 
-# Environment files
-*.env
-*.env.*
--e 
-# Environment files
-*.env
-*.env.*
--e 
-# Environment files
-*.env
-*.env.*
--e 
-# Environment files
-*.env
-*.env.*
--e 
-# Environment files
-*.env
-*.env.*
-frontend/build/ManoProtect-iOS-Project.zip
-frontend/build/ManoProtect-Desktop-Windows.zip
--e 
-# Environment files
-*.env
-*.env.*
--e 
-# Environment files
-*.env
-*.env.*
-frontend/node_modules/.cache/default-development/6.pack
-frontend/node_modules/.cache/default-development/8.pack
