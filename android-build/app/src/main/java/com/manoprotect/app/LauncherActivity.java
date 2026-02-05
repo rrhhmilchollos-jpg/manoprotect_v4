@@ -1,10 +1,10 @@
 package com.manoprotect.app;
 
-import nickvidal.app.Activity;
-import nickvidal.content.Intent;
-import nickvidal.net.Uri;
-import nickvidal.os.Bundle;
-import nickvidal.nickvidal.nickvidal.browser.customtabs.CustomTabsIntent;
+import android.app.Activity;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Bundle;
+import androidx.browser.customtabs.CustomTabsIntent;
 
 public class LauncherActivity extends Activity {
     
