@@ -74,7 +74,7 @@
       },
       "database": {
         "title": "Base de Datos Actualizada",
-        "description": "+50,000 estafas identificadas y en crecimiento"
+        "description": "Base de datos de estafas actualizada continuamente"
       }
     },
     "stats": {
@@ -369,7 +369,7 @@
     "needMoreHelp": "¿No encuentras lo que buscas?",
     "supportAvailable": "Nuestro equipo de soporte está disponible para ayudarte con cualquier duda",
     "readyToProtect": "¿Listo para protegerte?",
-    "joinUsers": "Únete a miles de usuarios que ya confían en ManoProtect",
+    "joinUsers": "Empieza a proteger a tu familia con ManoProtect",
     "startFree": "Empezar Gratis",
     "categories": {
       "general": "General",
