@@ -194,6 +194,8 @@ function AppRouter() {
           <Route path="/legal-notice" element={<LegalNotice />} />
           <Route path="/faq" element={<FAQ />} />
           <Route path="/preguntas-frecuentes" element={<FAQ />} />
+          <Route path="/sobre-nosotros" element={<SobreNosotros />} />
+          <Route path="/about" element={<SobreNosotros />} />
           <Route path="/empleados/descargar" element={<DescargarDesktop />} />
           <Route path="/empleados/portal" element={<PortalEmpleados />} />
           <Route path="/desarrolladores/descargas" element={<DescargarApps />} />
