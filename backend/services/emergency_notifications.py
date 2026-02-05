@@ -92,12 +92,22 @@ async def send_fcm_high_priority(
                         body=body,
                         icon='ic_notification',
                         color='#DC2626',
-                        sound='default',
+                        sound='alarm',  # Sonido de alarma del sistema
                         priority='max',
                         visibility='public',
-                        channel_id='sos_emergency',
+                        channel_id='sos_emergency_critical',  # Canal de emergencia crítica
                         tag='sos_alert',
-                        click_action='OPEN_SOS_ALERT'
+                        click_action='OPEN_SOS_ALERT',
+                        notification_count=1,
+                        default_sound=False,
+                        default_vibrate_timings=False,
+                        vibrate_timings_millis=[0, 500, 200, 500, 200, 500, 200, 500],
+                        default_light_settings=False,
+                        light_settings=messaging.LightSettings(
+                            color='#DC2626',
+                            light_on_duration_millis=500,
+                            light_off_duration_millis=200
+                        )
                     )
                 ),
                 webpush=messaging.WebpushConfig(
