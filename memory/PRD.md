@@ -1,7 +1,7 @@
 # ManoProtect - PRD Final
 
 ## ✅ LISTO PARA PRODUCCIÓN
-**Fecha:** 04/02/2026
+**Fecha:** 05/02/2026
 
 ---
 
@@ -32,16 +32,20 @@
 - Zonas personalizadas ilimitadas (premium)
 - Radio configurable: 50-500 metros
 - Alertas de ENTRADA y SALIDA
-- Notificaciones SMS (Infobip) + Push (FCM)
-- Historial de eventos de entrada/salida
 - Restricción: 1 zona gratis, ilimitadas premium
 
+#### 🤖 Chat con IA (NUEVO) ✅
+- Widget flotante en toda la app
+- Respuestas 24/7 con GPT-4o-mini
+- Conocimiento completo de ManoProtect
+- Preguntas frecuentes predefinidas
+- Escalamiento a soporte humano vía WhatsApp
+- Historial guardado en MongoDB
+
 #### 📺 Anuncios Intersticiales ✅
-- Componente InterstitialAd para usuarios gratuitos
+- Para usuarios gratuitos
 - Se muestra después de 3 visitas
-- Mínimo 60 segundos entre anuncios
 - Skip para usuarios premium
-- Promociona actualización a Premium
 
 #### 🛡️ Anti-Estafas
 - Detección de phishing, smishing, vishing
@@ -59,35 +63,33 @@
 | MongoDB | ✅ | .env configurado |
 | OpenStreetMap | ✅ | Gratis |
 | AdMob | ✅ | pub-7713974112203810 |
+| **OpenAI GPT-4o-mini** | ✅ | EMERGENT_LLM_KEY |
 
 ---
 
 ## Archivos Clave
 
 ### Backend
-- `/backend/routes/geofence_routes.py` - CRUD Geofencing + detección
-- `/backend/routes/family_sos_routes.py` - SOS, localización, tracking
+- `/backend/routes/geofence_routes.py` - CRUD Geofencing
+- `/backend/services/ai_support.py` - Chat con IA
 - `/backend/services/infobip_sms.py` - SMS
 - `/backend/services/emergency_notifications.py` - FCM + SMS
 
 ### Frontend
-- `/frontend/src/pages/SafeZones.js` - Página zonas seguras
-- `/frontend/src/components/InterstitialAd.jsx` - Anuncios intersticiales
+- `/frontend/src/components/AIChatWidget.jsx` - Widget de chat IA
+- `/frontend/src/components/InterstitialAd.jsx` - Anuncios
+- `/frontend/src/pages/SafeZones.js` - Zonas seguras
 - `/frontend/src/components/LiveLocationMap.jsx` - Mapa
-- `/frontend/src/services/admob.js` - Configuración AdMob
 
 ---
 
-## API Endpoints Geofencing
+## API Endpoints Chat IA
 
 | Endpoint | Método | Descripción |
 |----------|--------|-------------|
-| `/api/geofences` | GET | Listar zonas |
-| `/api/geofences` | POST | Crear zona |
-| `/api/geofences/{id}` | PUT | Actualizar |
-| `/api/geofences/{id}` | DELETE | Eliminar |
-| `/api/geofences/check-location` | POST | Verificar entrada/salida |
-| `/api/geofences/events` | GET | Historial |
+| `/api/chat/message` | POST | Enviar mensaje al asistente |
+| `/api/chat/quick-responses` | GET | Obtener preguntas frecuentes |
+| `/api/chat/session/{id}` | DELETE | Limpiar historial sesión |
 
 ---
 
@@ -106,16 +108,17 @@
 - [x] Sistema SOS con GPS preciso
 - [x] Notificaciones Push FCM
 - [x] Localización familiar bajo demanda
-- [x] **Geofencing / Zonas Seguras** (04/02/2026)
-- [x] **Anuncios Intersticiales AdMob** (04/02/2026)
-- [x] **Auditoría _id MongoDB** (04/02/2026)
-- [x] **Documentación arquitectura** (04/02/2026)
+- [x] Geofencing / Zonas Seguras
+- [x] Anuncios Intersticiales AdMob
+- [x] Auditoría _id MongoDB
+- [x] **Chat con IA (GPT-4o-mini)** (05/02/2026)
 
 ## Tareas Pendientes
 
-- [ ] Refactorización profunda server.py (ver ARCHITECTURE.md)
+- [ ] Preparar proyecto Android Studio para Google Play
+- [ ] Refactorización profunda server.py
 - [ ] Tests unitarios y E2E
-- [ ] Índices MongoDB para optimización
+- [ ] Índices MongoDB
 
 ---
 
