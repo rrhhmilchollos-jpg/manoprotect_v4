@@ -25,7 +25,7 @@ Todas las apps se conectan al mismo backend:
 
 | Entorno | URL |
 |---------|-----|
-| Preview | https://teamchat-secure.preview.emergentagent.com |
+| Preview | https://safe-alerts.preview.emergentagent.com |
 | Producción | [Tu dominio de producción] |
 
 ---

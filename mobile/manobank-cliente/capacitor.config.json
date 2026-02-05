@@ -3,7 +3,7 @@
   "appName": "ManoBank",
   "webDir": "www",
   "server": {
-    "url": "https://teamchat-secure.preview.emergentagent.com",
+    "url": "https://safe-alerts.preview.emergentagent.com",
     "cleartext": true
   },
   "android": {

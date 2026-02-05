@@ -43,4 +43,4 @@
 
 - **App ID:** com.manobank.app
 - **Nombre:** ManoBank
-- **URL Web:** https://teamchat-secure.preview.emergentagent.com
+- **URL Web:** https://safe-alerts.preview.emergentagent.com
