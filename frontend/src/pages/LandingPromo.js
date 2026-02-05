@@ -42,9 +42,8 @@ const LandingPromo = () => {
   ];
 
   const testimonials = [
-    { name: "María G.", role: "Madrid", text: "Detectaron un intento de phishing que me habría costado 3.000€. Increíble servicio.", rating: 5 },
-    { name: "Carlos R.", role: "Barcelona", text: "Mis padres mayores estaban recibiendo llamadas de estafa. Ya no más gracias a ManoProtect.", rating: 5 },
-    { name: "Ana P.", role: "Valencia", text: "La tranquilidad de saber que mis datos están protegidos no tiene precio.", rating: 5 },
+    { name: "Selomit", role: "España", text: "Llevo tiempo utilizándola, estoy tranquila. Tengo dos adolescentes y las tengo controladas, sé dónde están.", rating: 5 },
+    { name: "María Deseada S.", role: "España", text: "Muy útil con mi madre de 78 años para saber dónde está en todo momento y tener controlado en caso de caída.", rating: 5 },
   ];
 
   const stats = [

@@ -488,7 +488,7 @@ const LandingPage = () => {
             </div>
             <div className="order-1 lg:order-2 space-y-6">
               <h2 className="text-3xl sm:text-4xl font-bold">
-                Miles de familias ya están protegidas
+                Protege a toda tu familia
               </h2>
               <p className="text-lg text-zinc-600">
                 ManoProtect no solo protege a personas individuales. Protege a familias completas, 
@@ -576,7 +576,7 @@ const LandingPage = () => {
               Lo que dicen nuestros clientes
             </h2>
             <p className="text-zinc-600 max-w-2xl mx-auto">
-              Historias reales de personas que confían en ManoProtect
+              Reseñas reales de Google Play
             </p>
           </div>
 
