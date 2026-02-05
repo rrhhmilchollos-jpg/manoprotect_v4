@@ -96,7 +96,7 @@ async def get_family_dashboard(request: Request):
 async def add_family_member(data: FamilyMemberCreate, request: Request):
     """Add a family member to protection"""
     session_token = request.cookies.get("session_token")
-    user = await _require_auth(request, session_token)
+    user = await require_auth(request, session_token)
     
     # Check member limit (5 for family plan)
     existing_count = await _db.family_members.count_documents({"family_owner_id": user.user_id})
@@ -127,7 +127,7 @@ async def add_family_member(data: FamilyMemberCreate, request: Request):
 async def update_family_member(member_id: str, data: FamilyMemberCreate, request: Request):
     """Update family member settings"""
     session_token = request.cookies.get("session_token")
-    user = await _require_auth(request, session_token)
+    user = await require_auth(request, session_token)
     
     update_data = data.model_dump(exclude_unset=True)
     result = await _db.family_members.update_one(
@@ -145,7 +145,7 @@ async def update_family_member(member_id: str, data: FamilyMemberCreate, request
 async def remove_family_member(member_id: str, request: Request):
     """Remove family member from protection"""
     session_token = request.cookies.get("session_token")
-    user = await _require_auth(request, session_token)
+    user = await require_auth(request, session_token)
     
     result = await _db.family_members.delete_one({
         "id": member_id,
@@ -162,7 +162,7 @@ async def remove_family_member(member_id: str, request: Request):
 async def get_member_activity(member_id: str, request: Request):
     """Get activity history for a family member"""
     session_token = request.cookies.get("session_token")
-    user = await _require_auth(request, session_token)
+    user = await require_auth(request, session_token)
     
     member = await _db.family_members.find_one(
         {"id": member_id, "family_owner_id": user.user_id},
@@ -192,7 +192,7 @@ async def get_member_activity(member_id: str, request: Request):
 async def mark_alert_read(alert_id: str, request: Request):
     """Mark family alert as read"""
     session_token = request.cookies.get("session_token")
-    user = await _require_auth(request, session_token)
+    user = await require_auth(request, session_token)
     
     await _db.family_alerts.update_one(
         {"id": alert_id, "family_owner_id": user.user_id},
