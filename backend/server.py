@@ -165,6 +165,22 @@ init_family_routes(db, PLAN_FEATURES)
 from routes.geofence_routes import router as geofence_router, init_geofence_routes
 init_geofence_routes(db)
 
+# Core Routes (health, plans, knowledge base)
+from routes.core_routes import router as core_router, init_core_routes
+init_core_routes(db, PLAN_FEATURES)
+
+# Notifications Routes
+from routes.notifications_routes import router as notifications_router, init_notifications_routes
+init_notifications_routes(db)
+
+# Metrics Routes
+from routes.metrics_routes import router as metrics_router, init_metrics_routes
+init_metrics_routes(db)
+
+# Chat Routes (AI Support)
+from routes.chat_routes import router as chat_router, init_chat_routes
+init_chat_routes(db)
+
 # Payment Routes (Stripe)
 from routes.payments_routes import router as payments_router
 from routes.admin_routes import router as admin_router, init_db as init_admin_routes
