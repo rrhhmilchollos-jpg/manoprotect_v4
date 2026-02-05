@@ -618,45 +618,21 @@ const LandingPage = () => {
         </div>
       </section>
 
-      {/* 🔥 Trust: Certificaciones Oficiales */}
-      <CertificationsSection />
-
-      {/* 🔥 Trust: Casos de Éxito de Empresas */}
-      <SuccessCases />
-
-      {/* 🔥 Trust: Video Testimonios */}
-      <VideoTestimonials />
-
-      {/* 🔥 Trust: Widget de Reseñas Trustpilot/Google */}
-      <section className="px-6 py-16 bg-slate-50">
-        <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-8">
-            <h2 className="text-2xl font-bold text-slate-900 mb-2">Reseñas Verificadas</h2>
-            <p className="text-slate-600">Lo que dicen de nosotros en plataformas independientes</p>
-          </div>
-          <ReviewsWidget />
-        </div>
-      </section>
-
-      {/* Testimonials Section - Reseñas de Clientes Reales */}
+      {/* Testimonials Section - Clientes Reales */}
       <section className="px-6 py-20 bg-white" aria-labelledby="testimonials-heading">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-yellow-50 border border-yellow-200 mb-4">
-              <Star className="w-5 h-5 fill-yellow-400 text-yellow-400" />
-              <span className="text-sm font-medium text-yellow-700">4.9/5 basado en +1.250 reseñas verificadas</span>
-            </div>
             <h2 id="testimonials-heading" className="text-3xl font-bold text-zinc-900 mb-4">
               Lo que dicen nuestros clientes
             </h2>
             <p className="text-zinc-600 max-w-2xl mx-auto">
-              Miles de familias españolas confían en ManoProtect para protegerse contra fraudes y estafas digitales
+              Historias reales de personas que confían en ManoProtect
             </p>
           </div>
 
-          {/* Grid de Testimonios */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-            {testimonials.map((testimonial) => (
+          {/* Grid de Testimonios - Solo los reales */}
+          <div className="grid md:grid-cols-2 gap-6 mb-8 max-w-4xl mx-auto">
+            {testimonials.slice(0, 2).map((testimonial) => (
               <article 
                 key={testimonial.id}
                 className={`bg-gradient-to-br from-${testimonial.color}-50 to-white p-6 rounded-2xl border border-${testimonial.color}-100 shadow-sm hover:shadow-lg transition-all duration-300 relative`}
