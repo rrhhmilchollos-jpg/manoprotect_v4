@@ -17,12 +17,45 @@ def init_db(db):
     _db = db
 
 
+class FamilyMemberCreate(BaseModel):
+    name: str
+    email: Optional[EmailStr] = None
+    phone: Optional[str] = None
+    relationship: str = "familiar"
+    is_senior: bool = False
+    simplified_mode: bool = False
+    alert_level: str = "medium"
+
+
+class FamilyMember(BaseModel):
+    id: str = None
+    family_owner_id: str
+    name: str
+    email: Optional[str] = None
+    phone: Optional[str] = None
+    relationship: str = "familiar"
+    is_senior: bool = False
+    simplified_mode: bool = False
+    alert_level: str = "medium"
+    created_at: datetime = None
+    last_activity: Optional[datetime] = None
+    threats_count: int = 0
+    is_protected: bool = True
+    
+    def __init__(self, **data):
+        import uuid
+        if 'id' not in data or data['id'] is None:
+            data['id'] = str(uuid.uuid4())
+        if 'created_at' not in data or data['created_at'] is None:
+            data['created_at'] = datetime.now(timezone.utc)
+        super().__init__(**data)
+
+
 @router.get("/family/dashboard")
 async def get_family_dashboard(request: Request):
     """Get family protection dashboard"""
-    from fastapi import Cookie
     session_token = request.cookies.get("session_token")
-    user = await _require_auth(request, session_token)
+    user = await require_auth(request, session_token)
     
     # Check if user has family plan or enterprise plan
     has_family_features = user.plan and (user.plan.startswith("family") or user.plan in ["enterprise", "business"])
