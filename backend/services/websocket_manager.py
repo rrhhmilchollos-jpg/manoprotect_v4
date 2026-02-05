@@ -264,7 +264,10 @@ async def broadcast_location_to_family(user_id, location, alert_id=None):
 
 @sio.event
 async def acknowledge_sos(sid, data):
-    """Handle SOS acknowledgment from family member"""
+    """
+    Handle SOS acknowledgment from family member
+    CRITICAL: This is the ONLY way to stop the sirens on all devices
+    """
     if sid not in connection_info:
         return
     
@@ -272,9 +275,27 @@ async def acknowledge_sos(sid, data):
     acknowledger_name = connection_info[sid].get('user_name', 'Familiar')
     alert_id = data.get('alert_id')
     
+    print(f"[SOS] 🔔 ACKNOWLEDGMENT received from {acknowledger_name} for alert {alert_id}")
+    
     if alert_id and alert_id in active_sos_alerts:
         alert = active_sos_alerts[alert_id]
         sender_user_id = alert.get('user_id')
+        
+        # Mark alert as acknowledged
+        alert['acknowledged'] = True
+        alert['acknowledged_by'] = acknowledger_name
+        alert['acknowledged_by_id'] = acknowledger_id
+        alert['acknowledged_at'] = datetime.now(timezone.utc).isoformat()
+        
+        # Store acknowledgment in database
+        if _db:
+            await _db.sos_acknowledgments.insert_one({
+                'alert_id': alert_id,
+                'acknowledged_by': acknowledger_id,
+                'acknowledged_by_name': acknowledger_name,
+                'acknowledged_at': datetime.now(timezone.utc).isoformat(),
+                'sender_user_id': sender_user_id
+            })
         
         # Notify the SOS sender that help is coming
         if sender_user_id and sender_user_id in active_connections:
@@ -282,8 +303,57 @@ async def acknowledge_sos(sid, data):
                 await sio.emit('sos_acknowledged', {
                     'alert_id': alert_id,
                     'acknowledged_by': acknowledger_name,
-                    'timestamp': datetime.now(timezone.utc).isoformat()
+                    'acknowledged_by_id': acknowledger_id,
+                    'timestamp': datetime.now(timezone.utc).isoformat(),
+                    'message': f'{acknowledger_name} ha visto tu emergencia y está en camino'
                 }, to=sender_sid)
+        
+        # IMPORTANT: Notify ALL family members to STOP their sirens
+        # The emergency has been acknowledged, someone is responding
+        await notify_all_family_siren_stop(sender_user_id, alert_id, acknowledger_name)
+        
+        print(f"[SOS] ✅ Alert {alert_id} acknowledged by {acknowledger_name} - Sirens stopping on all devices")
+
+async def notify_all_family_siren_stop(sender_user_id, alert_id, acknowledger_name):
+    """
+    Notify ALL family members to stop their sirens
+    Called when someone acknowledges the SOS
+    """
+    if not _db:
+        return
+    
+    # Get all family members
+    family_members = await _db.family_members.find(
+        {'family_owner_id': sender_user_id},
+        {'_id': 0}
+    ).to_list(20)
+    
+    # Also get emergency contacts
+    contacts = await _db.contacts.find(
+        {'user_id': sender_user_id, 'is_emergency': True},
+        {'_id': 0}
+    ).to_list(10)
+    
+    all_family_ids = set()
+    for member in family_members:
+        if member.get('user_id'):
+            all_family_ids.add(member['user_id'])
+    for contact in contacts:
+        if contact.get('contact_user_id'):
+            all_family_ids.add(contact['contact_user_id'])
+    
+    # Send siren_stop to ALL connected family members
+    for family_user_id in all_family_ids:
+        if family_user_id in active_connections:
+            for sid in active_connections[family_user_id]:
+                await sio.emit('siren_stop', {
+                    'alert_id': alert_id,
+                    'acknowledged_by': acknowledger_name,
+                    'reason': 'acknowledged',
+                    'message': f'{acknowledger_name} está atendiendo la emergencia',
+                    'timestamp': datetime.now(timezone.utc).isoformat()
+                }, to=sid)
+                print(f"[SOS] 🔇 Sent siren_stop to family member {family_user_id}")
 
 # Utility function to send SOS from API routes
 async def send_sos_to_family(user_id: str, user_name: str, alert_data: dict):
