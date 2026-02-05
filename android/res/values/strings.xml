@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- App name - must be exactly ManoProtect -->
+    <string name="app_name">ManoProtect</string>
+    <string name="launcher_name">ManoProtect</string>
+    
+    <!-- Provider authorities - unique per app -->
+    <string name="providerAuthority">com.manoprotect.app.fileprovider</string>
+    
+    <!-- Host and origin for TWA -->
+    <string name="hostName">manoprotect.com</string>
+    <string name="launchUrl">/</string>
+    <string name="defaultUrl">https://manoprotect.com</string>
+    
+    <!-- Asset statements for TWA verification -->
+    <string name="assetStatements">
+        [{
+            \"relation\": [\"delegate_permission/common.handle_all_urls\"],
+            \"target\": {
+                \"namespace\": \"web\",
+                \"site\": \"https://manoprotect.com\"
+            }
+        }]
+    </string>
+    
+    <!-- Fallback and sharing -->
+    <string name="fallbackType">customtabs</string>
+    <string name="shareTarget">{
+        \"action\": \"/share-target/\",
+        \"method\": \"POST\",
+        \"enctype\": \"multipart/form-data\",
+        \"params\": {
+            \"files\": [{
+                \"name\": \"file\",
+                \"accept\": [\"*/*\"]
+            }]
+        }
+    }</string>
+    
+    <!-- Splash screen configuration -->
+    <string name="splashScreenFadeOutDuration">300</string>
+    
+    <!-- Version info -->
+    <string name="versionName">2.0.0</string>
+    <integer name="versionCode">2</integer>
+    
+    <!-- Enable notifications -->
+    <bool name="enableNotifications">true</bool>
+    
+    <!-- Orientation -->
+    <string name="orientation">portrait</string>
+    
+    <!-- Display mode -->
+    <string name="displayMode">standalone</string>
+</resources>
