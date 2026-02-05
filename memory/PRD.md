@@ -9,22 +9,25 @@
 
 ### ✅ Completado
 
-#### Limpieza de Políticas Google Play (Feb 2025)
-- [x] Eliminado contenido engañoso (estadísticas falsas, certificaciones falsas)
-- [x] Testimonios reales de Google (Selomit, María Deseada Solas Sanchis)
-- [x] Período de prueba actualizado a 7 días en toda la app
-- [x] AggregateRating falso eliminado del Schema.org
-- [x] Errores de consola corregidos (scripts ads comentados)
+#### Correcciones Google Play (5 Feb 2025)
+- [x] Período de prueba actualizado a 7 días en TODA la app
+- [x] Nuevo icono de alta calidad generado (512x512, sin pixelación)
+- [x] Guía AAB actualizada con instrucciones para evitar "SB StartBooking"
+- [x] AggregateRating falso eliminado
+- [x] Scripts de ads comentados (evitar errores)
+- [x] Testimonios falsos eliminados del noscript
 
-#### Icono de Alta Calidad (Feb 2025)
-- [x] Nuevo icono 512x512 generado sin pixelación
-- [x] Todos los tamaños PWA actualizados (72-512px)
-- [x] Escudo verde/morado con mano de protección
+#### Refactorización Backend (5 Feb 2025)
+- [x] server.py reducido de 3198 a 2811 líneas
+- [x] Rutas /push/* movidas a push_routes.py
+- [x] Rutas /notifications/* movidas a notifications_routes.py
+- [x] Rutas /family/* movidas a family_routes.py (NUEVO)
+- [x] Componente ScarcityIndicator.jsx eliminado
 
-#### Documentación Android (Feb 2025)
-- [x] Guía AAB actualizada (`/app/android/GENERAR_AAB_GUIA.md`)
-- [x] Archivos configuración TWA (`twa-manifest.json`, `strings.xml`, `colors.xml`)
-- [x] Instrucciones para evitar error "SB StartBooking"
+#### Limpieza Anterior (Feb 2025)
+- [x] Contenido engañoso eliminado (estadísticas falsas, certificaciones)
+- [x] Solo testimonios reales de Google Reviews
+- [x] Logos de medios falsos eliminados
 
 ### ⏳ Pendiente
 
@@ -34,28 +37,33 @@
 
 #### P1 - Próximos pasos
 - [ ] Configurar Pixel IDs de ads cuando estén disponibles
-- [ ] Completar refactorización de `server.py`
 
 #### P2 - Backlog
-- [ ] Eliminar archivos .jsx de componentes removidos
+- [ ] Continuar refactorización de server.py (meta: <500 líneas)
 - [ ] Configurar CI/CD
 
 ## Arquitectura
 
 ```
 /app/
-├── android/                    # Configuración Android/TWA
+├── android/
 │   ├── GENERAR_AAB_GUIA.md    # Guía actualizada
-│   ├── twa-manifest.json      # Config Bubblewrap
+│   ├── twa-manifest.json      # Config Android
 │   └── res/values/            # Strings y colores
 ├── backend/
-│   ├── server.py              # API principal FastAPI
-│   └── routes/                # Rutas modulares
+│   ├── server.py              # 2811 líneas (refactorizado)
+│   └── routes/
+│       ├── family_routes.py   # NUEVO - Rutas /family/*
+│       ├── push_routes.py     # Rutas /push/*
+│       ├── notifications_routes.py
+│       └── ...
 ├── frontend/
-│   └── public/
-│       ├── manifest.json      # PWA manifest
-│       ├── icons/             # Iconos actualizados
-│       └── manoprotect_icon_512x512.png  # Para Google Play
+│   ├── public/
+│   │   ├── icons/             # Iconos actualizados
+│   │   └── manoprotect_icon_512x512.png  # Para Google Play
+│   └── src/components/
+│       ├── conversion/        # 7 componentes activos
+│       └── trust/             # 1 componente activo
 └── memory/
     └── PRD.md                 # Este documento
 ```
