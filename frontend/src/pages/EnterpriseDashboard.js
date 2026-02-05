@@ -253,8 +253,8 @@ const EnterpriseDashboard = () => {
               </div>
               <div className="grid grid-cols-2 gap-2 text-center">
                 <div className="bg-zinc-700/50 rounded-lg p-3">
-                  <div className="text-xl font-bold text-emerald-500">98%</div>
-                  <div className="text-xs text-zinc-400">Compliance</div>
+                  <div className="text-xl font-bold text-emerald-500">Activo</div>
+                  <div className="text-xs text-zinc-400">Estado</div>
                 </div>
                 <div className="bg-zinc-700/50 rounded-lg p-3">
                   <div className="text-xl font-bold text-amber-500">2</div>
