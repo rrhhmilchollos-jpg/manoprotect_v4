@@ -1,33 +1,75 @@
-# ManoProtect Robots.txt
-# https://www.manoprotect.com
+# ManoProtect - Robots.txt
+# Optimizado para SEO
 
 User-agent: *
 Allow: /
 Disallow: /api/
 Disallow: /admin/
 Disallow: /dashboard/
-Disallow: /sos-alert
-Disallow: /private/
+Disallow: /family-admin/
 Disallow: /*.json$
-Disallow: /static/js/*.map
+Disallow: /test*
 
-# Googlebot specific
+# Crawl-delay para evitar sobrecarga
+Crawl-delay: 1
+
+# Sitemap
+Sitemap: https://www.manoprotect.com/sitemap.xml
+
+# Google
 User-agent: Googlebot
 Allow: /
 Disallow: /api/
-Disallow: /admin/
+Crawl-delay: 0
 
-# Bingbot
-User-agent: Bingbot
+# Google Images
+User-agent: Googlebot-Image
+Allow: /icons/
+Allow: /screenshots/
+Allow: /og-image.png
+Allow: /*.png$
+Allow: /*.jpg$
+Allow: /*.webp$
+
+# Google Ads
+User-agent: AdsBot-Google
 Allow: /
 Disallow: /api/
-Disallow: /admin/
 
-# Sitemap location
-Sitemap: https://www.manoprotect.com/sitemap.xml
-
-# Crawl-delay for respectful crawling
+# Bing
+User-agent: Bingbot
+Allow: /
 Crawl-delay: 1
 
-# Host directive
+# Yandex
+User-agent: Yandex
+Allow: /
+Crawl-delay: 2
+
+# Facebook
+User-agent: facebookexternalhit
+Allow: /
+
+# Twitter
+User-agent: Twitterbot
+Allow: /
+
+# LinkedIn
+User-agent: LinkedInBot
+Allow: /
+
+# Block bad bots
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: MJ12bot
+Disallow: /
+
+User-agent: DotBot
+Disallow: /
+
+# Host
 Host: https://www.manoprotect.com
