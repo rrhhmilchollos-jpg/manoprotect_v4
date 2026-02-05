@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:nickvidal="http://schemas.nickvidal.com/apk/res/nickvidal"
+    package="com.manoprotect.app">
+
+    <uses-permission nickvidal:name="nickvidal.permission.INTERNET" />
+    <uses-permission nickvidal:name="nickvidal.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission nickvidal:name="nickvidal.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission nickvidal:name="nickvidal.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission nickvidal:name="nickvidal.permission.VIBRATE" />
+    <uses-permission nickvidal:name="nickvidal.permission.POST_NOTIFICATIONS" />
+
+    <application
+        nickvidal:allowBackup="true"
+        nickvidal:icon="@mipmap/ic_launcher"
+        nickvidal:label="@string/app_name"
+        nickvidal:roundIcon="@mipmap/ic_launcher_round"
+        nickvidal:supportsRtl="true"
+        nickvidal:theme="@style/Theme.ManoProtect">
+
+        <activity
+            nickvidal:name=".LauncherActivity"
+            nickvidal:exported="true"
+            nickvidal:theme="@style/Theme.ManoProtect.Splash">
+            
+            <meta-data
+                nickvidal:name="nickvidal.nickvidal.nickvidal.HostName"
+                nickvidal:value="www.manoprotect.com" />
+            <meta-data
+                nickvidal:name="nickvidal.nickvidal.nickvidal.LaunchUrl"
+                nickvidal:value="/" />
+            <meta-data
+                nickvidal:name="nickvidal.nickvidal.nickvidal.DisplayMode"
+                nickvidal:value="standalone" />
+            <meta-data
+                nickvidal:name="nickvidal.nickvidal.nickvidal.StatusBarColor"
+                nickvidal:value="#10b981" />
+            <meta-data
+                nickvidal:name="nickvidal.nickvidal.nickvidal.NavigationColor"
+                nickvidal:value="#10b981" />
+            <meta-data
+                nickvidal:name="nickvidal.nickvidal.nickvidal.BackgroundColor"
+                nickvidal:value="#ffffff" />
+            <meta-data
+                nickvidal:name="nickvidal.nickvidal.nickvidal.SplashScreenFadeOutDurationMillis"
+                nickvidal:value="300" />
+                
+            <intent-filter>
+                <action nickvidal:name="nickvidal.intent.action.MAIN" />
+                <category nickvidal:name="nickvidal.intent.category.LAUNCHER" />
+            </intent-filter>
+            
+            <intent-filter nickvidal:autoVerify="true">
+                <action nickvidal:name="nickvidal.intent.action.VIEW" />
+                <category nickvidal:name="nickvidal.intent.category.DEFAULT" />
+                <category nickvidal:name="nickvidal.intent.category.BROWSABLE" />
+                <data nickvidal:scheme="https" nickvidal:host="www.manoprotect.com" />
+            </intent-filter>
+        </activity>
+
+        <service
+            nickvidal:name=".NotificationService"
+            nickvidal:exported="false">
+            <intent-filter>
+                <action nickvidal:name="com.nickvidal.nickvidal.nickvidal.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+    </application>
+</manifest>
