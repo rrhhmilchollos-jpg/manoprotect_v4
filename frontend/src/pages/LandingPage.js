@@ -944,13 +944,12 @@ const LandingPage = () => {
         </div>
       </footer>
       
-      {/* 🔥 Conversion: Componentes Globales de Conversión */}
+      {/* Conversion: Componentes Globales */}
       <ExitIntentPopup />
-      <SocialProofNotifications />
       <StickyMobileCTA />
       <ProactiveChat delaySeconds={30} />
       
-      {/* 🔥 Trust: Chat con Persona Real */}
+      {/* Chat con Persona Real */}
       <LiveChatWidget />
     </div>
   );
