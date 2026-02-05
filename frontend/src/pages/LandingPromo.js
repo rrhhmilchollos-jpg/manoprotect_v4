@@ -314,7 +314,7 @@ const LandingPromo = () => {
             ¿Listo para proteger a tu familia?
           </h2>
           <p className="text-xl text-indigo-200 mb-8">
-            Únete a más de 15.000 familias que ya confían en ManoProtect
+            Protege a tu familia con ManoProtect hoy
           </p>
           <Button 
             onClick={() => navigate('/registro')}

@@ -115,7 +115,7 @@ const HowItWorks = () => {
         <Card className="bg-gradient-to-br from-indigo-600 to-indigo-700 text-white p-12 text-center border-0">
           <Users className="w-16 h-16 mx-auto mb-6 opacity-90" />
           <h2 className="text-3xl font-bold mb-4">
-            Únete a miles de usuarios protegidos
+            Empieza a protegerte hoy
           </h2>
           <p className="text-indigo-100 mb-8 text-lg max-w-2xl mx-auto">
             Empieza a protegerte ahora. Es gratis y toma menos de 1 minuto.
