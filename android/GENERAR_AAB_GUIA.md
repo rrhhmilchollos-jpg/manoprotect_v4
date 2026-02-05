@@ -1,123 +1,135 @@
-# 🚀 Guía para Generar .AAB para Google Play Store
+# 🚀 Guía para Generar .AAB para Google Play Store (ACTUALIZADA)
 
-## OPCIÓN 1: PWABuilder (Recomendado - Más Fácil)
+## ⚠️ IMPORTANTE: Problema del Splash Screen
 
-### Paso 1: Ir a PWABuilder
-1. Abre: https://www.pwabuilder.com/
-2. Introduce la URL de tu app: `https://manoprotect.com`
-3. Click en "Start"
-
-### Paso 2: Verificar PWA Score
-- PWABuilder analizará tu app
-- Asegúrate de que tenga buen score
-
-### Paso 3: Generar Android Package
-1. Click en "Package for stores"
-2. Selecciona "Android"
-3. Configura:
-   - **Package ID**: `com.manoprotect.app`
-   - **App name**: `ManoProtect`
-   - **Version**: `2.0.0`
-   - **Version code**: `2`
-4. Click en "Generate"
-5. Descarga el .aab
+El .aab anterior mostraba "StartBooking SL" en la pantalla de carga porque fue generado con configuración incorrecta. Esta guía te muestra cómo generar uno nuevo con el branding correcto de **ManoProtect**.
 
 ---
 
-## OPCIÓN 2: Bubblewrap (Línea de comandos)
+## OPCIÓN 1: PWABuilder (RECOMENDADO - Más Fácil)
+
+### Paso 1: Ir a PWABuilder
+1. Abre: https://www.pwabuilder.com/
+2. Introduce la URL: `https://manoprotect.com` (o tu URL de preview)
+3. Click en "Start"
+
+### Paso 2: Verificar que detecta el PWA correctamente
+- Debería mostrar "ManoProtect" como nombre
+- Verificar que los iconos son los correctos (escudo con mano)
+
+### Paso 3: Generar Android Package
+1. Click en **"Package for stores"**
+2. Selecciona **"Android"**
+3. **IMPORTANTE - Configura EXACTAMENTE así:**
+
+   | Campo | Valor |
+   |-------|-------|
+   | Package ID | `com.manoprotect.app` |
+   | App name | `ManoProtect` |
+   | Launcher name | `ManoProtect` |
+   | Version name | `2.0.0` |
+   | Version code | `2` |
+   | Display mode | `standalone` |
+   | Status bar color | `#4F46E5` |
+   | Navigation bar color | `#4F46E5` |
+   | Background color | `#FFFFFF` |
+   | Splash screen icon | Seleccionar el icono de ManoProtect |
+   | Include source code | ✅ Sí (para verificar) |
+
+4. Click en **"Generate"**
+5. **Descarga y VERIFICA** que el .zip contiene los iconos correctos
+
+### Paso 4: Verificar ANTES de subir
+Descomprime el .zip y verifica en:
+- `app/src/main/res/values/strings.xml` → Debe decir "ManoProtect", NO "StartBooking"
+- `app/src/main/res/drawable/` → Los iconos deben ser el escudo verde/morado
+
+---
+
+## OPCIÓN 2: Bubblewrap CLI
 
 ### Requisitos
 - Node.js 14+
-- Java JDK 8+
+- Java JDK 8 o 11
 - Android SDK
 
-### Instalación
+### Paso 1: Instalar Bubblewrap
 ```bash
-npm install -g @nickvidal/nickvidal-cli
-# o
 npm install -g @nickvidal/nickvidal-cli
 ```
 
-### Generar proyecto
+### Paso 2: Crear proyecto
 ```bash
-mkdir manoprotect-android
-cd manoprotect-android
+mkdir manoprotect-twa
+cd manoprotect-twa
+
+# Usa el manifest.json de tu app
 bubblewrap init --manifest https://manoprotect.com/manifest.json
 ```
 
-### Configurar (cuando pregunte):
-- Package ID: com.manoprotect.app
-- App name: ManoProtect
-- Launcher name: ManoProtect
-- Display mode: standalone
-- Orientation: portrait
-- Theme color: #4F46E5
-- Background color: #FFFFFF
-- Start URL: /
-- Icon URL: /manoprotect_logo.png
+### Paso 3: Responder las preguntas EXACTAMENTE así:
 
-### Generar .aab
+```
+? Package ID: com.manoprotect.app
+? App name: ManoProtect
+? Launcher name: ManoProtect
+? Display mode: standalone
+? Orientation: portrait  
+? Theme color: #4F46E5
+? Background color: #FFFFFF
+? Start URL: /
+? Icon URL: /icons/icon-512x512.png (o ruta completa)
+? Maskable icon URL: /icons/icon-512x512.png
+? Splash screen icon URL: /icons/icon-512x512.png
+? Fallback type: customtabs
+? Enable notifications: yes
+```
+
+### Paso 4: Generar .aab
 ```bash
 bubblewrap build
 ```
 
-El archivo `app-release-bundle.aab` estará en la carpeta.
+El archivo `app-release-bundle.aab` estará listo.
 
 ---
 
-## OPCIÓN 3: Android Studio (Manual)
+## Archivos de Configuración Incluidos
 
-### Paso 1: Crear proyecto TWA
-1. Abre Android Studio
-2. File > New > New Project
-3. Selecciona "No Activity"
-4. Package name: `com.manoprotect.app`
-5. Language: Kotlin
-6. Minimum SDK: API 21
+He preparado los siguientes archivos en `/app/android/`:
 
-### Paso 2: Añadir dependencia TWA
-En `build.gradle` (Module):
-```gradle
-dependencies {
-    implementation 'com.aspect.nickvidal-nickvidal-cli:nickvidal-cli:+'
-}
-```
+- **twa-manifest.json** - Configuración completa para Bubblewrap
+- **res/values/strings.xml** - Strings de la app (nombre, URLs)
+- **res/values/colors.xml** - Colores de marca ManoProtect
 
-### Paso 3: Configurar AndroidManifest.xml
-Ya está preparado en `/app/android/AndroidManifest.xml`
-
-### Paso 4: Generar .aab
-1. Build > Generate Signed Bundle / APK
-2. Selecciona "Android App Bundle"
-3. Usa tu keystore o crea uno nuevo
-4. Build
+Puedes usar estos como referencia o copiarlos directamente a tu proyecto Android.
 
 ---
 
-## ✅ CHECKLIST ANTES DE SUBIR A GOOGLE PLAY
+## ✅ CHECKLIST FINAL ANTES DE SUBIR
 
-### Contenido (Ya corregido ✅)
-- [x] Sin estadísticas falsas (10,000 familias, etc.)
-- [x] Sin certificaciones falsas (ISO 27001, INCIBE)
+### Verificación de Contenido (Ya corregido ✅)
+- [x] Sin estadísticas falsas
+- [x] Sin certificaciones falsas  
 - [x] Sin logos de medios falsos
 - [x] Solo testimonios reales de Google Reviews
-- [x] Sin reseñas de Trustpilot inventadas
+- [x] Período de prueba: 7 días (NO 15 ni 30)
+- [x] Sin "miles de familias protegidas"
 
-### Assets requeridos
-- [ ] Icono 512x512 PNG (debe coincidir con el de la app)
-- [ ] Feature graphic 1024x500 PNG
-- [ ] Screenshots (mínimo 2, máximo 8)
-- [ ] Descripción corta (máx 80 caracteres)
-- [ ] Descripción larga (máx 4000 caracteres)
+### Verificación del .AAB
+- [ ] El splash screen muestra "ManoProtect" (NO StartBooking)
+- [ ] El icono es el escudo verde/morado con mano
+- [ ] El nombre de la app es "ManoProtect"
+- [ ] Los colores son indigo/verde (#4F46E5, #10B981)
 
-### Información legal
-- [ ] Política de privacidad URL
-- [ ] Términos de servicio URL
-- [ ] Email de contacto
+### Assets para Google Play Console
+- [ ] **Icono 512x512**: Usar `/app/frontend/public/manoprotect_icon_512x512.png`
+- [ ] **Feature Graphic 1024x500**: Usar `/app/frontend/public/manoprotect_feature_1024x500.png`
+- [ ] Screenshots actualizados (sin contenido falso)
 
 ---
 
-## 📝 DESCRIPCIÓN SUGERIDA PARA GOOGLE PLAY
+## 📝 DESCRIPCIÓN PARA GOOGLE PLAY (Actualizada)
 
 ### Descripción corta (80 caracteres):
 ```
@@ -158,11 +170,26 @@ Web: https://manoprotect.com
 
 ---
 
-## ⚠️ IMPORTANTE
+## 🔧 Solución al error "SB StartBooking"
 
-El icono de la app en Google Play DEBE ser EXACTAMENTE el mismo que aparece cuando el usuario instala la app. Si no coinciden, Google rechazará la app.
+El problema ocurrió porque el .aab se generó usando configuración de otro proyecto. Para solucionarlo:
 
-Verifica que:
-1. El icono en `/app/frontend/public/manoprotect_logo.png` es el correcto
-2. El manifest.json tiene los iconos correctos
-3. El .aab usa los mismos iconos
+1. **NO uses** el .aab anterior
+2. **Genera uno nuevo** siguiendo esta guía
+3. **Verifica** que el strings.xml dice "ManoProtect"
+4. **Sube** el nuevo .aab a Google Play Console
+5. **Actualiza** también el icono de alta resolución con el nuevo
+
+---
+
+## URLs Importantes
+
+- **App en preview**: https://safe-alerts.preview.emergentagent.com
+- **Manifest.json**: https://manoprotect.com/manifest.json
+- **Icono 512x512**: `/app/frontend/public/manoprotect_icon_512x512.png`
+- **Nuevo icono generado**: Alta calidad, sin pixelación
+
+---
+
+**Fecha de actualización**: Febrero 2025
+**Versión**: 2.0.0
