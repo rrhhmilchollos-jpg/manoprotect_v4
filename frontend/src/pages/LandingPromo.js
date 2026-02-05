@@ -15,7 +15,7 @@ const LandingPromo = () => {
     { icon: <Shield className="w-6 h-6" />, title: "Protección 24/7", desc: "Monitoreo en tiempo real" },
     { icon: <Zap className="w-6 h-6" />, title: "Alertas Instantáneas", desc: "SMS y Email" },
     { icon: <Smartphone className="w-6 h-6" />, title: "App Móvil", desc: "iOS y Android" },
-    { icon: <Lock className="w-6 h-6" />, title: "100% Seguro", desc: "Cifrado militar" },
+    { icon: <Lock className="w-6 h-6" />, title: "Pago Seguro", desc: "Con Stripe" },
   ];
 
   const protectionTypes = [
