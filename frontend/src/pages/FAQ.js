@@ -20,7 +20,7 @@ const FAQ = () => {
         },
         {
           q: "¿Cómo funciona la detección de fraudes?",
-          a: "Nuestro sistema analiza el contenido que nos envías utilizando algoritmos de IA entrenados con miles de ejemplos de fraudes reales. Identificamos patrones como URLs sospechosas, lenguaje de urgencia, solicitudes de datos personales, errores gramaticales típicos de estafas, y más de 50 indicadores diferentes."
+          a: "Nuestro sistema analiza el contenido que nos envías utilizando algoritmos de inteligencia artificial. Identificamos patrones como URLs sospechosas, lenguaje de urgencia, solicitudes de datos personales, errores gramaticales típicos de estafas, y múltiples indicadores de fraude."
         },
         {
           q: "¿Es seguro compartir mis mensajes con ManoProtect?",
