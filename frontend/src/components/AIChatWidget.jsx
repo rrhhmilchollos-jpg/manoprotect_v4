@@ -180,12 +180,37 @@ const AIChatWidget = () => {
                   <p className="text-xs text-emerald-100">Respuestas con IA • 24/7</p>
                 </div>
               </div>
-              <button
-                onClick={() => setIsOpen(false)}
-                className="text-white/80 hover:text-white transition-colors"
-              >
-                <X className="w-5 h-5" />
-              </button>
+              <div className="flex items-center gap-2">
+                {/* TTS Toggle Button */}
+                <button
+                  onClick={() => {
+                    if (isSpeaking) {
+                      window.speechSynthesis?.cancel();
+                      setIsSpeaking(false);
+                    }
+                    setTtsEnabled(!ttsEnabled);
+                  }}
+                  className={`p-2 rounded-full transition-colors ${
+                    ttsEnabled 
+                      ? 'bg-white/30 text-white' 
+                      : 'text-white/60 hover:text-white hover:bg-white/10'
+                  }`}
+                  title={ttsEnabled ? 'Desactivar voz' : 'Activar voz'}
+                  data-testid="tts-toggle"
+                >
+                  {ttsEnabled ? (
+                    isSpeaking ? <Volume2 className="w-5 h-5 animate-pulse" /> : <Volume2 className="w-5 h-5" />
+                  ) : (
+                    <VolumeX className="w-5 h-5" />
+                  )}
+                </button>
+                <button
+                  onClick={() => setIsOpen(false)}
+                  className="text-white/80 hover:text-white transition-colors"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
             </div>
           </div>
 
