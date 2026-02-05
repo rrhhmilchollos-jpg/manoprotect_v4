@@ -585,6 +585,44 @@ const LandingPage = () => {
         </div>
       </section>
 
+      {/* 🔥 Conversion: Sección de Herramientas de Conversión */}
+      <section className="px-6 py-20 bg-slate-900">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-white mb-4">
+              ¿Por qué elegir ManoProtect?
+            </h2>
+            <p className="text-slate-400 max-w-2xl mx-auto">
+              Descubre cuánto dinero estás poniendo en riesgo y encuentra el plan perfecto para ti
+            </p>
+          </div>
+          
+          <div className="grid lg:grid-cols-2 gap-8 mb-12">
+            {/* Calculadora de Ahorro */}
+            <SavingsCalculator />
+            
+            {/* Quiz de Plan */}
+            <PlanQuiz />
+          </div>
+          
+          {/* Tabla Comparativa */}
+          <div className="mb-12">
+            <h3 className="text-2xl font-bold text-white text-center mb-8">
+              Sin protección vs Con ManoProtect
+            </h3>
+            <ComparisonTable />
+          </div>
+          
+          {/* Indicador de Escasez */}
+          <div className="max-w-md mx-auto mb-8">
+            <ScarcityIndicator totalSpots={50} baseRemaining={12} />
+          </div>
+          
+          {/* Trust Badges */}
+          <TrustBadges />
+        </div>
+      </section>
+
       {/* Testimonials Section - Reseñas de Clientes Reales */}
       <section className="px-6 py-20 bg-white" aria-labelledby="testimonials-heading">
         <div className="max-w-7xl mx-auto">
