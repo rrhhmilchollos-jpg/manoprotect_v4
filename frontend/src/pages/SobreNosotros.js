@@ -93,7 +93,7 @@ const SobreNosotros = () => {
               Nuestra Misión
             </h2>
             <p className="text-lg text-slate-700 leading-relaxed mb-4">
-              Cada día, miles de españoles reciben intentos de estafa por teléfono, SMS y email. Personas mayores, familias trabajadoras, todos son objetivos de los ciberdelincuentes.
+              Cada día, muchos españoles reciben intentos de estafa por teléfono, SMS y email. Personas mayores, familias trabajadoras, todos son objetivos de los ciberdelincuentes.
             </p>
             <p className="text-lg text-slate-700 leading-relaxed mb-4">
               <strong>ManoProtect</strong> nació con una misión clara: hacer que la protección digital sea accesible y fácil de usar para todos.
@@ -176,7 +176,7 @@ const SobreNosotros = () => {
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-white mb-4">Nuestra Historia</h2>
-            <p className="text-slate-400">De una idea a proteger a miles de familias</p>
+            <p className="text-slate-400">De una idea a proteger familias españolas</p>
           </div>
 
           <div className="space-y-8">
