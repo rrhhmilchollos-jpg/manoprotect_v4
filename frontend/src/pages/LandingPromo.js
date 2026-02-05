@@ -82,7 +82,7 @@ const LandingPromo = () => {
     <div className="min-h-screen bg-white">
       <SEO 
         title="ManoProtect - Protección contra Fraudes y Estafas | España"
-        description="Protege a tu familia de phishing, estafas telefónicas y fraudes online. Alertas en tiempo real, bloqueo automático y monitoreo 24/7. ¡Primer mes GRATIS!"
+        description="Protege a tu familia de phishing, estafas telefónicas y fraudes online. Alertas en tiempo real, bloqueo automático y monitoreo 24/7. ¡7 días GRATIS!"
         keywords="protección fraude, antiphishing, estafas telefónicas, seguridad digital, protección online España"
         canonical="https://manoprotect.com/promo"
       />
@@ -129,7 +129,7 @@ const LandingPromo = () => {
           <div className="text-center max-w-4xl mx-auto">
             <div className="inline-flex items-center gap-2 bg-indigo-100 text-indigo-700 px-4 py-2 rounded-full text-sm font-medium mb-6">
               <Zap className="w-4 h-4" />
-              Primer mes GRATIS - Oferta limitada
+              7 días GRATIS - Oferta limitada
             </div>
             
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 mb-6">

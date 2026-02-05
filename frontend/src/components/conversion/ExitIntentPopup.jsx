@@ -81,7 +81,7 @@ const ExitIntentPopup = ({ onClose, onAccept }) => {
           ¡Espera! 🎁
         </h2>
         <p className="text-xl text-center text-emerald-400 font-semibold mb-2">
-          Tu primer mes es GRATIS
+          Tus primeros 7 días son GRATIS
         </p>
         <p className="text-center text-slate-300 mb-6">
           No te vayas sin proteger a tu familia. Activa tu prueba gratuita ahora y cancela cuando quieras.

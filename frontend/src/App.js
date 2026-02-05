@@ -366,7 +366,7 @@ function App() {
       <BrowserRouter>
         <AuthProvider>
           <UrgencyBanner 
-            message="🎁 OFERTA ESPECIAL: Primer mes GRATIS en ManoProtect"
+            message="🎁 OFERTA ESPECIAL: 7 días GRATIS en ManoProtect"
             link="/registro"
           />
           <Toaster position="top-center" richColors />

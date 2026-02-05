@@ -7,7 +7,7 @@ import { Shield, ArrowRight, Sparkles } from 'lucide-react';
  */
 const StickyMobileCTA = ({ 
   text = "Protégete Ahora",
-  subtext = "Primer mes GRATIS",
+  subtext = "7 días GRATIS",
   href = "/pricing",
   show = true 
 }) => {

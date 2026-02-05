@@ -63,7 +63,7 @@ const LandingPage = () => {
     <div className="min-h-screen bg-zinc-50">
       <SEO 
         title="ManoProtect - Protección Digital para tu Familia | Anti-Estafas España"
-        description="Protege a tu familia contra estafas online, fraudes telefónicos y amenazas digitales. Detección de estafas en tiempo real. Primer mes GRATIS."
+        description="Protege a tu familia contra estafas online, fraudes telefónicos y amenazas digitales. Detección de estafas en tiempo real. 7 días GRATIS."
         keywords="protección digital, anti estafas, seguridad online, protección familiar, fraudes online, ciberseguridad, España, detectar estafas, phishing"
         canonical="https://manoprotect.com"
       />

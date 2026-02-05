@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { X, Clock, Zap } from 'lucide-react';
 
 const UrgencyBanner = ({ 
-  message = "🎁 OFERTA LIMITADA: Primer mes GRATIS en todos los planes",
+  message = "🎁 OFERTA LIMITADA: 7 días GRATIS en todos los planes",
   endDate = null,
   link = "/registro",
   onClose = null 
