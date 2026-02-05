@@ -1,108 +1,79 @@
-# ManoProtect - PRD Final v2.0
+# ManoProtect - PRD Final v2.1
 
-## ✅ PRODUCCIÓN LISTA - OPTIMIZADA
+## ✅ PRODUCCIÓN LISTA - COMPLETAMENTE OPTIMIZADA
 **Última actualización:** 05/02/2026
+
+---
+
+## Publicidad Multi-Plataforma ✅ NUEVO
+
+### Píxeles de Tracking Instalados
+| Plataforma | Archivo | Eventos |
+|------------|---------|---------|
+| **Facebook/Instagram** | `/ads/facebook-pixel.js` | Registro, Compra, Lead, ViewContent |
+| **TikTok** | `/ads/tiktok-pixel.js` | Registro, Compra, Download, Contact |
+| **Twitter/X** | `/ads/twitter-pixel.js` | Signup, Purchase, Lead |
+| **LinkedIn** | `/ads/linkedin-pixel.js` | B2B Lead, Purchase |
+| **Snapchat** | `/ads/snapchat-pixel.js` | App Install, Purchase |
+| **Pinterest** | `/ads/pinterest-pixel.js` | Checkout, Lead |
+| **Google Ads** | `/google-ads/conversion-tracking.js` | Conversiones, Remarketing |
+
+### Gestor Unificado
+- **Archivo:** `/ads/unified-ads-manager.js`
+- Envía eventos a TODAS las plataformas simultáneamente
+- API simple: `ManoAds.trackSignUp()`, `ManoAds.trackPurchase()`
+
+### Anuncios Bonificados (Rewarded)
+- **Archivo:** `/ads/rewarded-ads.js`
+- **Componente:** `/src/components/RewardedAdsPanel.jsx`
+- **Recompensas:**
+  - 👑 1 Día Premium Gratis
+  - 📍 Zona Segura Extra
+  - 🔍 Análisis de Amenaza Gratis
+- **Límite:** 5 anuncios/día por usuario
 
 ---
 
 ## Optimizaciones Completadas
 
-### SEO
-- ✅ Meta tags completos (title, description, keywords)
-- ✅ Open Graph para Facebook/LinkedIn
-- ✅ Twitter Cards
-- ✅ Schema.org JSON-LD (Organization, SoftwareApp, FAQPage)
-- ✅ Sitemap.xml con 15+ URLs
-- ✅ Robots.txt optimizado
-- ✅ Canonical URLs
-- ✅ Hreflang tags
-- ✅ Preconnect/Preload críticos
+### SEO Expansivo ✅
+- Sitemap.xml (15+ URLs)
+- Robots.txt optimizado
+- Schema.org JSON-LD
+- Open Graph + Twitter Cards
+- Meta tags completos
 
-### SEM / Google Ads
-- ✅ Google Tag Manager (GTM-MK53XZ8Q)
-- ✅ Conversion tracking (`/google-ads/conversion-tracking.js`)
-- ✅ Remarketing events
-- ✅ E-commerce tracking para planes
+### BigData & Analytics ✅
+- DataLayer para GTM
+- Scroll depth tracking
+- Time on page
+- Performance metrics
+- E-commerce tracking
 
-### BigData / Analytics
-- ✅ BigData tracking system (`/bigdata-analytics.js`)
-- ✅ DataLayer para GTM
-- ✅ Scroll depth tracking
-- ✅ Time on page tracking
-- ✅ Performance metrics (LCP, FCP, etc.)
-- ✅ User identification
-- ✅ E-commerce events
+### Google Play Console ✅
+- AndroidManifest.xml completo
+- LauncherActivity.java con AdMob
+- MyFirebaseMessagingService.java
+- Guía: `/android/GOOGLE_PLAY_SETUP.md`
 
-### Google Play Console
-- ✅ AndroidManifest.xml completo
-- ✅ LauncherActivity.java con AdMob intersticial
-- ✅ MyFirebaseMessagingService.java para FCM
-- ✅ google-services.json.example
-- ✅ build.gradle.example
-- ✅ Guía GOOGLE_PLAY_SETUP.md
+### CI/CD ✅
+- GitHub Actions pipeline
+- Tests automáticos
 
-### Firebase
-- ✅ FCM configurado en backend
-- ✅ Service Worker para push
-- ✅ Android service para notificaciones
-- ✅ Canales de notificación (SOS, Alertas, Default)
-
-### AdMob
-- ✅ App ID: ca-pub-7713974112203810~9265947358
-- ✅ Intersticial en LauncherActivity
-- ✅ app-ads.txt configurado
-
----
-
-## Archivos Creados/Actualizados
-
-### SEO & Analytics
-| Archivo | Descripción |
-|---------|-------------|
-| `/public/sitemap.xml` | Sitemap con 15+ URLs |
-| `/public/robots.txt` | Configuración crawlers |
-| `/public/bigdata-analytics.js` | BigData tracking |
-| `/public/google-ads/conversion-tracking.js` | AdWords conversions |
-
-### Android / Google Play
-| Archivo | Descripción |
-|---------|-------------|
-| `/android/AndroidManifest.xml` | Manifest completo |
-| `/android/LauncherActivity.java` | Activity con AdMob |
-| `/android/MyFirebaseMessagingService.java` | FCM Service |
-| `/android/build.gradle.example` | Gradle config |
-| `/android/google-services.json.example` | Firebase config |
-| `/android/GOOGLE_PLAY_SETUP.md` | Guía completa |
-
-### CI/CD
-| Archivo | Descripción |
-|---------|-------------|
-| `/.github/workflows/ci-cd.yml` | Pipeline GitHub Actions |
-
-### Backend Modules
-| Archivo | Descripción |
-|---------|-------------|
-| `/backend/routes/core_routes.py` | Health, plans |
-| `/backend/routes/notifications_routes.py` | Push, preferences |
-| `/backend/routes/metrics_routes.py` | Dashboard, API keys |
-| `/backend/routes/chat_routes.py` | Chat IA |
-| `/backend/scripts/create_indexes.py` | MongoDB indexes |
+### MongoDB ✅
+- 104 índices creados
 
 ---
 
 ## Funcionalidades
 
-### Core
-- 🆘 Sistema SOS con GPS
+- 🆘 Sistema SOS
 - 📍 Geofencing / Zonas Seguras
 - 🤖 Chat con IA + TTS
 - 👨‍👩‍👧‍👦 Protección Familiar
-- 🛡️ Anti-Estafas (phishing, smishing, vishing)
-
-### Monetización
-- 📺 AdMob Intersticiales
-- 💳 Stripe Subscriptions
-- 👑 Planes Premium
+- 🛡️ Anti-Estafas
+- 📺 Anuncios Intersticiales
+- 🎁 Anuncios Bonificados
 
 ---
 
@@ -113,44 +84,45 @@
 | Infobip SMS | ✅ |
 | Firebase FCM | ✅ |
 | Stripe | ✅ |
-| MongoDB (104 índices) | ✅ |
+| MongoDB | ✅ |
 | OpenStreetMap | ✅ |
 | AdMob | ✅ |
 | OpenAI GPT-4o-mini | ✅ |
 | Google Tag Manager | ✅ |
-| Google Analytics 4 | ✅ |
-| Google Ads | ✅ |
+| **Facebook Pixel** | ✅ |
+| **TikTok Pixel** | ✅ |
+| **Twitter Pixel** | ✅ |
+| **LinkedIn Insight** | ✅ |
+| **Snapchat Pixel** | ✅ |
+| **Pinterest Tag** | ✅ |
 
 ---
 
-## Deploy Checklist
+## Archivos de Ads
 
-### Pre-Deploy
-- [x] Build frontend exitoso
-- [x] Backend funcionando
-- [x] Tests configurados
-- [x] CI/CD configurado
-- [x] SEO optimizado
-- [x] Analytics integrado
-
-### Google Play
-- [ ] Crear cuenta Play Console ($25)
-- [ ] Subir assets (icono, screenshots)
-- [ ] Configurar ficha de tienda
-- [ ] Generar keystore
-- [ ] Build AAB firmado
-- [ ] Internal testing
-- [ ] Production release
+```
+/frontend/public/ads/
+├── facebook-pixel.js
+├── tiktok-pixel.js
+├── twitter-pixel.js
+├── linkedin-pixel.js
+├── snapchat-pixel.js
+├── pinterest-pixel.js
+├── unified-ads-manager.js
+├── rewarded-ads.js
+└── README.md (guía configuración)
+```
 
 ---
 
-## URLs
+## Deploy
 
-- **App**: https://manoprotect.com
-- **Privacidad**: https://manoprotect.com/privacidad
-- **Términos**: https://manoprotect.com/terminos
-- **Soporte**: info@manoprotect.com
-- **WhatsApp**: +34 601 510 950
+1. ✅ Build frontend exitoso
+2. ✅ Backend funcionando
+3. ✅ Todos los píxeles instalados
+4. → Configurar IDs reales de píxeles
+5. → Deploy a producción
+6. → Google Play (seguir guía)
 
 ---
 
@@ -159,8 +131,7 @@
 | Usuario | Email | Password |
 |---------|-------|----------|
 | Admin | info@manoprotect.com | 19862210Des |
-| Test | reviewer@manoprotect.com | ReviewMano2025! |
 
 ---
 
-## 🚀 Listo para Deploy y Google Play
+## 🚀 LISTO PARA DEPLOY
