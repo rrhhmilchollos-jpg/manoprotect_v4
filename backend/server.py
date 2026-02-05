@@ -162,9 +162,8 @@ from routes.family_sos_routes import router as family_sos_router, init_family_ro
 init_family_routes(db, PLAN_FEATURES)
 
 # Family Management Routes
-from routes.family_routes import router as family_router, init_db as init_family_db, init_auth as init_family_auth
+from routes.family_routes import router as family_router, init_db as init_family_db
 init_family_db(db)
-# Note: init_family_auth will be called after require_auth is defined
 
 # Geofencing Routes
 from routes.geofence_routes import router as geofence_router, init_geofence_routes
