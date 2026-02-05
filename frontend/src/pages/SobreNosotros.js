@@ -11,60 +11,16 @@ import SEO from '@/components/SEO';
 const SobreNosotros = () => {
   const navigate = useNavigate();
 
+  // Solo mostramos información verificable del fundador
   const team = [
     {
       name: "Daniel Escrivá",
-      role: "CEO & Fundador",
-      image: null, // Placeholder for real image
+      role: "Fundador",
+      image: null,
       initials: "DE",
-      bio: "Ex-Director de Seguridad en banca. 15+ años protegiendo sistemas financieros. Fundó ManoProtect tras ver cómo estafadores robaban los ahorros de su abuela.",
+      bio: "Apasionado por la ciberseguridad y la protección de las familias españolas. Creó ManoProtect con la misión de hacer la tecnología de protección accesible para todos.",
       linkedin: "#",
       color: "indigo"
-    },
-    {
-      name: "María López Sánchez",
-      role: "CTO",
-      image: null,
-      initials: "ML",
-      bio: "Ingeniera de IA especializada en detección de fraudes. Ex-Google. Lidera el desarrollo de nuestros algoritmos de protección.",
-      linkedin: "#",
-      color: "emerald"
-    },
-    {
-      name: "Carlos Rodríguez",
-      role: "Director de Operaciones",
-      image: null,
-      initials: "CR",
-      bio: "MBA por IESE. 10+ años en startups fintech. Se asegura de que cada usuario reciba la mejor experiencia posible.",
-      linkedin: "#",
-      color: "purple"
-    },
-    {
-      name: "Ana Martínez García",
-      role: "Directora de Atención al Cliente",
-      image: null,
-      initials: "AM",
-      bio: "Especialista en experiencia de usuario. Su equipo ha conseguido un 98% de satisfacción entre nuestros clientes.",
-      linkedin: "#",
-      color: "amber"
-    },
-    {
-      name: "Pedro Ruiz",
-      role: "Lead Security Engineer",
-      image: null,
-      initials: "PR",
-      bio: "Ex-INCIBE. Certificado CISSP y CEH. Diseña las capas de protección que mantienen seguros a nuestros usuarios.",
-      linkedin: "#",
-      color: "red"
-    },
-    {
-      name: "Laura Fernández",
-      role: "Head of Marketing",
-      image: null,
-      initials: "LF",
-      bio: "Experta en comunicación de ciberseguridad. Su misión: que cada español conozca los peligros del fraude digital.",
-      linkedin: "#",
-      color: "blue"
     }
   ];
 
@@ -72,7 +28,7 @@ const SobreNosotros = () => {
     {
       icon: Shield,
       title: "Protección Real",
-      description: "No vendemos humo. Cada funcionalidad está diseñada para protegerte de amenazas reales."
+      description: "Cada funcionalidad está diseñada para protegerte de amenazas reales."
     },
     {
       icon: Heart,
