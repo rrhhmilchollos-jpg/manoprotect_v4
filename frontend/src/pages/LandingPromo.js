@@ -48,10 +48,10 @@ const LandingPromo = () => {
   ];
 
   const stats = [
-    { value: "15.000+", label: "Familias protegidas" },
-    { value: "50.000+", label: "Estafas bloqueadas" },
-    { value: "4.9★", label: "Valoración" },
-    { value: "99.8%", label: "Tasa detección" },
+    { value: "IA", label: "Análisis inteligente" },
+    { value: "24/7", label: "Protección continua" },
+    { value: "15 días", label: "Prueba gratis" },
+    { value: "SMS", label: "Alertas instantáneas" },
   ];
 
   const plans = [
