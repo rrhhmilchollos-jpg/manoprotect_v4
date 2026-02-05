@@ -1,5 +1,5 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { MessageCircle, X, Send, Bot, User, Loader2, Sparkles, Phone, ExternalLink } from 'lucide-react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
+import { MessageCircle, X, Send, Bot, User, Loader2, Sparkles, Phone, ExternalLink, Volume2, VolumeX } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
@@ -14,6 +14,32 @@ const QUICK_RESPONSES = [
   { id: 'family', text: '¿Cómo añado familiares?', icon: '👨‍👩‍👧' },
 ];
 
+// Text-to-Speech utility
+const speakText = (text, onEnd) => {
+  if ('speechSynthesis' in window) {
+    // Cancel any ongoing speech
+    window.speechSynthesis.cancel();
+    
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = 'es-ES';
+    utterance.rate = 1.0;
+    utterance.pitch = 1.0;
+    utterance.volume = 1.0;
+    
+    // Try to find a Spanish voice
+    const voices = window.speechSynthesis.getVoices();
+    const spanishVoice = voices.find(v => v.lang.startsWith('es'));
+    if (spanishVoice) {
+      utterance.voice = spanishVoice;
+    }
+    
+    utterance.onend = onEnd;
+    window.speechSynthesis.speak(utterance);
+    return true;
+  }
+  return false;
+};
+
 const AIChatWidget = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState([
@@ -27,6 +53,8 @@ const AIChatWidget = () => {
   const [inputValue, setInputValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [sessionId, setSessionId] = useState(null);
+  const [ttsEnabled, setTtsEnabled] = useState(false);
+  const [isSpeaking, setIsSpeaking] = useState(false);
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
 
