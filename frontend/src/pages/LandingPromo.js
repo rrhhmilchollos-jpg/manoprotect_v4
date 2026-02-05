@@ -50,7 +50,7 @@ const LandingPromo = () => {
   const stats = [
     { value: "IA", label: "Análisis inteligente" },
     { value: "24/7", label: "Protección continua" },
-    { value: "15 días", label: "Prueba gratis" },
+    { value: "7 días", label: "Prueba gratis" },
     { value: "SMS", label: "Alertas instantáneas" },
   ];
 

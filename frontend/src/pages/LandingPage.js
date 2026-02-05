@@ -498,7 +498,7 @@ const LandingPage = () => {
                 {[
                   { stat: 'IA', label: 'Análisis inteligente' },
                   { stat: 'SMS', label: 'Alertas instantáneas' },
-                  { stat: '15 días', label: 'Prueba gratuita' },
+                  { stat: '7 días', label: 'Prueba gratuita' },
                   { stat: '24/7', label: 'Protección continua' }
                 ].map((item, idx) => (
                   <div key={idx} className="flex items-center gap-4">

@@ -128,7 +128,7 @@ const Pricing = () => {
         'Historial de ubicaciones',
         'Modo Senior simplificado',
         'Panel familiar centralizado',
-        'Garantía satisfacción 15 días'
+        'Garantía satisfacción 7 días'
       ],
       cta: isAnnual ? 'Ahorrar €200/año' : 'Proteger Familia',
       popular: false
@@ -189,7 +189,7 @@ const Pricing = () => {
       a: 'Sí, sin preguntas. Cancela desde tu perfil y seguirás teniendo acceso hasta el final del período pagado.'
     },
     {
-      q: '¿Qué incluye la garantía de 15 días?',
+      q: '¿Qué incluye la garantía de 7 días?',
       a: 'Si no estás satisfecho, te devolvemos el 100% del importe. Sin letra pequeña, sin complicaciones.'
     },
     {
@@ -359,7 +359,7 @@ const Pricing = () => {
           </div>
           <div className="flex items-center gap-2 text-slate-600">
             <Check className="w-5 h-5 text-emerald-500" />
-            <span className="text-sm font-medium">Garantía 15 días</span>
+            <span className="text-sm font-medium">Garantía 7 días</span>
           </div>
           <div className="flex items-center gap-2 text-slate-600">
             <Check className="w-5 h-5 text-emerald-500" />
