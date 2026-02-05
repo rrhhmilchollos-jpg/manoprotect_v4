@@ -855,8 +855,6 @@ const LandingPage = () => {
             </p>
             <div className="flex items-center gap-4 text-sm text-zinc-500">
               <span>CIF: B19427723</span>
-              <span className="text-zinc-700">|</span>
-              <span>Entidad supervisada por el Banco de España</span>
             </div>
           </div>
         </div>
