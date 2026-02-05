@@ -136,8 +136,8 @@ const Community = () => {
                   <TrendingUp className="w-6 h-6 text-emerald-600" />
                 </div>
                 <div>
-                  <div className="text-2xl font-bold text-emerald-600">99.8%</div>
-                  <div className="text-sm text-zinc-600">Precisión</div>
+                  <div className="text-2xl font-bold text-emerald-600">IA</div>
+                  <div className="text-sm text-zinc-600">Análisis Inteligente</div>
                 </div>
               </div>
             </CardContent>

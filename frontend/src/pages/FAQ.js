@@ -87,7 +87,7 @@ const FAQ = () => {
         },
         {
           q: "¿Qué hago si detecto un falso positivo?",
-          a: "Si crees que hemos marcado como peligroso un mensaje que es legítimo, puedes reportarlo desde el panel de resultados. Nuestro equipo lo revisará y mejorará el sistema. Los falsos positivos son raros (<0.5%) pero nos ayudan a mejorar."
+          a: "Si crees que hemos marcado como peligroso un mensaje que es legítimo, puedes reportarlo desde el panel de resultados. Nuestro equipo lo revisará y mejorará el sistema continuamente."
         }
       ]
     }
@@ -236,7 +236,7 @@ const FAQ = () => {
         <div className="mt-12 text-center">
           <h3 className="text-2xl font-bold text-zinc-900 mb-4">¿Listo para protegerte?</h3>
           <p className="text-zinc-600 mb-6">
-            Únete a miles de usuarios que ya confían en ManoProtect
+            Empieza a protegerte hoy con ManoProtect
           </p>
           <Button 
             onClick={() => navigate('/registro')}

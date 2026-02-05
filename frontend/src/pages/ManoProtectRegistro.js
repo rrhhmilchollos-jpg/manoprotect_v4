@@ -388,21 +388,19 @@ const ManoProtectRegistro = () => {
               </div>
             </div>
 
-            {/* Stats */}
+            {/* Features */}
             <div className="mt-8 pt-8 border-t border-white/10 grid grid-cols-3 gap-4">
               <div className="text-center">
-                <p className="text-2xl font-bold text-white">15K+</p>
-                <p className="text-xs text-indigo-300">Familias protegidas</p>
+                <p className="text-2xl font-bold text-white">24/7</p>
+                <p className="text-xs text-indigo-300">Protección continua</p>
               </div>
               <div className="text-center">
-                <p className="text-2xl font-bold text-white">98%</p>
-                <p className="text-xs text-indigo-300">Estafas detectadas</p>
+                <p className="text-2xl font-bold text-white">IA</p>
+                <p className="text-xs text-indigo-300">Análisis inteligente</p>
               </div>
               <div className="text-center">
-                <p className="text-2xl font-bold text-white">4.9</p>
-                <p className="text-xs text-indigo-300">
-                  <Star className="w-3 h-3 inline text-yellow-400" /> Valoración
-                </p>
+                <p className="text-2xl font-bold text-white">SMS</p>
+                <p className="text-xs text-indigo-300">Alertas instantáneas</p>
               </div>
             </div>
           </div>
