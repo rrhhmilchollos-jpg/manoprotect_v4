@@ -43,4 +43,4 @@
 
 - **App ID:** com.manobank.app
 - **Nombre:** ManoBank
-- **URL Web:** https://mano-zones.preview.emergentagent.com
+- **URL Web:** https://teamchat-secure.preview.emergentagent.com

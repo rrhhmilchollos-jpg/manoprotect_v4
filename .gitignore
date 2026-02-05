@@ -129,3 +129,4 @@ frontend/build/ManoProtect-Desktop-Windows.zip
 *.env
 *.env.*
 frontend/node_modules/.cache/default-development/6.pack
+frontend/node_modules/.cache/default-development/8.pack

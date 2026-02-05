@@ -25,7 +25,7 @@ Todas las apps se conectan al mismo backend:
 
 | Entorno | URL |
 |---------|-----|
-| Preview | https://mano-zones.preview.emergentagent.com |
+| Preview | https://teamchat-secure.preview.emergentagent.com |
 | Producción | [Tu dominio de producción] |
 
 ---
