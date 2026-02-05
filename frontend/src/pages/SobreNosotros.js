@@ -90,16 +90,16 @@ const SobreNosotros = () => {
           <div className="bg-gradient-to-r from-amber-50 to-orange-50 rounded-2xl p-8 border border-amber-200">
             <h2 className="text-2xl font-bold text-slate-900 mb-4 flex items-center gap-3">
               <Heart className="w-6 h-6 text-red-500" />
-              Por qué existimos
+              Nuestra Misión
             </h2>
             <p className="text-lg text-slate-700 leading-relaxed mb-4">
-              En 2022, la abuela de nuestro fundador Daniel perdió <strong>€4,500</strong> en una estafa telefónica. Un supuesto "técnico de Microsoft" la convenció de darle acceso a su ordenador. Cuando Daniel se enteró, ya era tarde.
+              Cada día, miles de españoles reciben intentos de estafa por teléfono, SMS y email. Personas mayores, familias trabajadoras, todos son objetivos de los ciberdelincuentes.
             </p>
             <p className="text-lg text-slate-700 leading-relaxed mb-4">
-              Ese día Daniel decidió que ninguna familia más pasaría por eso. Reunió a los mejores expertos en seguridad que conocía y creó <strong>ManoProtect</strong>.
+              <strong>ManoProtect</strong> nació con una misión clara: hacer que la protección digital sea accesible y fácil de usar para todos.
             </p>
             <p className="text-lg text-slate-700 leading-relaxed">
-              Hoy protegemos a <strong>más de 50,000 familias</strong> en España. Y cada vez que bloqueamos una estafa, recordamos por qué hacemos esto.
+              Utilizamos inteligencia artificial para detectar amenazas en tiempo real y alertarte antes de que sea demasiado tarde.
             </p>
           </div>
         </div>
@@ -109,9 +109,9 @@ const SobreNosotros = () => {
       <section className="py-16 px-6 bg-slate-50">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-slate-900 mb-4">Conoce al Equipo</h2>
+            <h2 className="text-3xl font-bold text-slate-900 mb-4">Sobre el Fundador</h2>
             <p className="text-slate-600 max-w-2xl mx-auto">
-              Profesionales con décadas de experiencia combinada en ciberseguridad, banca y tecnología
+              Comprometido con la seguridad digital de las familias españolas
             </p>
           </div>
 
