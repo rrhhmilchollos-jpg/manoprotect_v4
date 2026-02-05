@@ -1,19 +1,13 @@
 # ManoProtect - PRD Final
 
-## ✅ LISTO PARA PRODUCCIÓN
-**Fecha:** 05/02/2026
+## ✅ PRODUCCIÓN LISTA
+**Última actualización:** 05/02/2026
 
 ---
 
-## Sistema Verificado
+## Funcionalidades Implementadas
 
-### SMS (Infobip) ✅
-- Saldo: 19.82 EUR
-- SMS de prueba: Recibidos correctamente
-
-### Funcionalidades Principales
-
-#### 🆘 Sistema SOS
+### 🆘 Sistema SOS
 - Botón SOS con countdown 3s
 - GPS preciso + dirección exacta
 - Mapa en tiempo real (OpenStreetMap)
@@ -21,28 +15,23 @@
 - Notificaciones push (Firebase FCM)
 - Sirena en dispositivo receptor
 
-#### 👨‍👩‍👧‍👦 Localización Familiar
-- "Solicitar Ubicación" envía notificación al familiar
-- Familiar comparte ubicación desde su móvil
-
-#### 📍 Geofencing / Zonas Seguras ✅
+### 📍 Geofencing / Zonas Seguras
 - Zonas: Casa 🏠, Trabajo 💼, Colegio 🏫 + personalizadas
 - Radio configurable: 50-500 metros
 - Alertas de ENTRADA y SALIDA
 - 1 zona gratis, ilimitadas premium
 
-#### 🤖 Chat con IA + TTS ✅
+### 🤖 Chat con IA + TTS
 - Widget flotante 24/7
-- GPT-4o-mini para respuestas inteligentes
-- **Text-to-Speech** para respuestas habladas (español)
-- Preguntas frecuentes predefinidas
-- Escalamiento a WhatsApp humano
+- GPT-4o-mini (Emergent LLM Key)
+- Text-to-Speech en español
+- Escalamiento a WhatsApp
 
-#### 📺 Anuncios Intersticiales ✅
-- Para usuarios gratuitos
+### 📺 Anuncios
+- Intersticiales para usuarios gratuitos
 - Skip automático para premium
 
-#### 🛡️ Anti-Estafas
+### 🛡️ Anti-Estafas
 - Detección de phishing, smishing, vishing
 
 ---
@@ -51,90 +40,107 @@
 
 | Servicio | Estado |
 |----------|--------|
-| Infobip SMS | ✅ 19.82€ |
+| Infobip SMS | ✅ |
 | Firebase FCM | ✅ |
 | Stripe | ✅ |
 | MongoDB | ✅ |
 | OpenStreetMap | ✅ |
 | AdMob | ✅ |
-| **OpenAI GPT-4o-mini** | ✅ |
-| **Web Speech API (TTS)** | ✅ |
+| OpenAI GPT-4o-mini | ✅ |
+| Web Speech API | ✅ |
 
 ---
 
-## Proyecto Android (Google Play)
+## Arquitectura Backend
 
-Archivos en `/app/android/`:
-- `README.md` - Guía paso a paso
-- `LauncherActivity.java` - Activity con intersticial AdMob
-- `build.gradle.example` - Configuración Gradle
+### Rutas Modularizadas
+| Archivo | Funcionalidad |
+|---------|--------------|
+| `core_routes.py` | Health, plans, knowledge |
+| `auth_routes.py` | Login, register, verify |
+| `family_sos_routes.py` | SOS, tracking, children |
+| `geofence_routes.py` | Zonas seguras |
+| `notifications_routes.py` | Push, preferencias |
+| `metrics_routes.py` | Dashboard, API keys |
+| `chat_routes.py` | Chat con IA |
+| `payments_routes.py` | Stripe |
+| `admin_routes.py` | Panel admin |
 
-**IDs AdMob:**
-- App ID: `ca-app-pub-7713974112203810~9265947358`
-- Test Intersticial: `ca-app-pub-3940256099942544/1033173712`
+### Índices MongoDB
+**104 índices** creados para:
+- users, user_sessions
+- geofences, geofence_events
+- family_children, sos_alerts
+- notifications, push_subscriptions
+- threats, chat_history
+- payment_transactions, api_keys
+
+---
+
+## CI/CD
+
+### GitHub Actions
+Archivo: `/.github/workflows/ci-cd.yml`
+
+**Jobs:**
+1. `backend-tests` - pytest con MongoDB
+2. `frontend-tests` - ESLint + build
+3. `e2e-tests` - Playwright
+4. `security-scan` - Trivy
+5. `deploy` - Producción (main branch)
 
 ---
 
 ## Tests
 
 ### Backend (pytest)
-- `/app/backend/tests/test_api.py`
-- 8/14 tests pasando (auth, health, chat)
-- Tests con cookies requieren ajuste de httpx
+- `/backend/tests/test_api.py`
+- Health, Auth, Geofencing, Chat
 
 ### E2E (Playwright)
-- `/app/frontend/e2e/manoprotect.spec.js`
-- Tests de landing, auth, safe zones, chat
+- `/frontend/e2e/manoprotect.spec.js`
+- Landing, Login, Safe Zones, Chat
 
 ---
 
-## Refactorización
+## Android (Google Play)
 
-### Completado
-- Documentado en `/app/memory/ARCHITECTURE.md`
-- Plan en `/app/memory/REFACTOR_PLAN.md`
-- Creado `/app/backend/routes/chat_routes.py`
+### Archivos en `/android/`
+- `LauncherActivity.java` - Intersticial AdMob
+- `build.gradle.example` - Configuración
+- `README.md` - Guía paso a paso
 
-### Pendiente
-- Mover rutas restantes de server.py a módulos
-- Meta: server.py < 500 líneas
-
----
-
-## Archivos Clave
-
-| Archivo | Descripción |
-|---------|-------------|
-| `/backend/services/ai_support.py` | Chat IA |
-| `/backend/routes/chat_routes.py` | API chat |
-| `/frontend/src/components/AIChatWidget.jsx` | Widget chat + TTS |
-| `/android/LauncherActivity.java` | Android con AdMob |
-| `/backend/tests/test_api.py` | Tests pytest |
-| `/frontend/e2e/manoprotect.spec.js` | Tests Playwright |
+### IDs AdMob
+- App: `ca-app-pub-7713974112203810~9265947358`
+- Test: `ca-app-pub-3940256099942544/1033173712`
 
 ---
 
-## Tareas Completadas
+## Credenciales Test
 
-- [x] Sistema SOS completo
+| Usuario | Email | Password |
+|---------|-------|----------|
+| Admin | info@manoprotect.com | 19862210Des |
+| Test | reviewer@manoprotect.com | ReviewMano2025! |
+
+---
+
+## Completado en esta sesión
+
 - [x] Geofencing / Zonas Seguras
 - [x] Chat con IA (GPT-4o-mini)
-- [x] **Text-to-Speech** para chat
-- [x] **Configuración Android Studio** para Google Play
-- [x] **Tests E2E** con Playwright
-- [x] **Tests Backend** con pytest
-- [x] Plan de refactorización documentado
-
-## Tareas Pendientes
-
-- [ ] Ejecutar refactorización completa de server.py
-- [ ] Configurar CI/CD para tests automáticos
-- [ ] Crear índices MongoDB para optimización
+- [x] Text-to-Speech
+- [x] Configuración Android Studio
+- [x] Tests E2E (Playwright + pytest)
+- [x] CI/CD Pipeline (GitHub Actions)
+- [x] Índices MongoDB (104 índices)
+- [x] Refactorización parcial server.py
+- [x] Módulos: core, notifications, metrics, chat
 
 ---
 
 ## Deploy
 
-1. **Save to Github** → manoprotect.com / main
+1. **Save to Github** → manoprotect.com
 2. **Deploy** → Producción
-3. **Google Play** → Seguir `/app/android/README.md`
+3. **Google Play** → Seguir `/android/README.md`
