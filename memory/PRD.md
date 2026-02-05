@@ -1,38 +1,108 @@
-# ManoProtect - PRD Final
+# ManoProtect - PRD Final v2.0
 
-## ✅ PRODUCCIÓN LISTA
+## ✅ PRODUCCIÓN LISTA - OPTIMIZADA
 **Última actualización:** 05/02/2026
 
 ---
 
-## Funcionalidades Implementadas
+## Optimizaciones Completadas
 
-### 🆘 Sistema SOS
-- Botón SOS con countdown 3s
-- GPS preciso + dirección exacta
-- Mapa en tiempo real (OpenStreetMap)
-- SMS a familiares (Infobip)
-- Notificaciones push (Firebase FCM)
-- Sirena en dispositivo receptor
+### SEO
+- ✅ Meta tags completos (title, description, keywords)
+- ✅ Open Graph para Facebook/LinkedIn
+- ✅ Twitter Cards
+- ✅ Schema.org JSON-LD (Organization, SoftwareApp, FAQPage)
+- ✅ Sitemap.xml con 15+ URLs
+- ✅ Robots.txt optimizado
+- ✅ Canonical URLs
+- ✅ Hreflang tags
+- ✅ Preconnect/Preload críticos
 
-### 📍 Geofencing / Zonas Seguras
-- Zonas: Casa 🏠, Trabajo 💼, Colegio 🏫 + personalizadas
-- Radio configurable: 50-500 metros
-- Alertas de ENTRADA y SALIDA
-- 1 zona gratis, ilimitadas premium
+### SEM / Google Ads
+- ✅ Google Tag Manager (GTM-MK53XZ8Q)
+- ✅ Conversion tracking (`/google-ads/conversion-tracking.js`)
+- ✅ Remarketing events
+- ✅ E-commerce tracking para planes
 
-### 🤖 Chat con IA + TTS
-- Widget flotante 24/7
-- GPT-4o-mini (Emergent LLM Key)
-- Text-to-Speech en español
-- Escalamiento a WhatsApp
+### BigData / Analytics
+- ✅ BigData tracking system (`/bigdata-analytics.js`)
+- ✅ DataLayer para GTM
+- ✅ Scroll depth tracking
+- ✅ Time on page tracking
+- ✅ Performance metrics (LCP, FCP, etc.)
+- ✅ User identification
+- ✅ E-commerce events
 
-### 📺 Anuncios
-- Intersticiales para usuarios gratuitos
-- Skip automático para premium
+### Google Play Console
+- ✅ AndroidManifest.xml completo
+- ✅ LauncherActivity.java con AdMob intersticial
+- ✅ MyFirebaseMessagingService.java para FCM
+- ✅ google-services.json.example
+- ✅ build.gradle.example
+- ✅ Guía GOOGLE_PLAY_SETUP.md
 
-### 🛡️ Anti-Estafas
-- Detección de phishing, smishing, vishing
+### Firebase
+- ✅ FCM configurado en backend
+- ✅ Service Worker para push
+- ✅ Android service para notificaciones
+- ✅ Canales de notificación (SOS, Alertas, Default)
+
+### AdMob
+- ✅ App ID: ca-pub-7713974112203810~9265947358
+- ✅ Intersticial en LauncherActivity
+- ✅ app-ads.txt configurado
+
+---
+
+## Archivos Creados/Actualizados
+
+### SEO & Analytics
+| Archivo | Descripción |
+|---------|-------------|
+| `/public/sitemap.xml` | Sitemap con 15+ URLs |
+| `/public/robots.txt` | Configuración crawlers |
+| `/public/bigdata-analytics.js` | BigData tracking |
+| `/public/google-ads/conversion-tracking.js` | AdWords conversions |
+
+### Android / Google Play
+| Archivo | Descripción |
+|---------|-------------|
+| `/android/AndroidManifest.xml` | Manifest completo |
+| `/android/LauncherActivity.java` | Activity con AdMob |
+| `/android/MyFirebaseMessagingService.java` | FCM Service |
+| `/android/build.gradle.example` | Gradle config |
+| `/android/google-services.json.example` | Firebase config |
+| `/android/GOOGLE_PLAY_SETUP.md` | Guía completa |
+
+### CI/CD
+| Archivo | Descripción |
+|---------|-------------|
+| `/.github/workflows/ci-cd.yml` | Pipeline GitHub Actions |
+
+### Backend Modules
+| Archivo | Descripción |
+|---------|-------------|
+| `/backend/routes/core_routes.py` | Health, plans |
+| `/backend/routes/notifications_routes.py` | Push, preferences |
+| `/backend/routes/metrics_routes.py` | Dashboard, API keys |
+| `/backend/routes/chat_routes.py` | Chat IA |
+| `/backend/scripts/create_indexes.py` | MongoDB indexes |
+
+---
+
+## Funcionalidades
+
+### Core
+- 🆘 Sistema SOS con GPS
+- 📍 Geofencing / Zonas Seguras
+- 🤖 Chat con IA + TTS
+- 👨‍👩‍👧‍👦 Protección Familiar
+- 🛡️ Anti-Estafas (phishing, smishing, vishing)
+
+### Monetización
+- 📺 AdMob Intersticiales
+- 💳 Stripe Subscriptions
+- 👑 Planes Premium
 
 ---
 
@@ -43,76 +113,44 @@
 | Infobip SMS | ✅ |
 | Firebase FCM | ✅ |
 | Stripe | ✅ |
-| MongoDB | ✅ |
+| MongoDB (104 índices) | ✅ |
 | OpenStreetMap | ✅ |
 | AdMob | ✅ |
 | OpenAI GPT-4o-mini | ✅ |
-| Web Speech API | ✅ |
+| Google Tag Manager | ✅ |
+| Google Analytics 4 | ✅ |
+| Google Ads | ✅ |
 
 ---
 
-## Arquitectura Backend
+## Deploy Checklist
 
-### Rutas Modularizadas
-| Archivo | Funcionalidad |
-|---------|--------------|
-| `core_routes.py` | Health, plans, knowledge |
-| `auth_routes.py` | Login, register, verify |
-| `family_sos_routes.py` | SOS, tracking, children |
-| `geofence_routes.py` | Zonas seguras |
-| `notifications_routes.py` | Push, preferencias |
-| `metrics_routes.py` | Dashboard, API keys |
-| `chat_routes.py` | Chat con IA |
-| `payments_routes.py` | Stripe |
-| `admin_routes.py` | Panel admin |
+### Pre-Deploy
+- [x] Build frontend exitoso
+- [x] Backend funcionando
+- [x] Tests configurados
+- [x] CI/CD configurado
+- [x] SEO optimizado
+- [x] Analytics integrado
 
-### Índices MongoDB
-**104 índices** creados para:
-- users, user_sessions
-- geofences, geofence_events
-- family_children, sos_alerts
-- notifications, push_subscriptions
-- threats, chat_history
-- payment_transactions, api_keys
+### Google Play
+- [ ] Crear cuenta Play Console ($25)
+- [ ] Subir assets (icono, screenshots)
+- [ ] Configurar ficha de tienda
+- [ ] Generar keystore
+- [ ] Build AAB firmado
+- [ ] Internal testing
+- [ ] Production release
 
 ---
 
-## CI/CD
+## URLs
 
-### GitHub Actions
-Archivo: `/.github/workflows/ci-cd.yml`
-
-**Jobs:**
-1. `backend-tests` - pytest con MongoDB
-2. `frontend-tests` - ESLint + build
-3. `e2e-tests` - Playwright
-4. `security-scan` - Trivy
-5. `deploy` - Producción (main branch)
-
----
-
-## Tests
-
-### Backend (pytest)
-- `/backend/tests/test_api.py`
-- Health, Auth, Geofencing, Chat
-
-### E2E (Playwright)
-- `/frontend/e2e/manoprotect.spec.js`
-- Landing, Login, Safe Zones, Chat
-
----
-
-## Android (Google Play)
-
-### Archivos en `/android/`
-- `LauncherActivity.java` - Intersticial AdMob
-- `build.gradle.example` - Configuración
-- `README.md` - Guía paso a paso
-
-### IDs AdMob
-- App: `ca-app-pub-7713974112203810~9265947358`
-- Test: `ca-app-pub-3940256099942544/1033173712`
+- **App**: https://manoprotect.com
+- **Privacidad**: https://manoprotect.com/privacidad
+- **Términos**: https://manoprotect.com/terminos
+- **Soporte**: info@manoprotect.com
+- **WhatsApp**: +34 601 510 950
 
 ---
 
@@ -125,22 +163,4 @@ Archivo: `/.github/workflows/ci-cd.yml`
 
 ---
 
-## Completado en esta sesión
-
-- [x] Geofencing / Zonas Seguras
-- [x] Chat con IA (GPT-4o-mini)
-- [x] Text-to-Speech
-- [x] Configuración Android Studio
-- [x] Tests E2E (Playwright + pytest)
-- [x] CI/CD Pipeline (GitHub Actions)
-- [x] Índices MongoDB (104 índices)
-- [x] Refactorización parcial server.py
-- [x] Módulos: core, notifications, metrics, chat
-
----
-
-## Deploy
-
-1. **Save to Github** → manoprotect.com
-2. **Deploy** → Producción
-3. **Google Play** → Seguir `/android/README.md`
+## 🚀 Listo para Deploy y Google Play
