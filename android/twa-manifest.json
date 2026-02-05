@@ -1,0 +1,55 @@
+{
+  "packageId": "com.manoprotect.app",
+  "host": "manoprotect.com",
+  "name": "ManoProtect",
+  "launcherName": "ManoProtect",
+  "display": "standalone",
+  "themeColor": "#4F46E5",
+  "navigationColor": "#4F46E5",
+  "navigationColorDark": "#4F46E5",
+  "navigationDividerColor": "#4F46E5",
+  "navigationDividerColorDark": "#4F46E5",
+  "backgroundColor": "#FFFFFF",
+  "enableNotifications": true,
+  "startUrl": "/",
+  "iconUrl": "/icons/icon-512x512.png",
+  "maskableIconUrl": "/icons/icon-512x512.png",
+  "splashScreenFadeOutDuration": 300,
+  "signingKey": {
+    "path": "./manoprotect-key.keystore",
+    "alias": "manoprotect"
+  },
+  "appVersionCode": 2,
+  "appVersionName": "2.0.0",
+  "shortcuts": [
+    {
+      "name": "Botón SOS",
+      "short_name": "SOS",
+      "url": "/sos-quick",
+      "icons": [
+        {
+          "src": "/icons/sos-icon-192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    }
+  ],
+  "generatorApp": "PWABuilder",
+  "webManifestUrl": "https://manoprotect.com/manifest.json",
+  "fallbackType": "customtabs",
+  "features": {
+    "locationDelegation": {
+      "enabled": true
+    },
+    "playBilling": {
+      "enabled": false
+    }
+  },
+  "alphaDependencies": {
+    "enabled": false
+  },
+  "enableSiteSettingsShortcut": true,
+  "isChromeOSOnly": false,
+  "orientation": "portrait"
+}
