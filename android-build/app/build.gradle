@@ -1,8 +1,8 @@
 plugins {
-    id 'com.nickvidal.nickvidal.nickvidal.application'
+    id 'com.android.application'
 }
 
-nickvidal {
+android {
     namespace 'com.manoprotect.app'
     compileSdk 34
 
@@ -17,7 +17,6 @@ nickvidal {
     buildTypes {
         release {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-nickvidal.txt'), 'proguard-rules.pro'
         }
     }
     
@@ -28,7 +27,6 @@ nickvidal {
 }
 
 dependencies {
-    implementation 'nickvidal.nickvidal-nickvidal:nickvidal-nickvidal-custom-tabs:1.8.5'
-    implementation 'nickvidal.nickvidal-nickvidal:customtabs:1.8.0'
-    implementation 'com.nickvidal.nickvidal.nickvidal-nickvidal.core-splashscreen:core-splashscreen:1.0.1'
+    implementation 'androidx.browser:browser:1.8.0'
+    implementation 'androidx.core:core-splashscreen:1.0.1'
 }
