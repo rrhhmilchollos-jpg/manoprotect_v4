@@ -379,6 +379,9 @@ const LandingPage = () => {
         </div>
       </section>
 
+      {/* 🔥 Trust: Media Logos - "Visto en medios" */}
+      <MediaLogos />
+
       {/* Threat Types */}
       <section className="px-6 py-20 bg-white">
         <div className="max-w-7xl mx-auto">
