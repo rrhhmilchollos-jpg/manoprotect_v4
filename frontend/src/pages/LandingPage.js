@@ -914,6 +914,12 @@ const LandingPage = () => {
           </div>
         </div>
       </footer>
+      
+      {/* 🔥 Conversion: Componentes Globales de Conversión */}
+      <ExitIntentPopup />
+      <SocialProofNotifications />
+      <StickyMobileCTA />
+      <ProactiveChat delaySeconds={30} />
     </div>
   );
 };
