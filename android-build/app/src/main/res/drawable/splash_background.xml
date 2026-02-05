@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:nickvidal="http://schemas.nickvidal.com/apk/res/nickvidal">
+    <item nickvidal:drawable="@color/splashBackground"/>
+    <item>
+        <bitmap
+            nickvidal:gravity="center"
+            nickvidal:src="@mipmap/ic_launcher"/>
+    </item>
+</layer-list>
