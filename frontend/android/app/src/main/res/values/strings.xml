@@ -1,9 +1,0 @@
-<?xml version='1.0' encoding='utf-8'?>
-<resources>
-    <string name="app_name">ManoProtect</string>
-    <string name="title_activity_main">ManoProtect - Protección contra Fraudes</string>
-    <string name="package_name">com.manoprotect.app</string>
-    <string name="custom_url_scheme">com.manoprotect.app</string>
-    <string name="company_name">STARTBOOKING SL</string>
-    <string name="company_cif">B19427723</string>
-</resources>
