@@ -41,7 +41,8 @@ class TestAuthEndpoints:
         assert response.status_code == 200
         
         data = response.json()
-        assert data.get("success") == True or "user" in data
+        # Login returns user data directly with email field
+        assert data.get("email") == ADMIN_EMAIL
         print(f"✅ Login successful for {ADMIN_EMAIL}")
         return response.cookies
     
