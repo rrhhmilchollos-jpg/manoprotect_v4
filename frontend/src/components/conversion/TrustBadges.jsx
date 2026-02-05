@@ -9,7 +9,7 @@ const TrustBadges = ({ variant = 'full' }) => {
   const badges = [
     {
       icon: Shield,
-      title: '15 Días Gratis',
+      title: '7 Días Gratis',
       subtitle: 'Sin compromiso',
       color: 'emerald'
     },
