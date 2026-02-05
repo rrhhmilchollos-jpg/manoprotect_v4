@@ -1,0 +1,73 @@
+// ManoProtect - app/build.gradle example with AdMob
+// Copy relevant sections to your Android Studio project
+
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    namespace 'com.manoprotect.www.twa'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId "com.manoprotect.www.twa"
+        minSdk 24
+        targetSdk 34
+        versionCode 10
+        versionName "2.0.0"
+        
+        // Digital Asset Links for TWA
+        resValue "string", "assetStatements", """
+            [{
+                "relation": ["delegate_permission/common.handle_all_urls"],
+                "target": {
+                    "namespace": "web",
+                    "site": "https://manoprotect.com"
+                }
+            }]
+        """
+    }
+
+    signingConfigs {
+        release {
+            // Configure your keystore here
+            // storeFile file('path/to/keystore.jks')
+            // storePassword 'your_store_password'
+            // keyAlias 'your_key_alias'
+            // keyPassword 'your_key_password'
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+        debug {
+            debuggable true
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+}
+
+dependencies {
+    // AndroidX
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'androidx.browser:browser:1.7.0'
+    implementation 'com.google.android.material:material:1.11.0'
+    
+    // Google Mobile Ads SDK (AdMob)
+    implementation 'com.google.android.gms:play-services-ads:22.6.0'
+    
+    // Firebase (optional - for analytics)
+    implementation platform('com.google.firebase:firebase-bom:32.7.0')
+    implementation 'com.google.firebase:firebase-analytics'
+}
+
+// Apply Google Services plugin if using Firebase
+// apply plugin: 'com.google.gms.google-services'
