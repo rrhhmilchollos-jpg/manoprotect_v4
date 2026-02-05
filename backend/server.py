@@ -3328,6 +3328,22 @@ print("✅ Family & SOS routes loaded")
 api_router.include_router(geofence_router)
 print("✅ Geofencing routes loaded")
 
+# Core routes (health, plans, knowledge)
+api_router.include_router(core_router)
+print("✅ Core routes loaded")
+
+# Notifications routes
+api_router.include_router(notifications_router)
+print("✅ Notifications routes loaded")
+
+# Metrics routes
+api_router.include_router(metrics_router)
+print("✅ Metrics routes loaded")
+
+# Chat routes (AI Support)
+api_router.include_router(chat_router)
+print("✅ Chat routes loaded")
+
 # Payment routes (Stripe)
 api_router.include_router(payments_router)
 print("✅ Payment routes loaded")
