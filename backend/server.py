@@ -30,8 +30,8 @@ from models.all_schemas import (
     NotificationSubscription, Notification, SubscriptionRequest, NotificationPreferences, PushSubscription,
     APIKey, APIKeyCreate,
     WhatsAppMessage, WhatsAppAlert,
-    BankAlert, BankAccountConnect, TransactionAnalyze,
     EmailPreferencesUpdate
+    # BankAlert, BankAccountConnect, TransactionAnalyze - RESERVED for ManoBank.es
 )
 
 ROOT_DIR = Path(__file__).parent
