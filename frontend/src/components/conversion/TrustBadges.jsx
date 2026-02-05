@@ -1,9 +1,9 @@
 import React from 'react';
-import { Shield, Clock, CreditCard, Lock, Award, CheckCircle, RefreshCw } from 'lucide-react';
+import { Shield, Clock, CreditCard, Lock, CheckCircle, RefreshCw } from 'lucide-react';
 
 /**
  * Trust Badges - Insignias de confianza y garantía
- * Aumenta la credibilidad y reduce fricción de compra
+ * Solo incluye garantías verificables y honestas
  */
 const TrustBadges = ({ variant = 'full' }) => {
   const badges = [
@@ -15,21 +15,15 @@ const TrustBadges = ({ variant = 'full' }) => {
     },
     {
       icon: RefreshCw,
-      title: 'Garantía 100%',
-      subtitle: 'Devolución fácil',
+      title: 'Cancela Cuando Quieras',
+      subtitle: 'Sin permanencia',
       color: 'blue'
     },
     {
       icon: Lock,
       title: 'Pago Seguro',
-      subtitle: 'SSL Encriptado',
+      subtitle: 'Con Stripe',
       color: 'purple'
-    },
-    {
-      icon: Award,
-      title: 'Certificado',
-      subtitle: 'GDPR Compliant',
-      color: 'amber'
     }
   ];
 
@@ -43,7 +37,7 @@ const TrustBadges = ({ variant = 'full' }) => {
   if (variant === 'compact') {
     return (
       <div className="flex flex-wrap items-center justify-center gap-4 py-4">
-        {badges.slice(0, 3).map((badge, index) => (
+        {badges.map((badge, index) => (
           <div key={index} className="flex items-center gap-2 text-slate-400 text-sm">
             <badge.icon className="w-4 h-4 text-emerald-400" />
             <span>{badge.title}</span>
