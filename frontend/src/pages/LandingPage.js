@@ -24,6 +24,16 @@ import {
   ProactiveChat
 } from '@/components/conversion';
 
+// Trust building components
+import {
+  MediaLogos,
+  ReviewsWidget,
+  CertificationsSection,
+  VideoTestimonials,
+  SuccessCases,
+  LiveChatWidget
+} from '@/components/trust';
+
 // Brand assets from environment variables
 const LOGO_URL = process.env.REACT_APP_LOGO_URL || '/manoprotect_logo.png';
 const ALERT_IMAGE_URL = process.env.REACT_APP_ALERT_IMAGE_URL || '/manoprotect_alert.png';
