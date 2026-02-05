@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Theme colors - ManoProtect brand colors -->
+    <color name="colorPrimary">#4F46E5</color>
+    <color name="colorPrimaryDark">#4338CA</color>
+    <color name="colorAccent">#10B981</color>
+    
+    <!-- Navigation colors -->
+    <color name="navigationColor">#4F46E5</color>
+    <color name="navigationColorDark">#4F46E5</color>
+    <color name="navigationDividerColor">#4F46E5</color>
+    <color name="navigationDividerColorDark">#4F46E5</color>
+    
+    <!-- Background colors -->
+    <color name="backgroundColor">#FFFFFF</color>
+    <color name="backgroundColorDark">#1F2937</color>
+    
+    <!-- Splash screen background -->
+    <color name="splashScreenBackground">#FFFFFF</color>
+</resources>
