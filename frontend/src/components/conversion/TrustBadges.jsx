@@ -118,17 +118,9 @@ const TrustBadges = ({ variant = 'full' }) => {
           </div>
           <div className="flex items-center gap-2 text-slate-400 text-sm">
             <Lock className="w-4 h-4 text-emerald-400" />
-            <span>SSL 256-bit</span>
+            <span>Pagos procesados por Stripe</span>
           </div>
         </div>
-      </div>
-
-      {/* Trust message */}
-      <div className="mt-6 text-center">
-        <p className="text-sm text-slate-300">
-          <CheckCircle className="w-4 h-4 text-emerald-400 inline mr-1" />
-          Más de <span className="text-emerald-400 font-bold">10,000 familias</span> ya confían en ManoProtect
-        </p>
       </div>
     </div>
   );
