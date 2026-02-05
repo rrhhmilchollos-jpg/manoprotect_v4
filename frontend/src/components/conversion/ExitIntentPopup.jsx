@@ -99,7 +99,7 @@ const ExitIntentPopup = ({ onClose, onAccept }) => {
           </div>
           <div className="flex items-center gap-3 text-slate-300">
             <Gift className="w-5 h-5 text-emerald-400" />
-            <span>30 días completamente gratis</span>
+            <span>7 días completamente gratis</span>
           </div>
         </div>
 

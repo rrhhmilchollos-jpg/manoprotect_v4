@@ -98,7 +98,7 @@ const PaymentSuccess = () => {
               </div>
               <div className="flex items-center gap-1">
                 <Award className="w-4 h-4" />
-                <span>Garantía 30 días</span>
+                <span>Garantía 7 días</span>
               </div>
             </div>
           </div>

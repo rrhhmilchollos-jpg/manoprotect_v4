@@ -103,7 +103,7 @@ const ProactiveChat = ({
     const q = question.toLowerCase();
     
     if (q.includes('plan') || q.includes('mejor') || q.includes('recomienda')) {
-      return "🎯 Para recomendarte el mejor plan, te sugiero usar nuestro cuestionario rápido. Pero en general:\n\n• **Plan Personal** (€9.99/mes): Ideal si solo te proteges tú\n• **Plan Familiar** (€29.99/mes): Perfecto para familias de hasta 5 personas\n• **Plan Enterprise** (€99.99/mes): Para familias grandes o empresas\n\n¡Todos incluyen 15 días de prueba gratis!";
+      return "🎯 Para recomendarte el mejor plan, te sugiero usar nuestro cuestionario rápido. Pero en general:\n\n• **Plan Personal** (€9.99/mes): Ideal si solo te proteges tú\n• **Plan Familiar** (€29.99/mes): Perfecto para familias de hasta 5 personas\n• **Plan Enterprise** (€99.99/mes): Para familias grandes o empresas\n\n¡Todos incluyen 7 días de prueba gratis!";
     }
     
     if (q.includes('funciona') || q.includes('cómo')) {
@@ -111,7 +111,7 @@ const ProactiveChat = ({
     }
     
     if (q.includes('gratis') || q.includes('prueba') || q.includes('probar')) {
-      return "🎁 ¡Sí! Todos nuestros planes incluyen **15 días de prueba GRATIS**.\n\nNo necesitas tarjeta de crédito para empezar. Puedes cancelar cuando quieras sin ningún compromiso.\n\n👉 ¿Quieres activar tu prueba ahora?";
+      return "🎁 ¡Sí! Todos nuestros planes incluyen **7 días de prueba GRATIS**.\n\nNo necesitas tarjeta de crédito para empezar. Puedes cancelar cuando quieras sin ningún compromiso.\n\n👉 ¿Quieres activar tu prueba ahora?";
     }
     
     if (q.includes('familia') || q.includes('padres') || q.includes('hijos')) {

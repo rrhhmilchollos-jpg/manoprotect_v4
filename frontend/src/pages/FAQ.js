@@ -49,7 +49,7 @@ const FAQ = () => {
         },
         {
           q: "¿Ofrecen garantía de devolución?",
-          a: "Sí, ofrecemos garantía de satisfacción de 30 días. Si no estás satisfecho con el servicio, puedes solicitar un reembolso completo sin preguntas."
+          a: "Sí, ofrecemos garantía de satisfacción de 7 días. Si no estás satisfecho con el servicio, puedes solicitar un reembolso completo sin preguntas."
         },
         {
           q: "¿Los precios incluyen IVA?",
