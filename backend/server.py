@@ -3278,12 +3278,13 @@ init_push_routes(db)
 api_router.include_router(push_router)
 print("✅ Push notification routes loaded")
 
-try:
-    from routes.banking_routes import router as banking_router
-    api_router.include_router(banking_router)
-    print("✅ Banking routes loaded")
-except ImportError as e:
-    print(f"⚠️ Banking routes not loaded: {e}")
+# Banking routes - RESERVED for ManoBank.es
+# try:
+#     from routes.banking_routes import router as banking_router
+#     api_router.include_router(banking_router)
+#     print("✅ Banking routes loaded")
+# except ImportError as e:
+#     print(f"⚠️ Banking routes not loaded: {e}")
 
 # ManoBank routes RESERVED - Will be loaded when ManoBank.es domain is ready
 # try:
