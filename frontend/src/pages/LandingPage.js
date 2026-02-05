@@ -296,23 +296,23 @@ const LandingPage = () => {
               </Button>
             </div>
             
-            {/* Stats */}
+            {/* Features - Real capabilities only */}
             <div className="flex flex-wrap justify-center gap-8 md:gap-16 mt-10 pt-8 border-t border-zinc-700">
               <div>
-                <div className="text-3xl font-bold text-emerald-400">99.8%</div>
-                <div className="text-sm text-zinc-500">{t('landing.stats.detectionRate')}</div>
+                <div className="text-3xl font-bold text-emerald-400">IA</div>
+                <div className="text-sm text-zinc-500">Análisis Inteligente</div>
               </div>
               <div>
                 <div className="text-3xl font-bold text-red-400">24/7</div>
                 <div className="text-sm text-zinc-500">Protección continua</div>
               </div>
               <div>
-                <div className="text-3xl font-bold text-indigo-400">+10K</div>
-                <div className="text-sm text-zinc-500">{t('landing.stats.scamsBlocked')}</div>
+                <div className="text-3xl font-bold text-indigo-400">SMS</div>
+                <div className="text-sm text-zinc-500">Alertas Instantáneas</div>
               </div>
               <div>
-                <div className="text-3xl font-bold text-orange-400">2 min</div>
-                <div className="text-sm text-zinc-500">Instalación rápida</div>
+                <div className="text-3xl font-bold text-orange-400">GPS</div>
+                <div className="text-sm text-zinc-500">Localización Familiar</div>
               </div>
             </div>
           </div>
