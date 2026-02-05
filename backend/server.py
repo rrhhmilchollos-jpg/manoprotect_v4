@@ -2559,6 +2559,10 @@ print("✅ Profile & Contacts routes loaded")
 api_router.include_router(family_sos_router)
 print("✅ Family & SOS routes loaded")
 
+# Family Management routes
+api_router.include_router(family_router)
+print("✅ Family Management routes loaded")
+
 # Geofencing routes
 api_router.include_router(geofence_router)
 print("✅ Geofencing routes loaded")
