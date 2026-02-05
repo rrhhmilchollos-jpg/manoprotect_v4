@@ -443,6 +443,82 @@ class SOSWebSocketClient {
   }
 
   /**
+   * Set callback for siren stop
+   */
+  setOnSirenStop(callback) {
+    this.onSirenStop = callback;
+  }
+
+  /**
+   * Show notification that someone acknowledged the emergency
+   */
+  showAcknowledgmentNotification(data) {
+    const message = data.message || `${data.acknowledged_by} está atendiendo la emergencia`;
+    
+    // Show browser notification if available
+    if ('Notification' in window && Notification.permission === 'granted') {
+      new Notification('✅ Emergencia Atendida', {
+        body: message,
+        icon: '/icons/icon-192x192.png',
+        tag: 'sos-acknowledged',
+        requireInteraction: false
+      });
+    }
+    
+    // Also create a visual overlay
+    const overlay = document.createElement('div');
+    overlay.id = 'sos-acknowledgment-overlay';
+    overlay.style.cssText = `
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: white;
+      padding: 20px 40px;
+      border-radius: 12px;
+      font-size: 18px;
+      font-weight: bold;
+      z-index: 100000;
+      box-shadow: 0 4px 20px rgba(16, 185, 129, 0.4);
+      animation: slideDown 0.5s ease-out;
+    `;
+    overlay.innerHTML = `
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <span style="font-size: 24px;">✅</span>
+        <div>
+          <div>Emergencia Atendida</div>
+          <div style="font-size: 14px; font-weight: normal; opacity: 0.9;">${message}</div>
+        </div>
+      </div>
+    `;
+    
+    // Add animation keyframes
+    if (!document.getElementById('sos-acknowledgment-styles')) {
+      const style = document.createElement('style');
+      style.id = 'sos-acknowledgment-styles';
+      style.textContent = `
+        @keyframes slideDown {
+          from { transform: translateX(-50%) translateY(-100px); opacity: 0; }
+          to { transform: translateX(-50%) translateY(0); opacity: 1; }
+        }
+      `;
+      document.head.appendChild(style);
+    }
+    
+    document.body.appendChild(overlay);
+    
+    // Remove after 10 seconds
+    setTimeout(() => {
+      if (overlay.parentNode) {
+        overlay.style.opacity = '0';
+        overlay.style.transition = 'opacity 0.5s';
+        setTimeout(() => overlay.parentNode?.removeChild(overlay), 500);
+      }
+    }, 10000);
+  }
+
+  /**
    * Disconnect from server
    */
   disconnect() {
