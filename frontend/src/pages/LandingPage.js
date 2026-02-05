@@ -991,6 +991,9 @@ const LandingPage = () => {
       <SocialProofNotifications />
       <StickyMobileCTA />
       <ProactiveChat delaySeconds={30} />
+      
+      {/* 🔥 Trust: Chat con Persona Real */}
+      <LiveChatWidget />
     </div>
   );
 };
