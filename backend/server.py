@@ -181,6 +181,10 @@ init_metrics_routes(db)
 from routes.chat_routes import router as chat_router, init_chat_routes
 init_chat_routes(db)
 
+# Employee Portal Routes (Messaging & Presence)
+from routes.employee_portal_routes import router as employee_portal_router, init_employee_routes
+init_employee_routes(db)
+
 # Payment Routes (Stripe)
 from routes.payments_routes import router as payments_router
 from routes.admin_routes import router as admin_router, init_db as init_admin_routes
