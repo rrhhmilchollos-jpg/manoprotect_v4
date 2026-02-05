@@ -121,6 +121,12 @@ const AIChatWidget = () => {
         };
 
         setMessages(prev => [...prev, assistantMessage]);
+        
+        // Speak response if TTS is enabled
+        if (ttsEnabled) {
+          setIsSpeaking(true);
+          speakText(data.response, () => setIsSpeaking(false));
+        }
       } else {
         throw new Error('Failed to get response');
       }
