@@ -107,6 +107,22 @@ class SOSWebSocketClient {
       }
     });
 
+    // CRITICAL: Siren stop command from server
+    // This is sent when someone acknowledges the emergency
+    this.socket.on('siren_stop', (data) => {
+      console.log('[WS] 🔇 SIREN STOP received - Someone acknowledged the emergency:', data);
+      this.stopSiren();
+      
+      // Show notification that someone is responding
+      if (data.acknowledged_by) {
+        this.showAcknowledgmentNotification(data);
+      }
+      
+      if (this.onSirenStop) {
+        this.onSirenStop(data);
+      }
+    });
+
     // SOS acknowledged by family
     this.socket.on('sos_acknowledged', (data) => {
       console.log('[WS] SOS Acknowledged:', data);
