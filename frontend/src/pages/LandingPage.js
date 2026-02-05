@@ -541,9 +541,9 @@ const LandingPage = () => {
               </p>
               <div className="space-y-4">
                 {[
-                  { stat: '10,000+', label: 'Usuarios protegidos' },
-                  { stat: '50,000+', label: 'Amenazas bloqueadas' },
-                  { stat: '99.8%', label: 'Precisión en detección' },
+                  { stat: 'IA', label: 'Análisis inteligente' },
+                  { stat: 'SMS', label: 'Alertas instantáneas' },
+                  { stat: '15 días', label: 'Prueba gratuita' },
                   { stat: '24/7', label: 'Protección continua' }
                 ].map((item, idx) => (
                   <div key={idx} className="flex items-center gap-4">
