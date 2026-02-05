@@ -564,11 +564,6 @@ const LandingPage = () => {
             <ComparisonTable />
           </div>
           
-          {/* Indicador de Escasez */}
-          <div className="max-w-md mx-auto mb-8">
-            <ScarcityIndicator totalSpots={50} baseRemaining={12} />
-          </div>
-          
           {/* Trust Badges */}
           <TrustBadges />
         </div>
