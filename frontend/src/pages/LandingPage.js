@@ -46,6 +46,17 @@ const LandingPage = () => {
       text: "Llevo tiempo utilizándola, estoy tranquila. Tengo dos adolescentes y las tengo controladas, sé dónde están. Y sé que si necesitan ayuda me pueden conectar y ir al sitio donde están. Muy útil y me gusta mucho. Os lo recomiendo.",
       saved: "Tranquilidad familiar",
       color: "indigo"
+    },
+    {
+      id: 2,
+      name: "María Deseada Solas Sanchis",
+      location: "España",
+      plan: "Usuario verificado",
+      date: "Reseña de Google - Febrero 2025",
+      rating: 5,
+      text: "Muy útil!!!! Con mi madre de 78 años para saber dónde está en todo momento y tener controlado en caso de caída o incidente.",
+      saved: "Cuidado de mayores",
+      color: "emerald"
     }
   ], []);
 
