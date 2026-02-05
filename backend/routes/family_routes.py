@@ -2,10 +2,12 @@
 Family Protection Routes - ManoProtect
 Routes for managing family members and family protection features
 """
-from fastapi import APIRouter, HTTPException, Request, Depends
+from fastapi import APIRouter, HTTPException, Request
 from typing import Optional
 from datetime import datetime, timezone
 from pydantic import BaseModel, EmailStr
+
+from core.auth import require_auth
 
 router = APIRouter()
 _db = None
@@ -13,48 +15,6 @@ _db = None
 def init_db(db):
     global _db
     _db = db
-
-
-class FamilyMemberCreate(BaseModel):
-    name: str
-    email: Optional[EmailStr] = None
-    phone: Optional[str] = None
-    relationship: str = "familiar"
-    is_senior: bool = False
-    simplified_mode: bool = False
-    alert_level: str = "medium"
-
-
-class FamilyMember(BaseModel):
-    id: str
-    family_owner_id: str
-    name: str
-    email: Optional[str] = None
-    phone: Optional[str] = None
-    relationship: str = "familiar"
-    is_senior: bool = False
-    simplified_mode: bool = False
-    alert_level: str = "medium"
-    created_at: datetime = None
-    last_activity: Optional[datetime] = None
-    threats_count: int = 0
-    is_protected: bool = True
-    
-    def __init__(self, **data):
-        import uuid
-        if 'id' not in data:
-            data['id'] = str(uuid.uuid4())
-        if 'created_at' not in data or data['created_at'] is None:
-            data['created_at'] = datetime.now(timezone.utc)
-        super().__init__(**data)
-
-
-# Import auth helper from main server (will be initialized)
-_require_auth = None
-
-def init_auth(require_auth_func):
-    global _require_auth
-    _require_auth = require_auth_func
 
 
 @router.get("/family/dashboard")
