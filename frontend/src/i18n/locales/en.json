@@ -74,7 +74,7 @@
       },
       "database": {
         "title": "Updated Database",
-        "description": "+50,000 identified scams and growing"
+        "description": "Scam database continuously updated"
       }
     },
     "stats": {
@@ -369,7 +369,7 @@
     "needMoreHelp": "Can't find what you're looking for?",
     "supportAvailable": "Our support team is available to help you with any questions",
     "readyToProtect": "Ready to protect yourself?",
-    "joinUsers": "Join thousands of users who already trust ManoProtect",
+    "joinUsers": "Start protecting your family with ManoProtect",
     "startFree": "Start Free",
     "categories": {
       "general": "General",
