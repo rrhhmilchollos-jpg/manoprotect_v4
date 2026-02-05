@@ -3348,6 +3348,10 @@ print("✅ Metrics routes loaded")
 api_router.include_router(chat_router)
 print("✅ Chat routes loaded")
 
+# Employee Portal routes (Messaging & Presence)
+api_router.include_router(employee_portal_router)
+print("✅ Employee Portal routes loaded")
+
 # Payment routes (Stripe)
 api_router.include_router(payments_router)
 print("✅ Payment routes loaded")
