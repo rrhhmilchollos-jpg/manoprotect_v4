@@ -36,7 +36,17 @@ const LandingPage = () => {
 
   // Memoize testimonials to prevent unnecessary re-renders
   const testimonials = useMemo(() => [
-    // Testimonios reales - Se añadirán cuando el usuario los proporcione
+    {
+      id: 1,
+      name: "Selomit",
+      location: "España",
+      plan: "Usuario verificado",
+      date: "Reseña de Google - Febrero 2025",
+      rating: 5,
+      text: "Llevo tiempo utilizándola, estoy tranquila. Tengo dos adolescentes y las tengo controladas, sé dónde están. Y sé que si necesitan ayuda me pueden conectar y ir al sitio donde están. Muy útil y me gusta mucho. Os lo recomiendo.",
+      saved: "Tranquilidad familiar",
+      color: "indigo"
+    }
   ], []);
 
   return (
