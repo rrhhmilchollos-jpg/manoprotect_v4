@@ -10,7 +10,7 @@ const ComparisonTable = () => {
     {
       category: "Protección Email",
       without: "Vulnerable a phishing",
-      with: "Detección automática IA",
+      with: "Detección con IA",
       icon: "📧"
     },
     {
@@ -34,19 +34,19 @@ const ComparisonTable = () => {
     {
       category: "Alertas SOS",
       without: "Sin sistema de emergencia",
-      with: "Botón de pánico 24/7",
+      with: "Botón SOS 24/7",
       icon: "🆘"
     },
     {
-      category: "Dinero en Riesgo",
-      without: "Pérdida media: €4,500",
-      with: "95% amenazas bloqueadas",
-      icon: "💰"
+      category: "Localización",
+      without: "Sin seguimiento",
+      with: "GPS en tiempo real",
+      icon: "📍"
     },
     {
       category: "Soporte",
       without: "Estás solo",
-      with: "Asistencia especializada",
+      with: "Chat y teléfono",
       icon: "🎧"
     },
     {
