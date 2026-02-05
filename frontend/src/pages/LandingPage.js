@@ -111,6 +111,13 @@ const LandingPage = () => {
         keywords="protección digital, anti estafas, seguridad online, protección familiar, fraudes online, ciberseguridad, España, detectar estafas, phishing"
         canonical="https://manoprotect.com"
       />
+      
+      {/* 🔥 Conversion: Banner de Urgencia con Countdown */}
+      <UrgencyCountdown discount={50} />
+      
+      {/* 🔥 Conversion: Estadísticas en Vivo */}
+      <LiveStatsCounter variant="banner" />
+      
       {/* Header */}
       <header className="glass sticky top-0 z-50 px-6 py-4" role="banner">
         <nav className="max-w-7xl mx-auto flex items-center justify-between" aria-label="Navegación principal">
