@@ -636,6 +636,26 @@ const LandingPage = () => {
         </div>
       </section>
 
+      {/* 🔥 Trust: Certificaciones Oficiales */}
+      <CertificationsSection />
+
+      {/* 🔥 Trust: Casos de Éxito de Empresas */}
+      <SuccessCases />
+
+      {/* 🔥 Trust: Video Testimonios */}
+      <VideoTestimonials />
+
+      {/* 🔥 Trust: Widget de Reseñas Trustpilot/Google */}
+      <section className="px-6 py-16 bg-slate-50">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-8">
+            <h2 className="text-2xl font-bold text-slate-900 mb-2">Reseñas Verificadas</h2>
+            <p className="text-slate-600">Lo que dicen de nosotros en plataformas independientes</p>
+          </div>
+          <ReviewsWidget />
+        </div>
+      </section>
+
       {/* Testimonials Section - Reseñas de Clientes Reales */}
       <section className="px-6 py-20 bg-white" aria-labelledby="testimonials-heading">
         <div className="max-w-7xl mx-auto">
