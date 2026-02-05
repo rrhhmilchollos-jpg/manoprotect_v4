@@ -82,20 +82,18 @@ const SobreNosotros = () => {
     {
       icon: Target,
       title: "Innovación Constante",
-      description: "Los estafadores evolucionan. Nosotros más rápido. Actualizamos nuestra IA cada día."
+      description: "Los estafadores evolucionan. Nosotros más rápido. Mejoramos nuestra tecnología constantemente."
     },
     {
       icon: Zap,
       title: "Simplicidad",
-      description: "Tecnología compleja, uso sencillo. Tu abuela puede usarlo sin ayuda."
+      description: "Tecnología compleja, uso sencillo. Diseñado para que cualquiera pueda usarlo."
     }
   ];
 
   const milestones = [
-    { year: "2022", event: "Fundación de ManoProtect", description: "Daniel crea ManoProtect tras la estafa a su abuela" },
-    { year: "2023", event: "10,000 familias protegidas", description: "Lanzamiento del Plan Familiar" },
-    { year: "2024", event: "Certificación ISO 27001", description: "Reconocimiento por INCIBE" },
-    { year: "2025", event: "50,000+ usuarios", description: "Expansión a Portugal y LATAM" }
+    { year: "2024", event: "Fundación de ManoProtect", description: "Nace ManoProtect con la misión de proteger familias españolas" },
+    { year: "2025", event: "Lanzamiento oficial", description: "Disponible para todos en España" }
   ];
 
   const colorClasses = {
