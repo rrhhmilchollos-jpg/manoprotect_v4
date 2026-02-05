@@ -266,7 +266,7 @@ const SobreNosotros = () => {
         <div className="max-w-2xl mx-auto text-center">
           <h2 className="text-2xl font-bold text-slate-900 mb-4">¿Listo para proteger a tu familia?</h2>
           <p className="text-slate-600 mb-8">
-            Únete a las más de 50,000 familias que ya confían en ManoProtect
+            Prueba ManoProtect gratis durante 15 días. Sin compromiso.
           </p>
           <Button
             onClick={() => navigate('/register')}
