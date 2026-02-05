@@ -94,8 +94,11 @@ async def create_indexes():
     # SOS Alerts Collection
     # =============================================
     print("\n📌 sos_alerts collection:")
-    await db.sos_alerts.create_index("alert_id", unique=True)
-    print("   ✅ alert_id (unique)")
+    try:
+        await db.sos_alerts.create_index("alert_id", unique=True, sparse=True)
+        print("   ✅ alert_id (unique, sparse)")
+    except Exception as e:
+        print(f"   ⚠️ alert_id: {str(e)[:50]}")
     await db.sos_alerts.create_index("user_id")
     print("   ✅ user_id")
     await db.sos_alerts.create_index("created_at")
