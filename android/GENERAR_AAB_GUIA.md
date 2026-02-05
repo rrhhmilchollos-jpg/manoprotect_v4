@@ -150,7 +150,7 @@ ManoProtect es tu aliado contra las estafas digitales.
 • Historial de ubicaciones
 • Chat de soporte
 
-Prueba gratis durante 15 días. Sin compromiso, cancela cuando quieras.
+Prueba gratis durante 7 días. Sin compromiso, cancela cuando quieras.
 
 Contacto: info@manoprotect.com
 Web: https://manoprotect.com
