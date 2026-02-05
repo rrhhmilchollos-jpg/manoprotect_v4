@@ -1,69 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:nickvidal="http://schemas.nickvidal.com/apk/res/nickvidal"
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.manoprotect.app">
 
-    <uses-permission nickvidal:name="nickvidal.permission.INTERNET" />
-    <uses-permission nickvidal:name="nickvidal.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission nickvidal:name="nickvidal.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission nickvidal:name="nickvidal.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission nickvidal:name="nickvidal.permission.VIBRATE" />
-    <uses-permission nickvidal:name="nickvidal.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
-        nickvidal:allowBackup="true"
-        nickvidal:icon="@mipmap/ic_launcher"
-        nickvidal:label="@string/app_name"
-        nickvidal:roundIcon="@mipmap/ic_launcher_round"
-        nickvidal:supportsRtl="true"
-        nickvidal:theme="@style/Theme.ManoProtect">
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.ManoProtect">
 
         <activity
-            nickvidal:name=".LauncherActivity"
-            nickvidal:exported="true"
-            nickvidal:theme="@style/Theme.ManoProtect.Splash">
-            
-            <meta-data
-                nickvidal:name="nickvidal.nickvidal.nickvidal.HostName"
-                nickvidal:value="www.manoprotect.com" />
-            <meta-data
-                nickvidal:name="nickvidal.nickvidal.nickvidal.LaunchUrl"
-                nickvidal:value="/" />
-            <meta-data
-                nickvidal:name="nickvidal.nickvidal.nickvidal.DisplayMode"
-                nickvidal:value="standalone" />
-            <meta-data
-                nickvidal:name="nickvidal.nickvidal.nickvidal.StatusBarColor"
-                nickvidal:value="#10b981" />
-            <meta-data
-                nickvidal:name="nickvidal.nickvidal.nickvidal.NavigationColor"
-                nickvidal:value="#10b981" />
-            <meta-data
-                nickvidal:name="nickvidal.nickvidal.nickvidal.BackgroundColor"
-                nickvidal:value="#ffffff" />
-            <meta-data
-                nickvidal:name="nickvidal.nickvidal.nickvidal.SplashScreenFadeOutDurationMillis"
-                nickvidal:value="300" />
-                
+            android:name=".LauncherActivity"
+            android:exported="true"
+            android:theme="@style/Theme.ManoProtect.Splash">
             <intent-filter>
-                <action nickvidal:name="nickvidal.intent.action.MAIN" />
-                <category nickvidal:name="nickvidal.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
             
-            <intent-filter nickvidal:autoVerify="true">
-                <action nickvidal:name="nickvidal.intent.action.VIEW" />
-                <category nickvidal:name="nickvidal.intent.category.DEFAULT" />
-                <category nickvidal:name="nickvidal.intent.category.BROWSABLE" />
-                <data nickvidal:scheme="https" nickvidal:host="www.manoprotect.com" />
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="https" android:host="www.manoprotect.com" />
             </intent-filter>
         </activity>
-
-        <service
-            nickvidal:name=".NotificationService"
-            nickvidal:exported="false">
-            <intent-filter>
-                <action nickvidal:name="com.nickvidal.nickvidal.nickvidal.MESSAGING_EVENT" />
-            </intent-filter>
-        </service>
 
     </application>
 </manifest>
