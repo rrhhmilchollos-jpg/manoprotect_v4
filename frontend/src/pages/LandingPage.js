@@ -13,7 +13,6 @@ import {
   ExitIntentPopup,
   SavingsCalculator,
   TrustBadges,
-  ScarcityIndicator,
   PlanQuiz,
   ComparisonTable,
   StickyMobileCTA,
