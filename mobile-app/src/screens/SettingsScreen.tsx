@@ -282,6 +282,24 @@ const SettingsScreen: React.FC = () => {
           </View>
         </View>
 
+        {/* Developer Tools Section */}
+        <Text style={styles.sectionTitle}>Herramientas de Desarrollo</Text>
+        <View style={styles.card}>
+          <TouchableOpacity 
+            style={styles.settingRowButton}
+            onPress={() => navigation.navigate('SOSTest')}
+          >
+            <View style={styles.settingInfo}>
+              <Icon name="flask" size={22} color="#f59e0b" />
+              <View>
+                <Text style={styles.settingLabel}>Probar Sistema SOS</Text>
+                <Text style={styles.settingDescription}>Verificar sirena y permisos</Text>
+              </View>
+            </View>
+            <Icon name="chevron-forward" size={20} color="#6b7280" />
+          </TouchableOpacity>
+        </View>
+
         {/* Danger Zone */}
         <TouchableOpacity style={styles.deleteButton} onPress={handleDeleteAccount}>
           <Icon name="trash-outline" size={20} color="#ef4444" />
