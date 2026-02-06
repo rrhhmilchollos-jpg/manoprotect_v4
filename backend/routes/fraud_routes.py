@@ -282,23 +282,26 @@ async def public_report_scam(request: Request):
     """
     body = await request.json()
     
-    if _db is None:
-        return {"message": "Reporte recibido"}
-    
     report = {
         "report_id": f"pub_{uuid.uuid4().hex[:12]}",
         "value": body.get("value"),
         "type": body.get("type", "phone"),
+        "category": body.get("category", "other"),
         "description": body.get("description"),
-        "reporter_contact": body.get("reporter_contact"),
+        "reporter_email": body.get("reporter_email"),
         "source": "public",
         "status": "pending_verification",
         "created_at": datetime.now(timezone.utc).isoformat()
     }
     
-    await _db.public_fraud_reports.insert_one(report)
+    if _db is not None:
+        try:
+            await _db.public_fraud_reports.insert_one(report)
+        except Exception as e:
+            print(f"Error saving report: {e}")
     
     return {
-        "message": "Gracias por tu reporte. Será revisado por nuestro equipo.",
+        "success": True,
+        "message": "Gracias por tu reporte. Será revisado por nuestro equipo antifraude.",
         "report_id": report["report_id"]
     }
