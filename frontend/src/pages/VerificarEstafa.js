@@ -5,7 +5,7 @@ import {
   Shield, Phone, Mail, AlertTriangle, CheckCircle, Search, 
   XCircle, Globe, Users, TrendingUp, Send, Landmark,
   AlertOctagon, Info, ExternalLink, Cloud, Database, Zap, RefreshCw,
-  MessageSquare, Bell, ArrowRight
+  MessageSquare, Bell, ArrowRight, Share2, Copy, Check
 } from 'lucide-react';
 import AlertSubscription from '../components/AlertSubscription';
 
