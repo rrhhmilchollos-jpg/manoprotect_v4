@@ -43,6 +43,9 @@ export type RootStackParamList = {
   ContactsPicker: { onSelect: (contact: any) => void };
   Settings: undefined;
   Notifications: undefined;
+  // SOS
+  SOSAlert: { alertId: string; senderName: string; latitude: number; longitude: number; message?: string };
+  SOSTest: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
