@@ -945,7 +945,7 @@ const LandingPage = () => {
                 <div>
                   <p className="text-sm font-medium text-white">Sede Central</p>
                   <p className="text-sm text-zinc-500">C/ Sor Isabel de Villena 80 bajo</p>
-                  <p className="text-sm text-zinc-500">Novelda, Valencia, España</p>
+                  <p className="text-sm text-zinc-500">Novetlè, Valencia, España</p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
