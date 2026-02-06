@@ -207,6 +207,9 @@ function AppRouter() {
           <Route path="/recuperar-password" element={<RecuperarPassword />} />
           <Route path="/verificar-estafa" element={<VerificarEstafa />} />
           
+          {/* Family Invitation - Public route */}
+          <Route path="/unirse/:memberId" element={<JoinFamilyPage />} />
+          
           {/* Auth Routes */}
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
