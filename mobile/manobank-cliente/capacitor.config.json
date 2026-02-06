@@ -3,7 +3,7 @@
   "appName": "ManoBank",
   "webDir": "www",
   "server": {
-    "url": "https://safety-app-boost.preview.emergentagent.com",
+    "url": "https://manoprotect-qa.preview.emergentagent.com",
     "cleartext": true
   },
   "android": {

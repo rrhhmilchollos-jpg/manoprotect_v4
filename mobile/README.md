@@ -25,7 +25,7 @@ Todas las apps se conectan al mismo backend:
 
 | Entorno | URL |
 |---------|-----|
-| Preview | https://safety-app-boost.preview.emergentagent.com |
+| Preview | https://manoprotect-qa.preview.emergentagent.com |
 | Producción | [Tu dominio de producción] |
 
 ---

@@ -1,148 +1,88 @@
 <analysis>**original_problem_statement:**
-The user's primary goal is to get the ManoProtect application approved for publication on the Google Play Store. The app has faced multiple rejections due to the Misleading Claims policy. The user has requested an exhaustive cleanup of all non-verifiable content, statistics, partnerships, and certifications. Additionally, the user asked for fixes related to the app's icon and an inconsistent in-app logo. A new critical requirement emerged to improve the core SOS/Panic Button feature to ensure it functions as a true critical alert system (overriding silent mode, location tracking, and requiring a confirmation handshake). The final step is to generate the Android App Bundle (.aab) with a new signing certificate provided by the user, ready for submission to Google Play.
+The user's primary goal is to get the ManoProtect application approved for publication on the Google Play Store. The app has faced multiple rejections due to the Misleading Claims policy. The user has requested an exhaustive cleanup of all non-verifiable content, statistics, partnerships, and certifications. A new critical requirement emerged to implement a true critical alert system using native Android capabilities (overriding silent mode, location tracking, lock screen alerts, and requiring a confirmation handshake). Subsequent requests focused on improving user trust on the landing page to increase conversions, fixing the family member linking flow, and finally, generating the Android App Bundle (.aab) with a new signing certificate for submission to Google Play.
 
 PRODUCT REQUIREMENTS:
-1.  **Google Play Compliance**: The application MUST be 100% free of misleading, false, or non-verifiable claims. This includes removing fake statistics, user counts, partner logos, and certifications.
-2.  **Trial Period Consistency**: All mentions of a free trial must be standardized to 7 días across the entire application.
-3.  **App Icon & Branding**: The app icon and in-app branding must be high-quality, consistent, and correctly configured for the Play Store.
-4.  **SOS Panic Button Enhancement**: The SOS feature must be a critical alert that can override a phone's silent/do-not-disturb mode and should not stop until a family member acknowledges the alert (handshake mechanism).
+1.  **Google Play Compliance**: The application MUST be 100% free of misleading claims. All messaging must frame the service as a personal notice tool, not an official emergency service.
+2.  **SOS Panic Button (Native)**: The SOS feature must be a critical alert that can override a phone's silent/do-not-disturb mode, draw over the lock screen, track location via a foreground service, and only stop when a family member acknowledges the alert (handshake mechanism). This must be implemented using native Android code.
+3.  **Family Linking Flow**: The process of adding a family member must be seamless, sending an SMS invitation with a link that allows the new member to join the family and be correctly linked in the database for receiving alerts.
+4.  **Increase User Trust & Conversion**: The landing page must be updated to build trust through transparency, clear guarantees, honest social proof, and a prominent call-to-action, without making claims that would violate Google Play policies.
 5.  **AAB Generation**: A production-ready and signed  file must be generated for upload to the Google Play Console.
 6.  **Backend Refactoring**: Continue refactoring  to improve maintainability.
-7.  **Code Cleanup**: Remove unused and dead code, specifically old component files.
 
 **User's preferred language**: Spanish
 
 **what currently exists?**
-The application is a full-stack React/FastAPI app. The agent has performed multiple, extensive cleanup sessions to comply with Google Play's Misleading Claims policy. All fake statistics (e.g., 99.8% accuracy, 15,000+ families), fake partnerships (VISA, Microsoft, Banco de España), and fake testimonials have been removed and replaced with verifiable feature descriptions and two real user reviews. The free trial period has been standardized to 7 days everywhere.
+The application is a full-stack React/FastAPI app with a newly added React Native project in .
 
-A new high-quality app icon was generated and implemented. The issue of an incorrect StartBooking logo appearing in-app was addressed by creating new Android configuration files. The core SOS Panic Button feature has been significantly enhanced with a backend critical alert flag for FCM notifications and a WebSocket-based handshake system, so the siren only stops when a recipient acknowledges the alert.
+Major progress has been made on all fronts. The original PWA has been extensively cleaned of misleading claims. The core SOS functionality has been completely rebuilt as a native Android feature within the  directory, using Java services for critical alerts, foreground location tracking, lock screen overlays, and audio management that overrides silent mode. The backend has been updated to send FCM Data Messages to trigger this native code.
 
-However, the environment lacks the necessary Android SDK and correct architecture (ARM64) to build the  file directly. The agent has created a complete Android project structure and multiple detailed guides (, ) instructing the user on how to use PWABuilder to generate the final file.
+A complete, multi-step family invitation flow has been implemented: a parent adds a member, an SMS with a unique URL is sent, the recipient visits a new Join Family page, and upon logging in and accepting, their account is correctly linked in the backend.
+
+The landing page has been significantly overhauled to improve user trust, featuring a trust bar, a Total Transparency section, corrected company information, and a clear, honest call-to-action. The SMS sending functionality has been debugged and verified. A comprehensive guide for the user to compile the  file locally using Android Studio has also been created, as it cannot be done in the agent's environment.
 
 **Last working item**:
--   **Last item agent was working**: Improving the core SOS/Panic Button feature. The agent enhanced the backend to send critical alert push notifications and implemented a WebSocket handshake system to ensure the alarm only stops after a family member acknowledges it. On the frontend, the siren was updated to loop indefinitely until a  event is received from the server. Finally, the agent prepared a full set of guides and configuration files to help the user submit the app to Google Play.
+-   **Last item agent was working**: The agent was conducting a comprehensive review of the application's user flow, as requested by the user (Acción 3 – Revisión de flujo). During this review, the agent checked the registration, login, dashboard, and the SOS button flow. The review was interrupted upon discovering a bug on the scam verification page.
 -   **Status**: IN PROGRESS
--   **Agent Testing Done**: Y (Backend health checked via curl, frontend changes verified visually with screenshots. The full E2E SOS flow requires manual testing on a device.)
--   **Which testing method agent to use?**: manual testing by user on a real device to verify the critical alert functionality.
+-   **Agent Testing Done**: Y (Manual walkthrough via screenshots)
+-   **Which testing method agent to use?**: frontend testing agent
 -   **User Testing Done**: N
 
 **All Pending/In progress Issue list**:
--   **Issue 1**: The Android App Bundle () file cannot be generated in the cloud environment. (Priority: P0)
-    -   **Attempted fixes**: The agent attempted to install the Android SDK, command-line tools, and various npm <command>
+-   **Issue 1**: The statistics cards on the scam verification page () are empty. (Priority: P0)
+    -   **Attempted fixes**: None. This issue was just discovered.
+    -   **Next debug checklist**:
+        1.  Examine the frontend code for the verification page (likely  or a similar name).
+        2.  Identify the API endpoint that should supply the data for these cards.
+        3.  Check the browser's network tab (or use ) to see if the API call is being made and what data is being returned.
+        4.  Debug the component to see why the fetched data is not being rendered in the cards.
+    -   **Why fix this issue and what will be achieved with the fix?**: Empty data cards look like a bug and severely damage user trust, directly contradicting the recent work done to improve the site's credibility.
+    -   **Status**: NOT STARTED
+    -   **Is recurring issue?**: N
+    -   **Should Test frontend/backend/both after fix?**: frontend
+    -   **Blocked on other issue**: None
 
-Usage:
-
-npm install        install all the dependencies in your project
-npm install <foo>  add the <foo> dependency to your project
-npm test           run this project's tests
-npm run <foo>      run the script named <foo>
-npm <command> -h   quick help on <command>
-npm -l             display usage info for all commands
-npm help <term>    search for help on <term>
-npm help npm       more involved overview
-
-All commands:
-
-    access, adduser, audit, bugs, cache, ci, completion,
-    config, dedupe, deprecate, diff, dist-tag, docs, doctor,
-    edit, exec, explain, explore, find-dupes, fund, get, help,
-    help-search, hook, init, install, install-ci-test,
-    install-test, link, ll, login, logout, ls, org, outdated,
-    owner, pack, ping, pkg, prefix, profile, prune, publish,
-    query, rebuild, repo, restart, root, run-script, sbom,
-    search, set, shrinkwrap, star, stars, start, stop, team,
-    test, token, uninstall, unpublish, unstar, update, version,
-    view, whoami
-
-Specify configs in the ini-formatted file:
-    /root/.npmrc
-or on the command line via: npm <command> --key=value
-
-More configuration info: npm help config
-Configuration fields: npm help 7 config
-
-npm@10.8.2 /usr/lib/node_modules/npm packages (, ), but failed due to architectural incompatibility (ARM64 server vs. x86_64 tools), npm <command>
-
-Usage:
-
-npm install        install all the dependencies in your project
-npm install <foo>  add the <foo> dependency to your project
-npm test           run this project's tests
-npm run <foo>      run the script named <foo>
-npm <command> -h   quick help on <command>
-npm -l             display usage info for all commands
-npm help <term>    search for help on <term>
-npm help npm       more involved overview
-
-All commands:
-
-    access, adduser, audit, bugs, cache, ci, completion,
-    config, dedupe, deprecate, diff, dist-tag, docs, doctor,
-    edit, exec, explain, explore, find-dupes, fund, get, help,
-    help-search, hook, init, install, install-ci-test,
-    install-test, link, ll, login, logout, ls, org, outdated,
-    owner, pack, ping, pkg, prefix, profile, prune, publish,
-    query, rebuild, repo, restart, root, run-script, sbom,
-    search, set, shrinkwrap, star, stars, start, stop, team,
-    test, token, uninstall, unpublish, unstar, update, version,
-    view, whoami
-
-Specify configs in the ini-formatted file:
-    /root/.npmrc
-or on the command line via: npm <command> --key=value
-
-More configuration info: npm help config
-Configuration fields: npm help 7 config
-
-npm@10.8.2 /usr/lib/node_modules/npm package errors, and missing dependencies. A full manual Gradle project was created but also failed to compile for the same architecture reason.
-    -   **Next debug checklist**: The user must follow the instructions in the guide  and use an external service like PWABuilder.com. The agent has provided the exact configuration needed for PWABuilder.
-    -   **Why fix this issue and what will be achieved with the fix?**: This is the final blocker preventing the user from submitting the updated, policy-compliant app to the Google Play Store.
-    -   **Status**: BLOCKED
+-   **Issue 2**: The Android App Bundle () file cannot be generated in the cloud environment. (Priority: P1)
+    -   **Attempted fixes**: The previous agent tried installing the Android SDK and various tools, which failed due to architectural incompatibility (ARM64 vs. x86_64). The current solution is a detailed guide for the user to build it locally.
+    -   **Next debug checklist**: The user must follow the instructions in . The agent's role is to provide support and answer any questions the user might have about the process.
+    -   **Why fix this issue and what will be achieved with the fix?**: This is the final step required to submit the app to the Google Play Store.
+    -   **Status**: BLOCKED (on user action)
     -   **Is recurring issue?**: Y
     -   **Should Test frontend/backend/both after fix?**: NA
     -   **Blocked on other issue**: None
 
--   **Issue 2**: The app was repeatedly rejected by Google Play for Misleading Claims. (Priority: P1)
-    -   **Attempted fixes**: The agent performed an exhaustive, multi-pass audit of the entire codebase (frontend, backend, i18n JSON files, old build artifacts). All identifiable non-verifiable statistics, fake partner logos, fake certifications, and exaggerated claims (cifrado militar, supervisado por el Banco de España) were removed.
-    -   **Next debug checklist**: The user needs to generate the  file and resubmit it to Google Play for review.
-    -   **Why fix this issue and what will be achieved with the fix?**: Resolving this is the primary goal of the project, enabling the app to be published.
+-   **Issue 3**: The app was repeatedly rejected by Google Play for Misleading Claims. (Priority: P1)
+    -   **Attempted fixes**: An exhaustive audit and rewrite of all user-facing content (in-app, web, SMS, push notifications) was performed to ensure compliance and frame the app as a personal notice tool.
+    -   **Next debug checklist**: The user needs to generate the new  file and submit it to Google Play for review.
+    -   **Why fix this issue and what will be achieved with the fix?**: This is the primary business goal of the entire project.
     -   **Status**: USER VERIFICATION PENDING
     -   **Is recurring issue?**: Y
     -   **Should Test frontend/backend/both after fix?**: NA
-    -   **Blocked on other issue**: Issue 1 (AAB Generation)
+    -   **Blocked on other issue**: Issue 2
 
 **In progress Task List**:
--   **Task 1**: Complete backend refactoring. (Priority: P2)
-    -   **Where to resume**: The file  has been reduced from ~3200 to ~2800 lines by modularizing the , , and  routes. The refactoring plan in  should be consulted to move the remaining routes (e.g., admin, enterprise, core API) into their own modules.
-    -   **What will be achieved with this?**: A more maintainable, scalable, and organized backend codebase, bringing  closer to the target of <500 lines.
+-   **Task 1**: Complete the user flow review (Acción 3 – Revisión de flujo). (Priority: P1)
+    -   **Where to resume**: After fixing the empty statistics cards (Issue 1), the review should continue. The agent should check the pricing/subscription flow, settings, and other key user interactions to ensure there are no other visual bugs or broken functionality.
+    -   **What will be achieved with this?**: A final quality assurance check to ensure the application is stable and professional before the user attempts to compile and submit it.
     -   **Status**: IN PROGRESS
-    -   **Should Test frontend/backend/both after fix?**: backend
-    -   **Blocked on something**: No
+    -   **Should Test frontend/backend/both after fix?**: both
+    -   **Blocked on something**: Issue 1
 
 **Upcoming and Future Tasks**
 -   **Upcoming Tasks:**
-    -   **(P1) Configure Ad Platform Pixel IDs**: The placeholder ad tracking scripts (, ) are currently commented out in . The agent needs to prompt the user for the real Pixel/Tracking IDs and re-enable them.
-    -   **(P2) Delete Unused Component Files**: The agent deleted , but a full audit of  should be performed to remove other  files that were part of the old, misleading UI and are no longer used.
-
+    -   **(P2) Complete Backend Refactoring**: The file  still contains a large number of routes. The refactoring plan in  should be consulted to continue modularizing the code. The recently added  should also be moved to its own file in .
+    -   **(P2) Configure Ad Platform Pixel IDs**: The placeholder ad tracking scripts (, ) are currently commented out in . The agent needs to prompt the user for the real Pixel/Tracking IDs and re-enable them.
 -   **Future Tasks:**
-    -   **(P2) Finalize CI/CD Setup**: Guide the user on using the  file in their own repository.
+    -   **(P3) Delete Unused Component Files**: Perform an audit of  to remove any  files that are no longer used after the various UI cleanups and the pivot to a native SOS flow.
+    -   **(P3) Finalize CI/CD Setup**: Guide the user on using the  file in their own repository.
 
 **Completed work in this session**
--   **Exhaustive Policy Compliance Cleanup**: Removed all misleading claims, fake statistics (99.8% Detección), fake partnerships (VISA, Microsoft, Banco de España), fake certifications, and exaggerated language (Cifrado militar) from all files, including pages, components, , and i18n translation files.
--   **Standardized Trial Period**: Changed all 15 días and 30 días trial offers to 7 días throughout the application.
--   **Fixed App Icon**: Generated a new, high-quality 512x512 app icon () and all other required PWA sizes to resolve the Google Play rejection for a low-quality icon.
--   **Fixed In-App Branding**: Prepared Android configuration files (, ) to ensure the correct ManoProtect branding is used in the splash screen, resolving the StartBooking logo issue.
--   **Enhanced SOS/Panic Button Feature**:
-    -   Implemented Critical Alerts in the backend () to override silent/DND mode on Android.
-    -   Developed a WebSocket-based handshake () to ensure the siren continues until a family member acknowledges the alert.
-    -   Updated the frontend () to handle the looping siren and the  event.
--   **Backend Refactoring (Partial)**: Modularized , , and  routes out of  into , reducing the main file size by ~400 lines.
--   **Code & Asset Cleanup**: Deleted the unused  component and removed obsolete  and  build folders.
--   **Created Comprehensive Build/Submission Guides**:
-    -   : A detailed guide for the user to generate the  file using PWABuilder.
-    -   : A pre-written justification for Google Play regarding the use of critical alerts and background location.
-    -   : Answers for the Google Play developer questionnaire.
-    -   : A final summary guide for the user.
+-   **Native SOS Critical Alert System**: Implemented a full native Android SOS system in  using Java for services (Foreground, Audio, LockScreen) and a React Native bridge.
+-   **FCM Data Message Integration**: Modified the backend () to send FCM Data Messages to trigger the new native Android code in the background.
+-   **Google Play Compliance Pass**: Rewrote all alert messages (Push, SMS, in-app UI) to use personal notice language, removing any terminology that could be mistaken for an official government alert.
+-   **Family Invitation Flow**: Built a complete, end-to-end flow for adding and linking family members via SMS invitations, including a new frontend page () and multiple backend endpoint updates.
+-   **Landing Page Conversion/Trust Optimization**: Overhauled  by adding a trust bar, a Total Transparency section, honest testimonials, a clear CTA, and correcting business details.
+-   **SMS Flow Debugging**: Investigated and resolved issues with SMS alerts, confirming the cause was missing phone numbers in family contact records and implementing a complete fix.
+-   **Local Build Guide & Test Endpoints**: Created  for local  generation and a  endpoint for simulating alerts.
 
 **Earlier issues found/mentioned but not fixed**
 -   None.
@@ -154,90 +94,77 @@ npm@10.8.2 /usr/lib/node_modules/npm package errors, and missing dependencies. A
 
 
 **Key Technical Concepts**
--   **Google Play Policy Compliance**: Exhaustive content audit and removal of any text or asset that could be construed as a Misleading Claim.
--   **PWA to TWA Conversion**: Strategy revolves around using PWABuilder.com to package the Progressive Web App into a Trusted Web Activity () for the Play Store.
--   **Android Critical Alerts**: Using specific FCM (Firebase Cloud Messaging) payload properties (, , ) to deliver high-priority notifications intended to bypass device silent modes.
--   **WebSocket Handshake Mechanism**: An application-level protocol where a critical event (SOS) triggers a state that can only be cleared by an explicit acknowledgment message from a client, ensuring the alert is seen.
+-   **React Native Bridge**: Connecting JavaScript with native Android (Java) modules to access device-level APIs (Audio, Foreground Services, Window Manager).
+-   **Android Native Services**: Use of  for background location,  to override silent mode, and the  permission to draw over other apps/lock screen.
+-   **FCM Data Messages**: Utilizing Firebase Cloud Messaging with  payloads to trigger background code execution in the native app, rather than showing a simple system notification.
+-   **Deep Linking & Invitation Flow**: A user acquisition loop where a unique URL is sent via SMS, directing a new user to a specific in-app page () to complete a registration/linking process.
+-   **Conversion Rate Optimization (CRO)**: Applying principles of user trust (transparency, social proof, clear guarantees) to the landing page design to increase sign-ups.
 
 **key DB schema**
--   No schema changes were made. The logic was built on top of existing , , and a new in-memory state for active emergencies managed by the .
-
-**changes in tech stack**
--   None.
+-   No schema changes. The logic heavily relies on the  collection, which now includes an  and is correctly updated with a  upon a successful invitation acceptance.
 
 **All files of reference**
--    (The primary guide for the user's next actions)
--    (Technical guide for AAB generation)
--    (Text for Google Play review)
--    (The most heavily modified page for compliance)
--    (The file being actively refactored)
--    (SOS backend logic)
--    (SOS frontend logic)
--    (Guide for future backend work)
+-    (The critical guide for the user's next action).
+-    (The main page for user acquisition and trust).
+-    (Contains the core logic for family management, invitations, and SOS triggers).
+-    (Directory containing all the new native Java code for the SOS feature).
+-    (The new page that handles family invitations).
 
 **Areas that need refactoring**:
--   ****: The file is still over 2800 lines long. The refactoring is only partially complete and needs to be continued to extract the remaining routes into modules.
--   ****: A thorough check is needed to identify and delete all unused component  files from the multiple UI cleanups.
+-   ****: This file continues to be a monolith. The recently added test routes should be extracted into a separate file under , and the broader refactoring effort should continue.
+-   ****: The code for adding a family member has become complex due to checks for premium plans and different API endpoints. It could be simplified into a more streamlined component.
 
 **key api endpoints**
--   The work focused on WebSocket events, not REST endpoints.
--   **WebSocket Events**:
-    -   : Emitted by a client to trigger an emergency.
-    -   : Broadcast to family members with location data.
-    -   : Emitted by a family member to confirm they have seen the alert.
-    -   : Broadcast to all family members to stop the alarm after acknowledgment.
+-   : Adds a family member, creates an , and sends an SMS invitation with a deep link.
+-   : A public endpoint to retrieve the details of an invitation for the .
+-   : Allows a logged-in user to accept an invitation, linking their  to the family member record.
+-   : A developer endpoint to trigger a full SOS flow for a specific user for testing purposes.
 
 **Critical Info for New Agent**
--   **The user's TOP PRIORITY is to pass the Google Play Store review.** Do not introduce any new marketing language, statistics, or features that are not 100% verifiable and essential. The app must remain clean.
--   **The user is BLOCKED on generating the  file.** The environment cannot do this. You must guide the user to follow the provided instructions using **PWABuilder.com**. Be prepared to answer questions and re-explain the steps from the guides in .
--   The user is non-technical and requires clear, simple, step-by-step instructions. Be patient and supportive.
--   The user has provided a new signing certificate (). For PWABuilder, the recommended path is to select None for the signing key and let Google Play App Signing handle it, as this is the modern, recommended approach.
--   Do not proceed with other tasks (like ad pixels or refactoring) until the user confirms they have successfully generated the  and submitted it. The next logical task while waiting for review is to continue the  refactoring.
+-   The project has fundamentally shifted from a PWA-centric approach to a **React Native ()** approach for the core SOS feature. The native Java code is now the source of truth for all critical alert functionality.
+-   The user is **BLOCKED** on generating the  file. You **cannot** do this in the environment. Your primary role is to support the user by referencing the guide at .
+-   **Google Play Compliance is the highest priority.** The user is extremely sensitive to this due to past rejections. All new features or text must strictly adhere to the personal notice tool framing and avoid any language suggesting an official emergency service.
+-   The family linking flow is now complete but intricate. Understand the sequence: Add Member -> SMS Sent -> User Clicks Link -> Join Page -> User Logs In -> User Clicks Join -> Backend Links . This is a likely area for future support questions.
 
 **documents and test reports created in this job**
 -   
 -   
 -   
 -   
--   
--   
--   
--   
--   
--   
--   
+-   Numerous native Java files under 
 
 **Last 10 User Messages and any pending HUMAN messages**
-1.  **User**: Asks how the family member linking process works. (Completed - Agent explained).
-2.  **User**: Asks the agent to prepare everything for Google Play submission. (Completed - Agent created final guides and assets).
-3.  **User**: Discusses and confirms the need for a real panic button functionality (critical alerts, location, handshake). (Completed - Agent implemented the feature).
-4.  **User**: Asks agent to generate APK/AAB with the new signing key. (In Progress - Blocked).
-5.  **User**: Asks if the agent is sure the app will now pass Google Play policies. (Completed - Agent performed a final audit and confirmed).
-6.  **User**: Provides more examples of misleading content seen on the homepage (99.8% detection, partner logos, certifications). (Completed - Agent removed them).
-7.  **User**: Asks the agent to do an exhaustive search for any remaining misleading content in all files and folders. (Completed - Agent did a deep audit and found/fixed more issues in i18n files and old build folders).
-8.  **User**: Reports another rejection from Google Play for Misleading Claims. (Completed - Sparked the most recent, exhaustive cleanup).
-9.  **User**: Asks the agent to proceed with refactoring  and deleting unused  files. (In Progress - Partially completed).
-10. **User**: Provides the second image from Google Play showing the wrong StartBooking logo in-app. (Completed - Agent identified the cause and provided a fix).
+1.  **User**: Asks to test the full family creation and invitation flow, as they believe it's not linking correctly. (Completed)
+2.  **Agent**: Tests the full flow, finds the missing SMS invitation step, implements it, and confirms the linking now works correctly. (Completed)
+3.  **User**: Expresses concern that the website has high traffic but no conversions, suspecting a lack of trust. (Pending Action)
+4.  **Agent**: Analyzes the landing page and proposes specific, honest improvements to build trust without violating Google Play policies. (Completed)
+5.  **User**: Agrees with the trust-building plan. (Completed)
+6.  **User**: Provides the necessary company details (CIF, address, etc.) to implement the changes. (Completed)
+7.  **Agent**: Implements all the trust and transparency changes on the landing page. (Completed)
+8.  **User**: Corrects the address from Novelda to Novetlè. (Completed)
+9.  **User**: Requests further improvements to the landing page hero section: a large 7-day free trial button and soft, honest testimonials. (Completed)
+10. **User**: Asks the agent to perform a final, comprehensive review of the entire app flow (Acción 3 – Revisión de flujo) to check for bugs and ensure everything works before production. (In Progress)
 
 **Project Health Check:**
--   **Broken**: AAB/APK generation within the agent's environment is non-functional due to architecture mismatch.
--   **Mocked**: Ad platform integrations in  are commented out and await real Pixel IDs from the user.
+-   **Broken**: Android App Bundle () generation within the agent's environment. The user must build it locally.
+-   **Mocked**: The AdMob service () is a placeholder for native implementation. The Facebook and TikTok pixel scripts in  are commented out, awaiting real IDs.
 
 **3rd Party Integrations**
--   **Infobip**: (Active) For SMS alerts.
--   **Firebase Cloud Messaging (FCM)**: (Active) For push notifications, now configured for critical alerts.
--   **Stripe**: (Active) For payments.
--   **OpenStreetMap/Nominatim/Leaflet**: (Active) For map services.
+-   **Infobip**: Used for transactional SMS (SOS alerts, family invitations).
+-   **Firebase Cloud Messaging (FCM)**: Used for sending data messages that trigger native critical alerts.
+-   **Stripe**: For subscription payments.
+-   **OpenStreetMap/Nominatim/Leaflet**: For map displays.
 
 **Testing status**
 -   **Testing agent used after significant changes**: NO
 -   **Troubleshoot agent used after agent stuck in loop**: NO
--   **Test files created**: None.
--   **Known regressions**: None.
+-   **Test files created**:
+    -   
+-   **Known regressions**: The empty statistic cards on the  page can be considered a regression.
 
 **Credentials to test flow:**
 -   **Superadmin**:  / 
 
 **What agent forgot to execute**
--   The refactoring of  is incomplete. The task was started at the user's request but is a large undertaking and significant work remains to meet the goal of <500 lines.
--   The cleanup of unused  component files is also incomplete. While one file was removed, a more thorough audit is required to ensure all dead code from previous UIs is gone.</analysis>
+-   The agent did not complete the full user flow review requested by the user. They found a bug (empty stats cards) and stopped, without checking other areas like the pricing and subscription flow.
+-   The long-standing task of refactoring  remains incomplete.</analysis>

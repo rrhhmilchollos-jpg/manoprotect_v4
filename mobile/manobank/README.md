@@ -43,4 +43,4 @@
 
 - **App ID:** com.manobank.app
 - **Nombre:** ManoBank
-- **URL Web:** https://safety-app-boost.preview.emergentagent.com
+- **URL Web:** https://manoprotect-qa.preview.emergentagent.com
