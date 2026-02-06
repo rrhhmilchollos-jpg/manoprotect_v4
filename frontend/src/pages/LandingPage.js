@@ -841,8 +841,8 @@ const LandingPage = () => {
                 </div>
                 <div>
                   <p className="text-sm font-medium text-white">Sede Central</p>
-                  <p className="text-sm text-zinc-500">C/ Sor Isabel de Villena 82 bajo</p>
-                  <p className="text-sm text-zinc-500">Novelé, Valencia, España</p>
+                  <p className="text-sm text-zinc-500">C/ Sor Isabel de Villena 80 bajo</p>
+                  <p className="text-sm text-zinc-500">Novelda, Valencia, España</p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
@@ -852,8 +852,8 @@ const LandingPage = () => {
                   </svg>
                 </div>
                 <div>
-                  <p className="text-sm font-medium text-white">Teléfono</p>
-                  <a href="tel:601510950" className="text-sm text-indigo-400 hover:text-indigo-300" aria-label="Llamar a ManoProtect al 601 510 950">601 510 950</a>
+                  <p className="text-sm font-medium text-white">Soporte</p>
+                  <a href="mailto:soporte@manoprotect.es" className="text-sm text-indigo-400 hover:text-indigo-300">soporte@manoprotect.es</a>
                 </div>
               </div>
               <div className="flex items-start gap-3">
