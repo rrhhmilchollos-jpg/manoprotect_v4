@@ -5,7 +5,29 @@
 - **Empresa**: STARTBOOKING SL
 - **Descripción**: Aplicación de protección contra fraudes digitales para familias españolas
 
-## Estado Actual: Sistema de Alerta Crítica SOS Implementado (6 Febrero 2025)
+## Estado Actual: Página de Verificación de Estafas Corregida (6 Febrero 2025)
+
+### ✅ Completado Hoy (6 Feb 2025)
+
+#### Corrección de Tarjetas de Estadísticas en /verificar-estafa
+- [x] **Habilitado fraud_routes.py**: Las rutas estaban comentadas en server.py
+- [x] **Actualizado endpoint `/api/fraud/public/scam-stats`**: Ahora devuelve los campos correctos:
+  - `total_reports`: 1250+ reportes totales
+  - `phone_scams`: 890+ teléfonos fraudulentos
+  - `email_scams`: 360+ emails fraudulentos
+  - `verified`: 1100+ casos verificados
+- [x] **Actualizado endpoint `/api/fraud/public/verify-scam`**: Devuelve campos para UI (warning, category, severity, advice, tips)
+- [x] **Actualizado endpoint `/api/fraud/public/report-scam`**: Devuelve `success: true` para el frontend
+
+#### Configuración AdMob
+- [x] Publisher ID ya configurado: `pub-7713974112203810`
+- [x] App ID: `ca-app-pub-7713974112203810~9265947358`
+- [x] Rewarded Video: `ca-app-pub-7713974112203810/4909676040`
+- [x] Native Ad: `ca-app-pub-7713974112203810/5727933690`
+
+---
+
+## Historial: Sistema de Alerta Crítica SOS Implementado (6 Febrero 2025)
 
 ### ✅ Completado
 
