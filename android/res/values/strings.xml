@@ -1,55 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- App name - must be exactly ManoProtect -->
+    <!-- App Info -->
     <string name="app_name">ManoProtect</string>
     <string name="launcher_name">ManoProtect</string>
     
-    <!-- Provider authorities - unique per app -->
-    <string name="providerAuthority">com.manoprotect.app.fileprovider</string>
-    
-    <!-- Host and origin for TWA -->
-    <string name="hostName">manoprotect.com</string>
+    <!-- TWA Configuration -->
+    <string name="hostName">www.manoprotect.com</string>
     <string name="launchUrl">/</string>
-    <string name="defaultUrl">https://manoprotect.com</string>
+    <string name="defaultUrl">https://www.manoprotect.com</string>
     
-    <!-- Asset statements for TWA verification -->
+    <!-- Asset Statements for TWA verification -->
     <string name="assetStatements">
         [{
             \"relation\": [\"delegate_permission/common.handle_all_urls\"],
             \"target\": {
                 \"namespace\": \"web\",
-                \"site\": \"https://manoprotect.com\"
+                \"site\": \"https://www.manoprotect.com\"
             }
         }]
     </string>
     
-    <!-- Fallback and sharing -->
+    <!-- Notification Channels -->
+    <string name="sos_channel_id">sos_emergency_critical</string>
+    <string name="sos_channel_name">Alertas de Emergencia SOS</string>
+    <string name="sos_channel_description">Notificaciones críticas de emergencia familiar. Estas alertas sonarán incluso en modo silencio.</string>
+    
+    <string name="general_channel_id">manoprotect_general</string>
+    <string name="general_channel_name">Notificaciones Generales</string>
+    <string name="general_channel_description">Actualizaciones y alertas de seguridad</string>
+    
+    <!-- Display Configuration -->
+    <string name="displayMode">standalone</string>
+    <string name="orientation">portrait</string>
     <string name="fallbackType">customtabs</string>
-    <string name="shareTarget">{
-        \"action\": \"/share-target/\",
-        \"method\": \"POST\",
-        \"enctype\": \"multipart/form-data\",
-        \"params\": {
-            \"files\": [{
-                \"name\": \"file\",
-                \"accept\": [\"*/*\"]
-            }]
-        }
-    }</string>
     
-    <!-- Splash screen configuration -->
-    <string name="splashScreenFadeOutDuration">300</string>
+    <!-- Splash Configuration -->
+    <integer name="splashScreenFadeOutDuration">300</integer>
     
-    <!-- Version info -->
+    <!-- Version Info -->
     <string name="versionName">2.0.0</string>
     <integer name="versionCode">2</integer>
     
-    <!-- Enable notifications -->
+    <!-- Features -->
     <bool name="enableNotifications">true</bool>
-    
-    <!-- Orientation -->
-    <string name="orientation">portrait</string>
-    
-    <!-- Display mode -->
-    <string name="displayMode">standalone</string>
+    <bool name="enableLocationDelegation">true</bool>
+    <bool name="enablePlayBilling">true</bool>
 </resources>
