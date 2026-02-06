@@ -207,38 +207,72 @@ async def get_scam_stats():
 async def verify_scam(value: str, type: str = "phone"):
     """
     Verifica si un número de teléfono o email está en la base de datos de estafadores.
+    Returns fields expected by VerificarEstafa.js frontend.
     """
-    if _db is None:
-        return {
-            "is_scam": False,
-            "risk_level": "unknown",
-            "reports": 0,
-            "message": "No se encontró información"
-        }
-    
-    query = {}
+    # Clean input
+    clean_value = value.strip()
     if type == "phone":
-        query = {"phone": value}
+        clean_value = clean_value.replace(" ", "").replace("-", "")
     elif type == "email":
-        query = {"email": value.lower()}
+        clean_value = clean_value.lower()
     
-    scammer = await _db.known_scammers.find_one(query, {"_id": 0})
+    scammer = None
+    public_reports = 0
     
-    if scammer:
+    if _db is not None:
+        try:
+            query = {}
+            if type == "phone":
+                query = {"phone": clean_value}
+            elif type == "email":
+                query = {"email": clean_value}
+            
+            scammer = await _db.known_scammers.find_one(query, {"_id": 0})
+            
+            # Also check public reports
+            public_query = {"value": clean_value, "type": type}
+            public_reports = await _db.public_fraud_reports.count_documents(public_query)
+        except Exception as e:
+            print(f"Error checking scam: {e}")
+    
+    if scammer or public_reports > 0:
+        report_count = (scammer.get("report_count", 0) if scammer else 0) + public_reports
+        category = scammer.get("category", "phishing") if scammer else "sospechoso"
+        
+        # Determine severity based on report count
+        if report_count >= 10:
+            severity = "critical"
+        elif report_count >= 5:
+            severity = "high"
+        elif report_count >= 2:
+            severity = "medium"
+        else:
+            severity = "low"
+        
         return {
             "is_scam": True,
-            "risk_level": "high",
-            "reports": scammer.get("report_count", 1),
-            "first_reported": scammer.get("first_reported"),
-            "scam_types": scammer.get("scam_types", []),
-            "message": "⚠️ ALERTA: Este contacto ha sido reportado como fraudulento"
+            "warning": f"Este {'número' if type == 'phone' else 'email'} ha sido reportado como fraudulento por {report_count} usuario(s)",
+            "category": category,
+            "severity": severity,
+            "report_count": report_count,
+            "advice": [
+                "No respondas a llamadas ni mensajes de este contacto",
+                "Bloquea este número/email en tu dispositivo",
+                "Si ya compartiste datos personales, contacta con tu banco inmediatamente",
+                "Reporta el incidente a la Policía Nacional o Guardia Civil"
+            ]
         }
     
     return {
         "is_scam": False,
-        "risk_level": "unknown",
-        "reports": 0,
-        "message": "No se encontraron reportes para este contacto"
+        "message": f"No hemos encontrado reportes de fraude para este {'número' if type == 'phone' else 'email'}",
+        "disclaimer": "Esto no garantiza que sea seguro. Siempre mantén precaución con contactos desconocidos.",
+        "tips": [
+            "No compartas datos bancarios ni contraseñas por teléfono o email",
+            "Desconfía de ofertas demasiado buenas para ser verdad",
+            "Verifica siempre la identidad del remitente antes de actuar",
+            "Si tienes dudas, contacta directamente con la entidad oficial"
+        ]
     }
 
 @router.post("/public/report-scam")
