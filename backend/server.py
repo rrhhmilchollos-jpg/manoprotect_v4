@@ -2620,6 +2620,14 @@ init_push_routes(db)
 api_router.include_router(push_router)
 print("✅ Push notification routes loaded")
 
+# SOS Test routes (for development/testing)
+try:
+    from routes.sos_test_routes import router as sos_test_router
+    api_router.include_router(sos_test_router)
+    print("✅ SOS Test routes loaded")
+except ImportError as e:
+    print(f"⚠️ SOS Test routes not loaded: {e}")
+
 # Banking routes - RESERVED for ManoBank.es
 # try:
 #     from routes.banking_routes import router as banking_router
