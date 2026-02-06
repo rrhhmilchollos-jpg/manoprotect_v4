@@ -131,6 +131,28 @@ const LandingPage = () => {
         </nav>
       </header>
 
+      {/* Trust Bar - Garantías visibles */}
+      <div className="bg-emerald-600 text-white py-2 px-4">
+        <div className="max-w-7xl mx-auto flex flex-wrap justify-center items-center gap-4 sm:gap-8 text-sm">
+          <span className="flex items-center gap-2">
+            <Check className="w-4 h-4" />
+            7 días GRATIS
+          </span>
+          <span className="flex items-center gap-2">
+            <Check className="w-4 h-4" />
+            Sin permanencia
+          </span>
+          <span className="flex items-center gap-2">
+            <Check className="w-4 h-4" />
+            Cancela cuando quieras
+          </span>
+          <span className="flex items-center gap-2">
+            <Shield className="w-4 h-4" />
+            Pago seguro
+          </span>
+        </div>
+      </div>
+
       {/* Hero Section - Main Content */}
       <main id="main-content" role="main">
       <section className="relative px-6 py-16 overflow-hidden">
