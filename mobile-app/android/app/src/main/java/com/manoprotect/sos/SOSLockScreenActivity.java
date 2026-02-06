@@ -157,6 +157,7 @@ public class SOSLockScreenActivity extends Activity {
     
     /**
      * CREAR INTERFAZ DE USUARIO
+     * NOTA: Usamos "Aviso Personal" no "Emergencia" para cumplir Google Play
      */
     private void createUI() {
         // Root layout
@@ -165,9 +166,9 @@ public class SOSLockScreenActivity extends Activity {
         rootView.setBackgroundColor(Color.parseColor("#1a1a2e"));
         rootView.setPadding(40, 60, 40, 40);
         
-        // Title
+        // Title - AVISO PERSONAL, no emergencia oficial
         titleText = new TextView(this);
-        titleText.setText("🆘 ¡EMERGENCIA SOS!");
+        titleText.setText("📱 Aviso Personal");
         titleText.setTextColor(Color.parseColor("#DC2626"));
         titleText.setTextSize(32);
         titleText.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
@@ -176,7 +177,7 @@ public class SOSLockScreenActivity extends Activity {
         
         // Sender name
         senderText = new TextView(this);
-        senderText.setText(senderName != null ? senderName + " necesita ayuda" : "Alerta de emergencia");
+        senderText.setText(senderName != null ? senderName + " te necesita" : "Un contacto te necesita");
         senderText.setTextColor(Color.WHITE);
         senderText.setTextSize(24);
         senderText.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
