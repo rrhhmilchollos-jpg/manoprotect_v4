@@ -156,51 +156,42 @@ async def get_user_alerts(user_id: str):
 async def get_scam_stats():
     """
     Estadísticas públicas de estafas detectadas.
-    Returns fields expected by VerificarEstafa.js frontend:
-    - total_reports: Total de reportes
-    - phone_scams: Teléfonos fraudulentos
-    - email_scams: Emails fraudulentos
-    - verified: Casos verificados
+    Solo datos REALES - sin números inflados para cumplir Google Play.
     """
     if _db is None:
-        # Return mock data when DB not available
         return {
-            "total_reports": 1247,
-            "phone_scams": 892,
-            "email_scams": 355,
-            "verified": 1103
+            "total_reports": 0,
+            "phone_scams": 0,
+            "email_scams": 0,
+            "verified": 0
         }
     
     try:
-        # Count total reports from all sources
+        # Count REAL data only
         total_reports = await _db.fraud_reports.count_documents({})
         public_reports = await _db.public_fraud_reports.count_documents({})
-        total = total_reports + public_reports
         
-        # Count phone scams
         phone_scams = await _db.known_scammers.count_documents({"phone": {"$exists": True, "$ne": None}})
         phone_reports = await _db.public_fraud_reports.count_documents({"type": "phone"})
         
-        # Count email scams
         email_scams = await _db.known_scammers.count_documents({"email": {"$exists": True, "$ne": None}})
         email_reports = await _db.public_fraud_reports.count_documents({"type": "email"})
         
-        # Count verified cases
         verified = await _db.known_scammers.count_documents({})
         
         return {
-            "total_reports": max(total, 50) + 1200,  # Base + real data
-            "phone_scams": max(phone_scams + phone_reports, 30) + 860,
-            "email_scams": max(email_scams + email_reports, 20) + 340,
-            "verified": max(verified, 40) + 1060
+            "total_reports": total_reports + public_reports,
+            "phone_scams": phone_scams + phone_reports,
+            "email_scams": email_scams + email_reports,
+            "verified": verified
         }
     except Exception as e:
         print(f"Error getting scam stats: {e}")
         return {
-            "total_reports": 1247,
-            "phone_scams": 892,
-            "email_scams": 355,
-            "verified": 1103
+            "total_reports": 0,
+            "phone_scams": 0,
+            "email_scams": 0,
+            "verified": 0
         }
 
 @router.get("/public/verify-scam")
