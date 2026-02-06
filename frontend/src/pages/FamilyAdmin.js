@@ -62,24 +62,43 @@ const FamilyAdmin = () => {
       toast.error('El nombre es obligatorio');
       return;
     }
+    
+    // Validar teléfono - OBLIGATORIO para recibir SMS de emergencia
+    if (!formData.phone || formData.phone.length < 9) {
+      toast.error('El teléfono es obligatorio para recibir alertas SOS');
+      return;
+    }
+
+    // Formatear teléfono español si no tiene prefijo
+    let phone = formData.phone.replace(/\s/g, '');
+    if (!phone.startsWith('+')) {
+      phone = '+34' + phone.replace(/^0+/, '');
+    }
 
     setSubmitting(true);
     try {
-      const response = await fetch(`${API}/family/members`, {
+      // Usar endpoint que vincula con teléfono para SMS
+      const response = await fetch(`${API}/family/link-member-phone`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
-        body: JSON.stringify(formData)
+        body: JSON.stringify({
+          name: formData.name,
+          phone: phone,
+          relationship: formData.relationship,
+          is_emergency: true
+        })
       });
 
-      if (response.ok) {
-        toast.success('Miembro familiar añadido');
+      const result = await response.json();
+      
+      if (result.success) {
+        toast.success(`${formData.name} añadido. Recibirá SMS en caso de emergencia.`);
         setShowAddDialog(false);
         resetForm();
         loadDashboard();
       } else {
-        const error = await response.json();
-        toast.error(error.detail || 'Error al añadir miembro');
+        toast.error(result.message || 'Error al añadir miembro');
       }
     } catch (error) {
       toast.error('Error de conexión');
