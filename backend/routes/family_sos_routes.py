@@ -287,14 +287,30 @@ async def join_family_group(
     if not invitation:
         raise HTTPException(status_code=404, detail="Invitación no encontrada o ya vinculada")
     
-    # Link user to family member record
+    # Get user's phone if they have one
+    user_phone = user.phone if hasattr(user, 'phone') else None
+    if not user_phone:
+        user_doc = await _db.users.find_one(
+            {"user_id": user.user_id},
+            {"_id": 0, "phone": 1}
+        )
+        user_phone = user_doc.get("phone") if user_doc else None
+    
+    # Link user to family member record - include their phone for SMS alerts
+    update_data = {
+        "user_id": user.user_id,
+        "email": user.email,
+        "status": "active",
+        "joined_at": datetime.now(timezone.utc).isoformat()
+    }
+    
+    # Update phone if user has one and invitation doesn't
+    if user_phone and not invitation.get("phone"):
+        update_data["phone"] = user_phone
+    
     await _db.family_members.update_one(
         {"id": invitation["id"]},
-        {"$set": {
-            "user_id": user.user_id,
-            "status": "active",
-            "joined_at": datetime.now(timezone.utc).isoformat()
-        }}
+        {"$set": update_data}
     )
     
     # Update user's family group
@@ -305,6 +321,29 @@ async def join_family_group(
             "is_family_member": True
         }}
     )
+    
+    # Notify family owner
+    owner = await _db.users.find_one(
+        {"user_id": invitation["family_owner_id"]},
+        {"_id": 0, "name": 1}
+    )
+    
+    notification = {
+        "notification_id": f"notif_{uuid.uuid4().hex[:12]}",
+        "user_id": invitation["family_owner_id"],
+        "type": "family_joined",
+        "title": "👨‍👩‍👧 ¡Un familiar se ha unido!",
+        "message": f"{user.name} ha aceptado tu invitación y ahora recibirá tus alertas SOS.",
+        "read": False,
+        "created_at": datetime.now(timezone.utc).isoformat()
+    }
+    await _db.notifications.insert_one(notification)
+    
+    return {
+        "message": "Te has unido al grupo familiar",
+        "family_owner_id": invitation["family_owner_id"],
+        "family_owner_name": owner.get("name") if owner else None
+    }
     
     return {
         "message": "Te has unido al grupo familiar",
