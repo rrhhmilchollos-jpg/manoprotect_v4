@@ -1,20 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Theme colors - ManoProtect brand colors -->
-    <color name="colorPrimary">#4F46E5</color>
-    <color name="colorPrimaryDark">#4338CA</color>
-    <color name="colorAccent">#10B981</color>
+    <!-- Brand Colors - ManoProtect -->
+    <color name="colorPrimary">#10B981</color>
+    <color name="colorPrimaryDark">#059669</color>
+    <color name="colorAccent">#4F46E5</color>
     
-    <!-- Navigation colors -->
-    <color name="navigationColor">#4F46E5</color>
-    <color name="navigationColorDark">#4F46E5</color>
-    <color name="navigationDividerColor">#4F46E5</color>
-    <color name="navigationDividerColorDark">#4F46E5</color>
-    
-    <!-- Background colors -->
+    <!-- Theme Colors -->
+    <color name="themeColor">#10B981</color>
+    <color name="themeDarkColor">#10B981</color>
     <color name="backgroundColor">#FFFFFF</color>
-    <color name="backgroundColorDark">#1F2937</color>
+    <color name="backgroundDarkColor">#111827</color>
     
-    <!-- Splash screen background -->
-    <color name="splashScreenBackground">#FFFFFF</color>
+    <!-- Navigation Colors -->
+    <color name="navigationColor">#10B981</color>
+    <color name="navigationDarkColor">#10B981</color>
+    <color name="navigationDividerColor">#10B981</color>
+    <color name="navigationDividerDarkColor">#10B981</color>
+    
+    <!-- Status Bar -->
+    <color name="statusBarColor">#10B981</color>
+    
+    <!-- Splash Screen -->
+    <color name="splashBackground">#FFFFFF</color>
+    
+    <!-- Emergency/SOS Colors -->
+    <color name="sosRed">#DC2626</color>
+    <color name="sosRedDark">#B91C1C</color>
+    <color name="sosAlertBackground">#FEE2E2</color>
+    
+    <!-- Notification LED -->
+    <color name="notificationLedColor">#DC2626</color>
 </resources>
