@@ -157,14 +157,16 @@ async def send_verification_code(phone_number: str, code: str) -> dict:
 
 async def send_sos_alert(phone_number: str, sender_name: str, location_url: str, message: str = None) -> dict:
     """
-    Send emergency SOS alert SMS
+    Send personal SOS alert SMS
+    NOTA: Usamos "aviso personal" no "emergencia oficial" para cumplir Google Play
     """
-    sms_text = f"ALERTA SOS - {sender_name} ha activado una emergencia."
+    # Mensaje claro: aviso personal, no oficial
+    sms_text = f"ManoProtect: {sender_name} te ha enviado un aviso personal."
     if message:
-        sms_text += f" Mensaje: {message}"
+        sms_text += f" {message}"
     if location_url:
-        sms_text += f" Ubicacion: {location_url}"
-    sms_text += " Contacta inmediatamente o llama al 112."
+        sms_text += f" Ver ubicacion: {location_url}"
+    sms_text += " Este es un mensaje privado, no una alerta oficial."
     
     return await send_sms(phone_number, sms_text)
 
