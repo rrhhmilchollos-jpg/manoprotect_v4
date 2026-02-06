@@ -2670,14 +2670,14 @@ try:
 except ImportError as e:
     print(f"⚠️ WhatsApp routes not loaded: {e}")
 
-# Fraud API routes - RESERVED for ManoBank.es integration
-# try:
-#     from routes.fraud_routes import router as fraud_router, init_fraud_routes
-#     init_fraud_routes(db)
-#     api_router.include_router(fraud_router)
-#     print("✅ Fraud API routes loaded (ManoBank integration)")
-# except ImportError as e:
-#     print(f"⚠️ Fraud routes not loaded: {e}")
+# Fraud API routes - Public scam verification
+try:
+    from routes.fraud_routes import router as fraud_router, init_fraud_routes
+    init_fraud_routes(db)
+    api_router.include_router(fraud_router)
+    print("✅ Fraud API routes loaded")
+except ImportError as e:
+    print(f"⚠️ Fraud routes not loaded: {e}")
 
 # SMS routes - RESERVED for ManoBank.es
 # try:
