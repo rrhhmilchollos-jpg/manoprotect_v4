@@ -99,6 +99,16 @@ const RootNavigator: React.FC = () => {
           />
           <Stack.Screen name="Settings" component={SettingsScreen} />
           <Stack.Screen name="Notifications" component={NotificationsScreen} />
+          <Stack.Screen 
+            name="SOSAlert" 
+            component={SOSAlertScreen}
+            options={{ animation: 'fade' }}
+          />
+          <Stack.Screen 
+            name="SOSTest" 
+            component={SOSTestScreen}
+            options={{ animation: 'slide_from_bottom' }}
+          />
         </>
       )}
     </Stack.Navigator>
