@@ -11,13 +11,17 @@
 
 #### Corrección de Tarjetas de Estadísticas en /verificar-estafa
 - [x] **Habilitado fraud_routes.py**: Las rutas estaban comentadas en server.py
-- [x] **Actualizado endpoint `/api/fraud/public/scam-stats`**: Ahora devuelve los campos correctos:
-  - `total_reports`: 1250+ reportes totales
-  - `phone_scams`: 890+ teléfonos fraudulentos
-  - `email_scams`: 360+ emails fraudulentos
-  - `verified`: 1100+ casos verificados
-- [x] **Actualizado endpoint `/api/fraud/public/verify-scam`**: Devuelve campos para UI (warning, category, severity, advice, tips)
-- [x] **Actualizado endpoint `/api/fraud/public/report-scam`**: Devuelve `success: true` para el frontend
+- [x] **Actualizado endpoint `/api/fraud/public/scam-stats`**: Solo datos REALES (sin inflar)
+- [x] **Actualizado endpoint `/api/fraud/public/verify-scam`**: Devuelve campos para UI
+- [x] **Actualizado endpoint `/api/fraud/public/report-scam`**: Devuelve `success: true`
+
+#### Botones de Compartir en Redes Sociales
+- [x] **WhatsApp**: Botón verde para compartir alerta
+- [x] **X/Twitter**: Botón para tweet
+- [x] **Facebook**: Botón para compartir en Facebook
+- [x] **Telegram**: Botón para compartir en Telegram
+- [x] **Copiar**: Botón para copiar texto de alerta
+- [x] **Native Share API**: Para móviles (botón "Más")
 
 #### Configuración AdMob
 - [x] Publisher ID ya configurado: `pub-7713974112203810`
