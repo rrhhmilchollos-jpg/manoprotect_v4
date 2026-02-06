@@ -142,22 +142,13 @@ async def send_sos_critical_alert(
     sender_email: str,
     latitude: float,
     longitude: float,
-    message: str = "¡Emergencia SOS!"
+    message: str = "Necesita tu ayuda"
 ) -> Dict:
     """
-    Enviar ALERTA CRÍTICA SOS a dispositivos Android
+    Enviar AVISO PERSONAL SOS a contactos de emergencia
     
-    Esta función envía un DATA MESSAGE que será procesado por
-    SOSFirebaseMessagingService en Android, el cual:
-    1. Guarda el volumen actual del usuario
-    2. Sube el volumen de STREAM_ALARM al 100%
-    3. Reproduce sirena en bucle (looping = true)
-    4. Inicia Foreground Service con GPS tracking
-    5. Muestra pantalla sobre lock screen
-    
-    La sirena NO se detiene hasta que:
-    - El servidor envíe 'siren_stop' (acknowledge recibido)
-    - El usuario pulse "Enterado" en la pantalla
+    IMPORTANTE: Este es un AVISO PERSONAL, NO una alerta oficial.
+    Cumple con políticas de Google Play.
     """
     data = {
         "type": "sos_alert",
@@ -166,12 +157,15 @@ async def send_sos_critical_alert(
         "sender_email": sender_email,
         "latitude": str(latitude),
         "longitude": str(longitude),
-        "message": message,
+        # Mensaje claro: aviso personal, no oficial
+        "message": f"Aviso personal: {sender_name} {message}",
+        "title": f"Aviso de {sender_name}",
+        "disclaimer": "Este es un mensaje privado entre contactos de emergencia, no una alerta oficial.",
         "timestamp": datetime.now(timezone.utc).isoformat(),
         "url": f"/sos-alert?alert={alert_id}"
     }
     
-    print(f"🚨 Sending SOS CRITICAL ALERT to {len(fcm_tokens)} devices")
+    print(f"📱 Sending personal SOS alert to {len(fcm_tokens)} contacts")
     return await send_fcm_data_message(fcm_tokens, data)
 
 
