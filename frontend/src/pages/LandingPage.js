@@ -155,18 +155,71 @@ const LandingPage = () => {
 
       {/* Hero Section - Main Content */}
       <main id="main-content" role="main">
-      <section className="relative px-6 py-16 overflow-hidden">
+      <section className="relative px-6 py-12 overflow-hidden">
         <div className="grain absolute inset-0 pointer-events-none" aria-hidden="true" />
         <div className="max-w-7xl mx-auto">
           
-          {/* Main Headline */}
-          <div className="text-center mb-16">
+          {/* Main Headline + CTA Button */}
+          <div className="text-center mb-12">
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight leading-tight mb-6">
               Protección completa para tu familia
             </h1>
-            <p className="text-lg sm:text-xl text-zinc-600 max-w-3xl mx-auto">
-              ManoProtect te protege de <strong>dos formas</strong>: emergencias reales con botón SOS 
-              y estafas digitales con detección inteligente.
+            <p className="text-lg sm:text-xl text-zinc-600 max-w-3xl mx-auto mb-8">
+              ManoProtect es una <strong>herramienta de apoyo</strong> para proteger a tu familia: 
+              botón SOS para emergencias y detección de estafas digitales.
+            </p>
+            
+            {/* CTA Principal - Visible sin scroll */}
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-6">
+              <Button 
+                size="lg" 
+                onClick={() => navigate('/register')}
+                className="bg-emerald-600 hover:bg-emerald-700 text-white text-lg px-8 py-6 rounded-xl shadow-lg hover:shadow-xl transition-all"
+              >
+                Prueba ManoProtect gratis 7 días
+                <ArrowRight className="ml-2 w-5 h-5" />
+              </Button>
+              <Button 
+                variant="outline" 
+                size="lg"
+                onClick={() => navigate('/login')}
+                className="text-lg px-6 py-6 rounded-xl border-2"
+              >
+                Ya tengo cuenta
+              </Button>
+            </div>
+            
+            <p className="text-sm text-zinc-500">
+              Sin tarjeta de crédito · Cancela cuando quieras · Sin compromiso
+            </p>
+          </div>
+
+          {/* Mini testimonios - Primeros usuarios */}
+          <div className="bg-zinc-50 rounded-2xl p-6 mb-12 border border-zinc-200">
+            <p className="text-center text-zinc-600 mb-4">
+              <span className="font-semibold text-zinc-800">Familias como la tuya</span> ya usan ManoProtect para estar más tranquilas
+            </p>
+            <div className="flex flex-wrap justify-center gap-6 text-sm text-zinc-500">
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 bg-emerald-100 rounded-full flex items-center justify-center">
+                  <Users className="w-4 h-4 text-emerald-600" />
+                </div>
+                <span>Primeros usuarios protegiendo a sus familias</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                  <Shield className="w-4 h-4 text-blue-600" />
+                </div>
+                <span>Herramienta de apoyo contra fraudes</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Disclaimer visible */}
+          <div className="text-center mb-12">
+            <p className="text-xs text-zinc-400 max-w-2xl mx-auto">
+              ManoProtect es una herramienta de apoyo familiar. No sustituye a los servicios de emergencia (112) 
+              ni garantiza protección absoluta. Ante una emergencia real, llama siempre al 112.
             </p>
           </div>
 
