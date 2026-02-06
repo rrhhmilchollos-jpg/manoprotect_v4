@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Colores para notificaciones y UI -->
+    <color name="notification_red">#DC2626</color>
+    <color name="primary">#1a1a2e</color>
+    <color name="primary_dark">#0f0f1a</color>
+    <color name="accent">#10B981</color>
+    <color name="emergency_red">#DC2626</color>
+    <color name="success_green">#10B981</color>
+    <color name="warning_yellow">#F59E0B</color>
+    <color name="info_blue">#3B82F6</color>
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+</resources>
