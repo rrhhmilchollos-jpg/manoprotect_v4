@@ -452,7 +452,7 @@ public class SOSCriticalAlertService extends Service {
     
     /**
      * CREAR CANAL DE NOTIFICACIÓN
-     * Configurado para BYPASS de modo silencioso
+     * NOTA: No usamos bypass DND para cumplir con Google Play
      */
     private void createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -462,30 +462,25 @@ public class SOSCriticalAlertService extends Service {
                 NotificationManager.IMPORTANCE_HIGH
             );
             
-            channel.setDescription("Alertas críticas de emergencia SOS");
+            // Descripción clara: aviso personal, no oficial
+            channel.setDescription("Avisos personales de contactos de emergencia");
             channel.enableVibration(true);
             channel.setVibrationPattern(new long[]{0, 500, 200, 500, 200, 500});
-            channel.setBypassDnd(true); // CRÍTICO: Bypass Do Not Disturb
+            // NO usamos setBypassDnd para cumplir Google Play
             channel.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
             channel.enableLights(true);
-            channel.setLightColor(0xFFDC2626); // Red
-            
-            // Set alarm sound
-            AudioAttributes audioAttributes = new AudioAttributes.Builder()
-                .setUsage(AudioAttributes.USAGE_ALARM)
-                .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
-                .build();
-            channel.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM), audioAttributes);
+            channel.setLightColor(0xFF3B82F6); // Blue instead of red
             
             NotificationManager manager = getSystemService(NotificationManager.class);
             manager.createNotificationChannel(channel);
             
-            Log.d(TAG, "Notification channel created with DND bypass");
+            Log.d(TAG, "Notification channel created");
         }
     }
     
     /**
      * CREAR NOTIFICACIÓN PARA FOREGROUND SERVICE
+     * NOTA: Usamos "Aviso personal" no "Emergencia" para Google Play
      */
     private Notification createNotification(String sender, String message, double lat, double lng) {
         // Intent para abrir la app
@@ -509,25 +504,27 @@ public class SOSCriticalAlertService extends Service {
             PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
         );
         
-        String locationText = String.format("📍 %.6f, %.6f", lat, lng);
-        String mapsUrl = "https://maps.google.com/?q=" + lat + "," + lng;
+        String locationText = String.format("Ubicación: %.4f, %.4f", lat, lng);
         
+        // IMPORTANTE: Lenguaje de "aviso personal" no "emergencia"
         return new NotificationCompat.Builder(this, CHANNEL_ID)
-            .setContentTitle("🆘 ¡EMERGENCIA SOS! - " + sender)
-            .setContentText(message != null ? message : "Necesita ayuda urgente")
+            .setContentTitle("Aviso de " + sender)
+            .setContentText(message != null ? message : sender + " te necesita")
             .setStyle(new NotificationCompat.BigTextStyle()
-                .bigText((message != null ? message : "¡Emergencia!") + "\n\n" + locationText))
-            .setSmallIcon(android.R.drawable.ic_dialog_alert) // Use system icon
-            .setColor(0xFFDC2626)
-            .setPriority(NotificationCompat.PRIORITY_MAX)
-            .setCategory(NotificationCompat.CATEGORY_ALARM)
+                .bigText((message != null ? message : sender + " te necesita") + 
+                    "\n\n" + locationText + 
+                    "\n\nEste es un aviso personal, no oficial."))
+            .setSmallIcon(android.R.drawable.ic_dialog_info) // Info icon, not alert
+            .setColor(0xFF3B82F6) // Blue instead of red
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setCategory(NotificationCompat.CATEGORY_MESSAGE) // Message, not alarm
             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-            .setOngoing(true) // Cannot be dismissed
+            .setOngoing(true)
             .setAutoCancel(false)
             .setContentIntent(openPendingIntent)
             .setFullScreenIntent(openPendingIntent, true)
-            .addAction(android.R.drawable.ic_menu_view, "VER UBICACIÓN", openPendingIntent)
-            .addAction(android.R.drawable.ic_menu_close_clear_cancel, "ENTERADO", ackPendingIntent)
+            .addAction(android.R.drawable.ic_menu_view, "VER", openPendingIntent)
+            .addAction(android.R.drawable.ic_menu_send, "RESPONDER", ackPendingIntent)
             .build();
     }
     
