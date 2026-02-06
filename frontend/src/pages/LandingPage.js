@@ -753,6 +753,109 @@ const LandingPage = () => {
       </section>
       </main>
 
+      {/* Transparency Section - Honestidad que genera confianza */}
+      <section className="px-6 py-16 bg-zinc-50 border-t border-zinc-200">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-10">
+            <h2 className="text-2xl sm:text-3xl font-bold mb-3">Transparencia Total</h2>
+            <p className="text-zinc-600">Queremos que sepas exactamente qué es ManoProtect</p>
+          </div>
+          
+          <div className="grid md:grid-cols-2 gap-8">
+            {/* Lo que SÍ somos */}
+            <div className="bg-white rounded-xl p-6 border border-emerald-200">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-10 h-10 bg-emerald-100 rounded-full flex items-center justify-center">
+                  <Check className="w-5 h-5 text-emerald-600" />
+                </div>
+                <h3 className="text-lg font-bold text-emerald-700">Lo que SÍ somos</h3>
+              </div>
+              <ul className="space-y-3 text-sm text-zinc-600">
+                <li className="flex items-start gap-2">
+                  <Check className="w-4 h-4 text-emerald-500 mt-0.5 flex-shrink-0" />
+                  <span>Sistema <strong>privado</strong> de avisos entre familiares</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <Check className="w-4 h-4 text-emerald-500 mt-0.5 flex-shrink-0" />
+                  <span>Herramienta de <strong>prevención</strong> contra estafas digitales</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <Check className="w-4 h-4 text-emerald-500 mt-0.5 flex-shrink-0" />
+                  <span>Empresa española registrada (CIF: B19427723)</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <Check className="w-4 h-4 text-emerald-500 mt-0.5 flex-shrink-0" />
+                  <span>Cumplimos con <strong>RGPD</strong> y normativa europea</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <Check className="w-4 h-4 text-emerald-500 mt-0.5 flex-shrink-0" />
+                  <span>Tus datos <strong>nunca se venden</strong> a terceros</span>
+                </li>
+              </ul>
+            </div>
+            
+            {/* Lo que NO somos */}
+            <div className="bg-white rounded-xl p-6 border border-red-200">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center">
+                  <X className="w-5 h-5 text-red-600" />
+                </div>
+                <h3 className="text-lg font-bold text-red-700">Lo que NO somos</h3>
+              </div>
+              <ul className="space-y-3 text-sm text-zinc-600">
+                <li className="flex items-start gap-2">
+                  <X className="w-4 h-4 text-red-500 mt-0.5 flex-shrink-0" />
+                  <span><strong>NO</strong> sustituimos al 112 ni servicios de emergencia</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <X className="w-4 h-4 text-red-500 mt-0.5 flex-shrink-0" />
+                  <span><strong>NO</strong> somos un organismo oficial ni gubernamental</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <X className="w-4 h-4 text-red-500 mt-0.5 flex-shrink-0" />
+                  <span><strong>NO</strong> garantizamos detección al 100%</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <X className="w-4 h-4 text-red-500 mt-0.5 flex-shrink-0" />
+                  <span><strong>NO</strong> accedemos a tus cuentas bancarias</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <X className="w-4 h-4 text-red-500 mt-0.5 flex-shrink-0" />
+                  <span><strong>NO</strong> hay permanencia ni penalizaciones</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+          
+          {/* Garantías */}
+          <div className="mt-10 bg-indigo-50 rounded-xl p-6 border border-indigo-200">
+            <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+              <div className="flex items-center gap-4">
+                <Shield className="w-12 h-12 text-indigo-600" />
+                <div>
+                  <h3 className="font-bold text-indigo-900">Nuestras Garantías</h3>
+                  <p className="text-sm text-indigo-700">Sin letra pequeña, sin sorpresas</p>
+                </div>
+              </div>
+              <div className="flex flex-wrap justify-center gap-4 text-sm">
+                <span className="bg-white px-4 py-2 rounded-full border border-indigo-200 text-indigo-700">
+                  ✓ 7 días gratis
+                </span>
+                <span className="bg-white px-4 py-2 rounded-full border border-indigo-200 text-indigo-700">
+                  ✓ Cancela cuando quieras
+                </span>
+                <span className="bg-white px-4 py-2 rounded-full border border-indigo-200 text-indigo-700">
+                  ✓ Sin permanencia
+                </span>
+                <span className="bg-white px-4 py-2 rounded-full border border-indigo-200 text-indigo-700">
+                  ✓ Pago seguro con Stripe
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Footer */}
       <footer className="px-6 py-12 bg-zinc-900 text-zinc-400" role="contentinfo">
         <div className="max-w-7xl mx-auto">
