@@ -1,6 +1,10 @@
 """
 ManoProtect - Emergency Notification Service
-FCM High Priority + Infobip SMS Backup for 100% reliable SOS alerts
+FCM DATA MESSAGES with High Priority + Infobip SMS Backup
+
+CRÍTICO: Este servicio envía DATA MESSAGES (no notification messages)
+para que la app Android pueda procesarlos en segundo plano y activar
+la sirena usando AudioManager.STREAM_ALARM
 """
 import os
 import json
@@ -62,7 +66,12 @@ async def send_fcm_data_message(
     y ejecute código ANTES de mostrar nada al usuario.
     
     El servicio nativo de Android (SOSFirebaseMessagingService) procesará
-    estos datos y activará la sirena usando STREAM_ALARM.
+    estos datos y activará:
+    - Sirena usando AudioManager.STREAM_ALARM (ignora modo silencioso)
+    - Volumen al 100%
+    - Vibración continua
+    - GPS tracking en segundo plano
+    - Pantalla sobre lock screen
     """
     if not _firebase_initialized:
         init_firebase()
@@ -85,75 +94,38 @@ async def send_fcm_data_message(
             # This ensures the app can process data in background
             message = messaging.Message(
                 token=token,
-                # NO notification field - only data
+                # NO notification field - only data payload
                 data=string_data,
                 android=messaging.AndroidConfig(
                     priority='high',  # CRITICAL: High priority for immediate delivery
-                    ttl=0,  # No delay - deliver immediately
-                        notification_count=1,
-                        default_sound=False,
-                        default_vibrate_timings=False,
-                        vibrate_timings_millis=[0, 500, 200, 500, 200, 500, 200, 500],
-                        default_light_settings=False,
-                        light_settings=messaging.LightSettings(
-                            color='#DC2626',
-                            light_on_duration_millis=500,
-                            light_off_duration_millis=200
-                        )
-                    )
+                    ttl=0,  # No delay - deliver immediately even in Doze mode
                 ),
+                # For web push (PWA fallback)
                 webpush=messaging.WebpushConfig(
                     headers={
                         'Urgency': 'high',
                         'TTL': '0'
                     },
-                    notification=messaging.WebpushNotification(
-                        title=title,
-                        body=body,
-                        icon='/icons/sos-icon-192.png',
-                        badge='/icons/sos-icon-192.png',
-                        tag='sos_emergency',
-                        require_interaction=True,
-                        vibrate=[500, 200, 500, 200, 500],
-                        actions=[
-                            messaging.WebpushNotificationAction(
-                                action='view',
-                                title='Ver ubicación'
-                            ),
-                            messaging.WebpushNotificationAction(
-                                action='call',
-                                title='Llamar 112'
-                            )
-                        ]
-                    ),
-                    fcm_options=messaging.WebpushFCMOptions(
-                        link=data.get('url', '/sos-alert') if data else '/sos-alert'
-                    )
+                    data=string_data
                 ),
+                # For iOS (if ever needed)
                 apns=messaging.APNSConfig(
                     headers={
                         'apns-priority': '10',
-                        'apns-push-type': 'alert'
+                        'apns-push-type': 'background'
                     },
                     payload=messaging.APNSPayload(
                         aps=messaging.Aps(
-                            alert=messaging.ApsAlert(
-                                title=title,
-                                body=body
-                            ),
-                            sound='default',
-                            badge=1,
-                            content_available=True,
-                            mutable_content=True,
-                            category='SOS_ALERT'
-                        )
+                            content_available=True
+                        ),
+                        custom_data=string_data
                     )
                 )
             )
             
             response = messaging.send(message)
             results["success"] += 1
-            print(f"✅ FCM sent: {response}")
+            print(f"✅ FCM DATA message sent: {response}")
             
         except Exception as e:
             results["failure"] += 1
@@ -161,6 +133,96 @@ async def send_fcm_data_message(
             print(f"❌ FCM error: {e}")
     
     return results
+
+
+async def send_sos_critical_alert(
+    fcm_tokens: List[str],
+    alert_id: str,
+    sender_name: str,
+    sender_email: str,
+    latitude: float,
+    longitude: float,
+    message: str = "¡Emergencia SOS!"
+) -> Dict:
+    """
+    Enviar ALERTA CRÍTICA SOS a dispositivos Android
+    
+    Esta función envía un DATA MESSAGE que será procesado por
+    SOSFirebaseMessagingService en Android, el cual:
+    1. Guarda el volumen actual del usuario
+    2. Sube el volumen de STREAM_ALARM al 100%
+    3. Reproduce sirena en bucle (looping = true)
+    4. Inicia Foreground Service con GPS tracking
+    5. Muestra pantalla sobre lock screen
+    
+    La sirena NO se detiene hasta que:
+    - El servidor envíe 'siren_stop' (acknowledge recibido)
+    - El usuario pulse "Enterado" en la pantalla
+    """
+    data = {
+        "type": "sos_alert",
+        "alert_id": alert_id,
+        "sender_name": sender_name,
+        "sender_email": sender_email,
+        "latitude": str(latitude),
+        "longitude": str(longitude),
+        "message": message,
+        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "url": f"/sos-alert?alert={alert_id}"
+    }
+    
+    print(f"🚨 Sending SOS CRITICAL ALERT to {len(fcm_tokens)} devices")
+    return await send_fcm_data_message(fcm_tokens, data)
+
+
+async def send_siren_stop(
+    fcm_tokens: List[str],
+    alert_id: str,
+    acknowledged_by: str,
+    reason: str = "acknowledged"
+) -> Dict:
+    """
+    Enviar señal para DETENER SIRENA en todos los dispositivos
+    
+    Esta función se llama cuando un familiar pulsa "Enterado".
+    Envía un DATA MESSAGE que será procesado por
+    SOSFirebaseMessagingService, el cual:
+    1. Detiene la sirena
+    2. Detiene la vibración
+    3. Restaura el volumen original
+    4. Cierra la pantalla de lock screen
+    """
+    data = {
+        "type": "siren_stop",
+        "alert_id": alert_id,
+        "acknowledged_by": acknowledged_by,
+        "reason": reason,
+        "message": f"{acknowledged_by} está atendiendo la emergencia",
+        "timestamp": datetime.now(timezone.utc).isoformat()
+    }
+    
+    print(f"🔇 Sending SIREN STOP to {len(fcm_tokens)} devices")
+    return await send_fcm_data_message(fcm_tokens, data)
+
+
+async def send_location_update(
+    fcm_tokens: List[str],
+    alert_id: str,
+    latitude: float,
+    longitude: float
+) -> Dict:
+    """
+    Enviar actualización de ubicación a familiares durante emergencia
+    """
+    data = {
+        "type": "location_update",
+        "alert_id": alert_id,
+        "latitude": str(latitude),
+        "longitude": str(longitude),
+        "timestamp": datetime.now(timezone.utc).isoformat()
+    }
+    
+    return await send_fcm_data_message(fcm_tokens, data)
 
 
 async def send_sms_emergency(
@@ -224,7 +286,7 @@ async def send_sos_notifications(
 ) -> Dict:
     """
     Main function to send SOS notifications through all channels:
-    1. FCM High Priority (instant even with app closed)
+    1. FCM DATA MESSAGES with High Priority (instant, activates native siren)
     2. Infobip SMS Backup (if FCM fails or no token)
     
     Returns summary of all notifications sent
@@ -243,8 +305,10 @@ async def send_sos_notifications(
     
     # Build location URL
     location_url = None
-    if location and location.get('latitude') and location.get('longitude'):
-        location_url = f"https://maps.google.com/?q={location['latitude']},{location['longitude']}"
+    lat = location.get('latitude', 0)
+    lng = location.get('longitude', 0)
+    if lat and lng:
+        location_url = f"https://maps.google.com/?q={lat},{lng}"
     
     # Collect FCM tokens and phone numbers
     fcm_tokens = []
@@ -294,24 +358,16 @@ async def send_sos_notifications(
         if phone:
             phone_numbers.append(phone)
     
-    # 1. Send FCM High Priority notifications
+    # 1. Send FCM DATA MESSAGES with critical alert
     if fcm_tokens:
-        fcm_data = {
-            "type": "sos_alert",
-            "alert_id": alert_id,
-            "sender_name": sender_name,
-            "sender_email": sender_email,
-            "latitude": str(location.get('latitude', 0)),
-            "longitude": str(location.get('longitude', 0)),
-            "url": f"/sos-alert?alert={alert_id}",
-            "timestamp": datetime.now(timezone.utc).isoformat()
-        }
-        
-        fcm_results = await send_fcm_high_priority(
+        fcm_results = await send_sos_critical_alert(
             fcm_tokens=fcm_tokens,
-            title=f"🚨 ¡EMERGENCIA SOS! - {sender_name}",
-            body=f"{sender_name} necesita ayuda urgente. Pulsa para ver su ubicación.",
-            data=fcm_data
+            alert_id=alert_id,
+            sender_name=sender_name,
+            sender_email=sender_email,
+            latitude=lat,
+            longitude=lng,
+            message=message
         )
         
         results["fcm_sent"] = fcm_results.get("success", 0)
@@ -339,7 +395,7 @@ async def send_sos_notifications(
     return results
 
 
-async def register_fcm_token(db, user_id: str, fcm_token: str, platform: str = "web") -> bool:
+async def register_fcm_token(db, user_id: str, fcm_token: str, platform: str = "android") -> bool:
     """
     Register or update FCM token for a user
     """
