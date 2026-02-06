@@ -228,6 +228,40 @@ async def delete_family_member(
     return {"message": "Miembro eliminado"}
 
 
+@router.get("/family/invitation/{member_id}")
+async def get_invitation_info(member_id: str):
+    """
+    PUBLIC endpoint - Get invitation info without authentication
+    Used by the JoinFamilyPage to show who invited the user
+    """
+    # Find the invitation
+    invitation = await _db.family_members.find_one(
+        {"id": member_id},
+        {"_id": 0}
+    )
+    
+    if not invitation:
+        raise HTTPException(status_code=404, detail="Invitación no encontrada")
+    
+    # Check if already used
+    if invitation.get("user_id"):
+        raise HTTPException(status_code=400, detail="Esta invitación ya fue utilizada")
+    
+    # Get owner info
+    owner = await _db.users.find_one(
+        {"user_id": invitation["family_owner_id"]},
+        {"_id": 0, "name": 1, "email": 1}
+    )
+    
+    return {
+        "member_id": member_id,
+        "name": invitation.get("name"),
+        "relationship": invitation.get("relationship"),
+        "owner_name": owner.get("name", "Un familiar") if owner else "Un familiar",
+        "status": invitation.get("status", "pending")
+    }
+
+
 @router.post("/family/join/{invite_code}")
 async def join_family_group(
     invite_code: str,
