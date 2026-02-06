@@ -24,6 +24,10 @@ import ContactsPickerScreen from '../screens/ContactsPickerScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 import NotificationsScreen from '../screens/NotificationsScreen';
 
+// SOS Screens
+import SOSAlertScreen from '../screens/SOSAlertScreen';
+import SOSTestScreen from '../screens/SOSTestScreen';
+
 export type RootStackParamList = {
   // Auth
   Login: undefined;
