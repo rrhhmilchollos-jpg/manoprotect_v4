@@ -239,13 +239,13 @@ public class SOSLockScreenActivity extends Activity {
         openMapsButton.setOnClickListener(v -> openMaps());
         ((LinearLayout) rootView).addView(openMapsButton);
         
-        // Call Emergency button
+        // Call Emergency button - Opcional, el usuario decide si llamar
         callEmergencyButton = new Button(this);
-        callEmergencyButton.setText("📞 LLAMAR 112");
-        callEmergencyButton.setBackgroundColor(Color.parseColor("#DC2626"));
+        callEmergencyButton.setText("📞 LLAMAR EMERGENCIAS (112)");
+        callEmergencyButton.setBackgroundColor(Color.parseColor("#6B7280"));
         callEmergencyButton.setTextColor(Color.WHITE);
-        callEmergencyButton.setTextSize(16);
-        callEmergencyButton.setPadding(40, 20, 40, 20);
+        callEmergencyButton.setTextSize(14);
+        callEmergencyButton.setPadding(40, 15, 40, 15);
         LinearLayout.LayoutParams callParams = new LinearLayout.LayoutParams(
             LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         callParams.setMargins(0, 10, 0, 20);
@@ -253,9 +253,18 @@ public class SOSLockScreenActivity extends Activity {
         callEmergencyButton.setOnClickListener(v -> callEmergency());
         ((LinearLayout) rootView).addView(callEmergencyButton);
         
+        // Disclaimer - IMPORTANTE para Google Play
+        TextView disclaimerText = new TextView(this);
+        disclaimerText.setText("Este es un aviso personal entre contactos de emergencia.\nNo es una alerta oficial ni de servicios públicos.");
+        disclaimerText.setTextColor(Color.parseColor("#6B7280"));
+        disclaimerText.setTextSize(11);
+        disclaimerText.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+        disclaimerText.setPadding(0, 10, 0, 10);
+        ((LinearLayout) rootView).addView(disclaimerText);
+        
         // Status text
         statusText = new TextView(this);
-        statusText.setText("⏳ Esperando confirmación...");
+        statusText.setText("Esperando tu respuesta...");
         statusText.setTextColor(Color.parseColor("#9CA3AF"));
         statusText.setTextSize(14);
         statusText.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
