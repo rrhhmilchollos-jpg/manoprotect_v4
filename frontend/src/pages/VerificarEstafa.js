@@ -19,6 +19,7 @@ const VerificarEstafa = () => {
   const [stats, setStats] = useState(null);
   const [recentAlerts, setRecentAlerts] = useState([]);
   const [showReportForm, setShowReportForm] = useState(false);
+  const [copied, setCopied] = useState(false);
   const [reportData, setReportData] = useState({
     type: 'phone',
     value: '',
@@ -26,6 +27,59 @@ const VerificarEstafa = () => {
     category: 'phishing',
     reporter_email: ''
   });
+
+  // Share functionality
+  const getShareText = () => {
+    if (!result?.is_scam || !searchValue) return '';
+    const type = searchType === 'phone' ? 'número' : 'email';
+    return `⚠️ ALERTA DE ESTAFA: El ${type} ${searchValue} ha sido reportado como fraudulento. Verifica cualquier contacto sospechoso en ManoProtect.com/verificar-estafa`;
+  };
+
+  const handleShare = async (platform) => {
+    const text = getShareText();
+    const url = 'https://manoprotect.com/verificar-estafa';
+    
+    if (platform === 'native' && navigator.share) {
+      try {
+        await navigator.share({
+          title: 'Alerta de Estafa - ManoProtect',
+          text: text,
+          url: url
+        });
+      } catch (err) {
+        if (err.name !== 'AbortError') {
+          console.error('Error sharing:', err);
+        }
+      }
+      return;
+    }
+
+    const encodedText = encodeURIComponent(text);
+    const encodedUrl = encodeURIComponent(url);
+    
+    const shareUrls = {
+      whatsapp: `https://wa.me/?text=${encodedText}`,
+      twitter: `https://twitter.com/intent/tweet?text=${encodedText}`,
+      facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}&quote=${encodedText}`,
+      telegram: `https://t.me/share/url?url=${encodedUrl}&text=${encodedText}`
+    };
+
+    if (shareUrls[platform]) {
+      window.open(shareUrls[platform], '_blank', 'width=600,height=400');
+    }
+  };
+
+  const handleCopyLink = async () => {
+    const text = getShareText();
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopied(true);
+      toast.success('Texto copiado al portapapeles');
+      setTimeout(() => setCopied(false), 2000);
+    } catch (err) {
+      toast.error('Error al copiar');
+    }
+  };
 
   useEffect(() => {
     fetchStats();
