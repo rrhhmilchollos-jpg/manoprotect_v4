@@ -50,16 +50,19 @@ else:
     print("⚠️ Infobip SMS not configured")
 
 
-async def send_fcm_high_priority(
+async def send_fcm_data_message(
     fcm_tokens: List[str],
-    title: str,
-    body: str,
-    data: Dict = None,
-    image_url: str = None
+    data: Dict
 ) -> Dict:
     """
-    Send FCM notification with HIGH PRIORITY for immediate delivery
-    Works even when app is closed on Android
+    Send FCM DATA MESSAGE with HIGH PRIORITY for critical alerts
+    
+    IMPORTANTE: Usamos DATA MESSAGES (no notification messages)
+    Esto permite que la app reciba los datos en segundo plano
+    y ejecute código ANTES de mostrar nada al usuario.
+    
+    El servicio nativo de Android (SOSFirebaseMessagingService) procesará
+    estos datos y activará la sirena usando STREAM_ALARM.
     """
     if not _firebase_initialized:
         init_firebase()
@@ -73,31 +76,20 @@ async def send_fcm_high_priority(
         "errors": []
     }
     
+    # Ensure all data values are strings (FCM requirement)
+    string_data = {k: str(v) if v is not None else "" for k, v in data.items()}
+    
     for token in fcm_tokens:
         try:
-            # Create message with HIGH PRIORITY
+            # Create DATA-ONLY message (NO notification payload)
+            # This ensures the app can process data in background
             message = messaging.Message(
                 token=token,
-                notification=messaging.Notification(
-                    title=title,
-                    body=body,
-                    image=image_url
-                ),
-                data=data or {},
+                # NO notification field - only data
+                data=string_data,
                 android=messaging.AndroidConfig(
-                    priority='high',
-                    ttl=0,
-                    notification=messaging.AndroidNotification(
-                        title=title,
-                        body=body,
-                        icon='ic_notification',
-                        color='#DC2626',
-                        sound='alarm',  # Sonido de alarma del sistema
-                        priority='max',
-                        visibility='public',
-                        channel_id='sos_emergency_critical',  # Canal de emergencia crítica
-                        tag='sos_alert',
-                        click_action='OPEN_SOS_ALERT',
+                    priority='high',  # CRITICAL: High priority for immediate delivery
+                    ttl=0,  # No delay - deliver immediately
                         notification_count=1,
                         default_sound=False,
                         default_vibrate_timings=False,
