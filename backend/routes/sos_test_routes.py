@@ -8,7 +8,7 @@ from typing import Optional
 from datetime import datetime, timezone
 import uuid
 
-router = APIRouter(prefix="/api/sos-test", tags=["SOS Test"])
+router = APIRouter(prefix="/sos-test", tags=["SOS Test"])
 
 # Store test alerts in memory
 test_alerts = {}
