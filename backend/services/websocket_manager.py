@@ -318,9 +318,15 @@ async def notify_all_family_siren_stop(sender_user_id, alert_id, acknowledger_na
     """
     Notify ALL family members to stop their sirens
     Called when someone acknowledges the SOS
+    
+    CRITICAL: This sends BOTH WebSocket events AND FCM DATA MESSAGES
+    to ensure native Android apps stop their sirens
     """
     if not _db:
         return
+    
+    # Import FCM service for native app notifications
+    from services.emergency_notifications import send_siren_stop
     
     # Get all family members
     family_members = await _db.family_members.find(
@@ -335,6 +341,8 @@ async def notify_all_family_siren_stop(sender_user_id, alert_id, acknowledger_na
     ).to_list(10)
     
     all_family_ids = set()
+    fcm_tokens = []
+    
     for member in family_members:
         if member.get('user_id'):
             all_family_ids.add(member['user_id'])
@@ -342,7 +350,16 @@ async def notify_all_family_siren_stop(sender_user_id, alert_id, acknowledger_na
         if contact.get('contact_user_id'):
             all_family_ids.add(contact['contact_user_id'])
     
-    # Send siren_stop to ALL connected family members
+    # Collect FCM tokens for native app notification
+    for family_user_id in all_family_ids:
+        fcm_sub = await _db.fcm_tokens.find_one(
+            {"user_id": family_user_id},
+            {"_id": 0, "fcm_token": 1}
+        )
+        if fcm_sub and fcm_sub.get('fcm_token'):
+            fcm_tokens.append(fcm_sub['fcm_token'])
+    
+    # 1. Send WebSocket events to all connected family members
     for family_user_id in all_family_ids:
         if family_user_id in active_connections:
             for sid in active_connections[family_user_id]:
@@ -353,7 +370,18 @@ async def notify_all_family_siren_stop(sender_user_id, alert_id, acknowledger_na
                     'message': f'{acknowledger_name} está atendiendo la emergencia',
                     'timestamp': datetime.now(timezone.utc).isoformat()
                 }, to=sid)
-                print(f"[SOS] 🔇 Sent siren_stop to family member {family_user_id}")
+                print(f"[SOS] 🔇 Sent WebSocket siren_stop to {family_user_id}")
+    
+    # 2. CRITICAL: Send FCM DATA MESSAGE to stop native Android sirens
+    # This ensures sirens stop even if app is in background
+    if fcm_tokens:
+        await send_siren_stop(
+            fcm_tokens=fcm_tokens,
+            alert_id=alert_id,
+            acknowledged_by=acknowledger_name,
+            reason='acknowledged'
+        )
+        print(f"[SOS] 🔇 Sent FCM siren_stop to {len(fcm_tokens)} devices")
 
 # Utility function to send SOS from API routes
 async def send_sos_to_family(user_id: str, user_name: str, alert_data: dict):
