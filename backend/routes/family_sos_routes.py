@@ -827,6 +827,7 @@ async def link_family_member_by_phone(
     """
     Link a family member to the subscription by their phone number.
     This allows them to receive SOS alerts and see family contacts.
+    ALSO sends an SMS invitation with a link to join the family.
     """
     user = await require_auth(request, session_token)
     
@@ -842,6 +843,11 @@ async def link_family_member_by_phone(
     if not phone:
         return {"success": False, "message": "Número de teléfono requerido"}
     
+    # Format phone number
+    phone = phone.replace(" ", "")
+    if not phone.startswith("+"):
+        phone = "+34" + phone.lstrip("0")
+    
     # Check if already linked
     existing = await _db.family_members.find_one({
         "family_owner_id": user.user_id,
@@ -851,8 +857,10 @@ async def link_family_member_by_phone(
     if existing:
         return {"success": False, "message": "Este número ya está vinculado a tu familia"}
     
-    # Create family member link
+    # Create family member link with invite token
     member_id = f"member_{uuid.uuid4().hex[:8]}"
+    invite_token = uuid.uuid4().hex[:12]
+    
     family_link = {
         "id": member_id,
         "family_owner_id": user.user_id,
@@ -863,11 +871,32 @@ async def link_family_member_by_phone(
         "is_senior": False,
         "simplified_mode": False,
         "alert_level": "all",
+        "invite_token": invite_token,
+        "status": "pending",  # pending until they join
         "linked_at": datetime.now(timezone.utc).isoformat(),
         "created_at": datetime.now(timezone.utc).isoformat()
     }
     
     await _db.family_members.insert_one(family_link)
+    
+    # Send SMS invitation
+    sms_sent = False
+    invite_link = f"https://manoprotect.com/unirse/{member_id}"
+    
+    try:
+        from services.infobip_sms import send_sms
+        
+        sms_message = (
+            f"ManoProtect: {user.name} te ha añadido como contacto de emergencia. "
+            f"Descarga la app y únete: {invite_link} "
+            f"Este es un mensaje privado, no oficial."
+        )
+        
+        sms_result = await send_sms(phone, sms_message)
+        sms_sent = sms_result.get("success", False)
+        print(f"📱 SMS invitación enviado a {phone}: {sms_sent}")
+    except Exception as e:
+        print(f"❌ Error enviando SMS invitación: {e}")
     
     # Create notification for the linked member (if they have the app)
     notification = {
@@ -878,7 +907,9 @@ async def link_family_member_by_phone(
         "message": f"{user.name} te ha añadido como {relationship} en ManoProtect. Ahora recibirás alertas SOS de tu familia.",
         "data": {
             "family_owner_id": user.user_id,
-            "family_owner_name": user.name
+            "family_owner_name": user.name,
+            "invite_link": invite_link,
+            "member_id": member_id
         },
         "read": False,
         "created_at": datetime.now(timezone.utc).isoformat()
@@ -887,14 +918,17 @@ async def link_family_member_by_phone(
     
     return {
         "success": True,
-        "message": f"{name} vinculado a tu familia correctamente",
+        "message": f"{name} vinculado a tu familia correctamente" + (" y SMS enviado" if sms_sent else ""),
         "member_id": member_id,
+        "invite_link": invite_link,
+        "sms_sent": sms_sent,
         "member": {
             "id": member_id,
             "name": name,
             "phone": phone,
             "relationship": relationship,
-            "is_emergency": is_emergency
+            "is_emergency": is_emergency,
+            "status": "pending"
         }
     }
 
