@@ -468,7 +468,6 @@ const FamilyAdmin = () => {
         </div>
       </div>
 
-      {/* Add/Edit Member Dialog */}
       <Dialog open={showAddDialog || !!editingMember} onOpenChange={(open) => {
         if (!open) {
           setShowAddDialog(false);
@@ -478,13 +477,22 @@ const FamilyAdmin = () => {
       }}>
         <DialogContent className="bg-white">
           <DialogHeader>
-            <DialogTitle>{editingMember ? 'Editar Miembro' : 'Añadir Miembro Familiar'}</DialogTitle>
+            <DialogTitle>{editingMember ? 'Editar Miembro' : '📱 Añadir Familiar para Alertas SOS'}</DialogTitle>
             <DialogDescription>
-              {editingMember ? 'Actualiza la información del miembro' : 'Añade un familiar para protegerlo con ManoProtect'}
+              {editingMember ? 'Actualiza la información del miembro' : 'Este familiar recibirá SMS y notificaciones cuando actives una alerta de emergencia'}
             </DialogDescription>
           </DialogHeader>
 
           <div className="space-y-4 py-4">
+            {/* Aviso importante */}
+            {!editingMember && (
+              <div className="bg-amber-50 border border-amber-200 rounded-lg p-3">
+                <p className="text-sm text-amber-800">
+                  <strong>⚠️ Importante:</strong> El teléfono es obligatorio para que tu familiar reciba SMS de emergencia cuando pulses el botón SOS.
+                </p>
+              </div>
+            )}
+
             <div>
               <label className="text-sm font-medium">Nombre *</label>
               <Input
@@ -494,31 +502,35 @@ const FamilyAdmin = () => {
               />
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="text-sm font-medium">Parentesco</label>
-                <Select 
-                  value={formData.relationship} 
-                  onValueChange={(v) => setFormData({...formData, relationship: v})}
-                >
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {relationships.map(r => (
-                      <SelectItem key={r.value} value={r.value}>{r.label}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-              <div>
-                <label className="text-sm font-medium">Teléfono</label>
-                <Input
-                  value={formData.phone}
-                  onChange={(e) => setFormData({...formData, phone: e.target.value})}
-                  placeholder="+34 600 000 000"
-                />
-              </div>
+            {/* Teléfono PRIMERO y destacado */}
+            <div>
+              <label className="text-sm font-medium flex items-center gap-2">
+                <Phone className="w-4 h-4 text-emerald-600" />
+                Teléfono * <span className="text-xs text-emerald-600 font-normal">(recibirá SMS de emergencia)</span>
+              </label>
+              <Input
+                value={formData.phone}
+                onChange={(e) => setFormData({...formData, phone: e.target.value})}
+                placeholder="+34 600 123 456"
+                className="border-emerald-300 focus:border-emerald-500"
+              />
+            </div>
+
+            <div>
+              <label className="text-sm font-medium">Parentesco</label>
+              <Select 
+                value={formData.relationship} 
+                onValueChange={(v) => setFormData({...formData, relationship: v})}
+              >
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {relationships.map(r => (
+                    <SelectItem key={r.value} value={r.value}>{r.label}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
 
             <div>
@@ -529,6 +541,7 @@ const FamilyAdmin = () => {
                 onChange={(e) => setFormData({...formData, email: e.target.value})}
                 placeholder="email@ejemplo.com"
               />
+              <p className="text-xs text-zinc-500 mt-1">Si tiene cuenta en ManoProtect, también recibirá notificaciones push</p>
             </div>
 
             <div className="space-y-3 pt-2">
@@ -554,23 +567,6 @@ const FamilyAdmin = () => {
                 />
               </div>
             </div>
-
-            <div>
-              <label className="text-sm font-medium">Nivel de alertas</label>
-              <Select 
-                value={formData.alert_level} 
-                onValueChange={(v) => setFormData({...formData, alert_level: v})}
-              >
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">Todas las alertas</SelectItem>
-                  <SelectItem value="high">Solo alta prioridad</SelectItem>
-                  <SelectItem value="critical">Solo críticas</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
           </div>
 
           <DialogFooter>
@@ -589,7 +585,7 @@ const FamilyAdmin = () => {
               {submitting ? (
                 <Loader2 className="w-4 h-4 animate-spin" />
               ) : (
-                editingMember ? 'Guardar Cambios' : 'Añadir Miembro'
+                editingMember ? 'Guardar Cambios' : '📱 Añadir y Activar SMS'
               )}
             </Button>
           </DialogFooter>
