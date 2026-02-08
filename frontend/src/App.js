@@ -48,6 +48,7 @@ const DescargarDesktop = lazy(() => import('@/pages/DescargarDesktop'));
 const DescargarApps = lazy(() => import('@/pages/DescargarApps'));
 const PortalEmpleados = lazy(() => import('@/pages/PortalEmpleados'));
 const DeleteAccount = lazy(() => import('@/pages/DeleteAccount'));
+const DeleteAccountRequest = lazy(() => import('@/pages/DeleteAccountRequest'));
 const AdminUsers = lazy(() => import('@/pages/AdminUsers'));
 const HealthProfile = lazy(() => import('@/pages/HealthProfile'));
 const AdminAudios = lazy(() => import('@/pages/AdminAudios'));
