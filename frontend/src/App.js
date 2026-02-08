@@ -217,6 +217,7 @@ function AppRouter() {
           <Route path="/registro" element={<ManoProtectRegistro />} />
           <Route path="/auth/callback" element={<AuthCallback />} />
           <Route path="/delete-account" element={<DeleteAccount />} />
+          <Route path="/solicitar-eliminacion" element={<DeleteAccountRequest />} />
           <Route path="/admin/users" element={<AdminUsers />} />
           <Route path="/health-profile" element={<HealthProfile />} />
           <Route path="/admin/audios" element={<AdminAudios />} />
