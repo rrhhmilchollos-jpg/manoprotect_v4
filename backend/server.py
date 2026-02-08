@@ -2712,6 +2712,15 @@ try:
 except ImportError as e:
     print(f"⚠️ Account routes not loaded: {e}")
 
+# Security Intelligence routes
+try:
+    from routes.security_routes import router as security_router, init_security_routes
+    init_security_routes(db)
+    api_router.include_router(security_router)
+    print("✅ Security Intelligence routes loaded")
+except ImportError as e:
+    print(f"⚠️ Security routes not loaded: {e}")
+
 app.include_router(api_router)
 app.include_router(public_router)
 
