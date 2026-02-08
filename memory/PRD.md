@@ -5,9 +5,34 @@
 - **Empresa**: STARTBOOKING SL
 - **Descripción**: Aplicación de protección contra fraudes digitales para familias españolas
 
-## Estado Actual: Página de Verificación de Estafas Corregida (6 Febrero 2025)
+## Estado Actual: Android 15+ y Eliminación de Cuenta (8 Febrero 2026)
 
-### ✅ Completado Hoy (6 Feb 2025)
+### ✅ Completado Hoy (8 Feb 2026)
+
+#### Página de Solicitud de Eliminación de Cuenta (Google Play Requirement)
+- [x] **Nueva página `/solicitar-eliminacion`**: Formulario de 2 pasos
+  - Paso 1: Identificación (email, nombre, teléfono)
+  - Paso 2: Confirmación (motivo, lista de datos a eliminar, checkbox de aceptación)
+- [x] **Endpoint `/api/account/delete-request`**: Procesa solicitudes de eliminación
+- [x] **Rutas en `account_routes.py`**: Guarda solicitudes en MongoDB collection `deletion_requests`
+
+#### Actualización Android 15+ y Pantallas Grandes
+- [x] **AndroidManifest.xml actualizado**:
+  - `tools:targetApi="35"` (Android 15)
+  - `android:resizeableActivity="true"` en todas las Activities
+  - `android:screenOrientation="unspecified"` para tablets/foldables
+  - `android:configChanges` incluye `density`
+- [x] **SOSLockScreenActivity.java - Edge-to-Edge**:
+  - `WindowCompat.setDecorFitsSystemWindows(window, false)`
+  - `window.statusBarColor = Color.TRANSPARENT`
+  - `window.navigationBarColor = Color.TRANSPARENT`
+  - `ViewCompat.setOnApplyWindowInsetsListener()` para padding dinámico
+  - ScrollView para pantallas grandes
+  - Eliminado `FLAG_FULLSCREEN` deprecated
+
+---
+
+### ✅ Completado (6 Feb 2026)
 
 #### Corrección de Tarjetas de Estadísticas en /verificar-estafa
 - [x] **Habilitado fraud_routes.py**: Las rutas estaban comentadas en server.py
