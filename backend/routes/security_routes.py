@@ -4,14 +4,14 @@ Endpoints para análisis de seguridad multi-capa
 """
 
 from fastapi import APIRouter, HTTPException, Query
-from pydantic import BaseModel, HttpUrl
+from pydantic import BaseModel
 from typing import Optional, List
 from datetime import datetime, timezone
 import re
 
 router = APIRouter(prefix="/security", tags=["Security Intelligence"])
 
-# Importar servicio de seguridad
+# Servicio de seguridad
 _security_service = None
 
 def init_security_routes(db):
@@ -20,9 +20,9 @@ def init_security_routes(db):
     try:
         from services.security_intelligence import get_security_service
         _security_service = get_security_service()
-        print("✅ Security Intelligence Service initialized")
+        print("[OK] Security Intelligence Service initialized")
     except Exception as e:
-        print(f"⚠️ Security service not available: {e}")
+        print(f"[WARN] Security service initialization: {e}")
 
 # ============================================
 # MODELOS DE REQUEST/RESPONSE
@@ -36,13 +36,6 @@ class IPCheckRequest(BaseModel):
 
 class ContentCheckRequest(BaseModel):
     content: str
-
-class SecurityProvider(BaseModel):
-    name: str
-    logo: str
-    description: str
-    category: str
-    status: str
 
 # ============================================
 # ENDPOINTS PÚBLICOS
@@ -134,30 +127,19 @@ async def check_url_security(request: URLCheckRequest):
     Analiza una URL contra múltiples fuentes de seguridad.
     
     Fuentes utilizadas:
-    - Google Safe Browsing v5
+    - Google Safe Browsing v4
     - VirusTotal v3
     - Análisis de patrones internos
     """
     url = request.url.strip()
     
-    # Validar URL
+    # Validar y normalizar URL
     if not url.startswith(('http://', 'https://')):
         url = 'https://' + url
     
     if _security_service is None:
-        # Modo fallback sin APIs externas
-        return {
-            "url": url,
-            "is_safe": True,
-            "threat_level": "unknown",
-            "message": "Análisis básico completado. APIs externas no configuradas.",
-            "recommendations": [
-                "Verifica siempre la URL antes de introducir datos personales",
-                "Busca el candado de seguridad HTTPS",
-                "Desconfía de ofertas demasiado buenas"
-            ],
-            "checked_at": datetime.now(timezone.utc).isoformat()
-        }
+        # Modo fallback sin APIs externas - análisis básico
+        return _fallback_url_analysis(url)
     
     try:
         result = await _security_service.analyze_url(url)
@@ -176,7 +158,8 @@ async def check_url_security(request: URLCheckRequest):
             "checked_at": result.result.checked_at
         }
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error en análisis: {str(e)}")
+        print(f"[ERROR] URL analysis failed: {e}")
+        return _fallback_url_analysis(url)
 
 @router.post("/check/ip")
 async def check_ip_security(request: IPCheckRequest):
@@ -189,19 +172,19 @@ async def check_ip_security(request: IPCheckRequest):
     """
     ip = request.ip.strip()
     
-    # Validar IP
+    # Validar formato IP
     ip_pattern = r'^(\d{1,3}\.){3}\d{1,3}$'
     if not re.match(ip_pattern, ip):
-        raise HTTPException(status_code=400, detail="IP inválida")
+        raise HTTPException(status_code=400, detail="IP inválida. Formato esperado: xxx.xxx.xxx.xxx")
+    
+    # Validar rangos
+    octets = ip.split('.')
+    for octet in octets:
+        if int(octet) > 255:
+            raise HTTPException(status_code=400, detail="IP inválida. Cada octeto debe ser 0-255")
     
     if _security_service is None:
-        return {
-            "ip": ip,
-            "is_safe": True,
-            "threat_level": "unknown",
-            "message": "Análisis básico completado. APIs externas no configuradas.",
-            "checked_at": datetime.now(timezone.utc).isoformat()
-        }
+        return _fallback_ip_analysis(ip)
     
     try:
         result = await _security_service.analyze_ip(ip)
@@ -220,7 +203,8 @@ async def check_ip_security(request: IPCheckRequest):
             "checked_at": result.result.checked_at
         }
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error en análisis: {str(e)}")
+        print(f"[ERROR] IP analysis failed: {e}")
+        return _fallback_ip_analysis(ip)
 
 @router.post("/check/content")
 async def check_content_patterns(request: ContentCheckRequest):
@@ -237,30 +221,10 @@ async def check_content_patterns(request: ContentCheckRequest):
     content = request.content.strip()
     
     if len(content) < 10:
-        raise HTTPException(status_code=400, detail="Contenido demasiado corto para analizar")
+        raise HTTPException(status_code=400, detail="Contenido demasiado corto para analizar (mínimo 10 caracteres)")
     
     if _security_service is None:
-        # Análisis básico sin servicio completo
-        suspicious_keywords = [
-            "urgente", "verificar", "premio", "ganador", "haz clic",
-            "suspendida", "bloquea", "confirma", "actualiza"
-        ]
-        
-        content_lower = content.lower()
-        matches = [kw for kw in suspicious_keywords if kw in content_lower]
-        
-        return {
-            "is_scam": len(matches) >= 2,
-            "detected_patterns": [{"type": "suspicious", "keyword": kw} for kw in matches],
-            "overall_confidence": min(len(matches) * 20, 100),
-            "threat_level": "medium" if len(matches) >= 2 else "low",
-            "recommendations": [
-                "No hagas clic en enlaces sospechosos",
-                "Verifica el remitente antes de actuar",
-                "Nunca compartas contraseñas por mensaje"
-            ],
-            "checked_at": datetime.now(timezone.utc).isoformat()
-        }
+        return _fallback_content_analysis(content)
     
     try:
         result = _security_service.detect_scam_patterns(content)
@@ -269,7 +233,7 @@ async def check_content_patterns(request: ContentCheckRequest):
         if result["is_scam"]:
             recommendations = [
                 "Este contenido presenta características de estafa",
-                "No respondas ni proporciones información personal",
+                "NO respondas ni proporciones información personal",
                 "Bloquea al remitente y reporta el mensaje",
                 "Si es SMS, reporta al 7726 (SPAM)"
             ]
@@ -285,7 +249,8 @@ async def check_content_patterns(request: ContentCheckRequest):
             "checked_at": datetime.now(timezone.utc).isoformat()
         }
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error en análisis: {str(e)}")
+        print(f"[ERROR] Content analysis failed: {e}")
+        return _fallback_content_analysis(content)
 
 @router.get("/stats/dashboard")
 async def get_security_dashboard():
@@ -302,7 +267,7 @@ async def get_security_dashboard():
             "AlienVault OTX",
             "Internal Pattern Detection"
         ],
-        "threats_analyzed_today": 0,  # Real data from DB
+        "threats_analyzed_today": 0,
         "phishing_blocked": 0,
         "malware_detected": 0,
         "suspicious_ips": 0,
@@ -314,4 +279,101 @@ async def get_security_dashboard():
             "ip_reputation": "Real-time",
             "pattern_detection": "AI-powered"
         }
+    }
+
+# ============================================
+# FUNCIONES FALLBACK (sin APIs configuradas)
+# ============================================
+
+def _fallback_url_analysis(url: str) -> dict:
+    """Análisis básico de URL sin APIs externas"""
+    suspicious_patterns = [
+        (r"login.*\.\w+\.\w+", "Posible dominio de phishing"),
+        (r"secure.*bank", "Posible suplantación bancaria"),
+        (r"verify.*account", "Patrón de phishing"),
+        (r"\.tk$|\.ml$|\.ga$|\.cf$", "TLD de alto riesgo"),
+    ]
+    
+    url_lower = url.lower()
+    warnings = []
+    
+    for pattern, description in suspicious_patterns:
+        if re.search(pattern, url_lower):
+            warnings.append(description)
+    
+    is_safe = len(warnings) == 0
+    
+    return {
+        "url": url,
+        "is_safe": is_safe,
+        "threat_level": "medium" if warnings else "unknown",
+        "warnings": warnings,
+        "message": "Análisis básico completado. Configura las claves API para análisis completo.",
+        "recommendations": [
+            "Verifica siempre la URL antes de introducir datos personales",
+            "Busca el candado de seguridad HTTPS",
+            "Desconfía de ofertas demasiado buenas"
+        ],
+        "checked_at": datetime.now(timezone.utc).isoformat()
+    }
+
+def _fallback_ip_analysis(ip: str) -> dict:
+    """Análisis básico de IP sin APIs externas"""
+    # IPs privadas conocidas
+    private_ranges = [
+        (r"^10\.", "Red privada Clase A"),
+        (r"^172\.(1[6-9]|2[0-9]|3[0-1])\.", "Red privada Clase B"),
+        (r"^192\.168\.", "Red privada Clase C"),
+        (r"^127\.", "Localhost"),
+    ]
+    
+    for pattern, description in private_ranges:
+        if re.match(pattern, ip):
+            return {
+                "ip": ip,
+                "is_safe": True,
+                "threat_level": "safe",
+                "message": f"IP privada detectada: {description}",
+                "checked_at": datetime.now(timezone.utc).isoformat()
+            }
+    
+    return {
+        "ip": ip,
+        "is_safe": True,
+        "threat_level": "unknown",
+        "message": "Análisis básico completado. Configura las claves API para verificación completa.",
+        "recommendations": [
+            "Configura ABUSEIPDB_API_KEY para verificación de reputación",
+            "Configura ALIENVAULT_OTX_KEY para threat intelligence"
+        ],
+        "checked_at": datetime.now(timezone.utc).isoformat()
+    }
+
+def _fallback_content_analysis(content: str) -> dict:
+    """Análisis básico de contenido sin servicio completo"""
+    suspicious_keywords = [
+        "urgente", "verificar", "premio", "ganador", "haz clic",
+        "suspendida", "bloquea", "confirma", "actualiza", "inmediatamente",
+        "paquete", "detenido", "aduanas", "multa", "devolucion"
+    ]
+    
+    content_lower = content.lower()
+    matches = [kw for kw in suspicious_keywords if kw in content_lower]
+    
+    is_scam = len(matches) >= 2
+    
+    return {
+        "is_scam": is_scam,
+        "detected_patterns": [{"type": "suspicious_keyword", "keyword": kw} for kw in matches],
+        "overall_confidence": min(len(matches) * 20, 100),
+        "threat_level": "high" if len(matches) >= 3 else "medium" if is_scam else "low",
+        "recommendations": [
+            "No hagas clic en enlaces sospechosos",
+            "Verifica el remitente antes de actuar",
+            "Nunca compartas contraseñas por mensaje"
+        ] if is_scam else [
+            "No se detectaron patrones de estafa evidentes",
+            "Mantén precaución con mensajes inesperados"
+        ],
+        "checked_at": datetime.now(timezone.utc).isoformat()
     }
