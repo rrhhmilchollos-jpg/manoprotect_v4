@@ -7,7 +7,20 @@
 
 ## Estado Actual: Plataforma de Protección Digital Multi-Capa (8 Febrero 2026)
 
-### ✅ Completado Hoy (8 Feb 2026) - Sesión 2
+### ✅ Completado Hoy (8 Feb 2026) - Sesión 3
+
+#### Compatibilidad Android 15/16 - Recomendaciones Google Play
+- [x] **Edge-to-Edge Display**: Implementado en MainActivity.kt con WindowCompat
+- [x] **APIs Obsoletas**: Eliminado uso de setStatusBarColor/setNavigationBarColor
+- [x] **Restricciones de Orientación**: Eliminadas para cumplir Android 16
+- [x] **Pantallas Grandes**: resizeableActivity=true en todas las Activities
+- [x] **Temas v35**: Creado `/app/mobile-app/android/app/src/main/res/values-v35/styles.xml`
+- [x] **Versión**: Actualizada a 2.0.1 (versionCode 3)
+- [x] **Documentación**: `/app/mobile-app/ANDROID_15_16_CHANGES.md`
+
+---
+
+### ✅ Completado (8 Feb 2026) - Sesión 2
 
 #### Servicio de Inteligencia de Seguridad IMPLEMENTADO
 - [x] **Nuevo archivo**: `/app/backend/services/security_intelligence.py`
