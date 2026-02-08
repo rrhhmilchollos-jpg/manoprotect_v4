@@ -5,30 +5,42 @@
 - **Empresa**: STARTBOOKING SL
 - **Descripción**: Aplicación de protección contra fraudes digitales para familias españolas
 
-## Estado Actual: Android 15+ y Eliminación de Cuenta (8 Febrero 2026)
+## Estado Actual: Plataforma de Protección Digital Multi-Capa (8 Febrero 2026)
 
 ### ✅ Completado Hoy (8 Feb 2026)
 
-#### Página de Solicitud de Eliminación de Cuenta (Google Play Requirement)
-- [x] **Nueva página `/solicitar-eliminacion`**: Formulario de 2 pasos
-  - Paso 1: Identificación (email, nombre, teléfono)
-  - Paso 2: Confirmación (motivo, lista de datos a eliminar, checkbox de aceptación)
-- [x] **Endpoint `/api/account/delete-request`**: Procesa solicitudes de eliminación
-- [x] **Rutas en `account_routes.py`**: Guarda solicitudes en MongoDB collection `deletion_requests`
+#### Arquitectura de Seguridad Multi-Capa
+- [x] **Backend `/api/security/*`**: Nuevos endpoints de análisis de seguridad
+  - `POST /api/security/check/url` - Análisis de URLs con múltiples fuentes
+  - `POST /api/security/check/ip` - Verificación de reputación de IPs
+  - `POST /api/security/check/content` - Detección de patrones de estafa
+  - `GET /api/security/providers` - Lista de proveedores integrados
+  - `GET /api/security/stats/dashboard` - Panel de estadísticas
+
+#### Integraciones de Ciberseguridad (APIs)
+- [x] **Google Safe Browsing API v5**: Detección de phishing y malware
+- [x] **VirusTotal API v3**: Análisis con 70+ motores antivirus
+- [x] **AbuseIPDB API v2**: Base de datos de IPs maliciosas
+- [x] **AlienVault OTX**: Open Threat Exchange - Inteligencia de amenazas
+- [x] **Cloudflare**: WAF, protección contra bots y DDoS (infraestructura)
+- [x] **CrowdStrike Falcon**: Threat Intelligence (preparado para enterprise)
+- [x] **Recorded Future**: AI Intelligence (preparado para premium)
+
+#### Landing Page - Sección de Partners
+- [x] **Nueva sección "Protección Multi-Capa"**: Muestra los proveedores de seguridad
+- [x] **Cards de tecnologías**: Google, VirusTotal, Cloudflare, AbuseIPDB
+- [x] **Partners premium**: AlienVault OTX, CrowdStrike, Recorded Future
+- [x] **Stats bar**: 8 capas, 70+ motores, 24/7, AI
+- [x] **Disclaimer legal**: Sin promesas de protección absoluta
+
+#### Página de Eliminación de Cuenta (Google Play Requirement)
+- [x] **Nueva ruta `/solicitar-eliminacion`**: Formulario de 2 pasos
+- [x] **Backend `/api/account/delete-request`**: Procesa solicitudes
+- [x] **Enlace en footer**: "Eliminar mi Cuenta"
 
 #### Actualización Android 15+ y Pantallas Grandes
-- [x] **AndroidManifest.xml actualizado**:
-  - `tools:targetApi="35"` (Android 15)
-  - `android:resizeableActivity="true"` en todas las Activities
-  - `android:screenOrientation="unspecified"` para tablets/foldables
-  - `android:configChanges` incluye `density`
-- [x] **SOSLockScreenActivity.java - Edge-to-Edge**:
-  - `WindowCompat.setDecorFitsSystemWindows(window, false)`
-  - `window.statusBarColor = Color.TRANSPARENT`
-  - `window.navigationBarColor = Color.TRANSPARENT`
-  - `ViewCompat.setOnApplyWindowInsetsListener()` para padding dinámico
-  - ScrollView para pantallas grandes
-  - Eliminado `FLAG_FULLSCREEN` deprecated
+- [x] **AndroidManifest.xml**: targetApi="35", resizeableActivity, screenOrientation
+- [x] **SOSLockScreenActivity.java**: Edge-to-Edge, barras transparentes, insets dinámicos
 
 ---
 
