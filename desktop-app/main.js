@@ -1,6 +1,7 @@
-const { app, BrowserWindow, ipcMain, Menu, Tray, shell, dialog } = require('electron');
+const { app, BrowserWindow, ipcMain, Menu, Tray, shell, dialog, Notification } = require('electron');
 const path = require('path');
 const Store = require('electron-store');
+const WebSocket = require('ws');
 
 // Almacenamiento persistente
 const store = new Store();
@@ -8,12 +9,79 @@ const store = new Store();
 // Clave de acceso de empleado
 const EMPLOYEE_ACCESS_KEY = '14082015';
 
-// URL del backend de ManoProtect
+// URL del backend de ManoProtect (PRODUCCIÓN: cambiar a manoprotect.com)
 const BACKEND_URL = 'https://manoprotect-qa.preview.emergentagent.com';
+const WS_URL = 'wss://manoprotect-qa.preview.emergentagent.com/ws';
 
 let mainWindow;
 let tray;
 let isAuthenticated = false;
+let wsConnection = null;
+
+// Conexión WebSocket en tiempo real
+function connectWebSocket() {
+  try {
+    wsConnection = new WebSocket(WS_URL);
+    
+    wsConnection.on('open', () => {
+      console.log('✅ WebSocket conectado');
+    });
+    
+    wsConnection.on('message', (data) => {
+      try {
+        const message = JSON.parse(data);
+        handleRealtimeMessage(message);
+      } catch (e) {
+        console.error('Error parsing WS message:', e);
+      }
+    });
+    
+    wsConnection.on('close', () => {
+      console.log('WebSocket desconectado, reconectando...');
+      setTimeout(connectWebSocket, 5000);
+    });
+    
+    wsConnection.on('error', (error) => {
+      console.error('WebSocket error:', error.message);
+    });
+  } catch (error) {
+    console.error('Error connecting WebSocket:', error);
+    setTimeout(connectWebSocket, 5000);
+  }
+}
+
+// Manejar mensajes en tiempo real
+function handleRealtimeMessage(message) {
+  switch (message.type) {
+    case 'sos_alert':
+      // Mostrar notificación de alerta SOS
+      new Notification({
+        title: '🚨 Alerta SOS',
+        body: message.data?.sender_name + ' necesita ayuda',
+        urgency: 'critical'
+      }).show();
+      
+      if (mainWindow) {
+        mainWindow.show();
+        mainWindow.webContents.send('sos-alert', message.data);
+      }
+      break;
+      
+    case 'fraud_report':
+      // Nueva alerta de fraude
+      if (mainWindow) {
+        mainWindow.webContents.send('new-fraud-report', message.data);
+      }
+      break;
+      
+    case 'system_update':
+      // Actualización del sistema
+      if (mainWindow) {
+        mainWindow.webContents.send('system-update', message.data);
+      }
+      break;
+  }
+}
 
 // Crear ventana de login
 function createLoginWindow() {
