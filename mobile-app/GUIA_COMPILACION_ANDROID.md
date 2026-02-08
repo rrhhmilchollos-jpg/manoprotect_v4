@@ -1,228 +1,134 @@
-# 📱 Guía de Compilación - ManoProtect Android
+# 📱 Guía de Compilación - ManoProtect Android (Actualizada Android 15+)
 
-## Paso 1: Descargar el Proyecto
+## ✅ Correcciones para Google Play Incluidas
 
-### Opción A: Desde Emergent.sh
-1. Ve a tu proyecto en Emergent.sh
-2. Pulsa **"Download Code"** o **"Export"**
-3. Descarga el archivo ZIP
-4. Descomprime en tu ordenador
+Esta versión soluciona los problemas reportados por Google Play:
 
-### Opción B: Desde GitHub (si está sincronizado)
-```bash
-git clone https://github.com/tu-usuario/manoprotect.git
-cd manoprotect
+| Problema | Estado |
+|----------|--------|
+| Edge-to-Edge no funciona | ✅ Corregido |
+| APIs obsoletas (setStatusBarColor, etc.) | ✅ Eliminadas |
+| Restricciones de orientación | ✅ Removidas |
+| Target SDK 35 (Android 15) | ✅ Configurado |
+
+---
+
+## 📋 Requisitos Previos
+
+| Software | Versión | Descarga |
+|----------|---------|----------|
+| Node.js | 18+ | https://nodejs.org/ |
+| Java JDK | 17 | https://adoptium.net/ |
+| Android Studio | Latest | https://developer.android.com/studio |
+| Android SDK | 35 | Via SDK Manager |
+
+---
+
+## 🔑 Configurar Keystore (IMPORTANTE)
+
+### 1. Copia el keystore al proyecto:
+```cmd
+copy C:\WINDOWS\system32\manoprotect-2025.keystore mobile-app\android\app\
+```
+
+### 2. Edita `mobile-app/android/gradle.properties`:
+Añade estas líneas al final del archivo:
+
+```properties
+MYAPP_UPLOAD_STORE_FILE=manoprotect-2025.keystore
+MYAPP_UPLOAD_KEY_ALIAS=manoprotect
+MYAPP_UPLOAD_STORE_PASSWORD=19862210Des
+MYAPP_UPLOAD_KEY_PASSWORD=19862210Des
 ```
 
 ---
 
-## Paso 2: Instalar Requisitos
+## 🚀 Compilar el AAB
 
-### Instalar Node.js (v18+)
-- Descarga de: https://nodejs.org/
-- Verifica: `node --version`
+### Paso 1: Descargar código
+- En Emergent → **"Download Code"**
+- Descomprime el ZIP en tu PC
 
-### Instalar Java JDK 17
-- Descarga de: https://adoptium.net/
-- Configura `JAVA_HOME`
-
-### Instalar Android Studio
-1. Descarga de: https://developer.android.com/studio
-2. Instala y abre Android Studio
-3. Ve a **SDK Manager** → instala:
-   - Android SDK Platform 34
-   - Android SDK Build-Tools 34
-   - Android SDK Command-line Tools
-
----
-
-## Paso 3: Configurar el Proyecto
-
-### 3.1 Instalar dependencias del proyecto
-```bash
+### Paso 2: Instalar dependencias
+```cmd
 cd mobile-app
 yarn install
 ```
 
-### 3.2 Configurar Firebase
-1. Ve a [Firebase Console](https://console.firebase.google.com/)
-2. Crea proyecto "ManoProtect" (o usa el existente)
-3. Añade app Android:
-   - Package name: `com.manoprotect.app`
-4. Descarga `google-services.json`
-5. Copia a: `mobile-app/android/app/google-services.json`
-
-### 3.3 Configurar variables de entorno
-Crea archivo `mobile-app/.env`:
-```
-API_URL=https://tu-backend-url.com/api
+### Paso 3: Compilar
+```cmd
+cd android
+gradlew bundleRelease
 ```
 
----
-
-## Paso 4: Abrir en Android Studio
-
-1. Abre Android Studio
-2. **File → Open**
-3. Selecciona la carpeta: `mobile-app/android`
-4. Espera a que Gradle sincronice (puede tardar 5-10 min)
-
----
-
-## Paso 5: Probar la App (Debug)
-
-### 5.1 Conectar dispositivo físico
-1. Activa **Opciones de desarrollador** en tu Android
-2. Activa **Depuración USB**
-3. Conecta el móvil por USB
-4. En Android Studio: verás el dispositivo en la barra superior
-
-### 5.2 Ejecutar en modo debug
-1. Selecciona tu dispositivo en la barra
-2. Pulsa el botón **▶ Run**
-3. Espera a que compile e instale
-
-### 5.3 Probar el sistema SOS
-1. Abre la app
-2. Ve a **Ajustes → Probar Sistema SOS**
-3. Pulsa **PROBAR SIRENA CRÍTICA**
-4. ✅ Verifica que suena aunque esté en silencio
-
----
-
-## Paso 6: Generar AAB para Google Play
-
-### 6.1 Configurar firma (signing)
-Edita `mobile-app/android/app/build.gradle`:
-
-```gradle
-android {
-    ...
-    signingConfigs {
-        release {
-            storeFile file('release.keystore')
-            storePassword 'tu_password'
-            keyAlias 'manoprotect'
-            keyPassword 'tu_password'
-        }
-    }
-    buildTypes {
-        release {
-            signingConfig signingConfigs.release
-            minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-    }
-}
-```
-
-### 6.2 Crear keystore (si no tienes)
-```bash
-keytool -genkey -v -keystore release.keystore -alias manoprotect -keyalg RSA -keysize 2048 -validity 10000
-```
-
-### 6.3 Generar AAB
-```bash
-cd mobile-app/android
-./gradlew bundleRelease
-```
-
-El archivo estará en:
+### Paso 4: Resultado
 ```
 mobile-app/android/app/build/outputs/bundle/release/app-release.aab
 ```
 
 ---
 
-## Paso 7: Subir a Google Play Console
+## 📤 Subir a Google Play
 
-1. Ve a [Google Play Console](https://play.google.com/console)
-2. Selecciona tu app "ManoProtect"
-3. Ve a **Producción → Crear nueva versión**
-4. Sube el archivo `.aab`
-5. Completa la información:
-   - Notas de versión
-   - Capturas de pantalla
-6. **Revisar y publicar**
-
----
-
-## 🧪 Endpoints de Prueba
-
-Mientras desarrollas, usa estos endpoints para probar:
-
-### Simular flujo completo
-```bash
-curl https://tu-backend.com/api/sos-test/simulate-flow
-```
-
-### Crear alerta de prueba
-```bash
-curl -X POST https://tu-backend.com/api/sos-test/send-alert \
-  -H "Content-Type: application/json" \
-  -d '{"sender_name": "Ivan", "message": "Prueba"}'
-```
-
-### Confirmar alerta
-```bash
-curl -X POST https://tu-backend.com/api/sos-test/acknowledge \
-  -H "Content-Type: application/json" \
-  -d '{"alert_id": "test_sos_xxx", "acknowledged_by": "Maria"}'
-```
-
-### Ver alertas activas
-```bash
-curl https://tu-backend.com/api/sos-test/alerts
-```
+1. Abre **[Google Play Console](https://play.google.com/console)**
+2. Selecciona **ManoProtect**
+3. **Producción** → **Crear nueva versión**
+4. Sube `app-release.aab`
+5. Notas de versión:
+   ```
+   Versión X.X.X
+   - Compatibilidad con Android 15 (Edge-to-Edge)
+   - Mejoras de rendimiento en pantallas grandes
+   - Correcciones de estabilidad
+   ```
+6. **Enviar para revisión**
 
 ---
 
-## ⚠️ Problemas Comunes
+## 🔐 Tu Keystore
 
-### Error: "SDK location not found"
-Crea archivo `mobile-app/android/local.properties`:
 ```
-sdk.dir=/Users/TU_USUARIO/Library/Android/sdk
-```
-(En Windows: `sdk.dir=C:\\Users\\TU_USUARIO\\AppData\\Local\\Android\\Sdk`)
-
-### Error: "Could not find google-services.json"
-Asegúrate de que el archivo está en:
-`mobile-app/android/app/google-services.json`
-
-### Error de Gradle
-```bash
-cd mobile-app/android
-./gradlew clean
-./gradlew bundleRelease
+📁 Archivo: manoprotect-2025.keystore
+🔑 Contraseña: 19862210Des
+🏷️ Alias: manoprotect
+📍 Ubicación original: C:\WINDOWS\system32\
 ```
 
-### La sirena no suena en silencio
-Verifica que tienes los permisos correctos en `AndroidManifest.xml`:
-- `POST_NOTIFICATIONS`
-- `VIBRATE`
+**⚠️ GUARDA UNA COPIA DE SEGURIDAD DEL KEYSTORE**
 
 ---
 
-## 📋 Checklist Final
+## ⚙️ Configuración Técnica
 
-Antes de subir a Google Play:
-
-- [ ] `google-services.json` configurado
-- [ ] Keystore creado y configurado
-- [ ] AAB generado sin errores
-- [ ] Probado en dispositivo real
-- [ ] Sistema SOS funciona
-- [ ] Mensajes dicen "aviso personal" (no "emergencia")
-- [ ] Permisos mínimos
+| Parámetro | Valor |
+|-----------|-------|
+| applicationId | com.Manoprotect.Mano |
+| targetSdkVersion | 35 |
+| compileSdkVersion | 35 |
+| minSdkVersion | 24 |
+| buildToolsVersion | 35.0.0 |
 
 ---
 
-## 📞 Soporte
+## 🔧 Solución de Problemas
 
-Si tienes problemas:
-1. Revisa los logs: `adb logcat | grep ManoProtect`
-2. Usa la pantalla de prueba en la app
-3. Contacta soporte de Emergent.sh
+### "SDK Platform 35 not installed"
+```
+Android Studio → SDK Manager → SDK Platforms → Android 15 (API 35) → Install
+```
 
-¡Buena suerte! 🚀
+### "keystore file not found"
+Verifica que copiaste el keystore a `android/app/`
+
+### "signing config missing"
+Verifica las 4 líneas `MYAPP_*` en `gradle.properties`
+
+### Error de memoria
+```cmd
+set GRADLE_OPTS=-Xmx4096m
+gradlew bundleRelease
+```
+
+---
+
+© 2025 STARTBOOKING SL - ManoProtect
