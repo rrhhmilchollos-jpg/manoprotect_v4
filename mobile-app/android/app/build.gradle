@@ -127,3 +127,10 @@ apply from: file("../../node_modules/@react-native-community/cli-platform-androi
 
 // Firebase
 apply plugin: 'com.google.gms.google-services'
+
+// Fix for react-native-camera flavor issue
+android {
+    defaultConfig {
+        missingDimensionStrategy 'react-native-camera', 'general'
+    }
+}
