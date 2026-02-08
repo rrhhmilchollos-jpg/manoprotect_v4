@@ -149,19 +149,30 @@ public class SOSLockScreenActivity extends Activity {
     /**
      * CONFIGURAR EDGE-TO-EDGE PARA ANDROID 15+
      * Barras de estado y navegación transparentes
+     * 
+     * NOTA: setStatusBarColor y setNavigationBarColor están obsoletas en API 35+
+     * Usamos WindowCompat y WindowInsetsController para compatibilidad
      */
     private void configureEdgeToEdge() {
-        // Enable Edge-to-Edge
+        // Enable Edge-to-Edge usando AndroidX
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
         
-        // Make status bar and navigation bar transparent
-        getWindow().setStatusBarColor(Color.TRANSPARENT);
-        getWindow().setNavigationBarColor(Color.TRANSPARENT);
+        // Para Android 15+ (API 35), el sistema maneja automáticamente las barras transparentes
+        // No usamos setStatusBarColor/setNavigationBarColor que están obsoletas
         
-        // For Android 15+ (API 35), these are enforced by default
+        // Configurar el controlador de insets para apariencia de barras del sistema
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            // Android 11+ usa WindowInsetsController
             getWindow().setDecorFitsSystemWindows(false);
+            
+            android.view.WindowInsetsController controller = getWindow().getInsetsController();
+            if (controller != null) {
+                // Configurar barras del sistema como transparentes con contenido claro
+                controller.setSystemBarsAppearance(0, 
+                    android.view.WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS);
+            }
         }
+        // Para versiones anteriores, el color se establece en el tema (styles.xml)
     }
     
     /**
