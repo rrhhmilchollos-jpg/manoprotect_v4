@@ -33,6 +33,19 @@
 - [x] **Stats bar**: 8 capas, 70+ motores, 24/7, AI
 - [x] **Disclaimer legal**: Sin promesas de protección absoluta
 
+#### Portal de Empleados Desktop (.exe)
+- [x] **Proyecto Electron completo** en `/app/desktop-app/`
+- [x] **Pantalla de login**: Clave de acceso `14082015`
+- [x] **Dashboard**: Estadísticas, proveedores, acciones rápidas
+- [x] **Verificador de URL**: Análisis multi-fuente
+- [x] **Verificador de IP**: Reputación AbuseIPDB/OTX
+- [x] **Analizador de Contenido**: Detección de patrones de estafa
+- [x] **Panel de Seguridad**: Estado de integraciones
+- [x] **Gestión**: Usuarios, Familias, Alertas, Reportes
+- [x] **Integración con Web**: Iframe embebido
+- [x] **Tray Icon**: Acceso rápido desde bandeja del sistema
+- [x] **Guía de compilación**: `/app/desktop-app/GUIA_COMPILACION.md`
+
 #### Página de Eliminación de Cuenta (Google Play Requirement)
 - [x] **Nueva ruta `/solicitar-eliminacion`**: Formulario de 2 pasos
 - [x] **Backend `/api/account/delete-request`**: Procesa solicitudes
