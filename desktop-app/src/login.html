@@ -9,7 +9,7 @@
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-      font-family: 'Segoe UI', system-ui, sans-serif;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
     }
 
     body {
@@ -22,13 +22,14 @@
     }
 
     .login-container {
-      background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
+      background: linear-gradient(145deg, #0f172a 0%, #1e293b 100%);
       border-radius: 24px;
       padding: 48px;
       width: 420px;
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 25px 60px -12px rgba(0, 0, 0, 0.6);
       border: 1px solid rgba(255, 255, 255, 0.1);
       -webkit-app-region: no-drag;
+      position: relative;
     }
 
     .close-btn {
@@ -64,63 +65,60 @@
     }
 
     .logo-icon {
-      width: 80px;
-      height: 80px;
-      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-      border-radius: 20px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 0 auto 16px;
-      box-shadow: 0 10px 30px rgba(16, 185, 129, 0.3);
+      width: 100px;
+      height: 100px;
+      margin: 0 auto 20px;
     }
 
-    .logo-icon svg {
-      width: 48px;
-      height: 48px;
-      stroke: white;
-      fill: none;
-      stroke-width: 2;
+    .logo-icon img {
+      width: 100%;
+      height: 100%;
+      border-radius: 24px;
+      box-shadow: 0 10px 40px rgba(16, 185, 129, 0.3);
     }
 
     .logo h1 {
       color: white;
-      font-size: 28px;
+      font-size: 32px;
       font-weight: 700;
+      background: linear-gradient(135deg, #10b981, #3b82f6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
 
     .logo p {
       color: #94a3b8;
       font-size: 14px;
-      margin-top: 4px;
+      margin-top: 8px;
     }
 
     .badge {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      background: rgba(16, 185, 129, 0.2);
+      gap: 8px;
+      background: rgba(16, 185, 129, 0.15);
       border: 1px solid rgba(16, 185, 129, 0.3);
       color: #10b981;
-      padding: 6px 12px;
-      border-radius: 20px;
-      font-size: 12px;
+      padding: 8px 16px;
+      border-radius: 24px;
+      font-size: 13px;
       font-weight: 500;
       margin-top: 16px;
     }
 
     .badge::before {
       content: '';
-      width: 6px;
-      height: 6px;
+      width: 8px;
+      height: 8px;
       background: #10b981;
       border-radius: 50%;
       animation: pulse 2s infinite;
     }
 
     @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.5; }
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.8); }
     }
 
     .form-group {
@@ -131,7 +129,7 @@
       display: block;
       color: #94a3b8;
       font-size: 14px;
-      margin-bottom: 8px;
+      margin-bottom: 10px;
       font-weight: 500;
     }
 
@@ -141,23 +139,23 @@
 
     .input-wrapper svg {
       position: absolute;
-      left: 16px;
+      left: 18px;
       top: 50%;
       transform: translateY(-50%);
-      width: 20px;
-      height: 20px;
+      width: 22px;
+      height: 22px;
       stroke: #64748b;
     }
 
     .form-group input {
       width: 100%;
-      padding: 16px 16px 16px 48px;
+      padding: 18px 18px 18px 54px;
       background: rgba(255, 255, 255, 0.05);
       border: 2px solid rgba(255, 255, 255, 0.1);
-      border-radius: 12px;
+      border-radius: 14px;
       color: white;
-      font-size: 18px;
-      letter-spacing: 8px;
+      font-size: 20px;
+      letter-spacing: 10px;
       text-align: center;
       transition: all 0.2s;
     }
@@ -166,19 +164,20 @@
       outline: none;
       border-color: #10b981;
       background: rgba(16, 185, 129, 0.1);
+      box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1);
     }
 
     .form-group input::placeholder {
-      letter-spacing: 2px;
-      color: #64748b;
+      letter-spacing: 4px;
+      color: #475569;
     }
 
     .submit-btn {
       width: 100%;
-      padding: 16px;
+      padding: 18px;
       background: linear-gradient(135deg, #10b981 0%, #059669 100%);
       border: none;
-      border-radius: 12px;
+      border-radius: 14px;
       color: white;
       font-size: 16px;
       font-weight: 600;
@@ -187,35 +186,35 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
+      gap: 10px;
     }
 
     .submit-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 10px 30px rgba(16, 185, 129, 0.3);
+      transform: translateY(-3px);
+      box-shadow: 0 15px 40px rgba(16, 185, 129, 0.4);
     }
 
     .submit-btn:active {
-      transform: translateY(0);
+      transform: translateY(-1px);
     }
 
     .submit-btn svg {
-      width: 20px;
-      height: 20px;
+      width: 22px;
+      height: 22px;
       stroke: white;
     }
 
     .error-message {
-      background: rgba(239, 68, 68, 0.2);
+      background: rgba(239, 68, 68, 0.15);
       border: 1px solid rgba(239, 68, 68, 0.3);
-      color: #ef4444;
-      padding: 12px;
-      border-radius: 8px;
+      color: #f87171;
+      padding: 14px;
+      border-radius: 10px;
       font-size: 14px;
-      margin-bottom: 16px;
+      margin-bottom: 20px;
       display: none;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
     }
 
     .error-message.show {
@@ -224,28 +223,29 @@
 
     .footer {
       text-align: center;
-      margin-top: 24px;
+      margin-top: 28px;
       color: #64748b;
       font-size: 12px;
+    }
+
+    .footer p {
+      margin-bottom: 4px;
     }
 
     .footer a {
       color: #10b981;
       text-decoration: none;
+      transition: color 0.2s;
     }
 
-    .loading {
-      display: none;
-    }
-
-    .loading.show {
-      display: block;
+    .footer a:hover {
+      color: #34d399;
     }
 
     .spinner {
-      width: 20px;
-      height: 20px;
-      border: 2px solid rgba(255, 255, 255, 0.3);
+      width: 22px;
+      height: 22px;
+      border: 3px solid rgba(255, 255, 255, 0.3);
       border-top-color: white;
       border-radius: 50%;
       animation: spin 0.8s linear infinite;
@@ -253,6 +253,28 @@
 
     @keyframes spin {
       to { transform: rotate(360deg); }
+    }
+
+    .features {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 24px;
+      padding-top: 24px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .feature {
+      text-align: center;
+      color: #64748b;
+      font-size: 11px;
+    }
+
+    .feature svg {
+      width: 20px;
+      height: 20px;
+      stroke: #10b981;
+      margin-bottom: 4px;
     }
   </style>
 </head>
@@ -266,9 +288,7 @@
 
     <div class="logo">
       <div class="logo-icon">
-        <svg viewBox="0 0 24 24">
-          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-        </svg>
+        <img src="https://static.prod-images.emergentagent.com/jobs/1efd8821-9402-4a99-87f0-f789bfce818b/images/b43816538bca69163a474728ab52ed519fdf941650bad92c7afbaee239aa619c.png" alt="ManoProtect Logo">
       </div>
       <h1>ManoProtect</h1>
       <p>Portal de Empleados</p>
@@ -277,7 +297,7 @@
 
     <form id="loginForm">
       <div id="errorMessage" class="error-message">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <circle cx="12" cy="12" r="10"/>
           <path d="M12 8v4M12 16h.01"/>
         </svg>
@@ -285,7 +305,7 @@
       </div>
 
       <div class="form-group">
-        <label>Clave de Acceso de Empleado</label>
+        <label>Clave de Acceso</label>
         <div class="input-wrapper">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
@@ -303,21 +323,39 @@
       </div>
 
       <button type="submit" class="submit-btn" id="submitBtn">
-        <span class="btn-text">Acceder al Portal</span>
-        <div class="loading">
-          <div class="spinner"></div>
-        </div>
+        <span class="btn-text">Acceder</span>
         <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M5 12h14M12 5l7 7-7 7"/>
         </svg>
       </button>
     </form>
 
+    <div class="features">
+      <div class="feature">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        </svg>
+        <p>Seguro</p>
+      </div>
+      <div class="feature">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"/>
+          <path d="M12 6v6l4 2"/>
+        </svg>
+        <p>Tiempo Real</p>
+      </div>
+      <div class="feature">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="2" y="3" width="20" height="14" rx="2"/>
+          <path d="M8 21h8M12 17v4"/>
+        </svg>
+        <p>Multiplataforma</p>
+      </div>
+    </div>
+
     <div class="footer">
-      <p>STARTBOOKING SL - ManoProtect &copy; 2025</p>
-      <p style="margin-top: 4px;">
-        <a href="#" onclick="window.electronAPI.openExternal('https://manoprotect.com')">manoprotect.com</a>
-      </p>
+      <p>STARTBOOKING SL &copy; 2025</p>
+      <p><a href="#" onclick="event.preventDefault()">manoprotect.com</a></p>
     </div>
   </div>
 
@@ -327,6 +365,8 @@
     const errorMessage = document.getElementById('errorMessage');
     const errorText = document.getElementById('errorText');
     const submitBtn = document.getElementById('submitBtn');
+    const btnText = submitBtn.querySelector('.btn-text');
+    const btnIcon = submitBtn.querySelector('.btn-icon');
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
@@ -340,42 +380,51 @@
 
       // Show loading
       submitBtn.disabled = true;
-      submitBtn.querySelector('.btn-text').style.display = 'none';
-      submitBtn.querySelector('.btn-icon').style.display = 'none';
-      submitBtn.querySelector('.loading').classList.add('show');
+      btnText.textContent = 'Verificando...';
+      btnIcon.style.display = 'none';
 
       try {
         const result = await window.electronAPI.verifyAccessKey(key);
         
         if (result.success) {
-          // Success - notify main process
-          window.electronAPI.loginSuccess();
+          btnText.textContent = '¡Acceso concedido!';
+          submitBtn.style.background = 'linear-gradient(135deg, #059669, #047857)';
+          
+          setTimeout(() => {
+            window.electronAPI.loginSuccess();
+          }, 500);
         } else {
           showError(result.message);
           accessKeyInput.value = '';
           accessKeyInput.focus();
+          resetButton();
         }
       } catch (error) {
         showError('Error de conexión');
-      } finally {
-        // Reset button
-        submitBtn.disabled = false;
-        submitBtn.querySelector('.btn-text').style.display = 'inline';
-        submitBtn.querySelector('.btn-icon').style.display = 'inline';
-        submitBtn.querySelector('.loading').classList.remove('show');
+        resetButton();
       }
     });
 
     function showError(message) {
       errorText.textContent = message;
       errorMessage.classList.add('show');
+      accessKeyInput.style.borderColor = '#ef4444';
+      
       setTimeout(() => {
         errorMessage.classList.remove('show');
+        accessKeyInput.style.borderColor = '';
       }, 3000);
     }
 
+    function resetButton() {
+      submitBtn.disabled = false;
+      btnText.textContent = 'Acceder';
+      btnIcon.style.display = 'inline';
+      submitBtn.style.background = '';
+    }
+
     // Focus input on load
-    accessKeyInput.focus();
+    setTimeout(() => accessKeyInput.focus(), 100);
   </script>
 </body>
 </html>
