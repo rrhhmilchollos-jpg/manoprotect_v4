@@ -21,7 +21,13 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
+
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsCompat;
 
 /**
  * PANTALLA DE ALERTA SOS SOBRE PANTALLA DE BLOQUEO
@@ -29,6 +35,12 @@ import android.widget.TextView;
  * Esta Activity se muestra ENCIMA de la pantalla de bloqueo
  * para que el familiar pueda ver la ubicación y pulsar "ENTERADO"
  * sin necesidad de desbloquear el teléfono.
+ * 
+ * ANDROID 15+ COMPATIBLE:
+ * - Edge-to-Edge display
+ * - Transparent status/navigation bars
+ * - Dynamic insets handling
+ * - Large screen support (tablets, foldables)
  */
 public class SOSLockScreenActivity extends Activity {
     
@@ -55,6 +67,7 @@ public class SOSLockScreenActivity extends Activity {
     private Runnable flashRunnable;
     private boolean isFlashRed = false;
     private View rootView;
+    private LinearLayout contentLayout;
     
     // Service binding
     private SOSCriticalAlertService sosService;
@@ -105,11 +118,17 @@ public class SOSLockScreenActivity extends Activity {
         latitude = getIntent().getDoubleExtra(SOSCriticalAlertService.EXTRA_LATITUDE, 0.0);
         longitude = getIntent().getDoubleExtra(SOSCriticalAlertService.EXTRA_LONGITUDE, 0.0);
         
+        // Configure window for Edge-to-Edge (Android 15+)
+        configureEdgeToEdge();
+        
         // Configure window to show over lock screen
         configureWindow();
         
         // Create UI programmatically
         createUI();
+        
+        // Apply window insets for Edge-to-Edge
+        applyWindowInsets();
         
         // Start flash animation
         startFlashAnimation();
@@ -125,6 +144,46 @@ public class SOSLockScreenActivity extends Activity {
         // Bind to service
         Intent serviceIntent = new Intent(this, SOSCriticalAlertService.class);
         bindService(serviceIntent, serviceConnection, Context.BIND_AUTO_CREATE);
+    }
+    
+    /**
+     * CONFIGURAR EDGE-TO-EDGE PARA ANDROID 15+
+     * Barras de estado y navegación transparentes
+     */
+    private void configureEdgeToEdge() {
+        // Enable Edge-to-Edge
+        WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
+        
+        // Make status bar and navigation bar transparent
+        getWindow().setStatusBarColor(Color.TRANSPARENT);
+        getWindow().setNavigationBarColor(Color.TRANSPARENT);
+        
+        // For Android 15+ (API 35), these are enforced by default
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            getWindow().setDecorFitsSystemWindows(false);
+        }
+    }
+    
+    /**
+     * APLICAR WINDOW INSETS PARA EDGE-TO-EDGE
+     * Ajusta dinámicamente el padding según las barras del sistema
+     */
+    private void applyWindowInsets() {
+        if (contentLayout != null) {
+            ViewCompat.setOnApplyWindowInsetsListener(contentLayout, (view, windowInsets) -> {
+                Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
+                
+                // Apply padding to avoid content behind system bars
+                view.setPadding(
+                    insets.left + 40,   // left + original padding
+                    insets.top + 60,    // top + original padding
+                    insets.right + 40,  // right + original padding
+                    insets.bottom + 40  // bottom + original padding
+                );
+                
+                return WindowInsetsCompat.CONSUMED;
+            });
+        }
     }
     
     /**
@@ -148,23 +207,33 @@ public class SOSLockScreenActivity extends Activity {
         // Keep screen on
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         
-        // Full screen
-        getWindow().setFlags(
-            WindowManager.LayoutParams.FLAG_FULLSCREEN,
-            WindowManager.LayoutParams.FLAG_FULLSCREEN
-        );
+        // Note: FLAG_FULLSCREEN is deprecated in Android 15+
+        // Edge-to-Edge handles this now
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
+            getWindow().setFlags(
+                WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN
+            );
+        }
     }
     
     /**
      * CREAR INTERFAZ DE USUARIO
      * NOTA: Usamos "Aviso Personal" no "Emergencia" para cumplir Google Play
+     * Compatible con pantallas grandes (tablets, foldables)
      */
     private void createUI() {
+        // Root ScrollView for large screens
+        ScrollView scrollView = new ScrollView(this);
+        scrollView.setFillViewport(true);
+        scrollView.setBackgroundColor(Color.parseColor("#1a1a2e"));
+        
         // Root layout
-        rootView = new LinearLayout(this);
-        ((LinearLayout) rootView).setOrientation(LinearLayout.VERTICAL);
-        rootView.setBackgroundColor(Color.parseColor("#1a1a2e"));
-        rootView.setPadding(40, 60, 40, 40);
+        rootView = scrollView;
+        contentLayout = new LinearLayout(this);
+        contentLayout.setOrientation(LinearLayout.VERTICAL);
+        contentLayout.setBackgroundColor(Color.parseColor("#1a1a2e"));
+        // Padding will be set by applyWindowInsets()
         
         // Title - AVISO PERSONAL, no emergencia oficial
         titleText = new TextView(this);
@@ -173,7 +242,7 @@ public class SOSLockScreenActivity extends Activity {
         titleText.setTextSize(32);
         titleText.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
         titleText.setPadding(0, 0, 0, 30);
-        ((LinearLayout) rootView).addView(titleText);
+        contentLayout.addView(titleText);
         
         // Sender name
         senderText = new TextView(this);
@@ -182,15 +251,17 @@ public class SOSLockScreenActivity extends Activity {
         senderText.setTextSize(24);
         senderText.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
         senderText.setPadding(0, 0, 0, 40);
-        ((LinearLayout) rootView).addView(senderText);
+        contentLayout.addView(senderText);
         
-        // Map container (placeholder)
+        // Map container (placeholder) - Responsive height
         mapContainer = new FrameLayout(this);
         mapContainer.setBackgroundColor(Color.parseColor("#2a2a4e"));
         LinearLayout.LayoutParams mapParams = new LinearLayout.LayoutParams(
-            LinearLayout.LayoutParams.MATCH_PARENT, 400);
+            LinearLayout.LayoutParams.MATCH_PARENT, 0);
+        mapParams.weight = 1; // Takes available space
         mapParams.setMargins(0, 0, 0, 30);
         mapContainer.setLayoutParams(mapParams);
+        mapContainer.setMinimumHeight(300);
         
         // Location label in map
         TextView mapLabel = new TextView(this);
@@ -200,7 +271,7 @@ public class SOSLockScreenActivity extends Activity {
         mapLabel.setPadding(20, 20, 20, 20);
         mapContainer.addView(mapLabel);
         
-        ((LinearLayout) rootView).addView(mapContainer);
+        contentLayout.addView(mapContainer);
         
         // Location text
         locationText = new TextView(this);
@@ -209,7 +280,7 @@ public class SOSLockScreenActivity extends Activity {
         locationText.setTextSize(16);
         locationText.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
         locationText.setPadding(0, 0, 0, 30);
-        ((LinearLayout) rootView).addView(locationText);
+        contentLayout.addView(locationText);
         
         // Acknowledge button (BIG)
         acknowledgeButton = new Button(this);
@@ -223,7 +294,7 @@ public class SOSLockScreenActivity extends Activity {
         ackParams.setMargins(0, 20, 0, 20);
         acknowledgeButton.setLayoutParams(ackParams);
         acknowledgeButton.setOnClickListener(v -> onAcknowledge());
-        ((LinearLayout) rootView).addView(acknowledgeButton);
+        contentLayout.addView(acknowledgeButton);
         
         // Open Maps button
         openMapsButton = new Button(this);
@@ -237,7 +308,7 @@ public class SOSLockScreenActivity extends Activity {
         mapsParams.setMargins(0, 10, 0, 10);
         openMapsButton.setLayoutParams(mapsParams);
         openMapsButton.setOnClickListener(v -> openMaps());
-        ((LinearLayout) rootView).addView(openMapsButton);
+        contentLayout.addView(openMapsButton);
         
         // Call Emergency button - Opcional, el usuario decide si llamar
         callEmergencyButton = new Button(this);
@@ -251,7 +322,7 @@ public class SOSLockScreenActivity extends Activity {
         callParams.setMargins(0, 10, 0, 20);
         callEmergencyButton.setLayoutParams(callParams);
         callEmergencyButton.setOnClickListener(v -> callEmergency());
-        ((LinearLayout) rootView).addView(callEmergencyButton);
+        contentLayout.addView(callEmergencyButton);
         
         // Disclaimer - IMPORTANTE para Google Play
         TextView disclaimerText = new TextView(this);
@@ -260,7 +331,7 @@ public class SOSLockScreenActivity extends Activity {
         disclaimerText.setTextSize(11);
         disclaimerText.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
         disclaimerText.setPadding(0, 10, 0, 10);
-        ((LinearLayout) rootView).addView(disclaimerText);
+        contentLayout.addView(disclaimerText);
         
         // Status text
         statusText = new TextView(this);
@@ -268,9 +339,10 @@ public class SOSLockScreenActivity extends Activity {
         statusText.setTextColor(Color.parseColor("#9CA3AF"));
         statusText.setTextSize(14);
         statusText.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-        ((LinearLayout) rootView).addView(statusText);
+        contentLayout.addView(statusText);
         
-        setContentView(rootView);
+        scrollView.addView(contentLayout);
+        setContentView(scrollView);
     }
     
     /**
