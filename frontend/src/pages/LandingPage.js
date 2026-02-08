@@ -427,6 +427,203 @@ const LandingPage = () => {
         </div>
       </section>
 
+      {/* Security Partners - Technology Stack */}
+      <section className="px-6 py-20 bg-gradient-to-b from-slate-900 to-slate-800">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <div className="inline-flex items-center gap-2 bg-emerald-500/20 border border-emerald-500/30 rounded-full px-4 py-2 mb-6">
+              <Shield className="w-4 h-4 text-emerald-400" />
+              <span className="text-sm font-medium text-emerald-400">Tecnología de Última Generación</span>
+            </div>
+            <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
+              Protección Multi-Capa con los Líderes del Mercado
+            </h2>
+            <p className="text-lg text-slate-400 max-w-3xl mx-auto">
+              Integramos las APIs de ciberseguridad más avanzadas del mundo para ofrecerte 
+              detección de amenazas en tiempo real. Sin promesas falsas, solo tecnología probada.
+            </p>
+          </div>
+
+          {/* Security Layers */}
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+            {/* Google Safe Browsing */}
+            <div className="bg-slate-800/50 backdrop-blur border border-slate-700 rounded-2xl p-6 hover:border-emerald-500/50 transition-all group">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center">
+                  <svg viewBox="0 0 24 24" className="w-8 h-8">
+                    <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                    <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                    <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                    <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                  </svg>
+                </div>
+                <div>
+                  <h3 className="font-semibold text-white">Google Safe Browsing</h3>
+                  <p className="text-xs text-emerald-400">API v5 - Activo</p>
+                </div>
+              </div>
+              <p className="text-sm text-slate-400 mb-3">
+                Protección contra phishing y malware. Escanea más de 5 mil millones de dispositivos diariamente.
+              </p>
+              <div className="flex items-center gap-2 text-xs text-slate-500">
+                <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
+                <span>99.9% detección de phishing</span>
+              </div>
+            </div>
+
+            {/* VirusTotal */}
+            <div className="bg-slate-800/50 backdrop-blur border border-slate-700 rounded-2xl p-6 hover:border-blue-500/50 transition-all group">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center">
+                  <svg viewBox="0 0 24 24" fill="white" className="w-7 h-7">
+                    <path d="M12 2L2 7v10l10 5 10-5V7L12 2zm0 2.18l6.9 3.45L12 11.09 5.1 7.63 12 4.18zM4 8.82l7 3.5v7.36l-7-3.5V8.82zm9 10.86v-7.36l7-3.5v7.36l-7 3.5z"/>
+                  </svg>
+                </div>
+                <div>
+                  <h3 className="font-semibold text-white">VirusTotal</h3>
+                  <p className="text-xs text-blue-400">API v3 - Activo</p>
+                </div>
+              </div>
+              <p className="text-sm text-slate-400 mb-3">
+                Análisis con más de 70 motores antivirus. Propiedad de Google Chronicle Security.
+              </p>
+              <div className="flex items-center gap-2 text-xs text-slate-500">
+                <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
+                <span>70+ motores de análisis</span>
+              </div>
+            </div>
+
+            {/* Cloudflare */}
+            <div className="bg-slate-800/50 backdrop-blur border border-slate-700 rounded-2xl p-6 hover:border-orange-500/50 transition-all group">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-12 h-12 bg-orange-500 rounded-xl flex items-center justify-center">
+                  <svg viewBox="0 0 24 24" fill="white" className="w-8 h-8">
+                    <path d="M16.5 8.5c-.3-1.2-1.5-2-3-1.8l-7.7.8c-.2 0-.3.1-.3.2-.1.1-.1.2 0 .3.1.1.2.2.4.2l7.8-.1c.6 0 1.2.2 1.5.7.3.4.4 1 .2 1.5-.1.4-.4.8-.8 1l-9.1 1.9c-.2 0-.3.1-.4.3-.1.2-.1.3 0 .5.1.1.2.2.4.2l9.2-.1h.1c1.2-.3 2.1-1.3 2.3-2.5.1-.8-.1-1.6-.6-2.1z"/>
+                    <path d="M19.8 11.2c-.1-.5-.5-.8-1-.7l-1.3.2c-.1 0-.2.1-.2.2s0 .2.1.3c.1.1.2.1.3.1l1.3-.1c.2 0 .4.1.5.3.1.2.1.4 0 .5l-3.3 2.2c-.1.1-.2.1-.2.2s0 .2.1.3c.1.1.2.1.3.1l3.3-2.2c.5-.3.8-.8.6-1.4z"/>
+                  </svg>
+                </div>
+                <div>
+                  <h3 className="font-semibold text-white">Cloudflare</h3>
+                  <p className="text-xs text-orange-400">WAF - Activo</p>
+                </div>
+              </div>
+              <p className="text-sm text-slate-400 mb-3">
+                WAF, protección contra bots y DDoS. Líder en Forrester Wave WAF 2025.
+              </p>
+              <div className="flex items-center gap-2 text-xs text-slate-500">
+                <div className="w-2 h-2 bg-orange-500 rounded-full animate-pulse"></div>
+                <span>20% del tráfico web mundial</span>
+              </div>
+            </div>
+
+            {/* AbuseIPDB */}
+            <div className="bg-slate-800/50 backdrop-blur border border-slate-700 rounded-2xl p-6 hover:border-red-500/50 transition-all group">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-12 h-12 bg-red-600 rounded-xl flex items-center justify-center">
+                  <Shield className="w-7 h-7 text-white" />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-white">AbuseIPDB</h3>
+                  <p className="text-xs text-red-400">API v2 - Activo</p>
+                </div>
+              </div>
+              <p className="text-sm text-slate-400 mb-3">
+                Base de datos colaborativa de IPs maliciosas reportadas por la comunidad global.
+              </p>
+              <div className="flex items-center gap-2 text-xs text-slate-500">
+                <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
+                <span>Millones de IPs verificadas</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Premium Partners Row */}
+          <div className="grid md:grid-cols-3 gap-6 mb-12">
+            {/* AlienVault OTX */}
+            <div className="bg-gradient-to-br from-purple-900/50 to-slate-800/50 border border-purple-500/30 rounded-2xl p-6">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-12 h-12 bg-purple-600 rounded-xl flex items-center justify-center">
+                  <svg viewBox="0 0 24 24" fill="white" className="w-7 h-7">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+                  </svg>
+                </div>
+                <div>
+                  <h3 className="font-semibold text-white">AlienVault OTX</h3>
+                  <p className="text-xs text-purple-400">Threat Intelligence</p>
+                </div>
+              </div>
+              <p className="text-sm text-slate-400">
+                Open Threat Exchange con más de 200.000 contribuidores compartiendo inteligencia de amenazas.
+              </p>
+            </div>
+
+            {/* CrowdStrike */}
+            <div className="bg-gradient-to-br from-red-900/50 to-slate-800/50 border border-red-500/30 rounded-2xl p-6">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-12 h-12 bg-red-600 rounded-xl flex items-center justify-center">
+                  <svg viewBox="0 0 24 24" fill="white" className="w-7 h-7">
+                    <path d="M12 2L4 5v6.09c0 5.05 3.41 9.76 8 10.91 4.59-1.15 8-5.86 8-10.91V5l-8-3zm6 9.09c0 4-2.55 7.7-6 8.83-3.45-1.13-6-4.82-6-8.83V6.31l6-2.25 6 2.25v4.78z"/>
+                  </svg>
+                </div>
+                <div>
+                  <h3 className="font-semibold text-white">CrowdStrike Falcon</h3>
+                  <p className="text-xs text-red-400">Premium - Enterprise</p>
+                </div>
+              </div>
+              <p className="text-sm text-slate-400">
+                Threat Intelligence líder mundial. Top 3 en plataformas TI 2025. Detección de amenazas avanzadas.
+              </p>
+            </div>
+
+            {/* Recorded Future */}
+            <div className="bg-gradient-to-br from-cyan-900/50 to-slate-800/50 border border-cyan-500/30 rounded-2xl p-6">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-12 h-12 bg-cyan-600 rounded-xl flex items-center justify-center">
+                  <svg viewBox="0 0 24 24" fill="white" className="w-7 h-7">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+                  </svg>
+                </div>
+                <div>
+                  <h3 className="font-semibold text-white">Recorded Future</h3>
+                  <p className="text-xs text-cyan-400">AI Intelligence</p>
+                </div>
+              </div>
+              <p className="text-sm text-slate-400">
+                Plataforma #1 de inteligencia AI. Intelligence Graph para análisis predictivo de amenazas.
+              </p>
+            </div>
+          </div>
+
+          {/* Stats Bar */}
+          <div className="bg-slate-800/30 border border-slate-700 rounded-2xl p-8">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+              <div>
+                <div className="text-3xl font-bold text-emerald-400">8</div>
+                <div className="text-sm text-slate-400">Capas de Protección</div>
+              </div>
+              <div>
+                <div className="text-3xl font-bold text-blue-400">70+</div>
+                <div className="text-sm text-slate-400">Motores Antivirus</div>
+              </div>
+              <div>
+                <div className="text-3xl font-bold text-orange-400">24/7</div>
+                <div className="text-sm text-slate-400">Monitoreo Activo</div>
+              </div>
+              <div>
+                <div className="text-3xl font-bold text-purple-400">AI</div>
+                <div className="text-sm text-slate-400">Detección Inteligente</div>
+              </div>
+            </div>
+          </div>
+
+          {/* Disclaimer */}
+          <p className="text-center text-xs text-slate-500 mt-8">
+            Los logos y marcas pertenecen a sus respectivos propietarios. ManoProtect integra sus APIs públicas 
+            para ofrecer protección multi-capa. No garantizamos protección absoluta contra todas las amenazas.
+          </p>
+        </div>
+      </section>
+
       {/* Segments - Bento Grid */}
       <section className="px-6 py-20">
         <div className="max-w-7xl mx-auto">
