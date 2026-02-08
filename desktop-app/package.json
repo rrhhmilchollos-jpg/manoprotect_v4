@@ -1,6 +1,6 @@
 {
   "name": "manoprotect-empleados",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Portal de Empleados ManoProtect - Gestión de Ciberseguridad",
   "main": "main.js",
   "scripts": {
