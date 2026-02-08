@@ -280,12 +280,14 @@ app.whenReady().then(() => {
   if (store.get('authenticated')) {
     isAuthenticated = true;
     createMainWindow();
+    connectWebSocket(); // Conectar WebSocket
   } else {
     const loginWin = createLoginWindow();
     
     ipcMain.once('login-success', () => {
       loginWin.close();
       createMainWindow();
+      connectWebSocket(); // Conectar WebSocket después de login
     });
   }
   
