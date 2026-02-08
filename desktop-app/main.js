@@ -1,7 +1,6 @@
-const { app, BrowserWindow, ipcMain, Menu, Tray, shell, dialog, Notification } = require('electron');
+const { app, BrowserWindow, ipcMain, Menu, Tray, shell, session } = require('electron');
 const path = require('path');
 const Store = require('electron-store');
-const WebSocket = require('ws');
 
 // Almacenamiento persistente
 const store = new Store();
@@ -9,85 +8,18 @@ const store = new Store();
 // Clave de acceso de empleado
 const EMPLOYEE_ACCESS_KEY = '14082015';
 
-// URL del backend de ManoProtect (PRODUCCIÓN: cambiar a manoprotect.com)
-const BACKEND_URL = 'https://manoprotect-qa.preview.emergentagent.com';
-const WS_URL = 'wss://manoprotect-qa.preview.emergentagent.com/ws';
+// URL de la web de ManoProtect (PRODUCCIÓN: cambiar a manoprotect.com)
+const WEB_URL = 'https://manoprotect-qa.preview.emergentagent.com';
 
 let mainWindow;
+let loginWindow;
 let tray;
-let isAuthenticated = false;
-let wsConnection = null;
-
-// Conexión WebSocket en tiempo real
-function connectWebSocket() {
-  try {
-    wsConnection = new WebSocket(WS_URL);
-    
-    wsConnection.on('open', () => {
-      console.log('✅ WebSocket conectado');
-    });
-    
-    wsConnection.on('message', (data) => {
-      try {
-        const message = JSON.parse(data);
-        handleRealtimeMessage(message);
-      } catch (e) {
-        console.error('Error parsing WS message:', e);
-      }
-    });
-    
-    wsConnection.on('close', () => {
-      console.log('WebSocket desconectado, reconectando...');
-      setTimeout(connectWebSocket, 5000);
-    });
-    
-    wsConnection.on('error', (error) => {
-      console.error('WebSocket error:', error.message);
-    });
-  } catch (error) {
-    console.error('Error connecting WebSocket:', error);
-    setTimeout(connectWebSocket, 5000);
-  }
-}
-
-// Manejar mensajes en tiempo real
-function handleRealtimeMessage(message) {
-  switch (message.type) {
-    case 'sos_alert':
-      // Mostrar notificación de alerta SOS
-      new Notification({
-        title: '🚨 Alerta SOS',
-        body: message.data?.sender_name + ' necesita ayuda',
-        urgency: 'critical'
-      }).show();
-      
-      if (mainWindow) {
-        mainWindow.show();
-        mainWindow.webContents.send('sos-alert', message.data);
-      }
-      break;
-      
-    case 'fraud_report':
-      // Nueva alerta de fraude
-      if (mainWindow) {
-        mainWindow.webContents.send('new-fraud-report', message.data);
-      }
-      break;
-      
-    case 'system_update':
-      // Actualización del sistema
-      if (mainWindow) {
-        mainWindow.webContents.send('system-update', message.data);
-      }
-      break;
-  }
-}
 
 // Crear ventana de login
 function createLoginWindow() {
-  const loginWindow = new BrowserWindow({
+  loginWindow = new BrowserWindow({
     width: 500,
-    height: 600,
+    height: 650,
     resizable: false,
     frame: false,
     transparent: true,
@@ -104,26 +36,26 @@ function createLoginWindow() {
   return loginWindow;
 }
 
-// Crear ventana principal
+// Crear ventana principal con la WEB
 function createMainWindow() {
   mainWindow = new BrowserWindow({
     width: 1400,
     height: 900,
     minWidth: 1200,
     minHeight: 700,
-    frame: false,
-    titleBarStyle: 'hidden',
+    frame: true,
+    title: 'ManoProtect - Portal de Empleados',
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
-      preload: path.join(__dirname, 'preload.js')
+      webSecurity: true
     },
     icon: path.join(__dirname, 'assets', 'icon.png'),
     show: false
   });
 
-  // Cargar la aplicación principal
-  mainWindow.loadFile(path.join(__dirname, 'src', 'index.html'));
+  // Cargar la WEB de ManoProtect
+  mainWindow.loadURL(WEB_URL);
 
   // Mostrar cuando esté lista
   mainWindow.once('ready-to-show', () => {
@@ -131,7 +63,16 @@ function createMainWindow() {
     mainWindow.focus();
   });
 
-  // Prevenir cierre accidental
+  // Abrir links externos en el navegador por defecto
+  mainWindow.webContents.setWindowOpenHandler(({ url }) => {
+    if (url.startsWith('http')) {
+      shell.openExternal(url);
+      return { action: 'deny' };
+    }
+    return { action: 'allow' };
+  });
+
+  // Prevenir cierre accidental - minimizar a tray
   mainWindow.on('close', (event) => {
     if (!app.isQuitting) {
       event.preventDefault();
@@ -158,38 +99,57 @@ function createTray() {
     },
     { type: 'separator' },
     { 
-      label: 'Panel de Seguridad',
+      label: 'Inicio',
       click: () => {
         if (mainWindow) {
           mainWindow.show();
-          mainWindow.webContents.send('navigate', 'security');
+          mainWindow.loadURL(WEB_URL);
         }
       }
     },
     { 
-      label: 'Verificar URL',
+      label: 'Dashboard',
       click: () => {
         if (mainWindow) {
           mainWindow.show();
-          mainWindow.webContents.send('navigate', 'url-check');
+          mainWindow.loadURL(WEB_URL + '/dashboard');
         }
       }
     },
     { 
-      label: 'Alertas',
+      label: 'Verificar Estafas',
       click: () => {
         if (mainWindow) {
           mainWindow.show();
-          mainWindow.webContents.send('navigate', 'alerts');
+          mainWindow.loadURL(WEB_URL + '/verificar-estafa');
+        }
+      }
+    },
+    { 
+      label: 'Precios',
+      click: () => {
+        if (mainWindow) {
+          mainWindow.show();
+          mainWindow.loadURL(WEB_URL + '/pricing');
         }
       }
     },
     { type: 'separator' },
     { 
+      label: 'Recargar',
+      click: () => {
+        if (mainWindow) {
+          mainWindow.reload();
+        }
+      }
+    },
+    { 
       label: 'Cerrar Sesión',
       click: () => {
-        isAuthenticated = false;
+        // Limpiar sesión
+        session.defaultSession.clearStorageData();
         store.delete('authenticated');
+        
         if (mainWindow) {
           mainWindow.close();
           mainWindow = null;
@@ -197,6 +157,7 @@ function createTray() {
         createLoginWindow();
       }
     },
+    { type: 'separator' },
     { 
       label: 'Salir',
       click: () => {
@@ -209,9 +170,10 @@ function createTray() {
   tray.setToolTip('ManoProtect - Portal de Empleados');
   tray.setContextMenu(contextMenu);
 
-  tray.on('click', () => {
+  tray.on('double-click', () => {
     if (mainWindow) {
-      mainWindow.isVisible() ? mainWindow.hide() : mainWindow.show();
+      mainWindow.show();
+      mainWindow.focus();
     }
   });
 }
@@ -219,7 +181,6 @@ function createTray() {
 // IPC Handlers
 ipcMain.handle('verify-access-key', async (event, key) => {
   if (key === EMPLOYEE_ACCESS_KEY) {
-    isAuthenticated = true;
     store.set('authenticated', true);
     store.set('lastLogin', new Date().toISOString());
     return { success: true, message: 'Acceso concedido' };
@@ -228,66 +189,23 @@ ipcMain.handle('verify-access-key', async (event, key) => {
 });
 
 ipcMain.handle('get-auth-status', async () => {
-  return { authenticated: isAuthenticated };
-});
-
-ipcMain.handle('logout', async () => {
-  isAuthenticated = false;
-  store.delete('authenticated');
-  return { success: true };
-});
-
-// Window controls
-ipcMain.handle('window-minimize', () => {
-  if (mainWindow) mainWindow.minimize();
-});
-
-ipcMain.handle('window-maximize', () => {
-  if (mainWindow) {
-    mainWindow.isMaximized() ? mainWindow.unmaximize() : mainWindow.maximize();
-  }
-});
-
-ipcMain.handle('window-close', () => {
-  if (mainWindow) mainWindow.hide();
-});
-
-// API calls
-ipcMain.handle('api-call', async (event, { endpoint, method, body }) => {
-  try {
-    const fetch = (await import('node-fetch')).default;
-    const response = await fetch(`${BACKEND_URL}${endpoint}`, {
-      method: method || 'GET',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: body ? JSON.stringify(body) : undefined
-    });
-    return await response.json();
-  } catch (error) {
-    return { error: error.message };
-  }
-});
-
-// Open external links
-ipcMain.handle('open-external', async (event, url) => {
-  shell.openExternal(url);
+  return { authenticated: store.get('authenticated', false) };
 });
 
 // App ready
 app.whenReady().then(() => {
   // Verificar si ya estaba autenticado
   if (store.get('authenticated')) {
-    isAuthenticated = true;
     createMainWindow();
-    connectWebSocket(); // Conectar WebSocket
   } else {
-    const loginWin = createLoginWindow();
+    createLoginWindow();
     
     ipcMain.once('login-success', () => {
-      loginWin.close();
+      if (loginWindow) {
+        loginWindow.close();
+        loginWindow = null;
+      }
       createMainWindow();
-      connectWebSocket(); // Conectar WebSocket después de login
     });
   }
   
@@ -309,17 +227,20 @@ if (!gotTheLock) {
 }
 
 app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {
-    // No cerrar, mantener en tray
-  }
+  // No cerrar, mantener en tray
 });
 
 app.on('activate', () => {
   if (BrowserWindow.getAllWindows().length === 0) {
-    if (isAuthenticated) {
+    if (store.get('authenticated')) {
       createMainWindow();
     } else {
       createLoginWindow();
     }
   }
+});
+
+// Limpiar al salir
+app.on('before-quit', () => {
+  app.isQuitting = true;
 });
