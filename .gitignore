@@ -101,3 +101,7 @@ android-build/gradle.zip
 desktop-app/node_modules/electron/dist/electron
 
 # NOTE: .env files are NOT ignored - they are required for Emergent deployment
+-e 
+# Environment files
+*.env
+*.env.*
