@@ -2703,6 +2703,15 @@ except ImportError as e:
 # api_router.include_router(banking_core_router)
 # print("✅ Banking Core routes loaded (Ledger, AML, KYC, Reporting)")
 
+# Account deletion request routes (required by Google Play)
+try:
+    from routes.account_routes import router as account_router, init_account_routes
+    init_account_routes(db)
+    api_router.include_router(account_router)
+    print("✅ Account deletion routes loaded")
+except ImportError as e:
+    print(f"⚠️ Account routes not loaded: {e}")
+
 app.include_router(api_router)
 app.include_router(public_router)
 
