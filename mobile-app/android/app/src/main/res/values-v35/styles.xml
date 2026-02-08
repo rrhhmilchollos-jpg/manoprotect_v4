@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 
+    TEMAS PARA ANDROID 15+ (API 35+)
+    
+    En Android 15+, Edge-to-Edge es el comportamiento predeterminado.
+    Las APIs setStatusBarColor y setNavigationBarColor están OBSOLETAS.
+    El sistema maneja automáticamente las barras transparentes.
+    -->
+
+    <!-- Tema principal para Android 15+ -->
+    <style name="AppTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
+        <item name="android:editTextBackground">@drawable/rn_edit_text_material</item>
+        
+        <!-- Android 15+: Edge-to-Edge es automático -->
+        <!-- No necesitamos configurar barras del sistema manualmente -->
+        <item name="android:windowOptOutEdgeToEdgeEnforcement">false</item>
+    </style>
+    
+    <!-- Tema Fullscreen para SOS - Android 15+ -->
+    <style name="AppTheme.Fullscreen" parent="Theme.AppCompat.DayNight.NoActionBar">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowShowWhenLocked">true</item>
+        <item name="android:windowTurnScreenOn">true</item>
+        <item name="android:windowBackground">@color/sos_background</item>
+        
+        <!-- Android 15+: Edge-to-Edge habilitado automáticamente -->
+        <item name="android:windowOptOutEdgeToEdgeEnforcement">false</item>
+    </style>
+    
+    <!-- Tema Splash Screen - Android 15+ -->
+    <style name="AppTheme.SplashScreen" parent="AppTheme">
+        <item name="android:windowBackground">@color/splash_background</item>
+    </style>
+
+</resources>
