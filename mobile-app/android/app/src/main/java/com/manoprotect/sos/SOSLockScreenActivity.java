@@ -365,9 +365,9 @@ public class SOSLockScreenActivity extends Activity {
         flashRunnable = new Runnable() {
             @Override
             public void run() {
-                if (rootView != null) {
+                if (contentLayout != null) {
                     isFlashRed = !isFlashRed;
-                    rootView.setBackgroundColor(isFlashRed ? 
+                    contentLayout.setBackgroundColor(isFlashRed ? 
                         Color.parseColor("#3D1A1A") : Color.parseColor("#1a1a2e"));
                     flashHandler.postDelayed(this, 500);
                 }
@@ -400,7 +400,9 @@ public class SOSLockScreenActivity extends Activity {
         
         // Stop flash animation
         stopFlashAnimation();
-        rootView.setBackgroundColor(Color.parseColor("#1a1a2e"));
+        if (contentLayout != null) {
+            contentLayout.setBackgroundColor(Color.parseColor("#1a1a2e"));
+        }
         
         // Stop the service (which stops siren, vibration, etc.)
         Intent stopIntent = new Intent(this, SOSCriticalAlertService.class);
