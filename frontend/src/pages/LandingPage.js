@@ -981,6 +981,11 @@ const LandingPage = () => {
                     Aviso Legal
                   </button>
                 </li>
+                <li>
+                  <button onClick={() => navigate('/solicitar-eliminacion')} className="hover:text-white transition-colors" aria-label="Solicitar eliminación de cuenta">
+                    Eliminar mi Cuenta
+                  </button>
+                </li>
               </ul>
             </div>
           </div>
