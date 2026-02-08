@@ -103,6 +103,8 @@ mobile-app/android/app/build/outputs/bundle/release/app-release.aab
 | Parámetro | Valor |
 |-----------|-------|
 | applicationId | com.Manoprotect.Mano |
+| versionName | **2.0.0** |
+| versionCode | **2** |
 | targetSdkVersion | 35 |
 | compileSdkVersion | 35 |
 | minSdkVersion | 24 |
