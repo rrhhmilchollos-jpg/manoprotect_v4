@@ -3,7 +3,7 @@
   "appName": "ManoBank",
   "webDir": "www",
   "server": {
-    "url": "https://manoprotect-qa.preview.emergentagent.com",
+    "url": "https://security-api-suite.preview.emergentagent.com",
     "cleartext": true
   }
 }

@@ -11,7 +11,7 @@
 
 const CONFIG = {
   // URLs del Backend
-  BACKEND_URL: process.env.REACT_APP_BACKEND_URL || 'https://manoprotect-qa.preview.emergentagent.com',
+  BACKEND_URL: process.env.REACT_APP_BACKEND_URL || 'https://security-api-suite.preview.emergentagent.com',
   
   // WebSocket para tiempo real
   WS_URL: process.env.REACT_APP_WS_URL || 'wss://manoprotect-qa.preview.emergentagent.com/ws',

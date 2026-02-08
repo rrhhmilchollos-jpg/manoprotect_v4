@@ -43,4 +43,4 @@
 
 - **App ID:** com.manobank.app
 - **Nombre:** ManoBank
-- **URL Web:** https://manoprotect-qa.preview.emergentagent.com
+- **URL Web:** https://security-api-suite.preview.emergentagent.com
