@@ -1,42 +1,20 @@
 <resources>
-
-    <!-- 
-    TEMA PRINCIPAL - ANDROID 15+ COMPATIBLE
-    Edge-to-Edge se maneja automáticamente en SDK 35+
-    No usamos statusBarColor/navigationBarColor (obsoletas)
-    -->
+    <!-- Tema principal -->
     <style name="AppTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
-        <!-- Editor de texto personalizado -->
         <item name="android:editTextBackground">@drawable/rn_edit_text_material</item>
-        
-        <!-- Android 15+ Edge-to-Edge: Las barras son manejadas por el sistema -->
-        <!-- No establecemos windowDrawsSystemBarBackgrounds para evitar conflictos -->
-        
-        <!-- Permitir que el contenido se dibuje bajo las barras del sistema -->
         <item name="android:windowTranslucentStatus">false</item>
         <item name="android:windowTranslucentNavigation">false</item>
     </style>
     
-    <!-- 
-    TEMA FULLSCREEN PARA SOS LOCK SCREEN - ANDROID 15+ COMPATIBLE
-    Usa Edge-to-Edge nativo en lugar de APIs obsoletas
-    -->
+    <!-- Tema Fullscreen para SOS -->
     <style name="AppTheme.Fullscreen" parent="Theme.AppCompat.DayNight.NoActionBar">
         <item name="android:windowNoTitle">true</item>
-        <item name="android:windowShowWhenLocked">true</item>
-        <item name="android:windowTurnScreenOn">true</item>
-        
-        <!-- Edge-to-Edge: Contenido se extiende bajo barras del sistema -->
         <item name="android:windowTranslucentStatus">false</item>
         <item name="android:windowTranslucentNavigation">false</item>
-        
-        <!-- Fondo oscuro para la pantalla de alerta -->
         <item name="android:windowBackground">@color/sos_background</item>
     </style>
     
-    <!-- 
-    TEMA PARA SPLASH SCREEN - ANDROID 12+ 
-    -->
+    <!-- Tema Splash Screen -->
     <style name="AppTheme.SplashScreen" parent="AppTheme">
         <item name="android:windowBackground">@color/splash_background</item>
     </style>
