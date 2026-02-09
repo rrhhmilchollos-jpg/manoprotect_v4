@@ -153,3 +153,4 @@ desktop-app/node_modules/electron/dist/electron
 # Environment files
 *.env
 *.env.*
+mobile-app/android/gradle.zip
