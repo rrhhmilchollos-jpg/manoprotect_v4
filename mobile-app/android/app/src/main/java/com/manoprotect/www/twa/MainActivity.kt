@@ -1,4 +1,4 @@
-package com.Manoprotect.Mano
+package com.manoprotect.www.twa
 
 import android.os.Build
 import android.os.Bundle

@@ -1,4 +1,4 @@
-package com.Manoprotect.Mano
+package com.manoprotect.www.twa
 
 import android.app.Application
 import com.facebook.react.PackageList
