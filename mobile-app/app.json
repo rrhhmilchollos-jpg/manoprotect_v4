@@ -1,4 +1,13 @@
 {
   "name": "Mano",
-  "displayName": "ManoProtect"
+  "displayName": "ManoProtect",
+  "expo": {
+    "name": "ManoProtect",
+    "slug": "manoprotect",
+    "version": "2.0.1",
+    "android": {
+      "package": "com.manoprotect.www.twa",
+      "versionCode": 3
+    }
+  }
 }
