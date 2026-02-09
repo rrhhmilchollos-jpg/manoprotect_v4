@@ -6,135 +6,29 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    
     steps:
-    - name: Checkout codigo
-      uses: actions/checkout@v4
-
-    - name: Mostrar estructura del proyecto
-      run: |
-        echo "=== Raiz del repositorio ==="
-        ls -la
-        echo ""
-        echo "=== Buscando mobile-app ==="
-        if [ -d "mobile-app" ]; then
-          echo "✓ mobile-app encontrado"
-          ls -la mobile-app/
-        else
-          echo "✗ mobile-app NO encontrado"
-          echo "Buscando carpetas con android..."
-          find . -maxdepth 3 -name "android" -type d 2>/dev/null
-        fi
-
-    - name: Setup Java 17
-      uses: actions/setup-java@v4
+    - uses: actions/checkout@v4
+    - uses: actions/setup-java@v4
       with:
-        distribution: 'temurin'
-        java-version: '17'
-
-    - name: Setup Node 18
-      uses: actions/setup-node@v4
+        distribution: temurin
+        java-version: 17
+    - uses: actions/setup-node@v4
       with:
-        node-version: '18'
-
-    - name: Setup Android SDK
-      uses: android-actions/setup-android@v3
-
-    - name: Instalar dependencias
+        node-version: 18
+    - uses: android-actions/setup-android@v3
+    - name: Build
       run: |
-        # Determinar directorio del proyecto
-        if [ -d "mobile-app" ]; then
-          cd mobile-app
-        fi
-        
-        echo "=== Directorio actual: $(pwd) ==="
-        echo "=== Instalando dependencias ==="
-        
-        if [ -f "yarn.lock" ]; then
-          npm install -g yarn
-          yarn install --frozen-lockfile || yarn install
-        else
-          npm install --legacy-peer-deps
-        fi
-        
-        echo ""
-        echo "=== Verificando node_modules ==="
-        ls node_modules/@react-native-community/cli-platform-android/ 2>/dev/null | head -3 || echo "CLI platform no encontrado"
-
-    - name: Crear keystore desde secreto
-      run: |
-        if [ -d "mobile-app" ]; then
-          TARGET_DIR="mobile-app/android/app"
-        else
-          TARGET_DIR="android/app"
-        fi
-        
-        echo "=== Creando keystore en $TARGET_DIR ==="
-        mkdir -p "$TARGET_DIR"
-        echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > "$TARGET_DIR/manoprotect-2025.keystore"
-        
-        if [ -f "$TARGET_DIR/manoprotect-2025.keystore" ]; then
-          echo "✓ Keystore creado"
-          ls -la "$TARGET_DIR/manoprotect-2025.keystore"
-        else
-          echo "✗ Error creando keystore"
-          exit 1
-        fi
-
-    - name: Configurar gradle.properties
-      run: |
-        if [ -d "mobile-app" ]; then
-          GRADLE_PROPS="mobile-app/android/gradle.properties"
-        else
-          GRADLE_PROPS="android/gradle.properties"
-        fi
-        
-        echo "=== Configurando $GRADLE_PROPS ==="
-        
-        # Verificar si ya tiene la config
-        if grep -q "MYAPP_UPLOAD_STORE_FILE" "$GRADLE_PROPS" 2>/dev/null; then
-          echo "Config de firma ya existe, actualizando..."
-          sed -i 's/MYAPP_UPLOAD_STORE_PASSWORD=.*/MYAPP_UPLOAD_STORE_PASSWORD=${{ secrets.KEYSTORE_PASSWORD }}/' "$GRADLE_PROPS"
-          sed -i 's/MYAPP_UPLOAD_KEY_PASSWORD=.*/MYAPP_UPLOAD_KEY_PASSWORD=${{ secrets.KEY_PASSWORD }}/' "$GRADLE_PROPS"
-        else
-          echo "" >> "$GRADLE_PROPS"
-          echo "MYAPP_UPLOAD_STORE_FILE=manoprotect-2025.keystore" >> "$GRADLE_PROPS"
-          echo "MYAPP_UPLOAD_KEY_ALIAS=${{ secrets.KEY_ALIAS }}" >> "$GRADLE_PROPS"
-          echo "MYAPP_UPLOAD_STORE_PASSWORD=${{ secrets.KEYSTORE_PASSWORD }}" >> "$GRADLE_PROPS"
-          echo "MYAPP_UPLOAD_KEY_PASSWORD=${{ secrets.KEY_PASSWORD }}" >> "$GRADLE_PROPS"
-        fi
-        
-        echo "✓ Configuración completada"
-
-    - name: Compilar AAB
-      run: |
-        if [ -d "mobile-app" ]; then
-          cd mobile-app/android
-        else
-          cd android
-        fi
-        
-        echo "=== Directorio: $(pwd) ==="
-        echo "=== Dando permisos a gradlew ==="
+        cd mobile-app
+        npm install --legacy-peer-deps
+        echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > android/app/manoprotect-2025.keystore
+        cd android
+        echo "MYAPP_UPLOAD_STORE_FILE=manoprotect-2025.keystore" >> gradle.properties
+        echo "MYAPP_UPLOAD_KEY_ALIAS=${{ secrets.KEY_ALIAS }}" >> gradle.properties
+        echo "MYAPP_UPLOAD_STORE_PASSWORD=${{ secrets.KEYSTORE_PASSWORD }}" >> gradle.properties
+        echo "MYAPP_UPLOAD_KEY_PASSWORD=${{ secrets.KEY_PASSWORD }}" >> gradle.properties
         chmod +x gradlew
-        
-        echo "=== Limpiando build anterior ==="
-        ./gradlew clean --no-daemon || true
-        
-        echo ""
-        echo "=== Compilando AAB Release ==="
-        ./gradlew bundleRelease --no-daemon --stacktrace
-        
-        echo ""
-        echo "=== Verificando AAB generado ==="
-        find . -name "*.aab" -type f 2>/dev/null
-
-    - name: Buscar y subir AAB
-      uses: actions/upload-artifact@v4
+        ./gradlew bundleRelease --no-daemon
+    - uses: actions/upload-artifact@v4
       with:
         name: ManoProtect-AAB
-        path: |
-          mobile-app/android/app/build/outputs/bundle/release/*.aab
-          android/app/build/outputs/bundle/release/*.aab
-        if-no-files-found: error
-        retention-days: 30
+        path: mobile-app/android/app/build/outputs/bundle/release/*.aab
