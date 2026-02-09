@@ -1,0 +1,124 @@
+name: Build Android AAB
+
+on:
+  workflow_dispatch:
+
+env:
+  JAVA_VERSION: '17'
+  NODE_VERSION: '18'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./mobile-app
+    
+    steps:
+    - name: Checkout codigo
+      uses: actions/checkout@v4
+
+    - name: Verificar estructura del proyecto
+      working-directory: .
+      run: |
+        echo "=== Estructura del repositorio ==="
+        ls -la
+        echo ""
+        if [ -d "mobile-app" ]; then
+          echo "✓ Carpeta mobile-app encontrada"
+          ls -la mobile-app/
+        else
+          echo "✗ No existe mobile-app, buscando android..."
+          find . -name "android" -type d -not -path "*/node_modules/*" | head -3
+        fi
+
+    - name: Setup Java 17
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'temurin'
+        java-version: ${{ env.JAVA_VERSION }}
+
+    - name: Setup Node 18
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+
+    - name: Cache node_modules
+      uses: actions/cache@v4
+      with:
+        path: ./mobile-app/node_modules
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json', '**/yarn.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-node-
+
+    - name: Instalar dependencias
+      run: |
+        echo "=== Instalando dependencias ==="
+        if [ -f "yarn.lock" ]; then
+          yarn install --frozen-lockfile || yarn install
+        else
+          npm install --legacy-peer-deps
+        fi
+        
+        echo ""
+        echo "=== Verificando instalación ==="
+        ls -la node_modules/@react-native-community/ 2>/dev/null || echo "Verificando otra ubicación..."
+        ls -la node_modules/react-native/ 2>/dev/null | head -5
+
+    - name: Setup Android SDK
+      uses: android-actions/setup-android@v3
+
+    - name: Crear keystore desde secreto
+      run: |
+        echo "=== Creando keystore ==="
+        echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > android/app/manoprotect-2025.keystore
+        
+        if [ -f "android/app/manoprotect-2025.keystore" ]; then
+          echo "✓ Keystore creado exitosamente"
+          ls -la android/app/manoprotect-2025.keystore
+        else
+          echo "✗ Error creando keystore"
+          exit 1
+        fi
+
+    - name: Configurar firma en gradle.properties
+      run: |
+        echo "=== Configurando firma ==="
+        cd android
+        
+        # Añadir configuración de firma
+        cat >> gradle.properties << EOF
+
+# Signing config para release (añadido por CI)
+MYAPP_UPLOAD_STORE_FILE=manoprotect-2025.keystore
+MYAPP_UPLOAD_KEY_ALIAS=${{ secrets.KEY_ALIAS }}
+MYAPP_UPLOAD_STORE_PASSWORD=${{ secrets.KEYSTORE_PASSWORD }}
+MYAPP_UPLOAD_KEY_PASSWORD=${{ secrets.KEY_PASSWORD }}
+EOF
+        
+        echo "✓ Configuración añadida a gradle.properties"
+
+    - name: Limpiar build anterior
+      run: |
+        cd android
+        chmod +x gradlew
+        ./gradlew clean --no-daemon
+        echo "✓ Limpieza completada"
+
+    - name: Compilar AAB Release
+      run: |
+        cd android
+        echo "=== Iniciando compilación ==="
+        ./gradlew bundleRelease --no-daemon --stacktrace
+        
+        echo ""
+        echo "=== Verificando AAB generado ==="
+        find . -name "*.aab" -type f
+
+    - name: Subir AAB como artefacto
+      uses: actions/upload-artifact@v4
+      with:
+        name: ManoProtect-AAB
+        path: mobile-app/android/app/build/outputs/bundle/release/*.aab
+        if-no-files-found: error
+        retention-days: 30
