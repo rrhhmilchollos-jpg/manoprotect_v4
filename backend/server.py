@@ -210,6 +210,22 @@ from routes.push_routes import router as push_router, init_db as init_push_route
 # init_banking_core_routes(db, require_admin)
 
 # ============================================
+# ROOT HEALTH CHECK (for Kubernetes probes)
+# ============================================
+
+@app.get("/health")
+async def root_health_check():
+    """Root health check endpoint for Kubernetes liveness/readiness probes"""
+    try:
+        await db.command("ping")
+        return {"status": "ok", "database": "connected"}
+    except Exception as e:
+        return JSONResponse(
+            status_code=503,
+            content={"status": "error", "database": str(e)}
+        )
+
+# ============================================
 # HEALTH CHECK ENDPOINT (for production monitoring)
 # ============================================
 
