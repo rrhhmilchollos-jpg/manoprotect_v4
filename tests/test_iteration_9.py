@@ -9,7 +9,7 @@ import requests
 import os
 import uuid
 
-BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', 'https://security-api-suite.preview.emergentagent.com').rstrip('/')
+BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', 'https://twa-android-release.preview.emergentagent.com').rstrip('/')
 
 class TestBankingSupportedBanks:
     """Test /api/banking/supported-banks endpoint - should return 11 banks including N26, Imagin, Nickel"""

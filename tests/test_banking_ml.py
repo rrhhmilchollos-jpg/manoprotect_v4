@@ -6,7 +6,7 @@ import pytest
 import requests
 import os
 
-BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', 'https://security-api-suite.preview.emergentagent.com').rstrip('/')
+BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', 'https://twa-android-release.preview.emergentagent.com').rstrip('/')
 
 # Test credentials
 TEST_EMAIL = "testuser@mano.com"

@@ -3,7 +3,7 @@
   "appName": "ManoBank",
   "webDir": "www",
   "server": {
-    "url": "https://security-api-suite.preview.emergentagent.com",
+    "url": "https://twa-android-release.preview.emergentagent.com",
     "cleartext": true
   },
   "android": {
