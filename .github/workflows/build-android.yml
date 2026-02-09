@@ -17,6 +17,11 @@ jobs:
         distribution: 'temurin'
         java-version: '17'
     
+    - name: Setup Gradle
+      uses: gradle/gradle-build-action@v2
+      with:
+        gradle-version: 8.3
+    
     - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
@@ -36,8 +41,6 @@ jobs:
         ls -la
         echo "📄 Checking index.js..."
         cat index.js
-        echo "📄 Checking App.tsx..."
-        ls -la App.tsx
     
     - name: Create assets directory
       working-directory: mobile-app
@@ -88,12 +91,14 @@ jobs:
         echo "MYAPP_UPLOAD_STORE_PASSWORD=${{ secrets.KEYSTORE_PASSWORD }}" >> gradle.properties
         echo "MYAPP_UPLOAD_KEY_PASSWORD=${{ secrets.KEY_PASSWORD }}" >> gradle.properties
         echo "✅ Signing configured"
-        echo "📄 Final gradle.properties:"
-        cat gradle.properties
     
-    - name: Make gradlew executable
+    - name: Initialize Gradle Wrapper
       working-directory: mobile-app/android
-      run: chmod +x gradlew
+      run: |
+        echo "🔧 Initializing Gradle wrapper..."
+        gradle wrapper --gradle-version 8.3
+        chmod +x gradlew
+        echo "✅ Gradle wrapper initialized"
     
     - name: Build Android App Bundle
       working-directory: mobile-app/android
