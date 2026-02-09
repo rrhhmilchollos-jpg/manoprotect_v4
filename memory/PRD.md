@@ -5,9 +5,22 @@
 - **Empresa**: STARTBOOKING SL
 - **Descripción**: Aplicación de protección contra fraudes digitales para familias españolas
 
-## Estado Actual: Plataforma de Protección Digital Multi-Capa (8 Febrero 2026)
+## Estado Actual: Plataforma de Protección Digital Multi-Capa (9 Febrero 2026)
 
-### ✅ Completado Hoy (8 Feb 2026) - Sesión 3
+### ✅ Completado Hoy (9 Feb 2026) - Sesión 4
+
+#### Correcciones para Compilación Android
+- [x] **app.json**: Simplificado para React Native CLI (eliminada config Expo)
+- [x] **index.js**: Registro del componente corregido
+- [x] **settings.gradle**: Nombre del proyecto corregido a 'Mano'
+- [x] **strings.xml**: Nombre de app actualizado a "ManoProtect"
+- [x] **GitHub Actions**: Workflow `build-android.yml` completamente reescrito
+- [x] **Limpieza de workflows**: Eliminados workflows duplicados
+- [x] **Documentación**: Creado `ESTADO_COMPILACION.md`
+
+---
+
+### ✅ Completado (8 Feb 2026) - Sesión 3
 
 #### Compatibilidad Android 15/16 - Recomendaciones Google Play
 - [x] **Edge-to-Edge Display**: Implementado en MainActivity.kt con WindowCompat
