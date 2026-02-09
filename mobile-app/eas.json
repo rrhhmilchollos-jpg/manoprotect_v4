@@ -1,42 +1,12 @@
 {
   "cli": {
-    "version": ">= 5.0.0"
+    "version": ">= 7.0.0"
   },
   "build": {
-    "development": {
-      "developmentClient": true,
-      "distribution": "internal",
-      "android": {
-        "buildType": "apk"
-      },
-      "ios": {
-        "simulator": true
-      }
-    },
-    "preview": {
-      "distribution": "internal",
-      "android": {
-        "buildType": "apk"
-      }
-    },
     "production": {
       "android": {
-        "buildType": "app-bundle"
-      },
-      "ios": {
-        "resourceClass": "m1-medium"
-      }
-    }
-  },
-  "submit": {
-    "production": {
-      "android": {
-        "serviceAccountKeyPath": "./google-play-key.json",
-        "track": "production"
-      },
-      "ios": {
-        "appleId": "tu-apple-id@email.com",
-        "ascAppId": "tu-app-store-connect-id"
+        "buildType": "app-bundle",
+        "credentialsSource": "local"
       }
     }
   }
