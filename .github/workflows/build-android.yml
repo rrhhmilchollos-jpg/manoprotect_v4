@@ -21,21 +21,34 @@ jobs:
       uses: actions/setup-node@v4
       with:
         node-version: '18'
-    
-    - name: Setup Android SDK
-      uses: android-actions/setup-android@v3
+        cache: 'npm'
+        cache-dependency-path: mobile-app/package-lock.json
     
     - name: Install dependencies
       working-directory: mobile-app
       run: npm install --legacy-peer-deps
     
-    - name: Decode and setup keystore
+    - name: Create assets directory
+      working-directory: mobile-app
+      run: mkdir -p android/app/src/main/assets
+    
+    - name: Bundle React Native JavaScript
+      working-directory: mobile-app
+      run: |
+        npx react-native bundle \
+          --platform android \
+          --dev false \
+          --entry-file index.js \
+          --bundle-output android/app/src/main/assets/index.android.bundle \
+          --assets-dest android/app/src/main/res/
+    
+    - name: Decode keystore
       working-directory: mobile-app/android/app
       run: |
         echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > manoprotect-2025.keystore
-        ls -la manoprotect-2025.keystore
+        ls -lh manoprotect-2025.keystore
     
-    - name: Configure signing properties
+    - name: Configure signing
       working-directory: mobile-app/android
       run: |
         echo "" >> gradle.properties
@@ -43,7 +56,6 @@ jobs:
         echo "MYAPP_UPLOAD_KEY_ALIAS=${{ secrets.KEY_ALIAS }}" >> gradle.properties
         echo "MYAPP_UPLOAD_STORE_PASSWORD=${{ secrets.KEYSTORE_PASSWORD }}" >> gradle.properties
         echo "MYAPP_UPLOAD_KEY_PASSWORD=${{ secrets.KEY_PASSWORD }}" >> gradle.properties
-        cat gradle.properties
     
     - name: Make gradlew executable
       working-directory: mobile-app/android
@@ -53,9 +65,9 @@ jobs:
       working-directory: mobile-app/android
       run: ./gradlew bundleRelease --no-daemon --stacktrace
     
-    - name: Upload AAB artifact
+    - name: Upload AAB
       uses: actions/upload-artifact@v4
       with:
-        name: ManoProtect-Release
+        name: ManoProtect-v2.0.1
         path: mobile-app/android/app/build/outputs/bundle/release/app-release.aab
         if-no-files-found: error
