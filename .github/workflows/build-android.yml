@@ -96,6 +96,10 @@ jobs:
     - name: Initialize Gradle Wrapper
       working-directory: mobile-app/android
       run: |
+        echo "🔧 Cleaning Gradle cache..."
+        rm -rf .gradle
+        rm -rf build
+        rm -rf app/build
         echo "🔧 Initializing Gradle wrapper..."
         gradle wrapper --gradle-version 8.3
         chmod +x gradlew
