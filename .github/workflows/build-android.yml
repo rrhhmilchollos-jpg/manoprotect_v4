@@ -24,36 +24,72 @@ jobs:
     
     - name: Install dependencies
       working-directory: mobile-app
-      run: npm install --legacy-peer-deps
+      run: |
+        echo "📦 Installing npm dependencies..."
+        npm install --legacy-peer-deps
+        echo "✅ Dependencies installed"
+    
+    - name: Verify project structure
+      working-directory: mobile-app
+      run: |
+        echo "📁 Checking project structure..."
+        ls -la
+        echo "📄 Checking index.js..."
+        cat index.js
+        echo "📄 Checking App.tsx..."
+        ls -la App.tsx
     
     - name: Create assets directory
       working-directory: mobile-app
-      run: mkdir -p android/app/src/main/assets
+      run: |
+        echo "📁 Creating assets directory..."
+        mkdir -p android/app/src/main/assets
+        ls -la android/app/src/main/
     
     - name: Bundle React Native JavaScript
       working-directory: mobile-app
       run: |
+        echo "📦 Bundling JavaScript..."
         npx react-native bundle \
           --platform android \
           --dev false \
           --entry-file index.js \
           --bundle-output android/app/src/main/assets/index.android.bundle \
-          --assets-dest android/app/src/main/res/
+          --assets-dest android/app/src/main/res/ || {
+            echo "❌ Bundle failed. Trying alternative method..."
+            npx react-native bundle \
+              --platform android \
+              --dev false \
+              --entry-file index.js \
+              --bundle-output android/app/src/main/assets/index.android.bundle
+          }
+        echo "✅ JavaScript bundled"
+        ls -lh android/app/src/main/assets/
     
     - name: Decode keystore
       working-directory: mobile-app/android/app
       run: |
+        echo "🔐 Decoding keystore..."
+        if [ -z "${{ secrets.KEYSTORE_BASE64 }}" ]; then
+          echo "❌ ERROR: KEYSTORE_BASE64 secret is empty!"
+          exit 1
+        fi
         echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > manoprotect-2025.keystore
         ls -lh manoprotect-2025.keystore
+        echo "✅ Keystore decoded"
     
     - name: Configure signing
       working-directory: mobile-app/android
       run: |
+        echo "⚙️ Configuring signing..."
         echo "" >> gradle.properties
         echo "MYAPP_UPLOAD_STORE_FILE=manoprotect-2025.keystore" >> gradle.properties
         echo "MYAPP_UPLOAD_KEY_ALIAS=${{ secrets.KEY_ALIAS }}" >> gradle.properties
         echo "MYAPP_UPLOAD_STORE_PASSWORD=${{ secrets.KEYSTORE_PASSWORD }}" >> gradle.properties
         echo "MYAPP_UPLOAD_KEY_PASSWORD=${{ secrets.KEY_PASSWORD }}" >> gradle.properties
+        echo "✅ Signing configured"
+        echo "📄 Final gradle.properties:"
+        cat gradle.properties
     
     - name: Make gradlew executable
       working-directory: mobile-app/android
@@ -61,7 +97,16 @@ jobs:
     
     - name: Build Android App Bundle
       working-directory: mobile-app/android
-      run: ./gradlew bundleRelease --no-daemon --stacktrace
+      run: |
+        echo "🔨 Building Android App Bundle..."
+        ./gradlew bundleRelease --no-daemon --stacktrace --info
+    
+    - name: Verify AAB was created
+      working-directory: mobile-app/android
+      run: |
+        echo "🔍 Looking for AAB file..."
+        find . -name "*.aab" -type f
+        ls -lh app/build/outputs/bundle/release/ || echo "❌ Build output directory not found"
     
     - name: Upload AAB
       uses: actions/upload-artifact@v4
