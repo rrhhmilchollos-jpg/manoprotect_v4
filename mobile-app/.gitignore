@@ -10,12 +10,6 @@ node_modules/
 build/
 dist/
 
-# iOS
-ios/Pods/
-ios/build/
-ios/*.xcworkspace/xcuserdata/
-*.ipa
-
 # Android
 android/.gradle/
 android/build/
@@ -25,9 +19,6 @@ android/app/build/
 
 # Keep gradle wrapper jar (CRITICAL for builds)
 !android/gradle/wrapper/gradle-wrapper.jar
-
-# Firebase configuration files (iOS only - Android is committed)
-ios/*/GoogleService-Info.plist
 
 # Local properties (machine-specific)
 android/local.properties
