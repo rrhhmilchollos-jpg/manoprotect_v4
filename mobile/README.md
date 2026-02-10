@@ -25,7 +25,7 @@ Todas las apps se conectan al mismo backend:
 
 | Entorno | URL |
 |---------|-----|
-| Preview | https://mobile-app-update-1.preview.emergentagent.com |
+| Preview | https://admin-panel-live.preview.emergentagent.com |
 | Producción | [Tu dominio de producción] |
 
 ---
