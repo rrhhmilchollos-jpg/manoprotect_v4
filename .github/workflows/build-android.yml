@@ -62,7 +62,7 @@ jobs:
 
     - name: Build Android App Bundle (Release)
       working-directory: mobile-app/android
-      run: ./gradlew bundleRelease --no-daemon --stacktrace
+      run: ./gradlew bundleRelease --no-daemon --stacktrace 2>&1 | tee build_output.log || { grep -A2 "^e:" build_output.log; exit 1; }
       env:
         JAVA_HOME: ${{ env.JAVA_HOME }}
 
