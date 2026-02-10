@@ -62,9 +62,21 @@ jobs:
 
     - name: Build Android App Bundle (Release)
       working-directory: mobile-app/android
-      run: ./gradlew bundleRelease --no-daemon --stacktrace 2>&1 | tee build_output.log || { grep -A2 "^e:" build_output.log; exit 1; }
+      shell: bash
+      run: |
+        set -o pipefail
+        ./gradlew bundleRelease --no-daemon --stacktrace 2>&1 | tee /tmp/build_output.log
       env:
         JAVA_HOME: ${{ env.JAVA_HOME }}
+
+    - name: Show build errors if failed
+      if: failure()
+      run: |
+        echo "=== KOTLIN COMPILATION ERRORS ==="
+        grep "^e:" /tmp/build_output.log || echo "No e: lines found"
+        echo ""
+        echo "=== LAST 50 LINES ==="
+        tail -50 /tmp/build_output.log
 
     - name: Verify AAB
       run: |
