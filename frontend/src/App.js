@@ -59,6 +59,7 @@ const InstruccionesFamiliares = lazy(() => import('@/pages/InstruccionesFamiliar
 const CompartirUbicacion = lazy(() => import('@/pages/CompartirUbicacion'));
 const SobreNosotros = lazy(() => import('@/pages/SobreNosotros'));
 const ShieldPage = lazy(() => import('@/pages/ShieldPage'));
+const EnterpriseLanding = lazy(() => import('@/pages/EnterpriseLanding'));
 const JoinFamilyPage = lazy(() => import('@/pages/JoinFamilyPage'));
 
 // Lazy load non-critical UI components to reduce main thread blocking
