@@ -1,64 +1,147 @@
 # PRD - ManoProtect
 
 ## Problema Original
-Aplicación de ciberseguridad para protección de usuarios mayores. Incluye panel web de administración y aplicación móvil Android.
+Aplicación de ciberseguridad para protección de usuarios mayores y empresas. Incluye panel web de administración y aplicación móvil Android (TWA).
 
 ## Arquitectura Actual
-- **Frontend Web (Admin Panel):** React + Shadcn/UI (puerto 3000)
+- **Frontend Web:** React + Shadcn/UI (puerto 3000)
 - **Backend API:** FastAPI + MongoDB (puerto 8001)
-- **Mobile App:** **Trusted Web Activity (TWA)** - Nativo Android Java
-- **Build Android:** Gradle 8.3 + AGP 8.1.4 + JDK 17
-- **Package:** com.manoprotect.www.twa
+- **Mobile App:** Trusted Web Activity (TWA) - Nativo Android Java
 - **URL TWA:** https://www.manoprotect.com
+- **Package:** com.manoprotect.www.twa
 
-## Lo Implementado
+## Lo Implementado (Febrero 2026)
 
-### CAMBIO MAYOR (Feb 10, 2026): Migración a TWA
-El proyecto React Native fue **ABANDONADO** debido a problemas persistentes de compilación. 
-Se creó un nuevo proyecto nativo Android usando **Trusted Web Activity (TWA)**.
+### 🛡️ ManoProtect Shield - Sistema de Seguridad Avanzada (NUEVO)
+Implementación completa de features revolucionarias:
 
-**Nuevo proyecto TWA en `/manoprotect-twa/`:**
-- LauncherActivity.java - Extiende LauncherActivity de androidbrowserhelper
-- AndroidManifest.xml con configuración completa TWA
-- Recursos: iconos, colores, splash screen
-- Firma: keystore manoprotect-2025.keystore incluido
-- GitHub Actions workflow: `.github/workflows/build-twa.yml`
-- Script Windows: `compilar-aab.bat`
+#### 1. **Verificador Universal** ✅
+- Verifica URLs, teléfonos, emails y empresas
+- Detecta patrones de phishing y estafas
+- Consulta base de datos comunitaria de reportes
+- Integración con DNA Digital y Trust Seal
 
-### Limpieza completa de iOS (Feb 10, 2026):
-- Eliminados todos los archivos y configuraciones iOS del proyecto
+#### 2. **Escudo de Voz AI** ✅
+- Analiza transcripciones de llamadas en tiempo real
+- Detecta tácticas de manipulación:
+  - Urgencia ("tiene 5 minutos")
+  - Autoridad falsa ("soy del banco")
+  - Miedo ("le vamos a bloquear")
+  - Solicitud de datos sensibles
+- Recomendaciones personalizadas
+- Risk score 0-100%
 
-### Endpoints de ciberseguridad probados (10/10 PASS):
-- GET /api/security/providers - 8 proveedores
-- POST /api/security/check/url - Detecta phishing y URLs seguras
-- POST /api/security/check/ip - Analiza IPs con AbuseIPDB y AlienVault OTX
-- POST /api/security/check/content - Detecta patrones de estafa
-- GET /api/security/stats/dashboard - Dashboard operativo
+#### 3. **DNA Digital** ✅
+- Sistema de identidad digital verificable
+- Códigos únicos tipo "MP-DNA-XXXXXXXX"
+- Verificación por teléfono, email, web o código
+- Para personas y empresas
+- Trust score dinámico
 
-### Correcciones plataforma web:
-1. Métricas en Tiempo Real (SSE) - FUNCIONANDO
-2. API Keys - CRUD completo funcional
+#### 4. **Sello de Confianza** ✅
+- Badge verificable para empresas
+- Tiers: Basic, Professional, Enterprise, Government
+- Código embebible para websites
+- Verificación en tiempo real
+- Precios: 29€-299€/mes
 
-## Proyecto móvil obsoleto (NO USAR)
-El directorio `mobile-app/` contiene el proyecto React Native abandonado. 
-No debe ser utilizado ni modificado.
+#### 5. **Sistema de Reportes Comunitarios** ✅
+- Reporte anónimo de estafas
+- Base de datos compartida
+- Alertas trending
+- Incremento automático de reportes duplicados
 
-## Backlog
-- **P0:** Compilar AAB del TWA (usuario debe ejecutar `.\gradlew.bat bundleRelease` localmente)
-- **P1:** Configurar Digital Asset Links en www.manoprotect.com/.well-known/assetlinks.json
-- **P2:** Eliminar directorio mobile-app/ (pendiente confirmación usuario)
-- **P3:** Configurar WhatsApp Business API para envío real de mensajes
+#### 6. **Verificador de Transacciones** ✅
+- Análisis de riesgo pre-transacción
+- Verificación de IBAN por país
+- Detección de países de alto riesgo
+- Integración con DNA Digital
 
-## Cómo Compilar el AAB
-
-### Opción 1: Local (Windows)
-```powershell
-cd manoprotect-twa
-.\gradlew.bat bundleRelease --no-daemon
+### Endpoints API Shield
 ```
-AAB en: `app\build\outputs\bundle\release\app-release.aab`
+POST /api/shield/dna/register - Registrar DNA Digital
+POST /api/shield/dna/verify - Verificar DNA Digital
+GET  /api/shield/dna/{code} - Obtener DNA Digital
 
-### Opción 2: GitHub Actions
-1. Push a main con cambios en `manoprotect-twa/`
-2. O ejecutar manualmente: Actions > Build ManoProtect TWA > Run workflow
-3. Descargar artifact
+POST /api/shield/seal/create - Crear Sello de Confianza
+POST /api/shield/seal/verify - Verificar Sello
+GET  /api/shield/seal/{code} - Obtener badge data
+
+POST /api/shield/verify/universal - Verificador Universal
+POST /api/shield/voice/analyze - Escudo de Voz AI
+POST /api/shield/transaction/verify - Verificar transacción
+
+POST /api/shield/scam/report - Reportar estafa
+GET  /api/shield/scam/trending - Estafas trending
+
+POST /api/shield/panic/trigger - Modo Pánico Silencioso
+GET  /api/shield/panic/status/{id} - Estado de alerta
+
+POST /api/shield/zones/create - Crear zona inteligente
+GET  /api/shield/zones/{user_id} - Zonas del usuario
+```
+
+### Frontend Components Shield
+```
+/src/components/shield/UniversalVerifier.jsx
+/src/components/shield/VoiceShieldAI.jsx
+/src/components/shield/DNADigital.jsx
+/src/components/shield/TrustSeal.jsx
+/src/pages/ShieldPage.jsx
+```
+
+### Cambios Dashboard
+- ❌ Eliminada pestaña "Banca Segura" (generaba desconfianza)
+- ✅ Nueva pestaña "Localizar Familia" con mapa interactivo
+- ✅ Acciones rápidas: SOS, Compartir ubicación, Guía
+
+### TWA Android App
+- Proyecto completo en `/manoprotect-twa/`
+- targetSdk: 35, versionCode: 5
+- URL: https://www.manoprotect.com
+- Keystore configurado
+- GitHub Actions workflow
+
+## Pendiente de Implementar
+
+### P0 - Crítico
+- [ ] Compilar AAB v2.2.1 (versionCode 5) para producción
+- [ ] Subir assetlinks.json a www.manoprotect.com/.well-known/
+
+### P1 - Alta Prioridad
+- [ ] Anti-Deepfake Shield (análisis de video/audio)
+- [ ] Herencia Digital (bóveda de documentos/contraseñas)
+- [ ] Modo Pánico Silencioso (UI móvil)
+- [ ] Zonas Inteligentes con aprendizaje de comportamiento
+
+### P2 - Media Prioridad
+- [ ] Predictor de Estafas AI
+- [ ] Simulacro de Phishing para empresas
+- [ ] Verificador de Transacciones Blockchain
+- [ ] Chrome Extension para verificación
+
+### P3 - Futuro
+- [ ] WhatsApp Business API
+- [ ] Integración con bancos reales
+- [ ] App iOS (cuando sea rentable)
+
+## Planes de Precios Actualizados
+
+### B2C
+| Plan | Precio | Incluye |
+|------|--------|---------|
+| Familiar | 4,99€/mes | Localización + Alertas + Verificador |
+| Premium | 29,99€/mes | Todo B2C + IA Analysis |
+
+### B2B (ManoProtect Enterprise)
+| Plan | Precio | Incluye |
+|------|--------|---------|
+| Básico | 29€/mes | Sello + 10 empleados |
+| Profesional | 99€/mes | Sello + Monitor + Simulacros |
+| Enterprise | 299€/mes | Todo + API + Blockchain |
+
+## Archivos Clave
+- `/app/backend/routes/shield.py` - API Shield
+- `/app/backend/models/security_advanced.py` - Modelos Pydantic
+- `/app/frontend/src/pages/ShieldPage.jsx` - UI principal
+- `/app/manoprotect-twa/` - Proyecto Android TWA
