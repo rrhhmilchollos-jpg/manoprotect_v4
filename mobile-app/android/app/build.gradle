@@ -127,6 +127,9 @@ dependencies {
     // The version of react-native is set by the React Native Gradle Plugin
     implementation("com.facebook.react:react-android")
 
+    // Google Play Services Location (required by SOSCriticalAlertService)
+    implementation("com.google.android.gms:play-services-location:21.1.0")
+
     if (hermesEnabled.toBoolean()) {
         implementation("com.facebook.react:hermes-android")
     } else {
