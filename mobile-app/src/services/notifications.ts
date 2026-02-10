@@ -110,7 +110,7 @@ class NotificationService {
       await AsyncStorage.setItem('fcm_token', token);
 
       // Register with backend
-      await api.registerPushToken(token, Platform.OS as 'ios' | 'android');
+      await api.registerPushToken(token, 'android');
 
       return token;
     } catch (error) {
