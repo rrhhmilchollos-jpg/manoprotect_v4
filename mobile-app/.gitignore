@@ -23,6 +23,9 @@ android/app/build/
 *.apk
 *.aab
 
+# Keep gradle wrapper jar (CRITICAL for builds)
+!android/gradle/wrapper/gradle-wrapper.jar
+
 # Firebase configuration files (iOS only - Android is committed)
 ios/*/GoogleService-Info.plist
 
