@@ -18,7 +18,6 @@ import {
   Linking,
   Animated,
   Dimensions,
-  Platform,
 } from 'react-native';
 import sosNativeService, { SOSLocation } from '../services/sosNative';
 import { useNavigation, useRoute } from '@react-navigation/native';
