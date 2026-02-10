@@ -82,9 +82,6 @@ android {
         versionCode 3
         versionName "2.0.1"
         multiDexEnabled true
-        
-        // Fix for react-native-camera flavor issue
-        missingDimensionStrategy 'react-native-camera', 'general'
     }
     
     // Packaging options to avoid duplicate files
