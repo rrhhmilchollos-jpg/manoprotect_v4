@@ -1,37 +1,32 @@
-# 🚀 Guía de Compilación - App Mano
+# Guia de Compilacion - ManoProtect (Android)
 
-## Configuración Completada ✅
+## Configuracion
 
 - **Nombre de la App:** Mano
 - **Dominio:** manoprotect.com
 - **Package Android:** com.Manoprotect.Mano
-- **Bundle iOS:** com.Manoprotect.Mano
 - **Firebase Project:** manoprotect-f889b
 
 ---
 
-## 📱 Compilar en tu Máquina Local
+## Compilar en tu Maquina Local
 
 ### Requisitos Previos
 
-#### Para Android:
 1. **Java JDK 17** - [Descargar](https://adoptium.net/)
 2. **Android Studio** - [Descargar](https://developer.android.com/studio)
 3. **Android SDK** (se instala con Android Studio)
-
-#### Para iOS (solo en Mac):
-1. **Xcode 14+** - Desde App Store
-2. **CocoaPods** - `sudo gem install cocoapods`
+4. **Node.js >= 18** - [Descargar](https://nodejs.org/)
+5. **Yarn** - `npm install -g yarn`
 
 ---
 
-## 🤖 Compilar para Android
+## Compilar para Android
 
 ### Paso 1: Clonar/Descargar el proyecto
 ```bash
-# Descarga el proyecto de Emergent o usa git
 cd ~/Desktop
-# Copia la carpeta mobile-app desde Emergent
+# Copia la carpeta mobile-app desde Emergent o clona el repo
 ```
 
 ### Paso 2: Instalar dependencias
@@ -47,7 +42,7 @@ cd android
 ```
 
 ### Paso 4: Encontrar el APK
-El APK estará en:
+El APK estara en:
 ```
 android/app/build/outputs/apk/debug/app-debug.apk
 ```
@@ -60,33 +55,8 @@ adb install android/app/build/outputs/apk/debug/app-debug.apk
 
 ---
 
-## 🍎 Compilar para iOS (Solo Mac)
+## Build para Produccion - AAB para Play Store
 
-### Paso 1: Instalar dependencias
-```bash
-cd mobile-app
-yarn install
-cd ios
-pod install
-cd ..
-```
-
-### Paso 2: Abrir en Xcode
-```bash
-open ios/ManoTemp.xcworkspace
-```
-
-### Paso 3: Configurar en Xcode
-1. Selecciona tu Team de desarrollo
-2. Cambia el Bundle Identifier a `com.Manoprotect.Mano`
-3. Selecciona tu dispositivo o simulador
-4. Click en ▶️ Run
-
----
-
-## 📦 Build para Producción
-
-### Android - AAB para Play Store
 ```bash
 cd android
 
@@ -103,32 +73,43 @@ echo "MANO_RELEASE_KEY_PASSWORD=tu_password" >> gradle.properties
 ./gradlew bundleRelease
 ```
 
-El archivo AAB estará en:
+El archivo AAB estara en:
 ```
 android/app/build/outputs/bundle/release/app-release.aab
 ```
 
-### iOS - Archive para App Store
-1. En Xcode: Product → Archive
-2. Distribute App → App Store Connect
-3. Subir a App Store Connect
+---
+
+## Script de Compilacion Avanzado
+
+Usa el script automatizado para compilar:
+```bash
+# Verificar entorno
+./compilar-avanzado.sh --doctor
+
+# Build AAB release
+./compilar-avanzado.sh
+
+# Build APK release
+./compilar-avanzado.sh --apk
+
+# Build debug
+./compilar-avanzado.sh --debug
+
+# Limpiar + Build AAB + APK
+./compilar-avanzado.sh --all
+```
 
 ---
 
-## 🔥 Configuración Firebase (Ya incluida)
+## Configuracion Firebase
 
-### Android ✅
+### Android
 - `google-services.json` ya configurado en `/android/app/`
 
-### iOS (Pendiente)
-1. Ve a [Firebase Console](https://console.firebase.google.com/project/manoprotect-f889b)
-2. Añade app iOS con Bundle ID: `com.Manoprotect.Mano`
-3. Descarga `GoogleService-Info.plist`
-4. Colócalo en `/ios/Mano/`
-
 ---
 
-## 🧪 Testing
+## Testing
 
 ### En emulador Android
 ```bash
@@ -136,44 +117,31 @@ android/app/build/outputs/bundle/release/app-release.aab
 yarn android
 ```
 
-### En simulador iOS
-```bash
-yarn ios
-```
-
-### En dispositivo físico
-1. Conecta el dispositivo
-2. Habilita modo desarrollador
-3. `yarn android` o `yarn ios`
+### En dispositivo fisico
+1. Conecta el dispositivo por USB
+2. Habilita modo desarrollador y depuracion USB
+3. `yarn android`
 
 ---
 
-## 📋 Checklist Pre-Publicación
+## Checklist Pre-Publicacion
 
-### Android
-- [ ] Crear keystore de producción
+- [ ] Crear keystore de produccion
 - [ ] Configurar versionCode/versionName
-- [ ] Añadir iconos de la app
-- [ ] Añadir splash screen
-- [ ] Probar en múltiples dispositivos
+- [ ] Anadir iconos de la app
+- [ ] Anadir splash screen
+- [ ] Probar en multiples dispositivos
 - [ ] Firmar y generar AAB
-
-### iOS
-- [ ] Configurar Apple Developer Account
-- [ ] Añadir GoogleService-Info.plist
-- [ ] Configurar Push Notifications (APNs)
-- [ ] Añadir iconos de la app
-- [ ] Crear provisioning profiles
-- [ ] Archive y subir a App Store Connect
+- [ ] Subir a Google Play Console
 
 ---
 
-## 📞 Soporte
+## Soporte
 
-- **Documentación Firebase:** https://firebase.google.com/docs
+- **Documentacion Firebase:** https://firebase.google.com/docs
 - **React Native:** https://reactnative.dev/docs/getting-started
 - **Mano Web:** https://manoprotect.com
 
 ---
 
-Última actualización: Diciembre 2025
+Ultima actualizacion: Febrero 2026
