@@ -25,7 +25,7 @@ from models.security_advanced import (
     ScamPrediction, ScamAlertCreate
 )
 
-router = APIRouter(prefix="/api/shield", tags=["ManoProtect Shield"])
+router = APIRouter(prefix="/shield", tags=["ManoProtect Shield"])
 
 # Database reference (will be set from server.py)
 db = None
