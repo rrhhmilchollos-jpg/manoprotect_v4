@@ -12,10 +12,10 @@ android {
         versionName "2.1.0"
 
         manifestPlaceholders = [
-            hostName: "manoprotect.com",
-            defaultUrl: "https://manoprotect.com",
+            hostName: "www.manoprotect.com",
+            defaultUrl: "https://www.manoprotect.com",
             launcherName: "ManoProtect",
-            assetStatements: '[{ "relation": ["delegate_permission/common.handle_all_urls"], "target": { "namespace": "web", "site": "https://manoprotect.com" } }]'
+            assetStatements: '[{ "relation": ["delegate_permission/common.handle_all_urls"], "target": { "namespace": "web", "site": "https://www.manoprotect.com" } }]'
         ]
     }
 
