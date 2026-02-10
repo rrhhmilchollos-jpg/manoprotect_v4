@@ -233,22 +233,6 @@ const EnterpriseLanding = () => {
         </div>
       </section>
 
-      {/* Trust Badges */}
-      <section className="py-8 bg-zinc-50 border-b">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="flex items-center justify-center gap-8 text-zinc-400 text-sm">
-            <span>Confían en nosotros:</span>
-            <div className="flex items-center gap-8 font-semibold text-zinc-600">
-              <span>BBVA</span>
-              <span>Telefónica</span>
-              <span>Iberdrola</span>
-              <span>Mapfre</span>
-              <span>Repsol</span>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* Features Section */}
       <section className="py-20">
         <div className="max-w-7xl mx-auto px-4">
