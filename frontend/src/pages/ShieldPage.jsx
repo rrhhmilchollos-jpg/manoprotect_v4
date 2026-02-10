@@ -102,6 +102,14 @@ const ShieldPage = () => {
         return <DNADigital />;
       case 'seal':
         return <TrustSeal />;
+      case 'deepfake':
+        return <AntiDeepfake />;
+      case 'vault':
+        return <DigitalInheritance />;
+      case 'panic':
+        return <SilentPanicMode />;
+      case 'zones':
+        return <SmartZones />;
       default:
         return <UniversalVerifier />;
     }
