@@ -482,8 +482,76 @@ const Dashboard = () => {
           <ThreatAnalyzer />
         )}
 
-        {activeTab === 'banking' && (
-          <BankingDashboard />
+        {activeTab === 'family' && (
+          <div className="space-y-6">
+            {/* Family Location Header */}
+            <Card className="border-emerald-200 bg-gradient-to-r from-emerald-50 to-teal-50">
+              <CardContent className="py-6">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-4">
+                    <div className="w-14 h-14 rounded-full bg-emerald-100 flex items-center justify-center">
+                      <MapPin className="w-7 h-7 text-emerald-600" />
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-bold text-emerald-900">Localización Familiar en Tiempo Real</h3>
+                      <p className="text-emerald-700">Sabe dónde están tus seres queridos en todo momento</p>
+                    </div>
+                  </div>
+                  <div className="flex gap-2">
+                    <Button
+                      onClick={() => navigate('/family-admin')}
+                      className="bg-emerald-600 hover:bg-emerald-700 text-white"
+                    >
+                      <Users className="w-4 h-4 mr-2" />
+                      Gestionar Familia
+                    </Button>
+                    <Button
+                      onClick={() => navigate('/safe-zones')}
+                      variant="outline"
+                      className="border-emerald-600 text-emerald-600 hover:bg-emerald-50"
+                    >
+                      <Shield className="w-4 h-4 mr-2" />
+                      Zonas Seguras
+                    </Button>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Live Location Map */}
+            <LiveLocationMap />
+
+            {/* Quick Actions */}
+            <div className="grid sm:grid-cols-3 gap-4">
+              <Card className="card-hover cursor-pointer" onClick={() => navigate('/sos-emergency')}>
+                <CardContent className="py-6 text-center">
+                  <div className="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center mx-auto mb-3">
+                    <AlertTriangle className="w-6 h-6 text-red-600" />
+                  </div>
+                  <h4 className="font-semibold text-zinc-900">Botón SOS</h4>
+                  <p className="text-sm text-zinc-600">Alerta de emergencia inmediata</p>
+                </CardContent>
+              </Card>
+              <Card className="card-hover cursor-pointer" onClick={() => navigate('/compartir-ubicacion')}>
+                <CardContent className="py-6 text-center">
+                  <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mx-auto mb-3">
+                    <Share2 className="w-6 h-6 text-blue-600" />
+                  </div>
+                  <h4 className="font-semibold text-zinc-900">Compartir Ubicación</h4>
+                  <p className="text-sm text-zinc-600">Comparte tu ubicación con familia</p>
+                </CardContent>
+              </Card>
+              <Card className="card-hover cursor-pointer" onClick={() => navigate('/instrucciones-familiares')}>
+                <CardContent className="py-6 text-center">
+                  <div className="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center mx-auto mb-3">
+                    <Book className="w-6 h-6 text-purple-600" />
+                  </div>
+                  <h4 className="font-semibold text-zinc-900">Guía para Familiares</h4>
+                  <p className="text-sm text-zinc-600">Cómo configurar la app</p>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
         )}
 
         {activeTab === 'history' && (
