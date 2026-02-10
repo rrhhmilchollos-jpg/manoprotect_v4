@@ -193,6 +193,10 @@ init_employee_routes(db)
 from routes.enterprise_routes import router as enterprise_router, init_enterprise_routes
 init_enterprise_routes(db)
 
+# ManoProtect Shield Routes (DNA Digital, Trust Seal, Voice AI, etc.)
+from routes.shield import router as shield_router, set_database as init_shield_routes
+init_shield_routes(db)
+
 # Payment Routes (Stripe)
 from routes.payments_routes import router as payments_router
 from routes.admin_routes import router as admin_router, init_db as init_admin_routes
