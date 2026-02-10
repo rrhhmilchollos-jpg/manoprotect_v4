@@ -188,3 +188,7 @@ mobile-app/android/gradle.zip
 *.env
 *.env.*
 frontend/public/ManoProtect-iOS-Project.zip
+-e 
+# Environment files
+*.env
+*.env.*
