@@ -331,6 +331,27 @@ const Dashboard = () => {
           </div>
         </div>
 
+        {/* Shield Quick Access Banner */}
+        <div 
+          onClick={() => navigate('/shield')}
+          className="mb-8 p-4 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 rounded-xl cursor-pointer hover:shadow-lg transition-all group"
+        >
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center">
+                <Shield className="w-6 h-6 text-white" />
+              </div>
+              <div className="text-white">
+                <h3 className="font-bold text-lg">ManoProtect Shield</h3>
+                <p className="text-white/80 text-sm">Verificador Universal, Escudo de Voz AI, DNA Digital y más</p>
+              </div>
+            </div>
+            <Button variant="secondary" className="bg-white text-indigo-600 hover:bg-white/90 group-hover:scale-105 transition-transform">
+              Acceder
+            </Button>
+          </div>
+        </div>
+
         {/* Stats */}
         {stats && (
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
