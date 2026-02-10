@@ -458,13 +458,13 @@ const Dashboard = () => {
             Analizador IA
           </Button>
           <Button
-            data-testid="tab-banking"
-            variant={activeTab === 'banking' ? 'default' : 'ghost'}
-            onClick={() => setActiveTab('banking')}
-            className={activeTab === 'banking' ? 'bg-indigo-600' : ''}
+            data-testid="tab-family"
+            variant={activeTab === 'family' ? 'default' : 'ghost'}
+            onClick={() => setActiveTab('family')}
+            className={activeTab === 'family' ? 'bg-indigo-600' : ''}
           >
-            <CreditCard className="w-4 h-4 mr-2" />
-            Banca Segura
+            <MapPin className="w-4 h-4 mr-2" />
+            Localizar Familia
           </Button>
           <Button
             data-testid="tab-history"
