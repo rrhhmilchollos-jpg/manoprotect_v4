@@ -248,7 +248,7 @@ const styles = StyleSheet.create({
   coordinates: {
     fontSize: 14,
     color: '#60A5FA',
-    fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace',
+    fontFamily: 'monospace',
   },
   messageContainer: {
     backgroundColor: 'rgba(220, 38, 38, 0.2)',

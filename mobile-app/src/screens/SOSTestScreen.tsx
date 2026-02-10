@@ -462,7 +462,7 @@ const styles = StyleSheet.create({
   logItem: {
     color: '#D1D5DB',
     fontSize: 12,
-    fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace',
+    fontFamily: 'monospace',
     marginBottom: 4,
   },
   instructions: {

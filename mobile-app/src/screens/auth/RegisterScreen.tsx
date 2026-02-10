@@ -70,7 +70,7 @@ const RegisterScreen: React.FC = () => {
   return (
     <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        behavior={'height'}
         style={styles.keyboardView}
       >
         <ScrollView
