@@ -26,12 +26,17 @@ jobs:
       uses: actions/setup-node@v4
       with:
         node-version: '18'
-        cache: 'yarn'
-        cache-dependency-path: mobile-app/yarn.lock
 
     - name: Install JS dependencies
       working-directory: mobile-app
-      run: yarn install --frozen-lockfile || yarn install
+      run: yarn install
+
+    - name: Verify gesture-handler version
+      working-directory: mobile-app
+      run: |
+        echo "react-native-gesture-handler version:"
+        node -e "console.log(require('react-native-gesture-handler/package.json').version)"
+        echo "Must be 2.14.x for RN 0.73 compatibility"
 
     - name: Create assets directory
       run: mkdir -p mobile-app/android/app/src/main/assets
@@ -49,9 +54,7 @@ jobs:
     - name: Remove duplicate resources
       working-directory: mobile-app
       run: |
-        # Remove drawable duplicates that cause AAPT2 errors
         find android/app/src/main/res/drawable-* -name "node_modules*" -delete 2>/dev/null || true
-        # Remove duplicate raw resources
         find android/app/src/main/res -name "*.orig" -delete 2>/dev/null || true
 
     - name: Make Gradlew executable
