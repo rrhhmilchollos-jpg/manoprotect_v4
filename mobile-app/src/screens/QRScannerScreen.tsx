@@ -1,8 +1,9 @@
 /**
  * QR Scanner Screen
  * Scan and analyze QR codes for threats
+ * Uses react-native-vision-camera with built-in code scanner
  */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useCallback } from 'react';
 import {
   View,
   Text,
@@ -11,12 +12,16 @@ import {
   Alert,
   Modal,
   Linking,
+  ActivityIndicator,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { RNCamera } from 'react-native-camera';
-import QRCodeScanner from 'react-native-qrcode-scanner';
+import {
+  Camera,
+  useCameraDevice,
+  useCameraPermission,
+  useCodeScanner,
+} from 'react-native-vision-camera';
 import Icon from 'react-native-vector-icons/Ionicons';
-import LinearGradient from 'react-native-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
 import qrScannerService, { ScanResult } from '../services/qrScanner';
 import api from '../services/api';
@@ -26,15 +31,17 @@ const QRScannerScreen: React.FC = () => {
   const [scanResult, setScanResult] = useState<ScanResult | null>(null);
   const [showResult, setShowResult] = useState(false);
   const [analyzing, setAnalyzing] = useState(false);
+  const [torchOn, setTorchOn] = useState(false);
 
-  const handleScan = async (e: any) => {
-    const data = e.data;
+  const device = useCameraDevice('back');
+  const { hasPermission, requestPermission } = useCameraPermission();
+
+  const handleScan = useCallback(async (data: string) => {
+    if (analyzing || showResult) return;
     setAnalyzing(true);
 
-    // Analyze QR content
     const result = qrScannerService.analyzeQRCode(data);
-    
-    // If it's a URL, also analyze with backend
+
     if (result.type === 'url') {
       try {
         const backendAnalysis = await api.analyzeContent(data, 'url');
@@ -51,13 +58,22 @@ const QRScannerScreen: React.FC = () => {
     setScanResult(result);
     setShowResult(true);
     setAnalyzing(false);
-  };
+  }, [analyzing, showResult]);
+
+  const codeScanner = useCodeScanner({
+    codeTypes: ['qr', 'ean-13', 'code-128', 'pdf-417'],
+    onCodeScanned: (codes) => {
+      if (codes.length > 0 && codes[0].value) {
+        handleScan(codes[0].value);
+      }
+    },
+  });
 
   const handleOpenURL = async () => {
     if (scanResult?.type === 'url' && scanResult.data) {
       if (scanResult.threatLevel === 'danger') {
         Alert.alert(
-          '⚠️ Advertencia',
+          'Advertencia',
           'Esta URL ha sido identificada como peligrosa. ¿Estás seguro de que quieres abrirla?',
           [
             { text: 'Cancelar', style: 'cancel' },
@@ -73,106 +89,124 @@ const QRScannerScreen: React.FC = () => {
   };
 
   const handleCopy = () => {
-    // Copy to clipboard would go here
     Alert.alert('Copiado', 'El contenido ha sido copiado al portapapeles');
   };
 
   const getThreatLevelColor = () => {
     switch (scanResult?.threatLevel) {
-      case 'danger':
-        return '#ef4444';
-      case 'warning':
-        return '#f59e0b';
-      default:
-        return '#22c55e';
+      case 'danger': return '#ef4444';
+      case 'warning': return '#f59e0b';
+      default: return '#22c55e';
     }
   };
 
   const getThreatLevelIcon = () => {
     switch (scanResult?.threatLevel) {
-      case 'danger':
-        return 'close-circle';
-      case 'warning':
-        return 'warning';
-      default:
-        return 'checkmark-circle';
+      case 'danger': return 'close-circle';
+      case 'warning': return 'warning';
+      default: return 'checkmark-circle';
     }
   };
 
   const getThreatLevelText = () => {
     switch (scanResult?.threatLevel) {
-      case 'danger':
-        return 'PELIGROSO';
-      case 'warning':
-        return 'PRECAUCIÓN';
-      default:
-        return 'SEGURO';
+      case 'danger': return 'PELIGROSO';
+      case 'warning': return 'PRECAUCION';
+      default: return 'SEGURO';
     }
   };
+
+  // Permission handling
+  if (!hasPermission) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <View style={styles.permissionContainer}>
+          <Icon name="camera-outline" size={64} color="#6366f1" />
+          <Text style={styles.permissionTitle}>Permiso de Camara</Text>
+          <Text style={styles.permissionText}>
+            Necesitamos acceso a la camara para escanear codigos QR
+          </Text>
+          <TouchableOpacity style={styles.permissionButton} onPress={requestPermission}>
+            <Text style={styles.permissionButtonText}>Permitir Camara</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+            <Text style={styles.backButtonText}>Volver</Text>
+          </TouchableOpacity>
+        </View>
+      </SafeAreaView>
+    );
+  }
+
+  if (!device) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <View style={styles.permissionContainer}>
+          <Icon name="alert-circle-outline" size={64} color="#ef4444" />
+          <Text style={styles.permissionTitle}>Camara no disponible</Text>
+          <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+            <Text style={styles.backButtonText}>Volver</Text>
+          </TouchableOpacity>
+        </View>
+      </SafeAreaView>
+    );
+  }
 
   return (
     <SafeAreaView style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
-        <TouchableOpacity
-          style={styles.closeButton}
-          onPress={() => navigation.goBack()}
-        >
+        <TouchableOpacity style={styles.closeButton} onPress={() => navigation.goBack()}>
           <Icon name="close" size={28} color="#fff" />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Escáner QR</Text>
-        <View style={{ width: 28 }} />
+        <Text style={styles.headerTitle}>Escaner QR</Text>
+        <TouchableOpacity style={styles.closeButton} onPress={() => setTorchOn(!torchOn)}>
+          <Icon name={torchOn ? 'flash' : 'flash-outline'} size={24} color="#fff" />
+        </TouchableOpacity>
       </View>
 
       {/* Scanner */}
       <View style={styles.scannerContainer}>
-        <QRCodeScanner
-          onRead={handleScan}
-          reactivate={!showResult}
-          reactivateTimeout={2000}
-          showMarker={true}
-          customMarker={
-            <View style={styles.marker}>
-              <View style={[styles.markerCorner, styles.topLeft]} />
-              <View style={[styles.markerCorner, styles.topRight]} />
-              <View style={[styles.markerCorner, styles.bottomLeft]} />
-              <View style={[styles.markerCorner, styles.bottomRight]} />
-            </View>
-          }
-          cameraStyle={styles.camera}
-          topContent={
-            <Text style={styles.scanInstructions}>
-              Apunta la cámara al código QR
-            </Text>
-          }
+        <Camera
+          style={StyleSheet.absoluteFill}
+          device={device}
+          isActive={!showResult}
+          codeScanner={codeScanner}
+          torch={torchOn ? 'on' : 'off'}
         />
-        
+
+        {/* Overlay with scan marker */}
+        <View style={styles.overlay}>
+          <Text style={styles.scanInstructions}>
+            Apunta la camara al codigo QR
+          </Text>
+          <View style={styles.marker}>
+            <View style={[styles.markerCorner, styles.topLeft]} />
+            <View style={[styles.markerCorner, styles.topRight]} />
+            <View style={[styles.markerCorner, styles.bottomLeft]} />
+            <View style={[styles.markerCorner, styles.bottomRight]} />
+          </View>
+        </View>
+
         {analyzing && (
           <View style={styles.analyzingOverlay}>
+            <ActivityIndicator size="large" color="#6366f1" />
             <Text style={styles.analyzingText}>Analizando...</Text>
           </View>
         )}
       </View>
 
       {/* Result Modal */}
-      <Modal
-        visible={showResult}
-        animationType="slide"
-        transparent={true}
-      >
+      <Modal visible={showResult} animationType="slide" transparent={true}>
         <View style={styles.modalOverlay}>
           <View style={styles.resultCard}>
-            {/* Status Icon */}
             <View style={[styles.statusIcon, { backgroundColor: getThreatLevelColor() + '20' }]}>
               <Icon name={getThreatLevelIcon()} size={60} color={getThreatLevelColor()} />
             </View>
 
-            {/* Status Text */}
             <Text style={[styles.statusText, { color: getThreatLevelColor() }]}>
               {getThreatLevelText()}
             </Text>
 
-            {/* Content Type */}
             <View style={styles.contentType}>
               <Icon
                 name={
@@ -190,14 +224,12 @@ const QRScannerScreen: React.FC = () => {
               </Text>
             </View>
 
-            {/* Content */}
             <View style={styles.contentBox}>
               <Text style={styles.contentText} numberOfLines={3}>
                 {scanResult?.data}
               </Text>
             </View>
 
-            {/* Reason if suspicious */}
             {scanResult?.reason && (
               <View style={styles.reasonBox}>
                 <Icon name="information-circle" size={20} color="#f59e0b" />
@@ -205,7 +237,6 @@ const QRScannerScreen: React.FC = () => {
               </View>
             )}
 
-            {/* Actions */}
             <View style={styles.actions}>
               {scanResult?.type === 'url' && (
                 <TouchableOpacity
@@ -226,15 +257,11 @@ const QRScannerScreen: React.FC = () => {
               </TouchableOpacity>
             </View>
 
-            {/* Scan Again */}
             <TouchableOpacity
               style={styles.scanAgainButton}
-              onPress={() => {
-                setShowResult(false);
-                setScanResult(null);
-              }}
+              onPress={() => { setShowResult(false); setScanResult(null); }}
             >
-              <Text style={styles.scanAgainText}>Escanear otro código</Text>
+              <Text style={styles.scanAgainText}>Escanear otro codigo</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -254,6 +281,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 16,
     backgroundColor: '#1a1a2e',
+    zIndex: 10,
   },
   closeButton: {
     padding: 4,
@@ -265,16 +293,22 @@ const styles = StyleSheet.create({
   },
   scannerContainer: {
     flex: 1,
+    position: 'relative',
   },
-  camera: {
-    height: '100%',
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   scanInstructions: {
     color: '#fff',
     fontSize: 16,
     textAlign: 'center',
-    padding: 20,
+    marginBottom: 24,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
     backgroundColor: 'rgba(0,0,0,0.5)',
+    borderRadius: 8,
   },
   marker: {
     width: 250,
@@ -321,6 +355,48 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 18,
     fontWeight: '600',
+    marginTop: 12,
+  },
+  permissionContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 32,
+    backgroundColor: '#1a1a2e',
+  },
+  permissionTitle: {
+    color: '#fff',
+    fontSize: 22,
+    fontWeight: '700',
+    marginTop: 20,
+    marginBottom: 12,
+  },
+  permissionText: {
+    color: '#9ca3af',
+    fontSize: 16,
+    textAlign: 'center',
+    marginBottom: 32,
+    lineHeight: 24,
+  },
+  permissionButton: {
+    backgroundColor: '#6366f1',
+    paddingVertical: 14,
+    paddingHorizontal: 40,
+    borderRadius: 12,
+    marginBottom: 16,
+  },
+  permissionButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  backButton: {
+    paddingVertical: 10,
+    paddingHorizontal: 24,
+  },
+  backButtonText: {
+    color: '#6366f1',
+    fontSize: 14,
   },
   modalOverlay: {
     flex: 1,
