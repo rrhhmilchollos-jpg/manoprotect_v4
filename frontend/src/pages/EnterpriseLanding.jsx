@@ -129,8 +129,8 @@ const TESTIMONIALS = [
 ];
 
 const STATS = [
-  { value: '500+', label: 'Empresas protegidas' },
-  { value: '2M+', label: 'Amenazas bloqueadas' },
+  { value: '0', label: 'Empresas protegidas' },
+  { value: '0', label: 'Amenazas bloqueadas' },
   { value: '99.9%', label: 'Uptime garantizado' },
   { value: '< 1s', label: 'Tiempo de verificación' }
 ];
