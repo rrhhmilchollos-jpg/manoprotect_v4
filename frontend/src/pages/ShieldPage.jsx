@@ -8,19 +8,24 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { 
   Shield, ArrowLeft, Fingerprint, Award, Brain, AlertTriangle, 
-  Lock, Users, Building2, Zap, Globe, Phone, Wallet
+  Lock, Users, Building2, Zap, Globe, Phone, Wallet, Eye, 
+  Vault, Navigation, Radio
 } from 'lucide-react';
 
 import UniversalVerifier from '@/components/shield/UniversalVerifier';
 import VoiceShieldAI from '@/components/shield/VoiceShieldAI';
 import DNADigital from '@/components/shield/DNADigital';
 import TrustSeal from '@/components/shield/TrustSeal';
+import AntiDeepfake from '@/components/shield/AntiDeepfake';
+import DigitalInheritance from '@/components/shield/DigitalInheritance';
+import SilentPanicMode from '@/components/shield/SilentPanicMode';
+import SmartZones from '@/components/shield/SmartZones';
 
 const FEATURES = [
   {
     id: 'verifier',
     name: 'Verificador Universal',
-    description: 'Comprueba URLs, teléfonos, emails y empresas',
+    description: 'Comprueba URLs, teléfonos, emails',
     icon: Globe,
     color: 'from-indigo-500 to-purple-500',
     badge: 'Popular'
@@ -28,26 +33,58 @@ const FEATURES = [
   {
     id: 'voice',
     name: 'Escudo de Voz AI',
-    description: 'Detecta manipulación en llamadas telefónicas',
+    description: 'Detecta manipulación en llamadas',
     icon: Brain,
     color: 'from-purple-500 to-pink-500',
-    badge: 'Nuevo'
+    badge: 'IA'
   },
   {
     id: 'dna',
     name: 'DNA Digital',
-    description: 'Verifica identidades con huella digital única',
+    description: 'Identidad digital verificable',
     icon: Fingerprint,
     color: 'from-cyan-500 to-blue-500',
-    badge: 'Revolucionario'
+    badge: 'Único'
   },
   {
     id: 'seal',
     name: 'Sello de Confianza',
-    description: 'Badge verificable para empresas',
+    description: 'Badge verificable empresas',
     icon: Award,
     color: 'from-amber-500 to-orange-500',
-    badge: 'Empresas'
+    badge: 'B2B'
+  },
+  {
+    id: 'deepfake',
+    name: 'Anti-Deepfake',
+    description: 'Detecta videos/audios falsos',
+    icon: Eye,
+    color: 'from-rose-500 to-red-500',
+    badge: 'Beta'
+  },
+  {
+    id: 'vault',
+    name: 'Herencia Digital',
+    description: 'Bóveda segura para familia',
+    icon: Vault,
+    color: 'from-emerald-500 to-teal-500',
+    badge: 'Nuevo'
+  },
+  {
+    id: 'panic',
+    name: 'Modo Pánico',
+    description: 'Alerta silenciosa de emergencia',
+    icon: AlertTriangle,
+    color: 'from-red-500 to-rose-500',
+    badge: 'SOS'
+  },
+  {
+    id: 'zones',
+    name: 'Zonas Inteligentes',
+    description: 'Aprendizaje de comportamiento',
+    icon: Navigation,
+    color: 'from-blue-500 to-indigo-500',
+    badge: 'IA'
   }
 ];
 
