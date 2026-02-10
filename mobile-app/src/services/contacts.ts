@@ -18,31 +18,20 @@ class ContactsService {
    * Request permission to access contacts
    */
   async requestPermission(): Promise<boolean> {
-    if (Platform.OS === 'android') {
-      try {
-        const granted = await PermissionsAndroid.request(
-          PermissionsAndroid.PERMISSIONS.READ_CONTACTS,
-          {
-            title: 'Acceso a Contactos',
-            message: 'MANO necesita acceso a tus contactos para configurar contactos de confianza.',
-            buttonPositive: 'Permitir',
-            buttonNegative: 'Denegar',
-          }
-        );
-        return granted === PermissionsAndroid.RESULTS.GRANTED;
-      } catch (error) {
-        console.error('Permission error:', error);
-        return false;
-      }
-    } else {
-      // iOS permissions are handled by the Contacts library
-      try {
-        const permission = await Contacts.requestPermission();
-        return permission === 'authorized';
-      } catch (error) {
-        console.error('iOS permission error:', error);
-        return false;
-      }
+    try {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.READ_CONTACTS,
+        {
+          title: 'Acceso a Contactos',
+          message: 'MANO necesita acceso a tus contactos para configurar contactos de confianza.',
+          buttonPositive: 'Permitir',
+          buttonNegative: 'Denegar',
+        }
+      );
+      return granted === PermissionsAndroid.RESULTS.GRANTED;
+    } catch (error) {
+      console.error('Permission error:', error);
+      return false;
     }
   }
 

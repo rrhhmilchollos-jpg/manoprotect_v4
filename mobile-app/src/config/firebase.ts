@@ -26,12 +26,6 @@ export const FIREBASE_CONFIG = {
     appId: '1:97231251022:android:54053179f6dfb05d61451f',
   },
   
-  // iOS configuration (add when available)
-  ios: {
-    bundleId: 'com.Manoprotect.Mano',
-    appId: '', // Add iOS app ID from Firebase Console
-  },
-  
   // Notification channels for Android
   channels: {
     threats: {

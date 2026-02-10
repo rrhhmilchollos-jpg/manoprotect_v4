@@ -74,7 +74,7 @@ class NotificationService {
         sound: true,
       },
       popInitialNotification: true,
-      requestPermissions: Platform.OS === 'ios',
+      requestPermissions: false,
     });
 
     this.isInitialized = true;
@@ -85,13 +85,6 @@ class NotificationService {
    */
   async requestPermission(): Promise<boolean> {
     try {
-      if (Platform.OS === 'ios') {
-        const authStatus = await messaging().requestPermission();
-        const enabled =
-          authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
-          authStatus === messaging.AuthorizationStatus.PROVISIONAL;
-        return enabled;
-      }
       return true; // Android grants by default
     } catch (error) {
       console.error('Permission request failed:', error);
