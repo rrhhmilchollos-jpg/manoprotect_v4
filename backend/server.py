@@ -2419,6 +2419,10 @@ print("✅ Employee Portal routes loaded")
 api_router.include_router(enterprise_router)
 print("✅ Enterprise routes loaded")
 
+# ManoProtect Shield routes (DNA Digital, Trust Seal, Voice AI, etc.)
+api_router.include_router(shield_router)
+print("✅ ManoProtect Shield routes loaded")
+
 # Payment routes (Stripe)
 api_router.include_router(payments_router)
 print("✅ Payment routes loaded")
