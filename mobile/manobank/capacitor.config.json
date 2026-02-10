@@ -1,9 +1,0 @@
-{
-  "appId": "com.manobank.app",
-  "appName": "ManoBank",
-  "webDir": "www",
-  "server": {
-    "url": "https://mobile-app-update-1.preview.emergentagent.com",
-    "cleartext": true
-  }
-}
