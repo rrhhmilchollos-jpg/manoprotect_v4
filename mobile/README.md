@@ -25,7 +25,7 @@ Todas las apps se conectan al mismo backend:
 
 | Entorno | URL |
 |---------|-----|
-| Preview | https://twa-android-release.preview.emergentagent.com |
+| Preview | https://mobile-app-update-1.preview.emergentagent.com |
 | Producción | [Tu dominio de producción] |
 
 ---

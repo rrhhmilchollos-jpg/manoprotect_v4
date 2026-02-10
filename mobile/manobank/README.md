@@ -43,4 +43,4 @@
 
 - **App ID:** com.manobank.app
 - **Nombre:** ManoBank
-- **URL Web:** https://twa-android-release.preview.emergentagent.com
+- **URL Web:** https://mobile-app-update-1.preview.emergentagent.com
