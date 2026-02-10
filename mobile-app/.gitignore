@@ -29,6 +29,9 @@ android/app/build/
 # Firebase configuration files (iOS only - Android is committed)
 ios/*/GoogleService-Info.plist
 
+# Local properties (machine-specific)
+android/local.properties
+
 # IDE
 .idea/
 .vscode/
