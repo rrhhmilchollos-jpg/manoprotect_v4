@@ -2,14 +2,14 @@ apply plugin: "com.android.application"
 
 android {
     namespace "com.manoprotect.www.twa"
-    compileSdk 34
+    compileSdk 35
 
     defaultConfig {
         applicationId "com.manoprotect.www.twa"
         minSdk 24
-        targetSdk 34
-        versionCode 3
-        versionName "2.1.0"
+        targetSdk 35
+        versionCode 4
+        versionName "2.2.0"
 
         manifestPlaceholders = [
             hostName: "www.manoprotect.com",
