@@ -88,7 +88,6 @@ Desktop.exe
 manoprotect-desktop/node_modules/electron/dist/electron
 frontend/node_modules/.cache/default-development/8.pack
 frontend/node_modules/.cache/default-development/0.pack
-frontend/ios/App/App/public/ManoProtect-Desktop-Windows.zip
 frontend/public/ManoProtect-Desktop-Windows.zip
 frontend/node_modules/.cache/default-development/3.pack
 frontend/node_modules/.cache/default-development/4.pack
