@@ -5,9 +5,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 
-import com.google.androidbrowserhelper.trusted.LauncherActivity;
-
-public class LauncherActivity extends com.google.androidbrowserhelper.trusted.LauncherActivity {
+public class MainActivity extends com.google.androidbrowserhelper.trusted.LauncherActivity {
 
     @Override
     protected Uri getLaunchingUrl() {
@@ -18,7 +16,6 @@ public class LauncherActivity extends com.google.androidbrowserhelper.trusted.La
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Request notification permission on Android 13+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (checkSelfPermission(android.Manifest.permission.POST_NOTIFICATIONS)
                     != PackageManager.PERMISSION_GRANTED) {
