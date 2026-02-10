@@ -102,7 +102,12 @@ GET  /api/shield/zones/{user_id} - Zonas del usuario
 /src/components/shield/VoiceShieldAI.jsx
 /src/components/shield/DNADigital.jsx
 /src/components/shield/TrustSeal.jsx
+/src/components/shield/AntiDeepfake.jsx
+/src/components/shield/DigitalInheritance.jsx
+/src/components/shield/SilentPanicMode.jsx
+/src/components/shield/SmartZones.jsx
 /src/pages/ShieldPage.jsx
+/src/pages/EnterpriseLanding.jsx
 ```
 
 ### Cambios Dashboard
