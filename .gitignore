@@ -196,3 +196,7 @@ frontend/public/ManoProtect-iOS-Project.zip
 # Environment files
 *.env
 *.env.*
+-e 
+# Environment files
+*.env
+*.env.*
