@@ -229,6 +229,11 @@ function AppRouter() {
           <Route path="/shield" element={<ShieldPage />} />
           <Route path="/seguridad" element={<ShieldPage />} />
           
+          {/* Enterprise B2B Landing */}
+          <Route path="/enterprise" element={<EnterpriseLanding />} />
+          <Route path="/empresas" element={<EnterpriseLanding />} />
+          <Route path="/b2b" element={<EnterpriseLanding />} />
+          
           {/* Investor Routes */}
           <Route path="/investor/register" element={<InvestorRegister />} />
           <Route 
