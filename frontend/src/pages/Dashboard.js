@@ -11,10 +11,10 @@ import { toast } from 'sonner';
 import NotificationCenter from '@/components/NotificationCenter';
 import PushNotificationToggle from '@/components/PushNotificationToggle';
 import ThreatAnalyzer from '@/components/ThreatAnalyzer';
-import BankingDashboard from '@/components/BankingDashboard';
 import AlertSubscription from '@/components/AlertSubscription';
 import { SubscriptionBadge, SubscriptionBadgeCard } from '@/components/SubscriptionBadge';
 import NativeAdBanner from '@/components/ads/NativeAdBanner';
+import LiveLocationMap from '@/components/LiveLocationMap';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
