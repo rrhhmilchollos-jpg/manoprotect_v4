@@ -1,0 +1,21 @@
+{
+  "iteration": 33,
+  "timestamp": "2026-02-10T12:45:00Z",
+  "test_type": "backend_manual_curl",
+  "total_tests": 10,
+  "passed": 10,
+  "failed": 0,
+  "results": [
+    {"test": "GET /api/security/providers", "status": "PASS", "details": "HTTP 200, 8 providers returned"},
+    {"test": "POST /api/security/check/url (phishing)", "status": "PASS", "details": "HTTP 200, is_safe=False correctly detected"},
+    {"test": "POST /api/security/check/url (safe)", "status": "PASS", "details": "HTTP 200, is_safe=True for google.com"},
+    {"test": "POST /api/security/check/ip (malicious)", "status": "PASS", "details": "HTTP 200, is_safe=False, threat_level=high"},
+    {"test": "POST /api/security/check/ip (private)", "status": "PASS", "details": "HTTP 200, is_safe=True for 192.168.1.1"},
+    {"test": "POST /api/security/check/ip (invalid)", "status": "PASS", "details": "HTTP 400 for invalid IP format"},
+    {"test": "POST /api/security/check/content (scam)", "status": "PASS", "details": "HTTP 200, is_scam=True correctly detected"},
+    {"test": "POST /api/security/check/content (normal)", "status": "PASS", "details": "HTTP 200, is_scam=False for normal text"},
+    {"test": "POST /api/security/check/content (too short)", "status": "PASS", "details": "HTTP 400 for content < 10 chars"},
+    {"test": "GET /api/security/stats/dashboard", "status": "PASS", "details": "HTTP 200, system_status=operational"}
+  ],
+  "notes": "All cybersecurity endpoints tested and working. External APIs (VirusTotal, AbuseIPDB, AlienVault OTX) responding correctly. Also verified: vision-camera migration in mobile-app (JS bundle compiles successfully), advanced build script doctor mode works."
+}
