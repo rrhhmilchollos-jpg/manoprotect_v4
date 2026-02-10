@@ -1,0 +1,58 @@
+apply plugin: "com.android.application"
+
+android {
+    namespace "com.manoprotect.www.twa"
+    compileSdk 34
+
+    defaultConfig {
+        applicationId "com.manoprotect.www.twa"
+        minSdk 24
+        targetSdk 34
+        versionCode 3
+        versionName "2.1.0"
+
+        manifestPlaceholders = [
+            hostName: "manoprotect.com",
+            defaultUrl: "https://manoprotect.com",
+            launcherName: "ManoProtect",
+            assetStatements: '[{ "relation": ["delegate_permission/common.handle_all_urls"], "target": { "namespace": "web", "site": "https://manoprotect.com" } }]'
+        ]
+    }
+
+    signingConfigs {
+        debug {
+            storeFile file("debug.keystore")
+        }
+        release {
+            if (project.hasProperty("MYAPP_UPLOAD_STORE_FILE")) {
+                storeFile file(MYAPP_UPLOAD_STORE_FILE)
+                storePassword MYAPP_UPLOAD_STORE_PASSWORD
+                keyAlias MYAPP_UPLOAD_KEY_ALIAS
+                keyPassword MYAPP_UPLOAD_KEY_PASSWORD
+            }
+        }
+    }
+
+    buildTypes {
+        debug {
+            signingConfig signingConfigs.debug
+        }
+        release {
+            signingConfig signingConfigs.release
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+}
+
+dependencies {
+    implementation "androidx.browser:browser:1.8.0"
+    implementation "androidx.appcompat:appcompat:1.6.1"
+    implementation "com.google.androidbrowserhelper:androidbrowserhelper:2.5.0"
+}
