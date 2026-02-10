@@ -125,25 +125,25 @@ GET  /api/shield/zones/{user_id} - Zonas del usuario
 ## Pendiente de Implementar
 
 ### P0 - Crítico
-- [ ] Compilar AAB v2.2.1 (versionCode 5) para producción
+- [ ] Compilar AAB v2.2.1 (versionCode 5) y subir a Google Play Producción
 - [ ] Subir assetlinks.json a www.manoprotect.com/.well-known/
 
 ### P1 - Alta Prioridad
-- [ ] Anti-Deepfake Shield (análisis de video/audio)
-- [ ] Herencia Digital (bóveda de documentos/contraseñas)
-- [ ] Modo Pánico Silencioso (UI móvil)
-- [ ] Zonas Inteligentes con aprendizaje de comportamiento
+- [ ] Backend real para Anti-Deepfake (integración con modelo IA)
+- [ ] Integración de grabación de audio para Modo Pánico
+- [ ] Geofencing real para Zonas Inteligentes
+- [ ] Predictor de Estafas AI
 
 ### P2 - Media Prioridad
-- [ ] Predictor de Estafas AI
-- [ ] Simulacro de Phishing para empresas
+- [ ] Simulacro de Phishing para empresas (envío de emails)
 - [ ] Verificador de Transacciones Blockchain
 - [ ] Chrome Extension para verificación
+- [ ] WhatsApp Business API
 
 ### P3 - Futuro
-- [ ] WhatsApp Business API
 - [ ] Integración con bancos reales
-- [ ] App iOS (cuando sea rentable)
+- [ ] App iOS
+- [ ] API pública para terceros
 
 ## Planes de Precios Actualizados
 
