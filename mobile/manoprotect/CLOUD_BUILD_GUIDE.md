@@ -94,7 +94,7 @@ keytool -genkey -v -keystore manoprotect.keystore -alias manoprotect -keyalg RSA
 
 La app se conecta a:
 ```
-https://admin-panel-live.preview.emergentagent.com
+https://twa-launcher.preview.emergentagent.com
 ```
 
 Cuando despliegues a producción, actualizar en `capacitor.config.json`:

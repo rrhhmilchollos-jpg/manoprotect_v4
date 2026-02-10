@@ -6,7 +6,7 @@
 // API Configuration
 export const API_CONFIG = {
   // Development/Preview URL (Emergent platform)
-  DEV_URL: 'https://admin-panel-live.preview.emergentagent.com/api',
+  DEV_URL: 'https://twa-launcher.preview.emergentagent.com/api',
   
   // Production URL (update when deploying to production)
   PROD_URL: 'https://mano-protect.com/api',
