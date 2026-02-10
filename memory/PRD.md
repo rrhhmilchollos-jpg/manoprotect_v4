@@ -1,43 +1,32 @@
 # PRD - ManoProtect
 
 ## Problema Original
-Actualizacion completa del proyecto React Native ManoProtect para compilar Android AAB para Google Play Store + correcciones de la plataforma web.
+Aplicación de ciberseguridad para protección de usuarios mayores. Incluye panel web de administración y aplicación móvil Android.
 
-## Arquitectura
-- **Frontend Web:** React + Shadcn/UI (puerto 3000)
-- **Backend:** FastAPI + MongoDB (puerto 8001)
-- **Mobile:** React Native 0.73.2 - **Solo Android** (compilacion offline)
-- **Build Android:** Gradle 8.3 + AGP 8.1.4 + Kotlin 1.9.22 + JDK 17
-- **Auth:** Firebase + JWT
+## Arquitectura Actual
+- **Frontend Web (Admin Panel):** React + Shadcn/UI (puerto 3000)
+- **Backend API:** FastAPI + MongoDB (puerto 8001)
+- **Mobile App:** **Trusted Web Activity (TWA)** - Nativo Android Java
+- **Build Android:** Gradle 8.3 + AGP 8.1.4 + JDK 17
 - **Package:** com.manoprotect.www.twa
+- **URL TWA:** https://www.manoprotect.com
 
-## Lo implementado
+## Lo Implementado
 
-### Correcciones de compilacion Android (.aab):
-1. Hermes habilitado (corregido mismatch gradle.properties/MainApplication.kt)
-2. Flipper eliminado (obsoleto en RN 0.73)
-3. SOSPackage registrado en MainApplication.kt
-4. play-services-location anadido para SOSCriticalAlertService
-5. ic_notification drawable creado (faltaba recurso FCM)
-6. gradle-wrapper.jar protegido en .gitignore
-7. JS Bundle verificado (2.0MB, compila correctamente)
-8. react-native-gesture-handler actualizado a 2.18.1 (fix BaseReactPackage para RN 0.73)
-9. Eliminada missingDimensionStrategy de react-native-camera en build.gradle
+### CAMBIO MAYOR (Feb 10, 2026): Migración a TWA
+El proyecto React Native fue **ABANDONADO** debido a problemas persistentes de compilación. 
+Se creó un nuevo proyecto nativo Android usando **Trusted Web Activity (TWA)**.
 
-### Migracion react-native-camera a vision-camera:
-- Eliminadas: react-native-camera, react-native-qrcode-scanner
-- Instalada: react-native-vision-camera ^4.6.0 con useCodeScanner
-- QRScannerScreen reescrito con soporte multi-codigo (QR, EAN-13, Code-128, PDF-417)
-- VisionCamera_enableCodeScanner=true en gradle.properties (MLKit)
+**Nuevo proyecto TWA en `/manoprotect-twa/`:**
+- LauncherActivity.java - Extiende LauncherActivity de androidbrowserhelper
+- AndroidManifest.xml con configuración completa TWA
+- Recursos: iconos, colores, splash screen
+- Firma: keystore manoprotect-2025.keystore incluido
+- GitHub Actions workflow: `.github/workflows/build-twa.yml`
+- Script Windows: `compilar-aab.bat`
 
 ### Limpieza completa de iOS (Feb 10, 2026):
-- Eliminados directorios: ios/, ios-config/
-- Eliminado script "ios" de package.json
-- Eliminadas todas las secciones iOS de: BUILD_GUIDE.md, PUBLISHING_GUIDE.md, FIREBASE_SETUP.md, README.md
-- Eliminadas entradas iOS de .gitignore
-- Eliminada config iOS de firebase.ts
-- Simplificados todos los Platform.OS checks en codigo fuente (8 archivos)
-- Eliminados imports de Platform innecesarios
+- Eliminados todos los archivos y configuraciones iOS del proyecto
 
 ### Endpoints de ciberseguridad probados (10/10 PASS):
 - GET /api/security/providers - 8 proveedores
@@ -46,16 +35,30 @@ Actualizacion completa del proyecto React Native ManoProtect para compilar Andro
 - POST /api/security/check/content - Detecta patrones de estafa
 - GET /api/security/stats/dashboard - Dashboard operativo
 
-### Scripts de compilacion:
-- compilar-avanzado.sh (Bash) y compilar-avanzado.ps1 (PowerShell)
-- Opciones: --doctor, --clean, --apk, --debug, --analyze, --sign-info, --all
-
 ### Correcciones plataforma web:
-1. Metricas en Tiempo Real (SSE) - ARREGLADO
+1. Métricas en Tiempo Real (SSE) - FUNCIONANDO
 2. API Keys - CRUD completo funcional
-3. Limpieza datos test
-4. Manobank eliminado
+
+## Proyecto móvil obsoleto (NO USAR)
+El directorio `mobile-app/` contiene el proyecto React Native abandonado. 
+No debe ser utilizado ni modificado.
 
 ## Backlog
-- P0: Compilar AAB final (gradlew bundleRelease en maquina local con JDK 17 + Android SDK)
-- P1: Configurar WhatsApp Business API para envio real de mensajes
+- **P0:** Compilar AAB del TWA (usuario debe ejecutar `.\gradlew.bat bundleRelease` localmente)
+- **P1:** Configurar Digital Asset Links en www.manoprotect.com/.well-known/assetlinks.json
+- **P2:** Eliminar directorio mobile-app/ (pendiente confirmación usuario)
+- **P3:** Configurar WhatsApp Business API para envío real de mensajes
+
+## Cómo Compilar el AAB
+
+### Opción 1: Local (Windows)
+```powershell
+cd manoprotect-twa
+.\gradlew.bat bundleRelease --no-daemon
+```
+AAB en: `app\build\outputs\bundle\release\app-release.aab`
+
+### Opción 2: GitHub Actions
+1. Push a main con cambios en `manoprotect-twa/`
+2. O ejecutar manualmente: Actions > Build ManoProtect TWA > Run workflow
+3. Descargar artifact
