@@ -224,6 +224,10 @@ function AppRouter() {
           <Route path="/admin/audios" element={<AdminAudios />} />
           <Route path="/admin/devices" element={<AdminDevices />} />
           
+          {/* Shield Security Hub - Public */}
+          <Route path="/shield" element={<ShieldPage />} />
+          <Route path="/seguridad" element={<ShieldPage />} />
+          
           {/* Investor Routes */}
           <Route path="/investor/register" element={<InvestorRegister />} />
           <Route 
