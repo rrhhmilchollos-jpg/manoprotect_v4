@@ -303,7 +303,7 @@ class AbuseIPDBService:
             usage_type = abuse_data.get("usageType", "Unknown")
             is_tor = abuse_data.get("isTor", False)
             
-            if abuse_confidence > 50 or total_reports > 5:
+            if abuse_confidence > 50 or (total_reports > 5 and abuse_confidence > 20):
                 return {
                     "source": "AbuseIPDB",
                     "status": "DANGER",
@@ -317,7 +317,7 @@ class AbuseIPDBService:
                     "risk_score": abuse_confidence,
                     "live_data": True
                 }
-            elif abuse_confidence > 20 or total_reports > 0:
+            elif abuse_confidence > 10 or (total_reports > 10 and abuse_confidence > 5):
                 return {
                     "source": "AbuseIPDB",
                     "status": "WARNING",
