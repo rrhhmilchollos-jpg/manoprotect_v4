@@ -240,6 +240,10 @@ function AppRouter() {
           <Route path="/smart-locator" element={<SmartLocator />} />
           <Route path="/localizador" element={<SmartLocator />} />
           
+          {/* Anti-Deepfake Shield */}
+          <Route path="/deepfake-shield" element={<DeepfakeShield />} />
+          <Route path="/anti-deepfake" element={<DeepfakeShield />} />
+          
           {/* Enterprise B2B Landing */}
           <Route path="/enterprise" element={<EnterpriseLanding />} />
           <Route path="/empresas" element={<EnterpriseLanding />} />
