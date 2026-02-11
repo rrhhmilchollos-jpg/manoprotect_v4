@@ -14,7 +14,7 @@ import requests
 import os
 import uuid
 
-BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', 'https://manoprotect-shield.preview.emergentagent.com')
+BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', 'https://shield-audio-dev.preview.emergentagent.com')
 
 class TestAdminAuth:
     """Test admin authentication"""

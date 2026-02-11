@@ -4,7 +4,7 @@
 ManoProtect is a revolutionary cybersecurity platform for both consumers (B2C) and businesses (B2B). The core philosophy is to build extreme trust by protecting users without being invasive.
 
 **Website**: https://www.manoprotect.com
-**Preview URL**: https://manoprotect-shield.preview.emergentagent.com
+**Preview URL**: https://shield-audio-dev.preview.emergentagent.com
 
 ## Production Deployment Notes
 To deploy to production with custom domain:

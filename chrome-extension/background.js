@@ -1,5 +1,5 @@
 // ManoProtect Shield - Background Service Worker
-const API_BASE = 'https://manoprotect-shield.preview.emergentagent.com/api';
+const API_BASE = 'https://shield-audio-dev.preview.emergentagent.com/api';
 
 // Check URL against ManoProtect threat intelligence
 async function checkUrl(url) {
