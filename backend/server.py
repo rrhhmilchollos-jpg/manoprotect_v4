@@ -169,6 +169,10 @@ init_family_db(db)
 from routes.smart_locator import router as smart_locator_router, init_db as init_smart_locator_db
 init_smart_locator_db(db)
 
+# Anti-Deepfake Shield Routes
+from routes.deepfake_shield import router as deepfake_shield_router, init_db as init_deepfake_db
+init_deepfake_db(db)
+
 # Geofencing Routes
 from routes.geofence_routes import router as geofence_router, init_geofence_routes
 init_geofence_routes(db)
