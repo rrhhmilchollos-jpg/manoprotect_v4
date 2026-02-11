@@ -2500,6 +2500,10 @@ print("✅ Real-Time Scam Detection routes loaded (LIVE)")
 api_router.include_router(voice_shield_router)
 print("✅ AI Voice Shield routes loaded")
 
+# Smart Family Locator routes
+api_router.include_router(smart_locator_router)
+print("✅ Smart Family Locator routes loaded")
+
 # Payment routes (Stripe)
 api_router.include_router(payments_router)
 print("✅ Payment routes loaded")
