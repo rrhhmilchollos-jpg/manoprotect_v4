@@ -266,14 +266,14 @@ const Downloads = () => {
             <div className="grid sm:grid-cols-3 gap-6">
               <div>
                 <div className="font-semibold mb-2 text-indigo-900">Email</div>
-                <a href="mailto:inversores@mano-protect.com" className="text-indigo-600 hover:underline">
-                  inversores@mano-protect.com
+                <a href="mailto:inversores@manoprotect.com" className="text-indigo-600 hover:underline">
+                  inversores@manoprotect.com
                 </a>
               </div>
               <div>
                 <div className="font-semibold mb-2 text-indigo-900">Teléfono</div>
-                <a href="tel:+34900123456" className="text-indigo-600 hover:underline">
-                  +34 900 123 456
+                <a href="tel:+34601510950" className="text-indigo-600 hover:underline">
+                  +34 601 510 950
                 </a>
               </div>
               <div>
