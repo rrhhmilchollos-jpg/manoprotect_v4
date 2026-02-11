@@ -235,6 +235,10 @@ function AppRouter() {
           <Route path="/voice-shield" element={<VoiceShield />} />
           <Route path="/escudo-voz" element={<VoiceShield />} />
           
+          {/* Smart Family Locator */}
+          <Route path="/smart-locator" element={<SmartLocator />} />
+          <Route path="/localizador" element={<SmartLocator />} />
+          
           {/* Enterprise B2B Landing */}
           <Route path="/enterprise" element={<EnterpriseLanding />} />
           <Route path="/empresas" element={<EnterpriseLanding />} />
