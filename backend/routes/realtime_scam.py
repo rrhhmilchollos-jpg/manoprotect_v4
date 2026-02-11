@@ -380,9 +380,9 @@ async def check_ip_realtime(request: IPCheckRequest):
 async def check_email_realtime(request: EmailCheckRequest):
     """
     Check email against:
-    - Our own database
-    - Have I Been Pwned (breaches)
+    - ManoProtect Community Database (MongoDB)
     - Known scam patterns
+    - DNA Digital verification
     """
     email = request.email.lower().strip()
     
@@ -393,23 +393,28 @@ async def check_email_realtime(request: EmailCheckRequest):
         "checks": [],
         "warnings": [],
         "breaches": [],
-        "checked_at": datetime.utcnow().isoformat()
+        "checked_at": datetime.now(timezone.utc).isoformat(),
+        "database_status": "LIVE"
     }
     
-    # 1. Check our database
-    our_report = await db.scam_reports.find_one({
-        "contact_info": email
-    })
-    
-    if our_report:
-        results["checks"].append({
-            "source": "ManoProtect Community",
-            "status": "DANGER",
-            "reports": our_report.get("report_count", 1)
+    # 1. Check ManoProtect Community Database
+    try:
+        our_report = await db.scam_reports.find_one({
+            "contact_info": email
         })
-        results["is_safe"] = False
-        results["risk_score"] += 50
-        results["warnings"].append(f"🚨 Este email ha sido reportado {our_report.get('report_count', 1)} veces")
+        
+        if our_report:
+            results["checks"].append({
+                "source": "ManoProtect Community",
+                "status": "DANGER",
+                "reports": our_report.get("report_count", 1),
+                "live_data": True
+            })
+            results["is_safe"] = False
+            results["risk_score"] += 50
+            results["warnings"].append(f"Este email ha sido reportado {our_report.get('report_count', 1)} veces")
+    except Exception as e:
+        logger.error(f"MongoDB email check error: {e}")
     
     # 2. Check suspicious email patterns
     domain = email.split('@')[1] if '@' in email else ''
@@ -419,49 +424,57 @@ async def check_email_realtime(request: EmailCheckRequest):
         ("guerrillamail", "Email temporal - No confiable"),
         ("10minutemail", "Email temporal - No confiable"),
         ("mailinator", "Email temporal - No confiable"),
-        (".ru", "Dominio ruso - Precaución"),
-        (".cn", "Dominio chino - Precaución"),
+        ("yopmail", "Email temporal - No confiable"),
+        ("throwaway", "Email temporal - No confiable"),
+        (".ru", "Dominio ruso - Precaucion"),
+        (".cn", "Dominio chino - Precaucion"),
     ]
     
     for pattern, warning in suspicious_domains:
         if pattern in domain:
             results["risk_score"] += 25
-            results["warnings"].append(f"⚠️ {warning}")
+            results["warnings"].append(warning)
             results["checks"].append({
                 "source": "Domain Analysis",
                 "status": "WARNING",
-                "detail": warning
+                "detail": warning,
+                "live_data": True
             })
             break
     
     # 3. Check if email impersonates known companies
     impersonation_patterns = [
-        (r"support.*@(?!.*\.(google|microsoft|apple|amazon|paypal)\.).*", "Posible suplantación de soporte"),
-        (r"banco.*@gmail", "Banco legítimo no usa Gmail"),
-        (r"hacienda.*@(?!.*\.gob\.es)", "Posible suplantación de Hacienda"),
-        (r"correos.*@(?!.*correos\.es)", "Posible suplantación de Correos"),
+        (r"support.*@(?!.*\.(google|microsoft|apple|amazon|paypal)\.).*", "Posible suplantacion de soporte"),
+        (r"banco.*@gmail", "Banco legitimo no usa Gmail"),
+        (r"hacienda.*@(?!.*\.gob\.es)", "Posible suplantacion de Hacienda"),
+        (r"correos.*@(?!.*correos\.es)", "Posible suplantacion de Correos"),
+        (r"admin.*@.*\.tk$", "Dominio sospechoso"),
     ]
     
     for pattern, warning in impersonation_patterns:
         if re.search(pattern, email):
             results["risk_score"] += 35
-            results["warnings"].append(f"🚨 {warning}")
+            results["warnings"].append(warning)
             results["is_safe"] = False
     
     # 4. DNA Digital verification
-    dna_record = await db.dna_digital.find_one({
-        "email": email,
-        "status": "verified"
-    })
-    
-    if dna_record:
-        results["risk_score"] = max(0, results["risk_score"] - 40)
-        results["checks"].append({
-            "source": "DNA Digital Verified",
-            "status": "TRUSTED",
-            "owner": dna_record.get("owner_name")
+    try:
+        dna_record = await db.dna_digital.find_one({
+            "email": email,
+            "status": "verified"
         })
-        results["warnings"].insert(0, f"✅ Email verificado: {dna_record.get('owner_name')}")
+        
+        if dna_record:
+            results["risk_score"] = max(0, results["risk_score"] - 40)
+            results["checks"].append({
+                "source": "DNA Digital Verified",
+                "status": "TRUSTED",
+                "owner": dna_record.get("owner_name"),
+                "live_data": True
+            })
+            results["warnings"].insert(0, f"Email verificado: {dna_record.get('owner_name')}")
+    except Exception as e:
+        logger.error(f"DNA Digital check error: {e}")
     
     # Determine safety
     results["risk_score"] = min(results["risk_score"], 100)
@@ -470,11 +483,23 @@ async def check_email_realtime(request: EmailCheckRequest):
     
     # Recommendation
     if results["risk_score"] >= 60:
-        results["recommendation"] = "🚨 NO RESPONDAS - Email probablemente fraudulento"
+        results["recommendation"] = "NO RESPONDAS - Email probablemente fraudulento"
     elif results["risk_score"] >= 30:
-        results["recommendation"] = "⚠️ Verifica el remitente antes de responder"
+        results["recommendation"] = "Verifica el remitente antes de responder"
     else:
-        results["recommendation"] = "✅ No se detectaron problemas con este email"
+        results["recommendation"] = "No se detectaron problemas con este email"
+    
+    # Log check
+    try:
+        await db.verification_logs.insert_one({
+            "type": "email",
+            "value": email,
+            "risk_score": results["risk_score"],
+            "is_safe": results["is_safe"],
+            "checked_at": datetime.now(timezone.utc)
+        })
+    except:
+        pass
     
     return results
 
