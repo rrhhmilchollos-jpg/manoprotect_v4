@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ManoProtect Shield</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="popup-container">
+    <!-- Header -->
+    <div class="header">
+      <div class="logo">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
+          <path d="M12 2L3 7V12C3 16.97 6.84 21.5 12 22.5C17.16 21.5 21 16.97 21 12V7L12 2Z" 
+                fill="#10B981" stroke="white" stroke-width="1.5"/>
+          <path d="M9 12L11 14L15 10" stroke="white" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="title">
+        <h1>ManoProtect</h1>
+        <span class="subtitle">Shield Extension</span>
+      </div>
+      <div class="status-badge">
+        <span class="status-dot"></span>
+        EN VIVO
+      </div>
+    </div>
+
+    <!-- Current Page Section -->
+    <div class="section">
+      <div class="section-title">Pagina actual</div>
+      <div id="current-url" class="current-url">Cargando...</div>
+      <button id="check-current" class="btn btn-primary">
+        <span class="btn-icon">🔍</span>
+        Verificar esta pagina
+      </button>
+    </div>
+
+    <!-- Quick Check Section -->
+    <div class="section">
+      <div class="section-title">Verificacion rapida</div>
+      <div class="input-group">
+        <input type="text" id="quick-check-input" placeholder="URL, email o telefono...">
+        <button id="quick-check-btn" class="btn btn-secondary">Verificar</button>
+      </div>
+    </div>
+
+    <!-- Result Section (hidden by default) -->
+    <div id="result-section" class="section result-section hidden">
+      <div id="result-status" class="result-status"></div>
+      <div id="result-score" class="result-score"></div>
+      <div id="result-details" class="result-details"></div>
+    </div>
+
+    <!-- Stats Section -->
+    <div class="section stats-section">
+      <div class="stat">
+        <span class="stat-value" id="stat-checks">-</span>
+        <span class="stat-label">Verificaciones</span>
+      </div>
+      <div class="stat">
+        <span class="stat-value" id="stat-threats">-</span>
+        <span class="stat-label">Amenazas bloqueadas</span>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+      <a href="https://www.manoprotect.com" target="_blank">www.manoprotect.com</a>
+      <span class="version">v1.0.0</span>
+    </div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
