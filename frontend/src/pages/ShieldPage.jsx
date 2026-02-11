@@ -20,6 +20,8 @@ import AntiDeepfake from '@/components/shield/AntiDeepfake';
 import DigitalInheritance from '@/components/shield/DigitalInheritance';
 import SilentPanicMode from '@/components/shield/SilentPanicMode';
 import SmartZones from '@/components/shield/SmartZones';
+import ScamPredictor from '@/components/shield/ScamPredictor';
+import PhishingSimulation from '@/components/shield/PhishingSimulation';
 
 const FEATURES = [
   {
