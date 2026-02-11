@@ -500,6 +500,17 @@ const VerificarEstafa = () => {
                 </div>
 
                 {result.is_scam && (
+                  <>
+                    {/* Share Buttons */}
+                    <div className="mt-6 pt-4 border-t border-red-700/50">
+                      <p className="text-sm text-red-200 mb-3 flex items-center gap-2">
+                        <Share2 className="w-4 h-4" />
+                        Comparte esta alerta para proteger a otros:
+                      </p>
+                      <div className="flex flex-wrap gap-2">
+                        {/* WhatsApp */}
+                        <button
+                          onClick={() => handleShare('whatsapp')}
                           className="flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-500 text-white rounded-lg transition-colors text-sm font-medium"
                           data-testid="share-whatsapp"
                         >
