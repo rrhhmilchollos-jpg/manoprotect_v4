@@ -11,6 +11,9 @@ import { Shield, Search, AlertTriangle, CheckCircle, Phone, Mail, Globe, Buildin
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
+// Use REAL-TIME API for live data
+const REALTIME_API = `${process.env.REACT_APP_BACKEND_URL}/api/realtime`;
+
 const VERIFICATION_TYPES = [
   { id: 'url', label: 'URL / Web', icon: Globe, placeholder: 'https://ejemplo.com' },
   { id: 'phone', label: 'Teléfono', icon: Phone, placeholder: '+34 600 000 000' },
