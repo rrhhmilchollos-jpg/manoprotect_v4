@@ -245,6 +245,10 @@ function AppRouter() {
           <Route path="/deepfake-shield" element={<DeepfakeShield />} />
           <Route path="/anti-deepfake" element={<DeepfakeShield />} />
           
+          {/* Investor CRM (Admin only) */}
+          <Route path="/investor-crm" element={<InvestorCRM />} />
+          <Route path="/crm-inversores" element={<InvestorCRM />} />
+          
           {/* Enterprise B2B Landing */}
           <Route path="/enterprise" element={<EnterpriseLanding />} />
           <Route path="/empresas" element={<EnterpriseLanding />} />
