@@ -69,19 +69,21 @@ def normalize_url(url: str) -> str:
     return url
 
 # ===========================================
-# REAL DATABASE CHECKS
+# REAL DATABASE CHECKS - LIVE APIS
 # ===========================================
 
 @router.post("/check/url")
 async def check_url_realtime(request: URLCheckRequest):
     """
     Check URL against multiple REAL databases:
-    - Our own database (user reports)
-    - Google Safe Browsing
-    - PhishTank
-    - VirusTotal
+    - ManoProtect Community (MongoDB)
+    - Google Safe Browsing (LIVE)
+    - VirusTotal (LIVE - 90+ security engines)
+    - AlienVault OTX (LIVE)
     """
     url = normalize_url(request.url)
+    
+    # Start with community database check
     results = {
         "url": url,
         "is_safe": True,
@@ -89,15 +91,17 @@ async def check_url_realtime(request: URLCheckRequest):
         "checks": [],
         "warnings": [],
         "details": {},
-        "checked_at": datetime.utcnow().isoformat()
+        "checked_at": datetime.now(timezone.utc).isoformat(),
+        "database_status": "LIVE"
     }
     
-    async with aiohttp.ClientSession() as session:
-        # 1. Check our own database first
+    # 1. Check ManoProtect Community Database (MongoDB)
+    try:
+        url_pattern = url.replace("https://", "").replace("http://", "").split("/")[0]
         our_report = await db.scam_reports.find_one({
             "$or": [
                 {"contact_info": url},
-                {"contact_info": {"$regex": url.replace("https://", "").replace("http://", ""), "$options": "i"}}
+                {"contact_info": {"$regex": url_pattern, "$options": "i"}}
             ]
         })
         
@@ -105,120 +109,102 @@ async def check_url_realtime(request: URLCheckRequest):
             results["checks"].append({
                 "source": "ManoProtect Community",
                 "status": "DANGER",
-                "reports": our_report.get("report_count", 1)
+                "reports": our_report.get("report_count", 1),
+                "live_data": True
             })
             results["is_safe"] = False
             results["risk_score"] += 40
-            results["warnings"].append(f"⚠️ Reportado {our_report.get('report_count', 1)} veces por la comunidad ManoProtect")
+            results["warnings"].append(f"Reportado {our_report.get('report_count', 1)} veces por la comunidad ManoProtect")
+    except Exception as e:
+        logger.error(f"MongoDB community check error: {e}")
+    
+    # 2. Check REAL threat intelligence APIs
+    try:
+        threat_results = await threat_aggregator.check_url_comprehensive(url)
         
-        # 2. Check Google Safe Browsing (if key available)
-        if GOOGLE_SAFE_BROWSING_KEY:
-            gsb_data = {
-                "client": {"clientId": "manoprotect", "clientVersion": "1.0"},
-                "threatInfo": {
-                    "threatTypes": ["MALWARE", "SOCIAL_ENGINEERING", "UNWANTED_SOFTWARE", "POTENTIALLY_HARMFUL_APPLICATION"],
-                    "platformTypes": ["ANY_PLATFORM"],
-                    "threatEntryTypes": ["URL"],
-                    "threatEntries": [{"url": url}]
-                }
-            }
-            gsb_result = await fetch_url(
-                session, 
-                f"{GOOGLE_SAFE_BROWSING_API}?key={GOOGLE_SAFE_BROWSING_KEY}",
-                method="POST",
-                data=gsb_data
-            )
+        # Add all real API checks
+        for check in threat_results.get("checks", []):
+            results["checks"].append(check)
             
-            if gsb_result and gsb_result.get("matches"):
-                results["checks"].append({
-                    "source": "Google Safe Browsing",
-                    "status": "DANGER",
-                    "threat_type": gsb_result["matches"][0].get("threatType")
-                })
-                results["is_safe"] = False
-                results["risk_score"] += 50
-                results["warnings"].append("🚨 Google marca esta URL como PELIGROSA")
-            else:
-                results["checks"].append({
-                    "source": "Google Safe Browsing",
-                    "status": "OK"
-                })
-        
-        # 3. Check VirusTotal (if key available)
-        if VIRUSTOTAL_KEY:
-            url_id = base64.urlsafe_b64encode(url.encode()).decode().strip("=")
-            vt_result = await fetch_url(
-                session,
-                f"https://www.virustotal.com/api/v3/urls/{url_id}",
-                headers={"x-apikey": VIRUSTOTAL_KEY}
-            )
-            
-            if vt_result and vt_result.get("data"):
-                stats = vt_result["data"].get("attributes", {}).get("last_analysis_stats", {})
-                malicious = stats.get("malicious", 0)
-                suspicious = stats.get("suspicious", 0)
-                
-                if malicious > 0 or suspicious > 0:
-                    results["checks"].append({
-                        "source": "VirusTotal",
-                        "status": "DANGER" if malicious > 2 else "WARNING",
-                        "malicious_detections": malicious,
-                        "suspicious_detections": suspicious
-                    })
-                    results["risk_score"] += malicious * 10 + suspicious * 5
-                    if malicious > 0:
-                        results["is_safe"] = False
-                        results["warnings"].append(f"🔴 VirusTotal: {malicious} motores detectan esta URL como maliciosa")
-                else:
-                    results["checks"].append({
-                        "source": "VirusTotal",
-                        "status": "OK"
-                    })
-        
-        # 4. Pattern-based analysis (always works)
-        suspicious_patterns = [
-            (r"login.*bank", "Posible phishing bancario"),
-            (r"verify.*account", "Solicita verificación de cuenta"),
-            (r"\.ru$|\.cn$|\.tk$|\.ml$", "Dominio de alto riesgo"),
-            (r"bit\.ly|tinyurl|t\.co", "URL acortada (oculta destino real)"),
-            (r"paypal.*\.(?!com$)", "Posible suplantación de PayPal"),
-            (r"amazon.*\.(?!com$|es$)", "Posible suplantación de Amazon"),
-            (r"correos.*\.(?!es$)", "Posible suplantación de Correos"),
-            (r"santander.*\.(?!es$|com$)", "Posible suplantación bancaria"),
-            (r"bbva.*\.(?!es$|com$)", "Posible suplantación bancaria"),
-            (r"caixabank.*\.(?!es$|com$)", "Posible suplantación bancaria"),
-        ]
-        
-        for pattern, warning in suspicious_patterns:
-            if re.search(pattern, url.lower()):
-                results["risk_score"] += 25
-                results["warnings"].append(f"⚠️ {warning}")
-                results["checks"].append({
-                    "source": "Pattern Analysis",
-                    "status": "WARNING",
-                    "detail": warning
-                })
-        
-        # 5. Check domain age and SSL (basic checks)
-        domain = url.split('/')[2] if '/' in url else url
-        results["details"]["domain"] = domain
-        
-        # Cap risk score at 100
-        results["risk_score"] = min(results["risk_score"], 100)
-        
-        # Determine final safety
-        if results["risk_score"] >= 50:
+        # Update risk score and safety
+        results["risk_score"] += threat_results.get("risk_score", 0)
+        if not threat_results.get("is_safe", True):
             results["is_safe"] = False
+            
+        # Add warnings from threat intelligence
+        results["warnings"].extend(threat_results.get("warnings", []))
         
-        # Add recommendation
-        if results["risk_score"] >= 70:
-            results["recommendation"] = "🚨 NO ENTRES EN ESTA WEB - Alto riesgo de estafa"
-        elif results["risk_score"] >= 40:
-            results["recommendation"] = "⚠️ Procede con extrema cautela"
-        elif results["risk_score"] >= 20:
-            results["recommendation"] = "⚡ Verifica antes de introducir datos personales"
-        else:
-            results["recommendation"] = "✅ No se detectaron amenazas conocidas"
+    except Exception as e:
+        logger.error(f"Threat intelligence API error: {e}")
+        results["checks"].append({
+            "source": "Threat Intelligence APIs",
+            "status": "ERROR",
+            "error": str(e)
+        })
+    
+    # 3. Pattern-based analysis (always works as backup)
+    suspicious_patterns = [
+        (r"login.*bank", "Posible phishing bancario"),
+        (r"verify.*account", "Solicita verificacion de cuenta"),
+        (r"\.ru$|\.cn$|\.tk$|\.ml$", "Dominio de alto riesgo"),
+        (r"bit\.ly|tinyurl|t\.co", "URL acortada (oculta destino real)"),
+        (r"paypal.*\.(?!com$)", "Posible suplantacion de PayPal"),
+        (r"amazon.*\.(?!com$|es$)", "Posible suplantacion de Amazon"),
+        (r"correos.*\.(?!es$)", "Posible suplantacion de Correos"),
+        (r"santander.*\.(?!es$|com$)", "Posible suplantacion bancaria"),
+        (r"bbva.*\.(?!es$|com$)", "Posible suplantacion bancaria"),
+        (r"caixabank.*\.(?!es$|com$)", "Posible suplantacion bancaria"),
+    ]
+    
+    for pattern, warning in suspicious_patterns:
+        if re.search(pattern, url.lower()):
+            results["risk_score"] += 25
+            results["warnings"].append(f"Patron sospechoso: {warning}")
+            results["checks"].append({
+                "source": "Pattern Analysis",
+                "status": "WARNING",
+                "detail": warning
+            })
+            break
+    
+    # Extract domain info
+    try:
+        from urllib.parse import urlparse
+        parsed = urlparse(url)
+        domain = parsed.netloc or parsed.path.split("/")[0]
+        results["details"]["domain"] = domain
+    except:
+        pass
+    
+    # Cap risk score at 100
+    results["risk_score"] = min(results["risk_score"], 100)
+    
+    # Determine final safety
+    if results["risk_score"] >= 50:
+        results["is_safe"] = False
+    
+    # Add recommendation
+    if results["risk_score"] >= 70:
+        results["recommendation"] = "NO ENTRES EN ESTA WEB - Alto riesgo de estafa"
+    elif results["risk_score"] >= 40:
+        results["recommendation"] = "Procede con extrema cautela"
+    elif results["risk_score"] >= 20:
+        results["recommendation"] = "Verifica antes de introducir datos personales"
+    else:
+        results["recommendation"] = "No se detectaron amenazas conocidas"
+    
+    # Log the check to MongoDB for analytics
+    try:
+        await db.verification_logs.insert_one({
+            "type": "url",
+            "value": url,
+            "risk_score": results["risk_score"],
+            "is_safe": results["is_safe"],
+            "checks_count": len(results["checks"]),
+            "checked_at": datetime.now(timezone.utc)
+        })
+    except:
+        pass
     
     return results
 
