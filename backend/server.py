@@ -2508,6 +2508,10 @@ print("✅ AI Voice Shield routes loaded")
 api_router.include_router(smart_locator_router)
 print("✅ Smart Family Locator routes loaded")
 
+# Anti-Deepfake Shield routes
+api_router.include_router(deepfake_shield_router)
+print("✅ Anti-Deepfake Shield routes loaded")
+
 # Payment routes (Stripe)
 api_router.include_router(payments_router)
 print("✅ Payment routes loaded")
