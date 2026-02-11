@@ -341,6 +341,15 @@ const LandingPage = () => {
                 Verificar una Estafa
                 <ArrowRight className="w-5 h-5 ml-2" />
               </Button>
+              
+              <Button
+                onClick={() => navigate('/voice-shield')}
+                className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white rounded-xl h-12 text-lg font-bold mt-3"
+                data-testid="voice-shield-btn"
+              >
+                <Phone className="w-5 h-5 mr-2" />
+                AI Voice Shield - Llamadas
+              </Button>
             </div>
           </div>
 
