@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
+const REALTIME_API = `${process.env.REACT_APP_BACKEND_URL}/api/realtime`;
 
 const SCAM_CATEGORIES = [
   { id: 'phishing', label: 'Phishing', icon: Mail, color: 'bg-blue-100 text-blue-600' },
