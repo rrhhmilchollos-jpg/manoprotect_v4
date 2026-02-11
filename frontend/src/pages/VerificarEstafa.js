@@ -114,15 +114,7 @@ const VerificarEstafa = () => {
   };
 
   const fetchRecentAlerts = async () => {
-    try {
-      const response = await fetch(`${API_URL}/api/alerts/history?limit=5`);
-      if (response.ok) {
-        const data = await response.json();
-        setRecentAlerts(data.alerts || []);
-      }
-    } catch (error) {
-      console.error('Error fetching alerts:', error);
-    }
+    // Now handled by fetchStats using trending data
   };
 
   const handleSearch = async (e) => {
