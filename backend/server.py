@@ -256,6 +256,63 @@ async def health_check():
     }
 
 # ============================================
+# PUBLIC USER STATISTICS (No auth required)
+# ============================================
+
+@api_router.get("/public/users-count")
+async def get_public_users_count():
+    """Get public count of registered users - No authentication required"""
+    total_users = await db.users.count_documents({})
+    active_users = await db.users.count_documents({"status": {"$ne": "inactive"}})
+    
+    # Get users registered in last 24 hours
+    day_ago = datetime.now(timezone.utc) - timedelta(days=1)
+    new_users_24h = await db.users.count_documents({"created_at": {"$gte": day_ago}})
+    
+    return {
+        "total_users": total_users,
+        "active_users": active_users,
+        "new_users_24h": new_users_24h,
+        "timestamp": datetime.now(timezone.utc).isoformat()
+    }
+
+
+@api_router.get("/public/active-users")
+async def get_public_active_users():
+    """Get list of active users with basic info - Privacy protected"""
+    users = await db.users.find(
+        {"status": {"$ne": "inactive"}},
+        {
+            "_id": 0,
+            "password_hash": 0,
+            "session_token": 0
+        }
+    ).sort("created_at", -1).limit(100).to_list(100)
+    
+    # Return users with masked info for privacy
+    sanitized_users = []
+    for u in users:
+        email = u.get("email", "")
+        masked_email = email[:3] + "***@***" if email else "***"
+        sanitized_users.append({
+            "user_id": u.get("user_id", ""),
+            "name": u.get("name", "Usuario"),
+            "email_masked": masked_email,
+            "role": u.get("role", "user"),
+            "plan": u.get("plan", "free"),
+            "status": u.get("status", "active"),
+            "member_since": u.get("created_at"),
+            "avatar_initial": u.get("name", "U")[0].upper() if u.get("name") else "U"
+        })
+    
+    return {
+        "users": sanitized_users,
+        "total": len(sanitized_users),
+        "timestamp": datetime.now(timezone.utc).isoformat()
+    }
+
+
+# ============================================
 # COMMUNITY ROUTES
 # ============================================
 
