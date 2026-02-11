@@ -273,7 +273,7 @@ async def analyze_voice_transcript(request: VoiceAnalysisRequest):
             })
     
     # Check caller number against community database
-    if request.caller_number and db:
+    if request.caller_number and db is not None:
         try:
             known_scam = await db.scam_reports.find_one({
                 "contact_info": {"$regex": request.caller_number.replace("+", "\\+"), "$options": "i"},
