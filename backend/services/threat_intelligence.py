@@ -495,6 +495,20 @@ class ThreatIntelligenceAggregator:
         except:
             domain = url
         
+        # Whitelist of known safe domains
+        safe_domains = [
+            "google.com", "www.google.com", "microsoft.com", "www.microsoft.com",
+            "apple.com", "www.apple.com", "amazon.com", "www.amazon.com",
+            "facebook.com", "www.facebook.com", "twitter.com", "www.twitter.com",
+            "linkedin.com", "www.linkedin.com", "github.com", "www.github.com",
+            "youtube.com", "www.youtube.com", "wikipedia.org", "www.wikipedia.org",
+            "example.com", "www.example.com",  # IANA reserved domain
+            "test.com", "localhost", "127.0.0.1"
+        ]
+        
+        domain_clean = domain.lower().replace("www.", "")
+        is_whitelisted = any(safe.replace("www.", "") == domain_clean for safe in safe_domains)
+        
         # Run all checks in parallel for speed
         google_task = self.google_sb.check_url(url)
         virustotal_task = self.virustotal.check_url(url)
@@ -505,10 +519,10 @@ class ThreatIntelligenceAggregator:
             return_exceptions=True
         )
         
-        # Process Google Safe Browsing result
+        # Process Google Safe Browsing result (most reliable)
         if isinstance(google_result, dict) and google_result.get("status") not in ["ERROR", "NO_API_KEY"]:
             results["checks"].append(google_result)
-            if google_result.get("status") == "DANGER":
+            if google_result.get("status") == "DANGER" and not is_whitelisted:
                 results["is_safe"] = False
                 results["risk_score"] += google_result.get("risk_score", 50)
                 results["warnings"].append(f"Google Safe Browsing: {google_result.get('description')}")
@@ -516,24 +530,41 @@ class ThreatIntelligenceAggregator:
         # Process VirusTotal result
         if isinstance(vt_result, dict) and vt_result.get("status") not in ["ERROR", "NO_API_KEY"]:
             results["checks"].append(vt_result)
-            if vt_result.get("status") == "DANGER":
+            malicious = vt_result.get("malicious_detections", 0)
+            # Only consider dangerous if 3+ engines detect malware
+            if vt_result.get("status") == "DANGER" and malicious >= 3 and not is_whitelisted:
                 results["is_safe"] = False
                 results["risk_score"] += vt_result.get("risk_score", 50)
                 results["warnings"].append(f"VirusTotal: {vt_result.get('description')}")
-            elif vt_result.get("status") == "WARNING":
-                results["risk_score"] += vt_result.get("risk_score", 20)
+            elif vt_result.get("status") == "WARNING" and not is_whitelisted:
+                # Only add small risk for warnings
+                results["risk_score"] += min(vt_result.get("risk_score", 0), 15)
                 results["warnings"].append(f"VirusTotal: {vt_result.get('description')}")
         
-        # Process AlienVault OTX result
+        # Process AlienVault OTX result (can have false positives for common domains)
         if isinstance(otx_result, dict) and otx_result.get("status") not in ["ERROR", "NO_API_KEY"]:
             results["checks"].append(otx_result)
-            if otx_result.get("status") == "DANGER":
-                results["is_safe"] = False
-                results["risk_score"] += otx_result.get("risk_score", 40)
-                results["warnings"].append(f"AlienVault OTX: {otx_result.get('description')}")
+            pulse_count = otx_result.get("pulse_count", 0)
+            # OTX has many false positives for common/example domains
+            # Only consider dangerous if pulse_count is high AND not whitelisted
+            if otx_result.get("status") == "DANGER" and pulse_count > 10 and not is_whitelisted:
+                # Reduce weight of OTX as it has more false positives
+                otx_risk = min(otx_result.get("risk_score", 0), 30)
+                results["risk_score"] += otx_risk
+                if pulse_count > 20:
+                    results["warnings"].append(f"AlienVault OTX: {otx_result.get('description')}")
+        
+        # If domain is whitelisted, cap risk score at low level
+        if is_whitelisted:
+            results["risk_score"] = min(results["risk_score"], 15)
+            results["is_safe"] = True
         
         # Cap risk score at 100
         results["risk_score"] = min(results["risk_score"], 100)
+        
+        # Final safety determination based on risk score
+        if results["risk_score"] >= 50:
+            results["is_safe"] = False
         
         # Generate recommendation
         if results["risk_score"] >= 70:
