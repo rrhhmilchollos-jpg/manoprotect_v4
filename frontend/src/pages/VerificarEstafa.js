@@ -164,17 +164,22 @@ const VerificarEstafa = () => {
     e.preventDefault();
     
     if (!reportData.value.trim()) {
-      toast.error('Introduce el número o email a reportar');
+      toast.error('Introduce el número, email o URL a reportar');
       return;
     }
 
     setLoading(true);
 
     try {
-      const response = await fetch(`${API_URL}/api/fraud/public/report-scam`, {
+      const response = await fetch(`${API_URL}/api/realtime/report`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(reportData)
+        body: JSON.stringify({
+          scam_type: reportData.category,
+          contact_info: reportData.value,
+          description: reportData.description,
+          reporter_email: reportData.reporter_email
+        })
       });
 
       const data = await response.json();
