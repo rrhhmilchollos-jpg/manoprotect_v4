@@ -6,129 +6,131 @@ ManoProtect is a revolutionary cybersecurity platform for both consumers (B2C) a
 **Website**: https://www.manoprotect.com
 **Preview URL**: https://manoprotect-shield.preview.emergentagent.com
 
+## Production Deployment Notes
+To deploy to production with custom domain:
+1. Click "Deploy" in Emergent platform
+2. Select "Custom Domain" → www.manoprotect.com
+3. Configure DNS: Add CNAME record pointing to Emergent URL
+4. SSL is automatic
+
 ## Implemented Features
 
-### Core - Real-Time Threat Intelligence (COMPLETED - Feb 11, 2026)
+### Real-Time Threat Intelligence (COMPLETED)
 **Status: PRODUCTION READY - 100% REAL APIs**
 
 #### Backend APIs:
 - `POST /api/realtime/check/url` - URL verification against LIVE threat databases
-- `POST /api/realtime/check/phone` - Phone number verification with community DB
-- `POST /api/realtime/check/email` - Email verification with impersonation detection
+- `POST /api/realtime/check/phone` - Phone number verification
+- `POST /api/realtime/check/email` - Email verification
 - `POST /api/realtime/check/ip` - IP address verification
 - `POST /api/realtime/report` - Report scam (persists in MongoDB)
 - `GET /api/realtime/trending` - Get trending scams
 - `GET /api/realtime/status` - API status check
-- `POST /api/realtime/check/bulk` - Bulk URL checking (for Chrome Extension)
+- `GET /api/public/users-count` - Public user count
+- `GET /api/public/active-users` - Public active users list
 
 #### Live API Integrations:
 1. **Google Safe Browsing API** - URL malware/phishing detection
 2. **VirusTotal API** - 90+ security engine scanning
-3. **AbuseIPDB API** - IP abuse reports from global community
+3. **AbuseIPDB API** - IP abuse reports
 4. **AlienVault OTX API** - Open threat intelligence
 5. **ManoProtect Community** - MongoDB persistent database
 
-#### Key Files:
-- `/app/backend/services/threat_intelligence.py` - API integration services
-- `/app/backend/routes/realtime_scam.py` - API endpoints
-- `/app/frontend/src/pages/VerificarEstafa.js` - Verification UI
+### Chrome Extension (COMPLETED - Feb 11, 2026)
+Location: `/app/chrome-extension/`
+Features:
+- Real-time URL verification
+- Context menu for checking links
+- Visual notifications for threats
+- Statistics tracking
+- Suspicious link highlighting
 
-### B2C Features:
-- Universal Verifier (URL, Phone, Email, IP) - COMPLETED
-- Community reporting system - COMPLETED
-- Trending scams - COMPLETED
-- Pattern-based threat detection - COMPLETED
+Download: `/app/manoprotect-chrome-extension.zip`
 
-### B2B Features:
-- Enterprise Landing Page - COMPLETED
-- Trust Seal concept - UI ONLY
-- Bulk URL checking API - COMPLETED
+### User Management
+- Total REAL users: 5 (test users cleaned)
+- Public API for user stats (privacy protected)
+- Admin dashboard for user management
 
-### TWA Android App:
-- Project structure ready at `/app/manoprotect-twa`
-- versionCode: 5, targetSdk: 35
-- Ready for AAB compilation
+## Active Users (Production)
+1. rrhh.milchollos@gmail.com - Ivan Rubio Cano (superadmin)
+2. msolassanchis@gmail.com - Maria Deseada Solas Sanchis (superadmin)
+3. ivanrubiosolas@gmail.com - Ivan Rubio cano (superadmin)
+4. info@manoprotect.com - ManoProtect Admin (superadmin)
+5. vguerolanavarro@gmail.com - Vicente (premium)
 
 ## Tech Stack
 - **Frontend**: React.js with Tailwind CSS
 - **Backend**: Python FastAPI
-- **Database**: MongoDB (persistent)
+- **Database**: MongoDB (test_database)
 - **Mobile**: Android TWA
+- **Extension**: Chrome Extension (Manifest V3)
 - **APIs**: Google Safe Browsing, VirusTotal, AbuseIPDB, AlienVault OTX
 
 ## Database Schema (MongoDB)
 ```
+users:
+  - user_id: string
+  - email: string
+  - name: string
+  - role: "user" | "premium" | "admin" | "superadmin"
+  - plan: string
+  - status: "active" | "inactive"
+  - created_at: datetime
+
 scam_reports:
   - scam_type: string
-  - contact_info: string (normalized)
+  - contact_info: string
   - description: string
-  - evidence: string (optional)
-  - amount_lost: number (optional)
-  - reporter_email: string (optional)
   - report_count: number
-  - reports: array of individual reports
   - created_at: datetime
-  - verified: boolean
-  - type: "phone" | "email" | "url"
 
 verification_logs:
-  - type: string
+  - type: "url" | "phone" | "email" | "ip"
   - value: string
   - risk_score: number
   - is_safe: boolean
   - checked_at: datetime
-
-dna_digital:
-  - phone: string (optional)
-  - email: string (optional)
-  - owner_name: string
-  - status: "verified" | "pending"
 ```
 
 ## Environment Variables (Backend)
 ```
-MONGO_URL=mongodb://...
-DB_NAME=manoprotect
-GOOGLE_SAFE_BROWSING_API_KEY=AIza...
+MONGO_URL=mongodb://localhost:27017
+DB_NAME=test_database
+GOOGLE_SAFE_BROWSING_API_KEY=...
 VIRUSTOTAL_API_KEY=...
 ABUSEIPDB_API_KEY=...
 ALIENVAULT_OTX_KEY=...
 ```
 
-## Testing
-- Test report: `/app/test_reports/iteration_34.json`
-- Backend: 90% pass rate
-- Frontend: 100% pass rate
-- All APIs confirmed LIVE (no mocks)
+## Changelog
+
+### Feb 11, 2026
+- Created Chrome Extension with full functionality
+- Cleaned ALL test users from database (28 → 5)
+- Added public API endpoints for user stats
+- Updated threat intelligence to handle whitelisted domains
+- Fixed false positives for known safe sites
+
+### Previous
+- Integrated REAL threat intelligence APIs
+- Replaced mock database with MongoDB persistent storage
+- Updated frontend to show "APIs de Seguridad EN VIVO"
 
 ## Backlog
 
 ### P1 - High Priority
-1. Publish AAB to Google Play Store (blocked on user action)
+1. ~~Chrome Extension~~ ✅ DONE
 2. AI Voice Shield implementation
 3. Smart Family Locator with behavioral zones
 4. Anti-Deepfake Shield
 
 ### P2 - Medium Priority
-5. Chrome Extension development
-6. WhatsApp Business API integration
-7. Secure Digital Legacy vault
-8. Silent Panic Mode
+5. WhatsApp Business API integration
+6. Secure Digital Legacy vault
+7. Silent Panic Mode
 
 ### P3 - Future
-9. Phishing Simulation for enterprises
-10. Blockchain Transaction Verifier
-11. DNA Digital identity system
-12. Community Alert Network expansion
-
-## Changelog
-
-### Feb 11, 2026
-- Integrated REAL threat intelligence APIs (Google Safe Browsing, VirusTotal, AbuseIPDB, AlienVault OTX)
-- Replaced mock database with MongoDB persistent storage
-- Updated frontend to show "APIs de Seguridad EN VIVO"
-- Added URL verification alongside phone and email
-- Implemented smart whitelist for known safe domains
-- Fixed false positive issues with AlienVault OTX
-- Added risk score visualization with progress bar
-- Testing completed with 90%+ pass rate
+8. Phishing Simulation for enterprises
+9. Blockchain Transaction Verifier
+10. DNA Digital identity system
