@@ -1,167 +1,134 @@
-# PRD - ManoProtect
+# ManoProtect - Product Requirements Document
 
-## Problema Original
-Aplicación de ciberseguridad para protección de usuarios mayores y empresas. Incluye panel web de administración y aplicación móvil Android (TWA).
+## Project Overview
+ManoProtect is a revolutionary cybersecurity platform for both consumers (B2C) and businesses (B2B). The core philosophy is to build extreme trust by protecting users without being invasive.
 
-## Arquitectura Actual
-- **Frontend Web:** React + Shadcn/UI (puerto 3000)
-- **Backend API:** FastAPI + MongoDB (puerto 8001)
-- **Mobile App:** Trusted Web Activity (TWA) - Nativo Android Java
-- **URL TWA:** https://www.manoprotect.com
-- **Package:** com.manoprotect.www.twa
+**Website**: https://www.manoprotect.com
+**Preview URL**: https://manoprotect-shield.preview.emergentagent.com
 
-## Lo Implementado (Febrero 2026)
+## Implemented Features
 
-### 🛡️ ManoProtect Shield - Sistema de Seguridad Avanzada
-Implementación completa de **8 features revolucionarias**:
+### Core - Real-Time Threat Intelligence (COMPLETED - Feb 11, 2026)
+**Status: PRODUCTION READY - 100% REAL APIs**
 
-#### 1. **Verificador Universal** ✅
-- Verifica URLs, teléfonos, emails y empresas
-- Detecta patrones de phishing y estafas
-- Consulta base de datos comunitaria de reportes
-- Integración con DNA Digital y Trust Seal
+#### Backend APIs:
+- `POST /api/realtime/check/url` - URL verification against LIVE threat databases
+- `POST /api/realtime/check/phone` - Phone number verification with community DB
+- `POST /api/realtime/check/email` - Email verification with impersonation detection
+- `POST /api/realtime/check/ip` - IP address verification
+- `POST /api/realtime/report` - Report scam (persists in MongoDB)
+- `GET /api/realtime/trending` - Get trending scams
+- `GET /api/realtime/status` - API status check
+- `POST /api/realtime/check/bulk` - Bulk URL checking (for Chrome Extension)
 
-#### 2. **Escudo de Voz AI** ✅
-- Analiza transcripciones de llamadas en tiempo real
-- Detecta tácticas de manipulación: urgencia, autoridad, miedo
-- Recomendaciones personalizadas, Risk score 0-100%
+#### Live API Integrations:
+1. **Google Safe Browsing API** - URL malware/phishing detection
+2. **VirusTotal API** - 90+ security engine scanning
+3. **AbuseIPDB API** - IP abuse reports from global community
+4. **AlienVault OTX API** - Open threat intelligence
+5. **ManoProtect Community** - MongoDB persistent database
 
-#### 3. **DNA Digital** ✅
-- Sistema de identidad digital verificable
-- Códigos únicos "MP-DNA-XXXXXXXX"
-- Para personas y empresas
+#### Key Files:
+- `/app/backend/services/threat_intelligence.py` - API integration services
+- `/app/backend/routes/realtime_scam.py` - API endpoints
+- `/app/frontend/src/pages/VerificarEstafa.js` - Verification UI
 
-#### 4. **Sello de Confianza** ✅
-- Badge verificable para empresas
-- Tiers: Basic (29€), Professional (99€), Enterprise (299€)
-- Código embebible para websites
+### B2C Features:
+- Universal Verifier (URL, Phone, Email, IP) - COMPLETED
+- Community reporting system - COMPLETED
+- Trending scams - COMPLETED
+- Pattern-based threat detection - COMPLETED
 
-#### 5. **Anti-Deepfake Shield** ✅ (NUEVO)
-- Detecta videos, audios e imágenes falsas
-- Análisis de consistencia facial
-- Detección de artefactos de IA
-- Fingerprint de redes neuronales
+### B2B Features:
+- Enterprise Landing Page - COMPLETED
+- Trust Seal concept - UI ONLY
+- Bulk URL checking API - COMPLETED
 
-#### 6. **Herencia Digital** ✅ (NUEVO)
-- Bóveda segura cifrada AES-256
-- Tipos: Contraseñas, documentos, info bancaria, crypto, médica
-- Protocolo de emergencia configurable
-- Beneficiarios designados
+### TWA Android App:
+- Project structure ready at `/app/manoprotect-twa`
+- versionCode: 5, targetSdk: 35
+- Ready for AAB compilation
 
-#### 7. **Modo Pánico Silencioso** ✅ (NUEVO)
-- Triggers: Botón (5 pulsaciones), palabra clave, agitar
-- Acciones automáticas: Ubicación GPS, grabación audio, llamar 112
-- Modo silencioso (sin sonido/vibración)
-- Contactos de emergencia
+## Tech Stack
+- **Frontend**: React.js with Tailwind CSS
+- **Backend**: Python FastAPI
+- **Database**: MongoDB (persistent)
+- **Mobile**: Android TWA
+- **APIs**: Google Safe Browsing, VirusTotal, AbuseIPDB, AlienVault OTX
 
-#### 8. **Zonas Inteligentes** ✅ (NUEVO)
-- Aprendizaje de comportamiento con IA
-- Tipos: Casa, trabajo, colegio, frecuente, riesgo
-- Alertas: entrada, salida, anomalías
-- Detección de patrones anómalos
-
-### 🏢 Landing Page B2B Enterprise ✅ (NUEVO)
-- URL: /empresas, /enterprise, /b2b
-- Hero con stats: 500+ empresas, 2M+ amenazas
-- Features: Sello, DNA, Voice AI, Phishing Simulation
-- Precios: Básico 29€, Profesional 99€, Enterprise 299€
-- Formulario de contacto para leads
-
-### 📊 Dashboard Actualizado ✅
-- Banner de acceso rápido a ManoProtect Shield
-- Eliminada pestaña "Banca Segura"
-- Nueva pestaña "Localizar Familia"
-
-### Endpoints API Shield
+## Database Schema (MongoDB)
 ```
-POST /api/shield/dna/register - Registrar DNA Digital
-POST /api/shield/dna/verify - Verificar DNA Digital
-GET  /api/shield/dna/{code} - Obtener DNA Digital
+scam_reports:
+  - scam_type: string
+  - contact_info: string (normalized)
+  - description: string
+  - evidence: string (optional)
+  - amount_lost: number (optional)
+  - reporter_email: string (optional)
+  - report_count: number
+  - reports: array of individual reports
+  - created_at: datetime
+  - verified: boolean
+  - type: "phone" | "email" | "url"
 
-POST /api/shield/seal/create - Crear Sello de Confianza
-POST /api/shield/seal/verify - Verificar Sello
-GET  /api/shield/seal/{code} - Obtener badge data
+verification_logs:
+  - type: string
+  - value: string
+  - risk_score: number
+  - is_safe: boolean
+  - checked_at: datetime
 
-POST /api/shield/verify/universal - Verificador Universal
-POST /api/shield/voice/analyze - Escudo de Voz AI
-POST /api/shield/transaction/verify - Verificar transacción
-
-POST /api/shield/scam/report - Reportar estafa
-GET  /api/shield/scam/trending - Estafas trending
-
-POST /api/shield/panic/trigger - Modo Pánico Silencioso
-GET  /api/shield/panic/status/{id} - Estado de alerta
-
-POST /api/shield/zones/create - Crear zona inteligente
-GET  /api/shield/zones/{user_id} - Zonas del usuario
+dna_digital:
+  - phone: string (optional)
+  - email: string (optional)
+  - owner_name: string
+  - status: "verified" | "pending"
 ```
 
-### Frontend Components Shield
+## Environment Variables (Backend)
 ```
-/src/components/shield/UniversalVerifier.jsx
-/src/components/shield/VoiceShieldAI.jsx
-/src/components/shield/DNADigital.jsx
-/src/components/shield/TrustSeal.jsx
-/src/components/shield/AntiDeepfake.jsx
-/src/components/shield/DigitalInheritance.jsx
-/src/components/shield/SilentPanicMode.jsx
-/src/components/shield/SmartZones.jsx
-/src/pages/ShieldPage.jsx
-/src/pages/EnterpriseLanding.jsx
+MONGO_URL=mongodb://...
+DB_NAME=manoprotect
+GOOGLE_SAFE_BROWSING_API_KEY=AIza...
+VIRUSTOTAL_API_KEY=...
+ABUSEIPDB_API_KEY=...
+ALIENVAULT_OTX_KEY=...
 ```
 
-### Cambios Dashboard
-- ❌ Eliminada pestaña "Banca Segura" (generaba desconfianza)
-- ✅ Nueva pestaña "Localizar Familia" con mapa interactivo
-- ✅ Acciones rápidas: SOS, Compartir ubicación, Guía
+## Testing
+- Test report: `/app/test_reports/iteration_34.json`
+- Backend: 90% pass rate
+- Frontend: 100% pass rate
+- All APIs confirmed LIVE (no mocks)
 
-### TWA Android App
-- Proyecto completo en `/manoprotect-twa/`
-- targetSdk: 35, versionCode: 5
-- URL: https://www.manoprotect.com
-- Keystore configurado
-- GitHub Actions workflow
+## Backlog
 
-## Pendiente de Implementar
+### P1 - High Priority
+1. Publish AAB to Google Play Store (blocked on user action)
+2. AI Voice Shield implementation
+3. Smart Family Locator with behavioral zones
+4. Anti-Deepfake Shield
 
-### P0 - Crítico
-- [ ] Compilar AAB v2.2.1 (versionCode 5) y subir a Google Play Producción
-- [ ] Subir assetlinks.json a www.manoprotect.com/.well-known/
+### P2 - Medium Priority
+5. Chrome Extension development
+6. WhatsApp Business API integration
+7. Secure Digital Legacy vault
+8. Silent Panic Mode
 
-### P1 - Alta Prioridad
-- [ ] Backend real para Anti-Deepfake (integración con modelo IA)
-- [ ] Integración de grabación de audio para Modo Pánico
-- [ ] Geofencing real para Zonas Inteligentes
-- [ ] Predictor de Estafas AI
+### P3 - Future
+9. Phishing Simulation for enterprises
+10. Blockchain Transaction Verifier
+11. DNA Digital identity system
+12. Community Alert Network expansion
 
-### P2 - Media Prioridad
-- [ ] Simulacro de Phishing para empresas (envío de emails)
-- [ ] Verificador de Transacciones Blockchain
-- [ ] Chrome Extension para verificación
-- [ ] WhatsApp Business API
+## Changelog
 
-### P3 - Futuro
-- [ ] Integración con bancos reales
-- [ ] App iOS
-- [ ] API pública para terceros
-
-## Planes de Precios Actualizados
-
-### B2C
-| Plan | Precio | Incluye |
-|------|--------|---------|
-| Familiar | 4,99€/mes | Localización + Alertas + Verificador |
-| Premium | 29,99€/mes | Todo B2C + IA Analysis |
-
-### B2B (ManoProtect Enterprise)
-| Plan | Precio | Incluye |
-|------|--------|---------|
-| Básico | 29€/mes | Sello + 10 empleados |
-| Profesional | 99€/mes | Sello + Monitor + Simulacros |
-| Enterprise | 299€/mes | Todo + API + Blockchain |
-
-## Archivos Clave
-- `/app/backend/routes/shield.py` - API Shield
-- `/app/backend/models/security_advanced.py` - Modelos Pydantic
-- `/app/frontend/src/pages/ShieldPage.jsx` - UI principal
-- `/app/manoprotect-twa/` - Proyecto Android TWA
+### Feb 11, 2026
+- Integrated REAL threat intelligence APIs (Google Safe Browsing, VirusTotal, AbuseIPDB, AlienVault OTX)
+- Replaced mock database with MongoDB persistent storage
+- Updated frontend to show "APIs de Seguridad EN VIVO"
+- Added URL verification alongside phone and email
+- Implemented smart whitelist for known safe domains
+- Fixed false positive issues with AlienVault OTX
+- Added risk score visualization with progress bar
+- Testing completed with 90%+ pass rate
