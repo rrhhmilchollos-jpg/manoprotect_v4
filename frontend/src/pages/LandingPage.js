@@ -603,6 +603,38 @@ const LandingPage = () => {
             </div>
           </div>
 
+          {/* AI Voice Shield Highlight */}
+          <div className="bg-gradient-to-br from-indigo-900/60 to-purple-900/60 border border-indigo-500/40 rounded-2xl p-8 mb-12">
+            <div className="flex flex-col md:flex-row items-center gap-6">
+              <div className="w-20 h-20 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl flex items-center justify-center flex-shrink-0 shadow-lg shadow-indigo-500/30">
+                <Phone className="w-10 h-10 text-white" />
+              </div>
+              <div className="flex-1 text-center md:text-left">
+                <div className="flex items-center gap-2 justify-center md:justify-start mb-2">
+                  <span className="bg-indigo-500/20 text-indigo-300 text-xs font-semibold px-3 py-1 rounded-full">NUEVO</span>
+                  <span className="bg-green-500/20 text-green-300 text-xs font-semibold px-3 py-1 rounded-full">EN VIVO</span>
+                </div>
+                <h3 className="text-2xl font-bold text-white mb-2">AI Voice Shield</h3>
+                <p className="text-slate-300 mb-4">
+                  Detecta estafas telefonicas en tiempo real usando IA. Analiza conversaciones 
+                  y te alerta de tacticas de manipulacion, presion financiera y suplantacion de identidad.
+                </p>
+                <button
+                  onClick={() => navigate('/voice-shield')}
+                  className="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-6 py-3 rounded-xl transition-colors"
+                  data-testid="voice-shield-cta-btn"
+                >
+                  Probar AI Voice Shield
+                  <ArrowRight className="w-4 h-4" />
+                </button>
+              </div>
+              <div className="text-center md:text-right">
+                <div className="text-4xl font-bold text-indigo-400">100%</div>
+                <div className="text-sm text-slate-400">Deteccion de Vishing</div>
+              </div>
+            </div>
+          </div>
+
           {/* Stats Bar */}
           <div className="bg-slate-800/30 border border-slate-700 rounded-2xl p-8">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
