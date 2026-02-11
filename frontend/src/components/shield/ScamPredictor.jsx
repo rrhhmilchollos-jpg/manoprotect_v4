@@ -216,10 +216,15 @@ const ScamPredictor = () => {
             <div>
               <CardTitle className="text-xl flex items-center gap-2">
                 Predictor de Estafas AI
-                <Badge className="bg-red-500 animate-pulse">En vivo</Badge>
+                <Badge className="bg-emerald-500 animate-pulse">EN VIVO</Badge>
               </CardTitle>
-              <CardDescription>
-                Alertas de nuevas estafas detectadas en España
+              <CardDescription className="flex items-center gap-2">
+                <span>Alertas de nuevas estafas detectadas en España</span>
+                {stats.total_reports > 0 && (
+                  <Badge variant="outline" className="text-xs">
+                    {stats.total_reports} reportes en BD
+                  </Badge>
+                )}
               </CardDescription>
             </div>
           </div>
