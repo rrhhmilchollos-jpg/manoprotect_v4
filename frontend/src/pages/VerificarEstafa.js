@@ -410,48 +410,96 @@ const VerificarEstafa = () => {
               </div>
               <div className="flex-1">
                 <h3 className={`text-2xl font-bold mb-2 ${result.is_scam ? 'text-red-300' : 'text-green-300'}`}>
-                  {result.is_scam ? '⚠️ ¡ALERTA DE ESTAFA!' : '✓ No encontrado'}
+                  {result.is_scam ? 'ALERTA DE RIESGO' : 'Sin Amenazas Detectadas'}
                 </h3>
                 <p className={`text-lg mb-4 ${result.is_scam ? 'text-red-200' : 'text-green-200'}`}>
-                  {result.warning || result.message}
+                  {result.description}
                 </p>
 
+                {/* Risk Score */}
+                <div className="mb-4">
+                  <div className="flex justify-between mb-1">
+                    <span className="text-sm text-slate-300">Puntuación de Riesgo</span>
+                    <span className={`text-sm font-bold ${
+                      result.risk_score >= 70 ? 'text-red-400' :
+                      result.risk_score >= 40 ? 'text-yellow-400' : 'text-green-400'
+                    }`}>{result.risk_score}/100</span>
+                  </div>
+                  <div className="h-2 bg-slate-700 rounded-full overflow-hidden">
+                    <div 
+                      className={`h-full transition-all ${
+                        result.risk_score >= 70 ? 'bg-red-500' :
+                        result.risk_score >= 40 ? 'bg-yellow-500' : 'bg-green-500'
+                      }`}
+                      style={{ width: `${result.risk_score}%` }}
+                    />
+                  </div>
+                </div>
+
+                {/* API Checks */}
+                {result.checks && result.checks.length > 0 && (
+                  <div className="space-y-2 mb-4">
+                    <p className="text-sm text-slate-400 mb-2">Fuentes de datos consultadas:</p>
+                    {result.checks.map((check, i) => (
+                      <div key={i} className={`flex items-center justify-between p-3 rounded-lg ${
+                        check.status === 'DANGER' ? 'bg-red-900/50 border border-red-700' :
+                        check.status === 'WARNING' ? 'bg-yellow-900/50 border border-yellow-700' :
+                        'bg-slate-700/50 border border-slate-600'
+                      }`}>
+                        <div className="flex items-center gap-2">
+                          {check.status === 'DANGER' ? (
+                            <XCircle className="w-4 h-4 text-red-400" />
+                          ) : check.status === 'WARNING' ? (
+                            <AlertTriangle className="w-4 h-4 text-yellow-400" />
+                          ) : check.status === 'TRUSTED' ? (
+                            <Shield className="w-4 h-4 text-blue-400" />
+                          ) : (
+                            <CheckCircle className="w-4 h-4 text-green-400" />
+                          )}
+                          <span className="text-white text-sm">{check.source}</span>
+                        </div>
+                        <span className={`text-xs px-2 py-1 rounded-full ${
+                          check.status === 'DANGER' ? 'bg-red-600 text-white' :
+                          check.status === 'WARNING' ? 'bg-yellow-600 text-white' :
+                          check.status === 'TRUSTED' ? 'bg-blue-600 text-white' :
+                          'bg-green-600 text-white'
+                        }`}>
+                          {check.live_data ? 'EN VIVO' : check.status}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {/* Warnings */}
+                {result.warnings && result.warnings.length > 0 && (
+                  <div className="bg-red-950/50 rounded-xl p-4 mb-4">
+                    <p className="font-semibold text-red-200 mb-2">Advertencias:</p>
+                    <ul className="space-y-2">
+                      {result.warnings.map((warning, i) => (
+                        <li key={i} className="flex items-start gap-2 text-red-100">
+                          <AlertTriangle className="w-4 h-4 text-red-400 flex-shrink-0 mt-1" />
+                          {warning}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {/* Database Status Badge */}
+                <div className="flex items-center gap-2 mt-4">
+                  <span className="inline-flex items-center gap-1 px-3 py-1 bg-emerald-900/50 text-emerald-300 text-xs rounded-full border border-emerald-700">
+                    <Database className="w-3 h-3" />
+                    {result.database_status || 'LIVE'}
+                  </span>
+                  {result.reports_count > 0 && (
+                    <span className="px-3 py-1 bg-red-900/50 text-red-300 text-xs rounded-full border border-red-700">
+                      {result.reports_count} reportes de la comunidad
+                    </span>
+                  )}
+                </div>
+
                 {result.is_scam && (
-                  <>
-                    <div className="flex flex-wrap gap-3 mb-4">
-                      <span className={`px-3 py-1 rounded-full text-sm text-white ${getSeverityColor(result.severity)}`}>
-                        Severidad: {result.severity}
-                      </span>
-                      <span className="px-3 py-1 rounded-full text-sm bg-slate-600 text-white">
-                        Categoría: {result.category}
-                      </span>
-                      <span className="px-3 py-1 rounded-full text-sm bg-slate-600 text-white">
-                        Reportado {result.report_count} veces
-                      </span>
-                    </div>
-
-                    <div className="bg-red-950/50 rounded-xl p-4">
-                      <p className="font-semibold text-red-200 mb-2">Recomendaciones:</p>
-                      <ul className="space-y-2">
-                        {result.advice?.map((tip, i) => (
-                          <li key={i} className="flex items-start gap-2 text-red-100">
-                            <AlertTriangle className="w-4 h-4 text-red-400 flex-shrink-0 mt-1" />
-                            {tip}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-
-                    {/* Share Buttons */}
-                    <div className="mt-6 pt-4 border-t border-red-700/50">
-                      <p className="text-sm text-red-200 mb-3 flex items-center gap-2">
-                        <Share2 className="w-4 h-4" />
-                        Comparte esta alerta para proteger a otros:
-                      </p>
-                      <div className="flex flex-wrap gap-2">
-                        {/* WhatsApp */}
-                        <button
-                          onClick={() => handleShare('whatsapp')}
                           className="flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-500 text-white rounded-lg transition-colors text-sm font-medium"
                           data-testid="share-whatsapp"
                         >
