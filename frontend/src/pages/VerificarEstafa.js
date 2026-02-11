@@ -88,9 +88,26 @@ const VerificarEstafa = () => {
 
   const fetchStats = async () => {
     try {
-      const response = await fetch(`${API_URL}/api/fraud/public/scam-stats`);
+      const response = await fetch(`${API_URL}/api/realtime/trending`);
       const data = await response.json();
-      setStats(data);
+      setStats({
+        total_reports: data.stats?.total_reports || 0,
+        phone_scams: data.trending?.filter(t => t.type === 'phone').length || 0,
+        email_scams: data.trending?.filter(t => t.type === 'email').length || 0,
+        verified_safe: data.stats?.reports_this_week || 0,
+        database_status: data.stats?.database_status || 'LIVE'
+      });
+      // Use trending data as recent alerts
+      if (data.trending && data.trending.length > 0) {
+        setRecentAlerts(data.trending.slice(0, 5).map(t => ({
+          id: t.id,
+          type: t.type,
+          value: t.contact_info,
+          description: t.description,
+          severity: t.report_count > 3 ? 'critical' : t.report_count > 1 ? 'high' : 'medium',
+          timestamp: t.first_reported
+        })));
+      }
     } catch (error) {
       console.error('Error fetching stats:', error);
     }
