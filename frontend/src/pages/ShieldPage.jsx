@@ -116,10 +116,14 @@ const ShieldPage = () => {
         return <UniversalVerifier />;
       case 'voice':
         return <VoiceShieldAI />;
+      case 'predictor':
+        return <ScamPredictor />;
       case 'dna':
         return <DNADigital />;
       case 'seal':
         return <TrustSeal />;
+      case 'phishing':
+        return <PhishingSimulation />;
       case 'deepfake':
         return <AntiDeepfake />;
       case 'vault':
