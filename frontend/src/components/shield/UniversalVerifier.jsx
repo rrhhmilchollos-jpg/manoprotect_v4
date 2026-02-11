@@ -213,55 +213,70 @@ const UniversalVerifier = () => {
                   <span className="text-sm font-medium">
                     Puntuación de riesgo: {result.risk_score}%
                   </span>
+                  {result.database_status === 'LIVE' && (
+                    <Badge className="bg-emerald-500 animate-pulse">EN VIVO</Badge>
+                  )}
                 </div>
+
+                {/* Security Checks Performed */}
+                {result.checks?.length > 0 && (
+                  <div className="mt-3 bg-zinc-50 rounded-lg p-3">
+                    <p className="font-semibold text-zinc-700 text-sm mb-2">Verificaciones realizadas:</p>
+                    <div className="space-y-1">
+                      {result.checks.map((check, idx) => (
+                        <div key={idx} className="flex items-center gap-2 text-sm">
+                          {check.status === 'OK' || check.status === 'TRUSTED' ? (
+                            <CheckCircle className="w-4 h-4 text-emerald-500" />
+                          ) : check.status === 'WARNING' ? (
+                            <AlertCircle className="w-4 h-4 text-amber-500" />
+                          ) : (
+                            <XCircle className="w-4 h-4 text-red-500" />
+                          )}
+                          <span className="text-zinc-600">{check.source}</span>
+                          {check.status === 'TRUSTED' && check.owner && (
+                            <span className="text-emerald-600 font-medium">({check.owner})</span>
+                          )}
+                          {check.reports && (
+                            <span className="text-red-600 font-medium">({check.reports} reportes)</span>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
 
                 {/* Warnings */}
                 {result.community_warnings?.length > 0 && (
                   <div className="mt-3 space-y-2">
-                    <p className="font-semibold text-red-700">⚠️ Alertas de la comunidad:</p>
+                    <p className="font-semibold text-zinc-700">Alertas detectadas:</p>
                     {result.community_warnings.map((warning, idx) => (
-                      <p key={idx} className="text-sm text-red-600 pl-4">• {warning}</p>
+                      <p key={idx} className="text-sm pl-4">{warning}</p>
                     ))}
                   </div>
                 )}
 
                 {/* DNA Digital verified */}
-                {result.details?.dna_verified && (
+                {result.verified_entity && (
                   <div className="mt-3 p-3 bg-emerald-50 rounded-lg">
                     <p className="text-emerald-700 font-medium">
                       ✅ Identidad verificada con DNA Digital
                     </p>
                     <p className="text-sm text-emerald-600">
-                      Propietario: {result.details.owner_name}
-                    </p>
-                  </div>
-                )}
-
-                {/* Trust Seal */}
-                {result.details?.trust_seal && (
-                  <div className="mt-3 p-3 bg-emerald-50 rounded-lg">
-                    <p className="text-emerald-700 font-medium">
-                      🛡️ Empresa con Sello de Confianza ManoProtect
-                    </p>
-                    <p className="text-sm text-emerald-600">
-                      {result.details.business_name}
+                      Propietario: {result.verified_entity.owner_name}
                     </p>
                   </div>
                 )}
 
                 {/* Recommendations */}
                 {result.recommendations?.length > 0 && (
-                  <div className="mt-4">
-                    <p className="font-semibold mb-2">Recomendaciones:</p>
-                    {result.recommendations.map((rec, idx) => (
-                      <p key={idx} className="text-sm pl-4">• {rec}</p>
-                    ))}
+                  <div className="mt-4 p-3 bg-zinc-100 rounded-lg">
+                    <p className="font-bold text-zinc-800">{result.recommendations[0]}</p>
                   </div>
                 )}
 
                 {result.known_reports > 0 && (
                   <p className="mt-3 text-sm font-medium text-red-600">
-                    📊 Reportado {result.known_reports} veces por la comunidad
+                    📊 Reportado {result.known_reports} veces por la comunidad ManoProtect
                   </p>
                 )}
               </div>
@@ -270,9 +285,13 @@ const UniversalVerifier = () => {
         )}
 
         {/* Help Text */}
-        <p className="text-xs text-zinc-500 text-center">
-          ManoProtect analiza en tiempo real bases de datos de fraudes, phishing y estafas conocidas
-        </p>
+        <div className="text-xs text-zinc-500 text-center space-y-1">
+          <p className="flex items-center justify-center gap-2">
+            <span className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span>
+            Base de datos EN VIVO - Actualizada en tiempo real
+          </p>
+          <p>Fuentes: Google Safe Browsing, VirusTotal, PhishTank, Comunidad ManoProtect</p>
+        </div>
       </CardContent>
     </Card>
   );
