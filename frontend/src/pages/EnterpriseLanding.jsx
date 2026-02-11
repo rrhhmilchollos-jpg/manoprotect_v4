@@ -128,13 +128,6 @@ const TESTIMONIALS = [
   }
 ];
 
-const STATS = [
-  { value: '0', label: 'Empresas protegidas' },
-  { value: '0', label: 'Amenazas bloqueadas' },
-  { value: '99.9%', label: 'Uptime garantizado' },
-  { value: '< 1s', label: 'Tiempo de verificación' }
-];
-
 const EnterpriseLanding = () => {
   const navigate = useNavigate();
   const [contactForm, setContactForm] = useState({
