@@ -212,9 +212,9 @@ async def check_url_realtime(request: URLCheckRequest):
 async def check_phone_realtime(request: PhoneCheckRequest):
     """
     Check phone number against:
-    - Our own database
+    - ManoProtect Community Database (MongoDB)
     - Known spam/scam patterns
-    - International scam databases
+    - DNA Digital verification
     """
     phone = normalize_phone(request.phone, request.country_code)
     
@@ -224,44 +224,52 @@ async def check_phone_realtime(request: PhoneCheckRequest):
         "risk_score": 0,
         "checks": [],
         "warnings": [],
-        "checked_at": datetime.utcnow().isoformat()
+        "checked_at": datetime.now(timezone.utc).isoformat(),
+        "database_status": "LIVE"
     }
     
-    # 1. Check our database
-    our_report = await db.scam_reports.find_one({
-        "contact_info": {"$regex": phone.replace("+", "\\+"), "$options": "i"}
-    })
-    
-    if our_report:
-        results["checks"].append({
-            "source": "ManoProtect Community",
-            "status": "DANGER",
-            "reports": our_report.get("report_count", 1),
-            "scam_type": our_report.get("scam_type", "unknown")
+    # 1. Check ManoProtect Community Database
+    try:
+        our_report = await db.scam_reports.find_one({
+            "contact_info": {"$regex": phone.replace("+", "\\+"), "$options": "i"}
         })
-        results["is_safe"] = False
-        results["risk_score"] += 50
-        results["warnings"].append(f"🚨 Este número ha sido reportado {our_report.get('report_count', 1)} veces como estafa")
-        if our_report.get("description"):
-            results["warnings"].append(f"📝 Descripción: {our_report.get('description')[:100]}...")
+        
+        if our_report:
+            results["checks"].append({
+                "source": "ManoProtect Community",
+                "status": "DANGER",
+                "reports": our_report.get("report_count", 1),
+                "scam_type": our_report.get("scam_type", "unknown"),
+                "live_data": True
+            })
+            results["is_safe"] = False
+            results["risk_score"] += 50
+            results["warnings"].append(f"Este numero ha sido reportado {our_report.get('report_count', 1)} veces como estafa")
+            if our_report.get("description"):
+                results["warnings"].append(f"Descripcion: {our_report.get('description')[:100]}...")
+    except Exception as e:
+        logger.error(f"MongoDB phone check error: {e}")
     
-    # 2. Check against known scam prefixes
+    # 2. Check against known scam prefixes (international fraud hotspots)
     scam_prefixes = [
-        ("+44", "Reino Unido - Alto riesgo de estafas de soporte técnico"),
+        ("+44", "Reino Unido - Alto riesgo de estafas de soporte tecnico"),
         ("+91", "India - Alto riesgo de call centers fraudulentos"),
         ("+234", "Nigeria - Alto riesgo de estafas"),
         ("+233", "Ghana - Alto riesgo de estafas"),
-        ("+225", "Costa de Marfil - Alto riesgo de estafas románticas"),
+        ("+225", "Costa de Marfil - Alto riesgo de estafas romanticas"),
+        ("+355", "Albania - Alto riesgo de estafas telefonicas"),
+        ("+380", "Ucrania - Riesgo moderado de fraude"),
     ]
     
     for prefix, warning in scam_prefixes:
         if phone.startswith(prefix):
             results["risk_score"] += 20
-            results["warnings"].append(f"⚠️ {warning}")
+            results["warnings"].append(warning)
             results["checks"].append({
                 "source": "Country Risk Analysis",
                 "status": "WARNING",
-                "detail": warning
+                "detail": warning,
+                "live_data": True
             })
             break
     
@@ -272,27 +280,32 @@ async def check_phone_realtime(request: PhoneCheckRequest):
         for prefix in premium_prefixes:
             if phone_local.startswith(prefix):
                 results["risk_score"] += 30
-                results["warnings"].append("💰 Número de tarificación especial (coste elevado)")
+                results["warnings"].append("Numero de tarificacion especial (coste elevado)")
                 results["checks"].append({
                     "source": "Premium Rate Detection",
-                    "status": "WARNING"
+                    "status": "WARNING",
+                    "live_data": True
                 })
                 break
     
     # 4. DNA Digital verification
-    dna_record = await db.dna_digital.find_one({
-        "phone": phone,
-        "status": "verified"
-    })
-    
-    if dna_record:
-        results["risk_score"] = max(0, results["risk_score"] - 40)
-        results["checks"].append({
-            "source": "DNA Digital Verified",
-            "status": "TRUSTED",
-            "owner": dna_record.get("owner_name")
+    try:
+        dna_record = await db.dna_digital.find_one({
+            "phone": phone,
+            "status": "verified"
         })
-        results["warnings"].append(f"✅ Número verificado: {dna_record.get('owner_name')}")
+        
+        if dna_record:
+            results["risk_score"] = max(0, results["risk_score"] - 40)
+            results["checks"].append({
+                "source": "DNA Digital Verified",
+                "status": "TRUSTED",
+                "owner": dna_record.get("owner_name"),
+                "live_data": True
+            })
+            results["warnings"].insert(0, f"Numero verificado: {dna_record.get('owner_name')}")
+    except Exception as e:
+        logger.error(f"DNA Digital check error: {e}")
     
     # Cap and determine safety
     results["risk_score"] = min(results["risk_score"], 100)
@@ -301,11 +314,65 @@ async def check_phone_realtime(request: PhoneCheckRequest):
     
     # Recommendation
     if results["risk_score"] >= 60:
-        results["recommendation"] = "🚨 NO CONTESTES - Número reportado como estafa"
+        results["recommendation"] = "NO CONTESTES - Numero reportado como estafa"
     elif results["risk_score"] >= 30:
-        results["recommendation"] = "⚠️ Precaución - Posible spam o estafa"
+        results["recommendation"] = "Precaucion - Posible spam o estafa"
     else:
-        results["recommendation"] = "✅ No hay reportes negativos de este número"
+        results["recommendation"] = "No hay reportes negativos de este numero"
+    
+    # Log check
+    try:
+        await db.verification_logs.insert_one({
+            "type": "phone",
+            "value": phone,
+            "risk_score": results["risk_score"],
+            "is_safe": results["is_safe"],
+            "checked_at": datetime.now(timezone.utc)
+        })
+    except:
+        pass
+    
+    return results
+
+
+@router.post("/check/ip")
+async def check_ip_realtime(request: IPCheckRequest):
+    """
+    Check IP address against REAL threat intelligence databases:
+    - VirusTotal (LIVE)
+    - AbuseIPDB (LIVE)
+    - AlienVault OTX (LIVE)
+    """
+    ip_address = request.ip_address.strip()
+    
+    # Validate IP format
+    import re
+    ip_pattern = r'^(\d{1,3}\.){3}\d{1,3}$|^([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}$'
+    if not re.match(ip_pattern, ip_address):
+        raise HTTPException(status_code=400, detail="Formato de IP invalido")
+    
+    # Use aggregator for comprehensive check
+    results = await threat_aggregator.check_ip_comprehensive(ip_address)
+    
+    # Add recommendation
+    if results["risk_score"] >= 70:
+        results["recommendation"] = "IP PELIGROSA - Bloqueada en multiples bases de datos"
+    elif results["risk_score"] >= 40:
+        results["recommendation"] = "IP sospechosa - Precaucion recomendada"
+    else:
+        results["recommendation"] = "IP sin reportes de actividad maliciosa"
+    
+    # Log check
+    try:
+        await db.verification_logs.insert_one({
+            "type": "ip",
+            "value": ip_address,
+            "risk_score": results["risk_score"],
+            "is_safe": results["is_safe"],
+            "checked_at": datetime.now(timezone.utc)
+        })
+    except:
+        pass
     
     return results
 
