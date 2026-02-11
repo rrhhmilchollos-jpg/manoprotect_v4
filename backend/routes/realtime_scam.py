@@ -38,6 +38,9 @@ class PhoneCheckRequest(BaseModel):
 class EmailCheckRequest(BaseModel):
     email: str
 
+class IPCheckRequest(BaseModel):
+    ip_address: str
+
 class ReportScamRequest(BaseModel):
     scam_type: str  # phishing, vishing, smishing, etc.
     contact_info: str  # phone, email, or URL
@@ -49,17 +52,6 @@ class ReportScamRequest(BaseModel):
 # ===========================================
 # UTILITY FUNCTIONS
 # ===========================================
-
-async def fetch_url(session: aiohttp.ClientSession, url: str, headers: dict = None, method: str = "GET", data: dict = None):
-    """Fetch URL with timeout and error handling"""
-    try:
-        async with session.request(method, url, headers=headers, json=data, timeout=aiohttp.ClientTimeout(total=10)) as response:
-            if response.status == 200:
-                return await response.json()
-            return None
-    except Exception as e:
-        print(f"Error fetching {url}: {e}")
-        return None
 
 def normalize_phone(phone: str, country_code: str = "ES") -> str:
     """Normalize phone number to international format"""
