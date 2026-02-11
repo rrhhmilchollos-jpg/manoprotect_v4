@@ -176,13 +176,33 @@ const ScamPredictor = () => {
     : trendingScams.filter(s => s.category === filter);
 
   const handleReport = async () => {
-    // In production, this would send to the backend
-    setReportSubmitted(true);
-    setTimeout(() => {
-      setShowReportForm(false);
-      setReportSubmitted(false);
-      setReportForm({ category: 'phishing', description: '', example: '', contact_info: '' });
-    }, 2000);
+    if (!reportForm.description) return;
+    
+    try {
+      const response = await fetch(`${REALTIME_API}/report`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          scam_type: reportForm.category,
+          contact_info: reportForm.contact_info || 'No especificado',
+          description: reportForm.description,
+          evidence: reportForm.example
+        })
+      });
+      
+      if (response.ok) {
+        setReportSubmitted(true);
+        // Reload trending scams
+        setTimeout(() => {
+          loadTrendingScams();
+          setShowReportForm(false);
+          setReportSubmitted(false);
+          setReportForm({ category: 'phishing', description: '', example: '', contact_info: '' });
+        }, 2000);
+      }
+    } catch (err) {
+      console.error('Error reporting scam:', err);
+    }
   };
 
   return (
