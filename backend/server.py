@@ -2492,6 +2492,10 @@ print("✅ ManoProtect Shield routes loaded")
 api_router.include_router(realtime_router)
 print("✅ Real-Time Scam Detection routes loaded (LIVE)")
 
+# AI Voice Shield routes
+api_router.include_router(voice_shield_router)
+print("✅ AI Voice Shield routes loaded")
+
 # Payment routes (Stripe)
 api_router.include_router(payments_router)
 print("✅ Payment routes loaded")
