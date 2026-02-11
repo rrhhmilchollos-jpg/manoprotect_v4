@@ -62,6 +62,7 @@ const ShieldPage = lazy(() => import('@/pages/ShieldPage'));
 const EnterpriseLanding = lazy(() => import('@/pages/EnterpriseLanding'));
 const JoinFamilyPage = lazy(() => import('@/pages/JoinFamilyPage'));
 const VoiceShield = lazy(() => import('@/pages/VoiceShield'));
+const SmartLocator = lazy(() => import('@/pages/SmartLocator'));
 
 // Lazy load non-critical UI components to reduce main thread blocking
 const CookieConsent = lazy(() => import('@/components/CookieConsent'));
