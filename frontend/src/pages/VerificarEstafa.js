@@ -111,7 +111,7 @@ const VerificarEstafa = () => {
   const handleSearch = async (e) => {
     e.preventDefault();
     if (!searchValue.trim()) {
-      toast.error('Introduce un número o email para verificar');
+      toast.error('Introduce un número, email o URL para verificar');
       return;
     }
 
@@ -119,13 +119,42 @@ const VerificarEstafa = () => {
     setResult(null);
 
     try {
-      const response = await fetch(
-        `${API_URL}/api/fraud/public/verify-scam?value=${encodeURIComponent(searchValue)}&type=${searchType}`
-      );
+      // Use REAL threat intelligence APIs
+      let endpoint = '';
+      let body = {};
+      
+      if (searchType === 'phone') {
+        endpoint = '/api/realtime/check/phone';
+        body = { phone: searchValue, country_code: 'ES' };
+      } else if (searchType === 'email') {
+        endpoint = '/api/realtime/check/email';
+        body = { email: searchValue };
+      } else if (searchType === 'url') {
+        endpoint = '/api/realtime/check/url';
+        body = { url: searchValue };
+      }
+      
+      const response = await fetch(`${API_URL}${endpoint}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+      });
+      
       const data = await response.json();
-      setResult(data);
+      
+      // Transform response for UI
+      setResult({
+        is_scam: !data.is_safe,
+        risk_score: data.risk_score,
+        reports_count: data.checks?.find(c => c.source === 'ManoProtect Community')?.reports || 0,
+        description: data.recommendation,
+        checks: data.checks || [],
+        warnings: data.warnings || [],
+        database_status: data.database_status || 'LIVE'
+      });
     } catch (error) {
       toast.error('Error al verificar');
+      console.error(error);
     } finally {
       setLoading(false);
     }
