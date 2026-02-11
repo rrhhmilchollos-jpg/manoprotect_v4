@@ -2516,6 +2516,10 @@ print("✅ Smart Family Locator routes loaded")
 api_router.include_router(deepfake_shield_router)
 print("✅ Anti-Deepfake Shield routes loaded")
 
+# Investor CRM routes
+api_router.include_router(investor_crm_router)
+print("✅ Investor CRM routes loaded")
+
 # Payment routes (Stripe)
 api_router.include_router(payments_router)
 print("✅ Payment routes loaded")
