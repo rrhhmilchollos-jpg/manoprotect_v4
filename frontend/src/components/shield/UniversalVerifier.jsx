@@ -69,19 +69,57 @@ const UniversalVerifier = () => {
     setResult(null);
 
     try {
-      const response = await fetch(`${API}/shield/verify/universal`, {
+      // Use REAL-TIME API for live data
+      let endpoint;
+      let body;
+      
+      switch (verificationType) {
+        case 'url':
+          endpoint = `${REALTIME_API}/check/url`;
+          body = { url: content.trim() };
+          break;
+        case 'phone':
+          endpoint = `${REALTIME_API}/check/phone`;
+          body = { phone: content.trim(), country_code: 'ES' };
+          break;
+        case 'email':
+          endpoint = `${REALTIME_API}/check/email`;
+          body = { email: content.trim() };
+          break;
+        default:
+          endpoint = `${REALTIME_API}/check/url`;
+          body = { url: content.trim() };
+      }
+      
+      const response = await fetch(endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          content: content.trim(),
-          verification_type: verificationType
-        })
+        body: JSON.stringify(body)
       });
 
       if (!response.ok) throw new Error('Error en la verificación');
       
       const data = await response.json();
-      setResult(data);
+      
+      // Transform to expected format
+      setResult({
+        is_safe: data.is_safe,
+        risk_level: data.risk_score >= 70 ? 'critical' : 
+                    data.risk_score >= 50 ? 'high' : 
+                    data.risk_score >= 30 ? 'medium' : 
+                    data.risk_score >= 10 ? 'low' : 'safe',
+        risk_score: data.risk_score,
+        verification_type: verificationType,
+        details: data.details || {},
+        recommendations: data.recommendation ? [data.recommendation] : [],
+        known_reports: data.checks?.find(c => c.source === 'ManoProtect Community')?.reports || 0,
+        community_warnings: data.warnings || [],
+        checks: data.checks || [],
+        verified_entity: data.checks?.find(c => c.status === 'TRUSTED') ? {
+          owner_name: data.checks.find(c => c.status === 'TRUSTED').owner
+        } : null,
+        database_status: 'LIVE'
+      });
     } catch (err) {
       setError('No se pudo realizar la verificación. Intenta de nuevo.');
     } finally {
