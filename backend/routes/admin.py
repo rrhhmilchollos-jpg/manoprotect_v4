@@ -11,6 +11,56 @@ from core.config import db, require_admin
 router = APIRouter(prefix="/admin", tags=["Admin"])
 
 
+@router.get("/public/users-count")
+async def get_public_users_count():
+    """Get public count of registered users (no auth required)"""
+    total_users = await db.users.count_documents({})
+    active_users = await db.users.count_documents({"status": {"$ne": "inactive"}})
+    
+    # Get users registered in last 24 hours
+    from datetime import timedelta
+    day_ago = datetime.now(timezone.utc) - timedelta(days=1)
+    new_users_24h = await db.users.count_documents({"created_at": {"$gte": day_ago}})
+    
+    return {
+        "total_users": total_users,
+        "active_users": active_users,
+        "new_users_24h": new_users_24h,
+        "timestamp": datetime.now(timezone.utc).isoformat()
+    }
+
+
+@router.get("/public/active-users")
+async def get_public_active_users():
+    """Get list of active users with basic info (for public display)"""
+    users = await db.users.find(
+        {"status": {"$ne": "inactive"}},
+        {
+            "_id": 0,
+            "password_hash": 0,
+            "email": 0,  # Hide email for privacy
+            "phone": 0
+        }
+    ).sort("created_at", -1).limit(50).to_list(50)
+    
+    # Mask sensitive info
+    sanitized_users = []
+    for u in users:
+        sanitized_users.append({
+            "name": u.get("name", "Usuario"),
+            "role": u.get("role", "user"),
+            "plan": u.get("plan", "free"),
+            "member_since": u.get("created_at"),
+            "avatar_initial": u.get("name", "U")[0].upper() if u.get("name") else "U"
+        })
+    
+    return {
+        "users": sanitized_users,
+        "total": len(sanitized_users),
+        "timestamp": datetime.now(timezone.utc).isoformat()
+    }
+
+
 @router.get("/dashboard")
 async def get_admin_dashboard(request: Request, session_token: Optional[str] = Cookie(None)):
     """Get admin dashboard stats"""
