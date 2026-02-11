@@ -41,6 +41,14 @@ const FEATURES = [
     badge: 'IA'
   },
   {
+    id: 'predictor',
+    name: 'Predictor de Estafas',
+    description: 'Alertas de nuevas estafas',
+    icon: AlertTriangle,
+    color: 'from-orange-500 to-red-500',
+    badge: 'Live'
+  },
+  {
     id: 'dna',
     name: 'DNA Digital',
     description: 'Identidad digital verificable',
@@ -55,6 +63,14 @@ const FEATURES = [
     icon: Award,
     color: 'from-amber-500 to-orange-500',
     badge: 'B2B'
+  },
+  {
+    id: 'phishing',
+    name: 'Simulacro Phishing',
+    description: 'Entrena a tus empleados',
+    icon: Shield,
+    color: 'from-indigo-500 to-blue-500',
+    badge: 'Enterprise'
   },
   {
     id: 'deepfake',
@@ -76,7 +92,7 @@ const FEATURES = [
     id: 'panic',
     name: 'Modo Pánico',
     description: 'Alerta silenciosa de emergencia',
-    icon: AlertTriangle,
+    icon: Radio,
     color: 'from-red-500 to-rose-500',
     badge: 'SOS'
   },
