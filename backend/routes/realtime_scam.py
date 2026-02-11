@@ -1,43 +1,28 @@
 """
 ManoProtect - Real-Time Scam Database Integration
-Connects to worldwide fraud databases for LIVE data
+Connects to REAL worldwide fraud databases for LIVE data
+100% REAL APIs - NO MOCKS
 """
-import aiohttp
 import asyncio
-import hashlib
-import base64
-import json
 import re
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import Optional, List, Dict, Any
 from fastapi import APIRouter, HTTPException, BackgroundTasks
 from pydantic import BaseModel
+import logging
+
+# Import REAL threat intelligence services
+from services.threat_intelligence import threat_aggregator
 
 router = APIRouter(prefix="/realtime", tags=["Real-Time Scam Detection"])
+logger = logging.getLogger(__name__)
 
-# Database reference
+# Database reference (MongoDB)
 db = None
 
 def set_database(database):
     global db
     db = database
-
-# ===========================================
-# API KEYS (from environment or config)
-# ===========================================
-import os
-
-# Free APIs that don't require keys
-PHISHTANK_API = "https://checkurl.phishtank.com/checkurl/"
-GOOGLE_SAFE_BROWSING_API = "https://safebrowsing.googleapis.com/v4/threatMatches:find"
-ABUSEIPDB_API = "https://api.abuseipdb.com/api/v2/check"
-VIRUSTOTAL_API = "https://www.virustotal.com/api/v3/urls"
-HIBP_API = "https://haveibeenpwned.com/api/v3/breachedaccount"
-
-# Get API keys from environment
-GOOGLE_SAFE_BROWSING_KEY = os.environ.get("GOOGLE_SAFE_BROWSING_KEY", "")
-ABUSEIPDB_KEY = os.environ.get("ABUSEIPDB_KEY", "")
-VIRUSTOTAL_KEY = os.environ.get("VIRUSTOTAL_KEY", "")
 
 # ===========================================
 # MODELS
