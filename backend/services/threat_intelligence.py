@@ -161,17 +161,31 @@ class VirusTotalService:
             total = malicious + suspicious + harmless + undetected
             
             if malicious > 0:
-                risk_score = min(100, 50 + (malicious * 5))
-                return {
-                    "source": "VirusTotal",
-                    "status": "DANGER",
-                    "malicious_detections": malicious,
-                    "suspicious_detections": suspicious,
-                    "total_engines": total,
-                    "description": f"{malicious} de {total} motores detectan malware",
-                    "risk_score": risk_score,
-                    "live_data": True
-                }
+                # Only mark as danger if at least 3 engines detect malware
+                risk_score = min(100, 30 + (malicious * 8))
+                if malicious >= 3:
+                    return {
+                        "source": "VirusTotal",
+                        "status": "DANGER",
+                        "malicious_detections": malicious,
+                        "suspicious_detections": suspicious,
+                        "total_engines": total,
+                        "description": f"{malicious} de {total} motores detectan malware",
+                        "risk_score": risk_score,
+                        "live_data": True
+                    }
+                else:
+                    # 1-2 detections could be false positives
+                    return {
+                        "source": "VirusTotal",
+                        "status": "WARNING",
+                        "malicious_detections": malicious,
+                        "suspicious_detections": suspicious,
+                        "total_engines": total,
+                        "description": f"{malicious} de {total} motores (posible falso positivo)",
+                        "risk_score": min(risk_score, 20),
+                        "live_data": True
+                    }
             elif suspicious > 0:
                 return {
                     "source": "VirusTotal",
