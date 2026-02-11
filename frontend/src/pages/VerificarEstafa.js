@@ -12,7 +12,7 @@ import AlertSubscription from '../components/AlertSubscription';
 const API_URL = process.env.REACT_APP_BACKEND_URL;
 
 const VerificarEstafa = () => {
-  const [searchType, setSearchType] = useState('phone');
+  const [searchType, setSearchType] = useState('url');
   const [searchValue, setSearchValue] = useState('');
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
