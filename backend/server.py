@@ -173,6 +173,10 @@ init_smart_locator_db(db)
 from routes.deepfake_shield import router as deepfake_shield_router, init_db as init_deepfake_db
 init_deepfake_db(db)
 
+# Investor CRM Routes
+from routes.investor_crm import router as investor_crm_router, init_db as init_investor_crm_db
+init_investor_crm_db(db)
+
 # Geofencing Routes
 from routes.geofence_routes import router as geofence_router, init_geofence_routes
 init_geofence_routes(db)
