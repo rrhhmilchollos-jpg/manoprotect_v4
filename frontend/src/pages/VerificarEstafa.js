@@ -307,11 +307,23 @@ const VerificarEstafa = () => {
         <div className="bg-slate-800/50 backdrop-blur-sm rounded-2xl p-8 border border-slate-700 mb-8">
           <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-3">
             <Search className="w-6 h-6 text-blue-400" />
-            Verificar número o email
+            Verificar URL, teléfono o email
           </h2>
 
           <form onSubmit={handleSearch} className="space-y-4">
             <div className="flex gap-2 mb-4">
+              <button
+                type="button"
+                onClick={() => setSearchType('url')}
+                className={`flex-1 py-3 px-4 rounded-xl flex items-center justify-center gap-2 transition-all ${
+                  searchType === 'url' 
+                    ? 'bg-blue-600 text-white' 
+                    : 'bg-slate-700 text-slate-300 hover:bg-slate-600'
+                }`}
+              >
+                <Globe className="w-5 h-5" />
+                URL
+              </button>
               <button
                 type="button"
                 onClick={() => setSearchType('phone')}
@@ -339,13 +351,15 @@ const VerificarEstafa = () => {
             </div>
 
             <div className="relative">
-              {searchType === 'phone' ? (
+              {searchType === 'url' ? (
+                <Globe className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+              ) : searchType === 'phone' ? (
                 <Phone className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
               ) : (
                 <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
               )}
               <input
-                type={searchType === 'email' ? 'email' : 'tel'}
+                type={searchType === 'email' ? 'email' : searchType === 'url' ? 'url' : 'tel'}
                 value={searchValue}
                 onChange={(e) => setSearchValue(e.target.value)}
                 placeholder={searchType === 'phone' ? 'Ej: 600123456 o +34600123456' : 'Ej: estafa@ejemplo.com'}
