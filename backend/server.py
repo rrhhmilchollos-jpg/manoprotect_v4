@@ -165,6 +165,10 @@ init_family_routes(db, PLAN_FEATURES)
 from routes.family_routes import router as family_router, init_db as init_family_db
 init_family_db(db)
 
+# Smart Family Locator Routes
+from routes.smart_locator import router as smart_locator_router, init_db as init_smart_locator_db
+init_smart_locator_db(db)
+
 # Geofencing Routes
 from routes.geofence_routes import router as geofence_router, init_geofence_routes
 init_geofence_routes(db)
