@@ -211,25 +211,25 @@ const VerificarEstafa = () => {
             de fraudes conocidos. Protégete contra estafas.
           </p>
           
-          {/* Cloud Badge - Firebase Connected */}
+          {/* Cloud Badge - REAL APIs Connected */}
           <div className="inline-flex items-center gap-2 bg-gradient-to-r from-emerald-500/20 to-green-500/20 border border-emerald-500/50 rounded-full px-4 py-2 mt-2">
             <Cloud className="w-5 h-5 text-emerald-400" />
-            <span className="text-emerald-300 text-sm font-medium">Conectado a Firebase Cloud</span>
+            <span className="text-emerald-300 text-sm font-medium">APIs de Seguridad EN VIVO</span>
             <span className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse" />
           </div>
           
           <div className="flex items-center justify-center gap-6 mt-4 text-sm text-slate-400">
             <div className="flex items-center gap-1">
-              <Database className="w-4 h-4" />
-              <span>Google Firestore</span>
+              <Database className="w-4 h-4 text-blue-400" />
+              <span>Google Safe Browsing</span>
             </div>
             <div className="flex items-center gap-1">
               <Zap className="w-4 h-4 text-yellow-400" />
-              <span>Tiempo Real</span>
+              <span>VirusTotal</span>
             </div>
             <div className="flex items-center gap-1">
-              <Globe className="w-4 h-4" />
-              <span>Público</span>
+              <Globe className="w-4 h-4 text-purple-400" />
+              <span>AbuseIPDB</span>
             </div>
           </div>
         </div>
