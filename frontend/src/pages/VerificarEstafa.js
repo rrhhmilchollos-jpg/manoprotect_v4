@@ -362,7 +362,11 @@ const VerificarEstafa = () => {
                 type={searchType === 'email' ? 'email' : searchType === 'url' ? 'url' : 'tel'}
                 value={searchValue}
                 onChange={(e) => setSearchValue(e.target.value)}
-                placeholder={searchType === 'phone' ? 'Ej: 600123456 o +34600123456' : 'Ej: estafa@ejemplo.com'}
+                placeholder={
+                  searchType === 'url' ? 'Ej: https://sitio-sospechoso.com' :
+                  searchType === 'phone' ? 'Ej: 600123456 o +34600123456' : 
+                  'Ej: estafa@ejemplo.com'
+                }
                 className="w-full pl-12 pr-4 py-4 bg-slate-700/50 border border-slate-600 rounded-xl text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
