@@ -2502,7 +2502,7 @@ print("✅ Payment routes loaded")
 
 # Admin routes for user management
 init_admin_routes(db)
-api_router.include_router(admin_router)
+api_router.include_router(admin_routes)
 print("✅ Admin routes loaded")
 
 # Health profile routes
