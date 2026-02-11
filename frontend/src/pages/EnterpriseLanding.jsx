@@ -189,45 +189,33 @@ const EnterpriseLanding = () => {
           </nav>
 
           {/* Hero Content */}
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div>
-              <Badge className="bg-amber-500 mb-4">Para Empresas</Badge>
-              <h1 className="text-5xl font-bold mb-6 leading-tight">
-                Protege tu empresa y genera 
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-orange-500"> confianza</span>
-              </h1>
-              <p className="text-xl text-white/80 mb-8">
-                El sistema de ciberseguridad que protege a tus empleados del fraude 
-                y demuestra a tus clientes que pueden confiar en ti.
-              </p>
-              <div className="flex flex-wrap gap-4">
-                <Button 
-                  size="lg" 
-                  className="bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-lg px-8"
-                  onClick={() => document.getElementById('pricing').scrollIntoView({ behavior: 'smooth' })}
-                >
-                  Ver Planes
-                  <ArrowRight className="w-5 h-5 ml-2" />
-                </Button>
-                <Button 
-                  size="lg" 
-                  variant="outline" 
-                  className="border-white/30 text-white hover:bg-white/10 text-lg px-8"
-                  onClick={() => navigate('/shield')}
-                >
-                  Demo Gratis
-                </Button>
-              </div>
-            </div>
-
-            {/* Stats */}
-            <div className="grid grid-cols-2 gap-4">
-              {STATS.map((stat, idx) => (
-                <div key={idx} className="bg-white/10 backdrop-blur rounded-xl p-6 text-center">
-                  <p className="text-4xl font-bold text-amber-400">{stat.value}</p>
-                  <p className="text-white/70">{stat.label}</p>
-                </div>
-              ))}
+          <div className="max-w-3xl">
+            <Badge className="bg-amber-500 mb-4">Para Empresas</Badge>
+            <h1 className="text-5xl font-bold mb-6 leading-tight">
+              Protege tu empresa y genera 
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-orange-500"> confianza</span>
+            </h1>
+            <p className="text-xl text-white/80 mb-8">
+              El sistema de ciberseguridad que protege a tus empleados del fraude 
+              y demuestra a tus clientes que pueden confiar en ti.
+            </p>
+            <div className="flex flex-wrap gap-4">
+              <Button 
+                size="lg" 
+                className="bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-lg px-8"
+                onClick={() => document.getElementById('pricing').scrollIntoView({ behavior: 'smooth' })}
+              >
+                Ver Planes
+                <ArrowRight className="w-5 h-5 ml-2" />
+              </Button>
+              <Button 
+                size="lg" 
+                variant="outline" 
+                className="border-white/30 text-white hover:bg-white/10 text-lg px-8"
+                onClick={() => navigate('/shield')}
+              >
+                Demo Gratis
+              </Button>
             </div>
           </div>
         </div>
