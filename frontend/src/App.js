@@ -230,6 +230,10 @@ function AppRouter() {
           <Route path="/shield" element={<ShieldPage />} />
           <Route path="/seguridad" element={<ShieldPage />} />
           
+          {/* AI Voice Shield - Phone Scam Detection */}
+          <Route path="/voice-shield" element={<VoiceShield />} />
+          <Route path="/escudo-voz" element={<VoiceShield />} />
+          
           {/* Enterprise B2B Landing */}
           <Route path="/enterprise" element={<EnterpriseLanding />} />
           <Route path="/empresas" element={<EnterpriseLanding />} />
