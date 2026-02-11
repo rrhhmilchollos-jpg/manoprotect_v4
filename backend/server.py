@@ -197,6 +197,10 @@ init_enterprise_routes(db)
 from routes.shield import router as shield_router, set_database as init_shield_routes
 init_shield_routes(db)
 
+# Real-Time Scam Detection Routes (LIVE data)
+from routes.realtime_scam import router as realtime_router, set_database as init_realtime_routes
+init_realtime_routes(db)
+
 # Payment Routes (Stripe)
 from routes.payments_routes import router as payments_router
 from routes.admin_routes import router as admin_router, init_db as init_admin_routes
