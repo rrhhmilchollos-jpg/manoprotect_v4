@@ -25,7 +25,7 @@ Todas las apps se conectan al mismo backend:
 
 | Entorno | URL |
 |---------|-----|
-| Preview | https://twa-launcher.preview.emergentagent.com |
+| Preview | https://manoprotect-shield.preview.emergentagent.com |
 | Producción | [Tu dominio de producción] |
 
 ---

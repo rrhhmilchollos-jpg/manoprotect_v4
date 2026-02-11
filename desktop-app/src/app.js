@@ -1,6 +1,6 @@
 // ManoProtect Desktop App - Main JavaScript
 
-const API_BASE = 'https://twa-launcher.preview.emergentagent.com';
+const API_BASE = 'https://manoprotect-shield.preview.emergentagent.com';
 
 // Navigation
 document.querySelectorAll('.nav-item').forEach(item => {

@@ -11,7 +11,7 @@ import pytest
 import requests
 import os
 
-BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', 'https://twa-launcher.preview.emergentagent.com')
+BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', 'https://manoprotect-shield.preview.emergentagent.com')
 
 # Expected prices synchronized between frontend and backend
 EXPECTED_PRICES = {
@@ -134,7 +134,7 @@ class TestCreateCheckoutSession:
             f"{BASE_URL}/api/create-checkout-session",
             json={
                 "plan_type": "weekly",
-                "origin_url": "https://twa-launcher.preview.emergentagent.com"
+                "origin_url": "https://manoprotect-shield.preview.emergentagent.com"
             }
         )
         assert response.status_code == 200, f"Expected 200, got {response.status_code}: {response.text}"
@@ -149,7 +149,7 @@ class TestCreateCheckoutSession:
             f"{BASE_URL}/api/create-checkout-session",
             json={
                 "plan_type": "monthly",
-                "origin_url": "https://twa-launcher.preview.emergentagent.com"
+                "origin_url": "https://manoprotect-shield.preview.emergentagent.com"
             }
         )
         assert response.status_code == 200, f"Expected 200, got {response.status_code}: {response.text}"
@@ -163,7 +163,7 @@ class TestCreateCheckoutSession:
             f"{BASE_URL}/api/create-checkout-session",
             json={
                 "plan_type": "quarterly",
-                "origin_url": "https://twa-launcher.preview.emergentagent.com"
+                "origin_url": "https://manoprotect-shield.preview.emergentagent.com"
             }
         )
         assert response.status_code == 200, f"Expected 200, got {response.status_code}: {response.text}"
@@ -177,7 +177,7 @@ class TestCreateCheckoutSession:
             f"{BASE_URL}/api/create-checkout-session",
             json={
                 "plan_type": "yearly",
-                "origin_url": "https://twa-launcher.preview.emergentagent.com"
+                "origin_url": "https://manoprotect-shield.preview.emergentagent.com"
             }
         )
         assert response.status_code == 200, f"Expected 200, got {response.status_code}: {response.text}"
@@ -191,7 +191,7 @@ class TestCreateCheckoutSession:
             f"{BASE_URL}/api/create-checkout-session",
             json={
                 "plan_type": "family-monthly",
-                "origin_url": "https://twa-launcher.preview.emergentagent.com"
+                "origin_url": "https://manoprotect-shield.preview.emergentagent.com"
             }
         )
         assert response.status_code == 200, f"Expected 200, got {response.status_code}: {response.text}"
@@ -205,7 +205,7 @@ class TestCreateCheckoutSession:
             f"{BASE_URL}/api/create-checkout-session",
             json={
                 "plan_type": "family-quarterly",
-                "origin_url": "https://twa-launcher.preview.emergentagent.com"
+                "origin_url": "https://manoprotect-shield.preview.emergentagent.com"
             }
         )
         assert response.status_code == 200, f"Expected 200, got {response.status_code}: {response.text}"
@@ -219,7 +219,7 @@ class TestCreateCheckoutSession:
             f"{BASE_URL}/api/create-checkout-session",
             json={
                 "plan_type": "family-yearly",
-                "origin_url": "https://twa-launcher.preview.emergentagent.com"
+                "origin_url": "https://manoprotect-shield.preview.emergentagent.com"
             }
         )
         assert response.status_code == 200, f"Expected 200, got {response.status_code}: {response.text}"
@@ -233,7 +233,7 @@ class TestCreateCheckoutSession:
             f"{BASE_URL}/api/create-checkout-session",
             json={
                 "plan_type": "invalid-plan",
-                "origin_url": "https://twa-launcher.preview.emergentagent.com"
+                "origin_url": "https://manoprotect-shield.preview.emergentagent.com"
             }
         )
         assert response.status_code == 400, f"Expected 400 for invalid plan, got {response.status_code}"
@@ -245,7 +245,7 @@ class TestCreateCheckoutSession:
             f"{BASE_URL}/api/create-checkout-session",
             json={
                 "plan_type": "monthly",
-                "origin_url": "https://twa-launcher.preview.emergentagent.com"
+                "origin_url": "https://manoprotect-shield.preview.emergentagent.com"
             }
         )
         assert response.status_code == 200
@@ -274,7 +274,7 @@ class TestCheckoutStatus:
             f"{BASE_URL}/api/create-checkout-session",
             json={
                 "plan_type": "monthly",
-                "origin_url": "https://twa-launcher.preview.emergentagent.com"
+                "origin_url": "https://manoprotect-shield.preview.emergentagent.com"
             }
         )
         assert create_response.status_code == 200
