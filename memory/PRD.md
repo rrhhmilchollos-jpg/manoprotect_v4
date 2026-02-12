@@ -4,7 +4,7 @@
 ManoProtect is a revolutionary cybersecurity platform for both consumers (B2C) and businesses (B2B).
 
 **Website**: https://www.manoprotect.com
-**Preview URL**: https://shield-audio-dev.preview.emergentagent.com
+**Preview URL**: https://family-safety-demo.preview.emergentagent.com
 
 ## Implemented Features (All PRODUCTION READY)
 
@@ -115,7 +115,7 @@ ABUSEIPDB_API_KEY=...
 ALIENVAULT_OTX_KEY=...
 
 # Frontend
-REACT_APP_BACKEND_URL=https://shield-audio-dev.preview.emergentagent.com
+REACT_APP_BACKEND_URL=https://family-safety-demo.preview.emergentagent.com
 ```
 
 ## Files Reference
