@@ -129,7 +129,7 @@ const LandingPage = () => {
             {/* Botón SOS Físico DESTACADO */}
             <Button
               data-testid="header-sos-device-btn"
-              onClick={() => navigate('/dispositivo-sos')}
+              onClick={() => navigate('/servicios-sos')}
               className="bg-red-600 hover:bg-red-700 text-white rounded-lg px-4 h-10 font-semibold shadow-sm"
             >
               🔴 Botón SOS
