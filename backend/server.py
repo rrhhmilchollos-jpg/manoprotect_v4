@@ -2521,6 +2521,9 @@ print("✅ Anti-Deepfake Shield routes loaded")
 
 # Investor CRM routes
 api_router.include_router(investor_crm_router)
+
+# Demo Videos (Sora 2 AI video generation)
+api_router.include_router(demo_videos_router)
 print("✅ Investor CRM routes loaded")
 
 # Payment routes (Stripe)
