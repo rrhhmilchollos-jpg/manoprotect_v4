@@ -26,6 +26,47 @@ const DEVICE_IMAGES = {
   technical: 'https://static.prod-images.emergentagent.com/jobs/48047d8d-d356-432e-9b76-e0dcfdb8856b/images/4b647ec828d739fb0904598a6e137bae97a1f71b4929ea76564f21cfc820d543.png'
 };
 
+// Color options for all ages and genders
+const COLOR_OPTIONS = [
+  // Niños/Jóvenes
+  { id: 'azul-cielo', name: 'Azul Cielo', hex: '#87CEEB', category: 'joven', icon: '🌤️' },
+  { id: 'verde-menta', name: 'Verde Menta', hex: '#98FF98', category: 'joven', icon: '🌿' },
+  { id: 'naranja-energy', name: 'Naranja Energy', hex: '#FF6B35', category: 'joven', icon: '⚡' },
+  { id: 'amarillo-sol', name: 'Amarillo Sol', hex: '#FFD93D', category: 'joven', icon: '☀️' },
+  
+  // Chicas/Mujeres
+  { id: 'rosa-coral', name: 'Rosa Coral', hex: '#FF6B6B', category: 'femenino', icon: '🌸' },
+  { id: 'lila-lavanda', name: 'Lila Lavanda', hex: '#E6E6FA', category: 'femenino', icon: '💜' },
+  { id: 'rosa-blush', name: 'Rosa Blush', hex: '#FFB6C1', category: 'femenino', icon: '🌷' },
+  { id: 'turquesa', name: 'Turquesa', hex: '#40E0D0', category: 'femenino', icon: '💎' },
+  
+  // Chicos/Hombres
+  { id: 'azul-marino', name: 'Azul Marino', hex: '#1E3A5F', category: 'masculino', icon: '🌊' },
+  { id: 'gris-titanio', name: 'Gris Titanio', hex: '#5C5C5C', category: 'masculino', icon: '🔩' },
+  { id: 'verde-bosque', name: 'Verde Bosque', hex: '#228B22', category: 'masculino', icon: '🌲' },
+  { id: 'negro-mate', name: 'Negro Mate', hex: '#1C1C1C', category: 'masculino', icon: '🖤' },
+  
+  // Adultos Mayores/Elegante
+  { id: 'champagne', name: 'Champagne', hex: '#F7E7CE', category: 'elegante', icon: '✨' },
+  { id: 'burdeos', name: 'Burdeos', hex: '#800020', category: 'elegante', icon: '🍷' },
+  { id: 'azul-clasico', name: 'Azul Clásico', hex: '#4169E1', category: 'elegante', icon: '💙' },
+  { id: 'blanco-perla', name: 'Blanco Perla', hex: '#FEFEFA', category: 'elegante', icon: '🤍' },
+  
+  // Unisex/Neutros
+  { id: 'plata', name: 'Plata', hex: '#C0C0C0', category: 'unisex', icon: '🪙' },
+  { id: 'oro-rosa', name: 'Oro Rosa', hex: '#E8B4B8', category: 'unisex', icon: '🌹' },
+  { id: 'verde-oliva', name: 'Verde Oliva', hex: '#808000', category: 'unisex', icon: '🫒' },
+  { id: 'terracota', name: 'Terracota', hex: '#E2725B', category: 'unisex', icon: '🏺' },
+];
+
+const COLOR_CATEGORIES = [
+  { id: 'joven', label: 'Jóvenes', icon: '🎮' },
+  { id: 'femenino', label: 'Mujer', icon: '👩' },
+  { id: 'masculino', label: 'Hombre', icon: '👨' },
+  { id: 'elegante', label: 'Elegante', icon: '👴👵' },
+  { id: 'unisex', label: 'Unisex', icon: '🌈' },
+];
+
 // Pricing - PROMOCIÓN LANZAMIENTO: TODO GRATIS
 const PRICING = {
   single: 0,          // GRATIS durante promoción de lanzamiento
@@ -66,6 +107,10 @@ export default function SOSDeviceOrder() {
     province: '',
     notes: ''
   });
+  
+  // Color selection - one color per device
+  const [selectedColors, setSelectedColors] = useState(['plata']);
+  const [activeColorCategory, setActiveColorCategory] = useState('unisex');
 
   // Calculate price based on user plan
   const calculatePrice = () => {
@@ -84,6 +129,18 @@ export default function SOSDeviceOrder() {
   const handleQuantityChange = (delta) => {
     const newQty = Math.max(1, Math.min(10, quantity + delta));
     setQuantity(newQty);
+    // Adjust colors array
+    if (newQty > selectedColors.length) {
+      setSelectedColors([...selectedColors, ...Array(newQty - selectedColors.length).fill('plata')]);
+    } else if (newQty < selectedColors.length) {
+      setSelectedColors(selectedColors.slice(0, newQty));
+    }
+  };
+  
+  const handleColorSelect = (colorId, deviceIndex) => {
+    const newColors = [...selectedColors];
+    newColors[deviceIndex] = colorId;
+    setSelectedColors(newColors);
   };
 
   const handleFamilyMembersChange = (delta) => {
@@ -117,6 +174,7 @@ export default function SOSDeviceOrder() {
           quantity,
           family_members: familyMembers,
           shipping: shippingInfo,
+          selected_colors: selectedColors,
           total_price: calculatePrice()
         })
       });
