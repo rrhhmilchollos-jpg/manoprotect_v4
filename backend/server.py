@@ -242,6 +242,10 @@ from routes.legacy_vault import router as legacy_vault_router
 # Phishing Simulation (B2B Enterprise)
 from routes.phishing_simulation import router as phishing_router
 
+# Employee Portal (Director-managed access)
+from routes.employee_portal import router as employee_portal_router, set_database as init_employee_portal
+init_employee_portal(db)
+
 # Banking and Compliance services - RESERVED for ManoBank.es
 # from services.compliance_service import init_compliance_service
 # from routes.compliance_routes import router as compliance_router, init_compliance_routes
