@@ -281,6 +281,11 @@ function AppRouter() {
           <Route path="/blockchain-verifier" element={<BlockchainVerifier />} />
           <Route path="/verificador-blockchain" element={<BlockchainVerifier />} />
           
+          {/* Order Tracking - Seguimiento de Pedidos */}
+          <Route path="/order-tracking" element={<OrderTracking />} />
+          <Route path="/seguimiento-pedido" element={<OrderTracking />} />
+          <Route path="/tracking" element={<OrderTracking />} />
+          
           {/* Enterprise B2B Landing */}
           <Route path="/enterprise" element={<EnterpriseLanding />} />
           <Route path="/empresas" element={<EnterpriseLanding />} />
