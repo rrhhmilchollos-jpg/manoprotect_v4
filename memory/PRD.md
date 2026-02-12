@@ -50,11 +50,42 @@ ManoProtect is a revolutionary cybersecurity platform for both consumers (B2C) a
 - Contact: inversores@manoprotect.com | +34 601 510 950
 - 4 documents: Business Plan, Financial Model, Pitch Deck, Dossier B2B
 
+### 9. Trust Seal / Sello de Confianza ✅ (NEW)
+- Badge visual para webs de clientes protegidos por ManoProtect
+- Verificación de sellos en tiempo real
+- Solicitud de nuevos sellos para empresas
+- Frontend: `/shield` → componente TrustSeal
+- Backend: `/api/shield/seal/*`
+- Sello visible en footer de landing page
+
+### 10. DNA Digital Identity System ✅ (NEW)
+- Identidad digital verificable única
+- Verificación de teléfonos, emails, webs
+- Registro de identidades para personas y empresas
+- Frontend: `/shield` → componente DNADigital
+- Backend: `/api/shield/dna/*`
+
+### 11. Blockchain Transaction Verifier ✅ (NEW)
+- Verificador de transacciones blockchain
+- Soporte: Bitcoin, Ethereum, Polygon, BNB Chain
+- Verificador de wallets y smart contracts
+- Detección de rug pulls, honeypots, mixers
+- Frontend: `/blockchain-verifier`
+
+### 12. Employee Dashboard ✅ (NEW)
+- Panel de control completo del sistema
+- Gestión de usuarios, amenazas, sellos, DNA Digital
+- Estado del sistema en tiempo real
+- Acciones administrativas rápidas
+- Frontend: `/employee-dashboard`
+- Backend: `/api/admin/*` (endpoints adicionales)
+
 ## Tech Stack
 - **Frontend**: React.js + Tailwind + Shadcn/UI
 - **Backend**: Python FastAPI + Motor (async MongoDB)
 - **Database**: MongoDB
 - **APIs**: Google Safe Browsing, VirusTotal, AbuseIPDB, AlienVault OTX
+- **Video Generation**: Sora 2 (via emergentintegrations)
 
 ## Key Routes Summary
 
@@ -66,8 +97,21 @@ ManoProtect is a revolutionary cybersecurity platform for both consumers (B2C) a
 | Investor CRM | /investor-crm | /api/investor-crm/* | ✅ |
 | Scam Verification | /verificar-estafa | /api/realtime/* | ✅ |
 | Downloads | /downloads | /api/investor/* | ✅ |
+| Trust Seal | /shield | /api/shield/seal/* | ✅ |
+| DNA Digital | /shield | /api/shield/dna/* | ✅ |
+| Blockchain Verifier | /blockchain-verifier | - | ✅ |
+| Employee Dashboard | /employee-dashboard | /api/admin/* | ✅ |
 
 ## Changelog
+
+### Feb 12, 2026 - Trust Seal, DNA Digital, Blockchain Verifier, Employee Dashboard
+- ✅ Sello de Confianza agregado al footer de Landing Page
+- ✅ TrustBadge component creado (/components/TrustBadge.jsx)
+- ✅ Employee Dashboard completo con gestión de usuarios, amenazas, sellos
+- ✅ Blockchain Transaction Verifier con verificación de TX, wallets, contratos
+- ✅ DNA Digital system funcional con verificación y registro
+- ✅ Nuevas rutas: /employee-dashboard, /blockchain-verifier
+- ✅ Admin endpoints adicionales: /api/admin/stats, /api/admin/trust-seals, /api/admin/dna-digital
 
 ### Feb 12, 2026 - P1 Features Complete
 - ✅ Secure Digital Legacy Vault - AES-256 encrypted document storage
@@ -117,14 +161,13 @@ ManoProtect is a revolutionary cybersecurity platform for both consumers (B2C) a
 
 ### P1 - High Priority
 - [ ] WhatsApp Business API integration (alerts)
+- [ ] Videos Demo IA - extend to 1 minute (Sora 2 limitation: 12s max)
 
 ### P2 - Medium Priority  
-- [ ] Secure Digital Legacy vault
-- [ ] Phishing Simulation for enterprises
+- [ ] PageSpeed optimization (currently 65/100)
 
 ### P3 - Future
-- [ ] DNA Digital identity system
-- [ ] Blockchain Transaction Verifier
+- [ ] Additional blockchain networks support
 
 ## Active Users
 1. rrhh.milchollos@gmail.com - Ivan Rubio Cano (superadmin)
@@ -142,6 +185,7 @@ GOOGLE_SAFE_BROWSING_API_KEY=...
 VIRUSTOTAL_API_KEY=...
 ABUSEIPDB_API_KEY=...
 ALIENVAULT_OTX_KEY=...
+EMERGENT_LLM_KEY=... (for Sora 2)
 
 # Frontend
 REACT_APP_BACKEND_URL=https://mano-staging.preview.emergentagent.com
@@ -150,5 +194,11 @@ REACT_APP_BACKEND_URL=https://mano-staging.preview.emergentagent.com
 ## Files Reference
 - Backend routes: `/app/backend/routes/`
 - Frontend pages: `/app/frontend/src/pages/`
+- Shield components: `/app/frontend/src/components/shield/`
 - Chrome Extension: `/app/chrome-extension/`
 - Documentation: `/app/memory/`
+
+## New Files Created This Session
+- `/app/frontend/src/pages/EmployeeDashboard.js` - Panel de control empleados
+- `/app/frontend/src/pages/BlockchainVerifier.js` - Verificador blockchain
+- `/app/frontend/src/components/TrustBadge.jsx` - Componente sello de confianza
