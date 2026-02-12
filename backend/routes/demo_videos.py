@@ -80,9 +80,9 @@ async def generate_demo_video(request: VideoGenerationRequest):
         
         video_gen.save_video(video_bytes, output_path)
         
-        # Get the public URL
-        backend_url = os.environ.get('BACKEND_URL', 'https://family-safety-demo.preview.emergentagent.com')
-        video_url = f"{backend_url}/api/uploads/demo_videos/{filename}"
+        # Get the public URL - use the file endpoint
+        backend_url = os.environ.get('REACT_APP_BACKEND_URL', 'https://family-safety-demo.preview.emergentagent.com')
+        video_url = f"{backend_url}/api/demo-videos/file/{filename}"
         
         # Store in memory
         demo_videos_storage[request.video_id] = {
