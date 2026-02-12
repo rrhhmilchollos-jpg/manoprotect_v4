@@ -312,6 +312,11 @@ function AppRouter() {
           <Route path="/servicios-sos" element={<SOSServices />} />
           <Route path="/sos-services" element={<SOSServices />} />
           
+          {/* Order Confirmation Page (After Stripe Payment) */}
+          <Route path="/pedido-confirmado" element={<OrderConfirmation />} />
+          <Route path="/order-confirmation" element={<OrderConfirmation />} />
+          <Route path="/gracias" element={<OrderConfirmation />} />
+          
           {/* SOS Device Order (Physical Keychain) - Redirect to Services */}
           <Route path="/sos-device" element={<SOSServices />} />
           <Route path="/dispositivo-sos" element={<SOSServices />} />
