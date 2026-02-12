@@ -441,10 +441,12 @@ function App() {
     <div className="App">
       <BrowserRouter>
         <AuthProvider>
-          <UrgencyBanner 
-            message="🎁 OFERTA ESPECIAL: 7 días GRATIS en ManoProtect"
-            link="/registro"
-          />
+          <Suspense fallback={<EmptyFallback />}>
+            <UrgencyBanner 
+              message="🎁 OFERTA ESPECIAL: 7 días GRATIS en ManoProtect"
+              link="/registro"
+            />
+          </Suspense>
           <Toaster position="top-center" richColors />
           <PushNotificationPrompt />
           <InterstitialAdManager />
