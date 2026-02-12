@@ -11,6 +11,17 @@ ManoProtect es una plataforma revolucionaria de ciberseguridad para consumidores
 
 ## ✅ FUNCIONALIDADES IMPLEMENTADAS (PRODUCTION READY)
 
+### 0. Página de Servicios SOS Completa ✅ (NUEVO - Feb 2026)
+- **Página unificada** con todas las funcionalidades SOS: `/servicios-sos`
+- **4 Secciones en tabs**:
+  1. 🔴 Dispositivo SOS: Formulario de pedido con colores, cantidad, envío
+  2. 💰 Planes y Precios: Básico (gratis), Individual (€249.99/año), Familiar (€399.99/año)
+  3. ⚡ Funcionalidades: GPS, 112, Audio bidireccional, Detección caídas, Zonas seguras
+  4. 📦 Seguir Pedido: Tracking de envíos
+- **Promoción Lanzamiento**: Dispositivo GRATIS, solo pago envío 4,95€
+- **Botón en Header**: "🔴 Botón SOS" accesible desde toda la web
+- Frontend: `/servicios-sos`, `/sos-device`, `/dispositivo-sos`, `/boton-sos`
+
 ### 1. Real-Time Threat Intelligence ✅
 - Live APIs: Google Safe Browsing, VirusTotal, AbuseIPDB, AlienVault OTX
 - Endpoints: `/api/realtime/check/*`
