@@ -451,8 +451,12 @@ function App() {
             />
           </Suspense>
           <Toaster position="top-center" richColors />
-          <PushNotificationPrompt />
-          <InterstitialAdManager />
+          <Suspense fallback={<EmptyFallback />}>
+            <PushNotificationPrompt />
+          </Suspense>
+          <Suspense fallback={<EmptyFallback />}>
+            <InterstitialAdManager />
+          </Suspense>
           <AppRouter />
           {/* Defer non-critical UI components */}
           <Suspense fallback={<EmptyFallback />}>
