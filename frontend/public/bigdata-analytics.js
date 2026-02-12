@@ -196,10 +196,22 @@ window.addEventListener('load', function() {
   setTimeout(window.trackPerformance, 0);
 });
 
-// Scroll depth tracking
+// Scroll depth tracking - Optimized to avoid forced reflows
 let maxScroll = 0;
-window.addEventListener('scroll', function() {
-  const scrollPercent = Math.round((window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100);
+let scrollTimeout = null;
+let cachedScrollData = null;
+
+// Cache scroll calculations using requestAnimationFrame
+function updateScrollDepth() {
+  if (cachedScrollData === null) {
+    cachedScrollData = {
+      scrollY: window.scrollY,
+      scrollHeight: document.body.scrollHeight,
+      innerHeight: window.innerHeight
+    };
+  }
+  
+  const scrollPercent = Math.round((cachedScrollData.scrollY / (cachedScrollData.scrollHeight - cachedScrollData.innerHeight)) * 100);
   
   // Track at 25%, 50%, 75%, 100%
   const milestones = [25, 50, 75, 100];
@@ -213,7 +225,24 @@ window.addEventListener('scroll', function() {
   });
   
   maxScroll = Math.max(maxScroll, scrollPercent);
-});
+  cachedScrollData = null;
+}
+
+window.addEventListener('scroll', function() {
+  // Debounce scroll events to reduce reflows
+  if (scrollTimeout) return;
+  
+  scrollTimeout = requestAnimationFrame(function() {
+    scrollTimeout = null;
+    // Read values in a batch before any writes
+    cachedScrollData = {
+      scrollY: window.scrollY,
+      scrollHeight: document.body.scrollHeight,
+      innerHeight: window.innerHeight
+    };
+    updateScrollDepth();
+  });
+}, { passive: true });
 
 // Time on page tracking
 let startTime = Date.now();
