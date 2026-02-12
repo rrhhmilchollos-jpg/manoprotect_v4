@@ -543,7 +543,7 @@ const Dashboard = () => {
             <LiveLocationMap />
 
             {/* Quick Actions */}
-            <div className="grid sm:grid-cols-3 gap-4">
+            <div className="grid sm:grid-cols-4 gap-4">
               <Card className="card-hover cursor-pointer" onClick={() => navigate('/sos-emergency')}>
                 <CardContent className="py-6 text-center">
                   <div className="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center mx-auto mb-3">
@@ -560,6 +560,15 @@ const Dashboard = () => {
                   </div>
                   <h4 className="font-semibold text-zinc-900">Compartir Ubicación</h4>
                   <p className="text-sm text-zinc-600">Comparte tu ubicación con familia</p>
+                </CardContent>
+              </Card>
+              <Card className="card-hover cursor-pointer" onClick={() => navigate('/videos-demo')}>
+                <CardContent className="py-6 text-center">
+                  <div className="w-12 h-12 rounded-full bg-indigo-100 flex items-center justify-center mx-auto mb-3">
+                    <Megaphone className="w-6 h-6 text-indigo-600" />
+                  </div>
+                  <h4 className="font-semibold text-zinc-900">Videos Demo IA</h4>
+                  <p className="text-sm text-zinc-600">Genera videos con Sora 2</p>
                 </CardContent>
               </Card>
               <Card className="card-hover cursor-pointer" onClick={() => navigate('/instrucciones-familiares')}>
