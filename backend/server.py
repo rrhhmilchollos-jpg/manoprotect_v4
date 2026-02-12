@@ -2658,22 +2658,26 @@ app.mount('/ws', socket_app)
 print("✅ WebSocket server mounted at /ws")
 
 # Configure CORS - read from environment for deployment flexibility
-cors_origins_env = os.environ.get('CORS_ORIGINS', '*')
-if cors_origins_env == '*':
-    allowed_origins = ['*']
-else:
-    allowed_origins = [origin.strip() for origin in cors_origins_env.split(',')]
+# IMPORTANT: When using credentials, we cannot use wildcard '*' for origins
+cors_origins_env = os.environ.get('CORS_ORIGINS', '')
 
-# Add localhost origins for development
-dev_origins = [
+# Define allowed origins explicitly (wildcard '*' not compatible with credentials)
+allowed_origins = [
     "http://localhost:3000",
-    "http://localhost:3001",
+    "http://localhost:3001", 
     "http://localhost:8001",
     "http://localhost:8002",
+    "https://manoprotect.com",
+    "https://www.manoprotect.com",
+    "https://digital-guard-1.emergent.host",
 ]
-for origin in dev_origins:
-    if origin not in allowed_origins:
-        allowed_origins.append(origin)
+
+# Add any additional origins from environment
+if cors_origins_env and cors_origins_env != '*':
+    for origin in cors_origins_env.split(','):
+        origin = origin.strip()
+        if origin and origin != '*' and origin not in allowed_origins:
+            allowed_origins.append(origin)
 
 app.add_middleware(
     CORSMiddleware,
@@ -2681,6 +2685,7 @@ app.add_middleware(
     allow_origins=allowed_origins,
     allow_methods=["*"],
     allow_headers=["*"],
+    expose_headers=["*"],
 )
 
 logging.basicConfig(
