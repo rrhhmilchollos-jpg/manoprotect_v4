@@ -25,7 +25,7 @@ Todas las apps se conectan al mismo backend:
 
 | Entorno | URL |
 |---------|-----|
-| Preview | https://mano-staging.preview.emergentagent.com |
+| Preview | https://mano-staging-1.preview.emergentagent.com |
 | Producción | [Tu dominio de producción] |
 
 ---

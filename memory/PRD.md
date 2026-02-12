@@ -4,7 +4,7 @@
 ManoProtect es una plataforma revolucionaria de ciberseguridad para consumidores (B2C) y empresas (B2B).
 
 **Website**: https://www.manoprotect.com
-**Preview URL**: https://mano-staging.preview.emergentagent.com
+**Preview URL**: https://mano-staging-1.preview.emergentagent.com
 **Empresa**: STARTBOOKING SL - CIF: B19427723
 
 ---
@@ -246,7 +246,7 @@ EMERGENT_LLM_KEY=... (for Sora 2)
 STRIPE_API_KEY=...
 
 # Frontend (.env)
-REACT_APP_BACKEND_URL=https://mano-staging.preview.emergentagent.com
+REACT_APP_BACKEND_URL=https://mano-staging-1.preview.emergentagent.com
 REACT_APP_STRIPE_PUBLISHABLE_KEY=...
 REACT_APP_FIREBASE_API_KEY=...
 ```
