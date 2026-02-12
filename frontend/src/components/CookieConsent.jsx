@@ -53,7 +53,7 @@ const CookieConsent = () => {
                 <p className="text-sm text-zinc-600">
                   Usamos cookies propias y de terceros para mejorar tu experiencia, analizar el tráfico y personalizar contenido. 
                   Puedes aceptar todas, configurar tus preferencias o rechazar las no esenciales. 
-                  <a href="/privacy-policy" className="text-indigo-600 hover:underline ml-1">Más información</a>
+                  <a href="/privacy-policy" className="text-indigo-600 hover:underline ml-1" aria-label="Leer nuestra política de privacidad y cookies">Leer política de privacidad</a>
                 </p>
               </div>
             </div>
