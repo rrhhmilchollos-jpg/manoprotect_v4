@@ -11,33 +11,54 @@ ManoProtect es una plataforma revolucionaria de ciberseguridad para consumidores
 
 ## ✅ FUNCIONALIDADES IMPLEMENTADAS (PRODUCTION READY)
 
-### 0. Página de Servicios SOS Completa ✅ (ACTUALIZADO - Feb 2026)
+### 0. Página de Servicios SOS Completa ✅ (ACTUALIZADO - 12 Feb 2026)
 - **Página unificada** con todas las funcionalidades SOS: `/servicios-sos`
 - **4 Secciones en tabs**:
-  1. 🔴 Dispositivo SOS: Formulario de pedido con colores, cantidad, envío
-  2. 💰 Planes y Precios: Básico (gratis), Individual (€249.99/año), Familiar (€399.99/año)
+  1. 🔴 Dispositivo SOS: Formulario de pedido con colores por dispositivo, estilos, envío escalable
+  2. 💰 Planes y Precios: Básico (gratis), Individual (€249.99/año con 7 días trial), Familiar (€399.99/año)
   3. ⚡ Funcionalidades: GPS, 112, Audio bidireccional, Detección caídas, Zonas seguras
   4. 📦 Seguir Pedido: Tracking de envíos
-- **Promoción Lanzamiento**: Dispositivo GRATIS, solo pago envío 4,95€
+- **Promoción Lanzamiento**: Dispositivo GRATIS, solo pago envío (escalable según cantidad)
 - **Botón en Header**: "🔴 Botón SOS" accesible desde toda la web
-- Frontend: `/servicios-sos`, `/sos-device`, `/dispositivo-sos`, `/boton-sos`
+- **Botón llamada soporte**: Tel: 601 510 950 (como Securitas Direct)
+- **3 Estilos dispositivo**: Juvenil (15-30), Adulto (30-60), Senior (60+) con imágenes únicas
+- **Selector color por dispositivo**: Cuando cantidad > 1, elegir color para cada uno
+- **Costes envío escalables**: 1ud=4.95€, 2ud=6.95€, 3ud=8.95€, etc.
+- Frontend: `/servicios-sos`
 
-### 0.1 Sistema de Pagos con Stripe ✅ (NUEVO - Feb 2026)
-- **Checkout para dispositivos SOS**: Pago de envío 4,95€ via Stripe
+### 0.1 Sistema de Pagos con Stripe ✅ (ACTUALIZADO - 12 Feb 2026)
+- **Checkout para dispositivos SOS**: Pago de envío via Stripe (escalable según cantidad)
 - **Suscripciones con trial**: 7 días de prueba GRATIS
 - **Tarjeta obligatoria**: Crédito/débito (NO prepago)
 - **Cobro automático**: Después del trial si no se cancela
 - **Cancelación automática**: Si cancela, se asigna Plan Básico gratuito
+- **Parámetros nuevos**: colors (array), device_style (juvenil/adulto/senior)
 - Backend: `/api/payments/device/checkout`, `/api/payments/subscription/checkout`
 - Webhook: `/api/payments/webhook/stripe`
 
-### 0.2 Panel de Gestión de Envíos (Admin) ✅ (NUEVO - Feb 2026)
+### 0.2 Panel de Gestión de Envíos (Admin) ✅ (ACTUALIZADO - 12 Feb 2026)
 - **Panel interno** para gestionar envíos de dispositivos
 - **8 transportistas**: Correos Express, SEUR, MRW, GLS, DHL, UPS, FedEx, Nacex
 - **Estados de envío**: Pendiente, Preparando, Enviado, En tránsito, En reparto, Entregado
 - **Funcionalidades**: Asignar tracking, cambiar estado, envío masivo, exportar
+- **Notificaciones email**: Emails automáticos al cambiar estado de envío
 - Frontend: `/admin/shipping`
 - Backend: `/api/admin/shipping/*`
+
+### 0.3 Sistema de Notificaciones por Email ✅ (NUEVO - 12 Feb 2026)
+- **Email confirmación pedido**: Se envía cuando el pago se completa
+- **Email actualización envío**: Se envía cuando cambia el estado del envío
+- **Plantillas HTML**: Diseño profesional con branding ManoProtect
+- **SendGrid integrado**: Requiere SENDGRID_API_KEY en .env para producción
+- Backend: `/app/backend/services/email_service.py`
+
+### 0.4 Landing Page - Sección Amenazas ✅ (NUEVO - 12 Feb 2026)
+- **Sección "Protección contra Amenazas Digitales"** con traducciones correctas:
+  - Vishing - Llamadas fraudulentas
+  - Smishing - SMS maliciosos
+  - Phishing - Correos engañosos
+  - Suplantación - Identidad falsa
+- Frontend: `/app/frontend/src/pages/LandingPage.js` (líneas 538-569)
 
 ### 1. Real-Time Threat Intelligence ✅
 - Live APIs: Google Safe Browsing, VirusTotal, AbuseIPDB, AlienVault OTX
