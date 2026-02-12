@@ -247,6 +247,11 @@ function AppRouter() {
           <Route path="/smart-locator" element={<SmartLocator />} />
           <Route path="/localizador" element={<SmartLocator />} />
           
+          {/* SOS Device Order (Physical Keychain) */}
+          <Route path="/sos-device" element={<SOSDeviceOrder />} />
+          <Route path="/dispositivo-sos" element={<SOSDeviceOrder />} />
+          <Route path="/boton-sos" element={<SOSDeviceOrder />} />
+          
           {/* Anti-Deepfake Shield */}
           <Route path="/deepfake-shield" element={<DeepfakeShield />} />
           <Route path="/anti-deepfake" element={<DeepfakeShield />} />
