@@ -2,6 +2,7 @@
 Demo Videos API - Generate AI demo videos with Sora 2
 """
 from fastapi import APIRouter, HTTPException
+from fastapi.responses import FileResponse
 from pydantic import BaseModel
 from typing import Optional, List
 import os
@@ -36,6 +37,14 @@ async def list_demo_videos():
         if data.get("url")
     ]
     return {"videos": videos, "total": len(videos)}
+
+@router.get("/file/{filename}")
+async def get_video_file(filename: str):
+    """Serve generated video file"""
+    file_path = f"/app/backend/uploads/demo_videos/{filename}"
+    if not os.path.exists(file_path):
+        raise HTTPException(status_code=404, detail="Video not found")
+    return FileResponse(file_path, media_type="video/mp4", filename=filename)
 
 @router.post("/generate")
 async def generate_demo_video(request: VideoGenerationRequest):
