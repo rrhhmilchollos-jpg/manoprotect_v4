@@ -38,6 +38,14 @@ const isPremiumUser = (user) => {
  * Check if we should show an ad based on frequency rules
  */
 const shouldShowAd = (user) => {
+  // Skip in preview/staging environments
+  if (typeof window !== 'undefined') {
+    const hostname = window.location.hostname;
+    if (hostname.includes('preview') || hostname.includes('staging') || hostname === 'localhost') {
+      return false;
+    }
+  }
+  
   // Skip for premium users
   if (isPremiumUser(user)) {
     console.log('[Ads] Premium user - skipping ads');
