@@ -5,13 +5,16 @@ import { InterstitialAd, useInterstitialAd } from '@/components/InterstitialAd';
 import { AuthProvider, useAuth } from '@/context/AuthContext';
 import { useEffect, lazy, Suspense } from 'react';
 
-// Firebase Analytics
-import { logAnalyticsEvent, AnalyticsEvents } from '@/services/firebase';
+// Firebase Analytics - Defer loading
+const logAnalyticsEvent = (...args) => {
+  import('@/services/firebase').then(m => m.logAnalyticsEvent(...args));
+};
+const AnalyticsEvents = {};
 
-// Critical Pages - Load immediately
-import LandingPage from '@/pages/LandingPage';
-import Login from '@/pages/Login';
-import Register from '@/pages/Register';
+// ALL pages lazy loaded for better initial bundle
+const LandingPage = lazy(() => import('@/pages/LandingPage'));
+const Login = lazy(() => import('@/pages/Login'));
+const Register = lazy(() => import('@/pages/Register'));
 
 // Lazy load non-critical pages to reduce initial bundle size
 const Dashboard = lazy(() => import('@/pages/Dashboard'));
