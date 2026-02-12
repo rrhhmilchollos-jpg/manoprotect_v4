@@ -77,7 +77,7 @@ const LiveChatWidget = () => {
         <Headphones className="w-5 h-5" />
         <span className="font-medium">Hablar con Humano</span>
         {availableAgents > 0 && (
-          <span className="flex items-center gap-1 text-xs bg-green-500 px-2 py-0.5 rounded-full">
+          <span className="flex items-center gap-1 text-xs bg-emerald-700 text-white px-2 py-0.5 rounded-full">
             <span className="w-1.5 h-1.5 bg-white rounded-full animate-pulse" />
             {availableAgents} online
           </span>

@@ -113,7 +113,7 @@ const ComparisonTable = () => {
         <div className="p-4 border-l border-slate-700 bg-emerald-500/10 text-center">
           <a 
             href="/pricing"
-            className="inline-flex items-center gap-2 px-6 py-2 bg-emerald-500 hover:bg-emerald-600 text-white text-sm font-semibold rounded-lg transition-colors"
+            className="inline-flex items-center gap-2 px-6 py-2 bg-emerald-700 hover:bg-emerald-800 text-white text-sm font-semibold rounded-lg transition-colors"
           >
             <Shield className="w-4 h-4" />
             Protegerme Ahora
