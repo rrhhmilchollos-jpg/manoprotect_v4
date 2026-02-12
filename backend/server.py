@@ -2704,6 +2704,13 @@ try:
 except ImportError as e:
     print(f"⚠️ Shipping Admin routes not loaded: {e}")
 
+# Employee Portal routes
+try:
+    api_router.include_router(employee_portal_router)
+    print("✅ Employee Portal routes loaded")
+except Exception as e:
+    print(f"⚠️ Employee Portal routes not loaded: {e}")
+
 app.include_router(api_router)
 app.include_router(public_router)
 
