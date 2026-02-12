@@ -1270,6 +1270,34 @@ const LandingPage = () => {
             </div>
           </div>
 
+          {/* Trust Seal / Sello de Confianza */}
+          <div className="border-t border-zinc-800 py-6">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+              <div className="flex items-center gap-3 px-5 py-3 bg-gradient-to-r from-emerald-900/50 to-teal-900/50 border border-emerald-700/50 rounded-xl">
+                <div className="w-12 h-12 bg-emerald-600 rounded-xl flex items-center justify-center">
+                  <Shield className="w-6 h-6 text-white" />
+                </div>
+                <div className="text-left">
+                  <div className="flex items-center gap-2">
+                    <p className="text-sm font-bold text-white">Sello de Confianza</p>
+                    <CheckCircle className="w-4 h-4 text-emerald-400" />
+                  </div>
+                  <p className="text-xs text-emerald-300">Sitio Verificado y Protegido</p>
+                </div>
+              </div>
+              
+              <div className="flex items-center gap-3 px-5 py-3 bg-zinc-800/50 border border-zinc-700/50 rounded-xl">
+                <div className="w-12 h-12 bg-amber-500 rounded-xl flex items-center justify-center">
+                  <Award className="w-6 h-6 text-white" />
+                </div>
+                <div className="text-left">
+                  <p className="text-sm font-bold text-white">Empresa Española</p>
+                  <p className="text-xs text-zinc-400">CIF: B19427723 · RGPD Compliant</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
           {/* Copyright */}
           <div className="border-t border-zinc-800 pt-6 flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-sm text-zinc-400">
