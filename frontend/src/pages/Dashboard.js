@@ -497,7 +497,7 @@ const Dashboard = () => {
         )}
 
         {/* Tab Navigation */}
-        <div className="flex gap-2 mb-6 border-b border-zinc-200 pb-4">
+        <div className="flex gap-2 mb-6 border-b border-zinc-200 pb-4 flex-wrap">
           <Button
             data-testid="tab-analyze"
             variant={activeTab === 'analyze' ? 'default' : 'ghost'}
@@ -506,6 +506,15 @@ const Dashboard = () => {
           >
             <Brain className="w-4 h-4 mr-2" />
             Analizador IA
+          </Button>
+          <Button
+            data-testid="tab-pedidos"
+            variant={activeTab === 'pedidos' ? 'default' : 'ghost'}
+            onClick={() => setActiveTab('pedidos')}
+            className={activeTab === 'pedidos' ? 'bg-red-600' : ''}
+          >
+            <Package className="w-4 h-4 mr-2" />
+            Mis Pedidos
           </Button>
           <Button
             data-testid="tab-family"
