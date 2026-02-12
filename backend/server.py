@@ -2546,6 +2546,10 @@ print("✅ SOS Device routes loaded")
 # Legacy Vault (Secure Digital Legacy)
 api_router.include_router(legacy_vault_router)
 
+# WhatsApp Alerts (Twilio)
+api_router.include_router(whatsapp_router)
+print("✅ WhatsApp alerts routes loaded")
+
 # Phishing Simulation (B2B Enterprise)
 api_router.include_router(phishing_router)
 print("✅ Investor CRM routes loaded")
