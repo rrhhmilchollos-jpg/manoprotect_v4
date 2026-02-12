@@ -244,6 +244,8 @@
             @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
             /* Content visibility for below-fold optimization */
             .content-visibility-auto{content-visibility:auto;contain-intrinsic-size:auto 500px}
+            /* Sections below the fold */
+            section:not(:first-of-type){content-visibility:auto;contain-intrinsic-size:auto 600px}
         </style>
         
         <!-- Development Tools - Only load in development/preview mode -->
