@@ -70,6 +70,7 @@ const DigitalLegacyVault = lazy(() => import('@/pages/DigitalLegacyVault'));
 const PhishingSimulation = lazy(() => import('@/pages/PhishingSimulation'));
 const EmployeeDashboard = lazy(() => import('@/pages/EmployeeDashboard'));
 const BlockchainVerifier = lazy(() => import('@/pages/BlockchainVerifier'));
+const SOSDeviceOrder = lazy(() => import('@/pages/SOSDeviceOrder'));
 
 // Lazy load non-critical UI components to reduce main thread blocking
 const CookieConsent = lazy(() => import('@/components/CookieConsent'));
