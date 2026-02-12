@@ -1100,6 +1100,246 @@ class EmailNotificationService:
         </html>
         """
 
+    # ============================================
+    # DEVICE ORDER EMAIL METHODS
+    # ============================================
+    
+    async def send_device_order_confirmation(
+        self,
+        user_id: str,
+        email: str,
+        order_data: Dict
+    ) -> Dict:
+        """Send order confirmation email after successful device purchase"""
+        content = self._generate_device_order_email(order_data)
+        order_id = order_data.get('order_id', 'UNKNOWN')[:8].upper()
+        
+        return await self._send_email(
+            to_email=email,
+            subject=f'✅ Confirmación de Pedido #{order_id} - ManoProtect',
+            html_content=content,
+            email_type='device_order_confirmation',
+            user_id=user_id,
+            metadata=order_data
+        )
+    
+    async def send_shipping_update(
+        self,
+        user_id: str,
+        email: str,
+        shipping_data: Dict
+    ) -> Dict:
+        """Send shipping status update email"""
+        content = self._generate_shipping_update_email(shipping_data)
+        order_id = shipping_data.get('order_id', 'UNKNOWN')[:8].upper()
+        status = shipping_data.get('status', 'shipped')
+        
+        status_emojis = {
+            'pending': '⏳',
+            'shipped': '📦',
+            'in_transit': '🚚',
+            'out_for_delivery': '📍',
+            'delivered': '✅'
+        }
+        emoji = status_emojis.get(status, '📦')
+        
+        return await self._send_email(
+            to_email=email,
+            subject=f'{emoji} Actualización de envío - Pedido #{order_id}',
+            html_content=content,
+            email_type='shipping_update',
+            user_id=user_id,
+            metadata=shipping_data
+        )
+    
+    def _generate_device_order_email(self, data: Dict) -> str:
+        """Generate device order confirmation HTML email"""
+        order_id = data.get('order_id', 'UNKNOWN')[:8].upper()
+        quantity = data.get('quantity', 1)
+        colors = data.get('colors', ['Plata'])
+        device_style = data.get('device_style', 'adulto')
+        shipping = data.get('shipping', {})
+        total = data.get('total_amount', 4.95)
+        
+        colors_list = ", ".join(colors) if isinstance(colors, list) else str(colors)
+        style_names = {'juvenil': 'Juvenil', 'adulto': 'Adulto', 'senior': 'Senior'}
+        style_display = style_names.get(device_style, 'Estándar')
+        
+        return f"""
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="utf-8">
+            <style>
+                body {{ font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 0; padding: 0; background: #f4f4f5; }}
+                .container {{ max-width: 600px; margin: 0 auto; padding: 20px; }}
+                .card {{ background: white; border-radius: 16px; padding: 32px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }}
+                .header {{ background: linear-gradient(135deg, #dc2626 0%, #f97316 100%); color: white; padding: 30px; text-align: center; border-radius: 16px 16px 0 0; margin: -32px -32px 24px -32px; }}
+                .order-box {{ background: #f9fafb; border-radius: 12px; padding: 20px; margin: 20px 0; }}
+                .detail-row {{ display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #e5e7eb; }}
+                .detail-row:last-child {{ border-bottom: none; font-weight: bold; color: #10b981; font-size: 18px; }}
+                .shipping-box {{ background: #ecfdf5; border: 1px solid #86efac; border-radius: 12px; padding: 20px; margin: 20px 0; }}
+                .badge {{ display: inline-block; background: #fef3c7; color: #92400e; padding: 6px 14px; border-radius: 16px; font-size: 12px; font-weight: bold; }}
+                .btn {{ display: inline-block; background: #dc2626; color: white; padding: 14px 32px; border-radius: 8px; text-decoration: none; font-weight: 600; }}
+                .footer {{ text-align: center; color: #71717a; font-size: 12px; margin-top: 32px; }}
+            </style>
+        </head>
+        <body>
+            <div class="container">
+                <div class="card">
+                    <div class="header">
+                        <h1 style="margin: 0;">🛡️ ManoProtect</h1>
+                        <p style="margin: 8px 0 0 0; opacity: 0.9;">¡Gracias por tu pedido!</p>
+                    </div>
+                    
+                    <div style="text-align: center; margin-bottom: 24px;">
+                        <span class="badge">Pedido #{order_id}</span>
+                    </div>
+                    
+                    <p style="color: #374151;">
+                        Hemos recibido tu pedido correctamente. A continuación te mostramos los detalles:
+                    </p>
+                    
+                    <div class="order-box">
+                        <h3 style="margin: 0 0 16px 0; color: #1f2937;">📦 Detalles del Pedido</h3>
+                        <div class="detail-row">
+                            <span>Dispositivos SOS</span>
+                            <span>{quantity}x unidad(es)</span>
+                        </div>
+                        <div class="detail-row">
+                            <span>Estilo</span>
+                            <span>{style_display}</span>
+                        </div>
+                        <div class="detail-row">
+                            <span>Colores</span>
+                            <span>{colors_list}</span>
+                        </div>
+                        <div class="detail-row">
+                            <span>Dispositivos</span>
+                            <span style="text-decoration: line-through; color: #9ca3af;">{quantity * 49}€</span>
+                            <span style="color: #10b981; font-weight: bold;">GRATIS</span>
+                        </div>
+                        <div class="detail-row">
+                            <span>Envío Express 24-48h</span>
+                            <span>€{total:.2f}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="shipping-box">
+                        <h3 style="margin: 0 0 16px 0; color: #166534;">🚚 Dirección de Envío</h3>
+                        <p style="margin: 0; color: #15803d;">
+                            <strong>{shipping.get('fullName', '')}</strong><br>
+                            {shipping.get('address', '')}<br>
+                            {shipping.get('postalCode', '')} {shipping.get('city', '')}<br>
+                            {shipping.get('province', '')}<br>
+                            Tel: {shipping.get('phone', '')}
+                        </p>
+                    </div>
+                    
+                    <div style="background: #fef3c7; border-radius: 8px; padding: 16px; margin: 20px 0;">
+                        <p style="margin: 0; color: #92400e; text-align: center;">
+                            📬 <strong>Envío Express 24-48h:</strong> Recibirás tu dispositivo en un plazo de 24 a 48 horas laborables.
+                        </p>
+                    </div>
+                    
+                    <div style="text-align: center; margin-top: 32px;">
+                        <a href="https://manoprotect.com/servicios-sos" class="btn">Ver mi pedido</a>
+                    </div>
+                </div>
+                
+                <div class="footer">
+                    <p>Si tienes alguna pregunta, contacta con nosotros:</p>
+                    <p>📞 601 510 950 | ✉️ soporte@manoprotect.com</p>
+                    <p>© 2026 ManoProtect - STARTBOOKING SL - CIF: B19427723</p>
+                </div>
+            </div>
+        </body>
+        </html>
+        """
+    
+    def _generate_shipping_update_email(self, data: Dict) -> str:
+        """Generate shipping status update HTML email"""
+        order_id = data.get('order_id', 'UNKNOWN')[:8].upper()
+        status = data.get('status', 'shipped')
+        tracking_number = data.get('tracking_number', '')
+        carrier = data.get('carrier', '')
+        estimated_delivery = data.get('estimated_delivery', '')
+        
+        status_info = {
+            'pending': ('⏳', 'Preparando tu pedido', '#f59e0b', 'Estamos preparando tu dispositivo SOS para el envío.'),
+            'shipped': ('📦', '¡Tu pedido ha sido enviado!', '#3b82f6', 'Tu dispositivo SOS ya está en camino.'),
+            'in_transit': ('🚚', 'En tránsito', '#8b5cf6', 'Tu paquete está en camino hacia ti.'),
+            'out_for_delivery': ('📍', 'En reparto', '#f97316', '¡Tu paquete está en reparto! Llegará hoy.'),
+            'delivered': ('✅', '¡Entregado!', '#10b981', 'Tu dispositivo SOS ha sido entregado.')
+        }
+        
+        emoji, title, color, description = status_info.get(status, ('📦', 'Actualización', '#6b7280', 'Estado actualizado.'))
+        
+        tracking_section = ""
+        if tracking_number and carrier:
+            tracking_section = f"""
+            <div style="background: #f0f9ff; border: 1px solid #bae6fd; border-radius: 12px; padding: 20px; margin: 20px 0;">
+                <h3 style="margin: 0 0 16px 0; color: #0369a1;">📍 Información de Seguimiento</h3>
+                <p style="margin: 0; color: #0c4a6e;">
+                    <strong>Transportista:</strong> {carrier}<br>
+                    <strong>Número de seguimiento:</strong> {tracking_number}
+                    {f'<br><strong>Entrega estimada:</strong> {estimated_delivery}' if estimated_delivery else ''}
+                </p>
+            </div>
+            """
+        
+        return f"""
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="utf-8">
+            <style>
+                body {{ font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 0; padding: 0; background: #f4f4f5; }}
+                .container {{ max-width: 600px; margin: 0 auto; padding: 20px; }}
+                .card {{ background: white; border-radius: 16px; padding: 32px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }}
+                .header {{ background: linear-gradient(135deg, #dc2626 0%, #f97316 100%); color: white; padding: 30px; text-align: center; border-radius: 16px 16px 0 0; margin: -32px -32px 24px -32px; }}
+                .status-badge {{ display: inline-block; background: {color}; color: white; padding: 12px 24px; border-radius: 24px; font-size: 18px; font-weight: bold; }}
+                .footer {{ text-align: center; color: #71717a; font-size: 12px; margin-top: 32px; }}
+            </style>
+        </head>
+        <body>
+            <div class="container">
+                <div class="card">
+                    <div class="header">
+                        <h1 style="margin: 0;">🛡️ ManoProtect</h1>
+                        <p style="margin: 8px 0 0 0; opacity: 0.9;">{emoji} {title}</p>
+                    </div>
+                    
+                    <div style="text-align: center; margin: 24px 0;">
+                        <span class="status-badge">{emoji} {title}</span>
+                    </div>
+                    
+                    <p style="color: #374151; text-align: center; font-size: 16px;">
+                        {description}
+                    </p>
+                    
+                    <div style="background: #f9fafb; border-radius: 12px; padding: 16px; margin: 20px 0; text-align: center;">
+                        <p style="margin: 0; color: #6b7280;">Pedido</p>
+                        <p style="margin: 4px 0 0 0; font-size: 20px; font-weight: bold; color: #1f2937;">#{order_id}</p>
+                    </div>
+                    
+                    {tracking_section}
+                    
+                    <p style="color: #6b7280; text-align: center; margin-top: 24px;">
+                        Si tienes alguna pregunta sobre tu envío, no dudes en contactarnos.
+                    </p>
+                </div>
+                
+                <div class="footer">
+                    <p>📞 601 510 950 | ✉️ soporte@manoprotect.com</p>
+                    <p>© 2026 ManoProtect - STARTBOOKING SL - CIF: B19427723</p>
+                </div>
+            </div>
+        </body>
+        </html>
+        """
+
+
 
 
 # Global instance
