@@ -31,6 +31,7 @@ class DeviceOrderRequest(BaseModel):
     quantity: int
     family_members: int
     shipping: ShippingInfo
+    selected_colors: Optional[List[str]] = []
     total_price: float
 
 class DeviceActivationRequest(BaseModel):
@@ -83,6 +84,7 @@ async def create_device_order(
         "user_name": user.get("name"),
         "quantity": order.quantity,
         "family_members": order.family_members,
+        "selected_colors": order.selected_colors or [],
         "shipping": {
             "full_name": order.shipping.fullName,
             "phone": order.shipping.phone,
@@ -93,9 +95,18 @@ async def create_device_order(
             "notes": order.shipping.notes
         },
         "total_price": order.total_price,
-        "status": "pending",  # pending, processing, shipped, delivered
+        "status": "pending",  # pending, confirmed, preparing, shipped, delivered
         "payment_status": "pending" if order.total_price > 0 else "free",
         "tracking_number": None,
+        "carrier": None,
+        "estimated_delivery": None,
+        "history": [
+            {
+                "date": datetime.now(timezone.utc).isoformat(),
+                "status": "pending",
+                "message": "Pedido recibido"
+            }
+        ],
         "created_at": datetime.now(timezone.utc).isoformat(),
         "updated_at": datetime.now(timezone.utc).isoformat()
     }
