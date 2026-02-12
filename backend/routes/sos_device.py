@@ -162,6 +162,67 @@ async def get_user_orders(
     return {"orders": orders}
 
 
+@router.get("/my-orders")
+async def get_my_orders_v1(
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """
+    Obtener pedidos del usuario (ruta alternativa para compatibilidad)
+    """
+    return await get_user_orders(request, session_token)
+
+
+@router.get("/track/{order_id}")
+async def track_order(
+    order_id: str,
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """
+    Obtener estado detallado de un pedido específico
+    """
+    user = await get_current_user(request, session_token)
+    
+    order = await db.device_orders.find_one(
+        {"order_id": order_id, "user_id": user["user_id"]},
+        {"_id": 0}
+    )
+    
+    if not order:
+        # Try by tracking number
+        order = await db.device_orders.find_one(
+            {"tracking_number": order_id, "user_id": user["user_id"]},
+            {"_id": 0}
+        )
+    
+    if not order:
+        raise HTTPException(status_code=404, detail="Pedido no encontrado")
+    
+    # Format for frontend
+    formatted_order = {
+        "id": order.get("order_id"),
+        "status": order.get("status"),
+        "created_at": order.get("created_at"),
+        "updated_at": order.get("updated_at"),
+        "quantity": order.get("quantity"),
+        "colors": order.get("selected_colors", []),
+        "shipping": {
+            "fullName": order.get("shipping", {}).get("full_name"),
+            "address": order.get("shipping", {}).get("address"),
+            "city": order.get("shipping", {}).get("city"),
+            "postalCode": order.get("shipping", {}).get("postal_code"),
+            "province": order.get("shipping", {}).get("province"),
+        },
+        "tracking_number": order.get("tracking_number"),
+        "carrier": order.get("carrier"),
+        "estimated_delivery": order.get("estimated_delivery"),
+        "history": order.get("history", [])
+    }
+    
+    return {"order": formatted_order}
+
+
 @router.get("/devices")
 async def get_user_devices(
     request: Request,
