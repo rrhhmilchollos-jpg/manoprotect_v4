@@ -118,6 +118,15 @@ ManoProtect is a revolutionary cybersecurity platform for both consumers (B2C) a
 
 ## Changelog
 
+### Feb 12, 2026 - ManoProtect SOS Button (Dispositivo Físico)
+- ✅ Diseño del llavero SOS generado (3 imágenes: frontal, lifestyle, técnico)
+- ✅ Documentación técnica completa para fabricación
+- ✅ Página de pedido con contador de personas/hogar
+- ✅ Sistema de pedidos con envío express 24-48h
+- ✅ Backend API: `/api/sos-device/*` (orders, devices, activate, alerts)
+- ✅ Rutas: /sos-device, /dispositivo-sos, /boton-sos
+- ✅ Integración con plan familiar (1er dispositivo gratis)
+
 ### Feb 12, 2026 - Trust Seal, DNA Digital, Blockchain Verifier, Employee Dashboard
 - ✅ Sello de Confianza agregado al footer de Landing Page
 - ✅ TrustBadge component creado (/components/TrustBadge.jsx)
