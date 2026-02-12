@@ -114,6 +114,7 @@ ManoProtect is a revolutionary cybersecurity platform for both consumers (B2C) a
 | DNA Digital | /shield | /api/shield/dna/* | ✅ |
 | Blockchain Verifier | /blockchain-verifier | - | ✅ |
 | Employee Dashboard | /employee-dashboard | /api/admin/* | ✅ |
+| SOS Device Order | /sos-device | /api/sos-device/* | ✅ |
 
 ## Changelog
 
