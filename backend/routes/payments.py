@@ -219,6 +219,7 @@ async def get_device_payment_status(session_id: str):
             "updated_at": datetime.now(timezone.utc)
         }
         
+        email_sent = False
         if session.payment_status == "paid":
             status_update["paid_at"] = datetime.now(timezone.utc)
             
@@ -228,19 +229,45 @@ async def get_device_payment_status(session_id: str):
                 # Get shipping cost based on quantity
                 quantity = transaction.get("quantity", 1)
                 shipping_price = get_shipping_cost(quantity)
+                shipping = transaction.get("shipping", {})
+                colors = transaction.get("colors", ["plata"])
+                device_style = transaction.get("device_style", "adulto")
                 
-                db.device_orders.insert_one({
+                order_doc = {
                     "session_id": session_id,
                     "quantity": quantity,
-                    "colors": transaction.get("colors", ["plata"]),
-                    "device_style": transaction.get("device_style", "adulto"),
-                    "shipping": transaction.get("shipping", {}),
+                    "colors": colors,
+                    "device_style": device_style,
+                    "shipping": shipping,
                     "amount_paid": shipping_price,
                     "order_status": "pending_shipment",
                     "tracking_number": None,
                     "carrier": None,
                     "created_at": datetime.now(timezone.utc)
-                })
+                }
+                db.device_orders.insert_one(order_doc)
+                
+                # Send order confirmation email
+                try:
+                    from services.email_service import email_service
+                    customer_email = session.customer_email or shipping.get('email', '')
+                    if customer_email:
+                        import asyncio
+                        asyncio.create_task(email_service.send_device_order_confirmation(
+                            user_id=str(transaction.get("user_id", "")),
+                            email=customer_email,
+                            order_data={
+                                "order_id": session_id,
+                                "quantity": quantity,
+                                "colors": colors,
+                                "device_style": device_style,
+                                "shipping": shipping,
+                                "total_amount": shipping_price
+                            }
+                        ))
+                        email_sent = True
+                except Exception as email_error:
+                    print(f"[EMAIL] Error sending confirmation email: {email_error}")
         
         db.payment_transactions.update_one(
             {"session_id": session_id},
@@ -251,7 +278,8 @@ async def get_device_payment_status(session_id: str):
             "status": session.status,
             "payment_status": session.payment_status,
             "amount_total": session.amount_total / 100 if session.amount_total else 0,
-            "currency": session.currency
+            "currency": session.currency,
+            "email_sent": email_sent
         }
         
     except Exception as e:
