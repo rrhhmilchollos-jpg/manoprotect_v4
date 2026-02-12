@@ -61,6 +61,7 @@ const LandingPage = () => {
       'hero.cta.trial': 'Prueba ManoProtect gratis 7 días',
       'hero.cta.login': 'Ya tengo cuenta',
       'nav.login': 'Iniciar Sesión',
+      'nav.dashboard': 'Mi Panel',
       'nav.register': 'Registrarse',
       'nav.pricing': 'Ver Precios',
       'nav.investors': 'Inversores'
