@@ -208,8 +208,8 @@ ManoProtect es una plataforma revolucionaria de ciberseguridad para consumidores
 ## 🔜 BACKLOG PENDIENTE
 
 ### P1 - Alta Prioridad
-- [ ] **WhatsApp Business API** - Alertas SOS por WhatsApp (EN PROGRESO)
-- [ ] **PageSpeed optimization** - Mejorar de 65/100 a 90+
+- [x] **WhatsApp Business API** - ✅ IMPLEMENTADO (Twilio)
+- [ ] **PageSpeed optimization** - ✅ OPTIMIZADO (lazy loading, CSS crítico)
 - [ ] **Videos Demo 1 minuto** - Solución para limitación Sora 2 (máx 12s)
 
 ### P2 - Media Prioridad
