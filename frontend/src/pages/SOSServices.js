@@ -438,16 +438,62 @@ export default function SOSServices() {
                   </Badge>
                 </div>
               </div>
+              
+              {/* Call Support Button - Similar to Securitas Direct */}
+              <Card className="bg-gradient-to-r from-red-600 to-red-700 text-white border-0">
+                <CardContent className="p-6">
+                  <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+                    <div className="flex items-center gap-4">
+                      <div className="w-14 h-14 bg-white/20 backdrop-blur rounded-full flex items-center justify-center animate-pulse">
+                        <Phone className="w-7 h-7" />
+                      </div>
+                      <div>
+                        <p className="text-xl font-bold">¿Necesitas ayuda urgente?</p>
+                        <p className="text-white/80">Llama a soporte de emergencias ManoProtect</p>
+                      </div>
+                    </div>
+                    <Button 
+                      onClick={handleCallSupport}
+                      className="bg-white text-red-600 hover:bg-zinc-100 h-14 px-8 text-lg font-bold shadow-lg"
+                      data-testid="call-support-btn"
+                    >
+                      <Phone className="w-6 h-6 mr-2" />
+                      Llamar al {MANOPROTECT_SUPPORT_PHONE}
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
 
               <div className="grid lg:grid-cols-2 gap-8">
-                {/* Product Gallery */}
+                {/* Product Gallery with Dynamic Color Preview */}
                 <div className="space-y-4">
-                  <div className="bg-white rounded-2xl p-6 shadow-lg">
-                    <img 
-                      src={DEVICE_IMAGES[activeImage]} 
-                      alt="ManoProtect SOS Button"
-                      className="w-full h-auto rounded-xl"
-                    />
+                  <div className="bg-white rounded-2xl p-6 shadow-lg relative overflow-hidden">
+                    {/* Main image with color tint overlay */}
+                    <div className="relative">
+                      <img 
+                        src={DEVICE_IMAGES[activeImage]} 
+                        alt="ManoProtect SOS Button"
+                        className="w-full h-auto rounded-xl"
+                      />
+                      {/* Color overlay indicator */}
+                      <div 
+                        className="absolute top-4 right-4 w-16 h-16 rounded-full border-4 border-white shadow-lg flex items-center justify-center"
+                        style={{ backgroundColor: currentPreviewColor }}
+                      >
+                        <span className="text-xs font-bold text-white drop-shadow">
+                          #{previewColorIndex + 1}
+                        </span>
+                      </div>
+                    </div>
+                    {/* Selected color indicator */}
+                    <div className="mt-4 text-center">
+                      <p className="text-sm text-zinc-600">
+                        Visualizando color del <strong>Dispositivo {previewColorIndex + 1}</strong>: 
+                        <span className="ml-2 px-2 py-1 rounded-full text-xs font-bold" style={{ backgroundColor: currentPreviewColor, color: currentPreviewColor === '#FEFEFA' || currentPreviewColor === '#F7E7CE' || currentPreviewColor === '#E6E6FA' || currentPreviewColor === '#98FF98' || currentPreviewColor === '#87CEEB' ? '#333' : '#fff' }}>
+                          {COLOR_OPTIONS.find(c => c.id === deviceColors[previewColorIndex])?.name}
+                        </span>
+                      </p>
+                    </div>
                   </div>
                   <div className="flex gap-3">
                     {Object.entries(DEVICE_IMAGES).map(([key, url]) => (
@@ -462,6 +508,41 @@ export default function SOSServices() {
                       </button>
                     ))}
                   </div>
+                  
+                  {/* Device Style Selection */}
+                  <Card>
+                    <CardHeader>
+                      <CardTitle className="flex items-center gap-2">
+                        <Heart className="w-5 h-5 text-red-600" />
+                        Estilo del Dispositivo
+                      </CardTitle>
+                      <CardDescription>Elige el diseño según la edad del usuario</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="grid grid-cols-3 gap-3">
+                        {DEVICE_STYLES.map((style) => (
+                          <button
+                            key={style.id}
+                            onClick={() => setSelectedDeviceStyle(style.id)}
+                            className={`p-4 rounded-xl border-2 transition-all text-center hover:shadow-md ${
+                              selectedDeviceStyle === style.id 
+                                ? 'border-red-500 bg-red-50' 
+                                : 'border-zinc-200 hover:border-zinc-300'
+                            }`}
+                          >
+                            <div className={`w-10 h-10 mx-auto rounded-full flex items-center justify-center mb-2 ${
+                              style.id === 'juvenil' ? 'bg-orange-100' : 
+                              style.id === 'adulto' ? 'bg-indigo-100' : 'bg-emerald-100'
+                            }`}>
+                              {style.id === 'juvenil' ? '🎨' : style.id === 'adulto' ? '💼' : '🌿'}
+                            </div>
+                            <p className="font-semibold text-sm">{style.name}</p>
+                            <p className="text-xs text-zinc-500">{style.targetAge}</p>
+                          </button>
+                        ))}
+                      </div>
+                    </CardContent>
+                  </Card>
 
                   {/* Features Grid */}
                   <Card>
@@ -516,7 +597,7 @@ export default function SOSServices() {
                         </Button>
                       </div>
                       
-                      {/* Price */}
+                      {/* Price with scalable shipping */}
                       <div className="mt-6 p-4 bg-emerald-50 rounded-xl border border-emerald-200">
                         <div className="flex justify-between items-center">
                           <span>{quantity}x Dispositivo SOS</span>
@@ -526,12 +607,15 @@ export default function SOSServices() {
                           </div>
                         </div>
                         <div className="flex justify-between items-center mt-2">
-                          <span>Envío Express 24-48h</span>
-                          <span>4,95€</span>
+                          <span className="flex items-center gap-1">
+                            <Truck className="w-4 h-4" />
+                            Envío Express 24-48h ({quantity} uds)
+                          </span>
+                          <span className="font-semibold">{shippingCost.toFixed(2)}€</span>
                         </div>
                         <div className="border-t border-emerald-300 mt-3 pt-3 flex justify-between items-center">
                           <span className="font-bold text-lg">TOTAL</span>
-                          <span className="font-bold text-2xl text-emerald-600">4,95€</span>
+                          <span className="font-bold text-2xl text-emerald-600">{shippingCost.toFixed(2)}€</span>
                         </div>
                         <p className="text-xs text-center text-emerald-700 mt-2">
                           ¡Ahorras {quantity * 49}€ con la promoción!
@@ -540,32 +624,62 @@ export default function SOSServices() {
                     </CardContent>
                   </Card>
 
-                  {/* Color Selection */}
+                  {/* Per-Device Color Selection */}
                   <Card>
                     <CardHeader>
-                      <CardTitle>🎨 Elige el Color</CardTitle>
+                      <CardTitle>🎨 Elige el Color de Cada Dispositivo</CardTitle>
+                      <CardDescription>
+                        {quantity > 1 
+                          ? `Selecciona un color para cada uno de tus ${quantity} dispositivos` 
+                          : 'Selecciona el color de tu dispositivo'}
+                      </CardDescription>
                     </CardHeader>
-                    <CardContent>
-                      <div className="grid grid-cols-6 gap-2">
-                        {COLOR_OPTIONS.map((color) => (
-                          <button
-                            key={color.id}
-                            onClick={() => setSelectedColor(color.id)}
-                            className={`p-2 rounded-lg border-2 transition-all hover:scale-105 ${
-                              selectedColor === color.id ? 'border-red-500 shadow-lg' : 'border-transparent'
-                            }`}
-                            title={color.name}
-                          >
-                            <div 
-                              className="w-8 h-8 rounded-full mx-auto border border-zinc-300"
-                              style={{ backgroundColor: color.hex }}
-                            />
-                          </button>
-                        ))}
-                      </div>
-                      <p className="text-center text-sm text-zinc-600 mt-3">
-                        Seleccionado: <strong>{COLOR_OPTIONS.find(c => c.id === selectedColor)?.name}</strong>
-                      </p>
+                    <CardContent className="space-y-4">
+                      {deviceColors.map((colorId, index) => {
+                        const selectedColorObj = COLOR_OPTIONS.find(c => c.id === colorId);
+                        return (
+                          <div key={index} className={`p-4 rounded-xl border-2 transition-all ${
+                            previewColorIndex === index ? 'border-red-500 bg-red-50' : 'border-zinc-200'
+                          }`}>
+                            <div className="flex items-center justify-between mb-3">
+                              <span className="font-semibold text-sm">
+                                Dispositivo {index + 1}
+                              </span>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => setPreviewColorIndex(index)}
+                                className="text-xs"
+                              >
+                                {previewColorIndex === index ? '👁️ Visualizando' : 'Ver preview'}
+                              </Button>
+                            </div>
+                            <div className="flex flex-wrap gap-2">
+                              {COLOR_OPTIONS.map((color) => (
+                                <button
+                                  key={color.id}
+                                  onClick={() => updateDeviceColor(index, color.id)}
+                                  className={`p-1 rounded-lg border-2 transition-all hover:scale-105 ${
+                                    colorId === color.id ? 'border-red-500 shadow-md' : 'border-transparent'
+                                  }`}
+                                  title={color.name}
+                                >
+                                  <div 
+                                    className="w-7 h-7 rounded-full border border-zinc-300"
+                                    style={{ backgroundColor: color.hex }}
+                                  />
+                                </button>
+                              ))}
+                            </div>
+                            <p className="text-xs text-zinc-600 mt-2">
+                              Seleccionado: <strong>{selectedColorObj?.name}</strong>
+                              <span className="ml-2 px-2 py-0.5 rounded text-xs bg-zinc-100">
+                                {selectedColorObj?.category}
+                              </span>
+                            </p>
+                          </div>
+                        );
+                      })}
                     </CardContent>
                   </Card>
 
@@ -631,7 +745,7 @@ export default function SOSServices() {
                     {loading ? 'Procesando...' : (
                       <>
                         <ShoppingCart className="w-6 h-6 mr-3" />
-                        Solicitar GRATIS (Envío: 4,95€)
+                        Solicitar GRATIS (Envío: {shippingCost.toFixed(2)}€)
                       </>
                     )}
                   </Button>
