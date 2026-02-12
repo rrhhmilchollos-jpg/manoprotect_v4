@@ -170,12 +170,24 @@ const SOSAlertListener = () => {
 
 // Interstitial Ad Manager - Shows promotional ads for free users
 const InterstitialAdManager = () => {
+  // Disable interstitial ads in preview/staging environments
+  if (typeof window !== 'undefined') {
+    const hostname = window.location.hostname;
+    if (hostname.includes('preview') || hostname.includes('staging') || hostname === 'localhost') {
+      return null;
+    }
+  }
+  
   const { user } = useAuth();
   const { showAd, closeAd } = useInterstitialAd(user);
   
   if (!showAd) return null;
   
-  return <InterstitialAd user={user} onClose={closeAd} />;
+  return (
+    <Suspense fallback={null}>
+      <InterstitialAd user={user} onClose={closeAd} />
+    </Suspense>
+  );
 };
 
 // App Router - ManoProtect.com Only
