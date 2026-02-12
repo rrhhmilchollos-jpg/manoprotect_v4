@@ -293,6 +293,7 @@ function AppRouter() {
           <Route path="/health-profile" element={<HealthProfile />} />
           <Route path="/admin/audios" element={<AdminAudios />} />
           <Route path="/admin/devices" element={<AdminDevices />} />
+          <Route path="/admin/shipping" element={<ShippingAdmin />} />
           
           {/* Shield Security Hub - Public */}
           <Route path="/shield" element={<ShieldPage />} />
