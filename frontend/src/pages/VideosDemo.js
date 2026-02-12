@@ -23,10 +23,11 @@ const DEMO_VIDEOS = [
     id: 'sos_button',
     title: 'Botón SOS',
     description: 'Demostración del botón de pánico y alerta a familiares',
-    prompt: 'A smartphone screen showing a red SOS emergency button being pressed, with an alert notification appearing on another phone in split screen. Modern UI, Spanish text "ALERTA SOS ENVIADA", clean design, 8 second demonstration video.',
+    prompt: 'A smartphone screen showing a red SOS emergency button being pressed, with an alert notification appearing on another phone in split screen. Modern UI, Spanish text "ALERTA SOS ENVIADA", clean design, demonstration video showing the full emergency alert flow.',
     icon: AlertTriangle,
     color: 'from-red-500 to-rose-600',
-    status: 'pending'
+    status: 'pending',
+    duration: 12
   },
   {
     id: 'family_locator',
@@ -35,7 +36,8 @@ const DEMO_VIDEOS = [
     prompt: 'A smartphone map application showing real-time family member locations with profile avatars, safe zone notifications appearing, and route tracking. Modern app interface, Spanish labels, smooth animations, professional demo video.',
     icon: MapPin,
     color: 'from-blue-500 to-indigo-600',
-    status: 'pending'
+    status: 'pending',
+    duration: 12
   },
   {
     id: 'voice_shield',
@@ -44,7 +46,8 @@ const DEMO_VIDEOS = [
     prompt: 'A phone call interface with AI voice analysis overlay detecting a scam caller. Red warning indicators, "ESTAFA DETECTADA" Spanish alert, caller ID verification failing, protection shield animation. Professional security app demo.',
     icon: Shield,
     color: 'from-purple-500 to-violet-600',
-    status: 'pending'
+    status: 'pending',
+    duration: 12
   },
   {
     id: 'deepfake_detector',
@@ -53,7 +56,8 @@ const DEMO_VIDEOS = [
     prompt: 'A video analysis interface scanning a video frame, detecting deepfake manipulation with visual overlays highlighting facial inconsistencies. Spanish UI showing "DEEPFAKE DETECTADO" warning, percentage confidence meter, professional security tool demonstration.',
     icon: Eye,
     color: 'from-amber-500 to-orange-600',
-    status: 'pending'
+    status: 'pending',
+    duration: 12
   }
 ];
 
@@ -111,7 +115,7 @@ const VideosDemo = () => {
         body: JSON.stringify({
           video_id: videoId,
           prompt: video.prompt,
-          duration: 8
+          duration: video.duration || 12
         })
       });
 
@@ -311,7 +315,7 @@ const VideosDemo = () => {
                     <div className="flex items-center gap-2 mt-2">
                       <Badge variant="outline" className="text-xs border-zinc-600 text-zinc-400">
                         <Clock className="w-3 h-3 mr-1" />
-                        0:08
+                        0:12
                       </Badge>
                       <Badge variant="outline" className="text-xs border-zinc-600 text-zinc-400">
                         1280x720
