@@ -69,6 +69,13 @@ ManoProtect is a revolutionary cybersecurity platform for both consumers (B2C) a
 
 ## Changelog
 
+### Feb 12, 2026 - Videos Demo IA Page
+- ✅ Created Videos Demo IA page with Sora 2 integration
+- ✅ 4 demo videos: SOS Button, Family Locator, Voice Shield, Deepfake Detector
+- ✅ Backend API for video generation at `/api/demo-videos/`
+- ✅ Added route `/videos-demo` and Dashboard quick access
+- ✅ All logos updated to WebP format across the app
+
 ### Feb 12, 2026 - PageSpeed Optimization
 - ✅ Fixed CORS error blocking `/api/auth/me` (wildcard + credentials conflict)
 - ✅ Logo optimization: PNG 121KB → WebP 6.5KB (95% reduction)
