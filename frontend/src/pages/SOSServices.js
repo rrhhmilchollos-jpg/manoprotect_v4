@@ -21,12 +21,36 @@ import { toast } from 'sonner';
 
 const API = process.env.REACT_APP_BACKEND_URL;
 
-// Device images
+// Device images - Base images
 const DEVICE_IMAGES = {
   front: 'https://static.prod-images.emergentagent.com/jobs/48047d8d-d356-432e-9b76-e0dcfdb8856b/images/f99ed06308511adbc1daae4f2950cd5204c0a6d6e9b0c0050741934a2dde5029.png',
   lifestyle: 'https://static.prod-images.emergentagent.com/jobs/48047d8d-d356-432e-9b76-e0dcfdb8856b/images/8af36fc33ec933f216de400947176c9dbee8cbb7f7db0def7967975ba764dd69.png',
   technical: 'https://static.prod-images.emergentagent.com/jobs/48047d8d-d356-432e-9b76-e0dcfdb8856b/images/4b647ec828d739fb0904598a6e137bae97a1f71b4929ea76564f21cfc820d543.png'
 };
+
+// Shipping costs - Escalates with quantity
+const SHIPPING_COSTS = {
+  1: 4.95,
+  2: 6.95,
+  3: 8.95,
+  4: 10.95,
+  5: 12.95,
+  6: 14.95,
+  7: 16.95,
+  8: 18.95,
+  9: 20.95,
+  10: 22.95
+};
+
+// ManoProtect Support Phone
+const MANOPROTECT_SUPPORT_PHONE = '601510950';
+
+// Device design styles based on age/target
+const DEVICE_STYLES = [
+  { id: 'juvenil', name: 'Estilo Juvenil', desc: 'Diseño moderno y colorido', targetAge: 'Jóvenes 15-30' },
+  { id: 'adulto', name: 'Estilo Adulto', desc: 'Diseño elegante y discreto', targetAge: 'Adultos 30-60' },
+  { id: 'senior', name: 'Estilo Senior', desc: 'Diseño fácil y ergonómico', targetAge: 'Mayores 60+' }
+];
 
 // Color options
 const COLOR_OPTIONS = [
