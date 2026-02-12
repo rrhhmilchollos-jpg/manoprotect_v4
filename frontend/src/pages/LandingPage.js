@@ -54,12 +54,16 @@ const LandingPage = () => {
   // Defer i18n loading - use simple fallback initially
   const [i18nLoaded, setI18nLoaded] = useState(false);
   const [t, setT] = useState(() => (key) => {
-    // Simple Spanish translations for hero
+    // Simple Spanish translations for critical UI elements
     const translations = {
       'hero.title': 'Protección completa para tu familia',
       'hero.subtitle': 'ManoProtect es una herramienta de apoyo para proteger a tu familia: botón SOS para emergencias y detección de estafas digitales.',
       'hero.cta.trial': 'Prueba ManoProtect gratis 7 días',
-      'hero.cta.login': 'Ya tengo cuenta'
+      'hero.cta.login': 'Ya tengo cuenta',
+      'nav.login': 'Iniciar Sesión',
+      'nav.register': 'Registrarse',
+      'nav.pricing': 'Ver Precios',
+      'nav.investors': 'Inversores'
     };
     return translations[key] || key;
   });
