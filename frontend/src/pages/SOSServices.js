@@ -28,6 +28,13 @@ const DEVICE_IMAGES = {
   technical: 'https://static.prod-images.emergentagent.com/jobs/48047d8d-d356-432e-9b76-e0dcfdb8856b/images/4b647ec828d739fb0904598a6e137bae97a1f71b4929ea76564f21cfc820d543.png'
 };
 
+// Device style images for different age groups
+const DEVICE_STYLE_IMAGES = {
+  juvenil: 'https://static.prod-images.emergentagent.com/jobs/c13be6f9-89ef-4434-a847-7778f3eee8d1/images/bb64a7f70094ffb604400158534639a5c44a2917e4d5ff1019a542b4c075de9a.png',
+  adulto: 'https://static.prod-images.emergentagent.com/jobs/c13be6f9-89ef-4434-a847-7778f3eee8d1/images/b78f26aa69a18c83f5a08f0a635aefc3f98e6c2560967187ea6f3f171ce0f009.png',
+  senior: 'https://static.prod-images.emergentagent.com/jobs/c13be6f9-89ef-4434-a847-7778f3eee8d1/images/660508e70869366eb46aec946768f90c889025f0b72019ab6e8d1d8e64554dab.png'
+};
+
 // Shipping costs - Escalates with quantity
 const SHIPPING_COSTS = {
   1: 4.95,
