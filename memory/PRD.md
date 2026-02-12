@@ -80,6 +80,19 @@ ManoProtect is a revolutionary cybersecurity platform for both consumers (B2C) a
 - Frontend: `/employee-dashboard`
 - Backend: `/api/admin/*` (endpoints adicionales)
 
+### 13. ManoProtect SOS Button (Dispositivo Físico) ✅ (NEW)
+- Llavero físico de emergencia con botón SOS
+- GPS en tiempo real (precisión 2.5m)
+- Conexión directa al 112 (emergencias España)
+- Audio bidireccional para comunicación
+- Detección automática de caídas
+- 7 días de batería, carga USB
+- Sistema de pedidos con contador de personas/hogar
+- Envío express 24-48h a domicilio
+- Frontend: `/sos-device`, `/boton-sos`
+- Backend: `/api/sos-device/*`
+- Documentación técnica: `/app/docs/MANOPROTECT_SOS_KEYCHAIN_SPECS.md`
+
 ## Tech Stack
 - **Frontend**: React.js + Tailwind + Shadcn/UI
 - **Backend**: Python FastAPI + Motor (async MongoDB)
