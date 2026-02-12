@@ -10,8 +10,12 @@ import uuid
 
 router = APIRouter(prefix="/sos-device", tags=["SOS Device"])
 
-# Database connection
-from database import db
+# Database will be injected from server.py
+db = None
+
+def set_database(database):
+    global db
+    db = database
 
 # Models
 class ShippingInfo(BaseModel):
