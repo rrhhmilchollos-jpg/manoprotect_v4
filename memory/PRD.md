@@ -11,7 +11,7 @@ ManoProtect es una plataforma revolucionaria de ciberseguridad para consumidores
 
 ## ✅ FUNCIONALIDADES IMPLEMENTADAS (PRODUCTION READY)
 
-### 0. Página de Servicios SOS Completa ✅ (NUEVO - Feb 2026)
+### 0. Página de Servicios SOS Completa ✅ (ACTUALIZADO - Feb 2026)
 - **Página unificada** con todas las funcionalidades SOS: `/servicios-sos`
 - **4 Secciones en tabs**:
   1. 🔴 Dispositivo SOS: Formulario de pedido con colores, cantidad, envío
@@ -21,6 +21,23 @@ ManoProtect es una plataforma revolucionaria de ciberseguridad para consumidores
 - **Promoción Lanzamiento**: Dispositivo GRATIS, solo pago envío 4,95€
 - **Botón en Header**: "🔴 Botón SOS" accesible desde toda la web
 - Frontend: `/servicios-sos`, `/sos-device`, `/dispositivo-sos`, `/boton-sos`
+
+### 0.1 Sistema de Pagos con Stripe ✅ (NUEVO - Feb 2026)
+- **Checkout para dispositivos SOS**: Pago de envío 4,95€ via Stripe
+- **Suscripciones con trial**: 7 días de prueba GRATIS
+- **Tarjeta obligatoria**: Crédito/débito (NO prepago)
+- **Cobro automático**: Después del trial si no se cancela
+- **Cancelación automática**: Si cancela, se asigna Plan Básico gratuito
+- Backend: `/api/payments/device/checkout`, `/api/payments/subscription/checkout`
+- Webhook: `/api/payments/webhook/stripe`
+
+### 0.2 Panel de Gestión de Envíos (Admin) ✅ (NUEVO - Feb 2026)
+- **Panel interno** para gestionar envíos de dispositivos
+- **8 transportistas**: Correos Express, SEUR, MRW, GLS, DHL, UPS, FedEx, Nacex
+- **Estados de envío**: Pendiente, Preparando, Enviado, En tránsito, En reparto, Entregado
+- **Funcionalidades**: Asignar tracking, cambiar estado, envío masivo, exportar
+- Frontend: `/admin/shipping`
+- Backend: `/api/admin/shipping/*`
 
 ### 1. Real-Time Threat Intelligence ✅
 - Live APIs: Google Safe Browsing, VirusTotal, AbuseIPDB, AlienVault OTX
