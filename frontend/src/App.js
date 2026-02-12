@@ -1,11 +1,14 @@
 import { BrowserRouter, Routes, Route, useLocation, Navigate, useNavigate } from 'react-router-dom';
 import { Toaster } from 'sonner';
-import PushNotificationPrompt from '@/components/PushNotificationPrompt';
-import { InterstitialAd, useInterstitialAd } from '@/components/InterstitialAd';
 import { AuthProvider, useAuth } from '@/context/AuthContext';
 import { useEffect, lazy, Suspense } from 'react';
 
-// Firebase Analytics - Defer loading
+// Defer non-critical component loading
+const PushNotificationPrompt = lazy(() => import('@/components/PushNotificationPrompt'));
+const InterstitialAd = lazy(() => import('@/components/InterstitialAd').then(m => ({ default: m.InterstitialAd })));
+const useInterstitialAd = () => ({ showAd: () => {}, closeAd: () => {}, isVisible: false });
+
+// Firebase Analytics - Defer loading completely
 const logAnalyticsEvent = (...args) => {
   import('@/services/firebase').then(m => m.logAnalyticsEvent(...args));
 };
