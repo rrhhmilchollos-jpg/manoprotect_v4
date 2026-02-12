@@ -253,3 +253,118 @@ async def get_document_downloads(
     downloads = await db.document_downloads.find({}, {"_id": 0}).sort("downloaded_at", -1).limit(100).to_list(100)
     
     return downloads
+
+
+
+# ============================================
+# EMPLOYEE DASHBOARD ENDPOINTS
+# ============================================
+
+@router.get("/stats")
+async def get_admin_stats(
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Get comprehensive stats for employee dashboard"""
+    await require_admin(request, session_token)
+    
+    total_users = await db.users.count_documents({})
+    active_users = await db.users.count_documents({"status": {"$ne": "inactive"}})
+    
+    # Threats blocked
+    threats_blocked = await db.threats.count_documents({})
+    
+    # Trust seals
+    trust_seals = await db.trust_seals.count_documents({})
+    
+    # DNA Digital registrations
+    dna_registrations = await db.dna_digital.count_documents({})
+    
+    # Revenue this month
+    from datetime import timedelta
+    month_start = datetime.now(timezone.utc).replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+    pipeline = [
+        {"$match": {"payment_status": "paid", "created_at": {"$gte": month_start.isoformat()}}},
+        {"$group": {"_id": None, "total": {"$sum": "$amount"}}}
+    ]
+    revenue_result = await db.payment_transactions.aggregate(pipeline).to_list(1)
+    revenue_month = revenue_result[0]["total"] if revenue_result else 0
+    
+    return {
+        "total_users": total_users,
+        "active_users": active_users,
+        "threats_blocked": threats_blocked,
+        "trust_seals": trust_seals,
+        "dna_registrations": dna_registrations,
+        "revenue_month": revenue_month
+    }
+
+
+@router.get("/trust-seals")
+async def get_trust_seals(
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Get all trust seals for admin management"""
+    await require_admin(request, session_token)
+    
+    seals = await db.trust_seals.find({}, {"_id": 0}).sort("issued_at", -1).limit(100).to_list(100)
+    
+    return {"seals": seals}
+
+
+@router.patch("/trust-seals/{seal_code}/verify")
+async def verify_trust_seal(
+    seal_code: str,
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Verify/approve a trust seal (admin only)"""
+    await require_admin(request, session_token)
+    
+    result = await db.trust_seals.update_one(
+        {"seal_code": seal_code},
+        {"$set": {"verified": True, "verified_at": datetime.now(timezone.utc).isoformat()}}
+    )
+    
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Sello no encontrado")
+    
+    return {"message": "Sello verificado correctamente", "seal_code": seal_code}
+
+
+@router.get("/dna-digital")
+async def get_dna_digital(
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Get all DNA Digital registrations for admin management"""
+    await require_admin(request, session_token)
+    
+    records = await db.dna_digital.find({}, {"_id": 0}).sort("created_at", -1).limit(100).to_list(100)
+    
+    return {"records": records}
+
+
+@router.patch("/dna-digital/{dna_code}/verify")
+async def verify_dna_digital(
+    dna_code: str,
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Verify/approve a DNA Digital identity (admin only)"""
+    await require_admin(request, session_token)
+    
+    result = await db.dna_digital.update_one(
+        {"dna_code": dna_code},
+        {"$set": {
+            "status": "verified",
+            "verified_at": datetime.now(timezone.utc).isoformat(),
+            "trust_score": 95
+        }}
+    )
+    
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="DNA Digital no encontrado")
+    
+    return {"message": "DNA Digital verificado correctamente", "dna_code": dna_code}
