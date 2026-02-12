@@ -142,12 +142,50 @@ export default function SOSServices() {
   const [activeTab, setActiveTab] = useState('dispositivo');
   const [isAnnual, setIsAnnual] = useState(true);
   const [quantity, setQuantity] = useState(1);
-  const [selectedColor, setSelectedColor] = useState('plata');
+  // Per-device color selection - array of colors, one for each device
+  const [deviceColors, setDeviceColors] = useState(['plata']);
+  const [selectedDeviceStyle, setSelectedDeviceStyle] = useState('adulto');
+  const [previewColorIndex, setPreviewColorIndex] = useState(0); // Which device's color to show in preview
   const [activeImage, setActiveImage] = useState('front');
   const [loading, setLoading] = useState(false);
   const [paymentStatus, setPaymentStatus] = useState(null);
   const [trackingInput, setTrackingInput] = useState('');
   const [trackingResult, setTrackingResult] = useState(null);
+  
+  // Calculate shipping cost based on quantity
+  const shippingCost = SHIPPING_COSTS[quantity] || SHIPPING_COSTS[10];
+  
+  // Update deviceColors array when quantity changes
+  useEffect(() => {
+    setDeviceColors(prev => {
+      if (quantity > prev.length) {
+        // Add more with default color
+        return [...prev, ...Array(quantity - prev.length).fill('plata')];
+      } else if (quantity < prev.length) {
+        // Remove excess
+        return prev.slice(0, quantity);
+      }
+      return prev;
+    });
+    // Reset preview index if out of bounds
+    if (previewColorIndex >= quantity) {
+      setPreviewColorIndex(0);
+    }
+  }, [quantity]);
+  
+  // Update specific device color
+  const updateDeviceColor = (index, colorId) => {
+    setDeviceColors(prev => {
+      const newColors = [...prev];
+      newColors[index] = colorId;
+      return newColors;
+    });
+    // Show this device's color in preview
+    setPreviewColorIndex(index);
+  };
+  
+  // Get the current preview color (for main image tint)
+  const currentPreviewColor = COLOR_OPTIONS.find(c => c.id === deviceColors[previewColorIndex])?.hex || '#C0C0C0';
   
   // Shipping info
   const [shippingInfo, setShippingInfo] = useState({
