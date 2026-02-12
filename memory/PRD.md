@@ -69,6 +69,13 @@ ManoProtect is a revolutionary cybersecurity platform for both consumers (B2C) a
 
 ## Changelog
 
+### Feb 12, 2026 - SOS Sound Fix & Payment Cleanup
+- ✅ SOS button sound: Silent for sender, siren plays on family members' devices
+- ✅ Added automatic siren (8s, 600-1400Hz) when family alerts arrive
+- ✅ Added browser notification for SOS alerts
+- ✅ Verified payment_transactions collection is empty (0 documents)
+- ✅ Videos Demo duration changed from 8s to 12s (Sora 2 max)
+
 ### Feb 12, 2026 - Videos Demo IA Page
 - ✅ Created Videos Demo IA page with Sora 2 integration
 - ✅ 4 demo videos: SOS Button, Family Locator, Voice Shield, Deepfake Detector
