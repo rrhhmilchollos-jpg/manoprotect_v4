@@ -324,8 +324,18 @@ const LandingPage = () => {
                 onClick={() => navigate('/sos-quick')}
                 className="w-full bg-red-700 hover:bg-red-800 text-white rounded-xl h-12 text-lg font-bold"
               >
-                Ver Botón SOS
+                Ver Botón SOS App
                 <ArrowRight className="w-5 h-5 ml-2" />
+              </Button>
+              
+              {/* Botón para solicitar dispositivo físico */}
+              <Button
+                onClick={() => navigate('/dispositivo-sos')}
+                variant="outline"
+                className="w-full mt-3 border-2 border-red-600 text-red-600 hover:bg-red-50 rounded-xl h-12 text-lg font-bold"
+                data-testid="order-physical-sos-btn"
+              >
+                🔴 Solicitar Botón SOS Físico GRATIS
               </Button>
             </div>
 
