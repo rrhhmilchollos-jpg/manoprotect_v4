@@ -324,28 +324,22 @@ export default function SOSDeviceOrder() {
                   {/* Price breakdown */}
                   <div className="mt-4 p-4 bg-zinc-50 rounded-lg">
                     <div className="space-y-2 text-sm">
-                      {hasFamilyPlan && (
-                        <div className="flex justify-between text-emerald-600">
-                          <span>1x Dispositivo (Plan Familiar)</span>
-                          <span>GRATIS</span>
-                        </div>
-                      )}
-                      {quantity > 1 && hasFamilyPlan && (
-                        <div className="flex justify-between">
-                          <span>{quantity - 1}x Dispositivos adicionales</span>
-                          <span>{(quantity - 1) * PRICING.additional}€</span>
-                        </div>
-                      )}
-                      {!hasFamilyPlan && (
-                        <div className="flex justify-between">
-                          <span>{quantity}x Dispositivos</span>
-                          <span>{quantity * PRICING.single}€</span>
-                        </div>
-                      )}
+                      <div className="flex justify-between text-emerald-600">
+                        <span>{quantity}x Dispositivo SOS</span>
+                        <span className="line-through text-zinc-400 mr-2">49€</span>
+                        <span className="font-bold">GRATIS</span>
+                      </div>
+                      <div className="flex justify-between text-zinc-600">
+                        <span>Envío Express 24-48h</span>
+                        <span>4,95€</span>
+                      </div>
                       <div className="border-t pt-2 flex justify-between font-bold text-lg">
                         <span>Total</span>
-                        <span className="text-emerald-600">{totalPrice}€</span>
+                        <span className="text-emerald-600">4,95€</span>
                       </div>
+                      <p className="text-xs text-center text-zinc-500 mt-2">
+                        Ahorras {quantity * 49}€ con la promoción de lanzamiento
+                      </p>
                     </div>
                   </div>
                 </CardContent>
