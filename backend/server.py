@@ -228,6 +228,9 @@ from routes.push_routes import router as push_router, init_db as init_push_route
 # Demo Videos Routes (Sora 2 AI video generation)
 from routes.demo_videos import router as demo_videos_router
 
+# SOS Device Orders Routes (Physical SOS Keychain)
+from routes.sos_device import router as sos_device_router
+
 # Legacy Vault (Secure Digital Legacy)
 from routes.legacy_vault import router as legacy_vault_router
 
