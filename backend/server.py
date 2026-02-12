@@ -228,6 +228,12 @@ from routes.push_routes import router as push_router, init_db as init_push_route
 # Demo Videos Routes (Sora 2 AI video generation)
 from routes.demo_videos import router as demo_videos_router
 
+# Legacy Vault (Secure Digital Legacy)
+from routes.legacy_vault import router as legacy_vault_router
+
+# Phishing Simulation (B2B Enterprise)
+from routes.phishing_simulation import router as phishing_router
+
 # Banking and Compliance services - RESERVED for ManoBank.es
 # from services.compliance_service import init_compliance_service
 # from routes.compliance_routes import router as compliance_router, init_compliance_routes
