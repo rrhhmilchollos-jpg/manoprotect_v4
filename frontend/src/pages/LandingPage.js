@@ -2,13 +2,12 @@ import { useNavigate } from 'react-router-dom';
 import { Phone, Mail, MessageSquare, Users, Building2, Check, ArrowRight, LogIn, Shield, Star, Quote, X, Award, CheckCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/context/AuthContext';
-import SEO from '@/components/SEO';
-import AlertSubscription from '@/components/AlertSubscription';
-import LanguageSelector from '@/components/LanguageSelector';
-import { useI18n } from '@/i18n/I18nContext';
-import { useMemo, lazy, Suspense, useEffect, useState, useRef } from 'react';
+import { useMemo, lazy, Suspense, useEffect, useState, useRef, memo } from 'react';
 
-// Lazy load ALL conversion components (non-critical for initial render)
+// Lazy load ALL non-critical components for better LCP
+const SEO = lazy(() => import('@/components/SEO'));
+const AlertSubscription = lazy(() => import('@/components/AlertSubscription'));
+const LanguageSelector = lazy(() => import('@/components/LanguageSelector'));
 const ExitIntentPopup = lazy(() => import('@/components/conversion/ExitIntentPopup'));
 const SavingsCalculator = lazy(() => import('@/components/conversion/SavingsCalculator'));
 const TrustBadges = lazy(() => import('@/components/conversion/TrustBadges'));
@@ -16,13 +15,13 @@ const PlanQuiz = lazy(() => import('@/components/conversion/PlanQuiz'));
 const ComparisonTable = lazy(() => import('@/components/conversion/ComparisonTable'));
 const StickyMobileCTA = lazy(() => import('@/components/conversion/StickyMobileCTA'));
 const ProactiveChat = lazy(() => import('@/components/conversion/ProactiveChat'));
-
-// Lazy load trust components
 const LiveChatWidget = lazy(() => import('@/components/trust/LiveChatWidget'));
+
+// Simple i18n fallback for initial render
+const useI18nSimple = () => ({ t: (key) => key });
 
 // Brand assets - Use optimized WebP for performance (6KB vs 124KB PNG)
 const LOGO_URL = '/manoprotect_logo.webp';
-const ALERT_IMAGE_URL = process.env.REACT_APP_ALERT_IMAGE_URL || '/manoprotect_alert.png';
 
 // Hook for lazy loading sections when they come into view
 const useLazySection = () => {
