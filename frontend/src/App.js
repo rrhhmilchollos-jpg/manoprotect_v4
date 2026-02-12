@@ -266,6 +266,14 @@ function AppRouter() {
           <Route path="/phishing-simulation" element={<PhishingSimulation />} />
           <Route path="/simulacion-phishing" element={<PhishingSimulation />} />
           
+          {/* Employee Dashboard - Control Panel */}
+          <Route path="/employee-dashboard" element={<EmployeeDashboard />} />
+          <Route path="/panel-empleados" element={<EmployeeDashboard />} />
+          
+          {/* Blockchain Transaction Verifier */}
+          <Route path="/blockchain-verifier" element={<BlockchainVerifier />} />
+          <Route path="/verificador-blockchain" element={<BlockchainVerifier />} />
+          
           {/* Enterprise B2B Landing */}
           <Route path="/enterprise" element={<EnterpriseLanding />} />
           <Route path="/empresas" element={<EnterpriseLanding />} />
