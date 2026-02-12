@@ -539,9 +539,9 @@ const LandingPage = () => {
       <section className="px-6 py-20 bg-white">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-bold mb-4">{t('landing.features.title')}</h2>
+            <h2 className="text-3xl sm:text-4xl font-bold mb-4">Protección contra Amenazas Digitales</h2>
             <p className="text-lg text-zinc-600 max-w-2xl mx-auto">
-              {t('landing.hero.subtitle')}
+              Detectamos y bloqueamos las principales técnicas de fraude que amenazan a tu familia cada día
             </p>
           </div>
 
