@@ -160,6 +160,11 @@ async def update_order(order_id: str, update: UpdateOrderRequest):
 async def ship_order(order_id: str, tracking_number: str, carrier: str):
     """Mark order as shipped with tracking"""
     try:
+        # Get order first to get customer email
+        order = db.device_orders.find_one({"_id": ObjectId(order_id)})
+        if not order:
+            raise HTTPException(status_code=404, detail="Pedido no encontrado")
+        
         result = db.device_orders.update_one(
             {"_id": ObjectId(order_id)},
             {"$set": {
@@ -171,12 +176,35 @@ async def ship_order(order_id: str, tracking_number: str, carrier: str):
             }}
         )
         
-        if result.matched_count == 0:
-            raise HTTPException(status_code=404, detail="Pedido no encontrado")
+        # Send shipping notification email
+        email_sent = False
+        try:
+            from services.email_service import email_service
+            shipping = order.get("shipping", {})
+            customer_email = shipping.get("email") or ""
+            
+            if customer_email:
+                import asyncio
+                asyncio.create_task(email_service.send_shipping_update(
+                    user_id="",
+                    email=customer_email,
+                    shipping_data={
+                        "order_id": order.get("session_id", str(order_id)),
+                        "status": "shipped",
+                        "tracking_number": tracking_number,
+                        "carrier": carrier,
+                        "estimated_delivery": "2-3 días laborables"
+                    }
+                ))
+                email_sent = True
+        except Exception as email_error:
+            print(f"[EMAIL] Error sending shipping notification: {email_error}")
         
-        # TODO: Send notification to customer (email/SMS)
-        
-        return {"message": "Pedido marcado como enviado", "tracking_number": tracking_number}
+        return {
+            "message": "Pedido marcado como enviado", 
+            "tracking_number": tracking_number,
+            "email_sent": email_sent
+        }
         
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
