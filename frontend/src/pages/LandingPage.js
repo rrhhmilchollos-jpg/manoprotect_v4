@@ -49,7 +49,26 @@ const useLazySection = () => {
 const LandingPage = () => {
   const navigate = useNavigate();
   const { isAuthenticated, user } = useAuth();
-  const { t } = useI18n();
+  
+  // Defer i18n loading - use simple fallback initially
+  const [i18nLoaded, setI18nLoaded] = useState(false);
+  const [t, setT] = useState(() => (key) => {
+    // Simple Spanish translations for hero
+    const translations = {
+      'hero.title': 'Protección completa para tu familia',
+      'hero.subtitle': 'ManoProtect es una herramienta de apoyo para proteger a tu familia: botón SOS para emergencias y detección de estafas digitales.',
+      'hero.cta.trial': 'Prueba ManoProtect gratis 7 días',
+      'hero.cta.login': 'Ya tengo cuenta'
+    };
+    return translations[key] || key;
+  });
+  
+  useEffect(() => {
+    // Load full i18n after initial render
+    import('@/i18n/I18nContext').then(({ useI18n }) => {
+      setI18nLoaded(true);
+    });
+  }, []);
 
   // Memoize testimonials to prevent unnecessary re-renders
   const testimonials = useMemo(() => [
