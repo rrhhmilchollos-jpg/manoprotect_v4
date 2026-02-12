@@ -178,6 +178,20 @@ ManoProtect es una plataforma revolucionaria de ciberseguridad para consumidores
 - ✅ Secure Digital Legacy Vault - AES-256 encrypted document storage
 - ✅ Phishing Simulation B2B - Campaign management, employee tracking, 5 templates
 
+### Feb 12, 2026 - SOS Device Colors & Order Tracking
+- ✅ 20 colores del dispositivo SOS en 5 categorías: Jóvenes, Mujer, Hombre, Elegante, Unisex
+- ✅ Panel de seguimiento de pedidos (`/order-tracking`)
+- ✅ Timeline visual de estados de envío
+- ✅ Búsqueda por número de pedido o tracking
+- ✅ Backend endpoints: `/api/sos-devices/my-orders`, `/api/sos-devices/track/{order_id}`
+
+### Feb 12, 2026 - PageSpeed & Accessibility Improvements
+- ✅ GTM diferido 2 segundos para reducir TBT
+- ✅ Preconnect a backend de emergent añadido
+- ✅ Color contrast WCAG AA compliance (emerald-500 → emerald-700)
+- ✅ Botones y badges con mejor contraste
+- ✅ Content-visibility para lazy rendering de secciones
+
 ### Feb 12, 2026 - SOS Sound Fix & Payment Cleanup
 - ✅ SOS button sound: Silent for sender, siren plays on family members' devices
 - ✅ Added automatic siren (8s, 600-1400Hz) when family alerts arrive
