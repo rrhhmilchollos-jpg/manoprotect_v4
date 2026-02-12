@@ -53,16 +53,52 @@ export default function SOSEmergency() {
   // Active alerts from family
   const [familyAlerts, setFamilyAlerts] = useState([]);
 
+  // Track if siren has been played for current family alerts
+  const sirenPlayedRef = useRef(new Set());
+
   useEffect(() => {
     checkActiveAlerts();
     getCurrentLocation();
+    
+    // Poll for new alerts every 15 seconds
+    const alertInterval = setInterval(checkActiveAlerts, 15000);
     
     return () => {
       if (recordingIntervalRef.current) {
         clearInterval(recordingIntervalRef.current);
       }
+      clearInterval(alertInterval);
+      stopAlertSound();
     };
   }, []);
+
+  // Play siren when new family alerts arrive
+  useEffect(() => {
+    if (familyAlerts.length > 0) {
+      // Check if there are new alerts we haven't played siren for
+      const newAlerts = familyAlerts.filter(alert => !sirenPlayedRef.current.has(alert.sos_id));
+      
+      if (newAlerts.length > 0) {
+        // Play emergency siren for new alerts
+        playAlertSound();
+        
+        // Mark these alerts as siren-played
+        newAlerts.forEach(alert => sirenPlayedRef.current.add(alert.sos_id));
+        
+        // Also show browser notification if permitted
+        if ('Notification' in window && Notification.permission === 'granted') {
+          newAlerts.forEach(alert => {
+            new Notification('🚨 ALERTA SOS FAMILIAR', {
+              body: `${alert.user_name} necesita ayuda urgente!`,
+              icon: '/manoprotect_logo.webp',
+              requireInteraction: true,
+              tag: `sos-${alert.sos_id}`
+            });
+          });
+        }
+      }
+    }
+  }, [familyAlerts]);
 
   const checkActiveAlerts = async () => {
     try {
