@@ -250,6 +250,10 @@ function AppRouter() {
           <Route path="/investor-crm" element={<InvestorCRM />} />
           <Route path="/crm-inversores" element={<InvestorCRM />} />
           
+          {/* Videos Demo IA (Sora 2) */}
+          <Route path="/videos-demo" element={<VideosDemo />} />
+          <Route path="/demo-videos" element={<VideosDemo />} />
+          
           {/* Enterprise B2B Landing */}
           <Route path="/enterprise" element={<EnterpriseLanding />} />
           <Route path="/empresas" element={<EnterpriseLanding />} />
