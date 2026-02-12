@@ -338,7 +338,7 @@ const LandingPage = () => {
               
               {/* Botón para solicitar dispositivo físico */}
               <Button
-                onClick={() => navigate('/servicios-sos')}}
+                onClick={() => navigate('/servicios-sos')}
                 variant="outline"
                 className="w-full mt-3 border-2 border-red-600 text-red-600 hover:bg-red-50 rounded-xl h-12 text-lg font-bold"
                 data-testid="order-physical-sos-btn"
