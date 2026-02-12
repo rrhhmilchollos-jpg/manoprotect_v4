@@ -1306,13 +1306,21 @@ const LandingPage = () => {
         </div>
       </footer>
       
-      {/* Conversion: Componentes Globales */}
-      <ExitIntentPopup />
-      <StickyMobileCTA />
-      <ProactiveChat delaySeconds={30} />
+      {/* Conversion: Componentes Globales - Lazy loaded */}
+      <Suspense fallback={null}>
+        <ExitIntentPopup />
+      </Suspense>
+      <Suspense fallback={null}>
+        <StickyMobileCTA />
+      </Suspense>
+      <Suspense fallback={null}>
+        <ProactiveChat delaySeconds={30} />
+      </Suspense>
       
-      {/* Chat con Persona Real */}
-      <LiveChatWidget />
+      {/* Chat con Persona Real - Lazy loaded */}
+      <Suspense fallback={null}>
+        <LiveChatWidget />
+      </Suspense>
     </div>
   );
 };
