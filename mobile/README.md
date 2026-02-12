@@ -25,7 +25,7 @@ Todas las apps se conectan al mismo backend:
 
 | Entorno | URL |
 |---------|-----|
-| Preview | https://family-safety-demo.preview.emergentagent.com |
+| Preview | https://mano-staging.preview.emergentagent.com |
 | Producción | [Tu dominio de producción] |
 
 ---

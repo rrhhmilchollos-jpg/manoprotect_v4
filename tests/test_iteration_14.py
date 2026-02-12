@@ -178,7 +178,7 @@ class TestExistingPaymentRoutes:
         """POST /api/create-checkout-session should work for weekly plan"""
         response = requests.post(f"{BASE_URL}/api/create-checkout-session", json={
             "plan_type": "weekly",
-            "origin_url": "https://family-safety-demo.preview.emergentagent.com"
+            "origin_url": "https://mano-staging.preview.emergentagent.com"
         })
         assert response.status_code == 200
         data = response.json()
@@ -192,7 +192,7 @@ class TestExistingPaymentRoutes:
         """POST /api/create-checkout-session should work for monthly plan"""
         response = requests.post(f"{BASE_URL}/api/create-checkout-session", json={
             "plan_type": "monthly",
-            "origin_url": "https://family-safety-demo.preview.emergentagent.com"
+            "origin_url": "https://mano-staging.preview.emergentagent.com"
         })
         assert response.status_code == 200
         data = response.json()
@@ -204,7 +204,7 @@ class TestExistingPaymentRoutes:
         """POST /api/create-checkout-session should return 400 for invalid plan"""
         response = requests.post(f"{BASE_URL}/api/create-checkout-session", json={
             "plan_type": "invalid_plan",
-            "origin_url": "https://family-safety-demo.preview.emergentagent.com"
+            "origin_url": "https://mano-staging.preview.emergentagent.com"
         })
         assert response.status_code == 400
         print(f"✓ Checkout correctly rejects invalid plan")
