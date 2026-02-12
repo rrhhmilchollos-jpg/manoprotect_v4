@@ -174,26 +174,32 @@ window.trackEcommerce = {
 };
 
 /**
- * Performance tracking
+ * Performance tracking - Uses Performance API entries to avoid forced reflows
  */
 window.trackPerformance = function() {
-  if (window.performance && window.performance.timing) {
-    const timing = window.performance.timing;
-    
-    window.trackBigDataEvent('performance_metrics', {
-      dns_lookup: timing.domainLookupEnd - timing.domainLookupStart,
-      tcp_connection: timing.connectEnd - timing.connectStart,
-      server_response: timing.responseStart - timing.requestStart,
-      page_load: timing.loadEventEnd - timing.navigationStart,
-      dom_interactive: timing.domInteractive - timing.navigationStart,
-      dom_complete: timing.domComplete - timing.navigationStart
-    });
+  // Use modern Performance API entries instead of deprecated timing
+  if (window.performance && window.performance.getEntriesByType) {
+    const navEntry = window.performance.getEntriesByType('navigation')[0];
+    if (navEntry) {
+      window.trackBigDataEvent('performance_metrics', {
+        dns_lookup: Math.round(navEntry.domainLookupEnd - navEntry.domainLookupStart),
+        tcp_connection: Math.round(navEntry.connectEnd - navEntry.connectStart),
+        server_response: Math.round(navEntry.responseStart - navEntry.requestStart),
+        page_load: Math.round(navEntry.loadEventEnd),
+        dom_interactive: Math.round(navEntry.domInteractive),
+        dom_complete: Math.round(navEntry.domComplete)
+      });
+    }
   }
 };
 
-// Auto-track performance after page load
+// Auto-track performance after page load - using requestIdleCallback for non-blocking
 window.addEventListener('load', function() {
-  setTimeout(window.trackPerformance, 0);
+  if ('requestIdleCallback' in window) {
+    requestIdleCallback(window.trackPerformance, { timeout: 2000 });
+  } else {
+    setTimeout(window.trackPerformance, 1000);
+  }
 });
 
 // Scroll depth tracking - Optimized to avoid forced reflows
