@@ -1,12 +1,59 @@
 import { BrowserRouter, Routes, Route, useLocation, Navigate, useNavigate } from 'react-router-dom';
 import { Toaster } from 'sonner';
 import { AuthProvider, useAuth } from '@/context/AuthContext';
-import { useEffect, lazy, Suspense } from 'react';
+import { useEffect, lazy, Suspense, useState } from 'react';
 
 // Defer non-critical component loading
 const PushNotificationPrompt = lazy(() => import('@/components/PushNotificationPrompt'));
 const InterstitialAd = lazy(() => import('@/components/InterstitialAd').then(m => ({ default: m.InterstitialAd })));
-const useInterstitialAd = () => ({ showAd: () => {}, closeAd: () => {}, isVisible: false });
+
+// Simplified useInterstitialAd that respects preview environment
+const useInterstitialAd = (user) => {
+  const [showAd, setShowAd] = useState(false);
+  
+  useEffect(() => {
+    // Never show ads in preview/staging
+    const hostname = window.location.hostname;
+    if (hostname.includes('preview') || hostname.includes('staging') || hostname === 'localhost') {
+      return;
+    }
+    
+    // Check if premium user
+    const premiumPlans = ['family-yearly', 'family-monthly', 'premium', 'enterprise'];
+    if (user && premiumPlans.includes(user.plan)) {
+      return;
+    }
+    
+    // Check session dismissed
+    if (sessionStorage.getItem('mano_ad_session_dismissed') === 'true') {
+      return;
+    }
+    
+    // Check view count (show after 3 views)
+    const views = parseInt(localStorage.getItem('mano_ad_views') || '0');
+    if (views < 3) {
+      localStorage.setItem('mano_ad_views', String(views + 1));
+      return;
+    }
+    
+    // Check minimum interval (60 seconds)
+    const lastAd = parseInt(localStorage.getItem('mano_last_ad_time') || '0');
+    if (Date.now() - lastAd < 60000) {
+      return;
+    }
+    
+    setShowAd(true);
+  }, [user]);
+  
+  const closeAd = () => {
+    setShowAd(false);
+    sessionStorage.setItem('mano_ad_session_dismissed', 'true');
+    localStorage.setItem('mano_last_ad_time', String(Date.now()));
+    localStorage.setItem('mano_ad_views', '0');
+  };
+  
+  return { showAd, closeAd };
+};
 
 // Firebase Analytics - Defer loading completely
 const logAnalyticsEvent = (...args) => {
