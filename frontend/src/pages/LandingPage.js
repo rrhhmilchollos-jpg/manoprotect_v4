@@ -384,7 +384,7 @@ const LandingPage = () => {
               <Button
                 data-testid="hero-download-btn"
                 onClick={() => navigate('/register')}
-                className="bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl px-8 h-14 text-lg font-bold shadow-lg"
+                className="bg-emerald-700 hover:bg-emerald-800 text-white rounded-xl px-8 h-14 text-lg font-bold shadow-lg"
               >
                 Crear Cuenta Gratis
                 <ArrowRight className="w-5 h-5 ml-2" />
