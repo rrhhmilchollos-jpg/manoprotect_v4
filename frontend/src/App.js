@@ -106,6 +106,7 @@ const AdminUsers = lazy(() => import('@/pages/AdminUsers'));
 const HealthProfile = lazy(() => import('@/pages/HealthProfile'));
 const AdminAudios = lazy(() => import('@/pages/AdminAudios'));
 const AdminDevices = lazy(() => import('@/pages/AdminDevices'));
+const ShippingAdmin = lazy(() => import('@/pages/ShippingAdmin'));
 const SOSAlertReceived = lazy(() => import('@/pages/SOSAlertReceived'));
 const SOSQuickButton = lazy(() => import('@/pages/SOSQuickButton'));
 const InstruccionesFamiliares = lazy(() => import('@/pages/InstruccionesFamiliares'));
