@@ -6,9 +6,9 @@ import SEO from '@/components/SEO';
 import AlertSubscription from '@/components/AlertSubscription';
 import LanguageSelector from '@/components/LanguageSelector';
 import { useI18n } from '@/i18n/I18nContext';
-import { useMemo, lazy, Suspense, useEffect, useState } from 'react';
+import { useMemo, lazy, Suspense, useEffect, useState, useRef } from 'react';
 
-// Lazy load conversion components (non-critical for initial render)
+// Lazy load ALL conversion components (non-critical for initial render)
 const ExitIntentPopup = lazy(() => import('@/components/conversion/ExitIntentPopup'));
 const SavingsCalculator = lazy(() => import('@/components/conversion/SavingsCalculator'));
 const TrustBadges = lazy(() => import('@/components/conversion/TrustBadges'));
@@ -23,6 +23,29 @@ const LiveChatWidget = lazy(() => import('@/components/trust/LiveChatWidget'));
 // Brand assets - Use optimized WebP for performance (6KB vs 124KB PNG)
 const LOGO_URL = '/manoprotect_logo.webp';
 const ALERT_IMAGE_URL = process.env.REACT_APP_ALERT_IMAGE_URL || '/manoprotect_alert.png';
+
+// Hook for lazy loading sections when they come into view
+const useLazySection = () => {
+  const [isVisible, setIsVisible] = useState(false);
+  const ref = useRef(null);
+  
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: '100px' }
+    );
+    
+    if (ref.current) observer.observe(ref.current);
+    return () => observer.disconnect();
+  }, []);
+  
+  return { ref, isVisible };
+};
 
 const LandingPage = () => {
   const navigate = useNavigate();
