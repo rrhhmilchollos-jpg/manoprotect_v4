@@ -79,7 +79,8 @@ SUBSCRIPTION_PLANS = {
 
 class DeviceOrderRequest(BaseModel):
     quantity: int = Field(ge=1, le=10)
-    color: str
+    colors: List[str]  # Array of colors, one per device
+    device_style: str = "adulto"  # juvenil, adulto, senior
     shipping: Dict
     origin_url: str
 
