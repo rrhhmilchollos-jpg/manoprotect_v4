@@ -225,6 +225,9 @@ from routes.audio_routes import router as audio_router, init_db as init_audio_ro
 from routes.device_routes import router as device_router, init_db as init_device_routes
 from routes.push_routes import router as push_router, init_db as init_push_routes
 
+# Demo Videos Routes (Sora 2 AI video generation)
+from routes.demo_videos import router as demo_videos_router
+
 # Banking and Compliance services - RESERVED for ManoBank.es
 # from services.compliance_service import init_compliance_service
 # from routes.compliance_routes import router as compliance_router, init_compliance_routes
