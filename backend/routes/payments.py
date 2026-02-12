@@ -144,8 +144,8 @@ async def create_device_checkout(order: DeviceOrderRequest):
     """Create checkout session for SOS device order (shipping only, scalable by quantity)"""
     try:
         origin_url = order.origin_url
-        success_url = f"{origin_url}/servicios-sos?payment=success&session_id={{CHECKOUT_SESSION_ID}}"
-        cancel_url = f"{origin_url}/servicios-sos?payment=cancelled"
+        success_url = f"{origin_url}/pedido-confirmado?payment=success&session_id={{CHECKOUT_SESSION_ID}}"
+        cancel_url = f"{origin_url}/pedido-confirmado?payment=cancelled"
         
         # Calculate shipping cost based on quantity (escalates)
         shipping_price = get_shipping_cost(order.quantity)
