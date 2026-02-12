@@ -141,11 +141,19 @@ def downgrade_to_basic(user_id: str):
 
 @router.post("/device/checkout")
 async def create_device_checkout(order: DeviceOrderRequest):
-    """Create checkout session for SOS device order (shipping only)"""
+    """Create checkout session for SOS device order (shipping only, scalable by quantity)"""
     try:
         origin_url = order.origin_url
         success_url = f"{origin_url}/servicios-sos?payment=success&session_id={{CHECKOUT_SESSION_ID}}"
         cancel_url = f"{origin_url}/servicios-sos?payment=cancelled"
+        
+        # Calculate shipping cost based on quantity (escalates)
+        shipping_price = get_shipping_cost(order.quantity)
+        
+        # Format colors for description
+        colors_desc = ", ".join(order.colors[:3])
+        if len(order.colors) > 3:
+            colors_desc += f" (+{len(order.colors) - 3} más)"
         
         # Create Stripe checkout session for shipping
         session = stripe.checkout.Session.create(
@@ -153,10 +161,10 @@ async def create_device_checkout(order: DeviceOrderRequest):
             line_items=[{
                 'price_data': {
                     'currency': 'eur',
-                    'unit_amount': int(SHIPPING_PRICE * 100),  # Convert to cents
+                    'unit_amount': int(shipping_price * 100),  # Convert to cents
                     'product_data': {
                         'name': f'Envío Dispositivo SOS ManoProtect x{order.quantity}',
-                        'description': f'Envío Express 24-48h - Color: {order.color}',
+                        'description': f'Envío Express 24-48h - Colores: {colors_desc} - Estilo: {order.device_style}',
                     },
                 },
                 'quantity': 1,
@@ -167,7 +175,8 @@ async def create_device_checkout(order: DeviceOrderRequest):
             metadata={
                 'type': 'device_order',
                 'quantity': str(order.quantity),
-                'color': order.color,
+                'colors': ','.join(order.colors),
+                'device_style': order.device_style,
                 'shipping_name': order.shipping.get('fullName', ''),
                 'shipping_phone': order.shipping.get('phone', ''),
                 'shipping_address': order.shipping.get('address', ''),
@@ -181,10 +190,11 @@ async def create_device_checkout(order: DeviceOrderRequest):
         db.payment_transactions.insert_one({
             "session_id": session.id,
             "type": "device_order",
-            "amount": SHIPPING_PRICE,
+            "amount": shipping_price,
             "currency": "eur",
             "quantity": order.quantity,
-            "color": order.color,
+            "colors": order.colors,
+            "device_style": order.device_style,
             "shipping": order.shipping,
             "status": "pending",
             "payment_status": "initiated",
