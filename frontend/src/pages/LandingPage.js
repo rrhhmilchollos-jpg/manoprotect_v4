@@ -501,7 +501,7 @@ const LandingPage = () => {
                 </ul>
                 <div className="flex flex-col sm:flex-row gap-4">
                   <Button
-                    onClick={() => navigate('/servicios-sos')}}
+                    onClick={() => navigate('/servicios-sos')}
                     className="bg-red-600 hover:bg-red-700 text-white rounded-xl px-8 h-14 text-lg font-bold shadow-lg"
                     data-testid="sos-device-main-cta"
                   >
