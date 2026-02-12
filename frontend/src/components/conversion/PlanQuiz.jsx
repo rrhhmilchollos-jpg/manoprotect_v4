@@ -189,7 +189,7 @@ const PlanQuiz = ({ onComplete }) => {
         </div>
       </div>
 
-      <p className="text-xs text-slate-500 text-center">
+      <p className="text-xs text-slate-400 text-center">
         Pregunta {step + 1} de {questions.length}
       </p>
 
