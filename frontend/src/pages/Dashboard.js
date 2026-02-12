@@ -21,6 +21,7 @@ const API = `${BACKEND_URL}/api`;
 
 const Dashboard = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { user, isAdmin, isInvestor, logout } = useAuth();
   const { t } = useI18n();
   const [analyzing, setAnalyzing] = useState(false);
@@ -29,8 +30,10 @@ const Dashboard = () => {
   const [threats, setThreats] = useState([]);
   const [stats, setStats] = useState(null);
   const [lastAnalysis, setLastAnalysis] = useState(null);
-  const [activeTab, setActiveTab] = useState('analyze'); // 'analyze', 'banking', 'history'
+  const [activeTab, setActiveTab] = useState(searchParams.get('tab') || 'analyze'); // 'analyze', 'banking', 'history', 'pedidos'
   const [recentAlerts, setRecentAlerts] = useState([]);
+  const [userOrders, setUserOrders] = useState([]);
+  const [ordersLoading, setOrdersLoading] = useState(false);
 
   useEffect(() => {
     loadThreats();
