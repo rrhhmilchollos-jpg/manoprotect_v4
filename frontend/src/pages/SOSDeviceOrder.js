@@ -223,6 +223,20 @@ export default function SOSDeviceOrder() {
 
             {/* Order Form */}
             <div className="space-y-6">
+              {/* PROMO LANZAMIENTO BANNER */}
+              <div className="bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 rounded-2xl p-5 text-white shadow-xl">
+                <div className="flex items-center gap-4">
+                  <div className="w-14 h-14 bg-white/20 backdrop-blur rounded-xl flex items-center justify-center">
+                    <Star className="w-8 h-8" />
+                  </div>
+                  <div>
+                    <p className="text-xl font-bold">🎉 PROMOCIÓN DE LANZAMIENTO</p>
+                    <p className="text-white/90">Dispositivo SOS <span className="font-bold text-yellow-200">100% GRATIS</span></p>
+                    <p className="text-sm text-white/80">Solo pagas el envío · Oferta válida hasta {PROMO_END_DATE}</p>
+                  </div>
+                </div>
+              </div>
+
               {/* Plan Badge */}
               {hasFamilyPlan && (
                 <div className="bg-emerald-100 border border-emerald-300 rounded-xl p-4">
