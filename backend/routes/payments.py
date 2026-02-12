@@ -18,7 +18,7 @@ from pymongo import MongoClient
 
 load_dotenv()
 
-router = APIRouter(prefix="/api/payments", tags=["Payments"])
+router = APIRouter(prefix="/payments", tags=["Payments"])
 
 # Stripe Configuration
 stripe.api_key = os.environ.get("STRIPE_API_KEY")
