@@ -22,6 +22,7 @@ const useI18nSimple = () => ({ t: (key) => key });
 
 // Brand assets - Use optimized WebP for performance (6KB vs 124KB PNG)
 const LOGO_URL = '/manoprotect_logo.webp';
+const ALERT_IMAGE_URL = '/manoprotect_alert.png';
 
 // Hook for lazy loading sections when they come into view
 const useLazySection = () => {
