@@ -403,6 +403,91 @@ export default function SOSDeviceOrder() {
                 </CardContent>
               </Card>
 
+              {/* Color Selection */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    🎨 Elige los Colores
+                  </CardTitle>
+                  <CardDescription>
+                    Personaliza cada dispositivo para cada miembro de la familia
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  {/* Category tabs */}
+                  <div className="flex flex-wrap gap-2">
+                    {COLOR_CATEGORIES.map((cat) => (
+                      <button
+                        key={cat.id}
+                        onClick={() => setActiveColorCategory(cat.id)}
+                        className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all ${
+                          activeColorCategory === cat.id
+                            ? 'bg-emerald-600 text-white shadow-md'
+                            : 'bg-zinc-100 text-zinc-600 hover:bg-zinc-200'
+                        }`}
+                      >
+                        {cat.icon} {cat.label}
+                      </button>
+                    ))}
+                  </div>
+                  
+                  {/* Color grid */}
+                  <div className="grid grid-cols-4 gap-2">
+                    {COLOR_OPTIONS.filter(c => c.category === activeColorCategory).map((color) => (
+                      <button
+                        key={color.id}
+                        onClick={() => handleColorSelect(color.id, 0)}
+                        className={`p-2 rounded-lg border-2 transition-all hover:scale-105 ${
+                          selectedColors.includes(color.id)
+                            ? 'border-emerald-500 shadow-lg'
+                            : 'border-transparent'
+                        }`}
+                        style={{ backgroundColor: color.hex + '20' }}
+                      >
+                        <div 
+                          className="w-8 h-8 rounded-full mx-auto mb-1 border border-zinc-300"
+                          style={{ backgroundColor: color.hex }}
+                        />
+                        <p className="text-xs font-medium truncate">{color.icon}</p>
+                        <p className="text-xs text-zinc-600 truncate">{color.name}</p>
+                      </button>
+                    ))}
+                  </div>
+                  
+                  {/* Selected colors per device */}
+                  {quantity > 0 && (
+                    <div className="mt-4 p-3 bg-emerald-50 rounded-lg">
+                      <p className="text-sm font-medium text-emerald-800 mb-2">
+                        Colores seleccionados ({quantity} dispositivo{quantity > 1 ? 's' : ''}):
+                      </p>
+                      <div className="flex flex-wrap gap-2">
+                        {selectedColors.map((colorId, idx) => {
+                          const color = COLOR_OPTIONS.find(c => c.id === colorId) || COLOR_OPTIONS[16];
+                          return (
+                            <div key={idx} className="flex items-center gap-2 bg-white px-3 py-1.5 rounded-full shadow-sm">
+                              <div 
+                                className="w-4 h-4 rounded-full border"
+                                style={{ backgroundColor: color.hex }}
+                              />
+                              <span className="text-sm">#{idx + 1}: {color.name}</span>
+                              <select
+                                value={colorId}
+                                onChange={(e) => handleColorSelect(e.target.value, idx)}
+                                className="text-xs bg-transparent border-none focus:ring-0 cursor-pointer"
+                              >
+                                {COLOR_OPTIONS.map(c => (
+                                  <option key={c.id} value={c.id}>{c.icon} {c.name}</option>
+                                ))}
+                              </select>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+
               {/* Shipping Info */}
               <Card>
                 <CardHeader>
