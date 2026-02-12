@@ -125,6 +125,7 @@ const EmployeeDashboard = lazy(() => import('@/pages/EmployeeDashboard'));
 const BlockchainVerifier = lazy(() => import('@/pages/BlockchainVerifier'));
 const SOSDeviceOrder = lazy(() => import('@/pages/SOSDeviceOrder'));
 const OrderTracking = lazy(() => import('@/pages/OrderTracking'));
+const SOSServices = lazy(() => import('@/pages/SOSServices'));
 
 // Lazy load non-critical UI components to reduce main thread blocking
 const CookieConsent = lazy(() => import('@/components/CookieConsent'));
@@ -304,10 +305,14 @@ function AppRouter() {
           <Route path="/smart-locator" element={<SmartLocator />} />
           <Route path="/localizador" element={<SmartLocator />} />
           
-          {/* SOS Device Order (Physical Keychain) */}
-          <Route path="/sos-device" element={<SOSDeviceOrder />} />
-          <Route path="/dispositivo-sos" element={<SOSDeviceOrder />} />
-          <Route path="/boton-sos" element={<SOSDeviceOrder />} />
+          {/* SOS Services - Complete Page */}
+          <Route path="/servicios-sos" element={<SOSServices />} />
+          <Route path="/sos-services" element={<SOSServices />} />
+          
+          {/* SOS Device Order (Physical Keychain) - Redirect to Services */}
+          <Route path="/sos-device" element={<SOSServices />} />
+          <Route path="/dispositivo-sos" element={<SOSServices />} />
+          <Route path="/boton-sos" element={<SOSServices />} />
           
           {/* Anti-Deepfake Shield */}
           <Route path="/deepfake-shield" element={<DeepfakeShield />} />
