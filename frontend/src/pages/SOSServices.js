@@ -475,11 +475,11 @@ export default function SOSServices() {
                 {/* Product Gallery with Dynamic Color Preview */}
                 <div className="space-y-4">
                   <div className="bg-white rounded-2xl p-6 shadow-lg relative overflow-hidden">
-                    {/* Main image with color tint overlay */}
+                    {/* Main image - changes based on selected device style */}
                     <div className="relative">
                       <img 
-                        src={DEVICE_IMAGES[activeImage]} 
-                        alt="ManoProtect SOS Button"
+                        src={DEVICE_STYLE_IMAGES[selectedDeviceStyle] || DEVICE_IMAGES.front} 
+                        alt={`ManoProtect SOS Button - Estilo ${selectedDeviceStyle}`}
                         className="w-full h-auto rounded-xl"
                       />
                       {/* Color overlay indicator */}
@@ -489,6 +489,13 @@ export default function SOSServices() {
                       >
                         <span className="text-xs font-bold text-white drop-shadow">
                           #{previewColorIndex + 1}
+                        </span>
+                      </div>
+                      {/* Style badge */}
+                      <div className="absolute top-4 left-4 bg-white/90 backdrop-blur px-3 py-1 rounded-full shadow">
+                        <span className="text-sm font-semibold">
+                          {selectedDeviceStyle === 'juvenil' ? '🎨 Juvenil' : 
+                           selectedDeviceStyle === 'adulto' ? '💼 Adulto' : '🌿 Senior'}
                         </span>
                       </div>
                     </div>
@@ -502,16 +509,18 @@ export default function SOSServices() {
                       </p>
                     </div>
                   </div>
+                  {/* Style preview thumbnails */}
                   <div className="flex gap-3">
-                    {Object.entries(DEVICE_IMAGES).map(([key, url]) => (
+                    {Object.entries(DEVICE_STYLE_IMAGES).map(([key, url]) => (
                       <button
                         key={key}
-                        onClick={() => setActiveImage(key)}
+                        onClick={() => setSelectedDeviceStyle(key)}
                         className={`w-20 h-20 rounded-lg overflow-hidden border-2 transition-all ${
-                          activeImage === key ? 'border-red-500 shadow-lg' : 'border-zinc-200'
+                          selectedDeviceStyle === key ? 'border-red-500 shadow-lg scale-105' : 'border-zinc-200'
                         }`}
+                        title={`Estilo ${key}`}
                       >
-                        <img src={url} alt={key} className="w-full h-full object-cover" />
+                        <img src={url} alt={`Estilo ${key}`} className="w-full h-full object-cover" />
                       </button>
                     ))}
                   </div>
