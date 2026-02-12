@@ -406,14 +406,14 @@ export default function SOSDeviceOrder() {
               <Button 
                 onClick={handleSubmitOrder}
                 disabled={loading}
-                className="w-full h-14 text-lg bg-emerald-600 hover:bg-emerald-700"
+                className="w-full h-14 text-lg bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700"
               >
                 {loading ? (
                   'Procesando...'
                 ) : (
                   <>
                     <ShoppingCart className="w-5 h-5 mr-2" />
-                    {totalPrice === 0 ? 'Solicitar Dispositivo Gratis' : `Pedir por ${totalPrice}€`}
+                    Solicitar Dispositivo GRATIS (Solo envío: 4,95€)
                   </>
                 )}
               </Button>
