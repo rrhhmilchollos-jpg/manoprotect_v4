@@ -52,6 +52,25 @@ ManoProtect es una plataforma revolucionaria de ciberseguridad para consumidores
 - **SendGrid integrado**: Requiere SENDGRID_API_KEY en .env para producción
 - Backend: `/app/backend/services/email_service.py`
 
+### 0.5 Página de Agradecimiento de Pedido ✅ (NUEVO - 12 Feb 2026)
+- **Página de confirmación** después de pago exitoso: `/pedido-confirmado`
+- **Efecto confetti** al pagar correctamente
+- **Countdown automático**: Redirección a dashboard en 10 segundos
+- **Opciones**: "Ir ahora" / "Quedarme aquí"
+- **Pasos visuales**: Preparación → Envío → Activación
+- **Detalles del pedido**: Precio, envío, total
+- **Página de cancelación**: Mensaje amigable si el usuario cancela
+- Frontend: `/app/frontend/src/pages/OrderConfirmation.js`
+
+### 0.6 Panel de Seguimiento de Pedidos en Dashboard ✅ (NUEVO - 12 Feb 2026)
+- **Nueva tab "Mis Pedidos"** en el dashboard del usuario
+- **Lista de pedidos**: Todos los pedidos del usuario con estado
+- **Barra de progreso visual**: Pedido → Enviado → En camino → Entregado
+- **Detalles**: Número tracking, transportista, dirección de entrega
+- **Estado vacío**: CTA para solicitar primer dispositivo
+- **Acceso rápido vía URL**: `/dashboard?tab=pedidos`
+- Backend: `/api/payments/orders/my-orders`
+
 ### 0.4 Landing Page - Sección Amenazas ✅ (NUEVO - 12 Feb 2026)
 - **Sección "Protección contra Amenazas Digitales"** con traducciones correctas:
   - Vishing - Llamadas fraudulentas
