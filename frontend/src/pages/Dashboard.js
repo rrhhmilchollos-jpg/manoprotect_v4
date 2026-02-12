@@ -822,6 +822,186 @@ const Dashboard = () => {
         </Card>
           </>
         )}
+
+        {/* Tab Content: Mis Pedidos */}
+        {activeTab === 'pedidos' && (
+          <div className="space-y-6">
+            {/* Orders Header */}
+            <Card className="border-red-200 bg-gradient-to-r from-red-50 to-orange-50">
+              <CardContent className="py-6">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-4">
+                    <div className="w-14 h-14 rounded-full bg-red-100 flex items-center justify-center">
+                      <Package className="w-7 h-7 text-red-600" />
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-bold text-red-900">Mis Dispositivos SOS</h3>
+                      <p className="text-red-700">Seguimiento en tiempo real de tus pedidos</p>
+                    </div>
+                  </div>
+                  <Button
+                    onClick={() => navigate('/servicios-sos')}
+                    className="bg-red-600 hover:bg-red-700 text-white"
+                  >
+                    <Package className="w-4 h-4 mr-2" />
+                    Solicitar Nuevo Dispositivo
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Orders List */}
+            {ordersLoading ? (
+              <div className="flex items-center justify-center py-12">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-red-600"></div>
+              </div>
+            ) : userOrders.length === 0 ? (
+              <Card className="border-dashed border-2 border-zinc-300">
+                <CardContent className="py-12 text-center">
+                  <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-zinc-100 flex items-center justify-center">
+                    <Package className="w-8 h-8 text-zinc-400" />
+                  </div>
+                  <h3 className="text-lg font-semibold text-zinc-700 mb-2">No tienes pedidos aún</h3>
+                  <p className="text-zinc-500 mb-4">
+                    Solicita tu dispositivo SOS físico gratis y protege a tu familia
+                  </p>
+                  <Button
+                    onClick={() => navigate('/servicios-sos')}
+                    className="bg-red-600 hover:bg-red-700 text-white"
+                  >
+                    Solicitar Dispositivo GRATIS
+                  </Button>
+                </CardContent>
+              </Card>
+            ) : (
+              <div className="space-y-4">
+                {userOrders.map((order, idx) => {
+                  const statusConfig = {
+                    pending_shipment: { label: 'Preparando', color: 'bg-amber-100 text-amber-800', icon: Clock },
+                    preparing: { label: 'En preparación', color: 'bg-amber-100 text-amber-800', icon: Package },
+                    shipped: { label: 'Enviado', color: 'bg-blue-100 text-blue-800', icon: Truck },
+                    in_transit: { label: 'En tránsito', color: 'bg-indigo-100 text-indigo-800', icon: Truck },
+                    out_for_delivery: { label: 'En reparto', color: 'bg-purple-100 text-purple-800', icon: MapPin },
+                    delivered: { label: 'Entregado', color: 'bg-emerald-100 text-emerald-800', icon: CheckCircle }
+                  };
+                  const status = statusConfig[order.order_status] || statusConfig.pending_shipment;
+                  const StatusIcon = status.icon;
+                  
+                  return (
+                    <Card key={order._id || idx} className="hover:shadow-lg transition-shadow">
+                      <CardContent className="py-6">
+                        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                          {/* Order Info */}
+                          <div className="flex items-start gap-4">
+                            <div className="w-12 h-12 rounded-xl bg-red-100 flex items-center justify-center flex-shrink-0">
+                              <StatusIcon className="w-6 h-6 text-red-600" />
+                            </div>
+                            <div>
+                              <div className="flex items-center gap-2 mb-1">
+                                <h4 className="font-bold text-zinc-900">
+                                  Pedido #{(order.session_id || order._id || '').slice(0, 8).toUpperCase()}
+                                </h4>
+                                <Badge className={status.color}>{status.label}</Badge>
+                              </div>
+                              <p className="text-sm text-zinc-600 mb-2">
+                                {order.quantity || 1}x Dispositivo SOS - Estilo {order.device_style || 'adulto'}
+                              </p>
+                              <div className="flex flex-wrap gap-1">
+                                {(order.colors || ['plata']).map((color, cIdx) => (
+                                  <Badge key={cIdx} variant="outline" className="text-xs">
+                                    {color}
+                                  </Badge>
+                                ))}
+                              </div>
+                            </div>
+                          </div>
+                          
+                          {/* Shipping Info */}
+                          <div className="flex flex-col items-end gap-2">
+                            {order.tracking_number ? (
+                              <div className="text-right">
+                                <p className="text-xs text-zinc-500">Número de seguimiento</p>
+                                <p className="font-mono font-bold text-zinc-900">{order.tracking_number}</p>
+                                {order.carrier && (
+                                  <Badge variant="outline" className="mt-1">{order.carrier}</Badge>
+                                )}
+                              </div>
+                            ) : (
+                              <p className="text-sm text-zinc-500 text-right">
+                                Pendiente de número de seguimiento
+                              </p>
+                            )}
+                            <p className="text-xs text-zinc-400">
+                              {order.created_at ? new Date(order.created_at).toLocaleDateString('es-ES', {
+                                day: 'numeric',
+                                month: 'long',
+                                year: 'numeric'
+                              }) : ''}
+                            </p>
+                          </div>
+                        </div>
+                        
+                        {/* Delivery Address */}
+                        {order.shipping && (
+                          <div className="mt-4 pt-4 border-t border-zinc-100">
+                            <p className="text-xs text-zinc-500 mb-1">Dirección de entrega:</p>
+                            <p className="text-sm text-zinc-700">
+                              {order.shipping.fullName} • {order.shipping.address}, {order.shipping.postalCode} {order.shipping.city}
+                            </p>
+                          </div>
+                        )}
+                        
+                        {/* Progress Bar */}
+                        <div className="mt-4">
+                          <div className="flex justify-between text-xs text-zinc-500 mb-2">
+                            <span>Pedido</span>
+                            <span>Enviado</span>
+                            <span>En camino</span>
+                            <span>Entregado</span>
+                          </div>
+                          <div className="h-2 bg-zinc-100 rounded-full overflow-hidden">
+                            <div 
+                              className="h-full bg-gradient-to-r from-red-500 to-orange-500 transition-all duration-500"
+                              style={{ 
+                                width: order.order_status === 'delivered' ? '100%' :
+                                       order.order_status === 'out_for_delivery' ? '75%' :
+                                       order.order_status === 'in_transit' ? '60%' :
+                                       order.order_status === 'shipped' ? '40%' :
+                                       order.order_status === 'preparing' ? '20%' : '10%'
+                              }}
+                            />
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  );
+                })}
+              </div>
+            )}
+            
+            {/* Help Section */}
+            <Card className="bg-zinc-50 border-zinc-200">
+              <CardContent className="py-6">
+                <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+                  <div>
+                    <h4 className="font-semibold text-zinc-900 mb-1">¿Tienes alguna pregunta sobre tu pedido?</h4>
+                    <p className="text-sm text-zinc-600">Nuestro equipo de soporte está disponible para ayudarte</p>
+                  </div>
+                  <div className="flex gap-3">
+                    <a href="tel:+34601510950" className="inline-flex items-center text-red-600 hover:text-red-700 font-medium">
+                      <Phone className="w-4 h-4 mr-2" />
+                      601 510 950
+                    </a>
+                    <a href="mailto:soporte@manoprotect.com" className="inline-flex items-center text-red-600 hover:text-red-700 font-medium">
+                      <Mail className="w-4 h-4 mr-2" />
+                      Contactar
+                    </a>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        )}
       </div>
     </div>
   );
