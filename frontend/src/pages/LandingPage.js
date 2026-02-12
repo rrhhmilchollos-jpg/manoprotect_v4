@@ -126,19 +126,27 @@ const LandingPage = () => {
           </div>
           <div className="flex items-center gap-3">
             <LanguageSelector className="mr-2" />
-            {/* Botón de Precios DESTACADO - Improved contrast */}
+            {/* Botón SOS Físico DESTACADO */}
+            <Button
+              data-testid="header-sos-device-btn"
+              onClick={() => navigate('/dispositivo-sos')}
+              className="bg-red-600 hover:bg-red-700 text-white rounded-lg px-4 h-10 font-semibold shadow-sm"
+            >
+              🔴 Botón SOS
+            </Button>
+            {/* Botón de Precios */}
             <Button
               data-testid="header-pricing-btn"
               onClick={() => navigate('/plans')}
               className="bg-emerald-700 hover:bg-emerald-800 text-white rounded-lg px-5 h-10 font-semibold shadow-sm"
             >
-              💰 Ver Precios
+              💰 Precios
             </Button>
             <Button
               data-testid="header-investors-btn"
               onClick={() => navigate('/investor/register')}
               variant="ghost"
-              className="text-zinc-700 hover:text-indigo-600 rounded-lg px-4 h-10"
+              className="text-zinc-700 hover:text-indigo-600 rounded-lg px-4 h-10 hidden md:flex"
             >
               Inversores
             </Button>
