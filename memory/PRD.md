@@ -69,6 +69,11 @@ ManoProtect is a revolutionary cybersecurity platform for both consumers (B2C) a
 
 ## Changelog
 
+### Feb 12, 2026 - P1 Features Complete
+- ✅ Secure Digital Legacy Vault - AES-256 encrypted document storage
+- ✅ Phishing Simulation B2B - Campaign management, employee tracking, 5 templates
+- Routes: /legacy-vault, /phishing-simulation
+
 ### Feb 12, 2026 - SOS Sound Fix & Payment Cleanup
 - ✅ SOS button sound: Silent for sender, siren plays on family members' devices
 - ✅ Added automatic siren (8s, 600-1400Hz) when family alerts arrive
