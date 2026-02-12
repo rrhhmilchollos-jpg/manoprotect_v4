@@ -25,7 +25,7 @@ Todas las apps se conectan al mismo backend:
 
 | Entorno | URL |
 |---------|-----|
-| Preview | https://device-checkout-flow.preview.emergentagent.com |
+| Preview | https://redesign-home-1.preview.emergentagent.com |
 | Producción | [Tu dominio de producción] |
 
 ---

@@ -9,7 +9,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 // For development/preview: Use your backend URL
 // For production: Update to your production domain
 const API_BASE_URL = __DEV__ 
-  ? 'https://device-checkout-flow.preview.emergentagent.com/api'
+  ? 'https://redesign-home-1.preview.emergentagent.com/api'
   : 'https://manoprotect.com/api';
 
 class ApiService {

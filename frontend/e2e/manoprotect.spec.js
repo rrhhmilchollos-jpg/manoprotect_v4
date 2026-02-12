@@ -5,7 +5,7 @@
 const { test, expect } = require('@playwright/test');
 
 // Test configuration
-const BASE_URL = process.env.TEST_URL || 'https://device-checkout-flow.preview.emergentagent.com';
+const BASE_URL = process.env.TEST_URL || 'https://redesign-home-1.preview.emergentagent.com';
 const ADMIN_EMAIL = 'info@manoprotect.com';
 const ADMIN_PASSWORD = '19862210Des';
 
