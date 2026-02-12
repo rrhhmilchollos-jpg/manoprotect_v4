@@ -1,7 +1,7 @@
 """
 ManoProtect - Payment System with Stripe
 Handles:
-- Device SOS orders (one-time payment 4.95€ shipping)
+- Device SOS orders (one-time payment with scalable shipping)
 - Subscription plans with 7-day trial
 - Card validation (no prepaid cards)
 - Auto-charge after trial
@@ -33,7 +33,26 @@ db = client[DB_NAME]
 # ==================== PRICING PACKAGES ====================
 # SECURITY: All prices defined server-side only
 
-SHIPPING_PRICE = 4.95  # EUR for device shipping
+# Shipping costs scale with quantity
+SHIPPING_COSTS = {
+    1: 4.95,
+    2: 6.95,
+    3: 8.95,
+    4: 10.95,
+    5: 12.95,
+    6: 14.95,
+    7: 16.95,
+    8: 18.95,
+    9: 20.95,
+    10: 22.95
+}
+
+def get_shipping_cost(quantity: int) -> float:
+    """Get shipping cost based on quantity - escalates with more devices"""
+    if quantity in SHIPPING_COSTS:
+        return SHIPPING_COSTS[quantity]
+    # For quantities > 10, use the max + extra per device
+    return SHIPPING_COSTS[10] + (quantity - 10) * 2.0
 
 SUBSCRIPTION_PLANS = {
     "individual": {
