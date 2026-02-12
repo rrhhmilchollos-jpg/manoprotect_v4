@@ -39,7 +39,33 @@ const Dashboard = () => {
     loadThreats();
     loadStats();
     loadRecentAlerts();
+    loadUserOrders();
   }, []);
+  
+  // Check URL params for tab navigation
+  useEffect(() => {
+    const tabParam = searchParams.get('tab');
+    if (tabParam) {
+      setActiveTab(tabParam);
+    }
+  }, [searchParams]);
+
+  const loadUserOrders = async () => {
+    setOrdersLoading(true);
+    try {
+      const response = await fetch(`${API}/payments/orders/my-orders`, { 
+        credentials: 'include' 
+      });
+      if (response.ok) {
+        const data = await response.json();
+        setUserOrders(data.orders || []);
+      }
+    } catch (error) {
+      console.error('Error loading orders:', error);
+    } finally {
+      setOrdersLoading(false);
+    }
+  };
 
   const loadRecentAlerts = async () => {
     try {
