@@ -2534,6 +2534,10 @@ api_router.include_router(investor_crm_router)
 # Demo Videos (Sora 2 AI video generation)
 api_router.include_router(demo_videos_router)
 
+# SOS Device Orders (Physical SOS Keychain)
+api_router.include_router(sos_device_router)
+print("✅ SOS Device routes loaded")
+
 # Legacy Vault (Secure Digital Legacy)
 api_router.include_router(legacy_vault_router)
 
