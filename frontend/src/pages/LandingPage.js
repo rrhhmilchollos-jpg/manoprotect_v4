@@ -24,8 +24,9 @@ import {
   LiveChatWidget
 } from '@/components/trust';
 
-// Brand assets from environment variables
-const LOGO_URL = process.env.REACT_APP_LOGO_URL || '/manoprotect_logo.png';
+// Brand assets from environment variables - Use WebP for better performance
+const LOGO_URL = process.env.REACT_APP_LOGO_URL || '/manoprotect_logo.webp';
+const LOGO_URL_PNG = '/manoprotect_logo.png'; // Fallback for older browsers
 const ALERT_IMAGE_URL = process.env.REACT_APP_ALERT_IMAGE_URL || '/manoprotect_alert.png';
 
 const LandingPage = () => {
@@ -83,11 +84,11 @@ const LandingPage = () => {
           </div>
           <div className="flex items-center gap-3">
             <LanguageSelector className="mr-2" />
-            {/* Botón de Precios DESTACADO */}
+            {/* Botón de Precios DESTACADO - Improved contrast */}
             <Button
               data-testid="header-pricing-btn"
               onClick={() => navigate('/plans')}
-              className="bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg px-5 h-10 font-semibold shadow-sm"
+              className="bg-emerald-700 hover:bg-emerald-800 text-white rounded-lg px-5 h-10 font-semibold shadow-sm"
             >
               💰 Ver Precios
             </Button>
@@ -131,9 +132,9 @@ const LandingPage = () => {
         </nav>
       </header>
 
-      {/* Trust Bar - Garantías visibles */}
-      <div className="bg-emerald-600 text-white py-2 px-4">
-        <div className="max-w-7xl mx-auto flex flex-wrap justify-center items-center gap-4 sm:gap-8 text-sm">
+      {/* Trust Bar - Garantías visibles - Improved contrast */}
+      <div className="bg-emerald-800 text-white py-2 px-4">
+        <div className="max-w-7xl mx-auto flex flex-wrap justify-center items-center gap-4 sm:gap-8 text-sm font-medium">
           <span className="flex items-center gap-2">
             <Check className="w-4 h-4" />
             7 días GRATIS
@@ -228,7 +229,7 @@ const LandingPage = () => {
             
             {/* Feature 1: Family Protection / SOS */}
             <div className="relative bg-gradient-to-br from-red-50 to-orange-50 border-2 border-red-200 rounded-3xl p-8 hover:shadow-xl transition-all">
-              <div className="absolute top-4 right-4 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full">
+              <div className="absolute top-4 right-4 bg-red-700 text-white text-xs font-bold px-3 py-1 rounded-full">
                 EMERGENCIAS
               </div>
               
@@ -279,7 +280,7 @@ const LandingPage = () => {
 
               <Button
                 onClick={() => navigate('/sos-quick')}
-                className="w-full bg-red-500 hover:bg-red-600 text-white rounded-xl h-12 text-lg font-bold"
+                className="w-full bg-red-700 hover:bg-red-800 text-white rounded-xl h-12 text-lg font-bold"
               >
                 Ver Botón SOS
                 <ArrowRight className="w-5 h-5 ml-2" />
@@ -288,7 +289,7 @@ const LandingPage = () => {
 
             {/* Feature 2: Fraud Protection */}
             <div className="relative bg-gradient-to-br from-indigo-50 to-blue-50 border-2 border-indigo-200 rounded-3xl p-8 hover:shadow-xl transition-all">
-              <div className="absolute top-4 right-4 bg-indigo-500 text-white text-xs font-bold px-3 py-1 rounded-full">
+              <div className="absolute top-4 right-4 bg-indigo-700 text-white text-xs font-bold px-3 py-1 rounded-full">
                 ESTAFAS
               </div>
               
@@ -336,7 +337,7 @@ const LandingPage = () => {
 
               <Button
                 onClick={() => navigate('/verificar-estafa')}
-                className="w-full bg-indigo-500 hover:bg-indigo-600 text-white rounded-xl h-12 text-lg font-bold"
+                className="w-full bg-indigo-700 hover:bg-indigo-800 text-white rounded-xl h-12 text-lg font-bold"
               >
                 Verificar una Estafa
                 <ArrowRight className="w-5 h-5 ml-2" />
