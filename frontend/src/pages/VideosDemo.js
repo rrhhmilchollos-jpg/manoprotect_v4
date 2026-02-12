@@ -272,9 +272,9 @@ const VideosDemo = () => {
                     src={video.url}
                     controls
                     className="w-full h-full object-cover"
-                    poster={`/demo-posters/${video.id}.jpg`}
                     data-testid={`video-${video.id}`}
                   >
+                    <source src={video.url} type="video/mp4" />
                     Tu navegador no soporta videos HTML5
                   </video>
                 ) : (
