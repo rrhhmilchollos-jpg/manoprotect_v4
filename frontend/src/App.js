@@ -170,18 +170,20 @@ const SOSAlertListener = () => {
 
 // Interstitial Ad Manager - Shows promotional ads for free users
 const InterstitialAdManager = () => {
-  // Disable interstitial ads in preview/staging environments
-  if (typeof window !== 'undefined') {
-    const hostname = window.location.hostname;
-    if (hostname.includes('preview') || hostname.includes('staging') || hostname === 'localhost') {
-      return null;
-    }
-  }
-  
   const { user } = useAuth();
+  
+  // Check if in preview/staging environment
+  const isPreviewEnv = typeof window !== 'undefined' && (
+    window.location.hostname.includes('preview') || 
+    window.location.hostname.includes('staging') || 
+    window.location.hostname === 'localhost'
+  );
+  
+  // Always call hooks, but skip ad display in preview
   const { showAd, closeAd } = useInterstitialAd(user);
   
-  if (!showAd) return null;
+  // Don't show ads in preview environments
+  if (isPreviewEnv || !showAd) return null;
   
   return (
     <Suspense fallback={null}>
