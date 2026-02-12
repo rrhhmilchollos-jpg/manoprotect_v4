@@ -908,8 +908,8 @@ const LandingPage = () => {
                   </div>
                 )}
                 
-                {/* Estrellas */}
-                <div className="flex items-center gap-1 mb-3" aria-label={`Valoración: ${testimonial.rating} de 5 estrellas`}>
+                {/* Estrellas - Use role="img" for star rating */}
+                <div className="flex items-center gap-1 mb-3" role="img" aria-label={`Valoración: ${testimonial.rating} de 5 estrellas`}>
                   {[...Array(testimonial.rating)].map((_, i) => (
                     <Star key={i} className="w-5 h-5 fill-yellow-400 text-yellow-400" aria-hidden="true" />
                   ))}
