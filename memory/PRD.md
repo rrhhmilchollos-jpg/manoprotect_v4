@@ -1,44 +1,47 @@
 # ManoProtect - Product Requirements Document
 
 ## Project Overview
-ManoProtect is a revolutionary cybersecurity platform for both consumers (B2C) and businesses (B2B).
+ManoProtect es una plataforma revolucionaria de ciberseguridad para consumidores (B2C) y empresas (B2B).
 
 **Website**: https://www.manoprotect.com
 **Preview URL**: https://mano-staging.preview.emergentagent.com
+**Empresa**: STARTBOOKING SL - CIF: B19427723
 
-## Implemented Features (All PRODUCTION READY)
+---
+
+## ✅ FUNCIONALIDADES IMPLEMENTADAS (PRODUCTION READY)
 
 ### 1. Real-Time Threat Intelligence ✅
 - Live APIs: Google Safe Browsing, VirusTotal, AbuseIPDB, AlienVault OTX
 - Endpoints: `/api/realtime/check/*`
 
 ### 2. AI Voice Shield ✅
-- Detects phone scams using AI pattern analysis
+- Detección de estafas telefónicas con análisis de patrones IA
 - Frontend: `/voice-shield`
 - Backend: `/api/voice-shield/*`
 
 ### 3. Smart Family Locator ✅
-- Behavioral zones (safe, school, work, restricted)
-- SOS button, location history, zone alerts
+- Zonas de comportamiento (segura, escuela, trabajo, restringida)
+- Botón SOS, historial de ubicaciones, alertas de zona
 - Frontend: `/smart-locator`
 - Backend: `/api/smart-locator/*`
 
 ### 4. Anti-Deepfake Shield ✅
-- Detects manipulated images, audio, video
-- 19 detection indicators (8 image, 6 audio, 5 video)
+- Detecta imágenes, audio y video manipulados
+- 19 indicadores de detección (8 imagen, 6 audio, 5 video)
 - Frontend: `/deepfake-shield`
 - Backend: `/api/deepfake-shield/*`
 
 ### 5. Chrome Extension ✅
-- Real-time URL verification
+- Verificación de URLs en tiempo real
 - Download: `/app/manoprotect-chrome-extension.zip`
-- Publication guide: `/app/GUIA_PUBLICAR_EXTENSION_CHROME.md`
+- Guía de publicación: `/app/GUIA_PUBLICAR_EXTENSION_CHROME.md`
 
-### 6. Investor CRM (Internal, Free) ✅
-- Track investor downloads and interactions
-- Status management (lead → committed)
-- Notes and tags per investor
-- Analytics dashboard
+### 6. Investor CRM (Interno, Gratis) ✅
+- Seguimiento de descargas e interacciones de inversores
+- Gestión de estados (lead → committed)
+- Notas y etiquetas por inversor
+- Dashboard de analytics
 - Frontend: `/investor-crm`
 - Backend: `/api/investor-crm/*`
 
@@ -46,11 +49,11 @@ ManoProtect is a revolutionary cybersecurity platform for both consumers (B2C) a
 - ads.txt: `/frontend/public/ads.txt`
 - Publisher ID: pub-7713974112203810
 
-### 8. Investor Portal ✅
-- Contact: inversores@manoprotect.com | +34 601 510 950
-- 4 documents: Business Plan, Financial Model, Pitch Deck, Dossier B2B
+### 8. Portal de Inversores ✅
+- Contacto: inversores@manoprotect.com | +34 601 510 950
+- 4 documentos: Plan de Negocio, Modelo Financiero, Pitch Deck, Dossier B2B
 
-### 9. Trust Seal / Sello de Confianza ✅ (NEW)
+### 9. Sello de Confianza / Trust Seal ✅
 - Badge visual para webs de clientes protegidos por ManoProtect
 - Verificación de sellos en tiempo real
 - Solicitud de nuevos sellos para empresas
@@ -58,49 +61,79 @@ ManoProtect is a revolutionary cybersecurity platform for both consumers (B2C) a
 - Backend: `/api/shield/seal/*`
 - Sello visible en footer de landing page
 
-### 10. DNA Digital Identity System ✅ (NEW)
+### 10. DNA Digital Identity System ✅
 - Identidad digital verificable única
 - Verificación de teléfonos, emails, webs
 - Registro de identidades para personas y empresas
 - Frontend: `/shield` → componente DNADigital
 - Backend: `/api/shield/dna/*`
 
-### 11. Blockchain Transaction Verifier ✅ (NEW)
+### 11. Blockchain Transaction Verifier ✅
 - Verificador de transacciones blockchain
 - Soporte: Bitcoin, Ethereum, Polygon, BNB Chain
 - Verificador de wallets y smart contracts
 - Detección de rug pulls, honeypots, mixers
 - Frontend: `/blockchain-verifier`
 
-### 12. Employee Dashboard ✅ (NEW)
+### 12. Employee Dashboard ✅
 - Panel de control completo del sistema
 - Gestión de usuarios, amenazas, sellos, DNA Digital
 - Estado del sistema en tiempo real
 - Acciones administrativas rápidas
 - Frontend: `/employee-dashboard`
-- Backend: `/api/admin/*` (endpoints adicionales)
+- Backend: `/api/admin/*`
 
-### 13. ManoProtect SOS Button (Dispositivo Físico) ✅ (NEW)
+### 13. ManoProtect SOS Button (Dispositivo Físico) ✅
 - Llavero físico de emergencia con botón SOS
 - GPS en tiempo real (precisión 2.5m)
 - Conexión directa al 112 (emergencias España)
 - Audio bidireccional para comunicación
 - Detección automática de caídas
 - 7 días de batería, carga USB
-- Sistema de pedidos con contador de personas/hogar
-- Envío express 24-48h a domicilio
-- Frontend: `/sos-device`, `/boton-sos`
+- **PROMOCIÓN LANZAMIENTO**: Dispositivo GRATIS (solo envío 4,95€)
+- Válido hasta 30 de Abril 2026
+- Frontend: `/sos-device`, `/boton-sos`, `/dispositivo-sos`
 - Backend: `/api/sos-device/*`
 - Documentación técnica: `/app/docs/MANOPROTECT_SOS_KEYCHAIN_SPECS.md`
 
-## Tech Stack
-- **Frontend**: React.js + Tailwind + Shadcn/UI
-- **Backend**: Python FastAPI + Motor (async MongoDB)
-- **Database**: MongoDB
-- **APIs**: Google Safe Browsing, VirusTotal, AbuseIPDB, AlienVault OTX
-- **Video Generation**: Sora 2 (via emergentintegrations)
+### 14. Videos Demo IA (Sora 2) ✅
+- Generación de videos demostrativos con IA
+- 4 demos: SOS Button, Family Locator, Voice Shield, Deepfake Detector
+- Limitación actual: máximo 12 segundos por video
+- Frontend: `/videos-demo`
+- Backend: `/api/demo-videos/*`
 
-## Key Routes Summary
+### 15. Secure Digital Legacy Vault ✅
+- Bóveda digital segura con encriptación AES-256
+- Almacenamiento de documentos importantes
+- Herencia digital para familiares
+- Frontend: `/legacy-vault`
+- Backend: `/api/legacy-vault/*`
+
+### 16. Phishing Simulation (B2B) ✅
+- Simulacros de phishing para empresas
+- Gestión de campañas y seguimiento de empleados
+- 5 plantillas de email
+- Frontend: `/phishing-simulation`
+- Backend: `/api/phishing/*`
+
+---
+
+## 🛠️ TECH STACK
+
+| Componente | Tecnología |
+|------------|------------|
+| Frontend | React.js + Tailwind + Shadcn/UI |
+| Backend | Python FastAPI + Motor (async MongoDB) |
+| Database | MongoDB |
+| APIs Seguridad | Google Safe Browsing, VirusTotal, AbuseIPDB, AlienVault OTX |
+| Video Generation | Sora 2 (via emergentintegrations) |
+| Payments | Stripe |
+| Push Notifications | Firebase Cloud Messaging |
+
+---
+
+## 📍 RUTAS PRINCIPALES
 
 | Feature | Frontend | Backend | Status |
 |---------|----------|---------|--------|
@@ -115,17 +148,22 @@ ManoProtect is a revolutionary cybersecurity platform for both consumers (B2C) a
 | Blockchain Verifier | /blockchain-verifier | - | ✅ |
 | Employee Dashboard | /employee-dashboard | /api/admin/* | ✅ |
 | SOS Device Order | /sos-device | /api/sos-device/* | ✅ |
+| Videos Demo | /videos-demo | /api/demo-videos/* | ✅ |
+| Legacy Vault | /legacy-vault | /api/legacy-vault/* | ✅ |
+| Phishing Simulation | /phishing-simulation | /api/phishing/* | ✅ |
 
-## Changelog
+---
+
+## 📅 CHANGELOG
 
 ### Feb 12, 2026 - ManoProtect SOS Button (Dispositivo Físico)
 - ✅ Diseño del llavero SOS generado (3 imágenes: frontal, lifestyle, técnico)
 - ✅ Documentación técnica completa para fabricación
 - ✅ Página de pedido con contador de personas/hogar
 - ✅ Sistema de pedidos con envío express 24-48h
-- ✅ Backend API: `/api/sos-device/*` (orders, devices, activate, alerts)
+- ✅ **PROMOCIÓN LANZAMIENTO**: Dispositivo GRATIS (solo envío 4,95€)
+- ✅ Backend API: `/api/sos-device/*`
 - ✅ Rutas: /sos-device, /dispositivo-sos, /boton-sos
-- ✅ Integración con plan familiar (1er dispositivo gratis)
 
 ### Feb 12, 2026 - Trust Seal, DNA Digital, Blockchain Verifier, Employee Dashboard
 - ✅ Sello de Confianza agregado al footer de Landing Page
@@ -139,69 +177,65 @@ ManoProtect is a revolutionary cybersecurity platform for both consumers (B2C) a
 ### Feb 12, 2026 - P1 Features Complete
 - ✅ Secure Digital Legacy Vault - AES-256 encrypted document storage
 - ✅ Phishing Simulation B2B - Campaign management, employee tracking, 5 templates
-- Routes: /legacy-vault, /phishing-simulation
 
 ### Feb 12, 2026 - SOS Sound Fix & Payment Cleanup
 - ✅ SOS button sound: Silent for sender, siren plays on family members' devices
 - ✅ Added automatic siren (8s, 600-1400Hz) when family alerts arrive
 - ✅ Added browser notification for SOS alerts
 - ✅ Verified payment_transactions collection is empty (0 documents)
-- ✅ Videos Demo duration changed from 8s to 12s (Sora 2 max)
 
 ### Feb 12, 2026 - Videos Demo IA Page
 - ✅ Created Videos Demo IA page with Sora 2 integration
 - ✅ 4 demo videos: SOS Button, Family Locator, Voice Shield, Deepfake Detector
 - ✅ Backend API for video generation at `/api/demo-videos/`
-- ✅ Added route `/videos-demo` and Dashboard quick access
-- ✅ All logos updated to WebP format across the app
+- ✅ All logos updated to WebP format
 
 ### Feb 12, 2026 - PageSpeed Optimization
-- ✅ Fixed CORS error blocking `/api/auth/me` (wildcard + credentials conflict)
+- ✅ Fixed CORS error blocking `/api/auth/me`
 - ✅ Logo optimization: PNG 121KB → WebP 6.5KB (95% reduction)
-- ✅ Improved preconnect: removed unused unsplash, added Firebase
 - ✅ Color contrast improvements across landing page (WCAG compliance)
-- ✅ Fixed ARIA prohibited attributes on testimonial star ratings
-- ✅ Optimized bigdata-analytics.js to avoid forced reflows
 - ✅ Enhanced security headers: CSP, COOP, Permissions-Policy
-- ✅ SEO: Fixed "Más información" link descriptor
 
 ### Feb 11, 2026 (Previous Session)
-- ✅ Google AdSense ads.txt created (pub-7713974112203810)
+- ✅ Google AdSense ads.txt created
 - ✅ Smart Family Locator - Full implementation
-- ✅ Anti-Deepfake Shield - Full implementation  
-- ✅ Investor CRM - Full implementation (internal, free)
+- ✅ Anti-Deepfake Shield - Full implementation
+- ✅ Investor CRM - Full implementation
 - ✅ Chrome Extension publication guide
-- ✅ Investor portal contact updated
 
-### Previous Sessions
-- ✅ AI Voice Shield
-- ✅ Live API integration (all 4 providers)
-- ✅ Chrome Extension created
-- ✅ Database migration to MongoDB
-- ✅ Test user cleanup
+---
 
-## Remaining Backlog
+## 🔜 BACKLOG PENDIENTE
 
-### P1 - High Priority
-- [ ] WhatsApp Business API integration (alerts)
-- [ ] Videos Demo IA - extend to 1 minute (Sora 2 limitation: 12s max)
+### P1 - Alta Prioridad
+- [ ] **WhatsApp Business API** - Alertas SOS por WhatsApp (EN PROGRESO)
+- [ ] **PageSpeed optimization** - Mejorar de 65/100 a 90+
+- [ ] **Videos Demo 1 minuto** - Solución para limitación Sora 2 (máx 12s)
 
-### P2 - Medium Priority  
-- [ ] PageSpeed optimization (currently 65/100)
+### P2 - Media Prioridad
+- [ ] Panel de seguimiento de envíos de dispositivos SOS
+- [ ] Integración con empresa de mensajería
 
-### P3 - Future
-- [ ] Additional blockchain networks support
+### P3 - Futuro
+- [ ] Soporte adicional de redes blockchain
+- [ ] App móvil nativa (Android/iOS)
 
-## Active Users
+---
+
+## 👥 USUARIOS ACTIVOS
+
 1. rrhh.milchollos@gmail.com - Ivan Rubio Cano (superadmin)
 2. msolassanchis@gmail.com - Maria Deseada Solas Sanchis (superadmin)
 3. ivanrubiosolas@gmail.com - Ivan Rubio cano (superadmin)
 4. info@manoprotect.com - ManoProtect Admin (superadmin)
 5. vguerolanavarro@gmail.com - Vicente (premium)
 
-## Environment Variables
-```
-# Backend
+---
+
+## 🔐 VARIABLES DE ENTORNO
+
+```bash
+# Backend (.env)
 MONGO_URL=mongodb://localhost:27017
 DB_NAME=test_database
 GOOGLE_SAFE_BROWSING_API_KEY=...
@@ -209,19 +243,58 @@ VIRUSTOTAL_API_KEY=...
 ABUSEIPDB_API_KEY=...
 ALIENVAULT_OTX_KEY=...
 EMERGENT_LLM_KEY=... (for Sora 2)
+STRIPE_API_KEY=...
 
-# Frontend
+# Frontend (.env)
 REACT_APP_BACKEND_URL=https://mano-staging.preview.emergentagent.com
+REACT_APP_STRIPE_PUBLISHABLE_KEY=...
+REACT_APP_FIREBASE_API_KEY=...
 ```
 
-## Files Reference
-- Backend routes: `/app/backend/routes/`
-- Frontend pages: `/app/frontend/src/pages/`
-- Shield components: `/app/frontend/src/components/shield/`
-- Chrome Extension: `/app/chrome-extension/`
-- Documentation: `/app/memory/`
+---
 
-## New Files Created This Session
-- `/app/frontend/src/pages/EmployeeDashboard.js` - Panel de control empleados
-- `/app/frontend/src/pages/BlockchainVerifier.js` - Verificador blockchain
-- `/app/frontend/src/components/TrustBadge.jsx` - Componente sello de confianza
+## 📁 ESTRUCTURA DE ARCHIVOS
+
+```
+/app
+├── backend/
+│   ├── routes/
+│   │   ├── admin.py
+│   │   ├── shield.py (DNA Digital, Trust Seal)
+│   │   ├── sos_device.py (Dispositivo SOS físico)
+│   │   ├── demo_videos.py (Sora 2)
+│   │   ├── legacy_vault.py
+│   │   ├── phishing_simulation.py
+│   │   └── ...
+│   ├── server.py
+│   └── requirements.txt
+├── frontend/
+│   ├── src/
+│   │   ├── pages/
+│   │   │   ├── SOSDeviceOrder.js (Pedido dispositivo SOS)
+│   │   │   ├── EmployeeDashboard.js
+│   │   │   ├── BlockchainVerifier.js
+│   │   │   └── ...
+│   │   └── components/
+│   │       ├── TrustBadge.jsx
+│   │       └── shield/
+│   └── package.json
+├── docs/
+│   └── MANOPROTECT_SOS_KEYCHAIN_SPECS.md
+└── memory/
+    └── PRD.md
+```
+
+---
+
+## 📞 CONTACTO
+
+- **Web**: https://www.manoprotect.com
+- **Email**: info@manoprotect.com
+- **Inversores**: inversores@manoprotect.com
+- **Teléfono**: +34 601 510 950
+
+---
+
+**Última actualización**: 12 Febrero 2026
+**Versión**: 2.5.0
