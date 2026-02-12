@@ -2684,6 +2684,22 @@ try:
 except ImportError as e:
     print(f"⚠️ Security routes not loaded: {e}")
 
+# === Payment Routes ===
+try:
+    from routes.payments import router as payments_router
+    api_router.include_router(payments_router)
+    print("✅ Payment routes loaded")
+except ImportError as e:
+    print(f"⚠️ Payment routes not loaded: {e}")
+
+# === Shipping Admin Routes ===
+try:
+    from routes.shipping_admin import router as shipping_admin_router
+    api_router.include_router(shipping_admin_router)
+    print("✅ Shipping Admin routes loaded")
+except ImportError as e:
+    print(f"⚠️ Shipping Admin routes not loaded: {e}")
+
 app.include_router(api_router)
 app.include_router(public_router)
 
