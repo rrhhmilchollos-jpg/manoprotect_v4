@@ -275,6 +275,9 @@ function AppRouter() {
           <Route path="/about" element={<SobreNosotros />} />
           <Route path="/empleados/descargar" element={<DescargarDesktop />} />
           <Route path="/empleados/portal" element={<PortalEmpleados />} />
+          <Route path="/empleados/login" element={<EmployeeLogin />} />
+          <Route path="/empleados/registro" element={<EmployeeRegister />} />
+          <Route path="/empleados/dashboard" element={<EmployeePortalDashboard />} />
           <Route path="/desarrolladores/descargas" element={<DescargarApps />} />
           
           {/* ManoProtect Promo Landing */}
