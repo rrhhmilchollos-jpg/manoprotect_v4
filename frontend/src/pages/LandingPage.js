@@ -20,9 +20,8 @@ const ProactiveChat = lazy(() => import('@/components/conversion/ProactiveChat')
 // Lazy load trust components
 const LiveChatWidget = lazy(() => import('@/components/trust/LiveChatWidget'));
 
-// Brand assets from environment variables - Use WebP for better performance
-const LOGO_URL = process.env.REACT_APP_LOGO_URL || '/manoprotect_logo.webp';
-const LOGO_URL_PNG = '/manoprotect_logo.webp'; // Fallback for older browsers
+// Brand assets - Use optimized WebP for performance (6KB vs 124KB PNG)
+const LOGO_URL = '/manoprotect_logo.webp';
 const ALERT_IMAGE_URL = process.env.REACT_APP_ALERT_IMAGE_URL || '/manoprotect_alert.png';
 
 const LandingPage = () => {
