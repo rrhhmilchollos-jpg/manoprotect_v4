@@ -232,6 +232,10 @@ from routes.demo_videos import router as demo_videos_router
 from routes.sos_device import router as sos_device_router, set_database as init_sos_device
 init_sos_device(db)
 
+# WhatsApp Alerts (Twilio)
+from routes.whatsapp_alerts import router as whatsapp_router, set_database as init_whatsapp
+init_whatsapp(db)
+
 # Legacy Vault (Secure Digital Legacy)
 from routes.legacy_vault import router as legacy_vault_router
 
