@@ -69,7 +69,17 @@ ManoProtect is a revolutionary cybersecurity platform for both consumers (B2C) a
 
 ## Changelog
 
-### Feb 11, 2026 (Current Session)
+### Feb 12, 2026 - PageSpeed Optimization
+- ✅ Fixed CORS error blocking `/api/auth/me` (wildcard + credentials conflict)
+- ✅ Logo optimization: PNG 121KB → WebP 6.5KB (95% reduction)
+- ✅ Improved preconnect: removed unused unsplash, added Firebase
+- ✅ Color contrast improvements across landing page (WCAG compliance)
+- ✅ Fixed ARIA prohibited attributes on testimonial star ratings
+- ✅ Optimized bigdata-analytics.js to avoid forced reflows
+- ✅ Enhanced security headers: CSP, COOP, Permissions-Policy
+- ✅ SEO: Fixed "Más información" link descriptor
+
+### Feb 11, 2026 (Previous Session)
 - ✅ Google AdSense ads.txt created (pub-7713974112203810)
 - ✅ Smart Family Locator - Full implementation
 - ✅ Anti-Deepfake Shield - Full implementation  
