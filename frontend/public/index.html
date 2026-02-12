@@ -25,6 +25,9 @@
         <!-- Preload Critical Resources for LCP - High Priority (WebP optimized) -->
         <link rel="preload" href="/manoprotect_logo.webp" as="image" type="image/webp" fetchpriority="high" />
         
+        <!-- Prefetch main JS bundle chunks for faster app load -->
+        <link rel="modulepreload" href="/static/js/main.js" />
+        
         <!-- Preconnect to External Origins - Early Connection -->
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
