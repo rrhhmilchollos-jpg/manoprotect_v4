@@ -1,6 +1,6 @@
 // ManoProtect Desktop App - Main JavaScript
 
-const API_BASE = 'https://mano-protect-perf.preview.emergentagent.com';
+const API_BASE = 'https://device-checkout-flow.preview.emergentagent.com';
 
 // Navigation
 document.querySelectorAll('.nav-item').forEach(item => {
