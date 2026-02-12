@@ -211,7 +211,7 @@ const VideosDemo = () => {
                 </div>
                 <div className="flex items-center gap-2">
                   <Zap className="w-5 h-5 text-amber-400" />
-                  <span className="text-zinc-300">8 segundos c/u</span>
+                  <span className="text-zinc-300">12 segundos c/u (máx Sora 2)</span>
                 </div>
               </div>
               
