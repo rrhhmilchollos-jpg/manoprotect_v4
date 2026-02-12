@@ -259,7 +259,8 @@ export default function SOSServices() {
         credentials: 'include',
         body: JSON.stringify({
           quantity,
-          color: selectedColor,
+          colors: deviceColors, // Array of colors for each device
+          device_style: selectedDeviceStyle,
           shipping: shippingInfo,
           origin_url: window.location.origin
         })
@@ -278,6 +279,12 @@ export default function SOSServices() {
     } finally {
       setLoading(false);
     }
+  };
+  
+  // Call ManoProtect Support - Auto-dial feature
+  const handleCallSupport = () => {
+    window.location.href = `tel:+34${MANOPROTECT_SUPPORT_PHONE}`;
+    toast.success('Llamando a ManoProtect Emergencias...');
   };
 
   // Subscribe to a plan - redirect to Stripe
