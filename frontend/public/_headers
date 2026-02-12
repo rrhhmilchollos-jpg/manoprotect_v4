@@ -60,9 +60,12 @@
 /api/*
   Cache-Control: no-store, no-cache, must-revalidate
 
-# Security headers for all routes
+# Security headers for all routes - Enhanced for PageSpeed Security audit
 /*
   X-Content-Type-Options: nosniff
-  X-Frame-Options: DENY
+  X-Frame-Options: SAMEORIGIN
   X-XSS-Protection: 1; mode=block
   Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: geolocation=(self), microphone=(), camera=()
+  Content-Security-Policy: frame-ancestors 'self'; form-action 'self'; base-uri 'self'; default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://static.cloudflareinsights.com https://firebase.googleapis.com https://www.gstatic.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https: blob:; connect-src 'self' https://www.google-analytics.com https://firebase.googleapis.com https://firebaseinstallations.googleapis.com https://ipapi.co https://*.manoprotect.com https://*.emergent.host wss://*.emergent.host; frame-src 'self' https://js.stripe.com https://www.googletagmanager.com
+  Cross-Origin-Opener-Policy: same-origin-allow-popups
