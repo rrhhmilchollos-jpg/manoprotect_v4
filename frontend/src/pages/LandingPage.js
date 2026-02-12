@@ -6,23 +6,19 @@ import SEO from '@/components/SEO';
 import AlertSubscription from '@/components/AlertSubscription';
 import LanguageSelector from '@/components/LanguageSelector';
 import { useI18n } from '@/i18n/I18nContext';
-import { useMemo } from 'react';
+import { useMemo, lazy, Suspense, useEffect, useState } from 'react';
 
-// Conversion optimization components (solo los honestos)
-import {
-  ExitIntentPopup,
-  SavingsCalculator,
-  TrustBadges,
-  PlanQuiz,
-  ComparisonTable,
-  StickyMobileCTA,
-  ProactiveChat
-} from '@/components/conversion';
+// Lazy load conversion components (non-critical for initial render)
+const ExitIntentPopup = lazy(() => import('@/components/conversion/ExitIntentPopup'));
+const SavingsCalculator = lazy(() => import('@/components/conversion/SavingsCalculator'));
+const TrustBadges = lazy(() => import('@/components/conversion/TrustBadges'));
+const PlanQuiz = lazy(() => import('@/components/conversion/PlanQuiz'));
+const ComparisonTable = lazy(() => import('@/components/conversion/ComparisonTable'));
+const StickyMobileCTA = lazy(() => import('@/components/conversion/StickyMobileCTA'));
+const ProactiveChat = lazy(() => import('@/components/conversion/ProactiveChat'));
 
-// Trust building components (solo los honestos)
-import {
-  LiveChatWidget
-} from '@/components/trust';
+// Lazy load trust components
+const LiveChatWidget = lazy(() => import('@/components/trust/LiveChatWidget'));
 
 // Brand assets from environment variables - Use WebP for better performance
 const LOGO_URL = process.env.REACT_APP_LOGO_URL || '/manoprotect_logo.webp';
