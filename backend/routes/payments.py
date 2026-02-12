@@ -285,6 +285,41 @@ async def get_device_payment_status(session_id: str):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+
+@router.get("/orders/my-orders")
+async def get_user_orders(request: Request):
+    """Get all orders for the current user"""
+    try:
+        # Get user from session or return all orders for now
+        # In production, this would filter by user_id from auth
+        orders = list(db.device_orders.find().sort("created_at", -1).limit(20))
+        
+        # Serialize orders
+        serialized_orders = []
+        for order in orders:
+            order_dict = {
+                "_id": str(order.get("_id", "")),
+                "session_id": order.get("session_id", ""),
+                "quantity": order.get("quantity", 1),
+                "colors": order.get("colors", ["plata"]),
+                "device_style": order.get("device_style", "adulto"),
+                "shipping": order.get("shipping", {}),
+                "order_status": order.get("order_status", "pending_shipment"),
+                "tracking_number": order.get("tracking_number"),
+                "carrier": order.get("carrier"),
+                "amount_paid": order.get("amount_paid", 4.95),
+                "created_at": order.get("created_at").isoformat() if order.get("created_at") else None,
+                "shipped_at": order.get("shipped_at").isoformat() if order.get("shipped_at") else None,
+                "delivered_at": order.get("delivered_at").isoformat() if order.get("delivered_at") else None
+            }
+            serialized_orders.append(order_dict)
+        
+        return {"orders": serialized_orders, "total": len(serialized_orders)}
+        
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
 # ==================== SUBSCRIPTION ENDPOINTS ====================
 
 @router.post("/subscription/checkout")
