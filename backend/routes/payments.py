@@ -225,12 +225,17 @@ async def get_device_payment_status(session_id: str):
             # Create device order record
             transaction = db.payment_transactions.find_one({"session_id": session_id})
             if transaction and not db.device_orders.find_one({"session_id": session_id}):
+                # Get shipping cost based on quantity
+                quantity = transaction.get("quantity", 1)
+                shipping_price = get_shipping_cost(quantity)
+                
                 db.device_orders.insert_one({
                     "session_id": session_id,
-                    "quantity": transaction.get("quantity", 1),
-                    "color": transaction.get("color", "plata"),
+                    "quantity": quantity,
+                    "colors": transaction.get("colors", ["plata"]),
+                    "device_style": transaction.get("device_style", "adulto"),
                     "shipping": transaction.get("shipping", {}),
-                    "amount_paid": SHIPPING_PRICE,
+                    "amount_paid": shipping_price,
                     "order_status": "pending_shipment",
                     "tracking_number": None,
                     "carrier": None,
