@@ -121,6 +121,9 @@ export default function SOSServices() {
   const [selectedColor, setSelectedColor] = useState('plata');
   const [activeImage, setActiveImage] = useState('front');
   const [loading, setLoading] = useState(false);
+  const [paymentStatus, setPaymentStatus] = useState(null);
+  const [trackingInput, setTrackingInput] = useState('');
+  const [trackingResult, setTrackingResult] = useState(null);
   
   // Shipping info
   const [shippingInfo, setShippingInfo] = useState({
@@ -132,13 +135,54 @@ export default function SOSServices() {
     province: ''
   });
 
-  const handleSubmitOrder = async () => {
-    if (!isAuthenticated) {
-      toast.error('Debes iniciar sesión para realizar el pedido');
-      navigate('/login');
+  // Check URL params for payment status
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const payment = params.get('payment');
+    const sessionId = params.get('session_id');
+    const tab = params.get('tab');
+    
+    if (tab === 'planes') {
+      setActiveTab('planes');
+    }
+    
+    if (payment === 'success' && sessionId) {
+      pollPaymentStatus(sessionId);
+    } else if (payment === 'cancelled') {
+      toast.error('Pago cancelado');
+    }
+  }, []);
+
+  // Poll payment status
+  const pollPaymentStatus = async (sessionId, attempts = 0) => {
+    if (attempts >= 5) {
+      toast.error('Tiempo de espera agotado. Verifica tu email para confirmación.');
       return;
     }
 
+    try {
+      const response = await fetch(`${API}/api/payments/device/status/${sessionId}`);
+      const data = await response.json();
+      
+      if (data.payment_status === 'paid') {
+        setPaymentStatus('success');
+        toast.success('¡Pago completado! Tu dispositivo SOS será enviado pronto.');
+        // Clear URL params
+        window.history.replaceState({}, '', window.location.pathname);
+      } else if (data.status === 'expired') {
+        setPaymentStatus('expired');
+        toast.error('La sesión de pago expiró. Intenta de nuevo.');
+      } else {
+        // Keep polling
+        setTimeout(() => pollPaymentStatus(sessionId, attempts + 1), 2000);
+      }
+    } catch (error) {
+      console.error('Error checking payment:', error);
+    }
+  };
+
+  // Submit device order - redirect to Stripe
+  const handleSubmitOrder = async () => {
     if (!shippingInfo.fullName || !shippingInfo.phone || !shippingInfo.address || 
         !shippingInfo.city || !shippingInfo.postalCode || !shippingInfo.province) {
       toast.error('Por favor, completa todos los campos de envío');
@@ -147,26 +191,86 @@ export default function SOSServices() {
 
     setLoading(true);
     try {
-      const response = await fetch(`${API}/api/sos-device/order`, {
+      const response = await fetch(`${API}/api/payments/device/checkout`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
         body: JSON.stringify({
           quantity,
+          color: selectedColor,
           shipping: shippingInfo,
-          selected_colors: [selectedColor],
-          total_price: 4.95
+          origin_url: window.location.origin
         })
       });
 
-      if (response.ok) {
-        toast.success('¡Pedido realizado! Te contactaremos para confirmar.');
-        navigate('/dashboard');
+      const data = await response.json();
+      
+      if (data.url) {
+        // Redirect to Stripe Checkout
+        window.location.href = data.url;
       } else {
-        toast.error('Error al procesar el pedido');
+        toast.error('Error al crear sesión de pago');
       }
     } catch (error) {
       toast.error('Error de conexión');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Subscribe to a plan - redirect to Stripe
+  const handleSubscribe = async (planId) => {
+    if (planId === 'basic') {
+      navigate('/register');
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const response = await fetch(`${API}/api/payments/subscription/checkout`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({
+          plan_id: planId,
+          billing_cycle: isAnnual ? 'yearly' : 'monthly',
+          origin_url: window.location.origin
+        })
+      });
+
+      const data = await response.json();
+      
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        toast.error('Error al crear sesión de pago');
+      }
+    } catch (error) {
+      toast.error('Error de conexión');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Track order
+  const handleTrackOrder = async () => {
+    if (!trackingInput.trim()) {
+      toast.error('Introduce un número de seguimiento');
+      return;
+    }
+    
+    setLoading(true);
+    try {
+      const response = await fetch(`${API}/api/orders/track/${trackingInput}`);
+      if (response.ok) {
+        const data = await response.json();
+        setTrackingResult(data);
+      } else {
+        toast.error('Pedido no encontrado');
+        setTrackingResult(null);
+      }
+    } catch (error) {
+      toast.error('Error al buscar pedido');
     } finally {
       setLoading(false);
     }
