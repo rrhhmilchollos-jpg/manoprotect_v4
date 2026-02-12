@@ -65,6 +65,7 @@ const VoiceShield = lazy(() => import('@/pages/VoiceShield'));
 const SmartLocator = lazy(() => import('@/pages/SmartLocator'));
 const DeepfakeShield = lazy(() => import('@/pages/DeepfakeShield'));
 const InvestorCRM = lazy(() => import('@/pages/InvestorCRM'));
+const VideosDemo = lazy(() => import('@/pages/VideosDemo'));
 
 // Lazy load non-critical UI components to reduce main thread blocking
 const CookieConsent = lazy(() => import('@/components/CookieConsent'));
