@@ -26,13 +26,17 @@ const DEVICE_IMAGES = {
   technical: 'https://static.prod-images.emergentagent.com/jobs/48047d8d-d356-432e-9b76-e0dcfdb8856b/images/4b647ec828d739fb0904598a6e137bae97a1f71b4929ea76564f21cfc820d543.png'
 };
 
-// Pricing
+// Pricing - PROMOCIÓN LANZAMIENTO: TODO GRATIS
 const PRICING = {
-  single: 49,
-  familyIncluded: 0, // 1 gratis con plan familiar
-  additional: 29,
-  familyPack: 149, // 5 dispositivos
+  single: 0,          // GRATIS durante promoción de lanzamiento
+  familyIncluded: 0,  // Gratis con plan familiar
+  additional: 0,      // GRATIS adicionales durante promoción
+  familyPack: 0,      // GRATIS pack familiar
 };
+
+// Promoción activa hasta Abril 2026
+const PROMO_ACTIVE = true;
+const PROMO_END_DATE = "30 de Abril 2026";
 
 // Features list
 const FEATURES = [
