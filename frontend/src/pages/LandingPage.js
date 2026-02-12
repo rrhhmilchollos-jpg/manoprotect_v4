@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { Phone, Mail, MessageSquare, Users, Building2, Check, ArrowRight, LogIn, Shield, Star, Quote, X } from 'lucide-react';
+import { Phone, Mail, MessageSquare, Users, Building2, Check, ArrowRight, LogIn, Shield, Star, Quote, X, Award, CheckCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/context/AuthContext';
 import SEO from '@/components/SEO';
