@@ -943,7 +943,7 @@ const LandingPage = () => {
                 
                 {/* Autor */}
                 <footer className="flex items-center gap-3 pt-4 border-t border-zinc-100">
-                  <div className={`w-12 h-12 bg-${testimonial.color}-100 rounded-full flex items-center justify-center text-${testimonial.color}-600 font-bold text-sm`}>
+                  <div className="w-12 h-12 bg-indigo-700 rounded-full flex items-center justify-center text-white font-bold text-sm">
                     {testimonial.name.split(' ').map(n => n[0]).slice(0, 2).join('')}
                   </div>
                   <div className="flex-1">
