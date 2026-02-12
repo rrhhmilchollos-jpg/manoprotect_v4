@@ -2530,6 +2530,12 @@ api_router.include_router(investor_crm_router)
 
 # Demo Videos (Sora 2 AI video generation)
 api_router.include_router(demo_videos_router)
+
+# Legacy Vault (Secure Digital Legacy)
+api_router.include_router(legacy_vault_router)
+
+# Phishing Simulation (B2B Enterprise)
+api_router.include_router(phishing_router)
 print("✅ Investor CRM routes loaded")
 
 # Payment routes (Stripe)
