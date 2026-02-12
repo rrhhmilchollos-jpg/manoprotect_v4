@@ -1148,8 +1148,8 @@ const LandingPage = () => {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="px-6 py-12 bg-zinc-900 text-zinc-400" role="contentinfo">
+      {/* Footer - Improved contrast */}
+      <footer className="px-6 py-12 bg-zinc-900 text-zinc-300" role="contentinfo">
         <div className="max-w-7xl mx-auto">
           <div className="grid md:grid-cols-4 gap-8 mb-8">
             {/* Logo y descripción */}
@@ -1164,7 +1164,7 @@ const LandingPage = () => {
                   loading="lazy"
                 />
               </div>
-              <p className="text-sm text-zinc-500 max-w-md">
+              <p className="text-sm text-zinc-400 max-w-md">
                 ManoProtect es tu escudo digital contra fraudes. Protegemos a personas, familias y empresas con tecnología de inteligencia artificial avanzada.
               </p>
             </div>
