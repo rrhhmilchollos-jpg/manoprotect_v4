@@ -456,6 +456,77 @@ const LandingPage = () => {
         </div>
       </section>
 
+      {/* 🔴 SECCIÓN DESTACADA: Botón SOS Físico */}
+      <section className="px-6 py-16 bg-gradient-to-r from-red-600 via-orange-500 to-red-600">
+        <div className="max-w-5xl mx-auto">
+          <div className="bg-white rounded-3xl p-8 md:p-12 shadow-2xl">
+            <div className="grid md:grid-cols-2 gap-8 items-center">
+              <div>
+                <div className="inline-flex items-center gap-2 bg-red-100 text-red-700 px-4 py-2 rounded-full text-sm font-bold mb-4">
+                  🎉 PROMOCIÓN LANZAMIENTO
+                </div>
+                <h2 className="text-3xl md:text-4xl font-bold text-zinc-900 mb-4">
+                  Botón SOS Físico
+                </h2>
+                <p className="text-lg text-zinc-600 mb-6">
+                  Dispositivo tipo llavero con <strong>GPS</strong>, <strong>conexión al 112</strong> y 
+                  <strong> audio bidireccional</strong>. Perfecto para personas mayores, niños o cualquier 
+                  situación de emergencia.
+                </p>
+                <ul className="space-y-3 mb-8">
+                  <li className="flex items-center gap-3 text-zinc-700">
+                    <Check className="w-5 h-5 text-emerald-600" />
+                    <span>GPS en tiempo real (precisión 2.5m)</span>
+                  </li>
+                  <li className="flex items-center gap-3 text-zinc-700">
+                    <Check className="w-5 h-5 text-emerald-600" />
+                    <span>Llamada directa al 112 de emergencias</span>
+                  </li>
+                  <li className="flex items-center gap-3 text-zinc-700">
+                    <Check className="w-5 h-5 text-emerald-600" />
+                    <span>7 días de batería + carga USB</span>
+                  </li>
+                  <li className="flex items-center gap-3 text-zinc-700">
+                    <Check className="w-5 h-5 text-emerald-600" />
+                    <span>Detección automática de caídas</span>
+                  </li>
+                </ul>
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <Button
+                    onClick={() => navigate('/dispositivo-sos')}
+                    className="bg-red-600 hover:bg-red-700 text-white rounded-xl px-8 h-14 text-lg font-bold shadow-lg"
+                    data-testid="sos-device-main-cta"
+                  >
+                    Solicitar GRATIS
+                    <ArrowRight className="w-5 h-5 ml-2" />
+                  </Button>
+                  <div className="text-center sm:text-left">
+                    <p className="text-2xl font-bold text-zinc-900">
+                      <span className="line-through text-zinc-400 text-lg mr-2">49€</span>
+                      <span className="text-emerald-600">GRATIS</span>
+                    </p>
+                    <p className="text-sm text-zinc-500">Solo pagas envío: 4,95€</p>
+                  </div>
+                </div>
+              </div>
+              <div className="relative">
+                <div className="bg-gradient-to-br from-red-100 to-orange-100 rounded-2xl p-6">
+                  <img 
+                    src="https://static.prod-images.emergentagent.com/jobs/48047d8d-d356-432e-9b76-e0dcfdb8856b/images/f99ed06308511adbc1daae4f2950cd5204c0a6d6e9b0c0050741934a2dde5029.png"
+                    alt="Botón SOS ManoProtect - Dispositivo de emergencia"
+                    className="w-full h-auto rounded-xl shadow-lg"
+                    loading="lazy"
+                  />
+                </div>
+                <div className="absolute -top-4 -right-4 bg-amber-400 text-amber-900 px-4 py-2 rounded-full font-bold text-sm shadow-lg transform rotate-12">
+                  ¡GRATIS!
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Threat Types */}
       <section className="px-6 py-20 bg-white">
         <div className="max-w-7xl mx-auto">
