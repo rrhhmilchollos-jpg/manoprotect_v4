@@ -113,7 +113,7 @@ const Profile = () => {
               <ArrowLeft className="w-5 h-5" />
             </Button>
             <div className="flex items-center gap-2">
-              <img src="/manoprotect_logo.png" alt="ManoProtect Logo" className="h-7 w-auto" />
+              <img src="/manoprotect_logo.webp" alt="ManoProtect Logo" className="h-7 w-auto" />
               <span className="text-xl font-bold">Perfil y Configuración</span>
             </div>
           </div>

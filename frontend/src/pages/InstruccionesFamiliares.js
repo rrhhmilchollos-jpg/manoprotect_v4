@@ -119,7 +119,7 @@ const InstruccionesFamiliares = () => {
             Volver
           </button>
           <img 
-            src="/manoprotect_logo.png" 
+            src="/manoprotect_logo.webp" 
             alt="ManoProtect" 
             className="h-8 cursor-pointer"
             onClick={() => navigate('/')}

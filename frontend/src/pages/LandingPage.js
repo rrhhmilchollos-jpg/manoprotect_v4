@@ -26,7 +26,7 @@ import {
 
 // Brand assets from environment variables - Use WebP for better performance
 const LOGO_URL = process.env.REACT_APP_LOGO_URL || '/manoprotect_logo.webp';
-const LOGO_URL_PNG = '/manoprotect_logo.png'; // Fallback for older browsers
+const LOGO_URL_PNG = '/manoprotect_logo.webp'; // Fallback for older browsers
 const ALERT_IMAGE_URL = process.env.REACT_APP_ALERT_IMAGE_URL || '/manoprotect_alert.png';
 
 const LandingPage = () => {

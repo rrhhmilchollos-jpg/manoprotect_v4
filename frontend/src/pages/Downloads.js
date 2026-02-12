@@ -136,7 +136,7 @@ const Downloads = () => {
             </Button>
             <div className="flex items-center gap-3">
               <img 
-                src="/manoprotect_logo.png" 
+                src="/manoprotect_logo.webp" 
                 alt="ManoProtect Logo" 
                 className="h-8 w-auto"
               />

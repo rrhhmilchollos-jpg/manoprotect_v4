@@ -158,7 +158,7 @@ const InvestorRegister = () => {
         {/* Header */}
         <div className="text-center mb-8">
           <img 
-            src="/manoprotect_logo.png" 
+            src="/manoprotect_logo.webp" 
             alt="ManoProtect Logo" 
             className="h-16 w-auto mx-auto mb-6 cursor-pointer"
             onClick={() => navigate('/')}

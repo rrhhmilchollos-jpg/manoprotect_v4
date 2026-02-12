@@ -208,7 +208,7 @@ const Pricing = () => {
       <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-lg border-b border-slate-200">
         <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3 cursor-pointer" onClick={() => navigate('/')}>
-            <img src="/manoprotect_logo.png" alt="ManoProtect" className="h-8 w-auto" />
+            <img src="/manoprotect_logo.webp" alt="ManoProtect" className="h-8 w-auto" />
           </div>
           <Button
             onClick={() => navigate('/login')}

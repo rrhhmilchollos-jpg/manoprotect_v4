@@ -114,7 +114,7 @@ const FAQ = () => {
         <div className="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3 cursor-pointer" onClick={() => navigate('/')}>
             <img 
-              src="/manoprotect_logo.png" 
+              src="/manoprotect_logo.webp" 
               alt="ManoProtect Logo" 
               className="h-8 w-auto" 
             />

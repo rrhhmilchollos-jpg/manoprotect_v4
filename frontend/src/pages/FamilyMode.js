@@ -169,7 +169,7 @@ const FamilyMode = () => {
               <ArrowLeft className="w-7 h-7" />
             </Button>
             <div className="flex items-center gap-3">
-              <img src="/manoprotect_logo.png" alt="ManoProtect Logo" className="h-10 w-auto" />
+              <img src="/manoprotect_logo.webp" alt="ManoProtect Logo" className="h-10 w-auto" />
               <span className="text-3xl font-bold">Modo Familiar</span>
             </div>
           </div>

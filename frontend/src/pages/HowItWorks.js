@@ -50,7 +50,7 @@ const HowItWorks = () => {
       <header className="glass sticky top-0 z-50 px-6 py-4 border-b border-zinc-200">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-2 cursor-pointer" onClick={() => navigate('/')}>
-            <img src="/manoprotect_logo.png" alt="ManoProtect Logo" className="h-8 w-auto" />
+            <img src="/manoprotect_logo.webp" alt="ManoProtect Logo" className="h-8 w-auto" />
             <span className="text-2xl font-bold tracking-tight">ManoProtect</span>
           </div>
           <Button

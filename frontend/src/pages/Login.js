@@ -59,7 +59,7 @@ const Login = () => {
         <CardHeader className="text-center pb-2">
           <div className="flex justify-center mb-4">
             <img 
-              src="/manoprotect_logo.png" 
+              src="/manoprotect_logo.webp" 
               alt="ManoProtect Logo" 
               className="h-16 w-auto cursor-pointer"
               onClick={() => navigate('/')}
