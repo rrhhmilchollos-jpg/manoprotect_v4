@@ -921,7 +921,7 @@ const LandingPage = () => {
               >
                 {/* Badge de ahorro */}
                 {testimonial.saved && (
-                  <div className={`absolute -top-3 -right-3 bg-${testimonial.color}-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg`}>
+                  <div className="absolute -top-3 -right-3 bg-emerald-700 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg">
                     {testimonial.saved}
                   </div>
                 )}
