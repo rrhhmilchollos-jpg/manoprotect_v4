@@ -256,6 +256,14 @@ function AppRouter() {
           <Route path="/videos-demo" element={<VideosDemo />} />
           <Route path="/demo-videos" element={<VideosDemo />} />
           
+          {/* Digital Legacy Vault */}
+          <Route path="/legacy-vault" element={<DigitalLegacyVault />} />
+          <Route path="/boveda-digital" element={<DigitalLegacyVault />} />
+          
+          {/* Phishing Simulation (B2B) */}
+          <Route path="/phishing-simulation" element={<PhishingSimulation />} />
+          <Route path="/simulacion-phishing" element={<PhishingSimulation />} />
+          
           {/* Enterprise B2B Landing */}
           <Route path="/enterprise" element={<EnterpriseLanding />} />
           <Route path="/empresas" element={<EnterpriseLanding />} />
