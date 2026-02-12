@@ -128,6 +128,12 @@ async def get_order(order_id: str):
 async def update_order(order_id: str, update: UpdateOrderRequest):
     """Update order with tracking info"""
     try:
+        # Get order first
+        order = db.device_orders.find_one({"_id": ObjectId(order_id)})
+        if not order:
+            raise HTTPException(status_code=404, detail="Pedido no encontrado")
+        
+        old_status = order.get("order_status")
         update_data = {"updated_at": datetime.now(timezone.utc)}
         
         if update.tracking_number:
@@ -148,10 +154,36 @@ async def update_order(order_id: str, update: UpdateOrderRequest):
             {"$set": update_data}
         )
         
-        if result.matched_count == 0:
-            raise HTTPException(status_code=404, detail="Pedido no encontrado")
+        # Send email notification if status changed
+        email_sent = False
+        new_status = update.order_status
+        if new_status and new_status != old_status:
+            try:
+                from services.email_service import email_service
+                shipping = order.get("shipping", {})
+                customer_email = shipping.get("email") or ""
+                
+                if customer_email:
+                    import asyncio
+                    asyncio.create_task(email_service.send_shipping_update(
+                        user_id="",
+                        email=customer_email,
+                        shipping_data={
+                            "order_id": order.get("session_id", str(order_id)),
+                            "status": new_status,
+                            "tracking_number": update.tracking_number or order.get("tracking_number", ""),
+                            "carrier": update.carrier or order.get("carrier", "")
+                        }
+                    ))
+                    email_sent = True
+            except Exception as email_error:
+                print(f"[EMAIL] Error sending status update: {email_error}")
         
-        return {"message": "Pedido actualizado", "order_id": order_id}
+        return {
+            "message": "Pedido actualizado", 
+            "order_id": order_id,
+            "email_sent": email_sent
+        }
         
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
