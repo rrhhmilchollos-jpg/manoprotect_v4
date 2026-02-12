@@ -583,9 +583,15 @@ export default function SOSServices() {
             <div className="space-y-8">
               <div className="text-center">
                 <h2 className="text-3xl md:text-4xl font-bold mb-4">Elige tu Plan de Protección</h2>
-                <p className="text-zinc-600 max-w-2xl mx-auto mb-8">
+                <p className="text-zinc-600 max-w-2xl mx-auto mb-4">
                   Protección contra fraudes y seguridad familiar. Sin sorpresas, cancela cuando quieras.
                 </p>
+                
+                {/* Trial Info Banner */}
+                <div className="inline-flex items-center gap-2 bg-amber-100 text-amber-800 px-4 py-2 rounded-full text-sm font-medium mb-6">
+                  <Gift className="w-4 h-4" />
+                  <span>7 días de prueba GRATIS en todos los planes</span>
+                </div>
                 
                 {/* Toggle Mensual/Anual */}
                 <div className="inline-flex items-center gap-4 bg-zinc-100 rounded-full p-2">
@@ -604,6 +610,7 @@ export default function SOSServices() {
                 {PLANS.map((plan) => {
                   const price = isAnnual ? plan.yearlyPrice : plan.monthlyPrice;
                   const monthlyEquiv = isAnnual && plan.yearlyPrice ? (plan.yearlyPrice / 12).toFixed(2) : null;
+                  const isPaid = plan.id !== 'basic';
                   
                   return (
                     <Card 
@@ -625,7 +632,7 @@ export default function SOSServices() {
                         <CardDescription>{plan.description}</CardDescription>
                       </CardHeader>
                       <CardContent className="text-center">
-                        <div className="mb-6">
+                        <div className="mb-4">
                           <span className="text-5xl font-bold">€{price || 0}</span>
                           <span className="text-zinc-500">/{isAnnual ? 'año' : 'mes'}</span>
                           {monthlyEquiv && (
@@ -638,6 +645,18 @@ export default function SOSServices() {
                           )}
                         </div>
                         
+                        {/* Trial Info for paid plans */}
+                        {isPaid && (
+                          <div className="mb-4 p-3 bg-amber-50 rounded-lg border border-amber-200">
+                            <p className="text-sm text-amber-800 font-medium">
+                              🎁 7 días GRATIS
+                            </p>
+                            <p className="text-xs text-amber-600">
+                              Se cobra automáticamente después del trial si no cancelas
+                            </p>
+                          </div>
+                        )}
+                        
                         <ul className="space-y-3 text-left mb-6">
                           {plan.features.map((feature, idx) => (
                             <li key={idx} className="flex items-center gap-2 text-sm">
@@ -648,7 +667,8 @@ export default function SOSServices() {
                         </ul>
                         
                         <Button 
-                          onClick={() => navigate(plan.id === 'basic' ? '/register' : '/register?plan=' + plan.id)}
+                          onClick={() => handleSubscribe(plan.id)}
+                          disabled={loading}
                           className={`w-full h-12 ${
                             plan.popular 
                               ? 'bg-indigo-600 hover:bg-indigo-700' 
@@ -657,14 +677,49 @@ export default function SOSServices() {
                                 : 'bg-zinc-800 hover:bg-zinc-900'
                           }`}
                         >
-                          {plan.cta}
+                          {isPaid ? 'Empezar Prueba Gratis' : plan.cta}
                           <ArrowRight className="w-4 h-4 ml-2" />
                         </Button>
+                        
+                        {/* Card requirement notice */}
+                        {isPaid && (
+                          <p className="text-xs text-zinc-400 mt-3">
+                            💳 Requiere tarjeta de crédito/débito (no prepago)
+                          </p>
+                        )}
                       </CardContent>
                     </Card>
                   );
                 })}
               </div>
+
+              {/* Cancellation Policy */}
+              <Card className="bg-zinc-50 border-zinc-200">
+                <CardContent className="p-6">
+                  <div className="flex items-start gap-4">
+                    <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
+                      <Shield className="w-6 h-6 text-blue-600" />
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-lg mb-2">Política de Cancelación</h4>
+                      <ul className="space-y-2 text-sm text-zinc-600">
+                        <li className="flex items-center gap-2">
+                          <Check className="w-4 h-4 text-emerald-500" />
+                          Cancela en cualquier momento durante los 7 días de prueba sin cargo
+                        </li>
+                        <li className="flex items-center gap-2">
+                          <Check className="w-4 h-4 text-emerald-500" />
+                          Si cancelas, se asigna automáticamente el Plan Básico gratuito
+                        </li>
+                        <li className="flex items-center gap-2">
+                          <Check className="w-4 h-4 text-emerald-500" />
+                          No se aceptan tarjetas prepago para evitar fraudes
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
 
               {/* Plan Comparison Info */}
               <Card className="bg-gradient-to-br from-indigo-50 to-purple-50 border-indigo-200">
