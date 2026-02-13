@@ -1,395 +1,165 @@
 # ManoProtect - Product Requirements Document
 
-## Project Overview
-ManoProtect es una plataforma revolucionaria de ciberseguridad para consumidores (B2C) y empresas (B2B).
+## Original Problem Statement
+ManoProtect es una plataforma de ciberseguridad española enfocada en proteger familias contra estafas digitales (phishing, vishing, smishing), con un producto físico estrella: el Botón SOS de emergencia.
 
-**Website**: https://www.manoprotect.com
-**Preview URL**: https://redesign-home-1.preview.emergentagent.com
-**Empresa**: STARTBOOKING SL - CIF: B19427723
-
----
-
-## ✅ FUNCIONALIDADES IMPLEMENTADAS (PRODUCTION READY)
-
-### 0. Página de Servicios SOS Completa ✅ (ACTUALIZADO - 12 Feb 2026)
-- **Página unificada** con todas las funcionalidades SOS: `/servicios-sos`
-- **4 Secciones en tabs**:
-  1. 🔴 Dispositivo SOS: Formulario de pedido con colores por dispositivo, estilos, envío escalable
-  2. 💰 Planes y Precios: Básico (gratis), Individual (€249.99/año con 7 días trial), Familiar (€399.99/año)
-  3. ⚡ Funcionalidades: GPS, 112, Audio bidireccional, Detección caídas, Zonas seguras
-  4. 📦 Seguir Pedido: Tracking de envíos
-- **Promoción Lanzamiento**: Dispositivo GRATIS, solo pago envío (escalable según cantidad)
-- **Botón en Header**: "🔴 Botón SOS" accesible desde toda la web
-- **Botón llamada soporte**: Tel: 601 510 950 (como Securitas Direct)
-- **3 Estilos dispositivo**: Juvenil (15-30), Adulto (30-60), Senior (60+) con imágenes únicas
-- **Selector color por dispositivo**: Cuando cantidad > 1, elegir color para cada uno
-- **Costes envío escalables**: 1ud=4.95€, 2ud=6.95€, 3ud=8.95€, etc.
-- Frontend: `/servicios-sos`
-
-### 0.1 Sistema de Pagos con Stripe ✅ (ACTUALIZADO - 12 Feb 2026)
-- **Checkout para dispositivos SOS**: Pago de envío via Stripe (escalable según cantidad)
-- **Suscripciones con trial**: 7 días de prueba GRATIS
-- **Tarjeta obligatoria**: Crédito/débito (NO prepago)
-- **Cobro automático**: Después del trial si no se cancela
-- **Cancelación automática**: Si cancela, se asigna Plan Básico gratuito
-- **Parámetros nuevos**: colors (array), device_style (juvenil/adulto/senior)
-- Backend: `/api/payments/device/checkout`, `/api/payments/subscription/checkout`
-- Webhook: `/api/payments/webhook/stripe`
-
-### 0.2 Panel de Gestión de Envíos (Admin) ✅ (ACTUALIZADO - 12 Feb 2026)
-- **Panel interno** para gestionar envíos de dispositivos
-- **8 transportistas**: Correos Express, SEUR, MRW, GLS, DHL, UPS, FedEx, Nacex
-- **Estados de envío**: Pendiente, Preparando, Enviado, En tránsito, En reparto, Entregado
-- **Funcionalidades**: Asignar tracking, cambiar estado, envío masivo, exportar
-- **Notificaciones email**: Emails automáticos al cambiar estado de envío
-- Frontend: `/admin/shipping`
-- Backend: `/api/admin/shipping/*`
-
-### 0.3 Sistema de Notificaciones por Email ✅ (NUEVO - 12 Feb 2026)
-- **Email confirmación pedido**: Se envía cuando el pago se completa
-- **Email actualización envío**: Se envía cuando cambia el estado del envío
-- **Plantillas HTML**: Diseño profesional con branding ManoProtect
-- **SendGrid integrado**: Requiere SENDGRID_API_KEY en .env para producción
-- Backend: `/app/backend/services/email_service.py`
-
-### 0.5 Página de Agradecimiento de Pedido ✅ (NUEVO - 12 Feb 2026)
-- **Página de confirmación** después de pago exitoso: `/pedido-confirmado`
-- **Efecto confetti** al pagar correctamente
-- **Countdown automático**: Redirección a dashboard en 10 segundos
-- **Opciones**: "Ir ahora" / "Quedarme aquí"
-- **Pasos visuales**: Preparación → Envío → Activación
-- **Detalles del pedido**: Precio, envío, total
-- **Página de cancelación**: Mensaje amigable si el usuario cancela
-- Frontend: `/app/frontend/src/pages/OrderConfirmation.js`
-
-### 0.6 Panel de Seguimiento de Pedidos en Dashboard ✅ (NUEVO - 12 Feb 2026)
-- **Nueva tab "Mis Pedidos"** en el dashboard del usuario
-- **Lista de pedidos**: Todos los pedidos del usuario con estado
-- **Barra de progreso visual**: Pedido → Enviado → En camino → Entregado
-- **Detalles**: Número tracking, transportista, dirección de entrega
-- **Estado vacío**: CTA para solicitar primer dispositivo
-- **Acceso rápido vía URL**: `/dashboard?tab=pedidos`
-- Backend: `/api/payments/orders/my-orders`
-
-### 0.4 Landing Page - Sección Amenazas ✅ (NUEVO - 12 Feb 2026)
-- **Sección "Protección contra Amenazas Digitales"** con traducciones correctas:
-  - Vishing - Llamadas fraudulentas
-  - Smishing - SMS maliciosos
-  - Phishing - Correos engañosos
-  - Suplantación - Identidad falsa
-- Frontend: `/app/frontend/src/pages/LandingPage.js` (líneas 538-569)
-
-### 1. Real-Time Threat Intelligence ✅
-- Live APIs: Google Safe Browsing, VirusTotal, AbuseIPDB, AlienVault OTX
-- Endpoints: `/api/realtime/check/*`
-
-### 2. AI Voice Shield ✅
-- Detección de estafas telefónicas con análisis de patrones IA
-- Frontend: `/voice-shield`
-- Backend: `/api/voice-shield/*`
-
-### 3. Smart Family Locator ✅
-- Zonas de comportamiento (segura, escuela, trabajo, restringida)
-- Botón SOS, historial de ubicaciones, alertas de zona
-- Frontend: `/smart-locator`
-- Backend: `/api/smart-locator/*`
-
-### 4. Anti-Deepfake Shield ✅
-- Detecta imágenes, audio y video manipulados
-- 19 indicadores de detección (8 imagen, 6 audio, 5 video)
-- Frontend: `/deepfake-shield`
-- Backend: `/api/deepfake-shield/*`
-
-### 5. Chrome Extension ✅
-- Verificación de URLs en tiempo real
-- Download: `/app/manoprotect-chrome-extension.zip`
-- Guía de publicación: `/app/GUIA_PUBLICAR_EXTENSION_CHROME.md`
-
-### 6. Investor CRM (Interno, Gratis) ✅
-- Seguimiento de descargas e interacciones de inversores
-- Gestión de estados (lead → committed)
-- Notas y etiquetas por inversor
-- Dashboard de analytics
-- Frontend: `/investor-crm`
-- Backend: `/api/investor-crm/*`
-
-### 7. Google AdSense ✅
-- ads.txt: `/frontend/public/ads.txt`
-- Publisher ID: pub-7713974112203810
-
-### 8. Portal de Inversores ✅
-- Contacto: inversores@manoprotect.com | +34 601 510 950
-- 4 documentos: Plan de Negocio, Modelo Financiero, Pitch Deck, Dossier B2B
-
-### 9. Sello de Confianza / Trust Seal ✅
-- Badge visual para webs de clientes protegidos por ManoProtect
-- Verificación de sellos en tiempo real
-- Solicitud de nuevos sellos para empresas
-- Frontend: `/shield` → componente TrustSeal
-- Backend: `/api/shield/seal/*`
-- Sello visible en footer de landing page
-
-### 10. DNA Digital Identity System ✅
-- Identidad digital verificable única
-- Verificación de teléfonos, emails, webs
-- Registro de identidades para personas y empresas
-- Frontend: `/shield` → componente DNADigital
-- Backend: `/api/shield/dna/*`
-
-### 11. Blockchain Transaction Verifier ✅
-- Verificador de transacciones blockchain
-- Soporte: Bitcoin, Ethereum, Polygon, BNB Chain
-- Verificador de wallets y smart contracts
-- Detección de rug pulls, honeypots, mixers
-- Frontend: `/blockchain-verifier`
-
-### 12. Employee Dashboard ✅
-- Panel de control completo del sistema
-- Gestión de usuarios, amenazas, sellos, DNA Digital
-- Estado del sistema en tiempo real
-- Acciones administrativas rápidas
-- Frontend: `/employee-dashboard`
-- Backend: `/api/admin/*`
-
-### 13. ManoProtect SOS Button (Dispositivo Físico) ✅
-- Llavero físico de emergencia con botón SOS
-- GPS en tiempo real (precisión 2.5m)
-- Conexión directa al 112 (emergencias España)
-- Audio bidireccional para comunicación
-- Detección automática de caídas
-- 7 días de batería, carga USB
-- **PROMOCIÓN LANZAMIENTO**: Dispositivo GRATIS (solo envío 4,95€)
-- Válido hasta 30 de Abril 2026
-- Frontend: `/sos-device`, `/boton-sos`, `/dispositivo-sos`
-- Backend: `/api/sos-device/*`
-- Documentación técnica: `/app/docs/MANOPROTECT_SOS_KEYCHAIN_SPECS.md`
-
-### 14. Videos Demo IA (Sora 2) ✅
-- Generación de videos demostrativos con IA
-- 4 demos: SOS Button, Family Locator, Voice Shield, Deepfake Detector
-- Limitación actual: máximo 12 segundos por video
-- Frontend: `/videos-demo`
-- Backend: `/api/demo-videos/*`
-
-### 15. Secure Digital Legacy Vault ✅
-- Bóveda digital segura con encriptación AES-256
-- Almacenamiento de documentos importantes
-- Herencia digital para familiares
-- Frontend: `/legacy-vault`
-- Backend: `/api/legacy-vault/*`
-
-### 16. Phishing Simulation (B2B) ✅
-- Simulacros de phishing para empresas
-- Gestión de campañas y seguimiento de empleados
-- 5 plantillas de email
-- Frontend: `/phishing-simulation`
-- Backend: `/api/phishing/*`
+## Latest User Request (February 2026)
+1. **Homepage Redesign** - Reorganizar la página principal que estaba muy cargada de información para hacerla más profesional y limpia.
+2. **Portal de Empleados** - Sistema completo con:
+   - Rol de "director general" que crea cuentas
+   - Registro por invitación (credenciales enviadas por email)
+   - Herramientas para controlar y monitorear todo el sitio
 
 ---
 
-## 🛠️ TECH STACK
+## What's Been Implemented
 
-| Componente | Tecnología |
-|------------|------------|
-| Frontend | React.js + Tailwind + Shadcn/UI |
-| Backend | Python FastAPI + Motor (async MongoDB) |
-| Database | MongoDB |
-| APIs Seguridad | Google Safe Browsing, VirusTotal, AbuseIPDB, AlienVault OTX |
-| Video Generation | Sora 2 (via emergentintegrations) |
-| Payments | Stripe |
-| Push Notifications | Firebase Cloud Messaging |
+### ✅ COMPLETED - February 13, 2026
 
----
+#### Homepage Redesign
+- **New modular landing page** with clean, professional design
+- Components created:
+  - `HeroSection.jsx` - Main headline with CTA buttons
+  - `FeaturesGrid.jsx` - 5 feature cards in bento grid layout
+  - `SOSProductShowcase.jsx` - Apple-style product highlight
+  - `TestimonialsSection.jsx` - User reviews
+  - `CTASection.jsx` - Final conversion section
+  - `LandingHeader.jsx` - Clean navigation
+  - `LandingFooter.jsx` - Minimal footer
+- Reduced from 1400+ lines to ~60 lines (modular)
+- Trust indicators: "7 días gratis", "Sin tarjeta", "Cancela cuando quieras"
 
-## 📍 RUTAS PRINCIPALES
+#### Employee Portal System
+- **Login**: `/empleados/login`
+- **Register**: `/empleados/registro?token=XXX`
+- **Dashboard**: `/empleados/dashboard`
+- **Roles**: director, manager, employee
+- **Features**:
+  - Director-only invitation creation
+  - Secure token-based registration flow
+  - Dashboard with statistics (users, orders, threats)
+  - Employee management (list, update, deactivate)
+  - Role-based access control (RBAC)
+- **Director Account Created**:
+  - Email: `director@manoprotect.com`
+  - Password: `Director2026!`
 
-| Feature | Frontend | Backend | Status |
-|---------|----------|---------|--------|
-| Voice Shield | /voice-shield | /api/voice-shield/* | ✅ |
-| Smart Locator | /smart-locator | /api/smart-locator/* | ✅ |
-| Deepfake Shield | /deepfake-shield | /api/deepfake-shield/* | ✅ |
-| Investor CRM | /investor-crm | /api/investor-crm/* | ✅ |
-| Scam Verification | /verificar-estafa | /api/realtime/* | ✅ |
-| Downloads | /downloads | /api/investor/* | ✅ |
-| Trust Seal | /shield | /api/shield/seal/* | ✅ |
-| DNA Digital | /shield | /api/shield/dna/* | ✅ |
-| Blockchain Verifier | /blockchain-verifier | - | ✅ |
-| Employee Dashboard | /employee-dashboard | /api/admin/* | ✅ |
-| SOS Device Order | /sos-device | /api/sos-device/* | ✅ |
-| Videos Demo | /videos-demo | /api/demo-videos/* | ✅ |
-| Legacy Vault | /legacy-vault | /api/legacy-vault/* | ✅ |
-| Phishing Simulation | /phishing-simulation | /api/phishing/* | ✅ |
-
----
-
-## 📅 CHANGELOG
-
-### Feb 12, 2026 - ManoProtect SOS Button (Dispositivo Físico)
-- ✅ Diseño del llavero SOS generado (3 imágenes: frontal, lifestyle, técnico)
-- ✅ Documentación técnica completa para fabricación
-- ✅ Página de pedido con contador de personas/hogar
-- ✅ Sistema de pedidos con envío express 24-48h
-- ✅ **PROMOCIÓN LANZAMIENTO**: Dispositivo GRATIS (solo envío 4,95€)
-- ✅ Backend API: `/api/sos-device/*`
-- ✅ Rutas: /sos-device, /dispositivo-sos, /boton-sos
-
-### Feb 12, 2026 - Trust Seal, DNA Digital, Blockchain Verifier, Employee Dashboard
-- ✅ Sello de Confianza agregado al footer de Landing Page
-- ✅ TrustBadge component creado (/components/TrustBadge.jsx)
-- ✅ Employee Dashboard completo con gestión de usuarios, amenazas, sellos
-- ✅ Blockchain Transaction Verifier con verificación de TX, wallets, contratos
-- ✅ DNA Digital system funcional con verificación y registro
-- ✅ Nuevas rutas: /employee-dashboard, /blockchain-verifier
-- ✅ Admin endpoints adicionales: /api/admin/stats, /api/admin/trust-seals, /api/admin/dna-digital
-
-### Feb 12, 2026 - P1 Features Complete
-- ✅ Secure Digital Legacy Vault - AES-256 encrypted document storage
-- ✅ Phishing Simulation B2B - Campaign management, employee tracking, 5 templates
-
-### Feb 12, 2026 - PageSpeed & Performance Optimizations
-- ✅ Lazy loading agresivo de LandingPage, Login, Register
-- ✅ GTM diferido 3 segundos usando requestIdleCallback
-- ✅ InterstitialAd desactivado en preview/staging
-- ✅ Firebase Analytics diferido
-- ✅ Componentes de conversión lazy loaded
-- ✅ i18n simplificado para render inicial con fallback translations
-- ✅ lucide-react actualizado a versión 0.563.0
-
-### Feb 12, 2026 - SOS Device Colors & Order Tracking
-- ✅ 20 colores del dispositivo SOS en 5 categorías: Jóvenes, Mujer, Hombre, Elegante, Unisex
-- ✅ Panel de seguimiento de pedidos (`/order-tracking`)
-- ✅ Timeline visual de estados de envío
-- ✅ Búsqueda por número de pedido o tracking
-- ✅ Backend endpoints: `/api/sos-devices/my-orders`, `/api/sos-devices/track/{order_id}`
-
-### Feb 12, 2026 - PageSpeed & Accessibility Improvements
-- ✅ GTM diferido 2 segundos para reducir TBT
-- ✅ Preconnect a backend de emergent añadido
-- ✅ Color contrast WCAG AA compliance (emerald-500 → emerald-700)
-- ✅ Botones y badges con mejor contraste
-- ✅ Content-visibility para lazy rendering de secciones
-
-### Feb 12, 2026 - SOS Sound Fix & Payment Cleanup
-- ✅ SOS button sound: Silent for sender, siren plays on family members' devices
-- ✅ Added automatic siren (8s, 600-1400Hz) when family alerts arrive
-- ✅ Added browser notification for SOS alerts
-- ✅ Verified payment_transactions collection is empty (0 documents)
-
-### Feb 12, 2026 - Videos Demo IA Page
-- ✅ Created Videos Demo IA page with Sora 2 integration
-- ✅ 4 demo videos: SOS Button, Family Locator, Voice Shield, Deepfake Detector
-- ✅ Backend API for video generation at `/api/demo-videos/`
-- ✅ All logos updated to WebP format
-
-### Feb 12, 2026 - PageSpeed Optimization
-- ✅ Fixed CORS error blocking `/api/auth/me`
-- ✅ Logo optimization: PNG 121KB → WebP 6.5KB (95% reduction)
-- ✅ Color contrast improvements across landing page (WCAG compliance)
-- ✅ Enhanced security headers: CSP, COOP, Permissions-Policy
-
-### Feb 11, 2026 (Previous Session)
-- ✅ Google AdSense ads.txt created
-- ✅ Smart Family Locator - Full implementation
-- ✅ Anti-Deepfake Shield - Full implementation
-- ✅ Investor CRM - Full implementation
-- ✅ Chrome Extension publication guide
+### ✅ Previously Completed
+- SOS Device Order Form with color selectors and dynamic pricing
+- Thank You page (`OrderConfirmation.js`) with confetti
+- Payment Cancelled page
+- User Dashboard "Mis Pedidos" tab for order tracking
+- SendGrid email service (code ready, awaiting API key)
 
 ---
 
-## 🔜 BACKLOG PENDIENTE
+## Pending/Blocked Items
 
-### P1 - Alta Prioridad
-- [x] **WhatsApp Business API** - ✅ IMPLEMENTADO (Twilio - pendiente credenciales)
-- [x] **PageSpeed optimization** - ✅ OPTIMIZADO (lazy loading, CSS crítico, GTM diferido)
-- [x] **SOS Device Colors** - ✅ 20 colores en 5 categorías
-- [x] **Order Tracking** - ✅ Panel de seguimiento de pedidos
-- [ ] **Videos Demo 1 minuto** - Solución para limitación Sora 2 (máx 12s)
-
-### P2 - Media Prioridad
-- [x] **Digital Legacy Vault** - ✅ Bóveda digital con cifrado AES-256
-- [x] **Phishing Simulation** - ✅ Simulacros de phishing B2B
-- [ ] Integración con empresa de mensajería para envíos
-
-### P3 - Futuro
-- [ ] Soporte adicional de redes blockchain
-- [ ] App móvil nativa (Android/iOS)
-- [ ] Intranet multi-dispositivo (pendiente clarificación)
+### 🟡 BLOCKED - Awaiting User Input
+1. **SendGrid API Key** - Email notifications implemented but need API key to function
+   - Affects: Order confirmations, shipping updates, employee invite emails
 
 ---
 
-## 👥 USUARIOS ACTIVOS
+## Prioritized Backlog
 
-1. rrhh.milchollos@gmail.com - Ivan Rubio Cano (superadmin)
-2. msolassanchis@gmail.com - Maria Deseada Solas Sanchis (superadmin)
-3. ivanrubiosolas@gmail.com - Ivan Rubio cano (superadmin)
-4. info@manoprotect.com - ManoProtect Admin (superadmin)
-5. vguerolanavarro@gmail.com - Vicente (premium)
+### P0 - Critical
+- [ ] SendGrid email integration activation (blocked on API key)
+
+### P1 - High Priority  
+- [ ] Employee portal email integration (send invite credentials via email)
+- [ ] PageSpeed optimization re-evaluation
+
+### P2 - Medium Priority
+- [ ] 1-minute demo videos (Sora 2 limitation workaround)
+- [ ] More admin tools in employee portal (content management)
+
+### P3 - Low Priority / Future
+- [ ] Company "Intranet" for devices
+- [ ] DNA Digital Identity / Blockchain Verifier
+- [ ] WhatsApp/Twilio integration
 
 ---
 
-## 🔐 VARIABLES DE ENTORNO
+## Technical Architecture
 
-```bash
-# Backend (.env)
-MONGO_URL=mongodb://localhost:27017
-DB_NAME=test_database
-GOOGLE_SAFE_BROWSING_API_KEY=...
-VIRUSTOTAL_API_KEY=...
-ABUSEIPDB_API_KEY=...
-ALIENVAULT_OTX_KEY=...
-EMERGENT_LLM_KEY=... (for Sora 2)
-STRIPE_API_KEY=...
-
-# Frontend (.env)
-REACT_APP_BACKEND_URL=https://redesign-home-1.preview.emergentagent.com
-REACT_APP_STRIPE_PUBLISHABLE_KEY=...
-REACT_APP_FIREBASE_API_KEY=...
+### Frontend Structure
+```
+/app/frontend/src/
+├── components/
+│   └── landing/
+│       ├── HeroSection.jsx
+│       ├── FeaturesGrid.jsx
+│       ├── SOSProductShowcase.jsx
+│       ├── TestimonialsSection.jsx
+│       ├── CTASection.jsx
+│       ├── LandingHeader.jsx
+│       └── LandingFooter.jsx
+├── pages/
+│   ├── LandingPage.js (redesigned)
+│   ├── EmployeeLogin.js (NEW)
+│   ├── EmployeeRegister.js (NEW)
+│   └── EmployeePortalDashboard.js (NEW)
 ```
 
----
-
-## 📁 ESTRUCTURA DE ARCHIVOS
-
+### Backend Structure
 ```
-/app
-├── backend/
-│   ├── routes/
-│   │   ├── admin.py
-│   │   ├── shield.py (DNA Digital, Trust Seal)
-│   │   ├── sos_device.py (Dispositivo SOS físico)
-│   │   ├── demo_videos.py (Sora 2)
-│   │   ├── legacy_vault.py
-│   │   ├── phishing_simulation.py
-│   │   └── ...
-│   ├── server.py
-│   └── requirements.txt
-├── frontend/
-│   ├── src/
-│   │   ├── pages/
-│   │   │   ├── SOSDeviceOrder.js (Pedido dispositivo SOS)
-│   │   │   ├── EmployeeDashboard.js
-│   │   │   ├── BlockchainVerifier.js
-│   │   │   └── ...
-│   │   └── components/
-│   │       ├── TrustBadge.jsx
-│   │       └── shield/
-│   └── package.json
-├── docs/
-│   └── MANOPROTECT_SOS_KEYCHAIN_SPECS.md
-└── memory/
-    └── PRD.md
+/app/backend/
+├── routes/
+│   └── employee_portal.py (NEW - complete CRUD + auth)
+├── services/
+│   └── email_service.py (SendGrid ready)
 ```
 
----
-
-## 📞 CONTACTO
-
-- **Web**: https://www.manoprotect.com
-- **Email**: info@manoprotect.com
-- **Inversores**: inversores@manoprotect.com
-- **Teléfono**: +34 601 510 950
+### Database Collections
+- `employees` - Employee accounts with roles
+- `employee_invites` - Invitation tokens with expiry
+- `site_content` - Editable site content (for future CMS)
 
 ---
 
-**Última actualización**: 12 Febrero 2026
-**Versión**: 2.5.0
+## API Endpoints
+
+### Employee Portal
+| Method | Endpoint | Description | Auth |
+|--------|----------|-------------|------|
+| POST | `/api/employee-portal/login` | Employee login | No |
+| POST | `/api/employee-portal/logout` | Employee logout | Yes |
+| GET | `/api/employee-portal/me` | Get current employee | Yes |
+| POST | `/api/employee-portal/register` | Register with invite token | No |
+| GET | `/api/employee-portal/verify-invite/{token}` | Verify invite token | No |
+| POST | `/api/employee-portal/invites` | Create invite | Director |
+| GET | `/api/employee-portal/invites` | List invites | Director |
+| DELETE | `/api/employee-portal/invites/{id}` | Cancel invite | Director |
+| GET | `/api/employee-portal/employees` | List employees | Director |
+| PATCH | `/api/employee-portal/employees/{id}` | Update employee | Director |
+| DELETE | `/api/employee-portal/employees/{id}` | Deactivate employee | Director |
+| GET | `/api/employee-portal/dashboard/stats` | Get dashboard stats | Yes |
+
+---
+
+## Test Coverage
+- Backend: 18/18 tests passing (100%)
+- Frontend: All features verified
+- Test file: `/app/backend/tests/test_employee_portal.py`
+- Test report: `/app/test_reports/iteration_37.json`
+
+---
+
+## Third-Party Integrations
+
+| Service | Status | Notes |
+|---------|--------|-------|
+| Stripe | ✅ Active | Payment processing |
+| SendGrid | 🟡 Code Ready | Awaiting API key |
+| Twilio | ⏸️ Pending | WhatsApp messaging |
+| Sora 2 | ✅ Active | Video generation |
+| Firebase | ✅ Active | Auth/Backend |
+
+---
+
+## Credentials for Testing
+
+### Employee Portal
+- **Director**: `director@manoprotect.com` / `Director2026!`
+- **Employee**: `empleado1@test.com` / `Empleado2026!`
