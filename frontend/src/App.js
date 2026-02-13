@@ -258,6 +258,8 @@ function AppRouter() {
         <Routes>
           {/* Public Routes */}
           <Route path="/" element={<LandingPage />} />
+          <Route path="/blog" element={<BlogPage />} />
+          <Route path="/blog/:slug" element={<BlogPostPage />} />
           <Route path="/how-it-works" element={<HowItWorks />} />
           <Route path="/pricing" element={<Pricing />} />
           <Route path="/plans" element={<Pricing />} />
