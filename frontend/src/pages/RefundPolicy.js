@@ -148,7 +148,7 @@ const RefundPolicy = () => {
           </section>
 
           <section className="space-y-4">
-            <h2 className="text-xl font-bold text-zinc-900">3. Reembolsos según el Plan</h2>
+            <h2 className="text-xl font-bold text-zinc-900">4. Reembolsos según el Plan</h2>
             <div className="overflow-x-auto">
               <table className="w-full border-collapse">
                 <thead>
