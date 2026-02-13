@@ -47,7 +47,66 @@ const RefundPolicy = () => {
           </div>
 
           <section className="space-y-4">
-            <h2 className="text-xl font-bold text-zinc-900">1. Derecho de Desistimiento (14 días)</h2>
+            <h2 className="text-xl font-bold text-zinc-900">1. Período de Prueba Gratuito (7 días)</h2>
+            <div className="bg-amber-50 p-5 rounded-xl border border-amber-200">
+              <h3 className="font-bold text-amber-800 mb-3">🎁 Prueba gratuita de 7 días</h3>
+              <p className="text-amber-700 mb-4">
+                Los planes <strong>Individual</strong> y <strong>Familiar</strong> (tanto mensuales como anuales) 
+                incluyen un período de prueba gratuito de 7 días. Para activar la prueba es obligatorio 
+                registrar una tarjeta de débito o crédito válida.
+              </p>
+              <div className="space-y-3">
+                <div className="flex items-start gap-3">
+                  <CheckCircle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
+                  <p className="text-amber-700">
+                    <strong>Si cancelas dentro de los 7 días:</strong> No se realizará ningún cargo y tu cuenta 
+                    pasará automáticamente al plan Básico gratuito.
+                  </p>
+                </div>
+                <div className="flex items-start gap-3">
+                  <AlertTriangle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
+                  <p className="text-amber-700">
+                    <strong>Si no cancelas dentro de los 7 días:</strong> Se cobrará automáticamente el importe 
+                    íntegro del plan seleccionado a la tarjeta registrada:
+                  </p>
+                </div>
+              </div>
+              <div className="mt-4 bg-white rounded-lg p-4 border border-amber-200">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="border-b border-amber-200">
+                      <th className="text-left py-2 text-amber-800">Plan</th>
+                      <th className="text-right py-2 text-amber-800">Importe tras período de prueba</th>
+                    </tr>
+                  </thead>
+                  <tbody className="text-amber-700">
+                    <tr className="border-b border-amber-100">
+                      <td className="py-2">Individual Mensual</td>
+                      <td className="text-right font-semibold">€29,99/mes</td>
+                    </tr>
+                    <tr className="border-b border-amber-100">
+                      <td className="py-2">Individual Anual</td>
+                      <td className="text-right font-semibold">€249,99/año</td>
+                    </tr>
+                    <tr className="border-b border-amber-100">
+                      <td className="py-2">Familiar Mensual</td>
+                      <td className="text-right font-semibold">€49,99/mes</td>
+                    </tr>
+                    <tr>
+                      <td className="py-2">Familiar Anual</td>
+                      <td className="text-right font-semibold">€399,99/año</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <p className="text-sm text-amber-600 mt-4">
+                * Te enviaremos un recordatorio por email 2 días antes de que finalice tu período de prueba.
+              </p>
+            </div>
+          </section>
+
+          <section className="space-y-4">
+            <h2 className="text-xl font-bold text-zinc-900">2. Derecho de Desistimiento (14 días)</h2>
             <p className="text-zinc-600">
               De conformidad con la normativa europea de consumidores, tienes derecho a desistir del 
               contrato en un plazo de <strong>14 días naturales</strong> desde la contratación, 
