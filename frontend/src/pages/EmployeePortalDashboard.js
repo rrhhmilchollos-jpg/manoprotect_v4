@@ -233,6 +233,10 @@ const EmployeePortalDashboard = () => {
                   <UserPlus className="w-4 h-4 mr-2" />
                   Invitaciones
                 </TabsTrigger>
+                <TabsTrigger value="documents" className="data-[state=active]:bg-indigo-600">
+                  <FileText className="w-4 h-4 mr-2" />
+                  Documentos
+                </TabsTrigger>
               </>
             )}
             <TabsTrigger value="orders" className="data-[state=active]:bg-indigo-600">
