@@ -127,8 +127,7 @@ const EmployeePortalDashboard = () => {
       const response = await fetch(`${API}/api/employee-portal/invites`, {
         method: 'POST',
         headers: { 
-          'Content-Type': 'application/json',
-          'Cookie': `session_token=${employee.session_token}`
+          'Content-Type': 'application/json'
         },
         credentials: 'include',
         body: JSON.stringify(inviteForm)
