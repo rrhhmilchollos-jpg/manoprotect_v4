@@ -131,6 +131,8 @@ const SOSDeviceOrder = lazy(() => import('@/pages/SOSDeviceOrder'));
 const OrderTracking = lazy(() => import('@/pages/OrderTracking'));
 const SOSServices = lazy(() => import('@/pages/SOSServices'));
 const OrderConfirmation = lazy(() => import('@/pages/OrderConfirmation'));
+const BlogPage = lazy(() => import('@/pages/BlogPage'));
+const BlogPostPage = lazy(() => import('@/pages/BlogPostPage'));
 
 // Lazy load non-critical UI components to reduce main thread blocking
 const CookieConsent = lazy(() => import('@/components/CookieConsent'));
