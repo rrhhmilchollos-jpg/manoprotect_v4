@@ -579,20 +579,35 @@ export default function SOSDeviceOrder() {
               </Card>
 
               {/* Order Button */}
-              <Button 
-                onClick={handleSubmitOrder}
-                disabled={loading}
-                className="w-full h-14 text-lg bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700"
-              >
-                {loading ? (
-                  'Procesando...'
-                ) : (
-                  <>
-                    <ShoppingCart className="w-5 h-5 mr-2" />
-                    Solicitar Dispositivo GRATIS (Solo envío: 4,95€)
-                  </>
-                )}
-              </Button>
+              {isInTrialPeriod ? (
+                <div className="space-y-3">
+                  <Button 
+                    disabled
+                    className="w-full h-14 text-lg bg-zinc-400 cursor-not-allowed"
+                  >
+                    <Clock className="w-5 h-5 mr-2" />
+                    Disponible tras el período de prueba
+                  </Button>
+                  <p className="text-center text-sm text-amber-600">
+                    Tu suscripción se activará automáticamente en unos días
+                  </p>
+                </div>
+              ) : (
+                <Button 
+                  onClick={handleSubmitOrder}
+                  disabled={loading}
+                  className="w-full h-14 text-lg bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700"
+                >
+                  {loading ? (
+                    'Procesando...'
+                  ) : (
+                    <>
+                      <ShoppingCart className="w-5 h-5 mr-2" />
+                      Solicitar Dispositivo GRATIS (Solo envío: 4,95€)
+                    </>
+                  )}
+                </Button>
+              )}
 
               {/* Trust badges */}
               <div className="flex items-center justify-center gap-4 text-xs text-zinc-500">
