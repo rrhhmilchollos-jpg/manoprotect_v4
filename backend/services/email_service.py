@@ -1339,7 +1339,139 @@ class EmailNotificationService:
         </html>
         """
 
-
+    # ============================================
+    # EMPLOYEE INVITATION EMAIL METHODS
+    # ============================================
+    
+    async def send_employee_invite(
+        self,
+        email: str,
+        invite_data: Dict
+    ) -> Dict:
+        """Send employee invitation email with registration link and temporary credentials"""
+        content = self._generate_employee_invite_email(invite_data)
+        
+        return await self._send_email(
+            to_email=email,
+            subject=f'🏢 ManoProtect: Invitación para unirte al equipo',
+            html_content=content,
+            email_type='employee_invite',
+            user_id=invite_data.get('invite_id', ''),
+            metadata=invite_data
+        )
+    
+    def _generate_employee_invite_email(self, data: Dict) -> str:
+        """Generate employee invitation HTML email"""
+        name = data.get('name', 'Nuevo empleado')
+        role = data.get('role', 'employee')
+        department = data.get('department', 'General')
+        temp_password = data.get('temp_password', '')
+        registration_url = data.get('registration_url', '')
+        expires_at = data.get('expires_at', '7 días')
+        invited_by = data.get('invited_by_name', 'Director General')
+        
+        role_names = {
+            'director': 'Director General',
+            'manager': 'Manager',
+            'soporte': 'Soporte al Cliente',
+            'analista_fraude': 'Analista de Fraude',
+            'ventas': 'Ventas',
+            'logistica': 'Logística',
+            'marketing': 'Marketing',
+            'employee': 'Empleado'
+        }
+        role_display = role_names.get(role, role.capitalize())
+        
+        full_url = f"https://manoprotect.com{registration_url}" if registration_url.startswith('/') else registration_url
+        
+        return f"""
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="utf-8">
+            <style>
+                body {{ font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 0; padding: 0; background: #f4f4f5; }}
+                .container {{ max-width: 600px; margin: 0 auto; padding: 20px; }}
+                .card {{ background: white; border-radius: 16px; padding: 32px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }}
+                .header {{ background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%); color: white; padding: 30px; text-align: center; border-radius: 16px 16px 0 0; margin: -32px -32px 24px -32px; }}
+                .badge {{ display: inline-block; background: #10b981; color: white; padding: 8px 20px; border-radius: 24px; font-weight: bold; }}
+                .info-box {{ background: #f0f9ff; border: 2px solid #bae6fd; padding: 20px; border-radius: 12px; margin: 24px 0; }}
+                .credentials-box {{ background: #fef3c7; border: 2px dashed #f59e0b; padding: 20px; border-radius: 12px; margin: 24px 0; text-align: center; }}
+                .password {{ font-family: monospace; font-size: 24px; letter-spacing: 2px; color: #92400e; background: white; padding: 10px 20px; border-radius: 8px; display: inline-block; }}
+                .btn {{ display: inline-block; background: #4f46e5; color: white; padding: 16px 36px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 16px; }}
+                .detail-row {{ display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #e5e7eb; }}
+                .detail-row:last-child {{ border-bottom: none; }}
+                .footer {{ text-align: center; color: #71717a; font-size: 12px; margin-top: 32px; }}
+            </style>
+        </head>
+        <body>
+            <div class="container">
+                <div class="card">
+                    <div class="header">
+                        <h1 style="margin: 0;">🏢 ManoProtect</h1>
+                        <p style="margin: 8px 0 0 0; opacity: 0.9;">Portal de Empleados</p>
+                    </div>
+                    
+                    <div style="text-align: center; margin-bottom: 24px;">
+                        <h2 style="color: #1f2937; margin: 0;">¡Bienvenido al equipo, {name}!</h2>
+                        <p style="color: #6b7280; margin-top: 8px;">{invited_by} te ha invitado a unirte a ManoProtect</p>
+                    </div>
+                    
+                    <div class="info-box">
+                        <h3 style="margin: 0 0 16px 0; color: #0369a1;">📋 Detalles de tu cuenta</h3>
+                        <div class="detail-row">
+                            <span style="color: #6b7280;">Rol asignado</span>
+                            <span style="font-weight: bold; color: #1f2937;">{role_display}</span>
+                        </div>
+                        <div class="detail-row">
+                            <span style="color: #6b7280;">Departamento</span>
+                            <span style="font-weight: bold; color: #1f2937;">{department or 'Por asignar'}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="credentials-box">
+                        <h3 style="margin: 0 0 12px 0; color: #92400e;">🔑 Tu contraseña temporal</h3>
+                        <div class="password">{temp_password}</div>
+                        <p style="margin: 12px 0 0 0; color: #b45309; font-size: 14px;">
+                            Guarda esta contraseña. La necesitarás para completar tu registro.
+                        </p>
+                    </div>
+                    
+                    <div style="text-align: center; margin: 32px 0;">
+                        <a href="{full_url}" class="btn">
+                            Completar mi registro
+                        </a>
+                    </div>
+                    
+                    <div style="background: #fef2f2; border-radius: 8px; padding: 16px; margin: 20px 0;">
+                        <p style="margin: 0; color: #991b1b; text-align: center; font-size: 14px;">
+                            ⏰ <strong>Esta invitación expira:</strong> {expires_at}<br>
+                            Completa tu registro antes de esa fecha.
+                        </p>
+                    </div>
+                    
+                    <div style="border-top: 1px solid #e5e7eb; padding-top: 20px; margin-top: 24px;">
+                        <p style="color: #6b7280; font-size: 14px; margin: 0;">
+                            <strong>Pasos para registrarte:</strong>
+                        </p>
+                        <ol style="color: #6b7280; font-size: 14px; margin: 10px 0 0 0; padding-left: 20px;">
+                            <li>Haz clic en "Completar mi registro"</li>
+                            <li>Introduce tu contraseña temporal</li>
+                            <li>Crea tu contraseña permanente</li>
+                            <li>¡Listo! Ya tendrás acceso al portal</li>
+                        </ol>
+                    </div>
+                </div>
+                
+                <div class="footer">
+                    <p>Este email fue enviado por ManoProtect<br>
+                    STARTBOOKING SL - CIF: B19427723</p>
+                    <p>Si no esperabas esta invitación, puedes ignorar este email.</p>
+                </div>
+            </div>
+        </body>
+        </html>
+        """
 
 
 # Global instance
