@@ -190,12 +190,16 @@ const Pricing = () => {
 
   const faqs = [
     {
-      q: '¿Puedo cancelar en cualquier momento?',
-      a: 'Sí, sin preguntas. Cancela desde tu perfil y seguirás teniendo acceso hasta el final del período pagado.'
+      q: '¿Cómo funciona la prueba gratuita de 7 días?',
+      a: 'Al suscribirte a los planes Individual o Familiar, disfrutas de 7 días de prueba gratis. Solo necesitas añadir tu tarjeta para activar el trial. Si no es lo que buscas, cancela antes de que acabe el periodo de prueba desde tu perfil.'
     },
     {
-      q: '¿Qué incluye la garantía de 7 días?',
-      a: 'Si no estás satisfecho, te devolvemos el 100% del importe. Sin letra pequeña, sin complicaciones.'
+      q: '¿Puedo cancelar en cualquier momento?',
+      a: 'Sí, sin preguntas. Cancela desde tu perfil y si estás en el periodo de prueba, volverás automáticamente al plan Básico gratuito.'
+    },
+    {
+      q: '¿Por qué necesitan mi tarjeta para la prueba gratis?',
+      a: 'Es para garantizar una experiencia fluida. Si decides continuar, no tendrás que hacer nada. Si cancelas dentro de los 7 días, no se realizará ningún cargo. Consulta nuestra política de reembolsos para más detalles.'
     },
     {
       q: '¿Cómo funciona el botón SOS?',
