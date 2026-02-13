@@ -87,7 +87,8 @@ const Pricing = () => {
         'Soporte por email'
       ],
       cta: 'Comenzar Gratis',
-      popular: false
+      popular: false,
+      hasTrial: false
     },
     {
       id: isAnnual ? 'yearly' : 'monthly',
@@ -108,8 +109,10 @@ const Pricing = () => {
         'Sin anuncios',
         'Soporte prioritario'
       ],
-      cta: isAnnual ? 'Ahorrar €110/año' : 'Suscribirse',
-      popular: true
+      cta: 'Probar 7 Días Gratis',
+      popular: true,
+      hasTrial: true,
+      trialDays: 7
     },
     {
       id: isAnnual ? 'family-yearly' : 'family-monthly',
@@ -130,8 +133,10 @@ const Pricing = () => {
         'Panel familiar centralizado',
         'Garantía satisfacción 7 días'
       ],
-      cta: isAnnual ? 'Ahorrar €200/año' : 'Proteger Familia',
-      popular: false
+      cta: 'Probar 7 Días Gratis',
+      popular: false,
+      hasTrial: true,
+      trialDays: 7
     }
   ];
 
