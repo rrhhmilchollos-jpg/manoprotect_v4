@@ -161,6 +161,12 @@ export default function SOSDeviceOrder() {
       return;
     }
 
+    // Check if user is in trial period - cannot order during trial
+    if (isInTrialPeriod) {
+      toast.error('El dispositivo SOS solo está disponible para suscriptores de pago. Espera a que finalice tu período de prueba.');
+      return;
+    }
+
     // Validate shipping info
     if (!shippingInfo.fullName || !shippingInfo.phone || !shippingInfo.address || 
         !shippingInfo.city || !shippingInfo.postalCode || !shippingInfo.province) {
