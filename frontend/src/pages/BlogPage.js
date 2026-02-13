@@ -895,6 +895,13 @@ const BlogPage = () => {
         </div>
       </section>
 
+      {/* Scam Alert Subscription */}
+      <section className="py-12 px-6 bg-slate-100">
+        <div className="max-w-7xl mx-auto">
+          <ScamAlertSubscription />
+        </div>
+      </section>
+
       {/* Footer */}
       <footer className="bg-slate-900 text-slate-400 py-8 px-6">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
