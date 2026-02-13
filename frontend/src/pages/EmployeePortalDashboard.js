@@ -612,6 +612,88 @@ const EmployeePortalDashboard = () => {
               </CardContent>
             </Card>
           </TabsContent>
+
+          {/* Documents Tab */}
+          {isDirector && (
+            <TabsContent value="documents" className="space-y-6">
+              <Card className="bg-slate-800/50 border-slate-700">
+                <CardHeader>
+                  <CardTitle className="text-white flex items-center gap-2">
+                    <FileText className="w-5 h-5 text-indigo-400" />
+                    Documentos Legales
+                  </CardTitle>
+                  <CardDescription className="text-slate-400">
+                    Modelos de contratos y documentos oficiales para nuevos empleados
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  {/* Employment Contract */}
+                  <div className="bg-slate-900/50 rounded-xl p-5 border border-slate-700">
+                    <div className="flex items-start justify-between">
+                      <div className="flex items-start gap-4">
+                        <div className="w-12 h-12 bg-emerald-600/20 rounded-xl flex items-center justify-center">
+                          <FileText className="w-6 h-6 text-emerald-400" />
+                        </div>
+                        <div>
+                          <h3 className="font-semibold text-white mb-1">Contrato de Trabajo Indefinido</h3>
+                          <p className="text-sm text-slate-400 mb-2">
+                            Modelo oficial de contrato laboral conforme al Estatuto de los Trabajadores
+                          </p>
+                          <div className="flex flex-wrap gap-2">
+                            <Badge className="bg-emerald-600/20 text-emerald-400 border-emerald-600/30">
+                              PDF
+                            </Badge>
+                            <Badge className="bg-slate-600/20 text-slate-400 border-slate-600/30">
+                              Con sello oficial
+                            </Badge>
+                            <Badge className="bg-indigo-600/20 text-indigo-400 border-indigo-600/30">
+                              v2.0 - Feb 2026
+                            </Badge>
+                          </div>
+                        </div>
+                      </div>
+                      <a
+                        href="/contrato_empleado_manoprotect.zip"
+                        download
+                        className="flex items-center gap-2 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg transition-colors"
+                        data-testid="download-contract-btn"
+                      >
+                        <Download className="w-4 h-4" />
+                        Descargar ZIP
+                      </a>
+                    </div>
+                  </div>
+
+                  {/* Contract Info */}
+                  <div className="bg-indigo-900/20 rounded-xl p-4 border border-indigo-600/30">
+                    <h4 className="font-medium text-indigo-300 mb-2">Contenido del ZIP:</h4>
+                    <ul className="text-sm text-slate-400 space-y-1">
+                      <li className="flex items-center gap-2">
+                        <CheckCircle className="w-4 h-4 text-emerald-400" />
+                        Contrato_Trabajo_ManoProtect.pdf - Modelo estándar
+                      </li>
+                      <li className="flex items-center gap-2">
+                        <CheckCircle className="w-4 h-4 text-emerald-400" />
+                        Contrato_Trabajo_ManoProtect_Sellado.pdf - Con cuño oficial
+                      </li>
+                    </ul>
+                  </div>
+
+                  {/* Usage Instructions */}
+                  <div className="bg-amber-900/20 rounded-xl p-4 border border-amber-600/30">
+                    <h4 className="font-medium text-amber-300 mb-2">Instrucciones de uso:</h4>
+                    <ol className="text-sm text-slate-400 space-y-1 list-decimal list-inside">
+                      <li>Descarga el ZIP y extrae los archivos PDF</li>
+                      <li>Imprime 2 copias del contrato</li>
+                      <li>Rellena los campos en blanco con los datos del empleado</li>
+                      <li>Ambas partes deben firmar las 2 copias</li>
+                      <li>Cada parte conserva una copia firmada</li>
+                    </ol>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+          )}
         </Tabs>
       </main>
     </div>
