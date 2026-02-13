@@ -25,7 +25,7 @@ Todas las apps se conectan al mismo backend:
 
 | Entorno | URL |
 |---------|-----|
-| Preview | https://redesign-home-1.preview.emergentagent.com |
+| Preview | https://admin-portal-353.preview.emergentagent.com |
 | Producción | [Tu dominio de producción] |
 
 ---

@@ -9,7 +9,7 @@
     "contextMenus"
   ],
   "host_permissions": [
-    "https://redesign-home-1.preview.emergentagent.com/*",
+    "https://admin-portal-353.preview.emergentagent.com/*",
     "https://www.manoprotect.com/*"
   ],
   "action": {
