@@ -2,7 +2,7 @@
 ManoProtect - Employee Portal Routes
 Secure employee management system with director-managed invitations
 """
-from fastapi import APIRouter, HTTPException, Request, Cookie, Depends, BackgroundTasks
+from fastapi import APIRouter, HTTPException, Request, Response, Cookie, Depends, BackgroundTasks
 from pydantic import BaseModel, EmailStr, Field
 from typing import Optional, List
 from datetime import datetime, timezone, timedelta
