@@ -194,6 +194,7 @@ async def get_available_roles():
 async def create_employee_invite(
     invite: EmployeeInvite,
     request: Request,
+    background_tasks: BackgroundTasks,
     session_token: Optional[str] = Cookie(None)
 ):
     """
