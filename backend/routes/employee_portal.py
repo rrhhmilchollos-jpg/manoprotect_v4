@@ -1,6 +1,16 @@
 """
 ManoProtect - Employee Portal Routes
 Secure employee management system with director-managed invitations
+
+ROLES DISPONIBLES:
+- director: Acceso total, crear empleados, gestionar todo
+- manager: Gestión de equipo, ver estadísticas, gestionar pedidos
+- soporte: Atención al cliente, ver usuarios, gestionar tickets
+- analista_fraude: Ver amenazas, análisis de seguridad
+- ventas: Ver clientes potenciales, gestionar leads
+- logistica: Gestionar envíos y pedidos
+- marketing: Gestionar contenido y campañas
+- employee: Acceso básico de empleado
 """
 from fastapi import APIRouter, HTTPException, Request, Response, Cookie, Depends, BackgroundTasks
 from pydantic import BaseModel, EmailStr, Field
@@ -15,6 +25,50 @@ router = APIRouter(prefix="/employee-portal", tags=["Employee Portal"])
 # Database reference - will be initialized
 db = None
 
+# Available roles and their permissions
+ROLES = {
+    "director": {
+        "name": "Director General",
+        "level": 100,
+        "permissions": ["all"]
+    },
+    "manager": {
+        "name": "Manager",
+        "level": 80,
+        "permissions": ["employees.view", "stats.view", "orders.manage", "users.view"]
+    },
+    "soporte": {
+        "name": "Soporte al Cliente",
+        "level": 50,
+        "permissions": ["users.view", "users.support", "tickets.manage"]
+    },
+    "analista_fraude": {
+        "name": "Analista de Fraude",
+        "level": 60,
+        "permissions": ["threats.view", "threats.analyze", "stats.view"]
+    },
+    "ventas": {
+        "name": "Ventas",
+        "level": 40,
+        "permissions": ["leads.view", "leads.manage", "stats.sales"]
+    },
+    "logistica": {
+        "name": "Logística",
+        "level": 50,
+        "permissions": ["orders.view", "orders.manage", "shipping.manage"]
+    },
+    "marketing": {
+        "name": "Marketing",
+        "level": 40,
+        "permissions": ["content.manage", "campaigns.manage"]
+    },
+    "employee": {
+        "name": "Empleado",
+        "level": 10,
+        "permissions": ["basic"]
+    }
+}
+
 def set_database(database):
     global db
     db = database
@@ -27,7 +81,7 @@ class EmployeeInvite(BaseModel):
     """Model for creating employee invitations"""
     email: EmailStr
     name: str
-    role: str = "employee"  # employee, manager, director
+    role: str = "employee"  # See ROLES above
     department: Optional[str] = None
 
 class EmployeeRegister(BaseModel):
