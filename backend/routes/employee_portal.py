@@ -288,7 +288,7 @@ async def verify_invite_token(token: str):
 # ============================================
 
 @router.post("/login")
-async def employee_login(data: EmployeeLogin):
+async def employee_login(data: EmployeeLogin, response: Response):
     """Employee login"""
     employee = await db.employees.find_one({"email": data.email})
     
@@ -310,6 +310,16 @@ async def employee_login(data: EmployeeLogin):
             "session_token": session_token,
             "last_login": datetime.now(timezone.utc).isoformat()
         }}
+    )
+    
+    # Set session cookie for browser requests
+    response.set_cookie(
+        key="session_token",
+        value=session_token,
+        httponly=True,
+        secure=True,
+        samesite="none",
+        max_age=60 * 60 * 24 * 7  # 7 days
     )
     
     return {
