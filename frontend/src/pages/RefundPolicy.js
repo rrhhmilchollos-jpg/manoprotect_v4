@@ -121,7 +121,7 @@ const RefundPolicy = () => {
           </section>
 
           <section className="space-y-4">
-            <h2 className="text-xl font-bold text-zinc-900">2. Cómo Solicitar un Reembolso</h2>
+            <h2 className="text-xl font-bold text-zinc-900">3. Cómo Solicitar un Reembolso</h2>
             <div className="space-y-3">
               <div className="flex items-start gap-3 p-3 bg-zinc-50 rounded-lg">
                 <span className="bg-indigo-600 text-white w-6 h-6 rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">1</span>
