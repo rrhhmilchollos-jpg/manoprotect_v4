@@ -203,7 +203,7 @@ const RefundPolicy = () => {
           </section>
 
           <section className="space-y-4">
-            <h2 className="text-xl font-bold text-zinc-900">5. Tiempo de Procesamiento</h2>
+            <h2 className="text-xl font-bold text-zinc-900">6. Tiempo de Procesamiento</h2>
             <ul className="list-disc pl-6 space-y-2 text-zinc-600">
               <li>Procesamos tu solicitud en <strong>24-48 horas laborables</strong></li>
               <li>El reembolso aparecerá en tu cuenta en <strong>5-10 días laborables</strong></li>
