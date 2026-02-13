@@ -37,6 +37,13 @@ const LandingHeader = () => {
         {/* Desktop Navigation */}
         <div className="hidden md:flex items-center gap-2">
           <Button
+            data-testid="header-blog-btn"
+            onClick={() => navigate('/blog')}
+            className="bg-amber-500 hover:bg-amber-600 text-white rounded-full px-5 h-10 font-medium shadow-sm"
+          >
+            Blog Estafas
+          </Button>
+          <Button
             data-testid="header-sos-btn"
             onClick={() => navigate('/servicios-sos')}
             className="bg-red-600 hover:bg-red-700 text-white rounded-full px-5 h-10 font-medium shadow-sm"
