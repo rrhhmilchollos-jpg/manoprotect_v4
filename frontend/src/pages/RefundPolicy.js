@@ -243,7 +243,7 @@ const RefundPolicy = () => {
           </section>
 
           <section className="space-y-4 border-t pt-8">
-            <h2 className="text-xl font-bold text-zinc-900">8. Contacto para Reembolsos</h2>
+            <h2 className="text-xl font-bold text-zinc-900">9. Contacto para Reembolsos</h2>
             <div className="bg-zinc-50 p-4 rounded-lg">
               <p><strong>Email:</strong> reembolsos@manoprotect.com</p>
               <p><strong>Teléfono:</strong> +34 601 510 950</p>
