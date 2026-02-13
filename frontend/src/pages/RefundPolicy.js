@@ -24,7 +24,7 @@ const RefundPolicy = () => {
           
           <div className="text-center border-b pb-8">
             <h1 className="text-3xl font-bold text-zinc-900 mb-2">Política de Reembolsos y Cancelaciones</h1>
-            <p className="text-zinc-500">Última actualización: Enero 2026</p>
+            <p className="text-zinc-500">Última actualización: Febrero 2026</p>
           </div>
 
           {/* Resumen visual */}
