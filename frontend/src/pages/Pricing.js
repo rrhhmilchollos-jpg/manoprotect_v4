@@ -198,8 +198,8 @@ const Pricing = () => {
       a: 'Sí, sin preguntas. Cancela desde tu perfil y si estás en el periodo de prueba, volverás automáticamente al plan Básico gratuito.'
     },
     {
-      q: '¿Por qué necesitan mi tarjeta para la prueba gratis?',
-      a: 'Es para garantizar una experiencia fluida. Si decides continuar, no tendrás que hacer nada. Si cancelas dentro de los 7 días, no se realizará ningún cargo. Consulta nuestra política de reembolsos para más detalles.'
+      q: '¿Por qué necesitan verificar mi tarjeta con el banco?',
+      a: 'Para evitar fraudes, estafas y uso de tarjetas falsas, utilizamos verificación 3D Secure. Tu banco te pedirá confirmar tu identidad (código SMS, app del banco o huella). Esto garantiza que eres el titular legítimo. Consulta nuestra política de reembolsos para más detalles.'
     },
     {
       q: '¿Cómo funciona el botón SOS?',
