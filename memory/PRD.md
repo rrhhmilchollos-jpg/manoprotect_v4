@@ -1,64 +1,61 @@
 # ManoProtect - Product Requirements Document
 
 ## Original Problem Statement
-ManoProtect es una plataforma de ciberseguridad española enfocada en proteger familias contra estafas digitales (phishing, vishing, smishing), con un producto físico estrella: el Botón SOS de emergencia.
+ManoProtect es una plataforma de ciberseguridad española enfocada en proteger familias contra estafas digitales.
 
 ---
 
-## What's Been Implemented - February 13, 2026
+## Implementado - Febrero 13, 2026
 
 ### Employee Portal System  
 - **URL Login:** `/empleados/login`
 - **Credenciales Director:** `director@manoprotect.com` / `Director2026!`
-- **EMAIL AUTOMÁTICO ACTIVADO** ✅
+- **Tabs:** Resumen, Empleados, Invitaciones, Documentos, Pedidos
 
-### Blog de Seguridad
-- **URL:** `/blog`
-- Sistema de Alertas Trending con suscripción
+### Contrato de Trabajo (NUEVO)
+- **Ubicación:** `/contrato_empleado_manoprotect.zip`
+- **Contenido:**
+  - `Contrato_Trabajo_ManoProtect.pdf` - Modelo estándar
+  - `Contrato_Trabajo_ManoProtect_Sellado.pdf` - Con cuño oficial de ManoProtect
+- **Características:**
+  - Conforme al RD Legislativo 2/2015 (Estatuto de los Trabajadores)
+  - 10 cláusulas completas (objeto, duración, jornada, retribución, confidencialidad, etc.)
+  - Sello oficial de STARTBOOKING SL / ManoProtect
+  - Espacio para firmas de ambas partes
+- **Acceso:** Portal de Empleados → Tab "Documentos"
 
 ### Planes con Trial de 7 días
-| Plan | Precio | Trial 7 días | Dispositivo SOS |
-|------|--------|--------------|-----------------|
-| Básico | €0 | No | No incluido |
-| Individual | €29,99/mes o €249,99/año | ✅ Sí | Tras pago |
-| Familiar | €49,99/mes o €399,99/año | ✅ Sí | GRATIS tras pago |
+| Plan | Precio | Trial | Dispositivo SOS |
+|------|--------|-------|-----------------|
+| Básico | €0 | No | No |
+| Individual | €29,99/mes | ✅ Sí | Tras pago |
+| Familiar | €49,99/mes | ✅ Sí | GRATIS tras pago |
 
-### Restricciones del Trial
-1. **Tarjeta obligatoria** - Se verifica con 3D Secure del banco
-2. **Dispositivo SOS NO disponible** durante el trial
-3. **Cancelación** → Vuelve automáticamente a Plan Básico
-4. **No cancelación** → Cobro automático del importe íntegro
-
-### Política de Reembolsos Actualizada
-- Sección 1: Período de Prueba (7 días)
-- Verificación bancaria 3D Secure
-- Restricción dispositivo SOS durante trial
-- Tabla de precios post-trial
+### Restricciones
+- Tarjeta verificada con 3D Secure del banco
+- Dispositivo SOS NO disponible durante trial
+- Cancelación → Plan Básico automático
 
 ---
 
-## URLs Importantes
+## URLs de Descarga
 
-| Página | URL |
-|--------|-----|
-| Pricing | `/pricing` |
-| Política Reembolsos | `/refund-policy` |
-| Dispositivo SOS | `/sos-device-order` |
-| Blog | `/blog` |
-| Portal Empleados | `/empleados/login` |
+| Archivo | URL |
+|---------|-----|
+| Contrato empleados | `/contrato_empleado_manoprotect.zip` |
+| Artículos del blog | `/articulos_manoprotect.zip` |
 
 ---
 
 ## Pending Tasks
 
-### P1 - High Priority  
+### P1
 - [ ] 2FA para Portal de Empleados
-- [ ] Cron job para emails de alertas trending
+- [ ] Cron job alertas trending
 
-### P2 - Medium Priority
+### P2
 - [ ] Subdominio admin.manoprotect.com
-- [ ] Dashboard analytics
 
-### P3 - Low Priority
-- [ ] Videos demo 1 minuto
-- [ ] App móvil nativa
+### P3
+- [ ] Videos demo
+- [ ] App móvil
