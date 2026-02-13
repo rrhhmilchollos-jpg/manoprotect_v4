@@ -97,6 +97,10 @@ export default function SOSDeviceOrder() {
   const [activeImage, setActiveImage] = useState('front');
   const [loading, setLoading] = useState(false);
   
+  // Check if user is in trial period
+  const isInTrialPeriod = user?.subscription_status === 'trial' || user?.is_trial === true;
+  const hasPaidSubscription = user?.subscription_status === 'active' && !user?.is_trial;
+  
   // Shipping info
   const [shippingInfo, setShippingInfo] = useState({
     fullName: user?.name || '',
