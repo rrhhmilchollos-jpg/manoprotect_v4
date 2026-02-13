@@ -331,7 +331,8 @@ const Pricing = () => {
                     )}
                     {plan.hasTrial && (
                       <p className="text-xs text-slate-500 mt-2">
-                        Requiere tarjeta de débito/crédito
+                        Requiere tarjeta de débito/crédito<br/>
+                        <span className="text-amber-600">Se verificará con tu banco (3D Secure)</span>
                       </p>
                     )}
                   </div>
