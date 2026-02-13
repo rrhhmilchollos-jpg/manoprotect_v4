@@ -126,6 +126,16 @@ const RefundPolicy = () => {
               <p className="text-sm text-amber-600 mt-4">
                 * Te enviaremos un recordatorio por email 2 días antes de que finalice tu período de prueba.
               </p>
+              
+              {/* SOS Device restriction */}
+              <div className="bg-white rounded-lg p-4 border border-amber-200 mt-4">
+                <h4 className="font-bold text-amber-800 mb-2">📦 Dispositivo SOS Físico</h4>
+                <p className="text-amber-700 text-sm">
+                  El dispositivo SOS físico (botón de emergencia tipo llavero) <strong>no está disponible 
+                  durante el período de prueba</strong>. Podrás solicitarlo sin coste adicional una vez 
+                  que tu suscripción de pago se active tras los 7 días de prueba.
+                </p>
+              </div>
             </div>
           </section>
 
