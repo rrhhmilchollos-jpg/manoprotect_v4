@@ -226,7 +226,7 @@ const RefundPolicy = () => {
           </section>
 
           <section className="space-y-4 bg-indigo-50 p-6 rounded-xl">
-            <h2 className="text-xl font-bold text-indigo-900">7. ¿Problemas Técnicos?</h2>
+            <h2 className="text-xl font-bold text-indigo-900">8. ¿Problemas Técnicos?</h2>
             <p className="text-indigo-700">
               Si experimentas problemas técnicos que afecten al servicio, contacta primero con 
               soporte. Muchas veces podemos resolver el problema sin necesidad de reembolso.
