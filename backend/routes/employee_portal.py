@@ -238,18 +238,44 @@ async def create_employee_invite(
     
     await db.employee_invites.insert_one(invite_doc)
     
-    # TODO: Send email with credentials using SendGrid
-    # For now, return the credentials (in production, only send via email)
+    # Send invitation email via SendGrid
+    email_sent = False
+    if email_service:
+        try:
+            email_data = {
+                "invite_id": invite_doc["invite_id"],
+                "name": invite.name,
+                "email": invite.email,
+                "role": invite.role,
+                "department": invite.department,
+                "temp_password": temp_password,
+                "registration_url": f"/empleados/registro?token={invite_token}",
+                "expires_at": invite_doc["expires_at"],
+                "invited_by_name": director.get("name", "Director General")
+            }
+            
+            # Send email in background to not block response
+            async def send_invite_email():
+                try:
+                    await email_service.send_employee_invite(invite.email, email_data)
+                except Exception as e:
+                    print(f"Error sending employee invite email: {e}")
+            
+            background_tasks.add_task(send_invite_email)
+            email_sent = True
+        except Exception as e:
+            print(f"Error preparing employee invite email: {e}")
     
     return {
         "success": True,
         "message": f"Invitación creada para {invite.email}",
         "invite_id": invite_doc["invite_id"],
         "email": invite.email,
-        "temp_password": temp_password,  # Remove this in production
+        "temp_password": temp_password,  # Also shown in response for manual sharing
         "registration_url": f"/empleados/registro?token={invite_token}",
         "expires_at": invite_doc["expires_at"],
-        "note": "En producción, estas credenciales se enviarán por email"
+        "email_sent": email_sent,
+        "note": "Se ha enviado un email con las credenciales" if email_sent else "Configura SendGrid para enviar emails automáticamente"
     }
 
 @router.get("/invites")
