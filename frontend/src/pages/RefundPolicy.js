@@ -212,7 +212,7 @@ const RefundPolicy = () => {
           </section>
 
           <section className="space-y-4">
-            <h2 className="text-xl font-bold text-zinc-900">6. Cancelación de Suscripción</h2>
+            <h2 className="text-xl font-bold text-zinc-900">7. Cancelación de Suscripción</h2>
             <p className="text-zinc-600">
               Puedes cancelar tu suscripción en cualquier momento. La cancelación:
             </p>
@@ -221,6 +221,7 @@ const RefundPolicy = () => {
               <li>Mantienes acceso hasta que expire el período pagado</li>
               <li>No genera reembolso automático (salvo solicitud expresa)</li>
               <li>No elimina tu cuenta ni tus datos (puedes solicitar eliminación aparte)</li>
+              <li><strong>Durante el período de prueba:</strong> Si cancelas dentro de los 7 días, tu cuenta vuelve automáticamente al plan Básico gratuito sin ningún cargo</li>
             </ul>
           </section>
 
