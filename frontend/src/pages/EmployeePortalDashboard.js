@@ -448,20 +448,34 @@ const EmployeePortalDashboard = () => {
                         className="w-full h-10 px-3 rounded-md bg-slate-900/50 border border-slate-600 text-white"
                         data-testid="invite-role"
                       >
-                        <option value="employee">Empleado</option>
+                        <option value="employee">Empleado (Básico)</option>
+                        <option value="soporte">Soporte al Cliente</option>
+                        <option value="ventas">Ventas</option>
+                        <option value="logistica">Logística</option>
+                        <option value="marketing">Marketing</option>
+                        <option value="analista_fraude">Analista de Fraude</option>
                         <option value="manager">Manager</option>
                         <option value="director">Director</option>
                       </select>
                     </div>
                     <div className="space-y-2">
-                      <label className="text-sm text-slate-300">Departamento (opcional)</label>
-                      <Input
-                        placeholder="Soporte, Ventas, etc."
+                      <label className="text-sm text-slate-300">Departamento</label>
+                      <select
                         value={inviteForm.department}
                         onChange={(e) => setInviteForm({ ...inviteForm, department: e.target.value })}
-                        className="bg-slate-900/50 border-slate-600 text-white"
+                        className="w-full h-10 px-3 rounded-md bg-slate-900/50 border border-slate-600 text-white"
                         data-testid="invite-department"
-                      />
+                      >
+                        <option value="">Seleccionar departamento...</option>
+                        <option value="Dirección">Dirección</option>
+                        <option value="Atención al Cliente">Atención al Cliente</option>
+                        <option value="Ventas">Ventas</option>
+                        <option value="Logística">Logística</option>
+                        <option value="Marketing">Marketing</option>
+                        <option value="Seguridad">Seguridad y Fraude</option>
+                        <option value="Tecnología">Tecnología</option>
+                        <option value="Administración">Administración</option>
+                      </select>
                     </div>
                     <div className="sm:col-span-2">
                       <Button
