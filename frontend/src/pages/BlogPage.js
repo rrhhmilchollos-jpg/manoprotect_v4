@@ -638,7 +638,14 @@ const BlogPage = () => {
       <Helmet>
         <title>Blog de Seguridad - Estafas y Fraudes en España | ManoProtect</title>
         <meta name="description" content="Noticias sobre estafas, phishing, vishing y fraudes en España. Casos reales y cómo protegerte. Actualizado diariamente." />
-        <meta name="keywords" content="estafas españa, phishing, vishing, smishing, fraudes, seguridad, noticias" />
+        <meta name="keywords" content="estafas españa, phishing, vishing, smishing, fraudes, seguridad, noticias, estafa correos, estafa banco, secuestro virtual, estafa whatsapp bizum" />
+        <meta property="og:title" content="Blog de Seguridad - Estafas en España | ManoProtect" />
+        <meta property="og:description" content="Casos reales de estafas que afectan a miles de españoles. Infórmate para proteger a tu familia." />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://manoprotect.com/blog" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Estafas y Fraudes en España - ManoProtect" />
+        <link rel="canonical" href="https://manoprotect.com/blog" />
       </Helmet>
 
       {/* Header */}
