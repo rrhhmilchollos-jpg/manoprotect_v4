@@ -25,6 +25,13 @@ router = APIRouter(prefix="/employee-portal", tags=["Employee Portal"])
 # Database reference - will be initialized
 db = None
 
+# Email service import
+email_service = None
+
+def set_email_service(service):
+    global email_service
+    email_service = service
+
 # Available roles and their permissions
 ROLES = {
     "director": {
