@@ -107,8 +107,27 @@ const LandingFooter = () => {
           </div>
         </div>
 
+        {/* Trust Badge - Protected by ManoProtect */}
+        <div className="mt-12 pt-8 border-t border-slate-800">
+          <div className="flex justify-center mb-8">
+            <div className="inline-flex items-center gap-3 bg-gradient-to-r from-emerald-900/50 to-indigo-900/50 border border-emerald-500/30 rounded-2xl px-6 py-4">
+              <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-xl flex items-center justify-center shadow-lg shadow-emerald-500/30">
+                <Shield className="w-7 h-7 text-white" />
+              </div>
+              <div>
+                <p className="text-emerald-400 font-bold text-sm uppercase tracking-wider">Sitio Verificado</p>
+                <p className="text-white font-semibold">Protegido por ManoProtect</p>
+              </div>
+              <div className="ml-2 flex items-center gap-1">
+                <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
+                <span className="text-emerald-400 text-xs font-medium">ACTIVO</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/* Bottom bar */}
-        <div className="mt-12 pt-8 border-t border-slate-800 flex flex-col sm:flex-row justify-between items-center gap-4">
+        <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
           <p className="text-sm">
             © {new Date().getFullYear()} STARTBOOKING SL (CIF: B19427723). Todos los derechos reservados.
           </p>
