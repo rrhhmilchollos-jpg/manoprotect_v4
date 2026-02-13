@@ -299,6 +299,14 @@ const Pricing = () => {
                 <CardContent className="pt-0">
                   {/* Price */}
                   <div className="text-center mb-6">
+                    {/* Trial Badge */}
+                    {plan.hasTrial && (
+                      <div className="mb-3">
+                        <Badge className="bg-amber-100 text-amber-700 border-amber-200 px-3 py-1">
+                          🎁 7 días de prueba gratis
+                        </Badge>
+                      </div>
+                    )}
                     <div className="flex items-baseline justify-center gap-1">
                       <span className="text-4xl font-bold text-slate-900">
                         €{price === 0 ? '0' : price.toFixed(2).replace('.', ',')}
@@ -315,6 +323,11 @@ const Pricing = () => {
                     {isAnnual && plan.annualSavings && (
                       <p className="text-xs text-slate-500 mt-1">
                         Ahorras €{plan.annualSavings}/año
+                      </p>
+                    )}
+                    {plan.hasTrial && (
+                      <p className="text-xs text-slate-500 mt-2">
+                        Requiere tarjeta de débito/crédito
                       </p>
                     )}
                   </div>
