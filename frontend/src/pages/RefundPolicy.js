@@ -180,7 +180,7 @@ const RefundPolicy = () => {
           </section>
 
           <section className="space-y-4">
-            <h2 className="text-xl font-bold text-zinc-900">4. Excepciones al Reembolso</h2>
+            <h2 className="text-xl font-bold text-zinc-900">5. Excepciones al Reembolso</h2>
             <p className="text-zinc-600">No procederá reembolso en los siguientes casos:</p>
             <ul className="space-y-2">
               <li className="flex items-start gap-2 text-zinc-600">
