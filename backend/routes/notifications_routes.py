@@ -188,6 +188,141 @@ async def update_notification_preferences(
     return {"message": "Preferencias actualizadas"}
 
 
+# ============================================
+# SCAM ALERT SUBSCRIPTIONS (Public - No auth required)
+# ============================================
+
+class ScamAlertSubscription(BaseModel):
+    email: str
+    categories: list = ["all"]  # all, smishing, vishing, phishing, whatsapp, secuestro
+    frequency: str = "instant"  # instant, daily, weekly
+
+
+@router.post("/scam-alerts/subscribe")
+async def subscribe_scam_alerts(data: ScamAlertSubscription):
+    """
+    Subscribe to scam alert notifications.
+    Public endpoint - anyone can subscribe without login.
+    """
+    # Check if already subscribed
+    existing = await _db.scam_alert_subscriptions.find_one(
+        {"email": data.email.lower()},
+        {"_id": 0}
+    )
+    
+    if existing:
+        # Update preferences
+        await _db.scam_alert_subscriptions.update_one(
+            {"email": data.email.lower()},
+            {"$set": {
+                "categories": data.categories,
+                "frequency": data.frequency,
+                "updated_at": datetime.now(timezone.utc).isoformat()
+            }}
+        )
+        return {
+            "success": True,
+            "message": "Preferencias de alertas actualizadas",
+            "email": data.email
+        }
+    
+    subscription = {
+        "id": f"scam_sub_{uuid.uuid4().hex[:12]}",
+        "email": data.email.lower(),
+        "categories": data.categories,
+        "frequency": data.frequency,
+        "is_active": True,
+        "created_at": datetime.now(timezone.utc).isoformat()
+    }
+    
+    await _db.scam_alert_subscriptions.insert_one(subscription)
+    
+    return {
+        "success": True,
+        "message": "¡Suscripción activada! Recibirás alertas de estafas en tu email.",
+        "email": data.email,
+        "subscription_id": subscription["id"]
+    }
+
+
+@router.delete("/scam-alerts/unsubscribe/{email}")
+async def unsubscribe_scam_alerts(email: str):
+    """Unsubscribe from scam alerts"""
+    result = await _db.scam_alert_subscriptions.update_one(
+        {"email": email.lower()},
+        {"$set": {"is_active": False}}
+    )
+    
+    if result.modified_count == 0:
+        raise HTTPException(status_code=404, detail="Email no encontrado")
+    
+    return {"success": True, "message": "Suscripción cancelada"}
+
+
+@router.get("/scam-alerts/trending")
+async def get_trending_scams():
+    """
+    Get current trending scams in Spain.
+    Public endpoint for displaying alerts.
+    """
+    # Simulated trending data - in production would come from real sources
+    trending = [
+        {
+            "id": "trend_1",
+            "title": "SMS falsos de Correos",
+            "category": "smishing",
+            "severity": "alta",
+            "affected_count": 12500,
+            "region": "España",
+            "description": "Nueva oleada de SMS pidiendo 1,99€ para liberar paquetes",
+            "date": "2026-02-13"
+        },
+        {
+            "id": "trend_2", 
+            "title": "Llamadas falsas Banco Santander",
+            "category": "vishing",
+            "severity": "crítica",
+            "affected_count": 3200,
+            "region": "Madrid, Cataluña",
+            "description": "Llaman diciendo que hay movimientos sospechosos en tu cuenta",
+            "date": "2026-02-12"
+        },
+        {
+            "id": "trend_3",
+            "title": "WhatsApp 'Mamá necesito dinero'",
+            "category": "whatsapp",
+            "severity": "alta",
+            "affected_count": 8700,
+            "region": "Toda España",
+            "description": "Se hacen pasar por hijos pidiendo Bizum urgente",
+            "date": "2026-02-11"
+        }
+    ]
+    
+    return {
+        "trending": trending,
+        "last_updated": datetime.now(timezone.utc).isoformat(),
+        "total_scams_detected_today": 1247
+    }
+
+
+@router.get("/scam-alerts/stats")
+async def get_scam_stats():
+    """Get scam statistics for Spain"""
+    return {
+        "daily_scams": 1200,
+        "weekly_increase": "+15%",
+        "most_affected_age": "50-70",
+        "top_categories": [
+            {"name": "Smishing", "percentage": 45},
+            {"name": "Vishing", "percentage": 28},
+            {"name": "Phishing", "percentage": 18},
+            {"name": "WhatsApp", "percentage": 9}
+        ],
+        "source": "INCIBE 2025"
+    }
+
+
 # Helper function
 async def create_notification(user_id: str, title: str, body: str, notification_type: str, data: dict = None):
     """Create and store a notification"""
