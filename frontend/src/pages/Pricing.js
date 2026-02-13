@@ -104,7 +104,7 @@ const Pricing = () => {
         'Análisis ilimitados con IA',
         'Bloqueo automático de amenazas',
         'Hasta 2 familiares incluidos',
-        'Botón SOS de emergencia',
+        'Botón SOS de emergencia (tras trial)',
         'Historial completo',
         'Sin anuncios',
         'Soporte prioritario'
@@ -128,7 +128,7 @@ const Pricing = () => {
         'Hasta 5 miembros familia',
         'Localización GPS en emergencias',
         'Tracking de niños bajo demanda',
-        'Historial de ubicaciones',
+        'Dispositivo SOS físico GRATIS (tras trial)',
         'Modo Senior simplificado',
         'Panel familiar centralizado',
         'Garantía satisfacción 7 días'
