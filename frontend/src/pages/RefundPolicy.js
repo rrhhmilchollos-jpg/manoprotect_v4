@@ -55,6 +55,30 @@ const RefundPolicy = () => {
                 incluyen un período de prueba gratuito de 7 días. Para activar la prueba es obligatorio 
                 registrar una tarjeta de débito o crédito válida.
               </p>
+              
+              {/* Verificación bancaria */}
+              <div className="bg-white rounded-lg p-4 border border-amber-200 mb-4">
+                <h4 className="font-bold text-amber-800 mb-2">🔐 Verificación de Seguridad Bancaria</h4>
+                <p className="text-amber-700 text-sm mb-3">
+                  Para evitar fraudes, estafas y el uso de tarjetas falsas, tu tarjeta será verificada 
+                  a través del sistema de seguridad de tu banco (<strong>3D Secure / Verificación bancaria</strong>).
+                </p>
+                <ul className="space-y-2 text-sm text-amber-700">
+                  <li className="flex items-start gap-2">
+                    <CheckCircle className="w-4 h-4 text-amber-600 flex-shrink-0 mt-0.5" />
+                    <span>Se te redirigirá al portal de tu banco para confirmar tu identidad</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <CheckCircle className="w-4 h-4 text-amber-600 flex-shrink-0 mt-0.5" />
+                    <span>Puede requerirse código SMS, huella digital o app del banco</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <CheckCircle className="w-4 h-4 text-amber-600 flex-shrink-0 mt-0.5" />
+                    <span>Este proceso garantiza que eres el titular legítimo de la tarjeta</span>
+                  </li>
+                </ul>
+              </div>
+
               <div className="space-y-3">
                 <div className="flex items-start gap-3">
                   <CheckCircle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
