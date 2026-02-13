@@ -5,42 +5,35 @@ ManoProtect es una plataforma de ciberseguridad española enfocada en proteger f
 
 ---
 
-## What's Been Implemented
+## What's Been Implemented - February 13, 2026
 
-### ✅ COMPLETED - February 13, 2026
-
-#### Employee Portal System  
+### Employee Portal System  
 - **URL Login:** `/empleados/login`
 - **Credenciales Director:** `director@manoprotect.com` / `Director2026!`
-- **8 Roles disponibles**
 - **EMAIL AUTOMÁTICO ACTIVADO** ✅
 
-#### Blog de Seguridad
+### Blog de Seguridad
 - **URL:** `/blog`
-- **11 artículos** sobre estafas reales
-- **Botón "Descargar Artículos"** en header
-- **Sistema de Alertas Trending** con suscripción
+- Sistema de Alertas Trending con suscripción
 
-#### Planes con Trial de 7 días (NUEVO)
-- **Plan Individual (Mensual/Anual):** 7 días de prueba gratis con tarjeta obligatoria
-- **Plan Familiar (Mensual/Anual):** 7 días de prueba gratis con tarjeta obligatoria
-- **Plan Básico:** Sin trial (gratis siempre)
+### Planes con Trial de 7 días
+| Plan | Precio | Trial 7 días | Dispositivo SOS |
+|------|--------|--------------|-----------------|
+| Básico | €0 | No | No incluido |
+| Individual | €29,99/mes o €249,99/año | ✅ Sí | Tras pago |
+| Familiar | €49,99/mes o €399,99/año | ✅ Sí | GRATIS tras pago |
 
-#### Política de Reembolsos Actualizada
-- **Sección 1:** Período de Prueba Gratuito (7 días)
-  - Si cancelas dentro de 7 días → Plan Básico automáticamente, sin cargo
-  - Si NO cancelas → Cobro automático del importe íntegro
-- Tabla de precios incluida en la política
+### Restricciones del Trial
+1. **Tarjeta obligatoria** - Se verifica con 3D Secure del banco
+2. **Dispositivo SOS NO disponible** durante el trial
+3. **Cancelación** → Vuelve automáticamente a Plan Básico
+4. **No cancelación** → Cobro automático del importe íntegro
 
----
-
-## Pricing Structure
-
-| Plan | Mensual | Anual | Trial 7 días |
-|------|---------|-------|--------------|
-| Básico | €0 | €0 | No |
-| Individual | €29,99/mes | €249,99/año | ✅ Sí (tarjeta requerida) |
-| Familiar | €49,99/mes | €399,99/año | ✅ Sí (tarjeta requerida) |
+### Política de Reembolsos Actualizada
+- Sección 1: Período de Prueba (7 días)
+- Verificación bancaria 3D Secure
+- Restricción dispositivo SOS durante trial
+- Tabla de precios post-trial
 
 ---
 
@@ -50,18 +43,9 @@ ManoProtect es una plataforma de ciberseguridad española enfocada en proteger f
 |--------|-----|
 | Pricing | `/pricing` |
 | Política Reembolsos | `/refund-policy` |
+| Dispositivo SOS | `/sos-device-order` |
 | Blog | `/blog` |
 | Portal Empleados | `/empleados/login` |
-
----
-
-## Credentials
-
-### Employee Portal
-- **Director**: `director@manoprotect.com` / `Director2026!`
-
-### SendGrid
-- **Status**: CONFIGURED ✅
 
 ---
 
