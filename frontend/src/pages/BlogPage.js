@@ -8,7 +8,7 @@ import { Helmet } from 'react-helmet-async';
 import { 
   AlertTriangle, Calendar, ArrowRight, Shield, Phone, Mail, 
   MessageSquare, Users, TrendingUp, ExternalLink, ChevronRight,
-  Clock, Eye, Tag, Search
+  Clock, Eye, Tag, Search, Download, FileText
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
