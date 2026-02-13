@@ -9,7 +9,7 @@ import {
   Shield, Users, Package, AlertTriangle, Settings, LogOut,
   UserPlus, Mail, Phone, Search, RefreshCw, ChevronRight,
   BarChart3, Clock, CheckCircle, XCircle, Eye, Trash2,
-  Send, Copy, Building2
+  Send, Copy, Building2, FileText, Download
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
