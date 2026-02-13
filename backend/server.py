@@ -243,8 +243,11 @@ from routes.legacy_vault import router as legacy_vault_router
 from routes.phishing_simulation import router as phishing_router
 
 # Employee Portal (Director-managed access)
-from routes.employee_portal import router as employee_portal_router, set_database as init_employee_portal
+from routes.employee_portal import router as employee_portal_router, set_database as init_employee_portal, set_email_service as init_employee_email
 init_employee_portal(db)
+# Connect email service to employee portal
+from services.email_service import email_service
+init_employee_email(email_service)
 
 # Banking and Compliance services - RESERVED for ManoBank.es
 # from services.compliance_service import init_compliance_service
