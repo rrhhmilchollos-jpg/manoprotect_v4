@@ -265,6 +265,344 @@ Los estafadores usan imágenes de famosos españoles para promocionar plataforma
 
 **ManoProtect detecta webs de inversión fraudulentas** y te advierte antes de que deposites dinero.
     `
+  },
+  {
+    id: 7,
+    slug: 'secuestro-real-corbera-xativa-2026',
+    title: 'CASO REAL: Secuestro en Corbera (Xàtiva) - Una llamada desde el maletero salvó sus vidas',
+    excerpt: 'Una pareja secuestrada en Valencia logró ser rescatada porque la mujer llamó a su cuñada desde el maletero del coche y compartió su ubicación GPS. La Policía detuvo a los captores.',
+    category: 'Secuestro Real',
+    categoryColor: 'bg-red-600',
+    date: '9 Feb 2026',
+    readTime: '6 min',
+    views: 45230,
+    image: 'https://images.unsplash.com/photo-1453873531674-2151bcd01707?w=800&q=80',
+    featured: true,
+    tags: ['Secuestro', 'Valencia', 'Xàtiva', 'Caso Real', 'GPS'],
+    content: `
+## El secuestro de Corbera que estremeció a Valencia
+
+El **6 de febrero de 2026**, una pareja fue secuestrada en una zona rural de Corbera, cerca de Xàtiva (Valencia). Lo que podría haber acabado en tragedia se convirtió en un rescate exitoso gracias a la tecnología.
+
+### Cómo ocurrió:
+1. La pareja fue interceptada y metida en el maletero de un vehículo
+2. Los captores exigían dinero bajo amenazas
+3. La mujer, con su móvil escondido, logró llamar a su cuñada
+4. **Compartió su ubicación GPS en tiempo real**
+5. La cuñada alertó inmediatamente al 112
+
+### El rescate:
+- La Policía Nacional y Local de Xàtiva iniciaron una persecución
+- Gracias a la ubicación GPS, localizaron el vehículo
+- Las víctimas fueron liberadas
+- Un captor fue detenido inmediatamente
+- El "autor intelectual" fue arrestado 2 días después en Valencia
+
+### Resultado judicial:
+| Detenido | Medida |
+|----------|--------|
+| Captor principal | Prisión provisional sin fianza |
+| Autor intelectual | Detenido y bajo investigación |
+| Tercer implicado | Libertad con restricciones (300m) |
+
+### Delitos investigados:
+- Detención ilegal / Secuestro
+- Extorsión
+- Falsedad documental
+- Estafa
+- Dos delitos de lesiones
+
+### Por qué este caso es clave:
+**La ubicación GPS salvó sus vidas.** Si la mujer no hubiera podido compartir su ubicación, el desenlace podría haber sido muy diferente.
+
+### Cómo ManoProtect te protege:
+- **Localización familiar en tiempo real** - Sabe siempre dónde están tus seres queridos
+- **Botón SOS** - Envía alerta con ubicación exacta a familiares y al 112
+- **Audio bidireccional** - Permite escuchar lo que ocurre
+- **Detección de movimientos bruscos** - Alerta automática si detecta algo anormal
+
+**No esperes a que ocurra. Protege a tu familia ahora.**
+    `
+  },
+  {
+    id: 8,
+    slug: 'ciberataques-espana-2025-cifras-record',
+    title: 'INCIBE: 122.223 ciberataques en España en 2025 - Récord histórico',
+    excerpt: 'España sufrió un 26% más de ciberataques en 2025. El phishing domina con 25.000 casos. La banca online fue el sector más atacado. 1.200 estafas diarias.',
+    category: 'Estadísticas',
+    categoryColor: 'bg-indigo-600',
+    date: '9 Feb 2026',
+    readTime: '5 min',
+    views: 32100,
+    image: 'https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=800&q=80',
+    featured: true,
+    tags: ['INCIBE', 'Estadísticas', '2025', 'Ciberataques', 'España'],
+    content: `
+## España bate récord de ciberataques en 2025
+
+El **Instituto Nacional de Ciberseguridad (INCIBE)** ha publicado datos alarmantes: en 2025 se detectaron **122.223 incidentes de ciberseguridad**, un 26% más que en 2024.
+
+### Cifras clave de 2025:
+
+| Métrica | Dato | Variación |
+|---------|------|-----------|
+| Incidentes totales | 122.223 | +26% |
+| Estafas online Q1 | 106.800 | +40% |
+| Phishing detectado | 25.133 casos | Líder |
+| Estafas diarias | 1.200 | - |
+| Dominios fraudulentos cerrados | 4.600 | 100% detección |
+
+### Sectores más atacados:
+1. **Banca online** - 34% de incidentes
+2. **Transporte** - 14%
+3. **Energía** - 8%
+
+### Tipos de estafa más comunes:
+- **Phishing** (emails falsos): 70% de intentos recibidos
+- **Vishing** (llamadas): 28% de consultas al 017
+- **Smishing** (SMS): 340% de aumento
+- **Estafa del familiar**: 63 casos esclarecidos (>320.000€ robados)
+
+### El dato más preocupante:
+**El 67% de las víctimas son mayores de 50 años**
+
+Las redes sociales han superado al email como vector principal de ataque (34% vs 28%).
+
+### Nuevas amenazas en 2025:
+- **Deepfakes** para clonar voces en llamadas
+- **Kits de phishing** duplicados globalmente
+- **IA** para crear webs falsas más convincentes
+- **Web skimming** (+56%) en tiendas online legítimas
+
+### Qué dice INCIBE:
+> "El fraude digital ya representa el 18% de los delitos penales en España. Se registraron 414.133 casos en 2024, un 490% más que en 2016."
+
+### Cómo protegerte:
+1. Verifica SIEMPRE las URLs antes de hacer clic
+2. Usa autenticación de dos factores (2FA)
+3. No compartas códigos SMS con nadie
+4. Reporta al 017 cualquier intento de estafa
+
+**ManoProtect detecta automáticamente** phishing, vishing y smishing antes de que caigas.
+    `
+  },
+  {
+    id: 9,
+    slug: 'menores-desaparecidos-espana-2024',
+    title: '13.000 menores desaparecieron en España en 2024 - Cómo proteger a tus hijos',
+    excerpt: 'La mitad de las desapariciones en España son de menores. 6 de cada 10 son niñas adolescentes. El 57% son fugas del hogar. El teléfono 116 000 atendió 4.383 casos.',
+    category: 'Menores',
+    categoryColor: 'bg-pink-600',
+    date: '7 Feb 2026',
+    readTime: '7 min',
+    views: 28450,
+    image: 'https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?w=800&q=80',
+    tags: ['Menores', 'Desapariciones', 'Niños', 'Familia', 'Seguridad'],
+    content: `
+## El drama de los menores desaparecidos en España
+
+Según el **Centro Nacional de Desaparecidos (CNDES)**, el 49,4% de las desapariciones en España en 2024 fueron de menores de edad. Esto significa **más de 13.000 niños y adolescentes**.
+
+### Datos oficiales 2024:
+
+| Métrica | Cifra |
+|---------|-------|
+| Total desapariciones | 26.345 |
+| Menores desaparecidos | 13.000+ (49,4%) |
+| Casos activos de menores | 3.068 |
+| Atendidos por ANAR | 1.171 casos |
+
+### Perfil de los menores desaparecidos:
+- **6 de cada 10 son niñas**
+- **66,2%** son adolescentes (13-17 años)
+- **18,6%** son preadolescentes
+- **13,1%** son menores de 9 años
+
+### Causas principales de desaparición:
+
+| Causa | Porcentaje |
+|-------|------------|
+| Fugas del hogar | 57,6% |
+| Expulsiones del hogar | 23,7% |
+| Secuestro parental | 12,4% |
+| Pérdida/accidente | 3,8% |
+| Secuestro por terceros | 1,9% |
+
+### Factores de riesgo:
+- **60% tiene problemas de salud mental**
+- 23% sufre algún tipo de violencia
+- 18,9% maltrato físico
+- 12,2% violencia de género en el entorno
+- 11,5% entornos con adicciones
+
+### Comunidades con más casos:
+1. Madrid - 324 casos
+2. Comunidad Valenciana - 187 casos
+3. Andalucía - 103 casos
+
+### Recursos de ayuda:
+- **Teléfono 116 000** (24 horas, gratuito)
+- Chat de la Fundación ANAR
+- 091 (Policía Nacional)
+- 112 (Emergencias)
+
+### Cómo ManoProtect ayuda a proteger a tus hijos:
+- **Localización GPS en tiempo real** - Sabe siempre dónde están
+- **Zonas seguras** - Recibe alerta si salen del colegio o casa
+- **Botón SOS** - Tu hijo puede pedir ayuda con un clic
+- **Historial de ubicaciones** - Revisa dónde ha estado
+- **Alertas de batería baja** - No pierdas el contacto
+
+**La prevención es la mejor protección. Actúa antes de que sea tarde.**
+    `
+  },
+  {
+    id: 10,
+    slug: 'caidas-ancianos-4000-muertes-espana',
+    title: '4.018 ancianos murieron por caídas en España en 2023 - El peligro silencioso',
+    excerpt: 'Las caídas son la principal causa de muerte accidental en mayores de 65 años. El 70% ocurre en casa. El baño causa el 66% de accidentes. La teleasistencia salva vidas.',
+    category: 'Mayores',
+    categoryColor: 'bg-amber-600',
+    date: '6 Feb 2026',
+    readTime: '6 min',
+    views: 19800,
+    image: 'https://images.unsplash.com/photo-1447005497901-b3e9ee359928?w=800&q=80',
+    tags: ['Ancianos', 'Caídas', 'Mayores', 'Emergencias', 'Teleasistencia'],
+    content: `
+## Las caídas: el asesino silencioso de nuestros mayores
+
+Según el **INE**, en 2023 murieron **4.018 personas por caídas** en España, un 6,1% más que en 2022. El 80% eran mayores de 65 años.
+
+### Estadísticas alarmantes:
+
+| Dato | Cifra |
+|------|-------|
+| Muertes por caídas (2023) | 4.018 |
+| Mayores de 65 años | +80% |
+| Mayores de 75 años | 70% de muertes |
+| Caídas en el hogar | 70-80% |
+| Accidentes en el baño | 66% |
+
+### ¿Quién está en riesgo?
+- **1 de cada 3** mayores de 65 años cae al menos una vez al año
+- **1 de cada 2** mayores de 80 años sufre caídas
+- **5-6%** de las caídas causan fracturas
+- **71,59%** de caídas hospitalarias son en mayores de 80 años
+
+### Consecuencias de una caída:
+- Fracturas (especialmente cadera)
+- Miedo a volver a caer (limita movilidad)
+- Pérdida de autonomía
+- Hospitalización prolongada
+- Muerte (en casos graves)
+
+### ¿Por qué ocurren?
+- Fragilidad física
+- Problemas de visión
+- Medicamentos que causan mareos
+- Suelos resbaladizos
+- Mala iluminación
+- Alfombras sueltas
+- Cables en el suelo
+
+### La teleasistencia salva vidas:
+En España, la teleasistencia atiende a cientos de miles de personas:
+- **Madrid**: 158.000 beneficiarios, 611.000 llamadas atendidas
+- **Andalucía**: 6 millones de llamadas en 2025
+- **Navarra**: 11.106 usuarios (+46% en 5 años)
+
+### Cómo funciona la teleasistencia:
+1. El mayor lleva un dispositivo (pulsera/colgante)
+2. Si cae o necesita ayuda, pulsa el botón
+3. Se conecta con una central 24/7
+4. Envían ayuda (ambulancia, familiares, bomberos)
+
+### ManoProtect: La evolución de la teleasistencia
+
+Nuestro **Botón SOS** ofrece:
+- **Detección automática de caídas** - No necesita pulsar
+- **GPS de alta precisión** (2.5m) - Te localizan donde estés
+- **Audio bidireccional** - Pueden hablar con tu familiar
+- **7 días de batería** - Sin cargas constantes
+- **Conexión directa al 112** - Emergencias reales
+- **Alertas a familiares** - Todos informados al instante
+
+### El botón SOS es GRATIS - Solo pagas 4,95€ de envío
+
+**No esperes a que tu padre o abuelo sufra una caída. Protégelo ahora.**
+    `
+  },
+  {
+    id: 11,
+    slug: 'estafa-empresas-ceo-fraud-2025',
+    title: 'Estafa del CEO: Cómo los hackers roban millones a empresas españolas',
+    excerpt: 'El "fraude del CEO" ha costado millones a empresas españolas. Los estafadores suplantan al director para ordenar transferencias urgentes. Aprende a proteger tu negocio.',
+    category: 'Empresas',
+    categoryColor: 'bg-slate-700',
+    date: '5 Feb 2026',
+    readTime: '5 min',
+    views: 15600,
+    image: 'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=800&q=80',
+    tags: ['Empresas', 'CEO Fraud', 'B2B', 'Estafa', 'Transferencias'],
+    content: `
+## La estafa del CEO: El fraude que arruina empresas
+
+El "fraude del CEO" o "Business Email Compromise (BEC)" es una de las estafas más lucrativas contra empresas. En España ha causado pérdidas millonarias.
+
+### Cómo funciona:
+1. Los estafadores investigan la empresa (LinkedIn, web, redes)
+2. Identifican al CEO/Director y al responsable de pagos
+3. Crean un email que imita al del CEO
+4. Envían mensaje "urgente" pidiendo una transferencia
+5. El empleado, creyendo que es su jefe, transfiere el dinero
+6. El dinero desaparece en cuentas extranjeras
+
+### Mensaje típico:
+> De: director@empresa.com (falso)
+> Para: contabilidad@empresa.com
+>
+> "Necesito que hagas una transferencia urgente de 45.000€. Es confidencial, no comentes con nadie. Te paso los datos del proveedor. Hazlo hoy sin falta."
+
+### Por qué funciona:
+- El email parece legítimo
+- Hay urgencia ("hoy sin falta")
+- Confidencialidad ("no comentes")
+- Autoridad (viene "del jefe")
+- Los empleados no quieren cuestionar al CEO
+
+### Casos reales en España:
+- Una empresa de Barcelona perdió **230.000€**
+- Pyme de Madrid estafada con **85.000€**
+- Despacho de abogados: **120.000€**
+
+### Variantes de la estafa:
+1. **Proveedor falso**: "Hemos cambiado de cuenta bancaria"
+2. **RRHH falso**: Piden nóminas de empleados
+3. **Abogado urgente**: "Necesitamos pagar una multa"
+
+### Señales de alerta:
+- ⚠️ Urgencia extrema
+- ⚠️ Confidencialidad sospechosa
+- ⚠️ Cambio de cuenta bancaria
+- ⚠️ Presión para no verificar
+- ⚠️ Email ligeramente diferente (director@empresa.corn)
+
+### Cómo proteger tu empresa:
+1. **Verificar SIEMPRE** por teléfono transferencias grandes
+2. Implementar **doble autorización** para pagos
+3. **Formar a empleados** sobre estas estafas
+4. Revisar emails sospechosos con IT
+5. Usar **filtros anti-spoofing** en el correo
+
+### ManoProtect para Empresas:
+Ofrecemos protección B2B con:
+- **Análisis de emails sospechosos**
+- **Alertas de suplantación de identidad**
+- **Formación para empleados**
+- **Auditoría de seguridad**
+
+**Protege tu empresa antes de que sea tarde.**
+    `
   }
 ];
 
@@ -274,7 +612,11 @@ const categories = [
   { name: 'Vishing', value: 'Vishing', color: 'bg-red-500' },
   { name: 'Phishing', value: 'Phishing', color: 'bg-blue-500' },
   { name: 'WhatsApp', value: 'WhatsApp', color: 'bg-green-500' },
-  { name: 'Secuestro Virtual', value: 'Secuestro Virtual', color: 'bg-purple-500' }
+  { name: 'Secuestro Virtual', value: 'Secuestro Virtual', color: 'bg-purple-500' },
+  { name: 'Secuestro Real', value: 'Secuestro Real', color: 'bg-red-600' },
+  { name: 'Menores', value: 'Menores', color: 'bg-pink-600' },
+  { name: 'Mayores', value: 'Mayores', color: 'bg-amber-600' },
+  { name: 'Empresas', value: 'Empresas', color: 'bg-slate-700' }
 ];
 
 const BlogPage = () => {
