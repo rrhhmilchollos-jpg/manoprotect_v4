@@ -242,6 +242,29 @@ export default function SOSDeviceOrder() {
         </div>
 
         <div className="max-w-6xl mx-auto px-4 py-8">
+          {/* Trial Period Warning Banner */}
+          {isAuthenticated && isInTrialPeriod && (
+            <div className="mb-6 bg-amber-50 border-2 border-amber-300 rounded-xl p-4">
+              <div className="flex items-start gap-3">
+                <AlertTriangle className="w-6 h-6 text-amber-600 flex-shrink-0 mt-0.5" />
+                <div>
+                  <h3 className="font-bold text-amber-800">Estás en período de prueba</h3>
+                  <p className="text-amber-700 text-sm mt-1">
+                    El dispositivo SOS físico <strong>solo está disponible para suscriptores de pago</strong>. 
+                    Una vez finalice tu período de prueba de 7 días y se active tu suscripción, 
+                    podrás solicitar tu dispositivo SOS sin coste adicional.
+                  </p>
+                  <div className="mt-3 flex gap-2">
+                    <Badge className="bg-amber-200 text-amber-800 border-amber-300">
+                      <Clock className="w-3 h-3 mr-1" />
+                      Disponible tras el trial
+                    </Badge>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
           <div className="grid lg:grid-cols-2 gap-8">
             {/* Product Images */}
             <div className="space-y-4">
