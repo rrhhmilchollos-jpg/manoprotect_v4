@@ -80,7 +80,6 @@ const EmployeePortalDashboard = () => {
     try {
       // Fetch stats
       const statsRes = await fetch(`${API}/api/employee-portal/dashboard/stats`, {
-        headers: { 'Cookie': `session_token=${employee.session_token}` },
         credentials: 'include'
       });
       if (statsRes.ok) {
@@ -90,7 +89,6 @@ const EmployeePortalDashboard = () => {
       // Fetch employees (director only)
       if (employee.role === 'director' || employee.role === 'superadmin') {
         const empRes = await fetch(`${API}/api/employee-portal/employees`, {
-          headers: { 'Cookie': `session_token=${employee.session_token}` },
           credentials: 'include'
         });
         if (empRes.ok) {
@@ -100,7 +98,6 @@ const EmployeePortalDashboard = () => {
 
         // Fetch invites
         const invRes = await fetch(`${API}/api/employee-portal/invites`, {
-          headers: { 'Cookie': `session_token=${employee.session_token}` },
           credentials: 'include'
         });
         if (invRes.ok) {
