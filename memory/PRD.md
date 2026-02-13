@@ -4,11 +4,9 @@
 ManoProtect es una plataforma de ciberseguridad española enfocada en proteger familias contra estafas digitales (phishing, vishing, smishing), con un producto físico estrella: el Botón SOS de emergencia.
 
 ## Latest User Request (February 2026)
-1. **Homepage Redesign** - Reorganizar la página principal que estaba muy cargada de información para hacerla más profesional y limpia.
-2. **Portal de Empleados** - Sistema completo con:
-   - Rol de "director general" que crea cuentas
-   - Registro por invitación (credenciales enviadas por email)
-   - Herramientas para controlar y monitorear todo el sitio
+1. **Homepage Redesign** - Reorganizar la página principal que estaba muy cargada de información
+2. **Portal de Empleados** - Sistema completo con roles profesionales
+3. **Blog de Estafas** - Sección con casos reales de estafas en España para generar confianza y conversiones
 
 ---
 
@@ -17,46 +15,52 @@ ManoProtect es una plataforma de ciberseguridad española enfocada en proteger f
 ### ✅ COMPLETED - February 13, 2026
 
 #### Homepage Redesign
-- **New modular landing page** with clean, professional design
-- Components created:
-  - `HeroSection.jsx` - Main headline with CTA buttons
-  - `FeaturesGrid.jsx` - 5 feature cards in bento grid layout
-  - `SOSProductShowcase.jsx` - Apple-style product highlight
-  - `TestimonialsSection.jsx` - User reviews
-  - `CTASection.jsx` - Final conversion section
-  - `LandingHeader.jsx` - Clean navigation
-  - `LandingFooter.jsx` - Minimal footer
-- Reduced from 1400+ lines to ~60 lines (modular)
-- Trust indicators: "7 días gratis", "Sin tarjeta", "Cancela cuando quieras"
+- Nueva landing page limpia y profesional con componentes modulares
+- Sello de confianza "Protegido por ManoProtect" en el footer
+- Componentes: HeroSection, FeaturesGrid, SOSProductShowcase, Testimonials, CTA
 
-#### Employee Portal System
-- **Login**: `/empleados/login`
-- **Register**: `/empleados/registro?token=XXX`
-- **Dashboard**: `/empleados/dashboard`
-- **Roles**: director, manager, employee
-- **Features**:
-  - Director-only invitation creation
-  - Secure token-based registration flow
-  - Dashboard with statistics (users, orders, threats)
-  - Employee management (list, update, deactivate)
-  - Role-based access control (RBAC)
-- **Director Account Created**:
-  - Email: `director@manoprotect.com`
-  - Password: `Director2026!`
+#### Employee Portal System  
+- Login: `/empleados/login`
+- Register: `/empleados/registro?token=XXX`
+- Dashboard: `/empleados/dashboard`
+- **8 Roles disponibles:**
+  - Director General (nivel 100)
+  - Manager (nivel 80)
+  - Analista de Fraude (nivel 60)
+  - Logística (nivel 50)
+  - Soporte al Cliente (nivel 50)
+  - Ventas (nivel 40)
+  - Marketing (nivel 40)
+  - Empleado básico (nivel 10)
+- **Departamentos:** Dirección, Atención al Cliente, Ventas, Logística, Marketing, Seguridad, Tecnología, Administración
+- **Director Account:** `director@manoprotect.com` / `Director2026!`
 
-### ✅ Previously Completed
-- SOS Device Order Form with color selectors and dynamic pricing
-- Thank You page (`OrderConfirmation.js`) with confetti
-- Payment Cancelled page
-- User Dashboard "Mis Pedidos" tab for order tracking
-- SendGrid email service (code ready, awaiting API key)
+#### Blog de Seguridad (NUEVO)
+- Página principal: `/blog`
+- Artículos individuales: `/blog/:slug`
+- **6 artículos iniciales** sobre estafas reales en España:
+  1. SMS falsos de Correos (Smishing)
+  2. Llamadas falsas de bancos - Santander/BBVA (Vishing)
+  3. WhatsApp "mamá se me rompió el móvil"
+  4. Secuestros virtuales
+  5. Phishing de Hacienda (Renta)
+  6. Criptoestafas con famosos
+- Filtros por categoría (Smishing, Vishing, Phishing, WhatsApp, Secuestro Virtual)
+- Buscador integrado
+- Botones de compartir en redes sociales
+- CTA de conversión en cada artículo
+- **Botón "Blog Estafas" en el header** (color amarillo destacado)
+
+#### Trust Badge
+- Sello "Sitio Verificado - Protegido por ManoProtect" en el footer
+- Indicador de estado "ACTIVO" animado
 
 ---
 
 ## Pending/Blocked Items
 
 ### 🟡 BLOCKED - Awaiting User Input
-1. **SendGrid API Key** - Email notifications implemented but need API key to function
+1. **SendGrid API Key** - Email notifications implemented but need API key
    - Affects: Order confirmations, shipping updates, employee invite emails
 
 ---
@@ -67,17 +71,20 @@ ManoProtect es una plataforma de ciberseguridad española enfocada en proteger f
 - [ ] SendGrid email integration activation (blocked on API key)
 
 ### P1 - High Priority  
-- [ ] Employee portal email integration (send invite credentials via email)
-- [ ] PageSpeed optimization re-evaluation
+- [ ] 2FA para Portal de Empleados
+- [ ] Logs de actividad de empleados
+- [ ] Más artículos de blog (actualizar semanalmente)
 
 ### P2 - Medium Priority
-- [ ] 1-minute demo videos (Sora 2 limitation workaround)
-- [ ] More admin tools in employee portal (content management)
+- [ ] Subdominio admin.manoprotect.com
+- [ ] PageSpeed optimization
+- [ ] SSO con Google Workspace
 
 ### P3 - Low Priority / Future
-- [ ] Company "Intranet" for devices
+- [ ] VPN obligatoria para empleados
+- [ ] Restricción por IP España
+- [ ] Auditoría de sesiones
 - [ ] DNA Digital Identity / Blockchain Verifier
-- [ ] WhatsApp/Twilio integration
 
 ---
 
@@ -93,28 +100,26 @@ ManoProtect es una plataforma de ciberseguridad española enfocada en proteger f
 │       ├── SOSProductShowcase.jsx
 │       ├── TestimonialsSection.jsx
 │       ├── CTASection.jsx
-│       ├── LandingHeader.jsx
-│       └── LandingFooter.jsx
+│       ├── LandingHeader.jsx (with Blog button)
+│       └── LandingFooter.jsx (with Trust Badge)
 ├── pages/
-│   ├── LandingPage.js (redesigned)
-│   ├── EmployeeLogin.js (NEW)
-│   ├── EmployeeRegister.js (NEW)
-│   └── EmployeePortalDashboard.js (NEW)
+│   ├── LandingPage.js
+│   ├── BlogPage.js (NEW)
+│   ├── BlogPostPage.js (NEW)
+│   ├── EmployeeLogin.js
+│   ├── EmployeeRegister.js
+│   └── EmployeePortalDashboard.js
 ```
 
 ### Backend Structure
 ```
 /app/backend/
 ├── routes/
-│   └── employee_portal.py (NEW - complete CRUD + auth)
-├── services/
-│   └── email_service.py (SendGrid ready)
+│   └── employee_portal.py (8 roles + permissions)
 ```
 
-### Database Collections
-- `employees` - Employee accounts with roles
-- `employee_invites` - Invitation tokens with expiry
-- `site_content` - Editable site content (for future CMS)
+### New Dependencies
+- `react-markdown` - For rendering blog post content
 
 ---
 
@@ -123,38 +128,20 @@ ManoProtect es una plataforma de ciberseguridad española enfocada en proteger f
 ### Employee Portal
 | Method | Endpoint | Description | Auth |
 |--------|----------|-------------|------|
+| GET | `/api/employee-portal/roles` | Get available roles | No |
 | POST | `/api/employee-portal/login` | Employee login | No |
-| POST | `/api/employee-portal/logout` | Employee logout | Yes |
-| GET | `/api/employee-portal/me` | Get current employee | Yes |
-| POST | `/api/employee-portal/register` | Register with invite token | No |
-| GET | `/api/employee-portal/verify-invite/{token}` | Verify invite token | No |
+| POST | `/api/employee-portal/register` | Register with token | No |
 | POST | `/api/employee-portal/invites` | Create invite | Director |
-| GET | `/api/employee-portal/invites` | List invites | Director |
-| DELETE | `/api/employee-portal/invites/{id}` | Cancel invite | Director |
 | GET | `/api/employee-portal/employees` | List employees | Director |
-| PATCH | `/api/employee-portal/employees/{id}` | Update employee | Director |
-| DELETE | `/api/employee-portal/employees/{id}` | Deactivate employee | Director |
-| GET | `/api/employee-portal/dashboard/stats` | Get dashboard stats | Yes |
+| GET | `/api/employee-portal/dashboard/stats` | Dashboard stats | Yes |
 
 ---
 
 ## Test Coverage
-- Backend: 18/18 tests passing (100%)
-- Frontend: All features verified
-- Test file: `/app/backend/tests/test_employee_portal.py`
-- Test report: `/app/test_reports/iteration_37.json`
-
----
-
-## Third-Party Integrations
-
-| Service | Status | Notes |
-|---------|--------|-------|
-| Stripe | ✅ Active | Payment processing |
-| SendGrid | 🟡 Code Ready | Awaiting API key |
-| Twilio | ⏸️ Pending | WhatsApp messaging |
-| Sora 2 | ✅ Active | Video generation |
-| Firebase | ✅ Active | Auth/Backend |
+- All features verified via screenshots
+- Employee portal login/dashboard working
+- Blog pages loading correctly
+- Trust badge visible in footer
 
 ---
 
@@ -162,4 +149,18 @@ ManoProtect es una plataforma de ciberseguridad española enfocada en proteger f
 
 ### Employee Portal
 - **Director**: `director@manoprotect.com` / `Director2026!`
-- **Employee**: `empleado1@test.com` / `Empleado2026!`
+
+---
+
+## Content Strategy (Blog)
+
+El blog tiene como objetivo:
+1. **Educar** a los usuarios sobre estafas reales
+2. **Generar confianza** mostrando que ManoProtect conoce las amenazas
+3. **Convertir** visitantes en usuarios mediante CTAs estratégicos
+4. **SEO** - Posicionar para búsquedas como "estafas SMS España", "phishing Correos", etc.
+
+### Actualización recomendada:
+- Agregar 2-3 artículos nuevos por semana
+- Actualizar estadísticas mensualmente
+- Añadir casos reales de noticias españolas
