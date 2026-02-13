@@ -147,6 +147,38 @@ async def require_director(request: Request, session_token: Optional[str] = Cook
     
     return employee
 
+async def require_manager_or_above(request: Request, session_token: Optional[str] = Cookie(None)):
+    """Require manager role or above"""
+    employee = await get_current_employee(request, session_token)
+    
+    role = employee.get("role", "employee")
+    role_level = ROLES.get(role, {}).get("level", 0)
+    
+    if role_level < 80:  # manager level
+        raise HTTPException(status_code=403, detail="No tienes permisos suficientes")
+    
+    return employee
+
+def has_permission(employee: dict, permission: str) -> bool:
+    """Check if employee has a specific permission"""
+    role = employee.get("role", "employee")
+    permissions = ROLES.get(role, {}).get("permissions", [])
+    return "all" in permissions or permission in permissions
+
+# ============================================
+# ROLES ENDPOINT
+# ============================================
+
+@router.get("/roles")
+async def get_available_roles():
+    """Get list of available roles for employee creation"""
+    return {
+        "roles": [
+            {"id": role_id, **role_data}
+            for role_id, role_data in ROLES.items()
+        ]
+    }
+
 # ============================================
 # DIRECTOR ENDPOINTS (Create invitations)
 # ============================================
