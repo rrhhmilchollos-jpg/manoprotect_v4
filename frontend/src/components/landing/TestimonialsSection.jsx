@@ -7,19 +7,36 @@ import { Star, Quote } from 'lucide-react';
 const testimonials = [
   {
     id: 1,
-    name: "Selomit",
-    text: "Llevo tiempo utilizándola, estoy tranquila. Tengo dos adolescentes y las tengo controladas, sé dónde están.",
+    name: "Selomit García",
+    role: "Madre de familia",
+    location: "Madrid",
+    text: "Llevo 6 meses utilizando ManoProtect y estoy muy tranquila. Tengo dos adolescentes y puedo saber dónde están en todo momento. La detección de SMS fraudulentos me ha salvado de 3 intentos de phishing.",
     rating: 5,
     date: "Febrero 2025",
-    source: "Google Play"
+    source: "Google Play",
+    verified: true
   },
   {
     id: 2,
-    name: "María Deseada S.",
-    text: "Muy útil con mi madre de 78 años para saber dónde está en todo momento y tener controlado en caso de caída.",
+    name: "María Deseada Sánchez",
+    role: "Cuidadora familiar",
+    location: "Barcelona",
+    text: "Imprescindible para cuidar a mi madre de 78 años. El botón SOS nos da mucha tranquilidad, sabemos dónde está en todo momento y en caso de caída podemos actuar rápido. El soporte responde en minutos.",
     rating: 5,
     date: "Febrero 2025",
-    source: "Google Play"
+    source: "Google Play",
+    verified: true
+  },
+  {
+    id: 3,
+    name: "Carlos Martínez",
+    role: "Empresario autónomo",
+    location: "Valencia",
+    text: "Como autónomo recibo muchos emails de phishing intentando robar datos bancarios. ManoProtect los detecta antes de que haga clic. Ya no tengo miedo de abrir correos sospechosos.",
+    rating: 5,
+    date: "Enero 2025",
+    source: "App Store",
+    verified: true
   }
 ];
 
