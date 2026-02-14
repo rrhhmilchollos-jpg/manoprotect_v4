@@ -192,9 +192,11 @@ async def sos_activate(sid, data):
     }, to=sid)
 
 async def notify_family_sos(user_id, alert_data):
-    """Send SOS alert to all family members via WebSocket"""
+    """Send SOS alert to all family members AND enterprise employees via WebSocket"""
     if not _db:
         return
+    
+    notified_count = 0
     
     # Get family members
     family_members = await _db.family_members.find(
@@ -209,8 +211,8 @@ async def notify_family_sos(user_id, alert_data):
     ).to_list(20)
     
     all_contacts = family_members + trusted_contacts
-    notified_count = 0
     
+    # Notify family members
     for contact in all_contacts:
         contact_user_id = contact.get('user_id') or contact.get('contact_id')
         
@@ -223,7 +225,23 @@ async def notify_family_sos(user_id, alert_data):
                     'play_siren': True
                 }, to=sid)
                 notified_count += 1
-                print(f"[WS] SOS sent to {contact_user_id}")
+                print(f"[WS] SOS sent to family {contact_user_id}")
+    
+    # ALSO notify ALL connected enterprise employees (admins/operators)
+    for conn_id, sids in active_connections.items():
+        if conn_id.startswith('enterprise_'):
+            for sid in sids:
+                # Check if this sid belongs to an enterprise employee
+                info = connection_info.get(sid, {})
+                if info.get('is_enterprise'):
+                    await sio.emit('sos_alert', {
+                        'type': 'new_alert',
+                        'alert': alert_data,
+                        'action_required': True,
+                        'source': 'system'
+                    }, to=sid)
+                    notified_count += 1
+                    print(f"[WS] SOS sent to enterprise employee: {info.get('user_name')}")
     
     return notified_count
 
