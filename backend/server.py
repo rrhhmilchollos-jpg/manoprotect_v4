@@ -2870,6 +2870,7 @@ allowed_origins = [
     "https://manoprotect.com",
     "https://www.manoprotect.com",
     "https://digital-guard-1.emergent.host",
+    "https://payment-dashboard-70.preview.emergentagent.com",
 ]
 
 # Add any additional origins from environment
