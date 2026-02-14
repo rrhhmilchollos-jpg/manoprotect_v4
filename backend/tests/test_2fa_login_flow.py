@@ -1,6 +1,7 @@
 """
 Test 2FA Login Flow for Enterprise Portal
 Tests login flow with and without 2FA enabled
+Iteration 42 - 2FA mandatory verification
 """
 import pytest
 import requests
@@ -9,18 +10,16 @@ import os
 
 BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', '').rstrip('/')
 
-# Test credentials
-ADMIN_WITHOUT_2FA = {
-    "email": "admin@manoprotect.com",
-    "password": "Admin2026!"
-}
-
+# CEO user has 2FA enabled with known TOTP secret
 ADMIN_WITH_2FA = {
     "email": "ceo@manoprotect.com",
     "password": "Admin2026!",
     "totp_secret": "EGURNUTLWW7XVKREBAMKIC6Y4LQ7CHKB",
     "backup_codes": ["J4WYBY6I", "YA54CMZ7", "MD3TPINO", "IMCC6I4L", "F4QAF7B2"]
 }
+
+# Note: admin@manoprotect.com doesn't exist in seed data
+# operador@manoprotect.com exists but we don't have the password
 
 
 @pytest.fixture
