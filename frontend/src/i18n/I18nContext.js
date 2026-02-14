@@ -87,10 +87,10 @@ export const I18nProvider = ({ children }) => {
   useEffect(() => {
     const saved = localStorage.getItem('manoprotect_locale');
     if (!saved) {
-      detectCountryByIP();
-    } else {
-      setIsDetecting(false);
+      // Set Spanish as default without IP detection for better UX in Spain
+      localStorage.setItem('manoprotect_locale', 'es');
     }
+    setIsDetecting(false);
   }, []);
 
   // Apply RTL direction for Arabic
