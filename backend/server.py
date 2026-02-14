@@ -2716,9 +2716,9 @@ except Exception as e:
 
 # Enterprise Portal routes (Complete system)
 try:
-    from routes.enterprise_portal_routes import router as enterprise_router, set_database as init_enterprise
-    init_enterprise(db)
-    api_router.include_router(enterprise_router)
+    from routes.enterprise_portal_routes import router as enterprise_portal_v2_router, set_database as init_enterprise_v2
+    init_enterprise_v2(db)
+    api_router.include_router(enterprise_portal_v2_router)
     print("✅ Enterprise Portal routes loaded")
 except Exception as e:
     print(f"⚠️ Enterprise Portal routes not loaded: {e}")
