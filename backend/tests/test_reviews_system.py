@@ -11,7 +11,7 @@ import requests
 import os
 import time
 
-BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', 'https://ratings.preview.emergentagent.com')
+BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', 'https://admin-portal-361.preview.emergentagent.com')
 
 # Enterprise credentials
 ENTERPRISE_EMAIL = "ceo@manoprotect.com"

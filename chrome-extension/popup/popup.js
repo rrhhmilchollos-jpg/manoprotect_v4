@@ -1,5 +1,5 @@
 // ManoProtect Shield - Popup Script
-const API_BASE = 'https://ratings.preview.emergentagent.com/api';
+const API_BASE = 'https://admin-portal-361.preview.emergentagent.com/api';
 
 // DOM Elements
 const currentUrlEl = document.getElementById('current-url');

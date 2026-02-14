@@ -17,7 +17,7 @@ import requests
 import os
 import uuid
 
-BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', 'https://ratings.preview.emergentagent.com')
+BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', 'https://admin-portal-361.preview.emergentagent.com')
 
 # Superadmin credentials
 SUPERADMIN_EMAIL = "rrhh.milchollos@gmail.com"

@@ -57,9 +57,9 @@ ManoProtect es una plataforma integral de protección contra fraudes digitales p
 ### Preview (Actual)
 | Portal | URL |
 |--------|-----|
-| Landing Page | https://ratings.preview.emergentagent.com |
-| Portal Enterprise | https://ratings.preview.emergentagent.com/enterprise/login |
-| Portal Director | https://ratings.preview.emergentagent.com/employee-login |
+| Landing Page | https://admin-portal-361.preview.emergentagent.com |
+| Portal Enterprise | https://admin-portal-361.preview.emergentagent.com/enterprise/login |
+| Portal Director | https://admin-portal-361.preview.emergentagent.com/employee-login |
 
 ---
 
