@@ -242,6 +242,10 @@ from routes.legacy_vault import router as legacy_vault_router
 # Phishing Simulation (B2B Enterprise)
 from routes.phishing_simulation import router as phishing_router
 
+# User Reviews/Ratings System
+from routes.reviews_routes import router as reviews_router, set_database as init_reviews
+init_reviews(db)
+
 # Employee Portal (Director-managed access)
 from routes.employee_portal import router as employee_portal_router, set_database as init_employee_portal, set_email_service as init_employee_email
 init_employee_portal(db)
