@@ -1361,35 +1361,59 @@ async def list_device_orders(
         "pages": (total + limit - 1) // limit
     }
 
+class DeviceOrderUpdate(BaseModel):
+    status: Optional[str] = None
+    payment_status: Optional[str] = None
+    tracking_number: Optional[str] = None
+    shipping_carrier: Optional[str] = None
+    notes: Optional[str] = None
+
 @router.patch("/device-orders/{order_id}")
 async def update_device_order(
     order_id: str,
+    data: DeviceOrderUpdate,
     request: Request,
-    enterprise_session: Optional[str] = Cookie(None),
-    status: Optional[str] = None,
-    tracking_number: Optional[str] = None,
-    shipping_carrier: Optional[str] = None,
-    notes: Optional[str] = None
+    enterprise_session: Optional[str] = Cookie(None)
 ):
-    """Update device order"""
+    """Update device order status, payment, or shipping info"""
     employee = await get_current_employee(request, enterprise_session)
     
     if not check_permission(employee, "manage_device_orders"):
-        raise HTTPException(status_code=403, detail="Sin permisos")
+        raise HTTPException(status_code=403, detail="Sin permisos para gestionar pedidos")
+    
+    # Check order exists
+    order = await db.device_orders.find_one({"order_id": order_id})
+    if not order:
+        raise HTTPException(status_code=404, detail="Pedido no encontrado")
     
     update = {"updated_at": datetime.now(timezone.utc).isoformat()}
-    if status:
-        update["status"] = status
-        if status == "shipped":
+    
+    if data.status:
+        valid_statuses = ["pending", "confirmed", "processing", "shipped", "delivered", "cancelled"]
+        if data.status not in valid_statuses:
+            raise HTTPException(status_code=400, detail=f"Estado inválido. Válidos: {valid_statuses}")
+        update["status"] = data.status
+        if data.status == "shipped":
             update["shipped_at"] = datetime.now(timezone.utc).isoformat()
-        elif status == "delivered":
+        elif data.status == "delivered":
             update["delivered_at"] = datetime.now(timezone.utc).isoformat()
-    if tracking_number:
-        update["tracking_number"] = tracking_number
-    if shipping_carrier:
-        update["shipping_carrier"] = shipping_carrier
-    if notes:
-        update["notes"] = notes
+        elif data.status == "cancelled":
+            update["cancelled_at"] = datetime.now(timezone.utc).isoformat()
+    
+    if data.payment_status:
+        valid_payment = ["pending", "paid", "failed", "refunded"]
+        if data.payment_status not in valid_payment:
+            raise HTTPException(status_code=400, detail=f"Estado de pago inválido")
+        update["payment_status"] = data.payment_status
+        if data.payment_status == "paid":
+            update["paid_at"] = datetime.now(timezone.utc).isoformat()
+    
+    if data.tracking_number:
+        update["tracking_number"] = data.tracking_number
+    if data.shipping_carrier:
+        update["shipping_carrier"] = data.shipping_carrier
+    if data.notes:
+        update["notes"] = data.notes
     
     await db.device_orders.update_one(
         {"order_id": order_id},
@@ -1398,7 +1422,7 @@ async def update_device_order(
     
     await create_audit_log(employee, "update", "device_order", order_id, update, request)
     
-    return {"success": True, "message": "Pedido actualizado"}
+    return {"success": True, "message": "Pedido actualizado", "changes": update}
 
 # ============================================
 # PAYMENTS / CASH FLOW
