@@ -1,107 +1,121 @@
-<analysis>**original_problem_statement**: The user wants to continue developing the ManoProtect application.
+<analysis>**original_problem_statement**: The user wants to build a comprehensive, enterprise-grade, and scalable ManoProtect application.
 
-The primary goals are:
-1.  **Homepage Redesign**: Professionally redesign the cluttered homepage () to be cleaner and more user-friendly to improve first impressions and conversions.
-2.  **Employee Portal**: Create a secure, comprehensive portal for employees.
-    *   A director general role has exclusive rights to create employee accounts via an invitation system.
-    *   Credentials are created by the director and sent via email. New employees register using these pre-approved credentials.
-    *   The portal should allow employees to manage website content (add, modify, delete).
-    *   The user has expressed a desire for a production version, not just a preview, and asked for a  file to install it on multiple devices.
-3.  **Blog for User Engagement**: Add a blog section to the header. The blog should feature articles about real-world scams, kidnappings, and accidents in Spain and worldwide to demonstrate the value of ManoProtect and drive user sign-ups.
-4.  **Downloadable Content**: Provide the newly created blog articles in a downloadable  file.
-5.  **Enable Email Functionality**: Integrate the SendGrid API key to make the user invitation and order confirmation emails functional.
+The core requirements are:
+1.  **Professional Employee Portal**: A complete, secure, and scalable portal for employees to manage the entire ManoProtect service. This is the main ongoing project, replacing a simpler V1 portal. The user has provided a detailed breakdown of required modules:
+    *   Dashboard with KPIs (clients, SOS requests, payments, threats).
+    *   Full-featured Employee Management (CRUD, roles, status).
+    *   Full-featured Client Management (CRUD, profiles, subscription/payment history, SOS device status).
+    *   Real-time SOS Emergency Management (live dashboard, geolocation, 112 integration).
+    *   Financial/Payment Management (cash flow, revenue reports).
+    *   Security Alert Management (phishing, fraud).
+    *   Audit Logs for all actions.
+2.  **Stripe Payment Verification**: A critical bug fix is required to ensure that orders for the physical SOS device are only processed after Stripe successfully verifies the payment. Currently, orders are created without payment confirmation.
+3.  **Homepage & Blog**: A redesigned homepage and a blog with real-world scam articles to drive user engagement and demonstrate the product's value. These are largely complete but require ongoing improvements based on user feedback.
+4.  **Conversion Rate Optimization**: The user has provided an audit PDF with recommendations to improve conversions, which need to be implemented.
+5.  **Email Functionality**: Integrate SendGrid for employee invitations and other notifications.
 
 **User's preferred language**: Spanish
 
 **what currently exists?**
-The agent has successfully executed a major redesign of the landing page, breaking it down into smaller, cleaner React components. A complete, functional first version of the Employee Portal has been built, including a backend with Flask (invitation tokens, roles, registration, login) and a React frontend (login, register-with-token, and a dashboard for the director to create invitations).
-
-A full-featured blog has been implemented with a main page listing articles by category and individual article pages using . The agent has populated the blog with several articles based on real-world cases found through web searches.
-
-The backend infrastructure for sending emails via SendGrid is in place but remains inactive pending an API key.
+- A redesigned landing page and a functional blog with downloadable articles.
+- The SendGrid integration is now active, and the backend successfully sends invitation emails to new employees.
+- A 7-day free trial system with credit card requirement has been implemented for certain plans.
+- A new, scalable **Enterprise Portal** has been started.
+    - The backend architecture is in place with modular routes () and a login endpoint ().
+    - An initial admin user () has been seeded in the  collection in the database.
+    - A basic frontend shell exists with a login page () and a dashboard layout ().
 
 **Last working item**:
-- **Last item agent was working**: The agent just finished creating several new blog articles based on user-requested topics (real scams, kidnappings, etc.), created a  file containing these articles, and was preparing to ask the user for their SendGrid API key to enable email functionality.
-- **Status**: IN PROGRESS
-- **Agent Testing Done**: Y
-- **Which testing method agent to use?**: manual testing by curl. The agent needs to provide the user with the download link for the created ZIP file and test that it works. The backend needs to be tested once the SendGrid key is provided.
-- **User Testing Done**: N
+-   **Last item agent was working**: The agent had just finished setting up the basic backend and frontend for the new **Enterprise Portal** and was verifying the login functionality. The user then interrupted with a critical bug report regarding Stripe payments and confirmed the plan to fix that bug first, then continue building the portal's UI.
+-   **Status**: BLOCKED (The main task of building the portal UI is blocked by the critical Stripe bug fix).
+-   **Agent Testing Done**: Y (for the enterprise login backend).
+-   **Which testing method agent to use?**: both. The Stripe fix requires backend testing with  against Stripe webhooks and database verification, and frontend testing to ensure the order flow is correct. A backend testing agent would be ideal to simulate the webhook flow. The portal UI will require the frontend testing agent.
+-   **User Testing Done**: N
 
 **All Pending/In progress Issue list**:
--   **Issue 1 (P0)**: SendGrid email integration is non-functional and blocked.
--   **Issue 2 (P0)**: User requires guidance on production deployment for the Employee Portal.
--   **Issue 3 (P1)**: The blog articles need to be made available for download.
+-   **Issue 1 (P0)**: Stripe payment verification for SOS device orders is broken.
+-   **Issue 2 (P1)**: The frontend for the new Enterprise Portal is incomplete.
+-   **Issue 3 (P2)**: Recommendations from the user-provided Conversion Audit PDF have not been implemented.
 
 **Issues Detail**:
--   **Issue 1**: SendGrid email integration is non-functional and blocked.
-    -   **Description**: The user has confirmed they do **not** have a SendGrid API key and need instructions on how to obtain one. This blocks employee invitations and order confirmations.
+-   **Issue 1**: Stripe payment verification for SOS device orders is broken.
+    -   **Description**: The current implementation creates an order for the physical SOS device *before* Stripe confirms the payment. This allows unpaid orders to enter the system, and critical customer shipping information is not captured, blocking fulfillment.
+    -   **Attempted fixes**: None. The issue was just reported.
     -   **Next debug checklist**:
-        1.  Provide the user with clear, step-by-step instructions on how to create a SendGrid account and generate an API key.
-        2.  Once the user provides the key, add it to the  file as .
-        3.  Restart the backend (backend: stopped
-backend: started).
-        4.  Test the employee invitation flow to confirm an email is sent.
-    -   **Why fix this issue and what will be achieved with the fix?**: It's a critical part of the employee registration flow and improves the post-purchase customer experience.
-    -   **Status**: BLOCKED
-    -   **Is recurring issue?**: Y
-    -   **Should Test frontend/backend/both after fix?**: Backend.
-    -   **Blocked on other issue**: Blocked on user action (who is waiting for instructions).
-
--   **Issue 2**: User requires guidance on production deployment for the Employee Portal.
-    -   **Description**: The user requested the employee portal in production and asked for a  file to install on USBs or send via email. This indicates a misunderstanding of how web applications are deployed. The current implementation is just a route () on the main site.
-    -   **Next debug checklist**:
-        1.  Explain to the user that modern web apps are not installed via ZIP files on client devices.
-        2.  Propose a professional architecture, as they requested: setting up a dedicated, secure subdomain like  for the employee portal.
-        3.  Clarify this approach separates administrative functions from the public-facing website, which is a security best practice.
-        4.  Plan the necessary steps for this architectural change (DNS configuration, server routing/proxy rules).
-    -   **Why fix this issue and what will be achieved with the fix?**: It aligns the project with professional standards for security and architecture, fulfilling the user's core request for a professional platform.
+        1.  Locate the backend endpoint responsible for creating the Stripe checkout session.
+        2.  Modify the order creation logic to first create an order with a  status.
+        3.  Implement a Stripe webhook handler endpoint (e.g., ).
+        4.  Listen for the  event from Stripe.
+        5.  Upon receiving the event, validate it and update the corresponding order's status to  or . Capture the customer's shipping address from the Stripe session object.
+        6.  If the payment fails, update the order status to  or .
+        7.  Modify the frontend order page () to align with this asynchronous payment confirmation flow.
+    -   **Why fix this issue and what will be achieved with the fix?**: This is a critical business logic flaw that prevents revenue collection and product fulfillment. Fixing it will make the sales flow viable.
     -   **Status**: NOT STARTED
     -   **Is recurring issue?**: N
-    -   **Should Test frontend/backend/both after fix?**: Both.
-    -   **Blocked on other issue**: None.
+    -   **Should Test frontend/backend/both after fix?**: both
+    -   **Blocked on other issue**: None. This is the primary blocker.
 
--   **Issue 3**: The blog articles need to be made available for download.
-    -   **Description**: The user requested a  file of the new articles. The agent created  and placed it in .
+-   **Issue 2**: The frontend for the new Enterprise Portal is incomplete.
+    -   **Description**: The user has approved a detailed, multi-module plan for a scalable enterprise portal. The backend foundation and a basic frontend shell are complete, but the actual data views and management functionality are missing.
+    -   **Attempted fixes**: Created file structure and basic login/dashboard pages.
     -   **Next debug checklist**:
-        1.  Add a download button/link to a relevant page (e.g., the main blog page or the footer).
-        2.  The link should point to .
-        3.  Verify the download works correctly.
-    -   **Why fix this issue and what will be achieved with the fix?**: Fulfills a direct user request.
+        1.  Following the approved architecture, build out the UI for each module sequentially, starting with **Employee Management**.
+        2.  Create a professional data table component with search, sort, and filter capabilities.
+        3.  Implement CRUD functionality (Create, Read, Update, Delete) for employees, connecting to the  endpoints.
+        4.  Use skeleton loaders for data fetching states, and toast notifications for actions (e.g., Employee created successfully).
+        5.  Ensure the UI is responsive and uses the existing  components.
+    -   **Why fix this issue and what will be achieved with the fix?**: This is the user's primary requested feature and the core of the application's internal management system.
     -   **Status**: IN PROGRESS
     -   **Is recurring issue?**: N
-    -   **Should Test frontend/backend/both after fix?**: Frontend.
+    -   **Should Test frontend/backend/both after fix?**: Frontend
+    -   **Blocked on other issue**: Blocked by **Issue 1**, as per the user's request to fix the critical bug first.
+
+-   **Issue 3**: Recommendations from the user-provided Conversion Audit PDF have not been implemented.
+    -   **Description**: The user uploaded , which contains actionable feedback to improve the site's conversion rate. The agent acknowledged it but has not implemented any changes yet.
+    -   **Attempted fixes**: None.
+    -   **Next debug checklist**:
+        1.  Thoroughly read the PDF.
+        2.  Prioritize and implement the suggested changes, such as correcting Spanish translations, improving the main headline, simplifying CTAs, and optimizing images.
+    -   **Why fix this issue and what will be achieved with the fix?**: To improve the site's business performance and address direct user feedback.
+    -   **Status**: NOT STARTED
+    -   **Is recurring issue?**: N
+    -   **Should Test frontend/backend/both after fix?**: Frontend
     -   **Blocked on other issue**: None.
 
 **In progress Task List**:
--   None.
+-   **Task 1**: Build Enterprise Portal Frontend.
+    -   **Where to resume**: The agent should start by building the Employee Management page within the  directory. This involves creating a data table to list employees and modals/forms to create and edit them.
+    -   **What will be achieved with this?**: A functional first module of the new core enterprise portal.
+    -   **Status**: IN PROGRESS
+    -   **Should Test frontend/backend/both after fix?**: Frontend
+    -   **Blocked on something**: Temporarily blocked by the higher-priority Stripe bug fix (Issue 1).
 
 **Upcoming and Future Tasks**
 -   **Upcoming Tasks**:
-    *   **P0 - Architect Employee Portal Subdomain**: Implement the  structure.
-    *   **P1 - Expand Employee Portal Tools**: Add functionality for employees to manage site content (e.g., add/edit blog posts).
-    *   **P2 - PageSpeed Score Re-evaluation**: Re-run PageSpeed Insights after the recent major UI changes.
+    *   **P0 - Implement Enterprise Portal Modules**: After the employee module, build the frontend for Clients, SOS, Payments, and Alerts.
+    *   **P1 - Implement Real-Time SOS**: Integrate WebSockets for live updates on the SOS dashboard.
+    *   **P1 - Implement Conversion Audit Fixes**: Action the items from the user's PDF.
 -   **Future Tasks**:
+    *   **P2 - Architect to Subdomain**: Move the employee portal to a dedicated subdomain like . (User previously deferred this).
     *   **P2 - 1-Minute Demo Videos**: Investigate server-side solutions for creating longer videos.
-    *   **P3 - Intranet for company devices**: Awaiting user clarification.
-    *   **P3 - DNA Digital Identity / Blockchain Verifier**: Backend logic and UI are still pending.
+    *   **P2 - PageSpeed Re-evaluation**: Re-run PageSpeed Insights after the recent changes.
+    *   **P3 - DNA Digital Identity / Blockchain Verifier**: Backend logic and UI are pending.
 
 **Completed work in this session**
--   **Homepage Redesign**: Completely refactored  into a clean, component-based structure. (DONE)
--   **Employee Portal (V1)**:
-    -   Backend routes () for invitation, registration, and login. (DONE)
-    -   MongoDB  model with roles, invitation tokens. (DONE)
-    -   Frontend pages for employee login, token-based registration, and a director's dashboard to send invites. (DONE)
-    -   Seeding script to create the initial  user. (DONE)
--   **Role-Based Access Control (RBAC) Expansion**: Added specific roles ('Soporte', 'Finanzas', 'Admin', 'Analista de Fraude') to the backend and the invitation form. (DONE)
--   **Trust Seal**: Added a Sitio Verificado - Protegido por ManoProtect seal to the site footer. (DONE)
--   **Blog Implementation**:
-    -   Created a new Blog Estafas section in the header and associated pages (, ). (DONE)
-    -   Researched and added multiple articles based on real-world cases in Spain. (DONE)
--   **Full System Testing**: Used the testing agent to validate the redesigned homepage and the full employee portal flow, which passed successfully. (DONE)
+-   Integrated SendGrid, enabling employee invitation emails.
+-   Implemented a 7-day free trial system requiring a credit card, updating the pricing and refund policy pages accordingly.
+-   Restricted users on a free trial from ordering the physical SOS device.
+-   Created a downloadable employee contract template (PDF in a ZIP file).
+-   Initiated the new **Enterprise Portal**:
+    -   Designed the scalable SPA + API architecture.
+    -   Built and tested the backend foundation, including models, routes, and a login endpoint ().
+    -   Created the initial frontend shell, including a login page and dashboard layout.
+    -   Debugged and resolved a database connection issue preventing the new portal's login from working.
 
 **Earlier issues found/mentioned but not fixed**
--   **PageSpeed Score**: A persistent user concern that needs re-evaluation after the redesign.
--   **Sora 2 Video Length**: The technical limitation preventing 1-minute videos remains unresolved.
+-   **Low PageSpeed score**: A recurring user concern that needs re-evaluation.
+-   **Sora 2 Video Length Limitation**: The technical limitation preventing 1-minute videos remains unresolved.
+-   **Subdomain Architecture**: User deferred the decision to move the admin portal to its own subdomain.
 
 **Known issue recurrence from previous fork**
 -   **Low PageSpeed score**: A recurring complaint.
@@ -111,82 +125,88 @@ backend: started).
 
 
 **Key Technical Concepts**
--   **Backend**: Flask, Pydantic, MongoDB, JWT for sessions.
--   **Frontend**: React, React Router, TailwindCSS, .
--   **Architecture**: Component-based frontend design, RESTful API, Token-based invitation system.
+-   **Backend**: FastAPI, Pydantic, MongoDB, JWT.
+-   **Frontend**: React, React Router, TailwindCSS.
+-   **Architecture**: Scalable SPA + API architecture, Modular design, Role-Based Access Control (RBAC).
+-   **Integrations**: Stripe (for payments, requires webhook fix), SendGrid (for emails, working).
 
 **key DB schema**
--   **employees**: 
+-   **employees**:  (Old portal)
+-   **enterprise_employees**:  (New portal)
 
 **changes in tech stack**
--   : Added to render blog post content.
+-    was installed via pip to handle PDF generation for the employee contract.
 
 **All files of reference**
--   **/app/frontend/src/pages/LandingPage.jsx**: Completely overhauled.
--   **/app/frontend/src/pages/EmployeeDashboard.js**: New file for employee portal.
--   **/app/frontend/src/pages/EmployeeLogin.js**: New file.
--   **/app/frontend/src/pages/EmployeeRegister.js**: New file.
--   **/app/frontend/src/pages/BlogPage.js**: New file.
--   **/app/frontend/src/pages/BlogPostPage.js**: New file.
--   **/app/backend/routes/employees.py**: New file for employee logic.
--   **/app/backend/models/employee.py**: New file for data models.
--   **/app/frontend/src/components/landing/**: New directory with all redesigned components.
--   **/app/frontend/src/components/Footer.js**: Modified to add trust seal.
--   **/app/frontend/src/App.js**: Modified with new routes.
--   **/app/frontend/public/articulos_manoprotect.zip**: New file.
+-   : **NEW**. Backend logic for the new enterprise portal.
+-   : **NEW**. Directory containing all frontend pages for the new portal.
+-   : File to be modified to fix the Stripe payment bug.
+-   : Modified to include the new enterprise routes.
+-   : Modified to include the new enterprise frontend routes.
+-   : Modified for trial logic.
+-   : Modified for trial logic.
+-   : Modified to integrate email sending on invitation.
 
 **Areas that need refactoring**:
--   The Employee Portal needs a major architectural change to move it to a secure subdomain () instead of being a public route on the main website.
+-   The Stripe payment integration for the SOS device order is critically flawed and needs a complete refactor to use webhooks for payment confirmation.
+-   The old employee portal (, ) is now being superseded by the new  portal and should be considered for deprecation/migration in the future.
 
 **key api endpoints**
--    (POST): **NEW**. Creates an invitation token for a new employee.
--    (POST): **NEW**. Registers an employee using a valid token.
--    (POST): **NEW**. Logs in an employee.
--    (GET): **NEW**. Fetches the list of available employee roles.
+-    (POST): **NEW**. Logs in an enterprise employee and returns a JWT.
+-    (POST): Creates and sends an invitation to a new employee for the old portal.
 
 **Critical Info for New Agent**
--   **User's #1 Blocker**: The user needs clear instructions on how to get a **SendGrid API Key**. They have confirmed they do not have one. This is the top priority to unblock the invitation flow.
--   **Architectural Decision Needed**: The user's request for a production employee portal via a  file must be addressed. You need to explain why a subdomain () is the professional and secure standard, and get their approval to proceed with that architecture.
--   **Provide Download Link**: The agent created . You must add a download link for it on the frontend.
--   **User Persona**: The user is focused on business outcomes (conversions, trust, professionalism) and may not be familiar with web development conventions. Explanations should be clear, non-technical, and focused on the benefits (e.g., A separate admin site is more secure).
+-   **TOP PRIORITY**: You must first fix the Stripe payment verification bug for the SOS device. This is a critical business flaw and the user's most immediate concern. Do not proceed to other tasks until this is resolved and tested.
+-   **Main Task**: After the Stripe fix, the main goal is to continue building out the frontend for the new, scalable **Enterprise Portal** (). Follow the user's detailed specifications for each module (Employees, Clients, SOS, etc.).
+-   **User Persona & Language**: The user is business-oriented, provides very detailed, structured requirements, and communicates exclusively in **Spanish**. All your responses and plans must be in Spanish.
+-   **Architecture**: Adhere to the approved SPA + API architecture for all new development on the portal.
 
 **documents and test reports created in this job**
 -    (updated)
 -   
+-   User Uploaded:  (in  or public URL)
 
 **Last 10 User Messages and any pending HUMAN messages**
-1.  **User**: I need real scam/kidnapping stories for the blog. Give me access to the employee portal and a  file to install it. Also, I need the articles as a downloadable . (PENDING)
-2.  **User**: Yes, I want to use SendGrid for emails. (COMPLETED - Intent captured)
-3.  **User**: I don't understand the employee access options you mentioned. I want roles for my  portal. The trust seal is missing. (COMPLETED - Roles and seal added)
-4.  **User**: I'm not getting views or purchases. Add a blog with real scam/kidnapping stories to show why people need ManoProtect. (COMPLETED - Blog implemented)
-5.  **User**: Explains the need for a professional architecture (subdomain, separate API, roles, 2FA) and asks the agent to implement it. (PENDING - V1 implemented, but professional architecture is next)
-6.  **User**: Continues with the tasks. (COMPLETED)
-7.  **User**: Acknowledged the agent's work and asks to continue. (COMPLETED)
-8.  **User**: Provides detailed requirements for the homepage redesign and employee portal. (COMPLETED - V1 of both is done)
-9.  **User**: Confirms the plan presented by the agent. (COMPLETED)
-10. **User**: No, tell me where I have to go to get the SendGrid key, or I think you already have it. Also, I want the employee portal in production, not preview. (PENDING - This is the latest and most critical message)
+1.  **User**: I need a full-fledged, scalable employee portal with detailed modules (employees, clients, SOS, payments, alerts, audit logs). Provides a comprehensive breakdown. (PENDING - In Progress)
+2.  **User**: The web must be scalable. (COMPLETED - Agent proposed and user approved a scalable architecture).
+3.  **User**: Asks which architecture is more robust. (COMPLETED - Agent recommended SPA + API).
+4.  **User**: Acknowleges the agent's plan for the scalable portal. (COMPLETED)
+5.  **User**: Create a user for Google Play Store verification. (MISSED/IGNORED by agent).
+6.  **User**: Create a professional, downloadable employment contract. (COMPLETED)
+7.  **User**: The physical SOS device cannot be ordered during the 7-day free trial. (COMPLETED)
+8.  **User**: Bank cards must be verified to prevent fraud. (COMPLETED - text added to pages).
+9.  **User**: Add a 7-day free trial for individual/family plans, requiring a credit card, and update the refund policy. (COMPLETED)
+10. **User**: This needs to be fixed! And the SOS button order must verify payment with Stripe before creating the shipping request. I'm getting orders without payment and can't see customer data. And yes, complete the frontend views. (PENDING - This is the highest priority task).
 
 **Project Health Check:**
--   **Broken**: None.
--   **Blocked**: Email functionality is blocked pending user action (after receiving instructions for the SendGrid key).
+-   **Broken**: The Stripe payment verification flow for SOS device orders is critically broken.
+-   **Blocked**: None.
 -   **Mocked**: None.
 
 **3rd Party Integrations**
--   **Stripe (Payments)** — requires User API Key. Active and working.
--   **SendGrid (Email)** — requires User API Key. **Implemented but BLOCKED on user providing key.**
--   **Sora 2 (Video Generation)** — uses Emergent LLM Key.
--   **Twilio (WhatsApp Messaging)** — requires User API Key.
+-   **Stripe (Payments)** — Requires User API Key. **Active, but has a CRITICAL BUG** in the SOS order implementation.
+-   **SendGrid (Email)** — Requires User API Key. **Active and working** for employee invitations.
+-   **Sora 2 (Video Generation)** — Uses Emergent LLM Key.
+-   **Twilio (WhatsApp Messaging)** — Requires User API Key.
 -   **Google Tag Manager / Google Ads** — User-provided.
 -   **Firebase** — User-provided.
 
 **Testing status**
--   **Testing agent used after significant changes**: YES.
--   **Troubleshoot agent used after agent stuck in loop**: NO.
+-   **Testing agent used after significant changes**: NO
+-   **Troubleshoot agent used after agent stuck in loop**: NO
 -   **Test files created**: []
 -   **Known regressions**: None.
 
 **Credentials to test flow:**
--   **Employee Portal Director**:
+-   **Enterprise Portal Admin**:
     -   URL: 
     -   Email: 
-    -   Password: </analysis>
+    -   Password: 
+-   **Old Director Portal**:
+    -   URL: 
+    -   Email: 
+    -   Password: 
+
+**What agent forgot to execute**
+-   The agent did not create the requested test user for Google Play Store verification ( / ).
+-   The agent has not yet started implementing the suggestions from the user-provided Conversion Audit PDF.</analysis>

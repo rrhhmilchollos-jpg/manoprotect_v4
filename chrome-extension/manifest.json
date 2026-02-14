@@ -9,7 +9,7 @@
     "contextMenus"
   ],
   "host_permissions": [
-    "https://admin-portal-353.preview.emergentagent.com/*",
+    "https://ops-center-4.preview.emergentagent.com/*",
     "https://www.manoprotect.com/*"
   ],
   "action": {
