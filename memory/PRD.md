@@ -78,6 +78,22 @@ Sistema completo de verificación 2FA obligatoria durante el login para empleado
 - ✅ **Códigos de respaldo**: Se pueden usar una sola vez en lugar del TOTP
 - ✅ **Testing**: Iteración 42 - 100% tests pasados (backend y frontend)
 
+### 14. Alertas de Seguridad 2FA por Email - COMPLETADO (14 Feb 2026)
+Sistema de notificaciones por email cuando se detecta un login con 2FA desde dispositivo/IP nuevo:
+- ✅ **Detección automática**:
+  - Nueva IP (comparando con historial de logins)
+  - Nuevo dispositivo/navegador (basado en User-Agent)
+- ✅ **Email de alerta** con detalles:
+  - IP del acceso
+  - Dispositivo/navegador
+  - Fecha y hora
+  - Indicadores de nuevo dispositivo/IP
+  - Enlace para reportar acceso sospechoso
+- ✅ **Envío en segundo plano**: No bloquea el login
+- ✅ **Sin spam**: No envía email si el dispositivo/IP ya es conocido
+- ✅ **Testing**: Iteración 43 - 100% tests pasados
+- ⚠️ **Nota**: SendGrid requiere verificación del sender para enviar emails reales
+
 ### 12. Two-Factor Authentication (2FA) Setup - COMPLETADO (14 Feb 2026)
 Sistema completo de configuración de autenticación de dos factores:
 - ✅ **Endpoints**:
