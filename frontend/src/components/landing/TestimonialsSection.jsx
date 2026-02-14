@@ -1,15 +1,17 @@
 /**
  * ManoProtect - Testimonials Section
- * Clean testimonial cards with real reviews and real statistics from database
+ * Shows real user reviews from database + verified testimonials
+ * Includes rating submission for logged-in users
  */
 import { useState, useEffect } from 'react';
-import { Star, Quote } from 'lucide-react';
+import { Star, Quote, Check, ChevronLeft, ChevronRight, MessageSquarePlus } from 'lucide-react';
 
 const API_URL = process.env.REACT_APP_BACKEND_URL || '';
 
-const testimonials = [
+// Static verified testimonials (always shown as featured)
+const featuredTestimonials = [
   {
-    id: 1,
+    id: 'featured-1',
     name: "Selomit García",
     role: "Madre de familia",
     location: "Madrid",
@@ -17,10 +19,11 @@ const testimonials = [
     rating: 5,
     date: "Febrero 2025",
     source: "Google Play",
-    verified: true
+    verified: true,
+    isFeatured: true
   },
   {
-    id: 2,
+    id: 'featured-2',
     name: "María Deseada Sánchez",
     role: "Cuidadora familiar",
     location: "Barcelona",
@@ -28,10 +31,11 @@ const testimonials = [
     rating: 5,
     date: "Febrero 2025",
     source: "Google Play",
-    verified: true
+    verified: true,
+    isFeatured: true
   },
   {
-    id: 3,
+    id: 'featured-3',
     name: "Carlos Martínez",
     role: "Empresario autónomo",
     location: "Valencia",
@@ -39,7 +43,8 @@ const testimonials = [
     rating: 5,
     date: "Enero 2025",
     source: "App Store",
-    verified: true
+    verified: true,
+    isFeatured: true
   }
 ];
 
@@ -47,12 +52,17 @@ const TestimonialsSection = () => {
   const [stats, setStats] = useState({
     families_protected: 0,
     threats_blocked: 0,
-    average_rating: 0
+    average_rating: 0,
+    total_reviews: 0
   });
+  const [userReviews, setUserReviews] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(0);
+  const reviewsPerPage = 3;
 
   useEffect(() => {
     fetchStats();
+    fetchUserReviews();
   }, []);
 
   const fetchStats = async () => {
@@ -63,13 +73,26 @@ const TestimonialsSection = () => {
         setStats({
           families_protected: data.families_protected || 0,
           threats_blocked: data.threats_blocked || 0,
-          average_rating: data.average_rating || 0
+          average_rating: data.average_rating || 0,
+          total_reviews: data.total_reviews || 0
         });
       }
     } catch (err) {
       console.error('Error fetching stats:', err);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchUserReviews = async () => {
+    try {
+      const res = await fetch(`${API_URL}/api/reviews/public?limit=20&min_rating=3`);
+      if (res.ok) {
+        const data = await res.json();
+        setUserReviews(data.reviews || []);
+      }
+    } catch (err) {
+      console.error('Error fetching reviews:', err);
     }
   };
 
@@ -80,9 +103,37 @@ const TestimonialsSection = () => {
     return num.toString();
   };
 
+  // Combine featured testimonials with user reviews
+  const allReviews = [...featuredTestimonials, ...userReviews.map(r => ({
+    id: r.review_id,
+    name: r.user_name,
+    role: r.user_plan,
+    location: r.location || 'España',
+    text: r.comment,
+    rating: r.rating,
+    date: new Date(r.created_at).toLocaleDateString('es-ES', { month: 'long', year: 'numeric' }),
+    source: 'ManoProtect',
+    verified: r.verified,
+    initial: r.user_initial
+  }))];
+
+  const totalPages = Math.ceil(allReviews.length / reviewsPerPage);
+  const displayedReviews = allReviews.slice(
+    currentPage * reviewsPerPage,
+    (currentPage + 1) * reviewsPerPage
+  );
+
+  const nextPage = () => {
+    setCurrentPage((prev) => (prev + 1) % totalPages);
+  };
+
+  const prevPage = () => {
+    setCurrentPage((prev) => (prev - 1 + totalPages) % totalPages);
+  };
+
   return (
-    <section className="px-6 py-20 bg-slate-50">
-      <div className="max-w-5xl mx-auto">
+    <section className="px-6 py-20 bg-slate-50" data-testid="testimonials-section">
+      <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="text-center mb-12">
           <span className="inline-block text-indigo-600 font-semibold text-sm uppercase tracking-wider mb-3">
@@ -94,11 +145,56 @@ const TestimonialsSection = () => {
           <p className="text-slate-600">
             Reseñas reales de familias que confían en ManoProtect
           </p>
+          
+          {/* Rating Summary */}
+          {stats.total_reviews > 0 && (
+            <div className="mt-6 flex items-center justify-center gap-2" data-testid="rating-summary">
+              <div className="flex items-center gap-1">
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <Star
+                    key={star}
+                    className={`w-5 h-5 ${
+                      star <= Math.round(stats.average_rating)
+                        ? 'fill-yellow-400 text-yellow-400'
+                        : 'fill-gray-200 text-gray-200'
+                    }`}
+                  />
+                ))}
+              </div>
+              <span className="font-bold text-slate-900">{stats.average_rating.toFixed(1)}</span>
+              <span className="text-slate-500">({stats.total_reviews} valoraciones)</span>
+            </div>
+          )}
         </div>
+
+        {/* Navigation Buttons */}
+        {totalPages > 1 && (
+          <div className="flex justify-center gap-4 mb-6">
+            <button
+              onClick={prevPage}
+              className="p-2 rounded-full bg-white shadow-md hover:shadow-lg transition-shadow border border-slate-200"
+              aria-label="Ver testimonios anteriores"
+              data-testid="prev-testimonials-btn"
+            >
+              <ChevronLeft className="w-5 h-5 text-slate-600" />
+            </button>
+            <span className="flex items-center text-sm text-slate-500">
+              {currentPage + 1} / {totalPages}
+            </span>
+            <button
+              onClick={nextPage}
+              className="p-2 rounded-full bg-white shadow-md hover:shadow-lg transition-shadow border border-slate-200"
+              aria-label="Ver más testimonios"
+              data-testid="next-testimonials-btn"
+            >
+              <ChevronRight className="w-5 h-5 text-slate-600" />
+            </button>
+          </div>
+        )}
 
         {/* Testimonials Grid */}
         <div className="grid md:grid-cols-3 gap-6">
-          {testimonials.map((testimonial) => (
+          {displayedReviews.map((testimonial) => (
             <article
               key={testimonial.id}
               data-testid={`testimonial-${testimonial.id}`}
@@ -113,9 +209,7 @@ const TestimonialsSection = () => {
                 </div>
                 {testimonial.verified && (
                   <span className="text-xs bg-emerald-100 text-emerald-700 px-2 py-1 rounded-full flex items-center gap-1">
-                    <svg className="w-3 h-3" viewBox="0 0 24 24" fill="currentColor">
-                      <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/>
-                    </svg>
+                    <Check className="w-3 h-3" />
                     Verificado
                   </span>
                 )}
@@ -124,7 +218,7 @@ const TestimonialsSection = () => {
               {/* Quote */}
               <Quote className="w-6 h-6 text-indigo-200 mb-3" />
               
-              <blockquote className="text-slate-700 leading-relaxed mb-6 text-sm">
+              <blockquote className="text-slate-700 leading-relaxed mb-6 text-sm line-clamp-4">
                 "{testimonial.text}"
               </blockquote>
 
@@ -132,7 +226,7 @@ const TestimonialsSection = () => {
               <footer className="flex items-center justify-between pt-4 border-t border-slate-100">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-sm">
-                    {testimonial.name.split(' ').map(n => n[0]).join('').slice(0,2)}
+                    {testimonial.initial || testimonial.name.split(' ').map(n => n[0]).join('').slice(0,2)}
                   </div>
                   <div>
                     <p className="font-medium text-slate-900 text-sm">{testimonial.name}</p>
@@ -141,13 +235,25 @@ const TestimonialsSection = () => {
                 </div>
               </footer>
               
-              {/* Source */}
+              {/* Source & Date */}
               <div className="flex items-center justify-between mt-3 pt-3 border-t border-slate-50">
                 <span className="text-xs text-slate-400">{testimonial.source}</span>
                 <span className="text-xs text-slate-400">{testimonial.date}</span>
               </div>
             </article>
           ))}
+        </div>
+
+        {/* CTA to leave review */}
+        <div className="mt-10 text-center">
+          <a
+            href="/dashboard"
+            className="inline-flex items-center gap-2 text-indigo-600 hover:text-indigo-700 font-medium transition-colors"
+            data-testid="leave-review-cta"
+          >
+            <MessageSquarePlus className="w-5 h-5" />
+            ¿Eres cliente? Deja tu valoración
+          </a>
         </div>
         
         {/* Trust Stats - Real Data from Database */}
@@ -170,6 +276,14 @@ const TestimonialsSection = () => {
             </div>
             <div className="text-sm text-slate-500">Amenazas bloqueadas</div>
           </div>
+          {stats.total_reviews > 0 && (
+            <div className="text-center" data-testid="stat-reviews">
+              <div className="text-3xl font-bold text-indigo-600">
+                {formatNumber(stats.total_reviews)}
+              </div>
+              <div className="text-sm text-slate-500">Valoraciones</div>
+            </div>
+          )}
         </div>
       </div>
     </section>
