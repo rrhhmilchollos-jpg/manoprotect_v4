@@ -227,9 +227,9 @@ async def stripe_device_webhook(request: Request):
             # Fallback: parse without verification (dev mode)
             data = json.loads(payload)
             event = stripe.Event.construct_from(data, stripe.api_key)
-    except ValueError as e:
+    except ValueError:
         raise HTTPException(status_code=400, detail="Invalid payload")
-    except stripe.error.SignatureVerificationError as e:
+    except stripe.error.SignatureVerificationError:
         raise HTTPException(status_code=400, detail="Invalid signature")
     
     # Handle the checkout.session.completed event
