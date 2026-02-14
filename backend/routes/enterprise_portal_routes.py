@@ -111,7 +111,9 @@ class Login2FARequest(BaseModel):
 
 @router.post("/auth/login")
 async def enterprise_login(data: LoginRequest, response: Response, request: Request):
-    """Enterprise employee login - Step 1: Validate credentials"""
+    """Enterprise employee login - Step 1: Validate credentials and send SMS code if 2FA enabled"""
+    from services.sms_service import sms_service
+    
     if db is None:
         raise HTTPException(status_code=500, detail="Database not initialized")
     
@@ -128,14 +130,52 @@ async def enterprise_login(data: LoginRequest, response: Response, request: Requ
     
     # Check if 2FA is enabled
     if employee.get("two_factor_enabled", False):
-        # Return response indicating 2FA is required
-        return {
-            "success": False,
-            "requires_2fa": True,
-            "employee_id": employee["employee_id"],
-            "name": employee["name"],
-            "message": "Se requiere verificación 2FA"
-        }
+        phone = employee.get("phone")
+        
+        if not phone:
+            # No phone configured, allow login without 2FA
+            pass
+        else:
+            # Generate and send SMS code
+            code = sms_service.generate_code(6)
+            code_expiry = datetime.now(timezone.utc) + timedelta(minutes=5)
+            
+            # Store code in database
+            await db.enterprise_employees.update_one(
+                {"employee_id": employee["employee_id"]},
+                {"$set": {
+                    "sms_verification_code": code,
+                    "sms_code_expiry": code_expiry.isoformat(),
+                    "sms_code_attempts": 0
+                }}
+            )
+            
+            # Send SMS
+            sms_result = await sms_service.send_verification_code(phone, code)
+            
+            if sms_result.get("success"):
+                return {
+                    "success": False,
+                    "requires_2fa": True,
+                    "two_factor_method": "sms",
+                    "employee_id": employee["employee_id"],
+                    "name": employee["name"],
+                    "phone_masked": sms_result.get("phone_masked", f"***{phone[-4:]}"),
+                    "message": "Se ha enviado un código de verificación a tu teléfono"
+                }
+            else:
+                # SMS failed, log error but allow alternative
+                print(f"[SMS] Failed to send code: {sms_result.get('error')}")
+                return {
+                    "success": False,
+                    "requires_2fa": True,
+                    "two_factor_method": "sms",
+                    "employee_id": employee["employee_id"],
+                    "name": employee["name"],
+                    "phone_masked": f"***{phone[-4:]}",
+                    "message": "Error al enviar SMS. Usa un código de respaldo o contacta IT.",
+                    "sms_error": True
+                }
     
     # No 2FA - proceed with normal login
     session_token = uuid.uuid4().hex
