@@ -68,7 +68,10 @@ async def get_current_user(request: Request, session_token: Optional[str] = None
     if not session_token:
         raise HTTPException(status_code=401, detail="No autenticado")
     
-    session = await db.sessions.find_one({"session_token": session_token})
+    session = await db.user_sessions.find_one({"session_token": session_token})
+    if not session:
+        # Try alternative collection
+        session = await db.sessions.find_one({"session_token": session_token})
     if not session:
         raise HTTPException(status_code=401, detail="Sesión no válida")
     
