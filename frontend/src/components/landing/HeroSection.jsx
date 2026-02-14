@@ -91,19 +91,21 @@ const HeroSection = () => {
               </Button>
             </div>
 
-            {/* Trust indicators */}
+            {/* Trust indicators + Trust Seals */}
             <div className="flex flex-wrap items-center gap-6 pt-4 text-sm text-slate-500">
               <span className="flex items-center gap-2">
                 <Check className="w-4 h-4 text-emerald-600" />
-                7 días gratis
-              </span>
-              <span className="flex items-center gap-2">
-                <Check className="w-4 h-4 text-emerald-600" />
-                Sin tarjeta
+                Sin compromiso
               </span>
               <span className="flex items-center gap-2">
                 <Check className="w-4 h-4 text-emerald-600" />
                 Cancela cuando quieras
+              </span>
+              <span className="flex items-center gap-2 bg-emerald-50 px-3 py-1 rounded-full">
+                <svg className="w-4 h-4 text-emerald-600" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/>
+                </svg>
+                Pago 100% Seguro
               </span>
             </div>
           </div>
