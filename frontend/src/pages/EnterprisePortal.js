@@ -501,42 +501,51 @@ const EnterprisePortal = () => {
                   </CardHeader>
                   <CardContent>
                     <div className="h-64">
-                      <ResponsiveContainer width="100%" height="100%">
-                        <AreaChart data={chartData.revenue.length > 0 ? chartData.revenue : generateDemoData('revenue')}>
-                          <defs>
-                            <linearGradient id="colorRevenue" x1="0" y1="0" x2="0" y2="1">
-                              <stop offset="5%" stopColor="#10b981" stopOpacity={0.3}/>
-                              <stop offset="95%" stopColor="#10b981" stopOpacity={0}/>
-                            </linearGradient>
-                          </defs>
-                          <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
-                          <XAxis 
-                            dataKey="date" 
-                            stroke="#94a3b8" 
-                            fontSize={12}
-                            tickFormatter={(value) => value?.slice(5) || ''}
-                          />
-                          <YAxis stroke="#94a3b8" fontSize={12} tickFormatter={(value) => `€${value}`} />
-                          <Tooltip 
-                            contentStyle={{ 
-                              backgroundColor: '#1e293b', 
-                              border: '1px solid #334155',
-                              borderRadius: '8px',
-                              color: '#f1f5f9'
-                            }}
-                            formatter={(value) => [`€${value}`, 'Ingresos']}
-                            labelFormatter={(label) => `Fecha: ${label}`}
-                          />
-                          <Area 
-                            type="monotone" 
-                            dataKey="amount" 
-                            stroke="#10b981" 
-                            fillOpacity={1} 
-                            fill="url(#colorRevenue)" 
-                            strokeWidth={2}
-                          />
-                        </AreaChart>
-                      </ResponsiveContainer>
+                      {chartData.revenue.length > 0 ? (
+                        <ResponsiveContainer width="100%" height="100%">
+                          <AreaChart data={chartData.revenue}>
+                            <defs>
+                              <linearGradient id="colorRevenue" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="5%" stopColor="#10b981" stopOpacity={0.3}/>
+                                <stop offset="95%" stopColor="#10b981" stopOpacity={0}/>
+                              </linearGradient>
+                            </defs>
+                            <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
+                            <XAxis 
+                              dataKey="date" 
+                              stroke="#94a3b8" 
+                              fontSize={12}
+                              tickFormatter={(value) => value?.slice(5) || ''}
+                            />
+                            <YAxis stroke="#94a3b8" fontSize={12} tickFormatter={(value) => `€${value}`} />
+                            <Tooltip 
+                              contentStyle={{ 
+                                backgroundColor: '#1e293b', 
+                                border: '1px solid #334155',
+                                borderRadius: '8px',
+                                color: '#f1f5f9'
+                              }}
+                              formatter={(value) => [`€${value}`, 'Ingresos']}
+                              labelFormatter={(label) => `Fecha: ${label}`}
+                            />
+                            <Area 
+                              type="monotone" 
+                              dataKey="amount" 
+                              stroke="#10b981" 
+                              fillOpacity={1} 
+                              fill="url(#colorRevenue)" 
+                              strokeWidth={2}
+                            />
+                          </AreaChart>
+                        </ResponsiveContainer>
+                      ) : (
+                        <div className="h-full flex items-center justify-center text-slate-500">
+                          <div className="text-center">
+                            <DollarSign className="w-10 h-10 mx-auto mb-2 opacity-50" />
+                            <p>Sin datos de ingresos en este período</p>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </CardContent>
                 </Card>
@@ -551,44 +560,53 @@ const EnterprisePortal = () => {
                   </CardHeader>
                   <CardContent>
                     <div className="h-64">
-                      <ResponsiveContainer width="100%" height="100%">
-                        <LineChart data={mergeChartData(chartData.alerts, chartData.sos)}>
-                          <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
-                          <XAxis 
-                            dataKey="date" 
-                            stroke="#94a3b8" 
-                            fontSize={12}
-                            tickFormatter={(value) => value?.slice(5) || ''}
-                          />
-                          <YAxis stroke="#94a3b8" fontSize={12} />
-                          <Tooltip 
-                            contentStyle={{ 
-                              backgroundColor: '#1e293b', 
-                              border: '1px solid #334155',
-                              borderRadius: '8px',
-                              color: '#f1f5f9'
-                            }}
-                            labelFormatter={(label) => `Fecha: ${label}`}
-                          />
-                          <Legend />
-                          <Line 
-                            type="monotone" 
-                            dataKey="alerts" 
-                            name="Alertas"
-                            stroke="#f97316" 
-                            strokeWidth={2}
-                            dot={{ fill: '#f97316', strokeWidth: 2 }}
-                          />
-                          <Line 
-                            type="monotone" 
-                            dataKey="sos" 
-                            name="Eventos SOS"
-                            stroke="#ef4444" 
-                            strokeWidth={2}
-                            dot={{ fill: '#ef4444', strokeWidth: 2 }}
-                          />
-                        </LineChart>
-                      </ResponsiveContainer>
+                      {(chartData.alerts.length > 0 || chartData.sos.length > 0) ? (
+                        <ResponsiveContainer width="100%" height="100%">
+                          <LineChart data={mergeChartData(chartData.alerts, chartData.sos)}>
+                            <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
+                            <XAxis 
+                              dataKey="date" 
+                              stroke="#94a3b8" 
+                              fontSize={12}
+                              tickFormatter={(value) => value?.slice(5) || ''}
+                            />
+                            <YAxis stroke="#94a3b8" fontSize={12} />
+                            <Tooltip 
+                              contentStyle={{ 
+                                backgroundColor: '#1e293b', 
+                                border: '1px solid #334155',
+                                borderRadius: '8px',
+                                color: '#f1f5f9'
+                              }}
+                              labelFormatter={(label) => `Fecha: ${label}`}
+                            />
+                            <Legend />
+                            <Line 
+                              type="monotone" 
+                              dataKey="alerts" 
+                              name="Alertas"
+                              stroke="#f97316" 
+                              strokeWidth={2}
+                              dot={{ fill: '#f97316', strokeWidth: 2 }}
+                            />
+                            <Line 
+                              type="monotone" 
+                              dataKey="sos" 
+                              name="Eventos SOS"
+                              stroke="#ef4444" 
+                              strokeWidth={2}
+                              dot={{ fill: '#ef4444', strokeWidth: 2 }}
+                            />
+                          </LineChart>
+                        </ResponsiveContainer>
+                      ) : (
+                        <div className="h-full flex items-center justify-center text-slate-500">
+                          <div className="text-center">
+                            <Activity className="w-10 h-10 mx-auto mb-2 opacity-50" />
+                            <p>Sin alertas ni eventos SOS en este período</p>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </CardContent>
                 </Card>
@@ -604,33 +622,42 @@ const EnterprisePortal = () => {
                 </CardHeader>
                 <CardContent>
                   <div className="h-48">
-                    <ResponsiveContainer width="100%" height="100%">
-                      <BarChart data={chartData.users.length > 0 ? chartData.users : generateDemoData('users')}>
-                        <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
-                        <XAxis 
-                          dataKey="date" 
-                          stroke="#94a3b8" 
-                          fontSize={12}
-                          tickFormatter={(value) => value?.slice(5) || ''}
-                        />
-                        <YAxis stroke="#94a3b8" fontSize={12} />
-                        <Tooltip 
-                          contentStyle={{ 
-                            backgroundColor: '#1e293b', 
-                            border: '1px solid #334155',
-                            borderRadius: '8px',
-                            color: '#f1f5f9'
-                          }}
-                          formatter={(value) => [value, 'Nuevos usuarios']}
-                          labelFormatter={(label) => `Fecha: ${label}`}
-                        />
-                        <Bar 
-                          dataKey="count" 
-                          fill="#6366f1" 
-                          radius={[4, 4, 0, 0]}
-                        />
-                      </BarChart>
-                    </ResponsiveContainer>
+                    {chartData.users.length > 0 ? (
+                      <ResponsiveContainer width="100%" height="100%">
+                        <BarChart data={chartData.users}>
+                          <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
+                          <XAxis 
+                            dataKey="date" 
+                            stroke="#94a3b8" 
+                            fontSize={12}
+                            tickFormatter={(value) => value?.slice(5) || ''}
+                          />
+                          <YAxis stroke="#94a3b8" fontSize={12} />
+                          <Tooltip 
+                            contentStyle={{ 
+                              backgroundColor: '#1e293b', 
+                              border: '1px solid #334155',
+                              borderRadius: '8px',
+                              color: '#f1f5f9'
+                            }}
+                            formatter={(value) => [value, 'Nuevos usuarios']}
+                            labelFormatter={(label) => `Fecha: ${label}`}
+                          />
+                          <Bar 
+                            dataKey="count" 
+                            fill="#6366f1" 
+                            radius={[4, 4, 0, 0]}
+                          />
+                        </BarChart>
+                      </ResponsiveContainer>
+                    ) : (
+                      <div className="h-full flex items-center justify-center text-slate-500">
+                        <div className="text-center">
+                          <Users className="w-10 h-10 mx-auto mb-2 opacity-50" />
+                          <p>Sin nuevos registros en este período</p>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </CardContent>
               </Card>
