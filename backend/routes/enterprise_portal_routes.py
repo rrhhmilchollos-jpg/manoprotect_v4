@@ -185,7 +185,7 @@ async def enterprise_login(data: LoginRequest, response: Response, request: Requ
 
 @router.post("/auth/login-2fa")
 async def enterprise_login_with_2fa(data: Login2FARequest, response: Response, request: Request, background_tasks: BackgroundTasks):
-    """Enterprise employee login - Step 2: Verify 2FA code"""
+    """Enterprise employee login - Step 2: Verify 2FA code with brute force protection"""
     import pyotp
     from services.email_service import email_service
     
@@ -206,23 +206,83 @@ async def enterprise_login_with_2fa(data: Login2FARequest, response: Response, r
     if not employee.get("two_factor_enabled"):
         raise HTTPException(status_code=400, detail="2FA no está habilitado para esta cuenta")
     
+    # ============================================
+    # 2FA BRUTE FORCE PROTECTION
+    # ============================================
+    failed_attempts = employee.get("two_factor_failed_attempts", 0)
+    lockout_until = employee.get("two_factor_lockout_until")
+    
+    # Check if account is currently locked
+    if lockout_until:
+        lockout_time = datetime.fromisoformat(lockout_until.replace("Z", "+00:00"))
+        if datetime.now(timezone.utc) < lockout_time:
+            remaining_minutes = int((lockout_time - datetime.now(timezone.utc)).total_seconds() / 60) + 1
+            raise HTTPException(
+                status_code=429, 
+                detail=f"Cuenta bloqueada temporalmente. Demasiados intentos fallidos. Inténtalo de nuevo en {remaining_minutes} minutos."
+            )
+        else:
+            # Lockout expired, reset counters
+            await db.enterprise_employees.update_one(
+                {"employee_id": employee["employee_id"]},
+                {"$set": {"two_factor_failed_attempts": 0}, "$unset": {"two_factor_lockout_until": ""}}
+            )
+            failed_attempts = 0
+    
     # Verify TOTP code
     secret = employee.get("two_factor_secret")
     backup_codes = employee.get("two_factor_backup_codes", [])
     
     # Check if it's a backup code
     if data.totp_code in backup_codes:
-        # Remove used backup code
+        # Remove used backup code and reset failed attempts
         backup_codes.remove(data.totp_code)
         await db.enterprise_employees.update_one(
             {"employee_id": employee["employee_id"]},
-            {"$set": {"two_factor_backup_codes": backup_codes}}
+            {"$set": {"two_factor_backup_codes": backup_codes, "two_factor_failed_attempts": 0}}
         )
     else:
         # Verify TOTP code
         totp = pyotp.TOTP(secret)
         if not totp.verify(data.totp_code, valid_window=1):
-            raise HTTPException(status_code=401, detail="Código 2FA inválido")
+            # Increment failed attempts
+            new_failed_attempts = failed_attempts + 1
+            update_data = {"two_factor_failed_attempts": new_failed_attempts}
+            
+            # Check if we need to lock the account
+            if new_failed_attempts >= MAX_2FA_ATTEMPTS:
+                lockout_time = datetime.now(timezone.utc) + timedelta(minutes=LOCKOUT_DURATION_MINUTES)
+                update_data["two_factor_lockout_until"] = lockout_time.isoformat()
+                
+                await db.enterprise_employees.update_one(
+                    {"employee_id": employee["employee_id"]},
+                    {"$set": update_data}
+                )
+                
+                # Log the lockout
+                await create_audit_log(employee, "2fa_lockout", "security", employee["employee_id"], 
+                                      {"failed_attempts": new_failed_attempts, "lockout_minutes": LOCKOUT_DURATION_MINUTES}, request)
+                
+                raise HTTPException(
+                    status_code=429,
+                    detail=f"Cuenta bloqueada por {LOCKOUT_DURATION_MINUTES} minutos debido a {MAX_2FA_ATTEMPTS} intentos fallidos."
+                )
+            
+            await db.enterprise_employees.update_one(
+                {"employee_id": employee["employee_id"]},
+                {"$set": update_data}
+            )
+            
+            remaining_attempts = MAX_2FA_ATTEMPTS - new_failed_attempts
+            raise HTTPException(
+                status_code=401, 
+                detail=f"Código 2FA inválido. Te quedan {remaining_attempts} intentos."
+            )
+        else:
+            # Successful verification - reset failed attempts
+            await db.enterprise_employees.update_one(
+                {"employee_id": employee["employee_id"]},
+                {"$set": {"two_factor_failed_attempts": 0}, "$unset": {"two_factor_lockout_until": ""}}
     
     # 2FA verified - complete login
     session_token = uuid.uuid4().hex
