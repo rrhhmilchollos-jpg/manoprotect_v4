@@ -134,6 +134,10 @@ const OrderConfirmation = lazy(() => import('@/pages/OrderConfirmation'));
 const BlogPage = lazy(() => import('@/pages/BlogPage'));
 const BlogPostPage = lazy(() => import('@/pages/BlogPostPage'));
 
+// Enterprise Portal (Complete system)
+const EnterprisePortal = lazy(() => import('@/pages/EnterprisePortal'));
+const EnterpriseLogin = lazy(() => import('@/pages/EnterpriseLogin'));
+
 // Lazy load non-critical UI components to reduce main thread blocking
 const CookieConsent = lazy(() => import('@/components/CookieConsent'));
 const AIChatWidget = lazy(() => import('@/components/AIChatWidget'));
