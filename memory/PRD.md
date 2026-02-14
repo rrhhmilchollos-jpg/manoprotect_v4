@@ -15,9 +15,9 @@ ManoProtect es una plataforma integral de protección contra fraudes digitales p
 - **Frontend**: React 18, TailwindCSS, Shadcn/UI, Recharts
 - **Backend**: FastAPI, Python 3.11, Pydantic
 - **Database**: MongoDB (Motor async driver)
-- **Payments**: Stripe (checkout sessions + webhooks)
+- **Payments**: Stripe (checkout sessions + webhooks + refunds)
 - **Email**: SendGrid
-- **Auth**: JWT + session cookies + **2FA (TOTP) con verificación en login**
+- **Auth**: JWT + session cookies + **2FA (TOTP) con verificación en login + protección brute force**
 - **Real-time**: Socket.IO/WebSockets
 
 ### Estructura de Directorios
@@ -29,7 +29,7 @@ ManoProtect es una plataforma integral de protección contra fraudes digitales p
 │   │   ├── export_routes.py          # Exportación CSV
 │   │   ├── two_factor_routes.py      # 2FA TOTP setup/config
 │   │   ├── sos_device.py             # Pedidos SOS con Stripe
-│   │   └── enterprise_portal_routes.py # Login con 2FA integrado
+│   │   └── enterprise_portal_routes.py # Login 2FA + Pagos/Reembolsos
 │   └── server.py
 ├── frontend/
 │   └── src/
@@ -40,7 +40,7 @@ ManoProtect es una plataforma integral de protección contra fraudes digitales p
 │       └── pages/
 │           ├── Dashboard.js          # Tab "Valorar" añadido
 │           ├── EnterpriseLogin.js    # Login con flujo 2FA
-│           └── EnterprisePortal.js   # Sección "Seguridad" añadida
+│           └── EnterprisePortal.js   # Secciones: Seguridad, Pagos/Reembolsos
 └── memory/
     └── PRD.md
 ```
@@ -66,51 +66,46 @@ ManoProtect es una plataforma integral de protección contra fraudes digitales p
 
 ## Funcionalidades Completadas ✅
 
-### 13. Verificación 2FA en Login - COMPLETADO (14 Feb 2026)
-Sistema completo de verificación 2FA obligatoria durante el login para empleados con 2FA habilitado:
-- ✅ **Flujo en 2 pasos**:
-  - Paso 1: Validación de email/password → Si tiene 2FA, devuelve `requires_2fa: true`
-  - Paso 2: Verificación del código TOTP de 6 dígitos o código de respaldo
-- ✅ **Endpoints**:
-  - `POST /api/enterprise/auth/login` - Valida credenciales, detecta si requiere 2FA
-  - `POST /api/enterprise/auth/login-2fa` - Completa login verificando código TOTP
-- ✅ **Frontend**: `EnterpriseLogin.js` actualizado con formulario de 2FA
-- ✅ **Códigos de respaldo**: Se pueden usar una sola vez en lugar del TOTP
-- ✅ **Testing**: Iteración 42 - 100% tests pasados (backend y frontend)
+### 15. Portal de Pagos y Reembolsos Stripe - COMPLETADO (14 Feb 2026)
+Sistema completo para gestionar pagos y procesar reembolsos desde Stripe:
+- ✅ **Endpoints Backend**:
+  - `GET /api/enterprise/admin/payments/:id` - Buscar pago por ID de Stripe
+  - `POST /api/enterprise/admin/payments/:id/refund` - Procesar reembolso
+  - `GET /api/enterprise/admin/payment-logs` - Ver historial de operaciones
+- ✅ **Restricción por roles**: Solo admin, super_admin y finance pueden acceder
+- ✅ **Rate limiting**: Máximo 10 reembolsos por empleado por hora
+- ✅ **Auditoría**: Todas las operaciones se registran en `payment_logs`
+- ✅ **Frontend PaymentsSection con 3 tabs**:
+  - Resumen: KPIs y últimas transacciones
+  - Buscar Pago: Búsqueda por ID de Stripe con detalles completos
+  - Registro de Operaciones: Historial de consultas y reembolsos
+- ✅ **Modal de confirmación** obligatorio antes de procesar reembolso
+- ✅ **Testing**: Iteración 44 - 100% tests pasados
+
+### 16. Protección Brute Force 2FA - COMPLETADO (14 Feb 2026)
+Protección contra ataques de fuerza bruta en la verificación 2FA:
+- ✅ **Límite de intentos**: 5 intentos fallidos máximo
+- ✅ **Bloqueo temporal**: 15 minutos de lockout tras exceder límites
+- ✅ **Mensajes informativos**: Muestra intentos restantes y tiempo de espera
+- ✅ **Reset automático**: Contador se reinicia tras login exitoso o expiración
+- ✅ **Audit log**: Registra eventos de bloqueo
+
+### 17. Actualización de Footer - COMPLETADO (14 Feb 2026)
+- ✅ Footer actualizado de "STARTBOOKING SL (CIF: B19427723)" a "Manoprotect.com"
+- ✅ Archivos actualizados: EnterpriseLogin, FAQ, BlogPage, PaymentSuccess, DescargarApps, DescargarDesktop, PortalEmpleados, ManoProtectRegistro
+- ⚠️ **Nota**: Páginas legales (TermsOfService, LegalNotice, PrivacyPolicy) mantienen referencias legales originales
 
 ### 14. Alertas de Seguridad 2FA por Email - COMPLETADO (14 Feb 2026)
-Sistema de notificaciones por email cuando se detecta un login con 2FA desde dispositivo/IP nuevo:
-- ✅ **Detección automática**:
-  - Nueva IP (comparando con historial de logins)
-  - Nuevo dispositivo/navegador (basado en User-Agent)
-- ✅ **Email de alerta** con detalles:
-  - IP del acceso
-  - Dispositivo/navegador
-  - Fecha y hora
-  - Indicadores de nuevo dispositivo/IP
-  - Enlace para reportar acceso sospechoso
-- ✅ **Envío en segundo plano**: No bloquea el login
-- ✅ **Sin spam**: No envía email si el dispositivo/IP ya es conocido
-- ✅ **Testing**: Iteración 43 - 100% tests pasados
-- ⚠️ **Nota**: SendGrid requiere verificación del sender para enviar emails reales
+Sistema de notificaciones por email cuando se detecta un login con 2FA desde dispositivo/IP nuevo.
+
+### 13. Verificación 2FA en Login - COMPLETADO (14 Feb 2026)
+Sistema completo de verificación 2FA obligatoria durante el login.
 
 ### 12. Two-Factor Authentication (2FA) Setup - COMPLETADO (14 Feb 2026)
-Sistema completo de configuración de autenticación de dos factores:
-- ✅ **Endpoints**:
-  - `GET /api/2fa/status` - Estado del 2FA
-  - `GET /api/2fa/setup` - Generar QR code para Google Authenticator
-  - `POST /api/2fa/enable` - Activar 2FA tras verificar código
-  - `POST /api/2fa/disable` - Desactivar 2FA
-  - `POST /api/2fa/verify` - Verificar código TOTP
-  - `POST /api/2fa/regenerate-backup-codes` - Regenerar códigos de respaldo
-- ✅ **Frontend**: Componente `TwoFactorSettings.jsx` con flujo completo
-- ✅ **Portal Enterprise**: Nueva sección "Seguridad (2FA)" en el menú
-- ✅ **Dependencias**: pyotp, qrcode (Google Authenticator compatible)
+Sistema completo de configuración de autenticación de dos factores.
 
 ### 11. Sistema de Exportación CSV - COMPLETADO (14 Feb 2026)
-Exportación de datos en formato CSV desde el Portal Enterprise:
-- ✅ **Endpoints**: users, alerts, sos, payments, reviews, dashboard-summary
-- ✅ **Botones de exportación** añadidos en: Dashboard, Usuarios, Valoraciones
+Exportación de datos en formato CSV desde el Portal Enterprise.
 
 ### 10-1. Funcionalidades anteriores
 - Sistema de Valoraciones de Usuarios (solo premium)
@@ -123,11 +118,18 @@ Exportación de datos en formato CSV desde el Portal Enterprise:
 
 ## Endpoints API
 
+### Pagos y Reembolsos (Stripe)
+| Endpoint | Método | Auth | Descripción |
+|----------|--------|------|-------------|
+| `/api/enterprise/admin/payments/:id` | GET | admin/finance | Buscar pago en Stripe |
+| `/api/enterprise/admin/payments/:id/refund` | POST | admin/finance | Procesar reembolso |
+| `/api/enterprise/admin/payment-logs` | GET | admin/finance/auditor | Ver logs de operaciones |
+
 ### Login Enterprise (2FA integrado)
 | Endpoint | Método | Auth | Descripción |
 |----------|--------|------|-------------|
 | `/api/enterprise/auth/login` | POST | No | Login paso 1 - valida credenciales |
-| `/api/enterprise/auth/login-2fa` | POST | No | Login paso 2 - verifica código TOTP |
+| `/api/enterprise/auth/login-2fa` | POST | No | Login paso 2 - verifica código TOTP (con brute force protection) |
 
 ### 2FA Configuration
 | Endpoint | Método | Auth | Descripción |
@@ -142,12 +144,14 @@ Exportación de datos en formato CSV desde el Portal Enterprise:
 
 ## Testing
 
-### Último Test: Iteración 43 (14 Feb 2026)
-- Backend: 10/10 tests passed (100%) - 2FA Email Alerts
+### Último Test: Iteración 44 (14 Feb 2026)
+- Backend: 15/15 tests passed (100%)
+- Frontend: 10/10 tests passed (100%)
 - Funcionalidades verificadas:
-  - Detección de nuevo IP/dispositivo
-  - Creación de email_notifications correctamente
-  - Email solo enviado cuando IP o dispositivo son nuevos
+  - Protección brute force 2FA (5 intentos, 15 min lockout)
+  - Stripe payment lookup y refund endpoints
+  - PaymentsSection UI con 3 tabs
+  - Footer actualizado a Manoprotect.com
 
 ---
 
@@ -155,17 +159,16 @@ Exportación de datos en formato CSV desde el Portal Enterprise:
 
 ### P1 - Alta Prioridad
 - [ ] Optimización PageSpeed (imágenes, lazy loading)
+- [ ] Verificar SendGrid sender domain para emails reales
 
 ### P2 - Media Prioridad  
 - [ ] Integración con 112 (emergencias)
 - [ ] Arquitectura subdomain (`admin.manoprotect.com`)
+- [ ] Refactorización de `EnterprisePortal.js` (archivo muy grande)
 
 ### P3 - Baja Prioridad
-- [ ] Videos demo de 1 minuto (Sora 2)
+- [ ] Videos demo de 1 minuto (Sora 2 - limitación técnica)
 - [ ] DNA Digital Identity
-
-### Refactorización
-- [ ] `EnterprisePortal.js` tiene +2500 líneas - dividir en componentes
 
 ---
 
@@ -184,10 +187,12 @@ Exportación de datos en formato CSV desde el Portal Enterprise:
 
 1. **2FA Login**: Compatible con Google Authenticator y Microsoft Authenticator
 2. **Códigos de respaldo**: 6 códigos de 8 caracteres, uso único
-3. **Valoraciones**: Solo usuarios premium pueden dejar valoraciones
-4. **Exportación**: Todos los CSV incluyen headers en español
-5. **Sesiones**: JWT + session cookies con expiración
-6. **Idioma**: Forzado a español por defecto
+3. **Brute Force 2FA**: 5 intentos máx, 15 min lockout, mensajes informativos
+4. **Pagos/Reembolsos**: Requiere rol admin/finance, rate limit 10/hora
+5. **Valoraciones**: Solo usuarios premium pueden dejar valoraciones
+6. **Exportación**: Todos los CSV incluyen headers en español
+7. **Sesiones**: JWT + session cookies con expiración
+8. **Idioma**: Forzado a español por defecto
 
 ---
 
@@ -198,4 +203,5 @@ Exportación de datos en formato CSV desde el Portal Enterprise:
 pyotp==2.9.0       # TOTP para 2FA
 qrcode==8.2        # Generación de QR codes
 pillow==12.1.0     # Dependencia de qrcode
+stripe==14.1.0     # Pagos y reembolsos
 ```
