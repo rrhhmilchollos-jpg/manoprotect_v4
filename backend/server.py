@@ -246,6 +246,10 @@ from routes.phishing_simulation import router as phishing_router
 from routes.reviews_routes import router as reviews_router, set_database as init_reviews
 init_reviews(db)
 
+# Export Reports (CSV/PDF)
+from routes.export_routes import router as export_router, set_database as init_export
+init_export(db)
+
 # Employee Portal (Director-managed access)
 from routes.employee_portal import router as employee_portal_router, set_database as init_employee_portal, set_email_service as init_employee_email
 init_employee_portal(db)
