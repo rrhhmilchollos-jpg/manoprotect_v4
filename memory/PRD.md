@@ -17,7 +17,7 @@ ManoProtect es una plataforma integral de protección contra fraudes digitales p
 - **Database**: MongoDB (Motor async driver)
 - **Payments**: Stripe (checkout sessions + webhooks)
 - **Email**: SendGrid
-- **Auth**: JWT + session cookies + **2FA (TOTP)**
+- **Auth**: JWT + session cookies + **2FA (TOTP) con verificación en login**
 - **Real-time**: Socket.IO/WebSockets
 
 ### Estructura de Directorios
@@ -26,19 +26,20 @@ ManoProtect es una plataforma integral de protección contra fraudes digitales p
 ├── backend/
 │   ├── routes/
 │   │   ├── reviews_routes.py         # Sistema de valoraciones
-│   │   ├── export_routes.py          # Exportación CSV (NUEVO)
-│   │   ├── two_factor_routes.py      # 2FA TOTP (NUEVO)
+│   │   ├── export_routes.py          # Exportación CSV
+│   │   ├── two_factor_routes.py      # 2FA TOTP setup/config
 │   │   ├── sos_device.py             # Pedidos SOS con Stripe
-│   │   └── enterprise_portal_routes.py
+│   │   └── enterprise_portal_routes.py # Login con 2FA integrado
 │   └── server.py
 ├── frontend/
 │   └── src/
 │       ├── components/
 │       │   ├── landing/
 │       │   ├── ReviewForm.jsx        # Formulario valoraciones
-│       │   └── TwoFactorSettings.jsx # Config 2FA (NUEVO)
+│       │   └── TwoFactorSettings.jsx # Config 2FA
 │       └── pages/
 │           ├── Dashboard.js          # Tab "Valorar" añadido
+│           ├── EnterpriseLogin.js    # Login con flujo 2FA
 │           └── EnterprisePortal.js   # Sección "Seguridad" añadida
 └── memory/
     └── PRD.md
@@ -65,8 +66,20 @@ ManoProtect es una plataforma integral de protección contra fraudes digitales p
 
 ## Funcionalidades Completadas ✅
 
-### 12. Two-Factor Authentication (2FA) - COMPLETADO (14 Feb 2026)
-Sistema completo de autenticación de dos factores para empleados del portal enterprise:
+### 13. Verificación 2FA en Login - COMPLETADO (14 Feb 2026)
+Sistema completo de verificación 2FA obligatoria durante el login para empleados con 2FA habilitado:
+- ✅ **Flujo en 2 pasos**:
+  - Paso 1: Validación de email/password → Si tiene 2FA, devuelve `requires_2fa: true`
+  - Paso 2: Verificación del código TOTP de 6 dígitos o código de respaldo
+- ✅ **Endpoints**:
+  - `POST /api/enterprise/auth/login` - Valida credenciales, detecta si requiere 2FA
+  - `POST /api/enterprise/auth/login-2fa` - Completa login verificando código TOTP
+- ✅ **Frontend**: `EnterpriseLogin.js` actualizado con formulario de 2FA
+- ✅ **Códigos de respaldo**: Se pueden usar una sola vez en lugar del TOTP
+- ✅ **Testing**: Iteración 42 - 100% tests pasados (backend y frontend)
+
+### 12. Two-Factor Authentication (2FA) Setup - COMPLETADO (14 Feb 2026)
+Sistema completo de configuración de autenticación de dos factores:
 - ✅ **Endpoints**:
   - `GET /api/2fa/status` - Estado del 2FA
   - `GET /api/2fa/setup` - Generar QR code para Google Authenticator
@@ -80,30 +93,12 @@ Sistema completo de autenticación de dos factores para empleados del portal ent
 
 ### 11. Sistema de Exportación CSV - COMPLETADO (14 Feb 2026)
 Exportación de datos en formato CSV desde el Portal Enterprise:
-- ✅ **Endpoints**:
-  - `GET /api/export/users/csv` - Exportar usuarios
-  - `GET /api/export/alerts/csv` - Exportar alertas
-  - `GET /api/export/sos/csv` - Exportar eventos SOS
-  - `GET /api/export/payments/csv` - Exportar pagos
-  - `GET /api/export/reviews/csv` - Exportar valoraciones
-  - `GET /api/export/dashboard-summary/csv` - Resumen del dashboard
+- ✅ **Endpoints**: users, alerts, sos, payments, reviews, dashboard-summary
 - ✅ **Botones de exportación** añadidos en: Dashboard, Usuarios, Valoraciones
 
-### 10. Formulario de Valoraciones en Dashboard - COMPLETADO (14 Feb 2026)
-- ✅ Nueva pestaña "Valorar" en el Dashboard de usuario
-- ✅ Componente `ReviewForm` integrado
-- ✅ Solo usuarios con plan de pago pueden valorar
-
-### 9. Sistema de Valoraciones de Usuarios - COMPLETADO (14 Feb 2026)
-Sistema completo para que los clientes con **plan de pago** califiquen el servicio:
-- ✅ **Solo usuarios premium**: Usuarios gratuitos ven mensaje de upgrade
-- ✅ **Aprobación automática**: Todas las reviews se publican inmediatamente
-- ✅ **Badge verificado**: Todas las reviews muestran badge
-- ✅ **Portal Enterprise**: Sección completa de gestión de valoraciones
-
-### 8-1. Funcionalidades anteriores
+### 10-1. Funcionalidades anteriores
+- Sistema de Valoraciones de Usuarios (solo premium)
 - WebSockets SOS en Tiempo Real
-- Eliminación de Mock Data
 - Dashboard con Gráficas Interactivas (Recharts)
 - Gestión de Usuarios (Portal Enterprise)
 - Portal Enterprise completo
@@ -112,7 +107,13 @@ Sistema completo para que los clientes con **plan de pago** califiquen el servic
 
 ## Endpoints API
 
-### 2FA (Nuevo)
+### Login Enterprise (2FA integrado)
+| Endpoint | Método | Auth | Descripción |
+|----------|--------|------|-------------|
+| `/api/enterprise/auth/login` | POST | No | Login paso 1 - valida credenciales |
+| `/api/enterprise/auth/login-2fa` | POST | No | Login paso 2 - verifica código TOTP |
+
+### 2FA Configuration
 | Endpoint | Método | Auth | Descripción |
 |----------|--------|------|-------------|
 | `/api/2fa/status` | GET | Enterprise | Estado 2FA |
@@ -121,32 +122,14 @@ Sistema completo para que los clientes con **plan de pago** califiquen el servic
 | `/api/2fa/disable` | POST | Enterprise | Desactivar con código |
 | `/api/2fa/verify` | POST | Enterprise | Verificar código TOTP |
 
-### Export CSV (Nuevo)
-| Endpoint | Método | Auth | Descripción |
-|----------|--------|------|-------------|
-| `/api/export/users/csv` | GET | Enterprise | Export usuarios |
-| `/api/export/alerts/csv` | GET | Enterprise | Export alertas |
-| `/api/export/sos/csv` | GET | Enterprise | Export SOS |
-| `/api/export/payments/csv` | GET | Enterprise | Export pagos |
-| `/api/export/reviews/csv` | GET | Enterprise | Export valoraciones |
-| `/api/export/dashboard-summary/csv` | GET | Enterprise | Resumen KPIs |
-
-### Valoraciones
-| Endpoint | Método | Auth | Descripción |
-|----------|--------|------|-------------|
-| `/api/reviews/public` | GET | No | Reviews aprobadas |
-| `/api/reviews/stats` | GET | No | Estadísticas |
-| `/api/reviews/can-review` | GET | Usuario | Verificar elegibilidad |
-| `/api/reviews` | POST | Usuario Premium | Crear valoración |
-
 ---
 
 ## Testing
 
-### Último Test: Iteración 41 (14 Feb 2026)
-- Backend: 21/21 tests passed (100%)
-- Frontend: 11/11 features verified (100%)
-- Todas las funcionalidades nuevas verificadas funcionando
+### Último Test: Iteración 42 (14 Feb 2026)
+- Backend: 8/8 tests passed (100%) - 2FA Login Flow
+- Frontend: 10/10 features verified (100%)
+- Todas las funcionalidades 2FA verificadas funcionando
 
 ---
 
@@ -157,10 +140,9 @@ Sistema completo para que los clientes con **plan de pago** califiquen el servic
 
 ### P2 - Media Prioridad  
 - [ ] Integración con 112 (emergencias)
-- [ ] Verificación 2FA en login (actualmente solo setup/status)
+- [ ] Arquitectura subdomain (`admin.manoprotect.com`)
 
 ### P3 - Baja Prioridad
-- [ ] Arquitectura subdomain (`admin.manoprotect.com`)
 - [ ] Videos demo de 1 minuto (Sora 2)
 - [ ] DNA Digital Identity
 
@@ -171,25 +153,27 @@ Sistema completo para que los clientes con **plan de pago** califiquen el servic
 
 ## Usuarios del Sistema
 
-| Usuario | Email | Password | Rol |
-|---------|-------|----------|-----|
-| CEO/Admin | ceo@manoprotect.com | Admin2026! | super_admin (Enterprise) |
-| CEO/Director | ceo@manoprotect.com | Director2026! | director (Portal antiguo) |
-| Google Play Tester | rrhh.milchollos@gmail.com | 20142026 | user (family-yearly) |
+| Usuario | Email | Password | Rol | 2FA |
+|---------|-------|----------|-----|-----|
+| CEO/Admin | ceo@manoprotect.com | Admin2026! | super_admin | ✅ Habilitado |
+| Director General | admin@manoprotect.com | Admin2026! | admin | ❌ |
+| Operador SOS | operador@manoprotect.com | - | operator | ❌ |
+| Google Play Tester | rrhh.milchollos@gmail.com | 20142026 | user | N/A |
 
 ---
 
 ## Notas Importantes
 
-1. **2FA**: Compatible con Google Authenticator y Microsoft Authenticator
-2. **Valoraciones**: Solo usuarios premium pueden dejar valoraciones
-3. **Exportación**: Todos los CSV incluyen headers en español
-4. **Sesiones**: JWT + session cookies con expiración
-5. **Idioma**: Forzado a español por defecto
+1. **2FA Login**: Compatible con Google Authenticator y Microsoft Authenticator
+2. **Códigos de respaldo**: 6 códigos de 8 caracteres, uso único
+3. **Valoraciones**: Solo usuarios premium pueden dejar valoraciones
+4. **Exportación**: Todos los CSV incluyen headers en español
+5. **Sesiones**: JWT + session cookies con expiración
+6. **Idioma**: Forzado a español por defecto
 
 ---
 
-## Dependencias Nuevas
+## Dependencias Backend
 
 ```
 # Backend (Python)
