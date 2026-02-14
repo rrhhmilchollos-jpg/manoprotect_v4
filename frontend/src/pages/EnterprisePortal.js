@@ -583,10 +583,22 @@ const EnterprisePortal = () => {
                   <h1 className="text-2xl font-bold text-white">Dashboard</h1>
                   <p className="text-slate-400">Resumen de operaciones en tiempo real</p>
                 </div>
-                <Button onClick={fetchDashboardData} variant="outline" className="border-slate-600 text-slate-300">
-                  <RefreshCw className="w-4 h-4 mr-2" />
-                  Actualizar
-                </Button>
+                <div className="flex gap-2">
+                  <Button 
+                    onClick={() => handleExport('dashboard-summary', { days: 30 })}
+                    variant="outline" 
+                    className="border-slate-600 text-slate-300"
+                    disabled={exporting === 'dashboard-summary'}
+                    data-testid="export-dashboard-btn"
+                  >
+                    <Download className="w-4 h-4 mr-2" />
+                    {exporting === 'dashboard-summary' ? 'Exportando...' : 'Exportar CSV'}
+                  </Button>
+                  <Button onClick={fetchDashboardData} variant="outline" className="border-slate-600 text-slate-300">
+                    <RefreshCw className="w-4 h-4 mr-2" />
+                    Actualizar
+                  </Button>
+                </div>
               </div>
 
               {/* KPI Cards */}
