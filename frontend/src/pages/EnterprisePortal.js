@@ -11,7 +11,7 @@ import {
   Phone, MapPin, Clock, CheckCircle, XCircle, Activity,
   DollarSign, ShoppingCart, FileText, BarChart3, Eye,
   UserPlus, RefreshCw, Filter, Download, MoreVertical,
-  Zap, Target, AlertCircle, PhoneCall
+  Zap, Target, AlertCircle, PhoneCall, Star, MessageSquare
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
