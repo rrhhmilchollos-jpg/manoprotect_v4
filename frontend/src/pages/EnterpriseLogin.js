@@ -24,6 +24,9 @@ const EnterpriseLogin = () => {
   const [requires2FA, setRequires2FA] = useState(false);
   const [totpCode, setTotpCode] = useState('');
   const [employeeName, setEmployeeName] = useState('');
+  
+  // IT Contact Modal state
+  const [showITModal, setShowITModal] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
