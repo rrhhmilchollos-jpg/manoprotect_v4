@@ -182,6 +182,8 @@ const EnterprisePortal = () => {
     sos: [],
     users: []
   });
+  const [wsConnected, setWsConnected] = useState(false);
+  const [realtimeNotification, setRealtimeNotification] = useState(null);
 
   // Check auth
   useEffect(() => {
@@ -197,6 +199,122 @@ const EnterprisePortal = () => {
       return () => clearInterval(interval);
     }
   }, [employee]);
+
+  // WebSocket connection for real-time SOS alerts
+  useEffect(() => {
+    if (!employee) return;
+
+    const wsUrl = API_URL.replace('https://', 'wss://').replace('http://', 'ws://').replace('/api', '');
+    
+    const socket = io(wsUrl, {
+      path: '/ws/socket.io',
+      transports: ['websocket', 'polling'],
+      reconnection: true,
+      reconnectionAttempts: 5,
+      reconnectionDelay: 1000,
+      timeout: 10000
+    });
+
+    socket.on('connect', () => {
+      console.log('[Enterprise WS] Connected');
+      setWsConnected(true);
+      
+      // Register as enterprise employee for admin notifications
+      socket.emit('register_enterprise', {
+        employee_id: employee.employee_id,
+        employee_name: employee.name,
+        role: employee.role
+      });
+    });
+
+    socket.on('disconnect', () => {
+      console.log('[Enterprise WS] Disconnected');
+      setWsConnected(false);
+    });
+
+    // Listen for new SOS alerts
+    socket.on('sos_alert', (data) => {
+      console.log('[Enterprise WS] New SOS Alert:', data);
+      
+      // Show toast notification
+      toast.error(`🚨 Nueva Emergencia SOS de ${data.alert?.user_name || 'Usuario'}`, {
+        duration: 10000,
+        action: {
+          label: 'Ver',
+          onClick: () => setActiveSection('sos')
+        }
+      });
+
+      // Play notification sound
+      playNotificationSound();
+
+      // Add to pending SOS list
+      setPendingSOS(prev => {
+        const exists = prev.some(s => s.sos_id === data.alert?.alert_id);
+        if (!exists && data.alert) {
+          return [{
+            sos_id: data.alert.alert_id,
+            client_name: data.alert.user_name,
+            location: data.alert.location,
+            status: 'pending',
+            created_at: data.alert.created_at,
+            priority: 'high'
+          }, ...prev];
+        }
+        return prev;
+      });
+
+      // Show real-time notification banner
+      setRealtimeNotification({
+        type: 'sos',
+        message: `Emergencia SOS activa - ${data.alert?.user_name}`,
+        timestamp: new Date().toISOString()
+      });
+    });
+
+    // Listen for SOS resolved
+    socket.on('sos_resolved', (data) => {
+      console.log('[Enterprise WS] SOS Resolved:', data);
+      
+      toast.success(`✅ Emergencia ${data.alert_id} resuelta`, {
+        duration: 5000
+      });
+
+      // Remove from pending list
+      setPendingSOS(prev => prev.filter(s => s.sos_id !== data.alert_id));
+      setRealtimeNotification(null);
+    });
+
+    // Listen for security alerts
+    socket.on('security_alert', (data) => {
+      console.log('[Enterprise WS] Security Alert:', data);
+      
+      toast.warning(`⚠️ Alerta de Seguridad: ${data.alert_type}`, {
+        duration: 8000
+      });
+
+      // Refresh alerts
+      fetchDashboardData();
+    });
+
+    return () => {
+      socket.disconnect();
+    };
+  }, [employee]);
+
+  // Play notification sound for critical alerts
+  const playNotificationSound = () => {
+    try {
+      const audio = new Audio('/sounds/alert.mp3');
+      audio.volume = 0.5;
+      audio.play().catch(() => {
+        // Audio autoplay might be blocked
+        console.log('[Audio] Autoplay blocked');
+      });
+    } catch (e) {
+      console.log('[Audio] Failed to play:', e);
+    }
+  };
 
   const checkAuth = async () => {
     try {
