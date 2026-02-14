@@ -1,14 +1,18 @@
 /**
  * ManoProtect - Review Form Component
- * Allows logged-in users to submit and edit their review
+ * Allows ONLY paid users to submit and edit their review
+ * Free users see upgrade prompt
  */
 import { useState, useEffect } from 'react';
-import { Star, Send, Loader2, Check, X, Edit2, Trash2 } from 'lucide-react';
+import { Star, Send, Loader2, Edit2, Trash2, Lock, CreditCard } from 'lucide-react';
 import { toast } from 'sonner';
+import { useNavigate } from 'react-router-dom';
 
 const API_URL = process.env.REACT_APP_BACKEND_URL || '';
 
 const ReviewForm = ({ onReviewSubmitted }) => {
+  const navigate = useNavigate();
+  const [canReview, setCanReview] = useState(null); // null = loading
   const [existingReview, setExistingReview] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [rating, setRating] = useState(0);
@@ -20,8 +24,33 @@ const ReviewForm = ({ onReviewSubmitted }) => {
   const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
-    fetchExistingReview();
+    checkCanReview();
   }, []);
+
+  const checkCanReview = async () => {
+    try {
+      const res = await fetch(`${API_URL}/api/reviews/can-review`, {
+        credentials: 'include'
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setCanReview(data.can_review);
+        if (data.can_review) {
+          fetchExistingReview();
+        } else {
+          setLoading(false);
+        }
+      } else if (res.status === 401) {
+        // Not logged in
+        setCanReview(false);
+        setLoading(false);
+      }
+    } catch (err) {
+      console.error('Error checking review eligibility:', err);
+      setCanReview(false);
+      setLoading(false);
+    }
+  };
 
   const fetchExistingReview = async () => {
     try {
@@ -78,7 +107,7 @@ const ReviewForm = ({ onReviewSubmitted }) => {
 
       if (res.ok) {
         toast.success(data.message || '¡Gracias por tu valoración!');
-        setExistingReview(data.review || { rating, title, comment, status: 'pending' });
+        setExistingReview(data.review || { rating, title, comment, status: 'approved' });
         setIsEditing(false);
         if (onReviewSubmitted) onReviewSubmitted();
       } else {
@@ -132,15 +161,6 @@ const ReviewForm = ({ onReviewSubmitted }) => {
     return texts[stars] || '';
   };
 
-  const getStatusBadge = (status) => {
-    const badges = {
-      approved: { bg: 'bg-emerald-100', text: 'text-emerald-700', label: 'Publicada' },
-      pending: { bg: 'bg-yellow-100', text: 'text-yellow-700', label: 'Pendiente de revisión' },
-      rejected: { bg: 'bg-red-100', text: 'text-red-700', label: 'Rechazada' }
-    };
-    return badges[status] || badges.pending;
-  };
-
   if (loading) {
     return (
       <div className="flex items-center justify-center p-8">
@@ -149,17 +169,41 @@ const ReviewForm = ({ onReviewSubmitted }) => {
     );
   }
 
+  // Show upgrade prompt for free users
+  if (canReview === false) {
+    return (
+      <div className="bg-slate-50 rounded-xl border border-slate-200 p-6 text-center" data-testid="review-blocked">
+        <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4">
+          <Lock className="w-8 h-8 text-slate-400" />
+        </div>
+        <h3 className="font-semibold text-slate-900 text-lg mb-2">
+          Valoraciones exclusivas para suscriptores
+        </h3>
+        <p className="text-slate-600 mb-6">
+          Las valoraciones están disponibles solo para usuarios con suscripción de pago. 
+          Actualiza tu plan para compartir tu experiencia con la comunidad.
+        </p>
+        <button
+          onClick={() => navigate('/pricing')}
+          className="inline-flex items-center gap-2 bg-indigo-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-indigo-700 transition-colors"
+          data-testid="upgrade-plan-btn"
+        >
+          <CreditCard className="w-5 h-5" />
+          Ver planes de suscripción
+        </button>
+      </div>
+    );
+  }
+
   // Show existing review in view mode
   if (existingReview && !isEditing) {
-    const status = getStatusBadge(existingReview.status);
-    
     return (
       <div className="bg-white rounded-xl border border-slate-200 p-6" data-testid="existing-review">
         <div className="flex items-start justify-between mb-4">
           <div>
             <h3 className="font-semibold text-slate-900">Tu valoración</h3>
-            <span className={`inline-flex items-center gap-1 mt-1 text-xs px-2 py-0.5 rounded-full ${status.bg} ${status.text}`}>
-              {status.label}
+            <span className="inline-flex items-center gap-1 mt-1 text-xs px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700">
+              Publicada
             </span>
           </div>
           <div className="flex gap-2">
@@ -206,12 +250,6 @@ const ReviewForm = ({ onReviewSubmitted }) => {
         <p className="text-slate-600 text-sm leading-relaxed">
           "{existingReview.comment}"
         </p>
-
-        {existingReview.status === 'rejected' && existingReview.rejection_reason && (
-          <div className="mt-4 p-3 bg-red-50 rounded-lg text-sm text-red-700">
-            <strong>Motivo del rechazo:</strong> {existingReview.rejection_reason}
-          </div>
-        )}
       </div>
     );
   }
@@ -334,7 +372,7 @@ const ReviewForm = ({ onReviewSubmitted }) => {
 
       {/* Info text */}
       <p className="text-xs text-slate-500 text-center mt-4">
-        Tu valoración será revisada antes de publicarse. Los usuarios premium obtienen el badge de "Verificado".
+        Tu valoración se publicará inmediatamente con el badge de "Verificado".
       </p>
     </form>
   );
