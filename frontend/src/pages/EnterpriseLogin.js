@@ -1,10 +1,10 @@
 /**
- * ManoProtect Enterprise Portal - Login Page
+ * ManoProtect Enterprise Portal - Login Page with 2FA Support
  */
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
-import { Shield, Mail, Lock, Eye, EyeOff, Loader2, AlertCircle } from 'lucide-react';
+import { Shield, Mail, Lock, Eye, EyeOff, Loader2, AlertCircle, KeyRound, ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
@@ -19,6 +19,11 @@ const EnterpriseLogin = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  
+  // 2FA state
+  const [requires2FA, setRequires2FA] = useState(false);
+  const [totpCode, setTotpCode] = useState('');
+  const [employeeName, setEmployeeName] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -35,9 +40,16 @@ const EnterpriseLogin = () => {
 
       const data = await res.json();
 
-      if (res.ok && data.success) {
-        toast.success(`Bienvenido, ${data.name}`);
-        navigate('/enterprise');
+      if (res.ok) {
+        if (data.requires_2fa) {
+          // 2FA is required, show the 2FA input
+          setRequires2FA(true);
+          setEmployeeName(data.name);
+          toast.info('Introduce el código de tu app autenticadora');
+        } else if (data.success) {
+          toast.success(`Bienvenido, ${data.name}`);
+          navigate('/enterprise');
+        }
       } else {
         setError(data.detail || 'Credenciales incorrectas');
       }
@@ -46,6 +58,40 @@ const EnterpriseLogin = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handle2FASubmit = async (e) => {
+    e.preventDefault();
+    setError('');
+    setLoading(true);
+
+    try {
+      const res = await fetch(`${API_URL}/api/enterprise/auth/login-2fa`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ email, password, totp_code: totpCode })
+      });
+
+      const data = await res.json();
+
+      if (res.ok && data.success) {
+        toast.success(`Bienvenido, ${data.name}`);
+        navigate('/enterprise');
+      } else {
+        setError(data.detail || 'Código 2FA inválido');
+      }
+    } catch (err) {
+      setError('Error de conexión. Inténtalo de nuevo.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const goBackToLogin = () => {
+    setRequires2FA(false);
+    setTotpCode('');
+    setError('');
   };
 
   return (
