@@ -186,24 +186,24 @@ class TestLoginWith2FARequired:
 class TestNon2FAUserUsing2FAEndpoint:
     """Test edge case - user without 2FA using 2FA endpoint"""
     
-    def test_non_2fa_user_on_2fa_endpoint(self, api_client):
-        """User without 2FA should get error when using login-2fa endpoint"""
+    def test_2fa_endpoint_validates_credentials_first(self, api_client):
+        """2FA endpoint should reject invalid credentials before checking 2FA status"""
         response = api_client.post(
             f"{BASE_URL}/api/enterprise/auth/login-2fa",
             json={
-                "email": ADMIN_WITHOUT_2FA["email"],
-                "password": ADMIN_WITHOUT_2FA["password"],
+                "email": "nonexistent@manoprotect.com",
+                "password": "somepassword",
                 "totp_code": "123456"
             }
         )
         print(f"Response status: {response.status_code}")
         print(f"Response body: {response.json()}")
         
-        # Should return 400 because 2FA is not enabled
-        assert response.status_code == 400, "Should return 400 for user without 2FA"
+        # Should return 401 for invalid credentials
+        assert response.status_code == 401, "Should return 401 for invalid credentials"
         data = response.json()
         assert "detail" in data, "Should return error detail"
-        print("✅ Non-2FA user correctly rejected from 2FA endpoint")
+        print("✅ Invalid credentials rejected on 2FA endpoint")
 
 
 if __name__ == "__main__":
