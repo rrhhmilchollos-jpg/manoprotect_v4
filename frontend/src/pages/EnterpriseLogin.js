@@ -112,75 +112,144 @@ const EnterpriseLogin = () => {
 
         <Card className="bg-slate-800/50 border-slate-700 backdrop-blur">
           <CardHeader className="text-center">
-            <CardTitle className="text-white text-xl">Iniciar Sesión</CardTitle>
+            <CardTitle className="text-white text-xl">
+              {requires2FA ? 'Verificación 2FA' : 'Iniciar Sesión'}
+            </CardTitle>
             <CardDescription className="text-slate-400">
-              Acceso exclusivo para empleados autorizados
+              {requires2FA 
+                ? `Hola ${employeeName}, introduce el código de tu app autenticadora`
+                : 'Acceso exclusivo para empleados autorizados'
+              }
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              {error && (
-                <div className="flex items-center gap-2 p-3 bg-red-500/20 border border-red-500/30 rounded-lg text-red-400 text-sm">
-                  <AlertCircle className="w-4 h-4 flex-shrink-0" />
-                  {error}
-                </div>
-              )}
-
-              <div className="space-y-2">
-                <label className="text-sm text-slate-300">Email corporativo</label>
-                <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500" />
-                  <Input
-                    type="email"
-                    placeholder="tu@manoprotect.com"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                    className="pl-10 bg-slate-900/50 border-slate-600 text-white placeholder:text-slate-500"
-                    data-testid="enterprise-email-input"
-                  />
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <label className="text-sm text-slate-300">Contraseña</label>
-                <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500" />
-                  <Input
-                    type={showPassword ? 'text' : 'password'}
-                    placeholder="••••••••"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                    className="pl-10 pr-10 bg-slate-900/50 border-slate-600 text-white placeholder:text-slate-500"
-                    data-testid="enterprise-password-input"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300"
-                  >
-                    {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-                  </button>
-                </div>
-              </div>
-
-              <Button
-                type="submit"
-                disabled={loading}
-                className="w-full h-12 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold"
-                data-testid="enterprise-login-btn"
-              >
-                {loading ? (
-                  <>
-                    <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-                    Verificando...
-                  </>
-                ) : (
-                  'Acceder al Portal'
+            {requires2FA ? (
+              /* 2FA Verification Form */
+              <form onSubmit={handle2FASubmit} className="space-y-4">
+                {error && (
+                  <div className="flex items-center gap-2 p-3 bg-red-500/20 border border-red-500/30 rounded-lg text-red-400 text-sm">
+                    <AlertCircle className="w-4 h-4 flex-shrink-0" />
+                    {error}
+                  </div>
                 )}
-              </Button>
-            </form>
+
+                <div className="flex items-center justify-center py-4">
+                  <div className="w-16 h-16 bg-indigo-600/20 rounded-full flex items-center justify-center">
+                    <KeyRound className="w-8 h-8 text-indigo-400" />
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-sm text-slate-300">Código de 6 dígitos</label>
+                  <Input
+                    type="text"
+                    inputMode="numeric"
+                    maxLength={8}
+                    placeholder="000000"
+                    value={totpCode}
+                    onChange={(e) => setTotpCode(e.target.value.replace(/\D/g, '').slice(0, 8))}
+                    required
+                    autoFocus
+                    className="text-center text-2xl tracking-widest bg-slate-900/50 border-slate-600 text-white placeholder:text-slate-500"
+                    data-testid="enterprise-2fa-input"
+                  />
+                  <p className="text-xs text-slate-500 text-center">
+                    O introduce un código de respaldo de 8 caracteres
+                  </p>
+                </div>
+
+                <Button
+                  type="submit"
+                  disabled={loading || totpCode.length < 6}
+                  className="w-full h-12 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold"
+                  data-testid="enterprise-2fa-submit-btn"
+                >
+                  {loading ? (
+                    <>
+                      <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+                      Verificando...
+                    </>
+                  ) : (
+                    'Verificar y Acceder'
+                  )}
+                </Button>
+
+                <Button
+                  type="button"
+                  variant="ghost"
+                  onClick={goBackToLogin}
+                  className="w-full text-slate-400 hover:text-white"
+                >
+                  <ArrowLeft className="w-4 h-4 mr-2" />
+                  Volver al login
+                </Button>
+              </form>
+            ) : (
+              /* Normal Login Form */
+              <form onSubmit={handleSubmit} className="space-y-4">
+                {error && (
+                  <div className="flex items-center gap-2 p-3 bg-red-500/20 border border-red-500/30 rounded-lg text-red-400 text-sm">
+                    <AlertCircle className="w-4 h-4 flex-shrink-0" />
+                    {error}
+                  </div>
+                )}
+
+                <div className="space-y-2">
+                  <label className="text-sm text-slate-300">Email corporativo</label>
+                  <div className="relative">
+                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500" />
+                    <Input
+                      type="email"
+                      placeholder="tu@manoprotect.com"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      required
+                      className="pl-10 bg-slate-900/50 border-slate-600 text-white placeholder:text-slate-500"
+                      data-testid="enterprise-email-input"
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-sm text-slate-300">Contraseña</label>
+                  <div className="relative">
+                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500" />
+                    <Input
+                      type={showPassword ? 'text' : 'password'}
+                      placeholder="••••••••"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      required
+                      className="pl-10 pr-10 bg-slate-900/50 border-slate-600 text-white placeholder:text-slate-500"
+                      data-testid="enterprise-password-input"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300"
+                    >
+                      {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                    </button>
+                  </div>
+                </div>
+
+                <Button
+                  type="submit"
+                  disabled={loading}
+                  className="w-full h-12 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold"
+                  data-testid="enterprise-login-btn"
+                >
+                  {loading ? (
+                    <>
+                      <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+                      Verificando...
+                    </>
+                  ) : (
+                    'Acceder al Portal'
+                  )}
+                </Button>
+              </form>
+            )}
 
             <div className="mt-6 pt-6 border-t border-slate-700">
               <p className="text-center text-slate-500 text-sm">
