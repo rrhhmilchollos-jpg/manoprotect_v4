@@ -93,9 +93,14 @@ class LoginRequest(BaseModel):
     email: EmailStr
     password: str
 
+class Login2FARequest(BaseModel):
+    email: EmailStr
+    password: str
+    totp_code: str
+
 @router.post("/auth/login")
 async def enterprise_login(data: LoginRequest, response: Response, request: Request):
-    """Enterprise employee login"""
+    """Enterprise employee login - Step 1: Validate credentials"""
     if db is None:
         raise HTTPException(status_code=500, detail="Database not initialized")
     
@@ -110,7 +115,18 @@ async def enterprise_login(data: LoginRequest, response: Response, request: Requ
     if hash_password(data.password) != employee.get("password_hash"):
         raise HTTPException(status_code=401, detail="Credenciales incorrectas")
     
-    # Generate session
+    # Check if 2FA is enabled
+    if employee.get("two_factor_enabled"):
+        # Return response indicating 2FA is required
+        return {
+            "success": False,
+            "requires_2fa": True,
+            "employee_id": employee["employee_id"],
+            "name": employee["name"],
+            "message": "Se requiere verificación 2FA"
+        }
+    
+    # No 2FA - proceed with normal login
     session_token = uuid.uuid4().hex
     
     # Update login info
@@ -147,6 +163,92 @@ async def enterprise_login(data: LoginRequest, response: Response, request: Requ
     
     return {
         "success": True,
+        "requires_2fa": False,
+        "employee_id": employee["employee_id"],
+        "name": employee["name"],
+        "email": employee["email"],
+        "role": employee["role"],
+        "permissions": ROLE_PERMISSIONS.get(EmployeeRole(employee["role"]), []),
+        "session_token": session_token
+    }
+
+@router.post("/auth/login-2fa")
+async def enterprise_login_with_2fa(data: Login2FARequest, response: Response, request: Request):
+    """Enterprise employee login - Step 2: Verify 2FA code"""
+    import pyotp
+    
+    if db is None:
+        raise HTTPException(status_code=500, detail="Database not initialized")
+    
+    employee = await db.enterprise_employees.find_one({"email": data.email.lower()})
+    
+    if not employee:
+        raise HTTPException(status_code=401, detail="Credenciales incorrectas")
+    
+    if employee.get("status") != "active":
+        raise HTTPException(status_code=403, detail="Cuenta suspendida o inactiva")
+    
+    if hash_password(data.password) != employee.get("password_hash"):
+        raise HTTPException(status_code=401, detail="Credenciales incorrectas")
+    
+    if not employee.get("two_factor_enabled"):
+        raise HTTPException(status_code=400, detail="2FA no está habilitado para esta cuenta")
+    
+    # Verify TOTP code
+    secret = employee.get("two_factor_secret")
+    backup_codes = employee.get("two_factor_backup_codes", [])
+    
+    # Check if it's a backup code
+    if data.totp_code in backup_codes:
+        # Remove used backup code
+        backup_codes.remove(data.totp_code)
+        await db.enterprise_employees.update_one(
+            {"employee_id": employee["employee_id"]},
+            {"$set": {"two_factor_backup_codes": backup_codes}}
+        )
+    else:
+        # Verify TOTP code
+        totp = pyotp.TOTP(secret)
+        if not totp.verify(data.totp_code, valid_window=1):
+            raise HTTPException(status_code=401, detail="Código 2FA inválido")
+    
+    # 2FA verified - complete login
+    session_token = uuid.uuid4().hex
+    
+    await db.enterprise_employees.update_one(
+        {"employee_id": employee["employee_id"]},
+        {"$set": {
+            "session_token": session_token,
+            "last_login": datetime.now(timezone.utc).isoformat(),
+            "last_ip": request.client.host,
+            "two_factor_verified_at": datetime.now(timezone.utc).isoformat()
+        },
+        "$push": {
+            "login_history": {
+                "$each": [{
+                    "timestamp": datetime.now(timezone.utc).isoformat(),
+                    "ip": request.client.host,
+                    "user_agent": request.headers.get("user-agent"),
+                    "method": "2fa"
+                }],
+                "$slice": -50
+            }
+        }}
+    )
+    
+    response.set_cookie(
+        key="enterprise_session",
+        value=session_token,
+        httponly=True,
+        max_age=86400 * 7,
+        samesite="lax"
+    )
+    
+    await create_audit_log(employee, "login_2fa", "auth", employee["employee_id"], request=request)
+    
+    return {
+        "success": True,
+        "requires_2fa": False,
         "employee_id": employee["employee_id"],
         "name": employee["name"],
         "email": employee["email"],
