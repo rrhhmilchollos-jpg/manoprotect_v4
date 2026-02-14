@@ -1090,8 +1090,10 @@ const ClientDetailModal = ({ client, details, loading, onClose }) => {
                   </span>
                 </div>
                 <div className="flex-1 min-w-0">
-                  <h3 className="text-xl font-bold text-white truncate">{details?.name || client.name || 'Sin nombre'}</h3>
-                  <p className="text-slate-400 truncate">{details?.email || client.email}</p>
+                  <h3 className="text-xl font-bold text-white truncate" data-testid="client-name">
+                    {details?.name || client?.name || 'Sin nombre'}
+                  </h3>
+                  <p className="text-slate-400 truncate" data-testid="client-email">{details?.email || client?.email}</p>
                   <div className="flex items-center gap-2 mt-2">
                     <Badge className={`${planColors[details?.plan || client.plan] || planColors.free} text-white`}>
                       {planLabels[details?.plan || client.plan] || 'Gratuito'}
