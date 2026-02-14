@@ -83,6 +83,50 @@ async def register(sid, data):
     # Check for active SOS alerts for this user's family
     await check_family_alerts(sid, user_id)
 
+@sio.event
+async def register_enterprise(sid, data):
+    """Register enterprise employee for admin SOS notifications"""
+    employee_id = data.get('employee_id')
+    employee_name = data.get('employee_name', 'Empleado')
+    role = data.get('role', 'user')
+    
+    if not employee_id:
+        await sio.emit('error', {'message': 'employee_id required'}, to=sid)
+        return
+    
+    # Store connection with enterprise prefix to distinguish from regular users
+    enterprise_id = f"enterprise_{employee_id}"
+    if enterprise_id not in active_connections:
+        active_connections[enterprise_id] = []
+    active_connections[enterprise_id].append(sid)
+    
+    connection_info[sid] = {
+        'user_id': enterprise_id,
+        'employee_id': employee_id,
+        'user_name': employee_name,
+        'role': role,
+        'is_enterprise': True,
+        'connected_at': datetime.now(timezone.utc).isoformat()
+    }
+    
+    print(f"[WS] Enterprise employee registered: {employee_name} ({role})")
+    
+    # Send confirmation
+    await sio.emit('registered', {
+        'status': 'connected',
+        'employee_id': employee_id,
+        'role': role,
+        'timestamp': datetime.now(timezone.utc).isoformat()
+    }, to=sid)
+    
+    # Send any pending SOS alerts to admin
+    for alert_id, alert in active_sos_alerts.items():
+        if alert.get('status') == 'active':
+            await sio.emit('sos_alert', {
+                'type': 'active_alert',
+                'alert': alert
+            }, to=sid)
+
 async def check_family_alerts(sid, user_id):
     """Check if there are active SOS alerts for user's family"""
     if not _db:
