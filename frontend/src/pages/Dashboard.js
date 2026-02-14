@@ -535,6 +535,15 @@ const Dashboard = () => {
             <Clock className="w-4 h-4 mr-2" />
             Historial
           </Button>
+          <Button
+            data-testid="tab-review"
+            variant={activeTab === 'review' ? 'default' : 'ghost'}
+            onClick={() => setActiveTab('review')}
+            className={activeTab === 'review' ? 'bg-yellow-500' : ''}
+          >
+            <Star className="w-4 h-4 mr-2" />
+            Valorar
+          </Button>
         </div>
 
         {/* Tab Content */}
