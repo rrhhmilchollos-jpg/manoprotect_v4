@@ -11,7 +11,7 @@ import {
   Phone, MapPin, Clock, CheckCircle, XCircle, Activity,
   DollarSign, ShoppingCart, FileText, BarChart3, Eye,
   UserPlus, RefreshCw, Filter, Download, MoreVertical,
-  Zap, Target, AlertCircle, PhoneCall, Star, MessageSquare
+  Zap, Target, AlertCircle, PhoneCall, Star, MessageSquare, Lock
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
@@ -23,6 +23,7 @@ import {
   XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend
 } from 'recharts';
 import { io } from 'socket.io-client';
+import TwoFactorSettings from '@/components/TwoFactorSettings';
 
 const API_URL = process.env.REACT_APP_BACKEND_URL || '';
 
