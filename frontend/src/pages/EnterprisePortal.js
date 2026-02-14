@@ -128,6 +128,12 @@ const EnterprisePortal = () => {
   const [recentAlerts, setRecentAlerts] = useState([]);
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [activeSection, setActiveSection] = useState('dashboard');
+  const [chartData, setChartData] = useState({
+    revenue: [],
+    alerts: [],
+    sos: [],
+    users: []
+  });
 
   // Check auth
   useEffect(() => {
@@ -138,6 +144,7 @@ const EnterprisePortal = () => {
   useEffect(() => {
     if (employee) {
       fetchDashboardData();
+      fetchChartData();
       const interval = setInterval(fetchPendingSOS, 10000); // Refresh SOS every 10s
       return () => clearInterval(interval);
     }
