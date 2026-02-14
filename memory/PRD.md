@@ -1,49 +1,115 @@
 # ManoProtect - Product Requirements Document
 
-## Portal Enterprise - Implementación Completa
+## Última Actualización: 14 Febrero 2026
 
-### Backend Implementado ✅
+---
 
-**Archivo:** `/app/backend/routes/enterprise_portal_routes.py`
+## Descripción del Proyecto
+ManoProtect es una plataforma integral de protección contra fraudes digitales para usuarios individuales, familias y empresas en España. Incluye análisis de amenazas con IA, botón SOS de emergencia físico, localización familiar, y un portal enterprise para la gestión interna.
 
-#### Endpoints Disponibles:
+---
 
+## Arquitectura Técnica
+
+### Stack
+- **Frontend**: React 18, TailwindCSS, Shadcn/UI
+- **Backend**: FastAPI, Python 3.11, Pydantic
+- **Database**: MongoDB (Motor async driver)
+- **Payments**: Stripe (checkout sessions + webhooks)
+- **Email**: SendGrid
+- **Auth**: JWT + session cookies
+
+### Estructura de Directorios
+```
+/app
+├── backend/
+│   ├── routes/
+│   │   ├── sos_device.py          # Pedidos SOS con Stripe (CORREGIDO)
+│   │   ├── enterprise_portal_routes.py  # Portal Enterprise
+│   │   └── ...
+│   ├── models/
+│   ├── services/
+│   └── server.py
+├── frontend/
+│   └── src/
+│       └── pages/
+│           ├── EnterprisePortal.js  # Portal completo
+│           ├── EnterpriseLogin.js
+│           ├── SOSDeviceOrder.js
+│           └── ...
+└── memory/
+    └── PRD.md
+```
+
+---
+
+## Funcionalidades Completadas ✅
+
+### 1. Bug Crítico de Stripe - CORREGIDO (14 Feb 2026)
+**Problema**: Los pedidos de dispositivos SOS se creaban sin verificar el pago. Los dispositivos se generaban inmediatamente.
+
+**Solución implementada**:
+- Pedidos ahora se crean con status `pending_payment`
+- Se genera sesión de Stripe Checkout y se retorna `checkout_url`
+- Los dispositivos solo se crean después de que el webhook de Stripe confirma el pago
+- Endpoint de webhook: `/api/sos-device/webhook/stripe`
+
+### 2. Portal Enterprise - COMPLETADO (14 Feb 2026)
+**Módulos funcionales**:
+- ✅ Dashboard con KPIs en tiempo real
+- ✅ Gestión de Empleados (CRUD completo)
+- ✅ Gestión de Clientes (visualización y filtros)
+- ✅ Centro de Emergencias SOS (asignación, escalado)
+- ✅ Alertas de Seguridad (phishing, fraude)
+- ✅ Pedidos de Dispositivos (con estado de pago)
+- ✅ Flujo de Caja (resumen financiero)
+- ✅ Logs de Auditoría
+
+**Credenciales de acceso**:
+- Admin: `admin@manoprotect.com` / `Admin2026!`
+- URL: `/enterprise/login`
+
+### 3. Usuario Google Play - CREADO (14 Feb 2026)
+- Email: `review@manoprotect.com`
+- Password: `20142026`
+- Plan: `family-yearly` (acceso completo)
+
+### 4. Integración SendGrid - ACTIVA
+- Envío de invitaciones a empleados
+- Configurado en `backend/.env`
+
+### 5. Sistema de Trial 7 días - ACTIVO
+- Requiere tarjeta de crédito
+- Restricción de dispositivo SOS durante trial
+
+---
+
+## Endpoints Clave
+
+### SOS Device Orders
 | Endpoint | Método | Descripción |
 |----------|--------|-------------|
-| `/api/enterprise/auth/login` | POST | Login empleado enterprise |
-| `/api/enterprise/auth/logout` | POST | Logout |
-| `/api/enterprise/auth/me` | GET | Obtener usuario actual |
-| `/api/enterprise/dashboard/stats` | GET | KPIs del dashboard |
-| `/api/enterprise/dashboard/charts` | GET | Datos para gráficas |
-| `/api/enterprise/employees` | GET | Listar empleados con filtros |
-| `/api/enterprise/employees/:id` | GET | Detalle empleado |
-| `/api/enterprise/employees` | POST | Crear empleado |
-| `/api/enterprise/employees/:id` | PUT | Actualizar empleado |
-| `/api/enterprise/employees/:id/suspend` | PATCH | Suspender empleado |
-| `/api/enterprise/employees/:id/activate` | PATCH | Activar empleado |
-| `/api/enterprise/employees/:id/reset-password` | POST | Resetear contraseña |
-| `/api/enterprise/employees/:id/force-logout` | POST | Forzar logout |
-| `/api/enterprise/employees/:id` | DELETE | Eliminar empleado |
-| `/api/enterprise/employees/:id/activity` | GET | Historial actividad |
-| `/api/enterprise/employees/:id/security` | GET | Métricas seguridad |
-| `/api/enterprise/employees/bulk` | POST | Acciones masivas |
-| `/api/enterprise/clients` | GET | Listar clientes |
-| `/api/enterprise/clients/:id` | GET | Detalle cliente |
-| `/api/enterprise/sos` | GET | Listar eventos SOS |
-| `/api/enterprise/sos/pending` | GET | SOS pendientes (tiempo real) |
-| `/api/enterprise/sos/:id` | GET | Detalle SOS |
-| `/api/enterprise/sos/:id/respond` | POST | Responder a SOS |
-| `/api/enterprise/device-orders` | GET | Listar pedidos dispositivos |
-| `/api/enterprise/device-orders/:id` | PATCH | Actualizar pedido |
-| `/api/enterprise/payments` | GET | Listar pagos |
-| `/api/enterprise/payments/summary` | GET | Resumen financiero |
-| `/api/enterprise/alerts` | GET | Listar alertas seguridad |
-| `/api/enterprise/alerts/:id/review` | PATCH | Revisar alerta |
-| `/api/enterprise/audit-logs` | GET | Logs de auditoría |
-| `/api/enterprise/export/employees` | GET | Exportar CSV |
-| `/api/enterprise/roles` | GET | Roles y permisos |
+| `/api/sos-device/order` | POST | Crea pedido con checkout Stripe |
+| `/api/sos-device/order/{id}/status` | GET | Estado del pedido y pago |
+| `/api/sos-device/webhook/stripe` | POST | Webhook de confirmación Stripe |
+| `/api/sos-device/orders` | GET | Lista pedidos del usuario |
 
-### Roles del Sistema
+### Enterprise Portal
+| Endpoint | Método | Descripción |
+|----------|--------|-------------|
+| `/api/enterprise/auth/login` | POST | Login empleado |
+| `/api/enterprise/dashboard/stats` | GET | KPIs del dashboard |
+| `/api/enterprise/employees` | GET/POST | CRUD empleados |
+| `/api/enterprise/clients` | GET | Lista clientes |
+| `/api/enterprise/sos` | GET | Lista eventos SOS |
+| `/api/enterprise/sos/{id}/respond` | POST | Responder SOS |
+| `/api/enterprise/device-orders` | GET | Pedidos dispositivos |
+| `/api/enterprise/payments` | GET | Transacciones |
+| `/api/enterprise/audit-logs` | GET | Logs auditoría |
+
+---
+
+## Roles del Portal Enterprise
 
 | Rol | Nivel | Permisos |
 |-----|-------|----------|
@@ -54,119 +120,65 @@
 | auditor | 30 | Solo lectura + logs |
 | emergency_service | 20 | Solo SOS |
 
-### Frontend Implementado ✅
-
-**Archivos:**
-- `/app/frontend/src/pages/EnterpriseLogin.js` - Login
-- `/app/frontend/src/pages/EnterprisePortal.js` - Dashboard
-
-**Características:**
-- Dashboard con KPIs en tiempo real
-- Sidebar con navegación por módulos
-- Alertas SOS con actualización cada 10s
-- Cards de estadísticas
-- Gestión de permisos por rol
-
-### Credenciales de Acceso
-
-| Usuario | Email | Password | Rol |
-|---------|-------|----------|-----|
-| Super Admin | admin@manoprotect.com | Admin2026! | super_admin |
-| Operador | operador@manoprotect.com | Operador2026! | operator |
-
-### URLs
-
-- Login: `/enterprise/login`
-- Dashboard: `/enterprise`
-
 ---
 
-## Modelos de Datos
+## Backlog Pendiente
 
-### enterprise_employees
-```json
-{
-  "employee_id": "emp_xxx",
-  "company_id": "manoprotect",
-  "name": "string",
-  "email": "string",
-  "phone": "string",
-  "department": "string",
-  "role": "super_admin|admin|supervisor|operator|auditor|emergency_service",
-  "status": "active|suspended|pending|inactive",
-  "permissions": [],
-  "risk_score": 0,
-  "risk_level": "low|medium|high|critical",
-  "failed_simulations": 0,
-  "phishing_clicks": 0,
-  "two_factor_enabled": false,
-  "last_login": "ISO date",
-  "login_history": []
-}
-```
-
-### sos_events
-```json
-{
-  "sos_id": "sos_xxx",
-  "client_id": "string",
-  "client_name": "string",
-  "client_phone": "string",
-  "location": {"lat": 0, "lng": 0, "address": "string"},
-  "message": "string",
-  "priority": "low|medium|high|critical",
-  "status": "pending|in_progress|resolved|escalated|false_alarm",
-  "assigned_operator_id": "string",
-  "emergency_service_called": false,
-  "emergency_service_type": "112|policia_nacional|guardia_civil",
-  "notes": [],
-  "response_time_seconds": 0,
-  "resolution_time_seconds": 0
-}
-```
-
-### security_alerts
-```json
-{
-  "alert_id": "alert_xxx",
-  "client_id": "string",
-  "alert_type": "phishing|sms_fraud|call_fraud|suspicious_login|data_breach",
-  "severity": "low|medium|high|critical",
-  "title": "string",
-  "description": "string",
-  "blocked": true,
-  "false_positive": false,
-  "reviewed_by": "employee_id"
-}
-```
-
-### audit_logs
-```json
-{
-  "log_id": "log_xxx",
-  "employee_id": "string",
-  "action": "string",
-  "resource_type": "employee|client|sos|payment|alert",
-  "resource_id": "string",
-  "details": {},
-  "ip_address": "string",
-  "created_at": "ISO date"
-}
-```
-
----
-
-## Pending / Backlog
-
-### P0 - Crítico
-- [ ] Completar las vistas de: Empleados, Clientes, SOS, Alertas, Pedidos, Pagos, Auditoría
-
-### P1 - Alto
+### P1 - Alta Prioridad
+- [ ] Implementar recomendaciones del PDF de Auditoría de Conversión
 - [ ] WebSockets para SOS en tiempo real
-- [ ] Gráficas con Recharts
-- [ ] Exportación CSV/PDF
+- [ ] Gráficas con Recharts en dashboard
 
-### P2 - Medio
+### P2 - Media Prioridad
 - [ ] 2FA para empleados
-- [ ] Integración con servicios de emergencia 112
-- [ ] Dashboard analytics avanzado
+- [ ] Integración con 112
+- [ ] Exportación CSV/PDF desde portal
+
+### P3 - Baja Prioridad
+- [ ] Arquitectura subdomain (`admin.manoprotect.com`)
+- [ ] Videos demo de 1 minuto
+- [ ] Re-evaluación PageSpeed
+- [ ] DNA Digital Identity
+
+---
+
+## Integraciones Activas
+
+| Servicio | Estado | Keys en |
+|----------|--------|---------|
+| Stripe | ✅ Activo | `backend/.env` |
+| SendGrid | ✅ Activo | `backend/.env` |
+| MongoDB | ✅ Activo | `backend/.env` |
+| Firebase | ✅ Activo | `frontend/.env` |
+
+---
+
+## Testing
+
+### Último Test: Iteración 38 (14 Feb 2026)
+- Backend: 13/13 tests passed (100%)
+- Frontend: 7/7 tests passed (100%)
+- Archivo: `/app/backend/tests/test_iteration_38.py`
+
+### Casos Verificados:
+1. ✅ SOS order crea status `pending_payment`
+2. ✅ Retorna Stripe checkout URL
+3. ✅ Dispositivos NO se crean antes del pago
+4. ✅ Enterprise login funciona
+5. ✅ Dashboard KPIs retorna datos
+6. ✅ Google Play user puede loguearse
+
+---
+
+## Notas de Desarrollo
+
+### Sesiones de Usuario
+- La autenticación usa colección `user_sessions` en MongoDB
+- El endpoint SOS device fue actualizado para buscar en ambas colecciones (`user_sessions` y `sessions`)
+
+### Stripe Webhooks
+- Endpoint: `/api/sos-device/webhook/stripe`
+- Eventos manejados:
+  - `checkout.session.completed` → Confirma pago, crea dispositivos
+  - `checkout.session.expired` → Marca pedido como expirado
+  - `payment_intent.payment_failed` → Marca pago como fallido
