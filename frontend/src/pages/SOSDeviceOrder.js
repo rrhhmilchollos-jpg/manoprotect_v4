@@ -189,12 +189,21 @@ export default function SOSDeviceOrder() {
         })
       });
 
+      const data = await response.json();
+
       if (response.ok) {
-        const data = await response.json();
-        toast.success('¡Pedido realizado! Te contactaremos para confirmar el envío.');
-        navigate('/dashboard');
+        // Check if payment is required (redirect to Stripe)
+        if (data.requires_payment && data.checkout_url) {
+          toast.info('Redirigiendo al pago seguro...');
+          // Redirect to Stripe Checkout
+          window.location.href = data.checkout_url;
+        } else {
+          // Free order (shouldn't happen normally)
+          toast.success('¡Pedido realizado! Te contactaremos para confirmar el envío.');
+          navigate('/dashboard');
+        }
       } else {
-        toast.error('Error al procesar el pedido');
+        toast.error(data.detail || 'Error al procesar el pedido');
       }
     } catch (error) {
       toast.error('Error de conexión');
