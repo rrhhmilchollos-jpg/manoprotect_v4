@@ -142,10 +142,12 @@ Exportación de datos en formato CSV desde el Portal Enterprise:
 
 ## Testing
 
-### Último Test: Iteración 42 (14 Feb 2026)
-- Backend: 8/8 tests passed (100%) - 2FA Login Flow
-- Frontend: 10/10 features verified (100%)
-- Todas las funcionalidades 2FA verificadas funcionando
+### Último Test: Iteración 43 (14 Feb 2026)
+- Backend: 10/10 tests passed (100%) - 2FA Email Alerts
+- Funcionalidades verificadas:
+  - Detección de nuevo IP/dispositivo
+  - Creación de email_notifications correctamente
+  - Email solo enviado cuando IP o dispositivo son nuevos
 
 ---
 
