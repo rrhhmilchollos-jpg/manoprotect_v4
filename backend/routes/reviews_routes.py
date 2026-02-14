@@ -170,6 +170,16 @@ async def get_current_user(request: Request, session_token: Optional[str] = Cook
     return user
 
 
+# Lista de planes de pago válidos (excluye "free")
+PAID_PLANS = [
+    "personal", "personal-monthly", "personal-quarterly", "personal-yearly",
+    "family", "family-monthly", "family-quarterly", "family-yearly",
+    "business", "business-monthly", "business-yearly",
+    "enterprise", "enterprise-monthly", "enterprise-yearly",
+    "weekly", "monthly", "quarterly", "yearly"
+]
+
+
 @router.post("")
 async def create_review(
     data: ReviewCreate,
@@ -177,11 +187,21 @@ async def create_review(
     session_token: Optional[str] = Cookie(None)
 ):
     """
-    Create a new review (authenticated users only)
-    Users can only leave one review
+    Create a new review (ONLY for users with paid subscription)
+    Free users cannot leave reviews
     """
     user = await get_current_user(request, session_token)
     user_id = user.get("user_id") or user.get("id")
+    
+    # Check if user has a PAID subscription - BLOCK free users
+    user_plan = user.get("plan", "free")
+    is_premium = user_plan in PAID_PLANS
+    
+    if not is_premium:
+        raise HTTPException(
+            status_code=403, 
+            detail="Solo los usuarios con suscripción de pago pueden dejar valoraciones. Actualiza tu plan para compartir tu experiencia."
+        )
     
     # Check if user already has a review
     existing = await db.user_reviews.find_one({"user_id": user_id})
@@ -190,10 +210,6 @@ async def create_review(
             status_code=400, 
             detail="Ya has dejado una valoración. Puedes editarla desde tu perfil."
         )
-    
-    # Check if user has an active subscription (premium users)
-    user_plan = user.get("plan", "free")
-    is_premium = user_plan != "free"
     
     # Create display name (privacy protected)
     user_name = user.get("name", "Usuario")
