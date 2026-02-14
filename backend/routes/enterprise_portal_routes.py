@@ -313,6 +313,17 @@ async def get_dashboard_charts(
     ]
     revenue_trend = await db.payments.aggregate(revenue_pipeline).to_list(100)
     
+    # Users registration trend
+    users_pipeline = [
+        {"$match": {"created_at": {"$gte": start_date.isoformat()}}},
+        {"$group": {
+            "_id": {"$substr": ["$created_at", 0, 10]},
+            "count": {"$sum": 1}
+        }},
+        {"$sort": {"_id": 1}}
+    ]
+    users_trend = await db.users.aggregate(users_pipeline).to_list(100)
+    
     # Risk by department
     risk_pipeline = [
         {"$match": {"department": {"$exists": True, "$ne": None}}},
@@ -329,11 +340,12 @@ async def get_dashboard_charts(
         "phishing_trend": [{"date": p["_id"], "count": p["count"]} for p in phishing_trend],
         "sos_trend": [{"date": s["_id"], "count": s["count"]} for s in sos_trend],
         "revenue_trend": [{"date": r["_id"], "amount": r["total"]} for r in revenue_trend],
+        "users_trend": [{"date": u["_id"], "count": u["count"]} for u in users_trend],
         "risk_by_department": [
             {
                 "department": d["_id"],
                 "employee_count": d["count"],
-                "avg_risk_score": round(d["avg_risk"], 1),
+                "avg_risk_score": round(d["avg_risk"], 1) if d["avg_risk"] else 0,
                 "high_risk_count": d["high_risk"]
             }
             for d in risk_by_dept
