@@ -2598,6 +2598,10 @@ print("✅ SOS Device routes loaded")
 # Legacy Vault (Secure Digital Legacy)
 api_router.include_router(legacy_vault_router)
 
+# User Reviews/Ratings System
+api_router.include_router(reviews_router)
+print("✅ Reviews routes loaded")
+
 # WhatsApp Alerts (Twilio)
 api_router.include_router(whatsapp_router)
 print("✅ WhatsApp alerts routes loaded")
