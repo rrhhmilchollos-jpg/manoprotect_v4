@@ -221,8 +221,8 @@ class TestReviewsIntegration:
     
     def test_public_reviews_match_stats(self):
         """Public reviews count should match stats total_reviews"""
-        # Get public reviews
-        public_response = requests.get(f"{BASE_URL}/api/reviews/public?limit=100")
+        # Get public reviews (limit max is 50)
+        public_response = requests.get(f"{BASE_URL}/api/reviews/public?limit=50")
         assert public_response.status_code == 200
         public_data = public_response.json()
         
