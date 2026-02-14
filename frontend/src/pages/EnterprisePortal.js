@@ -184,6 +184,37 @@ const EnterprisePortal = () => {
   });
   const [wsConnected, setWsConnected] = useState(false);
   const [realtimeNotification, setRealtimeNotification] = useState(null);
+  const [exporting, setExporting] = useState(null);
+
+  // Export helper function
+  const handleExport = async (type, params = {}) => {
+    setExporting(type);
+    try {
+      const queryParams = new URLSearchParams(params).toString();
+      const url = `${API_URL}/api/export/${type}/csv${queryParams ? '?' + queryParams : ''}`;
+      const response = await fetch(url, { credentials: 'include' });
+      
+      if (!response.ok) {
+        throw new Error('Export failed');
+      }
+      
+      const blob = await response.blob();
+      const downloadUrl = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = downloadUrl;
+      a.download = response.headers.get('Content-Disposition')?.split('filename=')[1] || `${type}_export.csv`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      window.URL.revokeObjectURL(downloadUrl);
+      toast.success('Exportación completada');
+    } catch (err) {
+      console.error('Export error:', err);
+      toast.error('Error al exportar');
+    } finally {
+      setExporting(null);
+    }
+  };
 
   // Check auth
   useEffect(() => {
