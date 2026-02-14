@@ -466,7 +466,8 @@ async def create_employee(
                           {"name": data.name, "role": data.role.value}, request)
     
     del employee["password_hash"]
-    del employee["_id"] if "_id" in employee else None
+    if "_id" in employee:
+        del employee["_id"]
     
     return {"success": True, "employee": employee}
 
