@@ -99,24 +99,16 @@ async def enterprise_login(data: LoginRequest, response: Response, request: Requ
     if db is None:
         raise HTTPException(status_code=500, detail="Database not initialized")
     
-    # Debug
-    count = await db.enterprise_employees.count_documents({})
-    print(f"DEBUG: Total employees in collection: {count}")
-    
     employee = await db.enterprise_employees.find_one({"email": data.email.lower()})
-    print(f"DEBUG: Looking for {data.email.lower()}, found: {employee is not None}")
     
     if not employee:
-        raise HTTPException(status_code=401, detail=f"Credenciales incorrectas - usuario no encontrado (total: {count})")
+        raise HTTPException(status_code=401, detail="Credenciales incorrectas")
     
     if employee.get("status") != "active":
         raise HTTPException(status_code=403, detail="Cuenta suspendida o inactiva")
     
-    computed_hash = hash_password(data.password)
-    stored_hash = employee.get("password_hash")
-    
-    if computed_hash != stored_hash:
-        raise HTTPException(status_code=401, detail="Credenciales incorrectas - password incorrecto")
+    if hash_password(data.password) != employee.get("password_hash"):
+        raise HTTPException(status_code=401, detail="Credenciales incorrectas")
     
     # Generate session
     session_token = uuid.uuid4().hex
