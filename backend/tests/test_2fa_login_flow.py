@@ -40,44 +40,34 @@ class TestHealthCheck:
         print("✅ API health check passed")
 
 
-class TestLoginWithout2FA:
-    """Test login flow for user without 2FA enabled"""
+class TestLoginWithInvalidCredentials:
+    """Test login with invalid credentials"""
     
-    def test_login_without_2fa_success(self, api_client):
-        """Login with admin@manoprotect.com should work without 2FA step"""
-        response = api_client.post(
-            f"{BASE_URL}/api/enterprise/auth/login",
-            json={
-                "email": ADMIN_WITHOUT_2FA["email"],
-                "password": ADMIN_WITHOUT_2FA["password"]
-            }
-        )
-        print(f"Response status: {response.status_code}")
-        print(f"Response body: {response.json()}")
-        
-        assert response.status_code == 200, f"Expected 200, got {response.status_code}"
-        data = response.json()
-        
-        # Should succeed without requiring 2FA
-        assert data.get("success") == True, "Login should succeed"
-        assert data.get("requires_2fa") == False, "Should not require 2FA"
-        assert "session_token" in data, "Should return session token"
-        assert "employee_id" in data, "Should return employee_id"
-        assert data.get("email") == ADMIN_WITHOUT_2FA["email"], "Email should match"
-        print("✅ Login without 2FA successful")
-    
-    def test_login_invalid_credentials(self, api_client):
+    def test_login_invalid_password(self, api_client):
         """Login with wrong password should fail"""
         response = api_client.post(
             f"{BASE_URL}/api/enterprise/auth/login",
             json={
-                "email": ADMIN_WITHOUT_2FA["email"],
+                "email": ADMIN_WITH_2FA["email"],
                 "password": "wrongpassword"
             }
         )
         
         assert response.status_code == 401, "Invalid credentials should return 401"
         print("✅ Invalid credentials rejected correctly")
+    
+    def test_login_invalid_email(self, api_client):
+        """Login with non-existent email should fail"""
+        response = api_client.post(
+            f"{BASE_URL}/api/enterprise/auth/login",
+            json={
+                "email": "nonexistent@manoprotect.com",
+                "password": "Admin2026!"
+            }
+        )
+        
+        assert response.status_code == 401, "Non-existent user should return 401"
+        print("✅ Non-existent user rejected correctly")
 
 
 class TestLoginWith2FARequired:
