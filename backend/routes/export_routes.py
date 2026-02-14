@@ -339,7 +339,7 @@ async def export_dashboard_summary(
     output = io.StringIO()
     writer = csv.writer(output)
     
-    writer.writerow(["Métrica", f"Total", f"Últimos {days} días"])
+    writer.writerow(["Métrica", "Total", f"Últimos {days} días"])
     writer.writerow(["Usuarios Registrados", total_users, new_users])
     writer.writerow(["Alertas de Seguridad", total_alerts, recent_alerts])
     writer.writerow(["Eventos SOS", total_sos, recent_sos])
