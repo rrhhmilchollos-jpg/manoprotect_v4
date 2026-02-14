@@ -2055,14 +2055,36 @@ const ReviewsSection = ({ employee, hasPermission }) => {
           <h1 className="text-2xl font-bold text-white">Valoraciones de Usuarios</h1>
           <p className="text-slate-400">Gestiona las valoraciones de los clientes</p>
         </div>
-        <Button 
-          onClick={() => { fetchReviews(); fetchStats(); }} 
-          variant="outline" 
-          className="border-slate-600 text-slate-300"
-        >
-          <RefreshCw className="w-4 h-4 mr-2" />
-          Actualizar
-        </Button>
+        <div className="flex gap-2">
+          <Button 
+            onClick={async () => {
+              const url = `${API_URL}/api/export/reviews/csv${statusFilter ? '?status=' + statusFilter : ''}`;
+              const response = await fetch(url, { credentials: 'include' });
+              if (response.ok) {
+                const blob = await response.blob();
+                const a = document.createElement('a');
+                a.href = window.URL.createObjectURL(blob);
+                a.download = 'valoraciones_manoprotect.csv';
+                a.click();
+                toast.success('Exportación completada');
+              }
+            }}
+            variant="outline" 
+            className="border-slate-600 text-slate-300"
+            data-testid="export-reviews-btn"
+          >
+            <Download className="w-4 h-4 mr-2" />
+            Exportar CSV
+          </Button>
+          <Button 
+            onClick={() => { fetchReviews(); fetchStats(); }} 
+            variant="outline" 
+            className="border-slate-600 text-slate-300"
+          >
+            <RefreshCw className="w-4 h-4 mr-2" />
+            Actualizar
+          </Button>
+        </div>
       </div>
 
       {/* Stats Cards */}
