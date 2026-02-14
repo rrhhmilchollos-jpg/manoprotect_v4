@@ -191,6 +191,26 @@ const EnterprisePortal = () => {
     }
   };
 
+  const fetchChartData = async () => {
+    try {
+      const res = await fetch(`${API_URL}/api/enterprise/dashboard/charts?days=7`, {
+        credentials: 'include'
+      });
+      
+      if (res.ok) {
+        const data = await res.json();
+        setChartData({
+          revenue: data.revenue_trend || [],
+          alerts: data.phishing_trend || [],
+          sos: data.sos_trend || [],
+          users: data.users_trend || []
+        });
+      }
+    } catch (err) {
+      console.error('Error fetching chart data:', err);
+    }
+  };
+
   const fetchPendingSOS = async () => {
     try {
       const res = await fetch(`${API_URL}/api/enterprise/sos/pending`, { credentials: 'include' });
