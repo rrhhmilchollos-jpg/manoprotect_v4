@@ -773,13 +773,16 @@ const EmployeesSection = ({ employee, hasPermission }) => {
 };
 
 // ============================================
-// CLIENTS SECTION COMPONENT
+// CLIENTS SECTION COMPONENT (GESTIÓN DE USUARIOS)
 // ============================================
 const ClientsSection = ({ employee, hasPermission }) => {
   const [clients, setClients] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [planFilter, setPlanFilter] = useState('');
+  const [selectedClient, setSelectedClient] = useState(null);
+  const [clientDetails, setClientDetails] = useState(null);
+  const [loadingDetails, setLoadingDetails] = useState(false);
 
   useEffect(() => {
     fetchClients();
@@ -806,6 +809,35 @@ const ClientsSection = ({ employee, hasPermission }) => {
     }
   };
 
+  const fetchClientDetails = async (clientId) => {
+    setLoadingDetails(true);
+    try {
+      const res = await fetch(`${API_URL}/api/enterprise/clients/${clientId}`, {
+        credentials: 'include'
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setClientDetails(data);
+      } else {
+        toast.error('Error al cargar detalles del usuario');
+      }
+    } catch (err) {
+      toast.error('Error de conexión');
+    } finally {
+      setLoadingDetails(false);
+    }
+  };
+
+  const handleViewClient = (client) => {
+    setSelectedClient(client);
+    fetchClientDetails(client.user_id || client.email);
+  };
+
+  const closeModal = () => {
+    setSelectedClient(null);
+    setClientDetails(null);
+  };
+
   const planColors = {
     free: 'bg-slate-600',
     'family-monthly': 'bg-emerald-600',
@@ -814,16 +846,32 @@ const ClientsSection = ({ employee, hasPermission }) => {
     enterprise: 'bg-purple-600'
   };
 
+  const planLabels = {
+    free: 'Gratuito',
+    'family-monthly': 'Familiar Mensual',
+    'family-yearly': 'Familiar Anual',
+    premium: 'Premium',
+    enterprise: 'Empresarial'
+  };
+
+  const statusLabels = {
+    active: 'Activo',
+    inactive: 'Inactivo',
+    suspended: 'Suspendido',
+    cancelled: 'Cancelado',
+    trial: 'Prueba'
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-white">Gestión de Clientes</h1>
+          <h1 className="text-2xl font-bold text-white" data-testid="clients-title">Gestión de Usuarios</h1>
           <p className="text-slate-400">Visualiza y gestiona los usuarios de ManoProtect</p>
         </div>
       </div>
 
-      {/* Filters */}
+      {/* Filtros */}
       <div className="flex flex-wrap gap-4">
         <div className="relative flex-1 min-w-[200px]">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
@@ -832,53 +880,57 @@ const ClientsSection = ({ employee, hasPermission }) => {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="pl-10 bg-slate-800 border-slate-700 text-white"
+            data-testid="clients-search-input"
           />
         </div>
         <select
           value={planFilter}
           onChange={(e) => setPlanFilter(e.target.value)}
           className="px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-white"
+          data-testid="clients-plan-filter"
         >
           <option value="">Todos los planes</option>
-          <option value="free">Gratis</option>
+          <option value="free">Gratuito</option>
           <option value="family-monthly">Familiar Mensual</option>
           <option value="family-yearly">Familiar Anual</option>
           <option value="premium">Premium</option>
         </select>
-        <Button variant="outline" onClick={fetchClients} className="border-slate-700 text-slate-300">
+        <Button variant="outline" onClick={fetchClients} className="border-slate-700 text-slate-300" data-testid="clients-refresh-btn">
           <RefreshCw className="w-4 h-4" />
         </Button>
       </div>
 
-      {/* Table */}
+      {/* Tabla de Usuarios */}
       <Card className="bg-slate-800/50 border-slate-700 overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="w-full">
+          <table className="w-full" data-testid="clients-table">
             <thead className="bg-slate-900/50">
               <tr>
-                <th className="text-left p-4 text-slate-400 font-medium">Cliente</th>
+                <th className="text-left p-4 text-slate-400 font-medium">Usuario</th>
                 <th className="text-left p-4 text-slate-400 font-medium">Plan</th>
                 <th className="text-left p-4 text-slate-400 font-medium">Estado</th>
                 <th className="text-left p-4 text-slate-400 font-medium">Dispositivo SOS</th>
-                <th className="text-left p-4 text-slate-400 font-medium">Registro</th>
+                <th className="text-left p-4 text-slate-400 font-medium">Fecha de Registro</th>
+                <th className="text-right p-4 text-slate-400 font-medium">Acciones</th>
               </tr>
             </thead>
             <tbody>
               {loading ? (
                 <tr>
-                  <td colSpan={5} className="p-8 text-center text-slate-500">
+                  <td colSpan={6} className="p-8 text-center text-slate-500">
                     <RefreshCw className="w-6 h-6 mx-auto animate-spin" />
+                    <p className="mt-2">Cargando usuarios...</p>
                   </td>
                 </tr>
               ) : clients.length === 0 ? (
                 <tr>
-                  <td colSpan={5} className="p-8 text-center text-slate-500">
-                    No se encontraron clientes
+                  <td colSpan={6} className="p-8 text-center text-slate-500">
+                    No se encontraron usuarios
                   </td>
                 </tr>
               ) : (
                 clients.map((client) => (
-                  <tr key={client.user_id} className="border-t border-slate-700 hover:bg-slate-800/50">
+                  <tr key={client.user_id || client.email} className="border-t border-slate-700 hover:bg-slate-800/50" data-testid={`client-row-${client.user_id}`}>
                     <td className="p-4">
                       <div className="flex items-center gap-3">
                         <div className="w-10 h-10 bg-emerald-600 rounded-full flex items-center justify-center">
@@ -892,7 +944,7 @@ const ClientsSection = ({ employee, hasPermission }) => {
                     </td>
                     <td className="p-4">
                       <Badge className={`${planColors[client.plan] || planColors.free} text-white`}>
-                        {client.plan || 'free'}
+                        {planLabels[client.plan] || 'Gratuito'}
                       </Badge>
                     </td>
                     <td className="p-4">
@@ -900,7 +952,11 @@ const ClientsSection = ({ employee, hasPermission }) => {
                         client.subscription_status === 'active' ? 'bg-emerald-500/20 text-emerald-400' :
                         client.is_trial ? 'bg-yellow-500/20 text-yellow-400' : 'bg-slate-500/20 text-slate-400'
                       }`}>
-                        {client.is_trial ? 'Trial' : client.subscription_status || 'Inactivo'}
+                        <span className={`w-1.5 h-1.5 rounded-full ${
+                          client.subscription_status === 'active' ? 'bg-emerald-400' :
+                          client.is_trial ? 'bg-yellow-400' : 'bg-slate-400'
+                        }`}></span>
+                        {client.is_trial ? 'Prueba' : statusLabels[client.subscription_status] || 'Inactivo'}
                       </span>
                     </td>
                     <td className="p-4">
@@ -911,7 +967,23 @@ const ClientsSection = ({ employee, hasPermission }) => {
                       )}
                     </td>
                     <td className="p-4 text-slate-400 text-sm">
-                      {client.created_at ? new Date(client.created_at).toLocaleDateString('es-ES') : '-'}
+                      {client.created_at ? new Date(client.created_at).toLocaleDateString('es-ES', {
+                        day: '2-digit',
+                        month: '2-digit', 
+                        year: 'numeric'
+                      }) : '-'}
+                    </td>
+                    <td className="p-4 text-right">
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        onClick={() => handleViewClient(client)}
+                        className="text-slate-400 hover:text-white hover:bg-slate-700"
+                        data-testid={`view-client-btn-${client.user_id}`}
+                        title="Ver detalles del usuario"
+                      >
+                        <Eye className="w-4 h-4" />
+                      </Button>
                     </td>
                   </tr>
                 ))
@@ -919,6 +991,227 @@ const ClientsSection = ({ employee, hasPermission }) => {
             </tbody>
           </table>
         </div>
+      </Card>
+
+      {/* Modal de Detalles del Usuario */}
+      {selectedClient && (
+        <ClientDetailModal
+          client={selectedClient}
+          details={clientDetails}
+          loading={loadingDetails}
+          onClose={closeModal}
+        />
+      )}
+    </div>
+  );
+};
+
+// ============================================
+// CLIENT DETAIL MODAL (MODAL DE DETALLES DE USUARIO)
+// ============================================
+const ClientDetailModal = ({ client, details, loading, onClose }) => {
+  const planLabels = {
+    free: 'Gratuito',
+    'family-monthly': 'Familiar Mensual',
+    'family-yearly': 'Familiar Anual',
+    premium: 'Premium',
+    enterprise: 'Empresarial'
+  };
+
+  const planColors = {
+    free: 'bg-slate-600',
+    'family-monthly': 'bg-emerald-600',
+    'family-yearly': 'bg-emerald-600',
+    premium: 'bg-indigo-600',
+    enterprise: 'bg-purple-600'
+  };
+
+  // Payment status translations and colors
+  const paymentStatusConfig = {
+    completed: { label: 'Completado', color: 'bg-emerald-500/20 text-emerald-400', dot: 'bg-emerald-400' },
+    paid: { label: 'Pagado', color: 'bg-emerald-500/20 text-emerald-400', dot: 'bg-emerald-400' },
+    succeeded: { label: 'Exitoso', color: 'bg-emerald-500/20 text-emerald-400', dot: 'bg-emerald-400' },
+    pending: { label: 'Pendiente', color: 'bg-yellow-500/20 text-yellow-400', dot: 'bg-yellow-400' },
+    pending_payment: { label: 'Pago Pendiente', color: 'bg-yellow-500/20 text-yellow-400', dot: 'bg-yellow-400' },
+    processing: { label: 'Procesando', color: 'bg-blue-500/20 text-blue-400', dot: 'bg-blue-400' },
+    failed: { label: 'Fallido', color: 'bg-red-500/20 text-red-400', dot: 'bg-red-400' },
+    refunded: { label: 'Reembolsado', color: 'bg-orange-500/20 text-orange-400', dot: 'bg-orange-400' },
+    cancelled: { label: 'Cancelado', color: 'bg-slate-500/20 text-slate-400', dot: 'bg-slate-400' },
+    unknown: { label: 'Desconocido', color: 'bg-slate-500/20 text-slate-400', dot: 'bg-slate-400' }
+  };
+
+  const getPaymentStatus = (status) => {
+    const normalizedStatus = (status || 'unknown').toLowerCase();
+    return paymentStatusConfig[normalizedStatus] || paymentStatusConfig.unknown;
+  };
+
+  const formatCurrency = (amount, currency = 'EUR') => {
+    if (!amount && amount !== 0) return '-';
+    return new Intl.NumberFormat('es-ES', {
+      style: 'currency',
+      currency: currency.toUpperCase()
+    }).format(amount);
+  };
+
+  const formatDate = (dateString) => {
+    if (!dateString) return '-';
+    return new Date(dateString).toLocaleDateString('es-ES', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  };
+
+  return (
+    <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4" data-testid="client-detail-modal">
+      <Card className="bg-slate-800 border-slate-700 w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col">
+        <CardHeader className="flex flex-row items-center justify-between border-b border-slate-700 shrink-0">
+          <CardTitle className="text-white">Detalles del Usuario</CardTitle>
+          <Button variant="ghost" size="sm" onClick={onClose} className="text-slate-400 hover:text-white" data-testid="close-modal-btn">
+            <X className="w-4 h-4" />
+          </Button>
+        </CardHeader>
+        
+        <CardContent className="overflow-y-auto p-6">
+          {loading ? (
+            <div className="flex items-center justify-center py-12">
+              <RefreshCw className="w-8 h-8 text-slate-400 animate-spin" />
+              <span className="ml-3 text-slate-400">Cargando información...</span>
+            </div>
+          ) : (
+            <div className="space-y-6">
+              {/* Información del Usuario */}
+              <div className="flex items-start gap-4">
+                <div className="w-16 h-16 bg-emerald-600 rounded-full flex items-center justify-center shrink-0">
+                  <span className="text-white text-2xl font-bold">
+                    {(details?.name || client.name)?.charAt(0) || 'U'}
+                  </span>
+                </div>
+                <div className="flex-1 min-w-0">
+                  <h3 className="text-xl font-bold text-white truncate">{details?.name || client.name || 'Sin nombre'}</h3>
+                  <p className="text-slate-400 truncate">{details?.email || client.email}</p>
+                  <div className="flex items-center gap-2 mt-2">
+                    <Badge className={`${planColors[details?.plan || client.plan] || planColors.free} text-white`}>
+                      {planLabels[details?.plan || client.plan] || 'Gratuito'}
+                    </Badge>
+                    <span className={`inline-flex items-center gap-1.5 px-2 py-1 rounded-full text-xs font-medium ${
+                      (details?.subscription_status || client.subscription_status) === 'active' 
+                        ? 'bg-emerald-500/20 text-emerald-400' 
+                        : (details?.is_trial || client.is_trial) 
+                          ? 'bg-yellow-500/20 text-yellow-400' 
+                          : 'bg-slate-500/20 text-slate-400'
+                    }`}>
+                      {(details?.is_trial || client.is_trial) ? 'Prueba' : 
+                       (details?.subscription_status || client.subscription_status) === 'active' ? 'Activo' : 'Inactivo'}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Estadísticas del Usuario */}
+              <div className="grid grid-cols-3 gap-4 pt-4 border-t border-slate-700">
+                <div className="text-center p-3 bg-slate-900/50 rounded-lg">
+                  <p className="text-2xl font-bold text-white">{details?.sos_events_count || 0}</p>
+                  <p className="text-slate-500 text-sm">Eventos SOS</p>
+                </div>
+                <div className="text-center p-3 bg-slate-900/50 rounded-lg">
+                  <p className="text-2xl font-bold text-white">{details?.alerts_count || 0}</p>
+                  <p className="text-slate-500 text-sm">Alertas</p>
+                </div>
+                <div className="text-center p-3 bg-slate-900/50 rounded-lg">
+                  <p className="text-2xl font-bold text-white">{details?.total_payments || 0}</p>
+                  <p className="text-slate-500 text-sm">Pagos</p>
+                </div>
+              </div>
+
+              {/* Información Adicional */}
+              <div className="grid grid-cols-2 gap-4 pt-4 border-t border-slate-700">
+                <div>
+                  <p className="text-slate-500 text-sm">Teléfono</p>
+                  <p className="text-white">{details?.phone || client.phone || '-'}</p>
+                </div>
+                <div>
+                  <p className="text-slate-500 text-sm">Fecha de Registro</p>
+                  <p className="text-white">{formatDate(details?.created_at || client.created_at)}</p>
+                </div>
+                <div>
+                  <p className="text-slate-500 text-sm">Dispositivo SOS</p>
+                  <p className="text-white">
+                    {details?.device_order ? (
+                      <span className="text-emerald-400">Solicitado</span>
+                    ) : '-'}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-slate-500 text-sm">ID de Usuario</p>
+                  <p className="text-white font-mono text-xs">{details?.user_id || client.user_id || '-'}</p>
+                </div>
+              </div>
+
+              {/* Historial de Pagos */}
+              <div className="pt-4 border-t border-slate-700">
+                <h4 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+                  <DollarSign className="w-5 h-5 text-emerald-400" />
+                  Historial de Transacciones
+                </h4>
+                
+                {(!details?.payment_history || details.payment_history.length === 0) ? (
+                  <div className="text-center py-8 bg-slate-900/30 rounded-lg">
+                    <DollarSign className="w-10 h-10 mx-auto text-slate-600 mb-2" />
+                    <p className="text-slate-500">No hay transacciones registradas</p>
+                  </div>
+                ) : (
+                  <div className="space-y-2 max-h-64 overflow-y-auto">
+                    {details.payment_history.map((payment, index) => {
+                      const statusConfig = getPaymentStatus(payment.status);
+                      return (
+                        <div 
+                          key={payment.payment_id || index} 
+                          className="flex items-center justify-between p-3 bg-slate-900/50 rounded-lg hover:bg-slate-900/70 transition-colors"
+                          data-testid={`payment-row-${index}`}
+                        >
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center gap-2">
+                              <p className="text-white font-medium truncate">
+                                {payment.plan || 'Pago'}
+                              </p>
+                              {/* Estado de la transacción con indicador visual */}
+                              <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium ${statusConfig.color}`}>
+                                <span className={`w-1.5 h-1.5 rounded-full ${statusConfig.dot}`}></span>
+                                {statusConfig.label}
+                              </span>
+                            </div>
+                            <p className="text-slate-500 text-xs mt-1">
+                              {formatDate(payment.created_at)}
+                              {payment.payment_id && (
+                                <span className="ml-2 font-mono">
+                                  #{payment.payment_id.slice(-8)}
+                                </span>
+                              )}
+                            </p>
+                          </div>
+                          <div className="text-right shrink-0 ml-4">
+                            <p className={`font-semibold ${
+                              payment.status === 'completed' || payment.status === 'paid' || payment.status === 'succeeded'
+                                ? 'text-emerald-400' 
+                                : payment.status === 'pending' || payment.status === 'pending_payment'
+                                  ? 'text-yellow-400'
+                                  : 'text-slate-400'
+                            }`}>
+                              {formatCurrency(payment.amount, payment.currency)}
+                            </p>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+        </CardContent>
       </Card>
     </div>
   );
