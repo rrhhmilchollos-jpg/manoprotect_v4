@@ -500,22 +500,1229 @@ const EnterprisePortal = () => {
             </div>
           )}
 
-          {/* Other sections - placeholder for now */}
-          {activeSection !== 'dashboard' && (
-            <div className="text-center py-20">
-              <div className="w-16 h-16 bg-slate-800 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Activity className="w-8 h-8 text-slate-500" />
-              </div>
-              <h2 className="text-xl font-bold text-white mb-2">
-                {menuItems.find(m => m.id === activeSection)?.label || 'Sección'}
-              </h2>
-              <p className="text-slate-400">
-                Esta sección está en desarrollo. Próximamente disponible.
-              </p>
-            </div>
+          {/* Employees Section */}
+          {activeSection === 'employees' && (
+            <EmployeesSection employee={employee} hasPermission={hasPermission} />
+          )}
+
+          {/* Clients Section */}
+          {activeSection === 'clients' && (
+            <ClientsSection employee={employee} hasPermission={hasPermission} />
+          )}
+
+          {/* SOS Section */}
+          {activeSection === 'sos' && (
+            <SOSSection employee={employee} hasPermission={hasPermission} onRespond={handleSOSRespond} />
+          )}
+
+          {/* Alerts Section */}
+          {activeSection === 'alerts' && (
+            <AlertsSection employee={employee} hasPermission={hasPermission} />
+          )}
+
+          {/* Orders Section */}
+          {activeSection === 'orders' && (
+            <OrdersSection employee={employee} hasPermission={hasPermission} />
+          )}
+
+          {/* Payments Section */}
+          {activeSection === 'payments' && (
+            <PaymentsSection employee={employee} hasPermission={hasPermission} />
+          )}
+
+          {/* Audit Section */}
+          {activeSection === 'audit' && (
+            <AuditSection employee={employee} hasPermission={hasPermission} />
           )}
         </div>
       </main>
+    </div>
+  );
+};
+
+// ============================================
+// EMPLOYEES SECTION COMPONENT
+// ============================================
+const EmployeesSection = ({ employee, hasPermission }) => {
+  const [employees, setEmployees] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState('');
+  const [statusFilter, setStatusFilter] = useState('');
+  const [showCreateModal, setShowCreateModal] = useState(false);
+  const [selectedEmployee, setSelectedEmployee] = useState(null);
+
+  useEffect(() => {
+    fetchEmployees();
+  }, [search, statusFilter]);
+
+  const fetchEmployees = async () => {
+    setLoading(true);
+    try {
+      const params = new URLSearchParams();
+      if (search) params.append('search', search);
+      if (statusFilter) params.append('status', statusFilter);
+      
+      const res = await fetch(`${API_URL}/api/enterprise/employees?${params}`, {
+        credentials: 'include'
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setEmployees(data.employees || []);
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleAction = async (employeeId, action) => {
+    try {
+      const endpoint = action === 'delete' 
+        ? `${API_URL}/api/enterprise/employees/${employeeId}`
+        : `${API_URL}/api/enterprise/employees/${employeeId}/${action}`;
+      
+      const res = await fetch(endpoint, {
+        method: action === 'delete' ? 'DELETE' : 'PATCH',
+        credentials: 'include'
+      });
+      
+      if (res.ok) {
+        toast.success(`Acción '${action}' ejecutada`);
+        fetchEmployees();
+      } else {
+        const data = await res.json();
+        toast.error(data.detail || 'Error');
+      }
+    } catch (err) {
+      toast.error('Error de conexión');
+    }
+  };
+
+  const statusColors = {
+    active: 'bg-emerald-500',
+    suspended: 'bg-red-500',
+    pending: 'bg-yellow-500',
+    inactive: 'bg-slate-500'
+  };
+
+  const riskColors = {
+    low: 'text-emerald-400',
+    medium: 'text-yellow-400',
+    high: 'text-orange-400',
+    critical: 'text-red-400'
+  };
+
+  return (
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-bold text-white">Gestión de Empleados</h1>
+          <p className="text-slate-400">Administra el equipo de ManoProtect</p>
+        </div>
+        {hasPermission('manage_employees') && (
+          <Button onClick={() => setShowCreateModal(true)} className="bg-indigo-600 hover:bg-indigo-700">
+            <UserPlus className="w-4 h-4 mr-2" />
+            Nuevo Empleado
+          </Button>
+        )}
+      </div>
+
+      {/* Filters */}
+      <div className="flex flex-wrap gap-4">
+        <div className="relative flex-1 min-w-[200px]">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+          <Input
+            placeholder="Buscar por nombre, email..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="pl-10 bg-slate-800 border-slate-700 text-white"
+          />
+        </div>
+        <select
+          value={statusFilter}
+          onChange={(e) => setStatusFilter(e.target.value)}
+          className="px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-white"
+        >
+          <option value="">Todos los estados</option>
+          <option value="active">Activos</option>
+          <option value="suspended">Suspendidos</option>
+          <option value="pending">Pendientes</option>
+        </select>
+        <Button variant="outline" onClick={fetchEmployees} className="border-slate-700 text-slate-300">
+          <RefreshCw className="w-4 h-4" />
+        </Button>
+      </div>
+
+      {/* Table */}
+      <Card className="bg-slate-800/50 border-slate-700 overflow-hidden">
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead className="bg-slate-900/50">
+              <tr>
+                <th className="text-left p-4 text-slate-400 font-medium">Empleado</th>
+                <th className="text-left p-4 text-slate-400 font-medium">Rol</th>
+                <th className="text-left p-4 text-slate-400 font-medium">Departamento</th>
+                <th className="text-left p-4 text-slate-400 font-medium">Estado</th>
+                <th className="text-left p-4 text-slate-400 font-medium">Riesgo</th>
+                <th className="text-left p-4 text-slate-400 font-medium">Último acceso</th>
+                <th className="text-right p-4 text-slate-400 font-medium">Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              {loading ? (
+                <tr>
+                  <td colSpan={7} className="p-8 text-center text-slate-500">
+                    <RefreshCw className="w-6 h-6 mx-auto animate-spin" />
+                  </td>
+                </tr>
+              ) : employees.length === 0 ? (
+                <tr>
+                  <td colSpan={7} className="p-8 text-center text-slate-500">
+                    No se encontraron empleados
+                  </td>
+                </tr>
+              ) : (
+                employees.map((emp) => (
+                  <tr key={emp.employee_id} className="border-t border-slate-700 hover:bg-slate-800/50">
+                    <td className="p-4">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 bg-indigo-600 rounded-full flex items-center justify-center">
+                          <span className="text-white font-semibold">{emp.name?.charAt(0)}</span>
+                        </div>
+                        <div>
+                          <p className="text-white font-medium">{emp.name}</p>
+                          <p className="text-slate-500 text-sm">{emp.email}</p>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="p-4">
+                      <Badge variant="outline" className="text-slate-300 border-slate-600 capitalize">
+                        {emp.role?.replace('_', ' ')}
+                      </Badge>
+                    </td>
+                    <td className="p-4 text-slate-300">{emp.department || '-'}</td>
+                    <td className="p-4">
+                      <span className={`inline-flex items-center gap-1.5 px-2 py-1 rounded-full text-xs font-medium text-white ${statusColors[emp.status]}`}>
+                        <span className="w-1.5 h-1.5 rounded-full bg-white"></span>
+                        {emp.status}
+                      </span>
+                    </td>
+                    <td className="p-4">
+                      <span className={`font-medium ${riskColors[emp.risk_level] || 'text-slate-400'}`}>
+                        {emp.risk_level?.toUpperCase() || 'N/A'}
+                      </span>
+                    </td>
+                    <td className="p-4 text-slate-400 text-sm">
+                      {emp.last_login ? new Date(emp.last_login).toLocaleDateString('es-ES') : 'Nunca'}
+                    </td>
+                    <td className="p-4 text-right">
+                      <div className="flex items-center justify-end gap-2">
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          onClick={() => setSelectedEmployee(emp)}
+                          className="text-slate-400 hover:text-white"
+                        >
+                          <Eye className="w-4 h-4" />
+                        </Button>
+                        {hasPermission('manage_employees') && (
+                          <>
+                            {emp.status === 'active' ? (
+                              <Button
+                                size="sm"
+                                variant="ghost"
+                                onClick={() => handleAction(emp.employee_id, 'suspend')}
+                                className="text-orange-400 hover:text-orange-300"
+                              >
+                                <XCircle className="w-4 h-4" />
+                              </Button>
+                            ) : (
+                              <Button
+                                size="sm"
+                                variant="ghost"
+                                onClick={() => handleAction(emp.employee_id, 'activate')}
+                                className="text-emerald-400 hover:text-emerald-300"
+                              >
+                                <CheckCircle className="w-4 h-4" />
+                              </Button>
+                            )}
+                          </>
+                        )}
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
+      </Card>
+
+      {/* Create Modal */}
+      {showCreateModal && (
+        <CreateEmployeeModal onClose={() => setShowCreateModal(false)} onSuccess={fetchEmployees} />
+      )}
+
+      {/* Detail Modal */}
+      {selectedEmployee && (
+        <EmployeeDetailModal employee={selectedEmployee} onClose={() => setSelectedEmployee(null)} />
+      )}
+    </div>
+  );
+};
+
+// ============================================
+// CLIENTS SECTION COMPONENT
+// ============================================
+const ClientsSection = ({ employee, hasPermission }) => {
+  const [clients, setClients] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState('');
+  const [planFilter, setPlanFilter] = useState('');
+
+  useEffect(() => {
+    fetchClients();
+  }, [search, planFilter]);
+
+  const fetchClients = async () => {
+    setLoading(true);
+    try {
+      const params = new URLSearchParams();
+      if (search) params.append('search', search);
+      if (planFilter) params.append('plan', planFilter);
+      
+      const res = await fetch(`${API_URL}/api/enterprise/clients?${params}`, {
+        credentials: 'include'
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setClients(data.clients || []);
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const planColors = {
+    free: 'bg-slate-600',
+    'family-monthly': 'bg-emerald-600',
+    'family-yearly': 'bg-emerald-600',
+    premium: 'bg-indigo-600',
+    enterprise: 'bg-purple-600'
+  };
+
+  return (
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-bold text-white">Gestión de Clientes</h1>
+          <p className="text-slate-400">Visualiza y gestiona los usuarios de ManoProtect</p>
+        </div>
+      </div>
+
+      {/* Filters */}
+      <div className="flex flex-wrap gap-4">
+        <div className="relative flex-1 min-w-[200px]">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+          <Input
+            placeholder="Buscar por nombre, email, teléfono..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="pl-10 bg-slate-800 border-slate-700 text-white"
+          />
+        </div>
+        <select
+          value={planFilter}
+          onChange={(e) => setPlanFilter(e.target.value)}
+          className="px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-white"
+        >
+          <option value="">Todos los planes</option>
+          <option value="free">Gratis</option>
+          <option value="family-monthly">Familiar Mensual</option>
+          <option value="family-yearly">Familiar Anual</option>
+          <option value="premium">Premium</option>
+        </select>
+        <Button variant="outline" onClick={fetchClients} className="border-slate-700 text-slate-300">
+          <RefreshCw className="w-4 h-4" />
+        </Button>
+      </div>
+
+      {/* Table */}
+      <Card className="bg-slate-800/50 border-slate-700 overflow-hidden">
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead className="bg-slate-900/50">
+              <tr>
+                <th className="text-left p-4 text-slate-400 font-medium">Cliente</th>
+                <th className="text-left p-4 text-slate-400 font-medium">Plan</th>
+                <th className="text-left p-4 text-slate-400 font-medium">Estado</th>
+                <th className="text-left p-4 text-slate-400 font-medium">Dispositivo SOS</th>
+                <th className="text-left p-4 text-slate-400 font-medium">Registro</th>
+              </tr>
+            </thead>
+            <tbody>
+              {loading ? (
+                <tr>
+                  <td colSpan={5} className="p-8 text-center text-slate-500">
+                    <RefreshCw className="w-6 h-6 mx-auto animate-spin" />
+                  </td>
+                </tr>
+              ) : clients.length === 0 ? (
+                <tr>
+                  <td colSpan={5} className="p-8 text-center text-slate-500">
+                    No se encontraron clientes
+                  </td>
+                </tr>
+              ) : (
+                clients.map((client) => (
+                  <tr key={client.user_id} className="border-t border-slate-700 hover:bg-slate-800/50">
+                    <td className="p-4">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 bg-emerald-600 rounded-full flex items-center justify-center">
+                          <span className="text-white font-semibold">{client.name?.charAt(0) || 'U'}</span>
+                        </div>
+                        <div>
+                          <p className="text-white font-medium">{client.name || 'Sin nombre'}</p>
+                          <p className="text-slate-500 text-sm">{client.email}</p>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="p-4">
+                      <Badge className={`${planColors[client.plan] || planColors.free} text-white`}>
+                        {client.plan || 'free'}
+                      </Badge>
+                    </td>
+                    <td className="p-4">
+                      <span className={`inline-flex items-center gap-1.5 px-2 py-1 rounded-full text-xs font-medium ${
+                        client.subscription_status === 'active' ? 'bg-emerald-500/20 text-emerald-400' :
+                        client.is_trial ? 'bg-yellow-500/20 text-yellow-400' : 'bg-slate-500/20 text-slate-400'
+                      }`}>
+                        {client.is_trial ? 'Trial' : client.subscription_status || 'Inactivo'}
+                      </span>
+                    </td>
+                    <td className="p-4">
+                      {client.sos_button_requested ? (
+                        <Badge className="bg-emerald-600">Solicitado</Badge>
+                      ) : (
+                        <span className="text-slate-500">-</span>
+                      )}
+                    </td>
+                    <td className="p-4 text-slate-400 text-sm">
+                      {client.created_at ? new Date(client.created_at).toLocaleDateString('es-ES') : '-'}
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
+      </Card>
+    </div>
+  );
+};
+
+// ============================================
+// SOS SECTION COMPONENT
+// ============================================
+const SOSSection = ({ employee, hasPermission, onRespond }) => {
+  const [sosEvents, setSosEvents] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [statusFilter, setStatusFilter] = useState('');
+
+  useEffect(() => {
+    fetchSOS();
+    const interval = setInterval(fetchSOS, 10000);
+    return () => clearInterval(interval);
+  }, [statusFilter]);
+
+  const fetchSOS = async () => {
+    try {
+      const params = new URLSearchParams();
+      if (statusFilter) params.append('status', statusFilter);
+      
+      const res = await fetch(`${API_URL}/api/enterprise/sos?${params}`, {
+        credentials: 'include'
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setSosEvents(data.events || []);
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const priorityColors = {
+    critical: 'bg-red-600',
+    high: 'bg-orange-500',
+    medium: 'bg-yellow-500',
+    low: 'bg-green-500'
+  };
+
+  const statusColors = {
+    pending: 'bg-red-500/20 text-red-400',
+    in_progress: 'bg-yellow-500/20 text-yellow-400',
+    resolved: 'bg-emerald-500/20 text-emerald-400',
+    escalated: 'bg-purple-500/20 text-purple-400',
+    false_alarm: 'bg-slate-500/20 text-slate-400'
+  };
+
+  return (
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-bold text-white flex items-center gap-2">
+            <AlertTriangle className="w-6 h-6 text-red-500" />
+            Centro de Emergencias SOS
+          </h1>
+          <p className="text-slate-400">Gestión en tiempo real de alertas de emergencia</p>
+        </div>
+        <Button variant="outline" onClick={fetchSOS} className="border-slate-700 text-slate-300">
+          <RefreshCw className="w-4 h-4 mr-2" />
+          Actualizar
+        </Button>
+      </div>
+
+      {/* Filters */}
+      <div className="flex gap-4">
+        <select
+          value={statusFilter}
+          onChange={(e) => setStatusFilter(e.target.value)}
+          className="px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-white"
+        >
+          <option value="">Todos los estados</option>
+          <option value="pending">Pendientes</option>
+          <option value="in_progress">En proceso</option>
+          <option value="resolved">Resueltos</option>
+          <option value="escalated">Escalados</option>
+        </select>
+      </div>
+
+      {/* SOS Grid */}
+      {loading ? (
+        <div className="text-center py-20">
+          <RefreshCw className="w-8 h-8 mx-auto text-slate-500 animate-spin" />
+        </div>
+      ) : sosEvents.length === 0 ? (
+        <Card className="bg-slate-800/50 border-slate-700 p-12 text-center">
+          <CheckCircle className="w-16 h-16 mx-auto mb-4 text-emerald-500" />
+          <h3 className="text-xl font-bold text-white mb-2">Sin emergencias activas</h3>
+          <p className="text-slate-400">Todas las alertas han sido atendidas</p>
+        </Card>
+      ) : (
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {sosEvents.map((sos) => (
+            <Card key={sos.sos_id} className={`bg-slate-800/50 border-slate-700 ${sos.status === 'pending' ? 'border-l-4 border-l-red-500' : ''}`}>
+              <CardContent className="p-4">
+                <div className="flex items-start justify-between mb-3">
+                  <Badge className={priorityColors[sos.priority]}>
+                    {sos.priority?.toUpperCase()}
+                  </Badge>
+                  <span className={`px-2 py-1 rounded-full text-xs ${statusColors[sos.status]}`}>
+                    {sos.status}
+                  </span>
+                </div>
+                
+                <h4 className="text-white font-semibold mb-1">{sos.client_name || 'Cliente'}</h4>
+                <p className="text-slate-400 text-sm mb-2">{sos.client_phone || 'Sin teléfono'}</p>
+                
+                {sos.location?.address && (
+                  <div className="flex items-center gap-2 text-slate-500 text-xs mb-3">
+                    <MapPin className="w-3 h-3" />
+                    {sos.location.address}
+                  </div>
+                )}
+                
+                <div className="text-slate-500 text-xs mb-3">
+                  <Clock className="w-3 h-3 inline mr-1" />
+                  {new Date(sos.created_at).toLocaleString('es-ES')}
+                </div>
+                
+                {hasPermission('respond_sos') && sos.status === 'pending' && (
+                  <div className="flex gap-2 mt-3">
+                    <Button
+                      size="sm"
+                      onClick={() => onRespond(sos.sos_id, 'assign')}
+                      className="bg-indigo-600 hover:bg-indigo-700 flex-1"
+                    >
+                      Asignarme
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => onRespond(sos.sos_id, 'call_emergency', '112')}
+                      className="border-red-500 text-red-400"
+                    >
+                      <PhoneCall className="w-4 h-4" />
+                    </Button>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
+
+// ============================================
+// ALERTS SECTION COMPONENT
+// ============================================
+const AlertsSection = ({ employee, hasPermission }) => {
+  const [alerts, setAlerts] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchAlerts();
+  }, []);
+
+  const fetchAlerts = async () => {
+    try {
+      const res = await fetch(`${API_URL}/api/enterprise/alerts`, {
+        credentials: 'include'
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setAlerts(data.alerts || []);
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const severityColors = {
+    critical: 'bg-red-500',
+    high: 'bg-orange-500',
+    medium: 'bg-yellow-500',
+    low: 'bg-green-500'
+  };
+
+  return (
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-bold text-white">Alertas de Seguridad</h1>
+          <p className="text-slate-400">Monitoreo de amenazas detectadas</p>
+        </div>
+        <Button variant="outline" onClick={fetchAlerts} className="border-slate-700 text-slate-300">
+          <RefreshCw className="w-4 h-4 mr-2" />
+          Actualizar
+        </Button>
+      </div>
+
+      <Card className="bg-slate-800/50 border-slate-700 overflow-hidden">
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead className="bg-slate-900/50">
+              <tr>
+                <th className="text-left p-4 text-slate-400 font-medium">Tipo</th>
+                <th className="text-left p-4 text-slate-400 font-medium">Severidad</th>
+                <th className="text-left p-4 text-slate-400 font-medium">Título</th>
+                <th className="text-left p-4 text-slate-400 font-medium">Cliente</th>
+                <th className="text-left p-4 text-slate-400 font-medium">Estado</th>
+                <th className="text-left p-4 text-slate-400 font-medium">Fecha</th>
+              </tr>
+            </thead>
+            <tbody>
+              {loading ? (
+                <tr>
+                  <td colSpan={6} className="p-8 text-center text-slate-500">
+                    <RefreshCw className="w-6 h-6 mx-auto animate-spin" />
+                  </td>
+                </tr>
+              ) : alerts.length === 0 ? (
+                <tr>
+                  <td colSpan={6} className="p-8 text-center text-slate-500">
+                    No hay alertas registradas
+                  </td>
+                </tr>
+              ) : (
+                alerts.map((alert) => (
+                  <tr key={alert.alert_id} className="border-t border-slate-700 hover:bg-slate-800/50">
+                    <td className="p-4">
+                      <Badge variant="outline" className="text-slate-300 border-slate-600">
+                        {alert.alert_type}
+                      </Badge>
+                    </td>
+                    <td className="p-4">
+                      <Badge className={severityColors[alert.severity]}>
+                        {alert.severity}
+                      </Badge>
+                    </td>
+                    <td className="p-4 text-white">{alert.title}</td>
+                    <td className="p-4 text-slate-400">{alert.client_name || '-'}</td>
+                    <td className="p-4">
+                      {alert.blocked ? (
+                        <Badge className="bg-emerald-600">Bloqueada</Badge>
+                      ) : (
+                        <Badge variant="outline" className="text-yellow-400 border-yellow-600">Pendiente</Badge>
+                      )}
+                    </td>
+                    <td className="p-4 text-slate-400 text-sm">
+                      {new Date(alert.created_at).toLocaleDateString('es-ES')}
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
+      </Card>
+    </div>
+  );
+};
+
+// ============================================
+// ORDERS SECTION COMPONENT  
+// ============================================
+const OrdersSection = ({ employee, hasPermission }) => {
+  const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchOrders();
+  }, []);
+
+  const fetchOrders = async () => {
+    try {
+      const res = await fetch(`${API_URL}/api/enterprise/device-orders`, {
+        credentials: 'include'
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setOrders(data.orders || []);
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const updateOrderStatus = async (orderId, status) => {
+    try {
+      const res = await fetch(`${API_URL}/api/enterprise/device-orders/${orderId}?status=${status}`, {
+        method: 'PATCH',
+        credentials: 'include'
+      });
+      if (res.ok) {
+        toast.success('Pedido actualizado');
+        fetchOrders();
+      }
+    } catch (err) {
+      toast.error('Error al actualizar');
+    }
+  };
+
+  const statusColors = {
+    pending_payment: 'bg-yellow-500/20 text-yellow-400',
+    pending: 'bg-yellow-500/20 text-yellow-400',
+    confirmed: 'bg-blue-500/20 text-blue-400',
+    processing: 'bg-indigo-500/20 text-indigo-400',
+    shipped: 'bg-purple-500/20 text-purple-400',
+    delivered: 'bg-emerald-500/20 text-emerald-400',
+    cancelled: 'bg-red-500/20 text-red-400'
+  };
+
+  return (
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-bold text-white">Pedidos de Dispositivos SOS</h1>
+          <p className="text-slate-400">Gestión de envíos de botones SOS físicos</p>
+        </div>
+        <Button variant="outline" onClick={fetchOrders} className="border-slate-700 text-slate-300">
+          <RefreshCw className="w-4 h-4 mr-2" />
+          Actualizar
+        </Button>
+      </div>
+
+      <Card className="bg-slate-800/50 border-slate-700 overflow-hidden">
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead className="bg-slate-900/50">
+              <tr>
+                <th className="text-left p-4 text-slate-400 font-medium">ID Pedido</th>
+                <th className="text-left p-4 text-slate-400 font-medium">Cliente</th>
+                <th className="text-left p-4 text-slate-400 font-medium">Cantidad</th>
+                <th className="text-left p-4 text-slate-400 font-medium">Dirección</th>
+                <th className="text-left p-4 text-slate-400 font-medium">Estado</th>
+                <th className="text-left p-4 text-slate-400 font-medium">Pago</th>
+                <th className="text-right p-4 text-slate-400 font-medium">Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              {loading ? (
+                <tr>
+                  <td colSpan={7} className="p-8 text-center text-slate-500">
+                    <RefreshCw className="w-6 h-6 mx-auto animate-spin" />
+                  </td>
+                </tr>
+              ) : orders.length === 0 ? (
+                <tr>
+                  <td colSpan={7} className="p-8 text-center text-slate-500">
+                    No hay pedidos registrados
+                  </td>
+                </tr>
+              ) : (
+                orders.map((order) => (
+                  <tr key={order.order_id} className="border-t border-slate-700 hover:bg-slate-800/50">
+                    <td className="p-4 text-white font-mono text-sm">{order.order_id}</td>
+                    <td className="p-4">
+                      <p className="text-white">{order.user_name || order.shipping?.full_name}</p>
+                      <p className="text-slate-500 text-xs">{order.user_email}</p>
+                    </td>
+                    <td className="p-4 text-white">{order.quantity}x</td>
+                    <td className="p-4 text-slate-400 text-sm">
+                      {order.shipping?.city}, {order.shipping?.postal_code}
+                    </td>
+                    <td className="p-4">
+                      <span className={`px-2 py-1 rounded-full text-xs ${statusColors[order.status]}`}>
+                        {order.status}
+                      </span>
+                    </td>
+                    <td className="p-4">
+                      <span className={`px-2 py-1 rounded-full text-xs ${
+                        order.payment_status === 'paid' ? 'bg-emerald-500/20 text-emerald-400' : 'bg-yellow-500/20 text-yellow-400'
+                      }`}>
+                        {order.payment_status}
+                      </span>
+                    </td>
+                    <td className="p-4 text-right">
+                      {hasPermission('manage_device_orders') && order.payment_status === 'paid' && order.status !== 'delivered' && (
+                        <select
+                          onChange={(e) => updateOrderStatus(order.order_id, e.target.value)}
+                          className="text-xs bg-slate-700 border-slate-600 rounded px-2 py-1 text-white"
+                          defaultValue=""
+                        >
+                          <option value="" disabled>Cambiar estado</option>
+                          <option value="processing">En preparación</option>
+                          <option value="shipped">Enviado</option>
+                          <option value="delivered">Entregado</option>
+                        </select>
+                      )}
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
+      </Card>
+    </div>
+  );
+};
+
+// ============================================
+// PAYMENTS SECTION COMPONENT
+// ============================================
+const PaymentsSection = ({ employee, hasPermission }) => {
+  const [summary, setSummary] = useState({});
+  const [payments, setPayments] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    try {
+      const [summaryRes, paymentsRes] = await Promise.all([
+        fetch(`${API_URL}/api/enterprise/payments/summary`, { credentials: 'include' }),
+        fetch(`${API_URL}/api/enterprise/payments`, { credentials: 'include' })
+      ]);
+      
+      if (summaryRes.ok) setSummary(await summaryRes.json());
+      if (paymentsRes.ok) {
+        const data = await paymentsRes.json();
+        setPayments(data.payments || []);
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-bold text-white">Flujo de Caja</h1>
+          <p className="text-slate-400">Resumen financiero y transacciones</p>
+        </div>
+        <Button variant="outline" onClick={fetchData} className="border-slate-700 text-slate-300">
+          <RefreshCw className="w-4 h-4 mr-2" />
+          Actualizar
+        </Button>
+      </div>
+
+      {/* Summary Cards */}
+      <div className="grid grid-cols-3 gap-4">
+        <StatCard
+          title="Ingresos Hoy"
+          value={`€${(summary.today?.amount || 0).toFixed(2)}`}
+          subtitle={`${summary.today?.count || 0} transacciones`}
+          icon={DollarSign}
+          color="bg-emerald-600"
+        />
+        <StatCard
+          title="Ingresos Semana"
+          value={`€${(summary.week?.amount || 0).toFixed(2)}`}
+          subtitle={`${summary.week?.count || 0} transacciones`}
+          icon={TrendingUp}
+          color="bg-blue-600"
+        />
+        <StatCard
+          title="Ingresos Mes"
+          value={`€${(summary.month?.amount || 0).toFixed(2)}`}
+          subtitle={`${summary.month?.count || 0} transacciones`}
+          icon={BarChart3}
+          color="bg-indigo-600"
+        />
+      </div>
+
+      {/* Payments Table */}
+      <Card className="bg-slate-800/50 border-slate-700 overflow-hidden">
+        <CardHeader>
+          <CardTitle className="text-white">Últimas Transacciones</CardTitle>
+        </CardHeader>
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead className="bg-slate-900/50">
+              <tr>
+                <th className="text-left p-4 text-slate-400 font-medium">ID</th>
+                <th className="text-left p-4 text-slate-400 font-medium">Cliente</th>
+                <th className="text-left p-4 text-slate-400 font-medium">Plan</th>
+                <th className="text-left p-4 text-slate-400 font-medium">Importe</th>
+                <th className="text-left p-4 text-slate-400 font-medium">Estado</th>
+                <th className="text-left p-4 text-slate-400 font-medium">Fecha</th>
+              </tr>
+            </thead>
+            <tbody>
+              {loading ? (
+                <tr>
+                  <td colSpan={6} className="p-8 text-center text-slate-500">
+                    <RefreshCw className="w-6 h-6 mx-auto animate-spin" />
+                  </td>
+                </tr>
+              ) : payments.length === 0 ? (
+                <tr>
+                  <td colSpan={6} className="p-8 text-center text-slate-500">
+                    No hay transacciones
+                  </td>
+                </tr>
+              ) : (
+                payments.map((payment, idx) => (
+                  <tr key={payment.payment_id || idx} className="border-t border-slate-700">
+                    <td className="p-4 text-white font-mono text-xs">{payment.payment_id?.slice(0, 12) || '-'}</td>
+                    <td className="p-4 text-slate-300">{payment.client_email || payment.email || '-'}</td>
+                    <td className="p-4 text-slate-400">{payment.plan || '-'}</td>
+                    <td className="p-4 text-emerald-400 font-semibold">€{(payment.amount || 0).toFixed(2)}</td>
+                    <td className="p-4">
+                      <Badge className={payment.status === 'completed' ? 'bg-emerald-600' : 'bg-yellow-600'}>
+                        {payment.status}
+                      </Badge>
+                    </td>
+                    <td className="p-4 text-slate-500 text-sm">
+                      {payment.created_at ? new Date(payment.created_at).toLocaleDateString('es-ES') : '-'}
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
+      </Card>
+    </div>
+  );
+};
+
+// ============================================
+// AUDIT SECTION COMPONENT
+// ============================================
+const AuditSection = ({ employee, hasPermission }) => {
+  const [logs, setLogs] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchLogs();
+  }, []);
+
+  const fetchLogs = async () => {
+    try {
+      const res = await fetch(`${API_URL}/api/enterprise/audit-logs`, {
+        credentials: 'include'
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setLogs(data.logs || []);
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const actionColors = {
+    login: 'text-emerald-400',
+    logout: 'text-slate-400',
+    create: 'text-blue-400',
+    update: 'text-yellow-400',
+    delete: 'text-red-400',
+    suspend: 'text-orange-400',
+    activate: 'text-emerald-400'
+  };
+
+  return (
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-bold text-white">Logs de Auditoría</h1>
+          <p className="text-slate-400">Registro de todas las acciones del sistema</p>
+        </div>
+        <Button variant="outline" onClick={fetchLogs} className="border-slate-700 text-slate-300">
+          <RefreshCw className="w-4 h-4 mr-2" />
+          Actualizar
+        </Button>
+      </div>
+
+      <Card className="bg-slate-800/50 border-slate-700 overflow-hidden">
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead className="bg-slate-900/50">
+              <tr>
+                <th className="text-left p-4 text-slate-400 font-medium">Fecha/Hora</th>
+                <th className="text-left p-4 text-slate-400 font-medium">Empleado</th>
+                <th className="text-left p-4 text-slate-400 font-medium">Acción</th>
+                <th className="text-left p-4 text-slate-400 font-medium">Recurso</th>
+                <th className="text-left p-4 text-slate-400 font-medium">IP</th>
+              </tr>
+            </thead>
+            <tbody>
+              {loading ? (
+                <tr>
+                  <td colSpan={5} className="p-8 text-center text-slate-500">
+                    <RefreshCw className="w-6 h-6 mx-auto animate-spin" />
+                  </td>
+                </tr>
+              ) : logs.length === 0 ? (
+                <tr>
+                  <td colSpan={5} className="p-8 text-center text-slate-500">
+                    No hay logs registrados
+                  </td>
+                </tr>
+              ) : (
+                logs.map((log, idx) => (
+                  <tr key={log.log_id || idx} className="border-t border-slate-700">
+                    <td className="p-4 text-slate-400 text-sm">
+                      {new Date(log.created_at).toLocaleString('es-ES')}
+                    </td>
+                    <td className="p-4">
+                      <p className="text-white">{log.employee_name}</p>
+                      <p className="text-slate-500 text-xs">{log.employee_role}</p>
+                    </td>
+                    <td className="p-4">
+                      <span className={`font-medium ${actionColors[log.action] || 'text-slate-400'}`}>
+                        {log.action}
+                      </span>
+                    </td>
+                    <td className="p-4 text-slate-400">
+                      {log.resource_type}: {log.resource_id?.slice(0, 12)}
+                    </td>
+                    <td className="p-4 text-slate-500 text-xs font-mono">{log.ip_address || '-'}</td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
+      </Card>
+    </div>
+  );
+};
+
+// ============================================
+// MODALS
+// ============================================
+const CreateEmployeeModal = ({ onClose, onSuccess }) => {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    department: '',
+    role: 'operator',
+    password: ''
+  });
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    
+    try {
+      const res = await fetch(`${API_URL}/api/enterprise/employees`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({
+          ...formData,
+          status: 'active',
+          permissions: []
+        })
+      });
+      
+      if (res.ok) {
+        toast.success('Empleado creado correctamente');
+        onSuccess();
+        onClose();
+      } else {
+        const data = await res.json();
+        toast.error(data.detail || 'Error al crear empleado');
+      }
+    } catch (err) {
+      toast.error('Error de conexión');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+      <Card className="bg-slate-800 border-slate-700 w-full max-w-md">
+        <CardHeader>
+          <CardTitle className="text-white">Nuevo Empleado</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <Input
+              placeholder="Nombre completo"
+              value={formData.name}
+              onChange={(e) => setFormData({...formData, name: e.target.value})}
+              required
+              className="bg-slate-900 border-slate-700 text-white"
+            />
+            <Input
+              type="email"
+              placeholder="Email corporativo"
+              value={formData.email}
+              onChange={(e) => setFormData({...formData, email: e.target.value})}
+              required
+              className="bg-slate-900 border-slate-700 text-white"
+            />
+            <Input
+              placeholder="Teléfono"
+              value={formData.phone}
+              onChange={(e) => setFormData({...formData, phone: e.target.value})}
+              className="bg-slate-900 border-slate-700 text-white"
+            />
+            <Input
+              placeholder="Departamento"
+              value={formData.department}
+              onChange={(e) => setFormData({...formData, department: e.target.value})}
+              className="bg-slate-900 border-slate-700 text-white"
+            />
+            <select
+              value={formData.role}
+              onChange={(e) => setFormData({...formData, role: e.target.value})}
+              className="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-lg text-white"
+            >
+              <option value="operator">Operador</option>
+              <option value="supervisor">Supervisor</option>
+              <option value="admin">Administrador</option>
+              <option value="auditor">Auditor</option>
+            </select>
+            <Input
+              type="password"
+              placeholder="Contraseña temporal"
+              value={formData.password}
+              onChange={(e) => setFormData({...formData, password: e.target.value})}
+              required
+              className="bg-slate-900 border-slate-700 text-white"
+            />
+            
+            <div className="flex gap-3 pt-4">
+              <Button type="button" variant="outline" onClick={onClose} className="flex-1 border-slate-600 text-slate-300">
+                Cancelar
+              </Button>
+              <Button type="submit" disabled={loading} className="flex-1 bg-indigo-600 hover:bg-indigo-700">
+                {loading ? 'Creando...' : 'Crear Empleado'}
+              </Button>
+            </div>
+          </form>
+        </CardContent>
+      </Card>
+    </div>
+  );
+};
+
+const EmployeeDetailModal = ({ employee, onClose }) => {
+  return (
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+      <Card className="bg-slate-800 border-slate-700 w-full max-w-lg">
+        <CardHeader className="flex flex-row items-center justify-between">
+          <CardTitle className="text-white">Detalle de Empleado</CardTitle>
+          <Button variant="ghost" size="sm" onClick={onClose} className="text-slate-400">
+            <X className="w-4 h-4" />
+          </Button>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="flex items-center gap-4">
+            <div className="w-16 h-16 bg-indigo-600 rounded-full flex items-center justify-center">
+              <span className="text-white text-2xl font-bold">{employee.name?.charAt(0)}</span>
+            </div>
+            <div>
+              <h3 className="text-xl font-bold text-white">{employee.name}</h3>
+              <p className="text-slate-400">{employee.email}</p>
+              <Badge variant="outline" className="mt-1 text-slate-300 border-slate-600 capitalize">
+                {employee.role?.replace('_', ' ')}
+              </Badge>
+            </div>
+          </div>
+          
+          <div className="grid grid-cols-2 gap-4 pt-4 border-t border-slate-700">
+            <div>
+              <p className="text-slate-500 text-sm">Departamento</p>
+              <p className="text-white">{employee.department || 'Sin asignar'}</p>
+            </div>
+            <div>
+              <p className="text-slate-500 text-sm">Teléfono</p>
+              <p className="text-white">{employee.phone || '-'}</p>
+            </div>
+            <div>
+              <p className="text-slate-500 text-sm">Estado</p>
+              <p className={`font-medium ${employee.status === 'active' ? 'text-emerald-400' : 'text-red-400'}`}>
+                {employee.status}
+              </p>
+            </div>
+            <div>
+              <p className="text-slate-500 text-sm">Nivel de Riesgo</p>
+              <p className="text-white">{employee.risk_level || 'N/A'}</p>
+            </div>
+            <div>
+              <p className="text-slate-500 text-sm">2FA Activo</p>
+              <p className={employee.two_factor_enabled ? 'text-emerald-400' : 'text-yellow-400'}>
+                {employee.two_factor_enabled ? 'Sí' : 'No'}
+              </p>
+            </div>
+            <div>
+              <p className="text-slate-500 text-sm">Último Acceso</p>
+              <p className="text-white">
+                {employee.last_login ? new Date(employee.last_login).toLocaleString('es-ES') : 'Nunca'}
+              </p>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 };
