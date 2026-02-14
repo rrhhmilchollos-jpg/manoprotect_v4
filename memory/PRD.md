@@ -101,13 +101,26 @@ Cambios realizados según el PDF de auditoría:
 | CTAs simplificados | ✅ "Probar 7 Días Gratis" + "Ver Planes" |
 | Idioma español forzado | ✅ Sin auto-detección por IP |
 | Testimonios detallados | ✅ Con nombre, rol, ubicación, verificado |
-| Estadísticas de confianza | ✅ 4.8 rating, 10K+ familias, 50K+ amenazas |
+| Estadísticas de confianza | ✅ Datos reales de BD (familias, amenazas) |
 | Sello de pago seguro | ✅ Añadido en hero |
 
-### 6. Integraciones Activas
+### 6. WebSockets SOS en Tiempo Real - COMPLETADO (14 Feb 2026)
+- ✅ Indicador de conexión "En vivo/Offline" en header
+- ✅ Notificaciones toast automáticas para emergencias SOS
+- ✅ Sonido de alerta para eventos críticos
+- ✅ Auto-actualización de lista SOS
+- ✅ Difusión a todos los empleados enterprise conectados
+
+### 7. Eliminación de Mock Data - COMPLETADO (14 Feb 2026)
+- ✅ Estadísticas landing con datos reales (`/api/public/landing-stats`)
+- ✅ Gráficas muestran mensaje vacío si no hay datos (sin datos ficticios)
+- ✅ Eliminadas funciones `generateDemoData` y similares
+
+### 8. Integraciones Activas
 - **Stripe** - Pagos y webhooks
 - **SendGrid** - Emails de invitación
 - **MongoDB** - Base de datos
+- **Socket.IO** - WebSockets tiempo real
 
 ---
 
