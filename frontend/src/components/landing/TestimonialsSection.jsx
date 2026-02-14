@@ -150,18 +150,24 @@ const TestimonialsSection = () => {
           ))}
         </div>
         
-        {/* Trust Stats */}
+        {/* Trust Stats - Real Data from Database */}
         <div className="mt-12 flex flex-wrap justify-center gap-8">
-          <div className="text-center">
-            <div className="text-3xl font-bold text-indigo-600">4.8</div>
+          <div className="text-center" data-testid="stat-rating">
+            <div className="text-3xl font-bold text-indigo-600">
+              {loading ? '...' : stats.average_rating > 0 ? stats.average_rating.toFixed(1) : '—'}
+            </div>
             <div className="text-sm text-slate-500">Valoración media</div>
           </div>
-          <div className="text-center">
-            <div className="text-3xl font-bold text-indigo-600">10K+</div>
+          <div className="text-center" data-testid="stat-families">
+            <div className="text-3xl font-bold text-indigo-600">
+              {loading ? '...' : stats.families_protected > 0 ? formatNumber(stats.families_protected) : '—'}
+            </div>
             <div className="text-sm text-slate-500">Familias protegidas</div>
           </div>
-          <div className="text-center">
-            <div className="text-3xl font-bold text-indigo-600">50K+</div>
+          <div className="text-center" data-testid="stat-threats">
+            <div className="text-3xl font-bold text-indigo-600">
+              {loading ? '...' : stats.threats_blocked > 0 ? formatNumber(stats.threats_blocked) : '—'}
+            </div>
             <div className="text-sm text-slate-500">Amenazas bloqueadas</div>
           </div>
         </div>
