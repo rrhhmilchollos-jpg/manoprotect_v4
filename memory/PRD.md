@@ -146,13 +146,12 @@ Cambios realizados según el PDF de auditoría:
 
 ### P1 - Alta Prioridad
 - [ ] WebSockets para SOS en tiempo real
-- [ ] Gráficas con Recharts en dashboard
 - [ ] Optimización de imágenes (PageSpeed)
+- [ ] Exportación CSV/PDF de reportes
 
 ### P2 - Media Prioridad
 - [ ] 2FA para empleados
 - [ ] Integración con 112
-- [ ] Exportación CSV/PDF
 
 ### P3 - Baja Prioridad
 - [ ] Arquitectura subdomain (`admin.manoprotect.com`)
