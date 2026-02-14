@@ -1,17 +1,28 @@
 """
 ManoProtect - SOS Device Orders API
 Gestión de pedidos de dispositivos SOS físicos
+Con verificación de pago via Stripe Webhooks
 """
-from fastapi import APIRouter, HTTPException, Request, Cookie
+from fastapi import APIRouter, HTTPException, Request, Cookie, Header
 from pydantic import BaseModel
 from typing import Optional, List
 from datetime import datetime, timezone
 import uuid
+import os
+import stripe
+import json
 
 router = APIRouter(prefix="/sos-device", tags=["SOS Device"])
 
 # Database will be injected from server.py
 db = None
+
+# Stripe config
+STRIPE_API_KEY = os.environ.get('STRIPE_API_KEY')
+STRIPE_WEBHOOK_SECRET = os.environ.get('STRIPE_WEBHOOK_SECRET')
+
+if STRIPE_API_KEY:
+    stripe.api_key = STRIPE_API_KEY
 
 def set_database(database):
     global db
@@ -43,6 +54,10 @@ class SOSAlertRequest(BaseModel):
     longitude: float
     alert_type: str  # "manual", "fall_detection", "emergency_112"
     battery_level: Optional[int] = None
+
+# Device pricing
+DEVICE_PRICE = 0.00  # Promo: Device free
+SHIPPING_PRICE = 4.95  # Shipping cost
 
 
 # Helper function to get user from session
