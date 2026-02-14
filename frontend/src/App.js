@@ -370,7 +370,9 @@ function AppRouter() {
           <Route path="/tracking" element={<OrderTracking />} />
           
           {/* Enterprise B2B Landing */}
-          <Route path="/enterprise" element={<EnterpriseLanding />} />
+          <Route path="/enterprise" element={<EnterprisePortal />} />
+          <Route path="/enterprise/login" element={<EnterpriseLogin />} />
+          <Route path="/enterprise/portal" element={<EnterprisePortal />} />
           <Route path="/empresas" element={<EnterpriseLanding />} />
           <Route path="/b2b" element={<EnterpriseLanding />} />
           
