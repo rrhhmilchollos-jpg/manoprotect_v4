@@ -333,18 +333,20 @@ async def get_public_landing_stats():
     # Total threats blocked (security alerts)
     total_alerts = await db.security_alerts.count_documents({})
     
-    # Calculate average rating from user feedback (if exists)
-    avg_rating = 4.8  # Default if no reviews exist yet
+    # Calculate average rating from APPROVED user reviews
+    avg_rating = 0
+    total_reviews = 0
     try:
         ratings_pipeline = [
-            {"$match": {"rating": {"$exists": True, "$ne": None}}},
+            {"$match": {"status": "approved", "rating": {"$exists": True, "$ne": None}}},
             {"$group": {"_id": None, "avg": {"$avg": "$rating"}, "count": {"$sum": 1}}}
         ]
         ratings_result = await db.user_reviews.aggregate(ratings_pipeline).to_list(1)
         if ratings_result and ratings_result[0].get("count", 0) > 0:
             avg_rating = round(ratings_result[0]["avg"], 1)
+            total_reviews = ratings_result[0]["count"]
     except Exception:
-        pass  # Use default if collection doesn't exist
+        pass  # Use defaults if collection doesn't exist
     
     # Total SOS events handled
     total_sos = await db.sos_events.count_documents({})
