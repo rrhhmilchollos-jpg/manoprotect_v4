@@ -283,6 +283,7 @@ async def enterprise_login_with_2fa(data: Login2FARequest, response: Response, r
             await db.enterprise_employees.update_one(
                 {"employee_id": employee["employee_id"]},
                 {"$set": {"two_factor_failed_attempts": 0}, "$unset": {"two_factor_lockout_until": ""}}
+            )
     
     # 2FA verified - complete login
     session_token = uuid.uuid4().hex
