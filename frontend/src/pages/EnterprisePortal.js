@@ -22,6 +22,7 @@ import {
   LineChart, Line, AreaChart, Area, BarChart, Bar,
   XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend
 } from 'recharts';
+import { io } from 'socket.io-client';
 
 const API_URL = process.env.REACT_APP_BACKEND_URL || '';
 
