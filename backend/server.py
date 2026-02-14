@@ -2617,6 +2617,10 @@ print("✅ Reviews routes loaded")
 api_router.include_router(export_router)
 print("✅ Export routes loaded")
 
+# Two-Factor Authentication
+api_router.include_router(twofa_router)
+print("✅ 2FA routes loaded")
+
 # WhatsApp Alerts (Twilio)
 api_router.include_router(whatsapp_router)
 print("✅ WhatsApp alerts routes loaded")
