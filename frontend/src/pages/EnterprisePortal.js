@@ -966,6 +966,17 @@ const EnterprisePortal = () => {
           {activeSection === 'audit' && (
             <AuditSection employee={employee} hasPermission={hasPermission} />
           )}
+
+          {/* Security Section (2FA) */}
+          {activeSection === 'security' && (
+            <div className="space-y-6" data-testid="security-section">
+              <div>
+                <h1 className="text-2xl font-bold text-white">Configuración de Seguridad</h1>
+                <p className="text-slate-400">Gestiona la autenticación de dos factores y opciones de seguridad</p>
+              </div>
+              <TwoFactorSettings />
+            </div>
+          )}
         </div>
       </main>
     </div>
