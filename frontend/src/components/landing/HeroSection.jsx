@@ -30,15 +30,46 @@ const HeroSection = () => {
             {/* Headline */}
             <div className="space-y-4">
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-slate-900 leading-[1.1]">
-                Protege a tu familia de{' '}
-                <span className="text-indigo-600">estafas digitales</span>
+                Tu familia protegida{' '}
+                <span className="text-indigo-600">contra estafas</span>
               </h1>
               <p className="text-lg lg:text-xl text-slate-600 leading-relaxed max-w-xl">
-                ManoProtect detecta fraudes telefónicos, SMS maliciosos y emails de phishing antes de que afecten a tu familia.
+                ManoProtect detecta fraudes, SMS maliciosos y emails de phishing en tiempo real. Recibe alertas antes de ser víctima.
               </p>
             </div>
 
-            {/* CTA Buttons */}
+            {/* 3 Key Benefits */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 py-2">
+              <div className="flex items-center gap-3 p-3 bg-white rounded-xl border border-slate-200 shadow-sm">
+                <div className="w-10 h-10 bg-indigo-100 rounded-lg flex items-center justify-center">
+                  <Shield className="w-5 h-5 text-indigo-600" />
+                </div>
+                <div>
+                  <div className="font-semibold text-slate-900 text-sm">Detección IA</div>
+                  <div className="text-xs text-slate-500">Analiza amenazas al instante</div>
+                </div>
+              </div>
+              <div className="flex items-center gap-3 p-3 bg-white rounded-xl border border-slate-200 shadow-sm">
+                <div className="w-10 h-10 bg-emerald-100 rounded-lg flex items-center justify-center">
+                  <Phone className="w-5 h-5 text-emerald-600" />
+                </div>
+                <div>
+                  <div className="font-semibold text-slate-900 text-sm">Botón SOS</div>
+                  <div className="text-xs text-slate-500">Emergencias con 1 clic</div>
+                </div>
+              </div>
+              <div className="flex items-center gap-3 p-3 bg-white rounded-xl border border-slate-200 shadow-sm">
+                <div className="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center">
+                  <Check className="w-5 h-5 text-orange-600" />
+                </div>
+                <div>
+                  <div className="font-semibold text-slate-900 text-sm">24/7 Activo</div>
+                  <div className="text-xs text-slate-500">Protección sin pausas</div>
+                </div>
+              </div>
+            </div>
+
+            {/* CTA Buttons - Simplified */}
             <div className="flex flex-col sm:flex-row gap-4">
               <Button
                 data-testid="hero-main-cta"
@@ -46,17 +77,17 @@ const HeroSection = () => {
                 onClick={() => navigate(isAuthenticated ? '/dashboard' : '/register')}
                 className="bg-indigo-600 hover:bg-indigo-700 text-white rounded-full px-8 h-14 text-lg font-semibold shadow-lg shadow-indigo-600/25 hover:shadow-xl hover:shadow-indigo-600/30 transition-all"
               >
-                {isAuthenticated ? 'Ir a Mi Panel' : 'Empezar Gratis'}
+                Probar 7 Días Gratis
                 <ArrowRight className="w-5 h-5 ml-2" />
               </Button>
               <Button
                 data-testid="hero-secondary-cta"
                 variant="outline"
                 size="lg"
-                onClick={() => navigate('/servicios-sos')}
+                onClick={() => navigate('/precios')}
                 className="border-2 border-slate-300 text-slate-700 hover:bg-slate-100 rounded-full px-8 h-14 text-lg font-semibold transition-all"
               >
-                Ver Dispositivo SOS
+                Ver Planes
               </Button>
             </div>
 
