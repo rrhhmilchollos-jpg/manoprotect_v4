@@ -1299,6 +1299,28 @@ const ClientsSection = ({ employee, hasPermission }) => {
           <h1 className="text-2xl font-bold text-white" data-testid="clients-title">Gestión de Usuarios</h1>
           <p className="text-slate-400">Visualiza y gestiona los usuarios de ManoProtect</p>
         </div>
+        <Button 
+          onClick={async () => {
+            const params = planFilter ? { plan: planFilter } : {};
+            const queryStr = new URLSearchParams(params).toString();
+            const url = `${API_URL}/api/export/users/csv${queryStr ? '?' + queryStr : ''}`;
+            const response = await fetch(url, { credentials: 'include' });
+            if (response.ok) {
+              const blob = await response.blob();
+              const a = document.createElement('a');
+              a.href = window.URL.createObjectURL(blob);
+              a.download = 'usuarios_manoprotect.csv';
+              a.click();
+              toast.success('Exportación completada');
+            }
+          }}
+          variant="outline"
+          className="border-slate-600 text-slate-300"
+          data-testid="export-users-btn"
+        >
+          <Download className="w-4 h-4 mr-2" />
+          Exportar CSV
+        </Button>
       </div>
 
       {/* Filtros */}
