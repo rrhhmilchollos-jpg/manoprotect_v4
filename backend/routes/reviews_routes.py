@@ -250,9 +250,9 @@ async def create_review(
         "rating": data.rating,
         "title": data.title,
         "comment": data.comment,
-        "verified": is_premium,  # Premium users get verified badge
+        "verified": True,  # All paid users get verified badge
         "location": user.get("location") or user.get("city"),
-        "status": "approved" if is_premium else "pending",  # Auto-approve premium users
+        "status": "approved",  # Auto-approve all paid users
         "created_at": datetime.now(timezone.utc).isoformat(),
         "updated_at": datetime.now(timezone.utc).isoformat()
     }
@@ -265,7 +265,7 @@ async def create_review(
     
     return {
         "success": True,
-        "message": "¡Gracias por tu valoración!" if is_premium else "Tu valoración está pendiente de revisión",
+        "message": "¡Gracias por tu valoración! Ya está publicada.",
         "review": {k: v for k, v in review.items() if k != "_id"}
     }
 
