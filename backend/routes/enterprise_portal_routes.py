@@ -1657,3 +1657,345 @@ async def get_available_roles(
         ],
         "permissions": ROLE_PERMISSIONS
     }
+
+# ============================================
+# STRIPE PAYMENT LOOKUP & REFUNDS
+# ============================================
+
+class RefundRequest(BaseModel):
+    reason: str = Field(..., min_length=5, max_length=500, description="Motivo del reembolso")
+    amount: Optional[float] = Field(None, description="Monto parcial a reembolsar (opcional)")
+
+@router.get("/admin/payments/{payment_id}")
+async def get_stripe_payment_details(
+    payment_id: str,
+    request: Request,
+    enterprise_session: Optional[str] = Cookie(None)
+):
+    """
+    Retrieve payment details from Stripe.
+    Access restricted to admin and finance roles.
+    """
+    employee = await get_current_employee(request, enterprise_session)
+    
+    # Check permissions - only admin, super_admin, or finance roles
+    if employee["role"] not in ["super_admin", "admin", "finance", "supervisor"]:
+        raise HTTPException(status_code=403, detail="Sin permisos. Solo administradores y finanzas.")
+    
+    if not stripe.api_key:
+        raise HTTPException(status_code=500, detail="Stripe no está configurado")
+    
+    try:
+        # Try to retrieve as PaymentIntent first
+        try:
+            payment_intent = stripe.PaymentIntent.retrieve(payment_id)
+            
+            # Get customer details if available
+            customer_info = None
+            if payment_intent.customer:
+                try:
+                    customer = stripe.Customer.retrieve(payment_intent.customer)
+                    customer_info = {
+                        "id": customer.id,
+                        "email": customer.email,
+                        "name": customer.name,
+                        "phone": customer.phone
+                    }
+                except:
+                    pass
+            
+            # Check if already refunded
+            refunds_list = []
+            if payment_intent.latest_charge:
+                try:
+                    charge = stripe.Charge.retrieve(payment_intent.latest_charge)
+                    if charge.refunds and charge.refunds.data:
+                        for refund in charge.refunds.data:
+                            refunds_list.append({
+                                "refund_id": refund.id,
+                                "amount": refund.amount / 100,
+                                "status": refund.status,
+                                "reason": refund.reason,
+                                "created": datetime.fromtimestamp(refund.created, tz=timezone.utc).isoformat()
+                            })
+                except:
+                    pass
+            
+            # Calculate refundable amount
+            amount_received = payment_intent.amount_received / 100
+            total_refunded = sum(r["amount"] for r in refunds_list)
+            refundable_amount = amount_received - total_refunded
+            
+            # Log the lookup
+            await create_audit_log(
+                employee, "payment_lookup", "payment", payment_id,
+                {"type": "payment_intent", "amount": amount_received},
+                request
+            )
+            
+            return {
+                "success": True,
+                "payment_type": "payment_intent",
+                "payment_id": payment_intent.id,
+                "amount": payment_intent.amount / 100,
+                "amount_received": amount_received,
+                "currency": payment_intent.currency.upper(),
+                "status": payment_intent.status,
+                "description": payment_intent.description,
+                "customer": customer_info,
+                "metadata": dict(payment_intent.metadata) if payment_intent.metadata else {},
+                "payment_method": payment_intent.payment_method_types[0] if payment_intent.payment_method_types else None,
+                "created": datetime.fromtimestamp(payment_intent.created, tz=timezone.utc).isoformat(),
+                "refunds": refunds_list,
+                "total_refunded": total_refunded,
+                "refundable_amount": refundable_amount,
+                "is_refundable": payment_intent.status == "succeeded" and refundable_amount > 0,
+                "charge_id": payment_intent.latest_charge
+            }
+            
+        except stripe.error.InvalidRequestError:
+            # Try as Charge
+            charge = stripe.Charge.retrieve(payment_id)
+            
+            customer_info = None
+            if charge.customer:
+                try:
+                    customer = stripe.Customer.retrieve(charge.customer)
+                    customer_info = {
+                        "id": customer.id,
+                        "email": customer.email,
+                        "name": customer.name,
+                        "phone": customer.phone
+                    }
+                except:
+                    pass
+            
+            refunds_list = []
+            if charge.refunds and charge.refunds.data:
+                for refund in charge.refunds.data:
+                    refunds_list.append({
+                        "refund_id": refund.id,
+                        "amount": refund.amount / 100,
+                        "status": refund.status,
+                        "reason": refund.reason,
+                        "created": datetime.fromtimestamp(refund.created, tz=timezone.utc).isoformat()
+                    })
+            
+            amount_captured = charge.amount_captured / 100
+            total_refunded = sum(r["amount"] for r in refunds_list)
+            refundable_amount = amount_captured - total_refunded
+            
+            await create_audit_log(
+                employee, "payment_lookup", "payment", payment_id,
+                {"type": "charge", "amount": amount_captured},
+                request
+            )
+            
+            return {
+                "success": True,
+                "payment_type": "charge",
+                "payment_id": charge.id,
+                "amount": charge.amount / 100,
+                "amount_received": amount_captured,
+                "currency": charge.currency.upper(),
+                "status": "succeeded" if charge.paid else charge.status,
+                "description": charge.description,
+                "customer": customer_info,
+                "metadata": dict(charge.metadata) if charge.metadata else {},
+                "payment_method": charge.payment_method_details.type if charge.payment_method_details else None,
+                "created": datetime.fromtimestamp(charge.created, tz=timezone.utc).isoformat(),
+                "refunds": refunds_list,
+                "total_refunded": total_refunded,
+                "refundable_amount": refundable_amount,
+                "is_refundable": charge.paid and not charge.refunded and refundable_amount > 0,
+                "charge_id": charge.id
+            }
+            
+    except stripe.error.InvalidRequestError as e:
+        raise HTTPException(status_code=404, detail=f"Pago no encontrado: {str(e)}")
+    except stripe.error.AuthenticationError:
+        raise HTTPException(status_code=500, detail="Error de autenticación con Stripe")
+    except stripe.error.StripeError as e:
+        raise HTTPException(status_code=500, detail=f"Error de Stripe: {str(e)}")
+
+@router.post("/admin/payments/{payment_id}/refund")
+async def process_stripe_refund(
+    payment_id: str,
+    data: RefundRequest,
+    request: Request,
+    enterprise_session: Optional[str] = Cookie(None)
+):
+    """
+    Process a refund for a Stripe payment.
+    Access restricted to admin and finance roles.
+    Creates audit trail in payment_logs collection.
+    """
+    employee = await get_current_employee(request, enterprise_session)
+    
+    # Check permissions - only admin, super_admin, or finance roles
+    if employee["role"] not in ["super_admin", "admin", "finance"]:
+        raise HTTPException(status_code=403, detail="Sin permisos. Solo administradores y finanzas pueden procesar reembolsos.")
+    
+    if not stripe.api_key:
+        raise HTTPException(status_code=500, detail="Stripe no está configurado")
+    
+    # Rate limiting check - max 10 refunds per employee per hour
+    one_hour_ago = datetime.now(timezone.utc) - timedelta(hours=1)
+    recent_refunds = await db.payment_logs.count_documents({
+        "employee_id": employee["employee_id"],
+        "action": "refund",
+        "created_at": {"$gte": one_hour_ago.isoformat()}
+    })
+    
+    if recent_refunds >= 10:
+        raise HTTPException(
+            status_code=429, 
+            detail="Has alcanzado el límite de 10 reembolsos por hora. Espera un momento antes de continuar."
+        )
+    
+    try:
+        # First, get the payment to validate
+        charge_id = None
+        original_amount = 0
+        
+        try:
+            payment_intent = stripe.PaymentIntent.retrieve(payment_id)
+            
+            if payment_intent.status != "succeeded":
+                raise HTTPException(status_code=400, detail="Solo se pueden reembolsar pagos completados (succeeded)")
+            
+            charge_id = payment_intent.latest_charge
+            original_amount = payment_intent.amount_received / 100
+            
+        except stripe.error.InvalidRequestError:
+            # Try as Charge
+            charge = stripe.Charge.retrieve(payment_id)
+            
+            if not charge.paid:
+                raise HTTPException(status_code=400, detail="Solo se pueden reembolsar pagos completados")
+            
+            charge_id = charge.id
+            original_amount = charge.amount_captured / 100
+        
+        if not charge_id:
+            raise HTTPException(status_code=400, detail="No se encontró el cargo asociado al pago")
+        
+        # Calculate refund amount
+        refund_amount = data.amount if data.amount else None
+        
+        if refund_amount:
+            if refund_amount <= 0:
+                raise HTTPException(status_code=400, detail="El monto del reembolso debe ser mayor a 0")
+            if refund_amount > original_amount:
+                raise HTTPException(status_code=400, detail=f"El monto del reembolso no puede ser mayor al pago original (€{original_amount:.2f})")
+        
+        # Create the refund
+        refund_params = {
+            "charge": charge_id,
+            "reason": "requested_by_customer",
+            "metadata": {
+                "employee_id": employee["employee_id"],
+                "employee_name": employee["name"],
+                "reason": data.reason,
+                "processed_at": datetime.now(timezone.utc).isoformat()
+            }
+        }
+        
+        if refund_amount:
+            refund_params["amount"] = int(refund_amount * 100)  # Convert to cents
+        
+        refund = stripe.Refund.create(**refund_params)
+        
+        # Log to payment_logs collection
+        log_entry = {
+            "log_id": generate_id("refund_"),
+            "payment_id": payment_id,
+            "charge_id": charge_id,
+            "refund_id": refund.id,
+            "action": "refund",
+            "original_amount": original_amount,
+            "refund_amount": refund.amount / 100,
+            "currency": refund.currency.upper(),
+            "reason": data.reason,
+            "status": refund.status,
+            "employee_id": employee["employee_id"],
+            "employee_name": employee["name"],
+            "employee_role": employee["role"],
+            "ip_address": request.client.host,
+            "user_agent": request.headers.get("user-agent"),
+            "created_at": datetime.now(timezone.utc).isoformat()
+        }
+        
+        await db.payment_logs.insert_one(log_entry)
+        
+        # Create audit log
+        await create_audit_log(
+            employee, "payment_refund", "payment", payment_id,
+            {
+                "refund_id": refund.id,
+                "amount": refund.amount / 100,
+                "reason": data.reason
+            },
+            request
+        )
+        
+        return {
+            "success": True,
+            "message": "Reembolso procesado correctamente",
+            "refund": {
+                "refund_id": refund.id,
+                "payment_id": payment_id,
+                "amount": refund.amount / 100,
+                "currency": refund.currency.upper(),
+                "status": refund.status,
+                "reason": data.reason,
+                "processed_by": employee["name"],
+                "created_at": datetime.now(timezone.utc).isoformat()
+            }
+        }
+        
+    except stripe.error.InvalidRequestError as e:
+        error_msg = str(e)
+        if "already been refunded" in error_msg.lower():
+            raise HTTPException(status_code=400, detail="Este pago ya ha sido reembolsado completamente")
+        raise HTTPException(status_code=400, detail=f"Error al procesar reembolso: {error_msg}")
+    except stripe.error.StripeError as e:
+        raise HTTPException(status_code=500, detail=f"Error de Stripe: {str(e)}")
+
+@router.get("/admin/payment-logs")
+async def get_payment_logs(
+    request: Request,
+    enterprise_session: Optional[str] = Cookie(None),
+    page: int = Query(1, ge=1),
+    limit: int = Query(20, ge=1, le=100),
+    action: Optional[str] = None
+):
+    """
+    Get payment audit logs.
+    Access restricted to admin and finance roles.
+    """
+    employee = await get_current_employee(request, enterprise_session)
+    
+    if employee["role"] not in ["super_admin", "admin", "finance", "auditor"]:
+        raise HTTPException(status_code=403, detail="Sin permisos para ver logs de pagos")
+    
+    query = {}
+    if action:
+        query["action"] = action
+    
+    skip = (page - 1) * limit
+    
+    logs = await db.payment_logs.find(
+        query,
+        {"_id": 0}
+    ).sort("created_at", -1).skip(skip).limit(limit).to_list(limit)
+    
+    total = await db.payment_logs.count_documents(query)
+    
+    return {
+        "logs": logs,
+        "total": total,
+        "page": page,
+        "limit": limit,
+        "pages": (total + limit - 1) // limit
+    }
