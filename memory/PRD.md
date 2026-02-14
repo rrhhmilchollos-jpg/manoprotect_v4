@@ -158,7 +158,7 @@ Cambios realizados según el PDF de auditoría:
 ## Backlog Pendiente
 
 ### P1 - Alta Prioridad
-- [ ] WebSockets para SOS en tiempo real
+- [x] WebSockets para SOS en tiempo real ✅ COMPLETADO
 - [ ] Optimización de imágenes (PageSpeed)
 - [ ] Exportación CSV/PDF de reportes
 
