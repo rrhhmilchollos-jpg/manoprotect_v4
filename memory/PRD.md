@@ -49,12 +49,16 @@ ManoProtect es una plataforma integral de protección contra fraudes digitales p
 ## Funcionalidades Completadas ✅
 
 ### 9. Sistema de Valoraciones de Usuarios - COMPLETADO (14 Feb 2026)
-Sistema completo para que los clientes califiquen el servicio:
+Sistema completo para que los clientes con **plan de pago** califiquen el servicio:
+- ✅ **Solo usuarios premium**: Los usuarios gratuitos ven mensaje de upgrade
+- ✅ **Aprobación automática**: Todas las reviews de usuarios de pago se publican inmediatamente
+- ✅ **Badge verificado**: Todas las reviews muestran badge de verificado
 - ✅ **Endpoints públicos**: 
   - `GET /api/reviews/public` - Obtener valoraciones aprobadas
   - `GET /api/reviews/stats` - Estadísticas (media, distribución)
 - ✅ **Endpoints autenticados**:
-  - `POST /api/reviews` - Crear valoración
+  - `GET /api/reviews/can-review` - Verificar elegibilidad
+  - `POST /api/reviews` - Crear valoración (solo premium)
   - `GET/PUT/DELETE /api/reviews/my-review` - Gestionar mi valoración
 - ✅ **Endpoints admin (Portal Enterprise)**:
   - `GET /api/reviews/admin/all` - Ver todas las valoraciones
@@ -62,7 +66,6 @@ Sistema completo para que los clientes califiquen el servicio:
   - `PATCH /api/reviews/admin/{id}/reject` - Rechazar
 - ✅ **Landing page actualizada**: Muestra valoraciones reales + estadísticas
 - ✅ **Portal Enterprise**: Nueva sección "Valoraciones" para gestión
-- ✅ **Endpoint landing-stats actualizado**: Incluye `average_rating` y `total_reviews`
 - ✅ **Tests**: Backend 15/15, Frontend 12/12 - 100% passed
 
 ### 8. WebSockets SOS en Tiempo Real - COMPLETADO (14 Feb 2026)
