@@ -7,7 +7,7 @@ import pytest
 import requests
 import os
 
-BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', 'https://admin-portal-361.preview.emergentagent.com')
+BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', 'https://payment-dashboard-70.preview.emergentagent.com')
 
 # Test credentials
 SUPERADMIN_EMAIL = "info@manoprotect.com"

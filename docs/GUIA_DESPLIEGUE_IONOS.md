@@ -121,7 +121,7 @@ El backend seguirá corriendo en Emergent. Asegúrate de:
 1. **Variables de entorno del frontend:**
    El archivo `frontend/.env` debe tener:
    ```
-   REACT_APP_BACKEND_URL=https://admin-portal-361.preview.emergentagent.com
+   REACT_APP_BACKEND_URL=https://payment-dashboard-70.preview.emergentagent.com
    ```
 
 2. **CORS del backend:**

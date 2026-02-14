@@ -9,7 +9,7 @@
     "contextMenus"
   ],
   "host_permissions": [
-    "https://admin-portal-361.preview.emergentagent.com/*",
+    "https://payment-dashboard-70.preview.emergentagent.com/*",
     "https://www.manoprotect.com/*"
   ],
   "action": {
