@@ -225,8 +225,7 @@ async def enterprise_login(data: LoginRequest, response: Response, request: Requ
 
 @router.post("/auth/login-2fa")
 async def enterprise_login_with_2fa(data: Login2FARequest, response: Response, request: Request, background_tasks: BackgroundTasks):
-    """Enterprise employee login - Step 2: Verify 2FA code with brute force protection"""
-    import pyotp
+    """Enterprise employee login - Step 2: Verify SMS code or backup code with brute force protection"""
     from services.email_service import email_service
     
     if db is None:
@@ -269,9 +268,11 @@ async def enterprise_login_with_2fa(data: Login2FARequest, response: Response, r
             )
             failed_attempts = 0
     
-    # Verify TOTP code
-    secret = employee.get("two_factor_secret")
+    # Verify code - SMS code, backup code, or TOTP (legacy)
     backup_codes = employee.get("two_factor_backup_codes", [])
+    sms_code = employee.get("sms_verification_code")
+    sms_expiry = employee.get("sms_code_expiry")
+    code_valid = False
     
     # Check if it's a backup code
     if data.totp_code in backup_codes:
@@ -279,12 +280,43 @@ async def enterprise_login_with_2fa(data: Login2FARequest, response: Response, r
         backup_codes.remove(data.totp_code)
         await db.enterprise_employees.update_one(
             {"employee_id": employee["employee_id"]},
-            {"$set": {"two_factor_backup_codes": backup_codes, "two_factor_failed_attempts": 0}}
+            {"$set": {"two_factor_backup_codes": backup_codes, "two_factor_failed_attempts": 0},
+             "$unset": {"sms_verification_code": "", "sms_code_expiry": ""}}
         )
+        code_valid = True
+    # Check SMS code
+    elif sms_code and data.totp_code == sms_code:
+        # Verify SMS code hasn't expired
+        if sms_expiry:
+            expiry_time = datetime.fromisoformat(sms_expiry.replace("Z", "+00:00"))
+            if datetime.now(timezone.utc) > expiry_time:
+                raise HTTPException(status_code=401, detail="Código SMS expirado. Inicia sesión de nuevo para recibir un nuevo código.")
+        
+        # Clear SMS code after successful use
+        await db.enterprise_employees.update_one(
+            {"employee_id": employee["employee_id"]},
+            {"$set": {"two_factor_failed_attempts": 0},
+             "$unset": {"sms_verification_code": "", "sms_code_expiry": ""}}
+        )
+        code_valid = True
     else:
-        # Verify TOTP code
-        totp = pyotp.TOTP(secret)
-        if not totp.verify(data.totp_code, valid_window=1):
+        # Try legacy TOTP verification as fallback
+        try:
+            import pyotp
+            secret = employee.get("two_factor_secret")
+            if secret:
+                totp = pyotp.TOTP(secret)
+                if totp.verify(data.totp_code, valid_window=1):
+                    await db.enterprise_employees.update_one(
+                        {"employee_id": employee["employee_id"]},
+                        {"$set": {"two_factor_failed_attempts": 0},
+                         "$unset": {"sms_verification_code": "", "sms_code_expiry": ""}}
+                    )
+                    code_valid = True
+        except:
+            pass
+    
+    if not code_valid:
             # Increment failed attempts
             new_failed_attempts = failed_attempts + 1
             update_data = {"two_factor_failed_attempts": new_failed_attempts}
