@@ -902,6 +902,11 @@ const EnterprisePortal = () => {
             <AlertsSection employee={employee} hasPermission={hasPermission} />
           )}
 
+          {/* Reviews Section */}
+          {activeSection === 'reviews' && (
+            <ReviewsSection employee={employee} hasPermission={hasPermission} />
+          )}
+
           {/* Orders Section */}
           {activeSection === 'orders' && (
             <OrdersSection employee={employee} hasPermission={hasPermission} />
