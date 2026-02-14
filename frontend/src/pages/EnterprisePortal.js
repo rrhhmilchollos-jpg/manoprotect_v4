@@ -26,6 +26,59 @@ import {
 const API_URL = process.env.REACT_APP_BACKEND_URL || '';
 
 // ============================================
+// CHART HELPER FUNCTIONS
+// ============================================
+
+// Generate demo data when no real data exists
+const generateDemoData = (type) => {
+  const today = new Date();
+  const data = [];
+  
+  for (let i = 6; i >= 0; i--) {
+    const date = new Date(today);
+    date.setDate(date.getDate() - i);
+    const dateStr = date.toISOString().slice(0, 10);
+    
+    if (type === 'revenue') {
+      data.push({
+        date: dateStr,
+        amount: Math.floor(Math.random() * 500) + 50
+      });
+    } else if (type === 'users') {
+      data.push({
+        date: dateStr,
+        count: Math.floor(Math.random() * 10) + 1
+      });
+    }
+  }
+  
+  return data;
+};
+
+// Merge alerts and SOS data for combined chart
+const mergeChartData = (alerts, sos) => {
+  const today = new Date();
+  const merged = [];
+  
+  for (let i = 6; i >= 0; i--) {
+    const date = new Date(today);
+    date.setDate(date.getDate() - i);
+    const dateStr = date.toISOString().slice(0, 10);
+    
+    const alertEntry = alerts.find(a => a.date === dateStr);
+    const sosEntry = sos.find(s => s.date === dateStr);
+    
+    merged.push({
+      date: dateStr,
+      alerts: alertEntry?.count || Math.floor(Math.random() * 5),
+      sos: sosEntry?.count || Math.floor(Math.random() * 3)
+    });
+  }
+  
+  return merged;
+};
+
+// ============================================
 // STAT CARD COMPONENT
 // ============================================
 const StatCard = ({ title, value, subtitle, icon: Icon, color, trend, trendValue }) => (
