@@ -181,4 +181,8 @@ Módulos funcionales:
 2. **Stripe Webhooks**: Endpoint `/api/sos-device/webhook/stripe`
 3. **Idioma**: Forzado a español por defecto
 4. **Portal Enterprise**: Acceso en `/enterprise/login`
-5. **Valoraciones**: Usuarios premium se aprueban automáticamente, gratuitos requieren revisión
+5. **Valoraciones**: 
+   - **Solo usuarios con plan de pago** pueden dejar valoraciones
+   - Usuarios gratuitos ven prompt de upgrade
+   - Todas las reviews se aprueban automáticamente
+   - Badge de "Verificado" en todas las reviews
