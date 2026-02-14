@@ -2609,6 +2609,10 @@ api_router.include_router(legacy_vault_router)
 api_router.include_router(reviews_router)
 print("✅ Reviews routes loaded")
 
+# Export Reports
+api_router.include_router(export_router)
+print("✅ Export routes loaded")
+
 # WhatsApp Alerts (Twilio)
 api_router.include_router(whatsapp_router)
 print("✅ WhatsApp alerts routes loaded")
