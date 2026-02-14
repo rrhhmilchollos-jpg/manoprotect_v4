@@ -24,7 +24,7 @@ ManoProtect es una plataforma integral de protección contra fraudes digitales p
 /app
 ├── backend/
 │   ├── routes/
-│   │   ├── sos_device.py          # Pedidos SOS con Stripe (CORREGIDO)
+│   │   ├── sos_device.py          # Pedidos SOS con Stripe
 │   │   ├── enterprise_portal_routes.py  # Portal Enterprise
 │   │   └── ...
 │   ├── models/
@@ -32,10 +32,9 @@ ManoProtect es una plataforma integral de protección contra fraudes digitales p
 │   └── server.py
 ├── frontend/
 │   └── src/
+│       ├── components/landing/    # Hero, Testimonials, etc.
 │       └── pages/
 │           ├── EnterprisePortal.js  # Portal completo
-│           ├── EnterpriseLogin.js
-│           ├── SOSDeviceOrder.js
 │           └── ...
 └── memory/
     └── PRD.md
@@ -46,41 +45,41 @@ ManoProtect es una plataforma integral de protección contra fraudes digitales p
 ## Funcionalidades Completadas ✅
 
 ### 1. Bug Crítico de Stripe - CORREGIDO (14 Feb 2026)
-**Problema**: Los pedidos de dispositivos SOS se creaban sin verificar el pago. Los dispositivos se generaban inmediatamente.
-
-**Solución implementada**:
 - Pedidos ahora se crean con status `pending_payment`
 - Se genera sesión de Stripe Checkout y se retorna `checkout_url`
-- Los dispositivos solo se crean después de que el webhook de Stripe confirma el pago
-- Endpoint de webhook: `/api/sos-device/webhook/stripe`
+- Los dispositivos solo se crean después del webhook de confirmación
+- Endpoint webhook: `/api/sos-device/webhook/stripe`
 
 ### 2. Portal Enterprise - COMPLETADO (14 Feb 2026)
-**Módulos funcionales**:
-- ✅ Dashboard con KPIs en tiempo real
-- ✅ Gestión de Empleados (CRUD completo)
-- ✅ Gestión de Clientes (visualización y filtros)
-- ✅ Centro de Emergencias SOS (asignación, escalado)
-- ✅ Alertas de Seguridad (phishing, fraude)
-- ✅ Pedidos de Dispositivos (con estado de pago)
-- ✅ Flujo de Caja (resumen financiero)
-- ✅ Logs de Auditoría
+Módulos funcionales:
+- Dashboard con KPIs | Gestión Empleados (CRUD) | Gestión Clientes
+- Centro SOS | Alertas Seguridad | Pedidos | Flujo de Caja | Auditoría
 
-**Credenciales de acceso**:
-- Admin: `admin@manoprotect.com` / `Admin2026!`
-- URL: `/enterprise/login`
+### 3. Usuarios del Sistema - ACTUALIZADOS (14 Feb 2026)
 
-### 3. Usuario Google Play - CREADO (14 Feb 2026)
-- Email: `review@manoprotect.com`
-- Password: `20142026`
-- Plan: `family-yearly` (acceso completo)
+| Usuario | Email | Password | Rol |
+|---------|-------|----------|-----|
+| CEO/Admin | ceo@manoprotect.com | Admin2026! | super_admin (Enterprise) |
+| CEO/Director | ceo@manoprotect.com | Director2026! | director (Portal antiguo) |
+| Google Play Tester | rrhh.milchollos@gmail.com | 20142026 | user (family-yearly) |
 
-### 4. Integración SendGrid - ACTIVA
-- Envío de invitaciones a empleados
-- Configurado en `backend/.env`
+### 4. Auditoría de Conversión - IMPLEMENTADA (14 Feb 2026)
+Cambios realizados según el PDF de auditoría:
 
-### 5. Sistema de Trial 7 días - ACTIVO
-- Requiere tarjeta de crédito
-- Restricción de dispositivo SOS durante trial
+| Recomendación | Estado |
+|---------------|--------|
+| Headline claro | ✅ "Tu familia protegida contra estafas" |
+| 3 beneficios principales | ✅ Detección IA, Botón SOS, 24/7 Activo |
+| CTAs simplificados | ✅ "Probar 7 Días Gratis" + "Ver Planes" |
+| Idioma español forzado | ✅ Sin auto-detección por IP |
+| Testimonios detallados | ✅ Con nombre, rol, ubicación, verificado |
+| Estadísticas de confianza | ✅ 4.8 rating, 10K+ familias, 50K+ amenazas |
+| Sello de pago seguro | ✅ Añadido en hero |
+
+### 5. Integraciones Activas
+- **Stripe** - Pagos y webhooks
+- **SendGrid** - Emails de invitación
+- **MongoDB** - Base de datos
 
 ---
 
@@ -90,66 +89,16 @@ ManoProtect es una plataforma integral de protección contra fraudes digitales p
 | Endpoint | Método | Descripción |
 |----------|--------|-------------|
 | `/api/sos-device/order` | POST | Crea pedido con checkout Stripe |
-| `/api/sos-device/order/{id}/status` | GET | Estado del pedido y pago |
-| `/api/sos-device/webhook/stripe` | POST | Webhook de confirmación Stripe |
-| `/api/sos-device/orders` | GET | Lista pedidos del usuario |
+| `/api/sos-device/order/{id}/status` | GET | Estado del pedido |
+| `/api/sos-device/webhook/stripe` | POST | Webhook Stripe |
 
 ### Enterprise Portal
 | Endpoint | Método | Descripción |
 |----------|--------|-------------|
 | `/api/enterprise/auth/login` | POST | Login empleado |
-| `/api/enterprise/dashboard/stats` | GET | KPIs del dashboard |
+| `/api/enterprise/dashboard/stats` | GET | KPIs |
 | `/api/enterprise/employees` | GET/POST | CRUD empleados |
 | `/api/enterprise/clients` | GET | Lista clientes |
-| `/api/enterprise/sos` | GET | Lista eventos SOS |
-| `/api/enterprise/sos/{id}/respond` | POST | Responder SOS |
-| `/api/enterprise/device-orders` | GET | Pedidos dispositivos |
-| `/api/enterprise/payments` | GET | Transacciones |
-| `/api/enterprise/audit-logs` | GET | Logs auditoría |
-
----
-
-## Roles del Portal Enterprise
-
-| Rol | Nivel | Permisos |
-|-----|-------|----------|
-| super_admin | 100 | Todo acceso |
-| admin | 80 | Gestión completa |
-| supervisor | 60 | SOS + alertas + clientes |
-| operator | 40 | Solo responder SOS |
-| auditor | 30 | Solo lectura + logs |
-| emergency_service | 20 | Solo SOS |
-
----
-
-## Backlog Pendiente
-
-### P1 - Alta Prioridad
-- [ ] Implementar recomendaciones del PDF de Auditoría de Conversión
-- [ ] WebSockets para SOS en tiempo real
-- [ ] Gráficas con Recharts en dashboard
-
-### P2 - Media Prioridad
-- [ ] 2FA para empleados
-- [ ] Integración con 112
-- [ ] Exportación CSV/PDF desde portal
-
-### P3 - Baja Prioridad
-- [ ] Arquitectura subdomain (`admin.manoprotect.com`)
-- [ ] Videos demo de 1 minuto
-- [ ] Re-evaluación PageSpeed
-- [ ] DNA Digital Identity
-
----
-
-## Integraciones Activas
-
-| Servicio | Estado | Keys en |
-|----------|--------|---------|
-| Stripe | ✅ Activo | `backend/.env` |
-| SendGrid | ✅ Activo | `backend/.env` |
-| MongoDB | ✅ Activo | `backend/.env` |
-| Firebase | ✅ Activo | `frontend/.env` |
 
 ---
 
@@ -158,27 +107,30 @@ ManoProtect es una plataforma integral de protección contra fraudes digitales p
 ### Último Test: Iteración 38 (14 Feb 2026)
 - Backend: 13/13 tests passed (100%)
 - Frontend: 7/7 tests passed (100%)
-- Archivo: `/app/backend/tests/test_iteration_38.py`
-
-### Casos Verificados:
-1. ✅ SOS order crea status `pending_payment`
-2. ✅ Retorna Stripe checkout URL
-3. ✅ Dispositivos NO se crean antes del pago
-4. ✅ Enterprise login funciona
-5. ✅ Dashboard KPIs retorna datos
-6. ✅ Google Play user puede loguearse
 
 ---
 
-## Notas de Desarrollo
+## Backlog Pendiente
 
-### Sesiones de Usuario
-- La autenticación usa colección `user_sessions` en MongoDB
-- El endpoint SOS device fue actualizado para buscar en ambas colecciones (`user_sessions` y `sessions`)
+### P1 - Alta Prioridad
+- [ ] WebSockets para SOS en tiempo real
+- [ ] Gráficas con Recharts en dashboard
+- [ ] Optimización de imágenes (PageSpeed)
 
-### Stripe Webhooks
-- Endpoint: `/api/sos-device/webhook/stripe`
-- Eventos manejados:
-  - `checkout.session.completed` → Confirma pago, crea dispositivos
-  - `checkout.session.expired` → Marca pedido como expirado
-  - `payment_intent.payment_failed` → Marca pago como fallido
+### P2 - Media Prioridad
+- [ ] 2FA para empleados
+- [ ] Integración con 112
+- [ ] Exportación CSV/PDF
+
+### P3 - Baja Prioridad
+- [ ] Arquitectura subdomain (`admin.manoprotect.com`)
+- [ ] Videos demo de 1 minuto
+- [ ] DNA Digital Identity
+
+---
+
+## Notas Importantes
+
+1. **Sesiones de Usuario**: La autenticación usa `user_sessions` en MongoDB
+2. **Stripe Webhooks**: Endpoint `/api/sos-device/webhook/stripe`
+3. **Idioma**: Forzado a español por defecto (sin auto-detección IP)
