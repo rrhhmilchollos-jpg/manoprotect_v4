@@ -290,6 +290,28 @@ async def get_my_review(
     return {"review": review}
 
 
+@router.get("/can-review")
+async def check_can_review(
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Check if current user can leave a review (must have paid plan)"""
+    user = await get_current_user(request, session_token)
+    user_id = user.get("user_id") or user.get("id")
+    user_plan = user.get("plan", "free")
+    
+    can_review = user_plan in PAID_PLANS
+    has_review = await db.user_reviews.find_one({"user_id": user_id}) is not None
+    
+    return {
+        "can_review": can_review,
+        "has_paid_plan": can_review,
+        "has_existing_review": has_review,
+        "current_plan": user_plan,
+        "message": None if can_review else "Necesitas una suscripción de pago para dejar valoraciones"
+    }
+
+
 @router.put("/my-review")
 async def update_my_review(
     data: ReviewCreate,
