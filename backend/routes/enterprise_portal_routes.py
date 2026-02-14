@@ -95,16 +95,22 @@ class LoginRequest(BaseModel):
 @router.post("/auth/login")
 async def enterprise_login(data: LoginRequest, response: Response, request: Request):
     """Enterprise employee login"""
+    if db is None:
+        raise HTTPException(status_code=500, detail="Database not initialized")
+    
     employee = await db.enterprise_employees.find_one({"email": data.email.lower()})
     
     if not employee:
-        raise HTTPException(status_code=401, detail="Credenciales incorrectas")
+        raise HTTPException(status_code=401, detail="Credenciales incorrectas - usuario no encontrado")
     
     if employee.get("status") != "active":
         raise HTTPException(status_code=403, detail="Cuenta suspendida o inactiva")
     
-    if hash_password(data.password) != employee.get("password_hash"):
-        raise HTTPException(status_code=401, detail="Credenciales incorrectas")
+    computed_hash = hash_password(data.password)
+    stored_hash = employee.get("password_hash")
+    
+    if computed_hash != stored_hash:
+        raise HTTPException(status_code=401, detail="Credenciales incorrectas - password incorrecto")
     
     # Generate session
     session_token = uuid.uuid4().hex
