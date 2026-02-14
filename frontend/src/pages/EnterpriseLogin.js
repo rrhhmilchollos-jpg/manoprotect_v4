@@ -263,7 +263,7 @@ const EnterpriseLogin = () => {
         </Card>
 
         <p className="text-center text-slate-500 text-xs mt-6">
-          © 2026 ManoProtect - STARTBOOKING SL. Todos los derechos reservados.
+          © 2026 ManoProtect - Manoprotect.com. Todos los derechos reservados.
         </p>
       </div>
     </div>

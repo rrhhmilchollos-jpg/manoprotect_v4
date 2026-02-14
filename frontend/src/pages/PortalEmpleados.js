@@ -653,7 +653,7 @@ export default function PortalEmpleados() {
 
           {/* Footer */}
           <div className="text-center mt-12 text-slate-500 text-sm">
-            <p>STARTBOOKING SL • CIF: B19427723</p>
+            <p>Manoprotect.com</p>
             <p className="mt-1">© 2024 ManoProtect - Portal Interno de Empleados</p>
           </div>
         </main>

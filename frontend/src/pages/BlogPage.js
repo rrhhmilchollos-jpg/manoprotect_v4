@@ -907,7 +907,7 @@ const BlogPage = () => {
       <footer className="bg-slate-900 text-slate-400 py-8 px-6">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
           <p className="text-sm">
-            © {new Date().getFullYear()} ManoProtect - STARTBOOKING SL (CIF: B19427723)
+            © {new Date().getFullYear()} ManoProtect - Manoprotect.com
           </p>
           <div className="flex items-center gap-4 text-sm">
             <Link to="/privacy-policy" className="hover:text-white">Privacidad</Link>

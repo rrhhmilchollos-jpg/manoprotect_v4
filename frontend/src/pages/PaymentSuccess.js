@@ -281,7 +281,7 @@ const PaymentSuccess = () => {
           
           {/* Company info */}
           <p className="text-xs text-zinc-400 mt-8">
-            STARTBOOKING SL - CIF: B19427723
+            Manoprotect.com
             <br />
             Todos los pagos son procesados de forma segura por Stripe
           </p>

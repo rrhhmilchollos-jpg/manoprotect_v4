@@ -156,7 +156,7 @@ export default function DescargarDesktop() {
 
           {/* Footer */}
           <div className="text-center mt-12 text-slate-500 text-sm">
-            <p>STARTBOOKING SL • CIF: B19427723</p>
+            <p>Manoprotect.com</p>
             <p className="mt-1">© 2024 ManoProtect - Software interno - No distribuir</p>
           </div>
         </main>

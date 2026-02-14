@@ -446,7 +446,7 @@ const ManoProtectRegistro = () => {
       {/* Footer */}
       <footer className="bg-black/20 backdrop-blur-sm border-t border-white/10 py-4">
         <div className="max-w-7xl mx-auto px-4 text-center text-xs text-white/50">
-          © 2025 ManoProtect S.L. | CIF: B19427723 | Calle de la Innovación, 15 - Valencia
+          © 2025 Manoprotect.com | Calle de la Innovación, 15 - Valencia
         </div>
       </footer>
     </div>
