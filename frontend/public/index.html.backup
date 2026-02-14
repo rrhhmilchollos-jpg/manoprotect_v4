@@ -1,0 +1,422 @@
+<!doctype html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5, user-scalable=yes" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests" />
+        <meta name="theme-color" content="#6366f1" />
+        
+        <!-- Preconnect FIRST - Before anything else -->
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+        <link rel="dns-prefetch" href="https://www.google-analytics.com" />
+        
+        <!-- Google Fonts - Non-blocking -->
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&family=Public+Sans:wght@400;500;600&display=swap" media="print" onload="this.media='all'" />
+        <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&family=Public+Sans:wght@400;500;600&display=swap" /></noscript>
+        
+        <!-- SEO Meta Tags - Optimizados -->
+        <title>ManoProtect - Protección Familiar contra Fraudes Digitales | España</title>
+        <meta name="description" content="Protege a tu familia contra fraudes, phishing y estafas digitales en tiempo real. IA avanzada, alertas instantáneas. Prueba gratis 7 días." />
+        <meta name="keywords" content="protección fraudes, anti phishing, detectar estafas, seguridad digital, protección familiar, alertas fraude, smishing, vishing, España" />
+        <meta name="author" content="STARTBOOKING SL" />
+        <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+        <meta name="googlebot" content="index, follow" />
+        <meta name="google" content="notranslate" />
+        <meta name="google-adsense-account" content="ca-pub-7713974112203810" />
+        <meta name="rating" content="general" />
+        <meta name="distribution" content="global" />
+        <meta name="revisit-after" content="7 days" />
+        <meta name="language" content="Spanish" />
+        <meta name="geo.region" content="ES" />
+        <meta name="geo.placename" content="España" />
+        <link rel="canonical" href="https://www.manoprotect.com/" />
+        <link rel="alternate" hreflang="es" href="https://www.manoprotect.com/" />
+        <link rel="alternate" hreflang="x-default" href="https://www.manoprotect.com/" />
+        
+        <!-- Open Graph / Facebook - Optimizado -->
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://www.manoprotect.com/" />
+        <meta property="og:title" content="ManoProtect - Protección Familiar contra Fraudes Digitales" />
+        <meta property="og:description" content="Protege a tu familia contra fraudes, phishing y estafas digitales en tiempo real. IA avanzada para detectar amenazas." />
+        <meta property="og:image" content="https://www.manoprotect.com/og-image.png" />
+        <meta property="og:image:secure_url" content="https://www.manoprotect.com/og-image.png" />
+        <meta property="og:image:type" content="image/png" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:image:alt" content="ManoProtect - Protección familiar digital" />
+        <meta property="og:locale" content="es_ES" />
+        <meta property="og:site_name" content="ManoProtect" />
+        
+        <!-- Twitter Cards - Optimizado -->
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:site" content="@manoprotect" />
+        <meta name="twitter:creator" content="@manoprotect" />
+        <meta name="twitter:url" content="https://www.manoprotect.com/" />
+        <meta name="twitter:title" content="ManoProtect - Protección Familiar contra Fraudes" />
+        <meta name="twitter:description" content="Protege a tu familia contra fraudes y estafas digitales. IA avanzada para detectar amenazas en tiempo real." />
+        <meta name="twitter:image" content="https://www.manoprotect.com/og-image.png" />
+        <meta name="twitter:image:alt" content="ManoProtect - Protección familiar digital" />
+        
+        <!-- Schema.org Organization - Mejorado -->
+        <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "Organization",
+            "name": "ManoProtect",
+            "legalName": "STARTBOOKING SL",
+            "url": "https://www.manoprotect.com",
+            "logo": "https://www.manoprotect.com/manoprotect_logo.webp",
+            "description": "Plataforma líder en España de protección contra fraudes y estafas digitales",
+            "foundingDate": "2024",
+            "address": {
+                "@type": "PostalAddress",
+                "addressCountry": "ES",
+                "addressLocality": "Madrid"
+            },
+            "contactPoint": {
+                "@type": "ContactPoint",
+                "telephone": "+34-601-510-950",
+                "contactType": "customer service",
+                "email": "info@manoprotect.com",
+                "availableLanguage": ["Spanish", "English"],
+                "areaServed": "ES"
+            },
+            "sameAs": [
+                "https://twitter.com/manoprotect",
+                "https://www.linkedin.com/company/manoprotect"
+            ]
+        }
+        </script>
+        
+        <!-- Schema.org SoftwareApplication - Mejorado -->
+        <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "SoftwareApplication",
+            "name": "ManoProtect",
+            "url": "https://www.manoprotect.com",
+            "operatingSystem": "ANDROID, IOS, Web",
+            "applicationCategory": "SecurityApplication",
+            "description": "Aplicación de protección contra fraudes digitales para familias",
+            "offers": {
+                "@type": "AggregateOffer",
+                "lowPrice": "0",
+                "highPrice": "399.99",
+                "priceCurrency": "EUR",
+                "offerCount": "3",
+                "availability": "https://schema.org/InStock"
+            },
+            "provider": {
+                "@type": "Organization",
+                "name": "STARTBOOKING SL",
+                "url": "https://www.manoprotect.com"
+            },
+            "screenshot": "https://www.manoprotect.com/og-image.png"
+        }
+        </script>
+        
+        <!-- Schema.org FAQPage - Actualizado -->
+        <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [
+                {
+                    "@type": "Question",
+                    "name": "¿Qué es ManoProtect?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "ManoProtect es una plataforma de seguridad digital que protege a familias contra fraudes, phishing, smishing y otras estafas digitales usando inteligencia artificial avanzada."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "¿Puedo cancelar en cualquier momento?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Sí, sin preguntas. Cancela desde tu perfil y seguirás teniendo acceso hasta el final del período pagado."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "¿Qué incluye la garantía de 7 días?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Si no estás satisfecho, te devolvemos el 100% del importe. Sin letra pequeña, sin complicaciones."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "¿Cómo funciona el botón SOS?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Al pulsarlo, se envía tu ubicación GPS a tus contactos de emergencia y suena una alarma en sus dispositivos."
+                    }
+                }
+            ]
+        }
+        </script>
+        
+        <!-- Schema.org WebSite with SearchAction -->
+        <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "WebSite",
+            "name": "ManoProtect",
+            "url": "https://www.manoprotect.com",
+            "potentialAction": {
+                "@type": "SearchAction",
+                "target": "https://www.manoprotect.com/search?q={search_term_string}",
+                "query-input": "required name=search_term_string"
+            }
+        }
+        </script>
+        
+        <!-- PWA Meta Tags -->
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <meta name="apple-mobile-web-app-title" content="ManoProtect" />
+        <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="application-name" content="ManoProtect" />
+        <meta name="msapplication-TileColor" content="#6366f1" />
+        <meta name="msapplication-tap-highlight" content="no" />
+        <meta name="format-detection" content="telephone=no" />
+        
+        <!-- Apple Touch Icons -->
+        <link rel="apple-touch-icon" href="/icons/icon-152x152.png" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/icons/icon-192x192.png" />
+        
+        <!-- Manifest -->
+        <link rel="manifest" href="/manifest.json" />
+        
+        <!-- Favicon -->
+        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+        
+        <!-- Critical CSS for faster FCP/LCP -->
+        <style>
+            /* Critical above-the-fold styles - Inlined for performance */
+            *,*::before,*::after{box-sizing:border-box}
+            body{margin:0;font-family:'Public Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#fafafa;-webkit-font-smoothing:antialiased}
+            h1,h2,h3,h4,h5,h6{font-family:'Outfit',sans-serif;letter-spacing:-0.02em;margin:0}
+            img{max-width:100%;height:auto;display:block}
+            /* Header skeleton */
+            .glass{background:rgba(255,255,255,0.8);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+            /* Hero section skeleton for CLS prevention */
+            .hero-skeleton{min-height:600px;display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:center}
+            @media(max-width:1024px){.hero-skeleton{grid-template-columns:1fr;min-height:auto}}
+            /* Loading state */
+            .loading-screen{display:flex;align-items:center;justify-content:center;min-height:100vh;background:#fafafa}
+            .loading-spinner{width:48px;height:48px;border:3px solid #e5e7eb;border-top-color:#6366f1;border-radius:50%;animation:spin 1s linear infinite}
+            @keyframes spin{to{transform:rotate(360deg)}}
+            /* Button base styles */
+            button{font-family:inherit}
+            /* Reduce layout shift */
+            #root{min-height:100vh}
+            /* Preload skeleton */
+            .skeleton{background:linear-gradient(90deg,#f0f0f0 25%,#e0e0e0 50%,#f0f0f0 75%);background-size:200% 100%;animation:shimmer 1.5s infinite}
+            @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+            /* Content visibility for below-fold optimization - CRITICAL for LCP */
+            .content-visibility-auto{content-visibility:auto;contain-intrinsic-size:auto 500px}
+            /* Sections below the fold - Deferred paint */
+            section:not(:first-of-type){content-visibility:auto;contain-intrinsic-size:auto 600px}
+            /* Preconnect hints inline */
+            @font-face{font-family:'Public Sans';font-display:swap;src:local('Public Sans')}
+            @font-face{font-family:'Outfit';font-display:swap;src:local('Outfit')}
+        </style>
+        
+        <!-- Development Tools - Only load in development/preview mode -->
+        <script>
+            (function() {
+                // Only load development scripts when NOT in production
+                var isProduction = window.location.hostname === 'manoprotect.com' || 
+                    window.location.hostname === 'www.manoprotect.com';
+                
+                if (!isProduction && window.location.hostname === 'localhost') {
+                    // Development mode only
+                    console.log('ManoProtect - Development Mode');
+                }
+            })();
+        </script>
+        
+        <!-- PWA Service Worker Registration -->
+        <script>
+            if ('serviceWorker' in navigator) {
+                window.addEventListener('load', function() {
+                    navigator.serviceWorker.register('/sw.js')
+                        .then(function(registration) {
+                            console.log('ManoProtect PWA: Service Worker registrado');
+                        })
+                        .catch(function(error) {
+                            // Service worker not found is OK - will work without it
+                        });
+                });
+            }
+        </script>
+        
+        <!-- BigData Analytics -->
+        <script src="/bigdata-analytics.js" defer></script>
+        
+        <!-- Google Ads Conversion Tracking -->
+        <script src="/google-ads/conversion-tracking.js" defer></script>
+        
+        <!-- Social Media Ads Pixels - DESACTIVADOS hasta configurar Pixel IDs reales -->
+        <!--
+        <script src="/ads/facebook-pixel.js" defer></script>
+        <script src="/ads/tiktok-pixel.js" defer></script>
+        <script src="/ads/twitter-pixel.js" defer></script>
+        <script src="/ads/linkedin-pixel.js" defer></script>
+        <script src="/ads/snapchat-pixel.js" defer></script>
+        <script src="/ads/pinterest-pixel.js" defer></script>
+        <script src="/ads/unified-ads-manager.js" defer></script>
+        <script src="/ads/rewarded-ads.js" defer></script>
+        -->
+    </head>
+    <body>
+        <!-- Google Tag Manager (noscript) -->
+        <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MK53XZ8Q"
+        height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+        <!-- End Google Tag Manager (noscript) -->
+        
+        <!-- Fallback content for SEO and AdSense compliance - visible to crawlers and users without JS -->
+        <noscript>
+            <style>
+                .noscript-content { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; max-width: 1200px; margin: 0 auto; padding: 20px; }
+                .noscript-header { background: linear-gradient(135deg, #6366f1 0%, #10b981 100%); color: white; padding: 40px 20px; text-align: center; border-radius: 16px; margin-bottom: 30px; }
+                .noscript-header h1 { font-size: 2.5rem; margin: 0 0 10px 0; }
+                .noscript-header p { font-size: 1.2rem; margin: 0; opacity: 0.9; }
+                .noscript-section { background: #f9fafb; padding: 30px; border-radius: 12px; margin-bottom: 20px; }
+                .noscript-section h2 { color: #1f2937; margin-top: 0; }
+                .noscript-section p, .noscript-section li { color: #4b5563; line-height: 1.6; }
+                .noscript-features { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin: 30px 0; }
+                .noscript-feature { background: white; padding: 20px; border-radius: 8px; border: 1px solid #e5e7eb; }
+                .noscript-feature h3 { color: #6366f1; margin-top: 0; }
+                .noscript-cta { background: #6366f1; color: white; padding: 15px 30px; border-radius: 8px; text-decoration: none; display: inline-block; font-weight: 600; }
+                .noscript-stats { display: flex; justify-content: space-around; flex-wrap: wrap; gap: 20px; text-align: center; padding: 20px 0; }
+                .noscript-stat { flex: 1; min-width: 150px; }
+                .noscript-stat-number { font-size: 2rem; font-weight: bold; color: #6366f1; }
+                .noscript-stat-label { color: #6b7280; font-size: 0.9rem; }
+                .noscript-footer { text-align: center; padding: 30px; color: #6b7280; border-top: 1px solid #e5e7eb; margin-top: 30px; }
+            </style>
+            <div class="noscript-content">
+                <header class="noscript-header">
+                    <h1>ManoProtect</h1>
+                    <p>Tu escudo digital contra fraudes y estafas en España</p>
+                </header>
+                
+                <section class="noscript-section">
+                    <h2>¿Qué es ManoProtect?</h2>
+                    <p>ManoProtect es la plataforma líder en España para proteger a tu familia contra fraudes digitales, phishing, smishing y estafas telefónicas. Utilizamos inteligencia artificial avanzada para detectar amenazas en tiempo real y mantener seguros a tus seres queridos.</p>
+                </section>
+
+                <div class="noscript-stats">
+                    <div class="noscript-stat">
+                        <div class="noscript-stat-number">IA</div>
+                        <div class="noscript-stat-label">Análisis Inteligente</div>
+                    </div>
+                    <div class="noscript-stat">
+                        <div class="noscript-stat-number">SMS</div>
+                        <div class="noscript-stat-label">Alertas Instantáneas</div>
+                    </div>
+                    <div class="noscript-stat">
+                        <div class="noscript-stat-number">7 días</div>
+                        <div class="noscript-stat-label">Prueba Gratuita</div>
+                    </div>
+                    <div class="noscript-stat">
+                        <div class="noscript-stat-number">24/7</div>
+                        <div class="noscript-stat-label">Protección Continua</div>
+                    </div>
+                </div>
+
+                <div class="noscript-features">
+                    <div class="noscript-feature">
+                        <h3>Protección contra Phishing</h3>
+                        <p>Detectamos y bloqueamos emails fraudulentos que intentan robar tus datos bancarios y personales.</p>
+                    </div>
+                    <div class="noscript-feature">
+                        <h3>Anti-Smishing SMS</h3>
+                        <p>Analizamos SMS sospechosos de supuestos bancos, correos o empresas de paquetería.</p>
+                    </div>
+                    <div class="noscript-feature">
+                        <h3>Bloqueo de Llamadas</h3>
+                        <p>Identificamos y bloqueamos llamadas de estafadores que se hacen pasar por técnicos o bancos.</p>
+                    </div>
+                    <div class="noscript-feature">
+                        <h3>Protección Familiar</h3>
+                        <p>Protege a tus padres, abuelos y toda tu familia con alertas compartidas en tiempo real.</p>
+                    </div>
+                </div>
+
+                <section class="noscript-section">
+                    <h2>Planes y Precios</h2>
+                    <ul>
+                        <li><strong>Plan Personal</strong> - 4,99€/mes: Protección individual completa</li>
+                        <li><strong>Plan Familiar</strong> - 9,99€/mes: Hasta 5 miembros de la familia</li>
+                        <li><strong>Plan Enterprise</strong> - Desde 49€/mes: Para empresas y organizaciones</li>
+                    </ul>
+                    <p><strong>Prueba gratuita de 7 días</strong> - Sin compromiso, cancela cuando quieras.</p>
+                </section>
+
+                <section class="noscript-section">
+                    <h2>Lo que dicen nuestros clientes</h2>
+                    <blockquote>
+                        <p>"Llevo tiempo utilizándola, estoy tranquila. Tengo dos adolescentes y las tengo controladas, sé dónde están. Muy útil y me gusta mucho."</p>
+                        <cite>— Selomit, España (Reseña de Google)</cite>
+                    </blockquote>
+                    <blockquote>
+                        <p>"Muy útil! Con mi madre de 78 años para saber dónde está en todo momento y tener controlado en caso de caída o incidente."</p>
+                        <cite>— María Deseada Solas Sanchis, España (Reseña de Google)</cite>
+                    </blockquote>
+                </section>
+
+                <section class="noscript-section">
+                    <h2>Contacto</h2>
+                    <p><strong>Teléfono:</strong> 601 510 950</p>
+                    <p><strong>Email:</strong> info@manoprotect.com</p>
+                    <p><strong>Empresa:</strong> STARTBOOKING SL - Madrid, España</p>
+                </section>
+
+                <div style="text-align: center; margin: 30px 0;">
+                    <p>Para disfrutar de todas las funciones de ManoProtect, por favor habilita JavaScript en tu navegador.</p>
+                    <a href="https://www.manoprotect.com" class="noscript-cta">Ir a ManoProtect.com</a>
+                </div>
+
+                <footer class="noscript-footer">
+                    <p>&copy; 2025 ManoProtect - STARTBOOKING SL. Todos los derechos reservados.</p>
+                    <p>
+                        <a href="/privacy-policy">Política de Privacidad</a> | 
+                        <a href="/terms-of-service">Términos y Condiciones</a> | 
+                        <a href="/legal-notice">Aviso Legal</a>
+                    </p>
+                </footer>
+            </div>
+        </noscript>
+        
+        <div id="root"></div>
+        
+        <!-- Google Tag Manager (noscript) -->
+        <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MK53XZ8Q" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+        
+        <!-- Google Tag Manager - Loaded AFTER page render for better LCP -->
+        <script>
+        // Load GTM after page is fully interactive (5 seconds delay)
+        if(typeof requestIdleCallback==='function'){
+            requestIdleCallback(function(){
+                setTimeout(loadGTM,3000);
+            });
+        }else{
+            window.addEventListener('load',function(){setTimeout(loadGTM,3000);});
+        }
+        function loadGTM(){
+            (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});
+            var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';
+            j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;
+            f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-MK53XZ8Q');
+        }
+        </script>
+    </body>
+</html>
