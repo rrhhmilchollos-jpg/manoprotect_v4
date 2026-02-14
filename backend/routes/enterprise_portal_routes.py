@@ -3,12 +3,14 @@ ManoProtect - Enterprise Employee Portal API Routes
 Complete backend for scalable employee management system
 """
 from fastapi import APIRouter, HTTPException, Request, Response, Cookie, Query, BackgroundTasks
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, Field
 from typing import Optional, List, Dict, Any
 from datetime import datetime, timezone, timedelta
 import uuid
 import hashlib
 import json
+import os
+import stripe
 
 from models.enterprise_portal import (
     EmployeeRole, EmployeeStatus, RiskLevel, SOSStatus, SOSPriority,
@@ -16,6 +18,15 @@ from models.enterprise_portal import (
     EmployeeCreate, EmployeeUpdate, EmployeeResponse,
     SOSResponse, DashboardStats, ROLE_PERMISSIONS
 )
+
+# Initialize Stripe
+stripe.api_key = os.environ.get('STRIPE_API_KEY')
+
+# ============================================
+# 2FA RATE LIMITING CONFIGURATION
+# ============================================
+MAX_2FA_ATTEMPTS = 5
+LOCKOUT_DURATION_MINUTES = 15
 
 router = APIRouter(prefix="/enterprise", tags=["Enterprise Portal"])
 
