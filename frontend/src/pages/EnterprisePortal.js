@@ -504,12 +504,10 @@ const EnterprisePortal = () => {
           {activeSection !== 'dashboard' && (
             <div className="text-center py-20">
               <div className="w-16 h-16 bg-slate-800 rounded-full flex items-center justify-center mx-auto mb-4">
-                {menuItems.find(m => m.id === activeSection)?.icon && 
-                  <menuItems.find(m => m.id === activeSection).icon className="w-8 h-8 text-slate-500" />
-                }
+                <Activity className="w-8 h-8 text-slate-500" />
               </div>
               <h2 className="text-xl font-bold text-white mb-2">
-                {menuItems.find(m => m.id === activeSection)?.label}
+                {menuItems.find(m => m.id === activeSection)?.label || 'Sección'}
               </h2>
               <p className="text-slate-400">
                 Esta sección está en desarrollo. Próximamente disponible.
