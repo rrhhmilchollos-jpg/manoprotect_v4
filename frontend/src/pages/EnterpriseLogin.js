@@ -257,9 +257,12 @@ const EnterpriseLogin = () => {
             <div className="mt-6 pt-6 border-t border-slate-700">
               <p className="text-center text-slate-500 text-sm">
                 ¿Olvidaste tu contraseña?{' '}
-                <a href="#" className="text-indigo-400 hover:text-indigo-300">
+                <button 
+                  onClick={() => setShowITModal(true)}
+                  className="text-indigo-400 hover:text-indigo-300 underline"
+                >
                   Contacta con IT
-                </a>
+                </button>
               </p>
             </div>
           </CardContent>
@@ -269,6 +272,72 @@ const EnterpriseLogin = () => {
           © 2026 ManoProtect - Manoprotect.com. Todos los derechos reservados.
         </p>
       </div>
+
+      {/* IT Contact Modal */}
+      {showITModal && (
+        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
+          <Card className="bg-slate-800 border-slate-700 w-full max-w-md">
+            <CardHeader className="relative">
+              <button
+                onClick={() => setShowITModal(false)}
+                className="absolute top-4 right-4 text-slate-400 hover:text-white"
+              >
+                <X className="w-5 h-5" />
+              </button>
+              <CardTitle className="text-white flex items-center gap-2">
+                <Shield className="w-5 h-5 text-indigo-400" />
+                Soporte IT - ManoProtect
+              </CardTitle>
+              <CardDescription className="text-slate-400">
+                Contacta con nuestro equipo técnico
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="bg-slate-900/50 rounded-lg p-4 space-y-3">
+                <div className="flex items-center gap-3">
+                  <Mail className="w-5 h-5 text-indigo-400" />
+                  <div>
+                    <p className="text-slate-400 text-xs">Email</p>
+                    <a href="mailto:soporte@manoprotect.com" className="text-white hover:text-indigo-300">
+                      soporte@manoprotect.com
+                    </a>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3">
+                  <Phone className="w-5 h-5 text-emerald-400" />
+                  <div>
+                    <p className="text-slate-400 text-xs">Teléfono</p>
+                    <a href="tel:+34900123456" className="text-white hover:text-emerald-300">
+                      +34 900 123 456
+                    </a>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3">
+                  <Clock className="w-5 h-5 text-yellow-400" />
+                  <div>
+                    <p className="text-slate-400 text-xs">Horario de atención</p>
+                    <p className="text-white">Lunes a Viernes: 9:00 - 18:00</p>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="bg-indigo-900/30 border border-indigo-600/30 rounded-lg p-3">
+                <p className="text-indigo-200 text-sm">
+                  <strong>¿Problemas con 2FA?</strong><br />
+                  Si no tienes acceso a tu app de autenticación, contacta con IT para restablecer tu acceso.
+                </p>
+              </div>
+
+              <Button
+                onClick={() => setShowITModal(false)}
+                className="w-full bg-indigo-600 hover:bg-indigo-700"
+              >
+                Cerrar
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
+      )}
     </div>
   );
 };
