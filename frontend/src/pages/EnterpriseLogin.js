@@ -27,6 +27,7 @@ const EnterpriseLogin = () => {
   
   // IT Contact Modal state
   const [showITModal, setShowITModal] = useState(false);
+  const [phoneMasked, setPhoneMasked] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -48,7 +49,13 @@ const EnterpriseLogin = () => {
           // 2FA is required, show the 2FA input
           setRequires2FA(true);
           setEmployeeName(data.name);
-          toast.info('Introduce el código de tu app autenticadora');
+          setPhoneMasked(data.phone_masked || '');
+          
+          if (data.two_factor_method === 'sms') {
+            toast.success(`Código enviado por SMS a ${data.phone_masked}`);
+          } else {
+            toast.info('Introduce el código de tu app autenticadora');
+          }
         } else if (data.success) {
           toast.success(`Bienvenido, ${data.name}`);
           navigate('/enterprise');
@@ -82,7 +89,7 @@ const EnterpriseLogin = () => {
         toast.success(`Bienvenido, ${data.name}`);
         navigate('/enterprise');
       } else {
-        setError(data.detail || 'Código 2FA inválido');
+        setError(data.detail || 'Código inválido');
       }
     } catch (err) {
       setError('Error de conexión. Inténtalo de nuevo.');
