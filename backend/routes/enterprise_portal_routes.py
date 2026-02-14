@@ -173,9 +173,10 @@ async def enterprise_login(data: LoginRequest, response: Response, request: Requ
     }
 
 @router.post("/auth/login-2fa")
-async def enterprise_login_with_2fa(data: Login2FARequest, response: Response, request: Request):
+async def enterprise_login_with_2fa(data: Login2FARequest, response: Response, request: Request, background_tasks: BackgroundTasks):
     """Enterprise employee login - Step 2: Verify 2FA code"""
     import pyotp
+    from services.email_service import email_service
     
     if db is None:
         raise HTTPException(status_code=500, detail="Database not initialized")
@@ -214,21 +215,31 @@ async def enterprise_login_with_2fa(data: Login2FARequest, response: Response, r
     
     # 2FA verified - complete login
     session_token = uuid.uuid4().hex
+    current_ip = request.client.host
+    current_user_agent = request.headers.get("user-agent", "")
+    
+    # Check if this is a new IP or device
+    login_history = employee.get("login_history", [])
+    known_ips = set(entry.get("ip") for entry in login_history if entry.get("ip"))
+    known_agents = set(entry.get("user_agent", "")[:50] for entry in login_history if entry.get("user_agent"))
+    
+    is_new_ip = current_ip not in known_ips
+    is_new_device = current_user_agent[:50] not in known_agents
     
     await db.enterprise_employees.update_one(
         {"employee_id": employee["employee_id"]},
         {"$set": {
             "session_token": session_token,
             "last_login": datetime.now(timezone.utc).isoformat(),
-            "last_ip": request.client.host,
+            "last_ip": current_ip,
             "two_factor_verified_at": datetime.now(timezone.utc).isoformat()
         },
         "$push": {
             "login_history": {
                 "$each": [{
                     "timestamp": datetime.now(timezone.utc).isoformat(),
-                    "ip": request.client.host,
-                    "user_agent": request.headers.get("user-agent"),
+                    "ip": current_ip,
+                    "user_agent": current_user_agent,
                     "method": "2fa"
                 }],
                 "$slice": -50
@@ -245,6 +256,26 @@ async def enterprise_login_with_2fa(data: Login2FARequest, response: Response, r
     )
     
     await create_audit_log(employee, "login_2fa", "auth", employee["employee_id"], request=request)
+    
+    # Send security alert email if new IP or device detected
+    if is_new_ip or is_new_device:
+        login_alert_data = {
+            "employee_name": employee.get("name", "Usuario"),
+            "ip_address": current_ip,
+            "user_agent": current_user_agent,
+            "timestamp": datetime.now(timezone.utc).strftime('%d/%m/%Y %H:%M'),
+            "is_new_ip": is_new_ip,
+            "is_new_device": is_new_device,
+            "login_successful": True
+        }
+        
+        # Send email in background to not block the response
+        background_tasks.add_task(
+            email_service.send_2fa_login_alert,
+            employee["employee_id"],
+            employee["email"],
+            login_alert_data
+        )
     
     return {
         "success": True,
