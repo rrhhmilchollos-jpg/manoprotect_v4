@@ -439,6 +439,7 @@ const EnterprisePortal = () => {
     { id: 'clients', label: 'Gestión de Usuarios', icon: Users, permission: 'view_clients' },
     { id: 'sos', label: 'Emergencias SOS', icon: AlertTriangle, permission: 'view_sos' },
     { id: 'alerts', label: 'Alertas de Seguridad', icon: Shield, permission: 'view_alerts' },
+    { id: 'reviews', label: 'Valoraciones', icon: Star, permission: null },
     { id: 'orders', label: 'Pedidos Dispositivos', icon: Package, permission: 'view_device_orders' },
     { id: 'payments', label: 'Flujo de Caja', icon: DollarSign, permission: 'view_payments' },
     { id: 'audit', label: 'Registro de Auditoría', icon: FileText, permission: 'view_audit_logs' },
