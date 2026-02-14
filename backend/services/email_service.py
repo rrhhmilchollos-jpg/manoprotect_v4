@@ -1473,6 +1473,246 @@ class EmailNotificationService:
         </html>
         """
 
+    # ============================================
+    # 2FA SECURITY ALERT EMAIL METHODS
+    # ============================================
+    
+    async def send_2fa_login_alert(
+        self,
+        employee_id: str,
+        email: str,
+        login_data: Dict
+    ) -> Dict:
+        """Send security alert when 2FA login attempt from new device/IP"""
+        content = self._generate_2fa_login_alert_email(login_data)
+        
+        return await self._send_email(
+            to_email=email,
+            subject='🔐 Alerta de Seguridad: Nuevo acceso a tu cuenta - ManoProtect',
+            html_content=content,
+            email_type='2fa_login_alert',
+            user_id=employee_id,
+            metadata=login_data
+        )
+    
+    async def send_2fa_enabled_confirmation(
+        self,
+        employee_id: str,
+        email: str,
+        employee_name: str
+    ) -> Dict:
+        """Send confirmation when 2FA is enabled"""
+        content = self._generate_2fa_enabled_email(employee_name)
+        
+        return await self._send_email(
+            to_email=email,
+            subject='✅ 2FA Activado - Tu cuenta está más segura - ManoProtect',
+            html_content=content,
+            email_type='2fa_enabled',
+            user_id=employee_id,
+            metadata={"employee_name": employee_name}
+        )
+    
+    def _generate_2fa_login_alert_email(self, data: Dict) -> str:
+        """Generate 2FA login alert HTML email"""
+        employee_name = data.get('employee_name', 'Usuario')
+        ip_address = data.get('ip_address', 'Desconocida')
+        user_agent = data.get('user_agent', 'Desconocido')
+        location = data.get('location', 'España')
+        timestamp = data.get('timestamp', datetime.now(timezone.utc).strftime('%d/%m/%Y %H:%M'))
+        is_new_ip = data.get('is_new_ip', False)
+        is_new_device = data.get('is_new_device', False)
+        login_successful = data.get('login_successful', True)
+        
+        # Determine alert type and color
+        if not login_successful:
+            alert_color = '#dc2626'  # Red for failed attempts
+            alert_icon = '🚨'
+            alert_title = 'Intento de acceso fallido'
+            alert_message = 'Se ha detectado un intento de acceso fallido a tu cuenta.'
+        elif is_new_ip or is_new_device:
+            alert_color = '#f59e0b'  # Orange for new device/IP
+            alert_icon = '⚠️'
+            alert_title = 'Acceso desde nuevo dispositivo'
+            alert_message = 'Se ha detectado un acceso exitoso desde un dispositivo o ubicación no reconocida.'
+        else:
+            alert_color = '#10b981'  # Green for recognized device
+            alert_icon = '✅'
+            alert_title = 'Acceso verificado'
+            alert_message = 'Se ha iniciado sesión correctamente con verificación 2FA.'
+        
+        new_indicators = []
+        if is_new_ip:
+            new_indicators.append('🆕 Nueva dirección IP')
+        if is_new_device:
+            new_indicators.append('🆕 Nuevo dispositivo/navegador')
+        
+        indicators_html = ""
+        if new_indicators:
+            indicators_html = f"""
+            <div style="background: #fef3c7; border: 1px solid #f59e0b; padding: 12px; border-radius: 8px; margin: 16px 0;">
+                {'<br>'.join(new_indicators)}
+            </div>
+            """
+        
+        return f"""
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="utf-8">
+            <style>
+                body {{ font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 0; padding: 0; background: #f4f4f5; }}
+                .container {{ max-width: 600px; margin: 0 auto; padding: 20px; }}
+                .card {{ background: white; border-radius: 16px; padding: 0; box-shadow: 0 4px 6px rgba(0,0,0,0.1); overflow: hidden; }}
+                .header {{ background: linear-gradient(135deg, #1e293b 0%, #334155 100%); padding: 30px; text-align: center; }}
+                .logo {{ color: white; font-size: 28px; font-weight: bold; }}
+                .alert-badge {{ display: inline-block; background: {alert_color}; color: white; padding: 12px 24px; border-radius: 24px; font-weight: bold; margin-top: 16px; }}
+                .content {{ padding: 32px; }}
+                .detail-box {{ background: #f9fafb; border-radius: 12px; padding: 20px; margin: 20px 0; }}
+                .detail-row {{ display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #e5e7eb; }}
+                .detail-row:last-child {{ border-bottom: none; }}
+                .warning-box {{ background: #fef2f2; border: 2px solid #fca5a5; padding: 20px; border-radius: 12px; margin: 24px 0; }}
+                .btn {{ display: inline-block; padding: 14px 28px; border-radius: 8px; text-decoration: none; font-weight: 600; margin: 4px; }}
+                .btn-danger {{ background: #dc2626; color: white; }}
+                .btn-secondary {{ background: #6b7280; color: white; }}
+                .footer {{ text-align: center; color: #71717a; font-size: 12px; padding: 20px; }}
+            </style>
+        </head>
+        <body>
+            <div class="container">
+                <div class="card">
+                    <div class="header">
+                        <div class="logo">🛡️ ManoProtect</div>
+                        <p style="color: #94a3b8; margin: 8px 0 0 0;">Portal Enterprise - Alerta de Seguridad</p>
+                        <div class="alert-badge">{alert_icon} {alert_title}</div>
+                    </div>
+                    
+                    <div class="content">
+                        <p style="color: #374151; font-size: 16px;">
+                            Hola <strong>{employee_name}</strong>,
+                        </p>
+                        <p style="color: #6b7280;">
+                            {alert_message}
+                        </p>
+                        
+                        {indicators_html}
+                        
+                        <div class="detail-box">
+                            <h3 style="margin: 0 0 16px 0; color: #1f2937;">📋 Detalles del acceso</h3>
+                            <div class="detail-row">
+                                <span style="color: #6b7280;">Fecha y hora</span>
+                                <strong>{timestamp} (UTC)</strong>
+                            </div>
+                            <div class="detail-row">
+                                <span style="color: #6b7280;">Dirección IP</span>
+                                <strong>{ip_address}</strong>
+                            </div>
+                            <div class="detail-row">
+                                <span style="color: #6b7280;">Dispositivo</span>
+                                <strong style="font-size: 13px;">{user_agent[:50]}...</strong>
+                            </div>
+                            <div class="detail-row">
+                                <span style="color: #6b7280;">Verificación 2FA</span>
+                                <strong style="color: #10b981;">✓ Verificado</strong>
+                            </div>
+                        </div>
+                        
+                        <div class="warning-box">
+                            <h3 style="margin: 0 0 12px 0; color: #991b1b;">⚠️ ¿No reconoces este acceso?</h3>
+                            <p style="margin: 0; color: #7f1d1d;">
+                                Si no has sido tú quien ha iniciado sesión, tu cuenta podría estar comprometida. 
+                                Te recomendamos:
+                            </p>
+                            <ol style="color: #7f1d1d; margin: 12px 0 0 0; padding-left: 20px;">
+                                <li>Cambiar tu contraseña inmediatamente</li>
+                                <li>Regenerar tus códigos de respaldo 2FA</li>
+                                <li>Contactar con el equipo de IT</li>
+                            </ol>
+                        </div>
+                        
+                        <div style="text-align: center; margin-top: 24px;">
+                            <a href="https://admin-portal-361.preview.emergentagent.com/enterprise" class="btn btn-secondary">Ir al Portal</a>
+                            <a href="mailto:it@manoprotect.com?subject=Alerta%20de%20Seguridad%20-%20Acceso%20no%20reconocido" class="btn btn-danger">Reportar acceso sospechoso</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="footer">
+                    <p>Este email fue enviado automáticamente por ManoProtect<br>
+                    STARTBOOKING SL - CIF: B19427723</p>
+                    <p style="margin-top: 12px;">
+                        Si no reconoces esta actividad, contacta inmediatamente con IT:<br>
+                        📞 601 510 950 | ✉️ it@manoprotect.com
+                    </p>
+                </div>
+            </div>
+        </body>
+        </html>
+        """
+    
+    def _generate_2fa_enabled_email(self, employee_name: str) -> str:
+        """Generate 2FA enabled confirmation HTML email"""
+        return f"""
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="utf-8">
+            <style>
+                body {{ font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 0; padding: 0; background: #ecfdf5; }}
+                .container {{ max-width: 600px; margin: 0 auto; padding: 20px; }}
+                .card {{ background: white; border-radius: 16px; padding: 32px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }}
+                .header {{ text-align: center; margin-bottom: 24px; }}
+                .success-icon {{ font-size: 64px; margin-bottom: 16px; }}
+                .badge {{ display: inline-block; background: #10b981; color: white; padding: 8px 20px; border-radius: 24px; font-weight: bold; }}
+                .tips-box {{ background: #f0fdf4; border: 1px solid #86efac; border-radius: 12px; padding: 20px; margin: 24px 0; }}
+                .btn {{ display: inline-block; background: #10b981; color: white; padding: 14px 32px; border-radius: 8px; text-decoration: none; font-weight: 600; }}
+                .footer {{ text-align: center; color: #71717a; font-size: 12px; margin-top: 32px; }}
+            </style>
+        </head>
+        <body>
+            <div class="container">
+                <div class="card">
+                    <div class="header">
+                        <div class="success-icon">🔐</div>
+                        <h1 style="margin: 0; color: #1f2937;">¡2FA Activado!</h1>
+                        <p style="color: #6b7280; margin-top: 8px;">Tu cuenta ahora está más segura</p>
+                    </div>
+                    
+                    <div style="text-align: center; margin: 24px 0;">
+                        <span class="badge">✓ PROTECCIÓN ACTIVA</span>
+                    </div>
+                    
+                    <p style="color: #374151;">
+                        Hola <strong>{employee_name}</strong>,
+                    </p>
+                    <p style="color: #6b7280;">
+                        Has activado correctamente la autenticación de dos factores (2FA) en tu cuenta del Portal Enterprise de ManoProtect.
+                    </p>
+                    
+                    <div class="tips-box">
+                        <h3 style="margin: 0 0 16px 0; color: #166534;">📋 Recuerda:</h3>
+                        <ul style="color: #15803d; margin: 0; padding-left: 20px;">
+                            <li style="margin-bottom: 8px;">Guarda tus códigos de respaldo en un lugar seguro</li>
+                            <li style="margin-bottom: 8px;">Necesitarás tu app autenticadora cada vez que inicies sesión</li>
+                            <li style="margin-bottom: 8px;">Los códigos cambian cada 30 segundos</li>
+                            <li>Si pierdes acceso a tu app, usa un código de respaldo</li>
+                        </ul>
+                    </div>
+                    
+                    <div style="text-align: center; margin-top: 32px;">
+                        <a href="https://admin-portal-361.preview.emergentagent.com/enterprise" class="btn">Ir al Portal</a>
+                    </div>
+                </div>
+                
+                <div class="footer">
+                    <p>ManoProtect - Portal Enterprise<br>
+                    STARTBOOKING SL - CIF: B19427723</p>
+                </div>
+            </div>
+        </body>
+        </html>
+        """
+
 
 # Global instance
 email_service = EmailNotificationService()
