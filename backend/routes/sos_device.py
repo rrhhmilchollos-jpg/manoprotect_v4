@@ -140,8 +140,6 @@ async def create_device_order(
     # Create Stripe checkout session for shipping payment
     if total_amount > 0 and STRIPE_API_KEY:
         try:
-            # Get base URL from request
-            base_url = str(request.base_url).rstrip('/')
             # Use frontend URL for redirects
             frontend_url = os.environ.get('FRONTEND_URL', 'https://ops-center-4.preview.emergentagent.com')
             
@@ -383,7 +381,7 @@ async def get_order_payment_status(
                 )
                 order["status"] = "confirmed"
                 order["payment_status"] = "paid"
-        except:
+        except Exception:
             pass
     
     return {
