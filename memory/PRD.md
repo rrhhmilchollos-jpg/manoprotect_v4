@@ -55,7 +55,26 @@ Módulos funcionales:
 - Dashboard con KPIs | Gestión Empleados (CRUD) | Gestión Clientes
 - Centro SOS | Alertas Seguridad | Pedidos | Flujo de Caja | Auditoría
 
-### 3. Usuarios del Sistema - ACTUALIZADOS (14 Feb 2026)
+### 3. Gestión de Usuarios (Portal Enterprise) - COMPLETADO (14 Feb 2026)
+Mejoras implementadas según feedback del usuario:
+- ✅ **Botón de ver (ojo)** - Cada fila de usuario tiene un icono de ojo para ver detalles
+- ✅ **Modal de detalles de usuario** - Muestra información completa incluyendo:
+  - Avatar con inicial del nombre
+  - Nombre completo, email, plan y estado
+  - Estadísticas: Eventos SOS, Alertas, Pagos
+  - Historial de transacciones real
+- ✅ **Historial de pagos real** - Elimina datos ficticios, muestra solo transacciones reales
+- ✅ **Indicadores visuales de estado de transacción**:
+  - Verde: Completado/Pagado/Exitoso
+  - Amarillo: Pendiente/Pago Pendiente
+  - Azul: Procesando
+  - Rojo: Fallido
+  - Naranja: Reembolsado
+  - Gris: Cancelado/Desconocido
+- ✅ **Traducción completa a español** - Toda la interfaz del portal
+- ✅ **Test coverage**: Backend 100% (9/9), Frontend 100%
+
+### 4. Usuarios del Sistema - ACTUALIZADOS (14 Feb 2026)
 
 | Usuario | Email | Password | Rol |
 |---------|-------|----------|-----|
@@ -63,7 +82,7 @@ Módulos funcionales:
 | CEO/Director | ceo@manoprotect.com | Director2026! | director (Portal antiguo) |
 | Google Play Tester | rrhh.milchollos@gmail.com | 20142026 | user (family-yearly) |
 
-### 4. Auditoría de Conversión - IMPLEMENTADA (14 Feb 2026)
+### 5. Auditoría de Conversión - IMPLEMENTADA (14 Feb 2026)
 Cambios realizados según el PDF de auditoría:
 
 | Recomendación | Estado |
@@ -76,7 +95,7 @@ Cambios realizados según el PDF de auditoría:
 | Estadísticas de confianza | ✅ 4.8 rating, 10K+ familias, 50K+ amenazas |
 | Sello de pago seguro | ✅ Añadido en hero |
 
-### 5. Integraciones Activas
+### 6. Integraciones Activas
 - **Stripe** - Pagos y webhooks
 - **SendGrid** - Emails de invitación
 - **MongoDB** - Base de datos
@@ -99,14 +118,18 @@ Cambios realizados según el PDF de auditoría:
 | `/api/enterprise/dashboard/stats` | GET | KPIs |
 | `/api/enterprise/employees` | GET/POST | CRUD empleados |
 | `/api/enterprise/clients` | GET | Lista clientes |
+| `/api/enterprise/clients/{id}` | GET | Detalles cliente + historial de pagos |
 
 ---
 
 ## Testing
 
-### Último Test: Iteración 38 (14 Feb 2026)
-- Backend: 13/13 tests passed (100%)
-- Frontend: 7/7 tests passed (100%)
+### Último Test: Iteración 39 (14 Feb 2026)
+- Backend: 9/9 tests passed (100%)
+- Frontend: 100% features verified
+
+### Test Files
+- `/app/backend/tests/test_iteration_39_user_management.py`
 
 ---
 
@@ -134,3 +157,4 @@ Cambios realizados según el PDF de auditoría:
 1. **Sesiones de Usuario**: La autenticación usa `user_sessions` en MongoDB
 2. **Stripe Webhooks**: Endpoint `/api/sos-device/webhook/stripe`
 3. **Idioma**: Forzado a español por defecto (sin auto-detección IP)
+4. **Portal Enterprise**: Acceso en `/enterprise/login` con credenciales de empleado
