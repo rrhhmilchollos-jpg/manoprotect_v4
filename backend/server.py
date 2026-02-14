@@ -358,6 +358,7 @@ async def get_public_landing_stats():
         "families_protected": total_users,
         "threats_blocked": total_alerts,
         "average_rating": avg_rating,
+        "total_reviews": total_reviews,
         "sos_events": total_sos,
         "payments_processed": total_payments,
         "timestamp": datetime.now(timezone.utc).isoformat()
