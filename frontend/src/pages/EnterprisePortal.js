@@ -237,14 +237,14 @@ const EnterprisePortal = () => {
   }
 
   const menuItems = [
-    { id: 'dashboard', label: 'Dashboard', icon: BarChart3, permission: null },
+    { id: 'dashboard', label: 'Panel Principal', icon: BarChart3, permission: null },
     { id: 'employees', label: 'Empleados', icon: Users, permission: 'view_employees' },
-    { id: 'clients', label: 'Clientes', icon: Users, permission: 'view_clients' },
+    { id: 'clients', label: 'Gestión de Usuarios', icon: Users, permission: 'view_clients' },
     { id: 'sos', label: 'Emergencias SOS', icon: AlertTriangle, permission: 'view_sos' },
-    { id: 'alerts', label: 'Alertas Seguridad', icon: Shield, permission: 'view_alerts' },
+    { id: 'alerts', label: 'Alertas de Seguridad', icon: Shield, permission: 'view_alerts' },
     { id: 'orders', label: 'Pedidos Dispositivos', icon: Package, permission: 'view_device_orders' },
     { id: 'payments', label: 'Flujo de Caja', icon: DollarSign, permission: 'view_payments' },
-    { id: 'audit', label: 'Logs Auditoría', icon: FileText, permission: 'view_audit_logs' },
+    { id: 'audit', label: 'Registro de Auditoría', icon: FileText, permission: 'view_audit_logs' },
   ];
 
   return (
