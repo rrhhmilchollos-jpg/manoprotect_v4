@@ -9,7 +9,7 @@ const store = new Store();
 const EMPLOYEE_ACCESS_KEY = '14082015';
 
 // URL de la web de ManoProtect (PRODUCCIÓN: cambiar a manoprotect.com)
-const WEB_URL = 'https://protected-admin-test.preview.emergentagent.com';
+const WEB_URL = 'https://ratings.preview.emergentagent.com';
 
 let mainWindow;
 let loginWindow;

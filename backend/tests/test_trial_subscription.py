@@ -91,7 +91,7 @@ class TestTrialSubscriptionEndpoints:
         new_session.headers.update({"Content-Type": "application/json"})
         response = new_session.post(f"{BASE_URL}/api/create-trial-subscription", json={
             "plan_after_trial": "monthly",
-            "origin_url": "https://protected-admin-test.preview.emergentagent.com"
+            "origin_url": "https://ratings.preview.emergentagent.com"
         })
         assert response.status_code == 401
         data = response.json()
@@ -106,7 +106,7 @@ class TestTrialSubscriptionEndpoints:
         
         response = self.session.post(f"{BASE_URL}/api/create-trial-subscription", json={
             "plan_after_trial": "monthly",
-            "origin_url": "https://protected-admin-test.preview.emergentagent.com"
+            "origin_url": "https://ratings.preview.emergentagent.com"
         })
         
         # Should return 200 with checkout URL or 400 if user already has trial
@@ -135,7 +135,7 @@ class TestTrialSubscriptionEndpoints:
         
         response = self.session.post(f"{BASE_URL}/api/create-trial-subscription", json={
             "plan_after_trial": "invalid_plan_xyz",
-            "origin_url": "https://protected-admin-test.preview.emergentagent.com"
+            "origin_url": "https://ratings.preview.emergentagent.com"
         })
         assert response.status_code == 400
         data = response.json()
@@ -193,7 +193,7 @@ class TestTrialSubscriptionFlow:
         # 1. Try to create trial without auth
         response = self.session.post(f"{BASE_URL}/api/create-trial-subscription", json={
             "plan_after_trial": "monthly",
-            "origin_url": "https://protected-admin-test.preview.emergentagent.com"
+            "origin_url": "https://ratings.preview.emergentagent.com"
         })
         assert response.status_code == 401
         
@@ -223,7 +223,7 @@ class TestTrialSubscriptionFlow:
         for plan in valid_plans:
             response = self.session.post(f"{BASE_URL}/api/create-trial-subscription", json={
                 "plan_after_trial": plan,
-                "origin_url": "https://protected-admin-test.preview.emergentagent.com"
+                "origin_url": "https://ratings.preview.emergentagent.com"
             })
             # Should return 200 or 400 (if already has trial)
             assert response.status_code in [200, 400]
@@ -250,7 +250,7 @@ class TestPaymentEndpoints:
         """Test POST /api/create-checkout-session"""
         response = self.session.post(f"{BASE_URL}/api/create-checkout-session", json={
             "plan_type": "monthly",
-            "origin_url": "https://protected-admin-test.preview.emergentagent.com"
+            "origin_url": "https://ratings.preview.emergentagent.com"
         })
         assert response.status_code == 200
         data = response.json()
@@ -264,7 +264,7 @@ class TestPaymentEndpoints:
         """Test POST /api/create-checkout-session with invalid plan"""
         response = self.session.post(f"{BASE_URL}/api/create-checkout-session", json={
             "plan_type": "invalid_plan",
-            "origin_url": "https://protected-admin-test.preview.emergentagent.com"
+            "origin_url": "https://ratings.preview.emergentagent.com"
         })
         assert response.status_code == 400
         data = response.json()

@@ -18,7 +18,7 @@ import requests
 import os
 import uuid
 
-BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', 'https://protected-admin-test.preview.emergentagent.com')
+BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', 'https://ratings.preview.emergentagent.com')
 
 # Test credentials
 ADMIN_EMAIL = "admin@mano.com"
