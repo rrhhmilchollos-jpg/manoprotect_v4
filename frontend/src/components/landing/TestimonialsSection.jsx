@@ -1,8 +1,11 @@
 /**
  * ManoProtect - Testimonials Section
- * Clean testimonial cards with real reviews
+ * Clean testimonial cards with real reviews and real statistics from database
  */
+import { useState, useEffect } from 'react';
 import { Star, Quote } from 'lucide-react';
+
+const API_URL = process.env.REACT_APP_BACKEND_URL || '';
 
 const testimonials = [
   {
@@ -41,6 +44,42 @@ const testimonials = [
 ];
 
 const TestimonialsSection = () => {
+  const [stats, setStats] = useState({
+    families_protected: 0,
+    threats_blocked: 0,
+    average_rating: 0
+  });
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchStats();
+  }, []);
+
+  const fetchStats = async () => {
+    try {
+      const res = await fetch(`${API_URL}/api/public/landing-stats`);
+      if (res.ok) {
+        const data = await res.json();
+        setStats({
+          families_protected: data.families_protected || 0,
+          threats_blocked: data.threats_blocked || 0,
+          average_rating: data.average_rating || 0
+        });
+      }
+    } catch (err) {
+      console.error('Error fetching stats:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Format numbers for display
+  const formatNumber = (num) => {
+    if (num >= 1000000) return `${(num / 1000000).toFixed(1)}M`;
+    if (num >= 1000) return `${(num / 1000).toFixed(0)}K`;
+    return num.toString();
+  };
+
   return (
     <section className="px-6 py-20 bg-slate-50">
       <div className="max-w-5xl mx-auto">
