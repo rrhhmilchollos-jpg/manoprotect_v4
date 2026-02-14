@@ -26,56 +26,50 @@ import {
 const API_URL = process.env.REACT_APP_BACKEND_URL || '';
 
 // ============================================
-// CHART HELPER FUNCTIONS
+// CHART HELPER FUNCTIONS (REAL DATA ONLY)
 // ============================================
 
-// Generate demo data when no real data exists
-const generateDemoData = (type) => {
-  const today = new Date();
-  const data = [];
-  
-  for (let i = 6; i >= 0; i--) {
-    const date = new Date(today);
-    date.setDate(date.getDate() - i);
-    const dateStr = date.toISOString().slice(0, 10);
-    
-    if (type === 'revenue') {
-      data.push({
-        date: dateStr,
-        amount: Math.floor(Math.random() * 500) + 50
-      });
-    } else if (type === 'users') {
-      data.push({
-        date: dateStr,
-        count: Math.floor(Math.random() * 10) + 1
-      });
-    }
-  }
-  
-  return data;
-};
-
-// Merge alerts and SOS data for combined chart
+// Merge alerts and SOS data for combined chart - NO MOCK DATA
 const mergeChartData = (alerts, sos) => {
-  const today = new Date();
-  const merged = [];
+  // Create a map of all dates from both datasets
+  const dateMap = new Map();
   
-  for (let i = 6; i >= 0; i--) {
-    const date = new Date(today);
-    date.setDate(date.getDate() - i);
-    const dateStr = date.toISOString().slice(0, 10);
-    
-    const alertEntry = alerts.find(a => a.date === dateStr);
-    const sosEntry = sos.find(s => s.date === dateStr);
-    
-    merged.push({
-      date: dateStr,
-      alerts: alertEntry?.count || Math.floor(Math.random() * 5),
-      sos: sosEntry?.count || Math.floor(Math.random() * 3)
+  // Add alert data
+  if (alerts && alerts.length > 0) {
+    alerts.forEach(a => {
+      if (a.date) {
+        dateMap.set(a.date, { 
+          ...(dateMap.get(a.date) || {}), 
+          date: a.date, 
+          alerts: a.count || 0 
+        });
+      }
     });
   }
   
-  return merged;
+  // Add SOS data
+  if (sos && sos.length > 0) {
+    sos.forEach(s => {
+      if (s.date) {
+        dateMap.set(s.date, { 
+          ...(dateMap.get(s.date) || {}), 
+          date: s.date, 
+          sos: s.count || 0 
+        });
+      }
+    });
+  }
+  
+  // Convert to array and sort by date
+  const result = Array.from(dateMap.values())
+    .map(item => ({
+      date: item.date,
+      alerts: item.alerts || 0,
+      sos: item.sos || 0
+    }))
+    .sort((a, b) => a.date.localeCompare(b.date));
+  
+  return result;
 };
 
 // ============================================
