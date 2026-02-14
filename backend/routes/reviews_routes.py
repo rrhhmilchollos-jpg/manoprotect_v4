@@ -296,23 +296,27 @@ async def update_my_review(
     request: Request,
     session_token: Optional[str] = Cookie(None)
 ):
-    """Update current user's review"""
+    """Update current user's review (only paid users)"""
     user = await get_current_user(request, session_token)
     user_id = user.get("user_id") or user.get("id")
+    
+    # Verify paid subscription
+    user_plan = user.get("plan", "free")
+    if user_plan not in PAID_PLANS:
+        raise HTTPException(
+            status_code=403, 
+            detail="Solo los usuarios con suscripción de pago pueden gestionar valoraciones."
+        )
     
     existing = await db.user_reviews.find_one({"user_id": user_id})
     if not existing:
         raise HTTPException(status_code=404, detail="No tienes ninguna valoración")
     
-    # Premium users stay approved, others go back to pending
-    user_plan = user.get("plan", "free")
-    is_premium = user_plan != "free"
-    
     update_data = {
         "rating": data.rating,
         "title": data.title,
         "comment": data.comment,
-        "status": "approved" if is_premium else "pending",
+        "status": "approved",  # Paid users always approved
         "updated_at": datetime.now(timezone.utc).isoformat()
     }
     
