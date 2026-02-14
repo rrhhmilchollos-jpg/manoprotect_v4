@@ -25,6 +25,7 @@ db = None
 def set_database(database):
     global db
     db = database
+    print(f"✅ Enterprise Portal DB initialized: {db is not None}")
 
 # ============================================
 # UTILITY FUNCTIONS
