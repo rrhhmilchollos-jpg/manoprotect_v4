@@ -25,7 +25,7 @@ Todas las apps se conectan al mismo backend:
 
 | Entorno | URL |
 |---------|-----|
-| Preview | https://ops-center-4.preview.emergentagent.com |
+| Preview | https://protected-admin-test.preview.emergentagent.com |
 | Producción | [Tu dominio de producción] |
 
 ---
