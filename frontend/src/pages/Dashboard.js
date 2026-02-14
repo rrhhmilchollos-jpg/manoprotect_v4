@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import { useI18n } from '@/i18n/I18nContext';
-import { Shield, Search, AlertTriangle, CheckCircle, Clock, Phone, MessageSquare, Mail, Link as LinkIcon, ArrowLeft, TrendingUp, Users, User, Book, Download, Share2, Flag, Building2, Heart, Settings, Bell, LogOut, Brain, MapPin, Trophy, Megaphone, Package, Truck } from 'lucide-react';
+import { Shield, Search, AlertTriangle, CheckCircle, Clock, Phone, MessageSquare, Mail, Link as LinkIcon, ArrowLeft, TrendingUp, Users, User, Book, Download, Share2, Flag, Building2, Heart, Settings, Bell, LogOut, Brain, MapPin, Trophy, Megaphone, Package, Truck, Star } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -15,6 +15,7 @@ import AlertSubscription from '@/components/AlertSubscription';
 import { SubscriptionBadge, SubscriptionBadgeCard } from '@/components/SubscriptionBadge';
 import NativeAdBanner from '@/components/ads/NativeAdBanner';
 import LiveLocationMap from '@/components/LiveLocationMap';
+import ReviewForm from '@/components/ReviewForm';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
