@@ -68,6 +68,23 @@ class SecurityHeadersMiddleware(BaseHTTPMiddleware):
         response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
         response.headers["Permissions-Policy"] = "geolocation=(self), microphone=()"
         
+        # Content Security Policy - Prevent XSS and injection attacks
+        response.headers["Content-Security-Policy"] = (
+            "default-src 'self'; "
+            "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://cdnjs.cloudflare.com; "
+            "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; "
+            "font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; "
+            "img-src 'self' data: https: blob:; "
+            "connect-src 'self' https://*.emergentagent.com https://*.stripe.com https://api.stripe.com wss://*.emergentagent.com; "
+            "frame-src 'self' https://www.googletagmanager.com https://js.stripe.com; "
+            "frame-ancestors 'none'; "
+            "form-action 'self'; "
+            "base-uri 'self';"
+        )
+        
+        # Strict Transport Security (HSTS)
+        response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains"
+        
         # Cache control for sensitive endpoints
         if "/api/" in str(request.url):
             response.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, private"
