@@ -442,6 +442,152 @@ const EnterprisePortal = () => {
                 />
               </div>
 
+              {/* Charts Section */}
+              <div className="grid lg:grid-cols-2 gap-6">
+                {/* Revenue Trend Chart */}
+                <Card className="bg-slate-800/50 border-slate-700">
+                  <CardHeader>
+                    <CardTitle className="text-white flex items-center gap-2">
+                      <DollarSign className="w-5 h-5 text-emerald-500" />
+                      Tendencia de Ingresos (7 días)
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="h-64">
+                      <ResponsiveContainer width="100%" height="100%">
+                        <AreaChart data={chartData.revenue.length > 0 ? chartData.revenue : generateDemoData('revenue')}>
+                          <defs>
+                            <linearGradient id="colorRevenue" x1="0" y1="0" x2="0" y2="1">
+                              <stop offset="5%" stopColor="#10b981" stopOpacity={0.3}/>
+                              <stop offset="95%" stopColor="#10b981" stopOpacity={0}/>
+                            </linearGradient>
+                          </defs>
+                          <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
+                          <XAxis 
+                            dataKey="date" 
+                            stroke="#94a3b8" 
+                            fontSize={12}
+                            tickFormatter={(value) => value?.slice(5) || ''}
+                          />
+                          <YAxis stroke="#94a3b8" fontSize={12} tickFormatter={(value) => `€${value}`} />
+                          <Tooltip 
+                            contentStyle={{ 
+                              backgroundColor: '#1e293b', 
+                              border: '1px solid #334155',
+                              borderRadius: '8px',
+                              color: '#f1f5f9'
+                            }}
+                            formatter={(value) => [`€${value}`, 'Ingresos']}
+                            labelFormatter={(label) => `Fecha: ${label}`}
+                          />
+                          <Area 
+                            type="monotone" 
+                            dataKey="amount" 
+                            stroke="#10b981" 
+                            fillOpacity={1} 
+                            fill="url(#colorRevenue)" 
+                            strokeWidth={2}
+                          />
+                        </AreaChart>
+                      </ResponsiveContainer>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Alerts & SOS Trend Chart */}
+                <Card className="bg-slate-800/50 border-slate-700">
+                  <CardHeader>
+                    <CardTitle className="text-white flex items-center gap-2">
+                      <Activity className="w-5 h-5 text-orange-500" />
+                      Alertas y Eventos SOS (7 días)
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="h-64">
+                      <ResponsiveContainer width="100%" height="100%">
+                        <LineChart data={mergeChartData(chartData.alerts, chartData.sos)}>
+                          <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
+                          <XAxis 
+                            dataKey="date" 
+                            stroke="#94a3b8" 
+                            fontSize={12}
+                            tickFormatter={(value) => value?.slice(5) || ''}
+                          />
+                          <YAxis stroke="#94a3b8" fontSize={12} />
+                          <Tooltip 
+                            contentStyle={{ 
+                              backgroundColor: '#1e293b', 
+                              border: '1px solid #334155',
+                              borderRadius: '8px',
+                              color: '#f1f5f9'
+                            }}
+                            labelFormatter={(label) => `Fecha: ${label}`}
+                          />
+                          <Legend />
+                          <Line 
+                            type="monotone" 
+                            dataKey="alerts" 
+                            name="Alertas"
+                            stroke="#f97316" 
+                            strokeWidth={2}
+                            dot={{ fill: '#f97316', strokeWidth: 2 }}
+                          />
+                          <Line 
+                            type="monotone" 
+                            dataKey="sos" 
+                            name="Eventos SOS"
+                            stroke="#ef4444" 
+                            strokeWidth={2}
+                            dot={{ fill: '#ef4444', strokeWidth: 2 }}
+                          />
+                        </LineChart>
+                      </ResponsiveContainer>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+
+              {/* Users Registration Trend */}
+              <Card className="bg-slate-800/50 border-slate-700">
+                <CardHeader>
+                  <CardTitle className="text-white flex items-center gap-2">
+                    <Users className="w-5 h-5 text-indigo-500" />
+                    Usuarios Registrados (últimos 7 días)
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="h-48">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <BarChart data={chartData.users.length > 0 ? chartData.users : generateDemoData('users')}>
+                        <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
+                        <XAxis 
+                          dataKey="date" 
+                          stroke="#94a3b8" 
+                          fontSize={12}
+                          tickFormatter={(value) => value?.slice(5) || ''}
+                        />
+                        <YAxis stroke="#94a3b8" fontSize={12} />
+                        <Tooltip 
+                          contentStyle={{ 
+                            backgroundColor: '#1e293b', 
+                            border: '1px solid #334155',
+                            borderRadius: '8px',
+                            color: '#f1f5f9'
+                          }}
+                          formatter={(value) => [value, 'Nuevos usuarios']}
+                          labelFormatter={(label) => `Fecha: ${label}`}
+                        />
+                        <Bar 
+                          dataKey="count" 
+                          fill="#6366f1" 
+                          radius={[4, 4, 0, 0]}
+                        />
+                      </BarChart>
+                    </ResponsiveContainer>
+                  </div>
+                </CardContent>
+              </Card>
+
               {/* SOS Alerts & Recent Activity */}
               <div className="grid lg:grid-cols-2 gap-6">
                 {/* Pending SOS */}
