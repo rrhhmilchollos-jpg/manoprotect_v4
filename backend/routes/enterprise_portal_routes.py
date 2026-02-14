@@ -760,30 +760,116 @@ async def get_client(
     request: Request,
     enterprise_session: Optional[str] = Cookie(None)
 ):
-    """Get client details"""
+    """Get client details with real payment history"""
     employee = await get_current_employee(request, enterprise_session)
     
     if not check_permission(employee, "view_clients"):
         raise HTTPException(status_code=403, detail="Sin permisos")
     
+    # Try to find by user_id first, then by email
     client = await db.users.find_one(
         {"user_id": client_id},
         {"_id": 0, "password_hash": 0, "session_token": 0}
     )
     
     if not client:
+        # Try finding by email as fallback
+        client = await db.users.find_one(
+            {"email": client_id},
+            {"_id": 0, "password_hash": 0, "session_token": 0}
+        )
+    
+    if not client:
         raise HTTPException(status_code=404, detail="Cliente no encontrado")
     
-    # Get additional data
-    sos_count = await db.sos_events.count_documents({"client_id": client_id})
-    alerts_count = await db.security_alerts.count_documents({"client_id": client_id})
-    payments = await db.payments.find(
-        {"client_id": client_id},
-        {"_id": 0}
-    ).sort("created_at", -1).limit(10).to_list(10)
+    user_id = client.get("user_id")
+    user_email = client.get("email")
     
+    # Get SOS events count
+    sos_count = await db.sos_events.count_documents({
+        "$or": [{"client_id": user_id}, {"user_id": user_id}]
+    }) if user_id else 0
+    
+    # Get alerts count
+    alerts_count = await db.security_alerts.count_documents({
+        "$or": [{"client_id": user_id}, {"user_id": user_id}]
+    }) if user_id else 0
+    
+    # Get REAL payments - from multiple possible collections and fields
+    payments = []
+    
+    # Search in payments collection with multiple field combinations
+    payment_queries = [
+        {"client_id": user_id},
+        {"user_id": user_id},
+        {"email": user_email},
+        {"client_email": user_email}
+    ]
+    
+    for query in payment_queries:
+        if query.get("client_id") or query.get("user_id") or query.get("email") or query.get("client_email"):
+            found_payments = await db.payments.find(
+                query,
+                {"_id": 0}
+            ).sort("created_at", -1).limit(50).to_list(50)
+            
+            for p in found_payments:
+                # Check if payment already exists (avoid duplicates)
+                payment_id = p.get("payment_id") or p.get("stripe_payment_id") or p.get("id")
+                if not any(existing.get("payment_id") == payment_id or 
+                          existing.get("stripe_payment_id") == payment_id for existing in payments):
+                    # Normalize payment data
+                    normalized = {
+                        "payment_id": payment_id or f"pay_{len(payments)}",
+                        "amount": p.get("amount", 0),
+                        "status": p.get("status", "unknown"),
+                        "plan": p.get("plan") or p.get("product") or p.get("description") or "N/A",
+                        "created_at": p.get("created_at") or p.get("date") or p.get("timestamp"),
+                        "currency": p.get("currency", "EUR"),
+                        "payment_method": p.get("payment_method") or p.get("method") or "card",
+                        "stripe_session_id": p.get("stripe_session_id"),
+                        "invoice_id": p.get("invoice_id")
+                    }
+                    payments.append(normalized)
+    
+    # Also check stripe_payments collection if exists
+    try:
+        stripe_payments = await db.stripe_payments.find(
+            {"$or": [{"email": user_email}, {"customer_email": user_email}]},
+            {"_id": 0}
+        ).sort("created_at", -1).limit(20).to_list(20)
+        
+        for sp in stripe_payments:
+            payment_id = sp.get("payment_id") or sp.get("stripe_payment_id")
+            if not any(existing.get("payment_id") == payment_id for existing in payments):
+                payments.append({
+                    "payment_id": payment_id,
+                    "amount": sp.get("amount", 0),
+                    "status": sp.get("status", "unknown"),
+                    "plan": sp.get("plan") or sp.get("description") or "Stripe",
+                    "created_at": sp.get("created_at"),
+                    "currency": sp.get("currency", "EUR"),
+                    "payment_method": "stripe",
+                    "stripe_session_id": sp.get("session_id")
+                })
+    except Exception:
+        pass  # Collection might not exist
+    
+    # Sort payments by date (newest first)
+    payments.sort(key=lambda x: x.get("created_at") or "", reverse=True)
+    
+    # Limit to most recent 20 real payments
+    payments = payments[:20]
+    
+    # Get device orders
     device_order = await db.device_orders.find_one(
-        {"client_id": client_id},
+        {"$or": [{"client_id": user_id}, {"user_id": user_id}, {"user_email": user_email}]},
+        {"_id": 0}
+    )
+    
+    # Also check sos_orders collection
+    sos_order = await db.sos_orders.find_one(
+        {"$or": [{"user_id": user_id}, {"email": user_email}]},
         {"_id": 0}
     )
     
@@ -791,8 +877,9 @@ async def get_client(
         **client,
         "sos_events_count": sos_count,
         "alerts_count": alerts_count,
-        "recent_payments": payments,
-        "device_order": device_order
+        "payment_history": payments,  # Real payment history
+        "total_payments": len(payments),
+        "device_order": device_order or sos_order
     }
 
 # ============================================
