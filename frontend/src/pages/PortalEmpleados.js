@@ -511,7 +511,7 @@ export default function PortalEmpleados() {
                 </div>
               )}
               
-              <span className="text-sm text-slate-400">{currentUser?.name || 'STARTBOOKING SL'}</span>
+              <span className="text-sm text-slate-400">{currentUser?.name || 'Manoprotect'}</span>
               <div className="w-8 h-8 bg-emerald-500/20 rounded-full flex items-center justify-center">
                 <Settings className="w-4 h-4 text-emerald-400" />
               </div>
