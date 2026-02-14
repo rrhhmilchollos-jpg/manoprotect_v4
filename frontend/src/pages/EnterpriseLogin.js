@@ -127,7 +127,7 @@ const EnterpriseLogin = () => {
             </CardTitle>
             <CardDescription className="text-slate-400">
               {requires2FA 
-                ? `Hola ${employeeName}, introduce el código de tu app autenticadora`
+                ? `Hola ${employeeName}, introduce el código SMS enviado a ${phoneMasked || 'tu teléfono'}`
                 : 'Acceso exclusivo para empleados autorizados'
               }
             </CardDescription>
@@ -144,13 +144,13 @@ const EnterpriseLogin = () => {
                 )}
 
                 <div className="flex items-center justify-center py-4">
-                  <div className="w-16 h-16 bg-indigo-600/20 rounded-full flex items-center justify-center">
-                    <KeyRound className="w-8 h-8 text-indigo-400" />
+                  <div className="w-16 h-16 bg-emerald-600/20 rounded-full flex items-center justify-center">
+                    <Phone className="w-8 h-8 text-emerald-400" />
                   </div>
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-sm text-slate-300">Código de 6 dígitos</label>
+                  <label className="text-sm text-slate-300">Código SMS de 6 dígitos</label>
                   <Input
                     type="text"
                     inputMode="numeric"
@@ -164,7 +164,7 @@ const EnterpriseLogin = () => {
                     data-testid="enterprise-2fa-input"
                   />
                   <p className="text-xs text-slate-500 text-center">
-                    O introduce un código de respaldo de 8 caracteres
+                    El código expira en 5 minutos. También puedes usar un código de respaldo.
                   </p>
                 </div>
 
