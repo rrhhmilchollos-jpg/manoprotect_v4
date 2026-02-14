@@ -475,6 +475,7 @@ const EnterprisePortal = () => {
     { id: 'orders', label: 'Pedidos Dispositivos', icon: Package, permission: 'view_device_orders' },
     { id: 'payments', label: 'Flujo de Caja', icon: DollarSign, permission: 'view_payments' },
     { id: 'audit', label: 'Registro de Auditoría', icon: FileText, permission: 'view_audit_logs' },
+    { id: 'security', label: 'Seguridad (2FA)', icon: Lock, permission: null },
   ];
 
   return (
