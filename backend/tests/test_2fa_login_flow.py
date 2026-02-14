@@ -143,8 +143,9 @@ class TestLoginWith2FARequired:
     
     def test_2fa_with_backup_code(self, api_client):
         """Verify backup codes work for 2FA login"""
-        # Use first backup code
-        backup_code = ADMIN_WITH_2FA["backup_codes"][0]
+        # Use a remaining backup code (some may have been used in previous runs)
+        # Available: YA54CMZ7, MD3TPINO, IMCC6I4L, F4QAF7B2
+        backup_code = "YA54CMZ7"
         print(f"Using backup code: {backup_code}")
         
         response = api_client.post(
