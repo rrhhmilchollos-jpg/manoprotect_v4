@@ -116,10 +116,7 @@ async def enterprise_login(data: LoginRequest, response: Response, request: Requ
         raise HTTPException(status_code=401, detail="Credenciales incorrectas")
     
     # Check if 2FA is enabled
-    two_fa_enabled = employee.get("two_factor_enabled", False)
-    print(f"[LOGIN] Employee: {employee.get('email')}, 2FA enabled: {two_fa_enabled}, type: {type(two_fa_enabled)}")
-    
-    if two_fa_enabled:
+    if employee.get("two_factor_enabled", False):
         # Return response indicating 2FA is required
         return {
             "success": False,
