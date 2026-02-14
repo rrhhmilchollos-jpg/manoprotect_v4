@@ -77,10 +77,11 @@ export const I18nProvider = ({ children }) => {
     if (saved && translations[saved]) {
       return saved;
     }
+    // Default to Spanish for the Spanish market
     return 'es';
   });
   
-  const [isDetecting, setIsDetecting] = useState(true);
+  const [isDetecting, setIsDetecting] = useState(false); // Don't auto-detect by default
   const [detectedCountry, setDetectedCountry] = useState(null);
 
   useEffect(() => {
