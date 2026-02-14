@@ -317,45 +317,39 @@ async def enterprise_login_with_2fa(data: Login2FARequest, response: Response, r
             pass
     
     if not code_valid:
-            # Increment failed attempts
-            new_failed_attempts = failed_attempts + 1
-            update_data = {"two_factor_failed_attempts": new_failed_attempts}
-            
-            # Check if we need to lock the account
-            if new_failed_attempts >= MAX_2FA_ATTEMPTS:
-                lockout_time = datetime.now(timezone.utc) + timedelta(minutes=LOCKOUT_DURATION_MINUTES)
-                update_data["two_factor_lockout_until"] = lockout_time.isoformat()
-                
-                await db.enterprise_employees.update_one(
-                    {"employee_id": employee["employee_id"]},
-                    {"$set": update_data}
-                )
-                
-                # Log the lockout
-                await create_audit_log(employee, "2fa_lockout", "security", employee["employee_id"], 
-                                      {"failed_attempts": new_failed_attempts, "lockout_minutes": LOCKOUT_DURATION_MINUTES}, request)
-                
-                raise HTTPException(
-                    status_code=429,
-                    detail=f"Cuenta bloqueada por {LOCKOUT_DURATION_MINUTES} minutos debido a {MAX_2FA_ATTEMPTS} intentos fallidos."
-                )
+        # Increment failed attempts
+        new_failed_attempts = failed_attempts + 1
+        update_data = {"two_factor_failed_attempts": new_failed_attempts}
+        
+        # Check if we need to lock the account
+        if new_failed_attempts >= MAX_2FA_ATTEMPTS:
+            lockout_time = datetime.now(timezone.utc) + timedelta(minutes=LOCKOUT_DURATION_MINUTES)
+            update_data["two_factor_lockout_until"] = lockout_time.isoformat()
             
             await db.enterprise_employees.update_one(
                 {"employee_id": employee["employee_id"]},
                 {"$set": update_data}
             )
             
-            remaining_attempts = MAX_2FA_ATTEMPTS - new_failed_attempts
+            # Log the lockout
+            await create_audit_log(employee, "2fa_lockout", "security", employee["employee_id"], 
+                                  {"failed_attempts": new_failed_attempts, "lockout_minutes": LOCKOUT_DURATION_MINUTES}, request)
+            
             raise HTTPException(
-                status_code=401, 
-                detail=f"Código 2FA inválido. Te quedan {remaining_attempts} intentos."
+                status_code=429,
+                detail=f"Cuenta bloqueada por {LOCKOUT_DURATION_MINUTES} minutos debido a {MAX_2FA_ATTEMPTS} intentos fallidos."
             )
-        else:
-            # Successful verification - reset failed attempts
-            await db.enterprise_employees.update_one(
-                {"employee_id": employee["employee_id"]},
-                {"$set": {"two_factor_failed_attempts": 0}, "$unset": {"two_factor_lockout_until": ""}}
-            )
+        
+        await db.enterprise_employees.update_one(
+            {"employee_id": employee["employee_id"]},
+            {"$set": update_data}
+        )
+        
+        remaining_attempts = MAX_2FA_ATTEMPTS - new_failed_attempts
+        raise HTTPException(
+            status_code=401, 
+            detail=f"Código inválido. Te quedan {remaining_attempts} intentos."
+        )
     
     # 2FA verified - complete login
     session_token = uuid.uuid4().hex
