@@ -250,6 +250,10 @@ init_reviews(db)
 from routes.export_routes import router as export_router, set_database as init_export
 init_export(db)
 
+# Two-Factor Authentication (2FA)
+from routes.two_factor_routes import router as twofa_router, set_database as init_twofa
+init_twofa(db)
+
 # Employee Portal (Director-managed access)
 from routes.employee_portal import router as employee_portal_router, set_database as init_employee_portal, set_email_service as init_employee_email
 init_employee_portal(db)
