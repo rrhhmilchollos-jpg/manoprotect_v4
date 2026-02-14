@@ -1012,6 +1012,26 @@ const Dashboard = () => {
             </Card>
           </div>
         )}
+
+        {/* Review Tab */}
+        {activeTab === 'review' && (
+          <div className="space-y-6" data-testid="review-tab-content">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Star className="w-5 h-5 text-yellow-500" />
+                  Comparte tu experiencia
+                </CardTitle>
+                <CardDescription>
+                  Tu opinión nos ayuda a mejorar y ayuda a otras familias a conocer ManoProtect
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <ReviewForm />
+              </CardContent>
+            </Card>
+          </div>
+        )}
       </div>
     </div>
   );
