@@ -74,6 +74,15 @@ Mejoras implementadas según feedback del usuario:
 - ✅ **Traducción completa a español** - Toda la interfaz del portal
 - ✅ **Test coverage**: Backend 100% (9/9), Frontend 100%
 
+### 4. Dashboard con Gráficas Interactivas - COMPLETADO (14 Feb 2026)
+Gráficas implementadas usando Recharts:
+- ✅ **Tendencia de Ingresos** - Gráfica de área verde mostrando ingresos de los últimos 7 días en euros
+- ✅ **Alertas y Eventos SOS** - Gráfica de líneas con dos series (naranja para alertas, roja para SOS)
+- ✅ **Usuarios Registrados** - Gráfica de barras mostrando nuevos registros por día
+- ✅ **Tooltips interactivos** - Muestra datos detallados al pasar el cursor
+- ✅ **Leyendas** - Identificadores claros para cada serie de datos
+- ✅ **Endpoint mejorado** - `/api/enterprise/dashboard/charts` incluye `users_trend`
+
 ### 4. Usuarios del Sistema - ACTUALIZADOS (14 Feb 2026)
 
 | Usuario | Email | Password | Rol |
