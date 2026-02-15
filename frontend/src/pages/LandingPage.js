@@ -2,6 +2,7 @@
  * ManoProtect - Landing Page
  * Clean, professional, conversion-focused homepage
  * Redesigned for better user experience and lower cognitive load
+ * SEO Optimized: digital security, fraud prevention, online payment protection
  */
 import { lazy, Suspense } from 'react';
 import { Helmet } from 'react-helmet-async';
@@ -23,9 +24,9 @@ const LandingPage = () => {
   return (
     <div className="min-h-screen bg-white">
       <Helmet>
-        <title>ManoProtect - Protección Digital para tu Familia | Anti-Estafas España</title>
-        <meta name="description" content="Protege a tu familia contra estafas online, fraudes telefónicos y amenazas digitales. Detección de estafas en tiempo real. 7 días GRATIS." />
-        <meta name="keywords" content="protección digital, anti estafas, seguridad online, protección familiar, fraudes online, ciberseguridad, España" />
+        <title>ManoProtect - Digital Security & Fraud Prevention | Online Payment Protection España</title>
+        <meta name="description" content="ManoProtect ofrece digital security líder en España. Fraud prevention con IA, online payment protection y alertas SOS con GPS. Protege a tu familia. 7 días GRATIS." />
+        <meta name="keywords" content="digital security, fraud prevention, online payment protection, secure online payments, protección digital, seguridad online, antifraude, estafas digitales, phishing, SOS emergencias, GPS familiar, ciberseguridad España" />
         <link rel="canonical" href="https://manoprotect.com" />
       </Helmet>
 
@@ -34,13 +35,13 @@ const LandingPage = () => {
 
       {/* Main Content */}
       <main>
-        {/* Hero Section */}
+        {/* Hero Section - Digital Security */}
         <HeroSection />
 
-        {/* Features Grid */}
+        {/* Features Grid - Fraud Prevention & Online Payment Protection */}
         <FeaturesGrid />
 
-        {/* SOS Product Showcase */}
+        {/* SOS Product Showcase - Secure Online Payments */}
         <SOSProductShowcase />
 
         {/* Testimonials */}
