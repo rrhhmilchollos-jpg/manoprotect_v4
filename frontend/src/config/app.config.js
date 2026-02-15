@@ -22,10 +22,12 @@ const CONFIG = {
   // Nombre de la app
   APP_NAME: 'ManoProtect',
   
-  // Logo URLs
+  // Logo URLs (with WebP optimization)
   LOGO: {
-    ICON: '/logo192.png',
-    FULL: '/logo512.png'
+    ICON: '/logo192.webp',
+    ICON_FALLBACK: '/logo192.png',
+    FULL: '/logo512.webp',
+    FULL_FALLBACK: '/logo512.png'
   },
   
   // Endpoints de la API
