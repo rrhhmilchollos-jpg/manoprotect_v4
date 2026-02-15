@@ -128,22 +128,81 @@ export default function SOSEmergency() {
       return;
     }
     
-    navigator.geolocation.getCurrentPosition(
+    // High precision GPS options
+    const gpsOptions = {
+      enableHighAccuracy: true,  // Use GPS instead of WiFi/Cell triangulation
+      timeout: 15000,            // Wait up to 15 seconds for accurate position
+      maximumAge: 0              // Don't use cached position - get fresh GPS fix
+    };
+    
+    // Try to get multiple readings and use the most accurate one
+    let bestPosition = null;
+    let readingsCount = 0;
+    const maxReadings = 3;
+    
+    const watchId = navigator.geolocation.watchPosition(
       (position) => {
+        readingsCount++;
+        
+        // Keep the most accurate reading
+        if (!bestPosition || position.coords.accuracy < bestPosition.coords.accuracy) {
+          bestPosition = position;
+        }
+        
+        // After getting enough readings or if accuracy is excellent (<10m), use it
+        if (readingsCount >= maxReadings || position.coords.accuracy < 10) {
+          navigator.geolocation.clearWatch(watchId);
+          
+          setLocation({
+            latitude: bestPosition.coords.latitude,
+            longitude: bestPosition.coords.longitude,
+            accuracy: Math.round(bestPosition.coords.accuracy),
+            altitude: bestPosition.coords.altitude,
+            speed: bestPosition.coords.speed,
+            heading: bestPosition.coords.heading,
+            timestamp: new Date().toISOString()
+          });
+          setGettingLocation(false);
+        }
+      },
+      (error) => {
+        navigator.geolocation.clearWatch(watchId);
+        
+        // Fallback to single position if watch fails
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            setLocation({
+              latitude: position.coords.latitude,
+              longitude: position.coords.longitude,
+              accuracy: Math.round(position.coords.accuracy),
+              timestamp: new Date().toISOString()
+            });
+            setGettingLocation(false);
+          },
+          () => {
+            setLocationError('No se pudo obtener la ubicación. Activa el GPS.');
+            setGettingLocation(false);
+          },
+          { enableHighAccuracy: true, timeout: 10000, maximumAge: 30000 }
+        );
+      },
+      gpsOptions
+    );
+    
+    // Safety timeout - use best position we have after 12 seconds
+    setTimeout(() => {
+      if (bestPosition) {
+        navigator.geolocation.clearWatch(watchId);
         setLocation({
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude,
-          accuracy: position.coords.accuracy,
+          latitude: bestPosition.coords.latitude,
+          longitude: bestPosition.coords.longitude,
+          accuracy: Math.round(bestPosition.coords.accuracy),
+          altitude: bestPosition.coords.altitude,
           timestamp: new Date().toISOString()
         });
         setGettingLocation(false);
-      },
-      (error) => {
-        setLocationError('No se pudo obtener la ubicación');
-        setGettingLocation(false);
-      },
-      { enableHighAccuracy: true, timeout: 10000 }
-    );
+      }
+    }, 12000);
   };
 
   const startRecording = async () => {
