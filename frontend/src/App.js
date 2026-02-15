@@ -383,6 +383,8 @@ function AppRouter() {
           
           {/* Investor Routes */}
           <Route path="/investor/register" element={<InvestorRegister />} />
+          <Route path="/investor/portal" element={<InvestorPortal />} />
+          <Route path="/inversores" element={<InvestorPortal />} />
           <Route 
             path="/downloads" 
             element={
