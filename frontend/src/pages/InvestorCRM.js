@@ -25,10 +25,25 @@ const STATUS_CONFIG = {
 };
 
 const DOC_NAMES = {
-  'business-plan': 'Plan de Negocio',
+  'business-plan': 'Plan de Negocio Completo',
   'financial-model': 'Modelo Financiero',
   'pitch-deck': 'Pitch Deck',
-  'dossier-b2b': 'Dossier B2B'
+  'dossier-b2b': 'Dossier Comercial B2B',
+  'one-pager': 'One Pager Ejecutivo',
+  'roadmap-tecnico': 'Roadmap Técnico',
+  'business-plan-full': 'Business Plan Extendido',
+  'pitch-deck-extended': 'Pitch Deck Extendido'
+};
+
+const DOC_DESCRIPTIONS = {
+  'business-plan': 'Documento completo con visión, mercado, estrategia y proyecciones',
+  'financial-model': 'Proyecciones financieras a 5 años con escenarios',
+  'pitch-deck': 'Presentación resumida para inversores',
+  'dossier-b2b': 'Material comercial para empresas clientes',
+  'one-pager': 'Resumen ejecutivo de una página',
+  'roadmap-tecnico': 'Hoja de ruta de desarrollo tecnológico',
+  'business-plan-full': 'Plan de negocio con análisis detallado',
+  'pitch-deck-extended': 'Presentación extendida con casos de uso'
 };
 
 const InvestorCRM = () => {
