@@ -37,7 +37,7 @@ const LandingFooter = () => {
           {/* Brand */}
           <div className="col-span-2 md:col-span-1">
             <div className="flex items-center gap-2 mb-4">
-              <img src={LOGO_URL} alt="ManoProtect" className="h-8 w-auto" />
+              <img src={LOGO_URL} alt="ManoProtect - Digital Security, Fraud Prevention & Online Payment Protection" className="h-8 w-auto" />
               <span className="font-bold text-white">ManoProtect</span>
             </div>
             <p className="text-sm leading-relaxed mb-4">
