@@ -2930,7 +2930,7 @@ allowed_origins = [
     "https://www.manoprotect.com",
     "https://admin.manoprotect.com",  # Employee Portal Subdomain
     "https://digital-guard-1.emergent.host",
-    "https://protect-admin.preview.emergentagent.com",
+    "https://staff-hub-mp.preview.emergentagent.com",
 ]
 
 # Add any additional origins from environment

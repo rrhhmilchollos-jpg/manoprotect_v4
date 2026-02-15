@@ -25,7 +25,7 @@ Todas las apps se conectan al mismo backend:
 
 | Entorno | URL |
 |---------|-----|
-| Preview | https://protect-admin.preview.emergentagent.com |
+| Preview | https://staff-hub-mp.preview.emergentagent.com |
 | Producción | [Tu dominio de producción] |
 
 ---

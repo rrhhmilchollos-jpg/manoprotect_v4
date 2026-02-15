@@ -121,7 +121,7 @@ El backend seguirá corriendo en Emergent. Asegúrate de:
 1. **Variables de entorno del frontend:**
    El archivo `frontend/.env` debe tener:
    ```
-   REACT_APP_BACKEND_URL=https://protect-admin.preview.emergentagent.com
+   REACT_APP_BACKEND_URL=https://staff-hub-mp.preview.emergentagent.com
    ```
 
 2. **CORS del backend:**

@@ -37,7 +37,7 @@ class TestDeviceCheckout:
                 "postalCode": "28001",
                 "province": "Madrid"
             },
-            "origin_url": "https://protect-admin.preview.emergentagent.com"
+            "origin_url": "https://staff-hub-mp.preview.emergentagent.com"
         })
         assert response.status_code == 200
         data = response.json()
@@ -60,7 +60,7 @@ class TestDeviceCheckout:
                 "postalCode": "08001",
                 "province": "Barcelona"
             },
-            "origin_url": "https://protect-admin.preview.emergentagent.com"
+            "origin_url": "https://staff-hub-mp.preview.emergentagent.com"
         })
         assert response.status_code == 200
         data = response.json()
@@ -82,7 +82,7 @@ class TestDeviceCheckout:
                 "postalCode": "46001",
                 "province": "Valencia"
             },
-            "origin_url": "https://protect-admin.preview.emergentagent.com"
+            "origin_url": "https://staff-hub-mp.preview.emergentagent.com"
         })
         assert response.status_code == 200
         data = response.json()
@@ -103,7 +103,7 @@ class TestDeviceCheckout:
                 "postalCode": "41001",
                 "province": "Sevilla"
             },
-            "origin_url": "https://protect-admin.preview.emergentagent.com"
+            "origin_url": "https://staff-hub-mp.preview.emergentagent.com"
         })
         assert response.status_code == 200
         data = response.json()
@@ -117,7 +117,7 @@ class TestDeviceCheckout:
             "colors": ["plata"],
             "device_style": "adulto",
             "shipping": {},
-            "origin_url": "https://protect-admin.preview.emergentagent.com"
+            "origin_url": "https://staff-hub-mp.preview.emergentagent.com"
         })
         # Should still create session but with empty shipping in metadata
         # The validation is done on frontend, backend accepts what it gets
@@ -205,7 +205,7 @@ class TestShippingCosts:
                     "postalCode": "28001",
                     "province": "Madrid"
                 },
-                "origin_url": "https://protect-admin.preview.emergentagent.com"
+                "origin_url": "https://staff-hub-mp.preview.emergentagent.com"
             })
             assert response.status_code == 200
             expected_cost = self.EXPECTED_COSTS[qty]
@@ -232,7 +232,7 @@ class TestDeviceStyles:
                     "postalCode": "28001",
                     "province": "Madrid"
                 },
-                "origin_url": "https://protect-admin.preview.emergentagent.com"
+                "origin_url": "https://staff-hub-mp.preview.emergentagent.com"
             })
             assert response.status_code == 200
             data = response.json()
@@ -265,7 +265,7 @@ class TestColorOptions:
                 "postalCode": "28001",
                 "province": "Madrid"
             },
-            "origin_url": "https://protect-admin.preview.emergentagent.com"
+            "origin_url": "https://staff-hub-mp.preview.emergentagent.com"
         })
         assert response.status_code == 200
         print(f"✅ Multiple colors accepted: {test_colors}")
