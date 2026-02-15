@@ -79,6 +79,23 @@ const LandingFooter = () => {
             </ul>
           </div>
 
+          {/* Security Links - SEO Deep Links */}
+          <div>
+            <h4 className="font-semibold text-white mb-4">Seguridad</h4>
+            <ul className="space-y-2">
+              {footerLinks.security.map((link) => (
+                <li key={link.name}>
+                  <Link
+                    to={link.href}
+                    className="text-sm hover:text-white transition-colors"
+                  >
+                    {link.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
           {/* Legal Links */}
           <div>
             <h4 className="font-semibold text-white mb-4">Legal</h4>
