@@ -101,6 +101,24 @@ Configuración del subdominio dedicado para el portal de empleados:
   - `/dashboard` → Dashboard enterprise
 - ⚠️ **Pendiente**: Usuario debe configurar DNS CNAME para activar el subdominio
 
+### 22. Portal de Inversores con Verificación Fiscal - COMPLETADO (15 Feb 2026)
+Sistema de documentación para inversores con verificación de empresa española:
+- ✅ **Página `/inversores`**: Portal completo para inversores
+- ✅ **Proceso de verificación**: 3 pasos (registro CIF, verificación 24-48h, acceso)
+- ✅ **Endpoint `/api/investor/verify-access`**: Verifica acceso del usuario
+- ✅ **8 documentos disponibles** para inversores verificados:
+  - Plan de Negocio Completo (~50 páginas)
+  - Modelo Financiero (~15 páginas)
+  - Pitch Deck (~20 slides)
+  - Dossier Comercial B2B (~12 páginas)
+  - One Pager Ejecutivo (1 página)
+  - Roadmap Técnico (~10 páginas)
+  - Business Plan Extendido (~70 páginas)
+  - Pitch Deck Extendido (~35 slides)
+- ✅ **Historial de descargas** visible para cada inversor
+- ✅ **Eliminado botón "Descargar Artículos"** del blog (no funcional)
+- ✅ **Categorías organizadas**: Esenciales, Financiera, Técnica, Comercial
+
 ### 19. Branding Dinámico Portal Empleados - COMPLETADO (15 Feb 2026)
 Sistema de branding diferenciado para admin.manoprotect.com:
 - ✅ **Detección automática** de subdominio (useSubdomain hook)
