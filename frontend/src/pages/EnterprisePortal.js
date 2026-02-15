@@ -1,23 +1,21 @@
 /**
  * ManoProtect Enterprise Portal - Complete Employee Management System
  * Main Dashboard with KPIs, Charts, and Real-time SOS monitoring
+ * REFACTORED: Components extracted to /pages/enterprise/components/
  */
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import {
-  Shield, Users, Package, AlertTriangle, Settings, LogOut,
-  Bell, Search, Menu, X, ChevronRight, TrendingUp, TrendingDown,
-  Phone, MapPin, Clock, CheckCircle, XCircle, Activity,
-  DollarSign, ShoppingCart, FileText, BarChart3, Eye,
-  UserPlus, RefreshCw, Filter, Download, MoreVertical,
-  Zap, Target, AlertCircle, PhoneCall, Star, MessageSquare, Lock,
-  CreditCard, RotateCcw, AlertOctagon, Loader2
+  Shield, Users, Package, AlertTriangle, LogOut,
+  Bell, Menu, X, TrendingUp, TrendingDown,
+  Clock, CheckCircle, Activity,
+  DollarSign, BarChart3,
+  RefreshCw, Download, Lock
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
 import { toast } from 'sonner';
 import {
   LineChart, Line, AreaChart, Area, BarChart, Bar,
@@ -25,6 +23,21 @@ import {
 } from 'recharts';
 import { io } from 'socket.io-client';
 import TwoFactorSettings from '@/components/TwoFactorSettings';
+
+// Import refactored components
+import {
+  StatCard,
+  SOSAlertCard,
+  EmployeesSection,
+  AlertsSection,
+  AuditSection,
+  SOSSection,
+  ClientsSection,
+  ReviewsSection,
+  OrdersSection,
+  PaymentsSection,
+  mergeChartData
+} from './enterprise/components';
 
 const API_URL = process.env.REACT_APP_BACKEND_URL || '';
 
