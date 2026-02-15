@@ -36,6 +36,18 @@
         <!-- Preconnect for Performance -->
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+        <link rel="dns-prefetch" href="https://www.google-analytics.com" />
+        <link rel="dns-prefetch" href="https://js.stripe.com" />
+        
+        <!-- Critical CSS - Prevent FOUC -->
+        <style>
+            /* Critical CSS for above-the-fold content */
+            body { margin: 0; background-color: #f4f4f5; font-family: system-ui, -apple-system, sans-serif; }
+            #root { min-height: 100vh; }
+            .loading-skeleton { animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; background: linear-gradient(90deg, #e5e7eb 0%, #f3f4f6 50%, #e5e7eb 100%); }
+            @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .5; } }
+        </style>
         
         <!-- Structured Data - Organization -->
         <script type="application/ld+json">
