@@ -493,11 +493,13 @@ const EnterprisePortal = () => {
   return (
     <div className="min-h-screen bg-slate-900">
       <Helmet>
-        <title>Portal Enterprise - ManoProtect</title>
+        <title>{isAdminSubdomain ? 'Portal Empleados - ManoProtect Admin' : 'Portal Enterprise - ManoProtect'}</title>
       </Helmet>
 
       {/* Header */}
-      <header className="fixed top-0 left-0 right-0 h-16 bg-slate-800 border-b border-slate-700 z-50 flex items-center justify-between px-4">
+      <header className={`fixed top-0 left-0 right-0 h-16 border-b z-50 flex items-center justify-between px-4 ${
+        isAdminSubdomain ? 'bg-slate-800 border-emerald-800/50' : 'bg-slate-800 border-slate-700'
+      }`}>
         <div className="flex items-center gap-4">
           <button
             onClick={() => setSidebarOpen(!sidebarOpen)}
@@ -506,9 +508,9 @@ const EnterprisePortal = () => {
             {sidebarOpen ? <X className="w-5 h-5 text-white" /> : <Menu className="w-5 h-5 text-white" />}
           </button>
           <div className="flex items-center gap-2">
-            <Shield className="w-8 h-8 text-emerald-500" />
+            <Shield className={`w-8 h-8 ${isAdminSubdomain ? 'text-emerald-500' : 'text-emerald-500'}`} />
             <span className="text-xl font-bold text-white">ManoProtect</span>
-            <Badge className="bg-indigo-600 text-white ml-2">Enterprise</Badge>
+            <Badge className={`text-white ml-2 ${theme.primary}`}>{theme.badge}</Badge>
           </div>
         </div>
 
@@ -540,7 +542,7 @@ const EnterprisePortal = () => {
           </Button>
 
           <div className="flex items-center gap-3 pl-4 border-l border-slate-700">
-            <div className="w-8 h-8 bg-indigo-600 rounded-full flex items-center justify-center">
+            <div className={`w-8 h-8 rounded-full flex items-center justify-center ${theme.primary}`}>
               <span className="text-white font-semibold text-sm">
                 {employee?.name?.charAt(0) || 'U'}
               </span>
