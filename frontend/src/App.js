@@ -271,12 +271,18 @@ function AppRouter() {
           <Route path="/blog" element={<BlogPage />} />
           <Route path="/blog/:slug" element={<BlogPostPage />} />
           <Route path="/how-it-works" element={<HowItWorks />} />
+          <Route path="/como-funciona" element={<HowItWorks />} />
           <Route path="/pricing" element={<Pricing />} />
           <Route path="/plans" element={<Pricing />} />
           <Route path="/payment-success" element={<PaymentSuccess />} />
           <Route path="/trial-success" element={<TrialSuccess />} />
           <Route path="/knowledge" element={<Knowledge />} />
           <Route path="/community" element={<Community />} />
+          
+          {/* SEO Landing Pages */}
+          <Route path="/secure-payments" element={<SecurePayments />} />
+          <Route path="/secure-online-payments" element={<SecurePayments />} />
+          <Route path="/online-payment-protection" element={<SecurePayments />} />
           
           {/* Legal Pages */}
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
