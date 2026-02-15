@@ -140,6 +140,11 @@ const BlogPage = lazy(() => import('@/pages/BlogPage'));
 const BlogPostPage = lazy(() => import('@/pages/BlogPostPage'));
 const SecurePayments = lazy(() => import('@/pages/SecurePayments'));
 
+// SEO SILO Pages
+const ProteccionPhishing = lazy(() => import('@/pages/ProteccionPhishing'));
+const ProteccionFraudeOnline = lazy(() => import('@/pages/ProteccionFraudeOnline'));
+const SeguridadDigitalFamiliar = lazy(() => import('@/pages/SeguridadDigitalFamiliar'));
+
 // Enterprise Portal (Complete system)
 const EnterprisePortal = lazy(() => import('@/pages/EnterprisePortal'));
 const EnterpriseLogin = lazy(() => import('@/pages/EnterpriseLogin'));
