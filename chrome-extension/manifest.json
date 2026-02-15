@@ -9,7 +9,7 @@
     "contextMenus"
   ],
   "host_permissions": [
-    "https://protect-staging.preview.emergentagent.com/*",
+    "https://protect-admin.preview.emergentagent.com/*",
     "https://www.manoprotect.com/*"
   ],
   "action": {
