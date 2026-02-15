@@ -524,6 +524,30 @@ function AppRouter() {
 }
 
 function App() {
+  // Detect if we're on admin.manoprotect.com subdomain
+  const subdomainInfo = getSubdomainInfo();
+  
+  // If on admin subdomain, render only the enterprise portal
+  if (subdomainInfo.isAdmin) {
+    return (
+      <div className="App">
+        <BrowserRouter>
+          <AuthProvider>
+            <Toaster position="top-center" richColors />
+            <Suspense fallback={
+              <div className="min-h-screen bg-slate-900 flex items-center justify-center">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-500"></div>
+              </div>
+            }>
+              <AdminSubdomainRouter />
+            </Suspense>
+          </AuthProvider>
+        </BrowserRouter>
+      </div>
+    );
+  }
+  
+  // Main ManoProtect app (manoprotect.com)
   return (
     <div className="App">
       <BrowserRouter>
