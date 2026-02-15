@@ -13,6 +13,7 @@ from models.all_schemas import (
 )
 from core.auth import require_auth
 from services.email_service import email_service
+from services.whatsapp_service import whatsapp_service
 
 router = APIRouter(tags=["SOS & Family"])
 
