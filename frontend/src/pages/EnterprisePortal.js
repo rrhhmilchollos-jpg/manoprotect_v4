@@ -564,7 +564,9 @@ const EnterprisePortal = () => {
       </header>
 
       {/* Sidebar */}
-      <aside className={`fixed left-0 top-16 bottom-0 w-64 bg-slate-800 border-r border-slate-700 transition-transform z-40 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`}>
+      <aside className={`fixed left-0 top-16 bottom-0 w-64 bg-slate-800 border-r transition-transform z-40 ${
+        isAdminSubdomain ? 'border-emerald-800/30' : 'border-slate-700'
+      } ${sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`}>
         <nav className="p-4 space-y-1">
           {menuItems.map(item => (
             (!item.permission || hasPermission(item.permission)) && (
@@ -573,7 +575,7 @@ const EnterprisePortal = () => {
                 onClick={() => setActiveSection(item.id)}
                 className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
                   activeSection === item.id
-                    ? 'bg-indigo-600 text-white'
+                    ? `${theme.primary} text-white`
                     : 'text-slate-400 hover:bg-slate-700 hover:text-white'
                 }`}
               >
