@@ -1,6 +1,6 @@
 # ManoProtect - Product Requirements Document
 
-## Última Actualización: 14 Febrero 2026
+## Última Actualización: 15 Febrero 2026
 
 ---
 
@@ -33,10 +33,13 @@ ManoProtect es una plataforma integral de protección contra fraudes digitales p
 │   └── server.py
 ├── frontend/
 │   └── src/
+│       ├── hooks/
+│       │   └── useSubdomain.js       # Detección de subdominios
 │       ├── components/
 │       │   ├── landing/
 │       │   ├── ReviewForm.jsx        # Formulario valoraciones
-│       │   └── TwoFactorSettings.jsx # Config 2FA
+│       │   ├── TwoFactorSettings.jsx # Config 2FA
+│       │   └── AdminSubdomainRouter.jsx # Router para admin.manoprotect.com
 │       └── pages/
 │           ├── Dashboard.js          # Tab "Valorar" añadido
 │           ├── EnterpriseLogin.js    # Login con flujo 2FA
@@ -50,10 +53,19 @@ ManoProtect es una plataforma integral de protección contra fraudes digitales p
 ## URLs del Sistema
 
 ### Producción (Recomendado)
-| Portal | URL | Subdominio a contratar |
-|--------|-----|------------------------|
-| Landing Page | https://manoprotect.com | - |
-| Portal Enterprise | https://admin.manoprotect.com | **admin.manoprotect.com** |
+| Portal | URL | Descripción |
+|--------|-----|-------------|
+| Landing Page | https://manoprotect.com | App principal para consumidores |
+| Portal Empleados | https://admin.manoprotect.com | **NUEVO** - Acceso exclusivo empleados |
+
+### Configuración DNS Requerida
+Para activar el subdominio `admin.manoprotect.com`:
+1. Acceder al panel de control del registrador de dominio
+2. Añadir registro **CNAME** o **A**:
+   - **Nombre**: `admin`
+   - **Tipo**: CNAME (recomendado) o A
+   - **Valor**: Mismo que manoprotect.com
+3. Esperar propagación DNS (puede tardar hasta 24-48 horas)
 
 ### Preview (Actual)
 | Portal | URL |
@@ -65,6 +77,19 @@ ManoProtect es una plataforma integral de protección contra fraudes digitales p
 ---
 
 ## Funcionalidades Completadas ✅
+
+### 18. Subdominio admin.manoprotect.com - COMPLETADO (15 Feb 2026)
+Configuración del subdominio dedicado para el portal de empleados:
+- ✅ **Hook useSubdomain**: Detecta automáticamente si se accede desde admin.manoprotect.com
+- ✅ **AdminSubdomainRouter**: Router dedicado que solo muestra páginas enterprise
+- ✅ **CORS Backend**: Añadido admin.manoprotect.com a los orígenes permitidos
+- ✅ **Experiencia limpia**: Sin banner de ofertas ni componentes del app consumidor
+- ✅ **Rutas simplificadas**:
+  - `/` → Login de empleados
+  - `/login` → Login de empleados
+  - `/portal` → Dashboard enterprise
+  - `/dashboard` → Dashboard enterprise
+- ⚠️ **Pendiente**: Usuario debe configurar DNS CNAME para activar el subdominio
 
 ### 15. Portal de Pagos y Reembolsos Stripe - COMPLETADO (14 Feb 2026)
 Sistema completo para gestionar pagos y procesar reembolsos desde Stripe:
