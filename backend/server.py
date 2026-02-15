@@ -2886,6 +2886,7 @@ allowed_origins = [
     "http://localhost:8002",
     "https://manoprotect.com",
     "https://www.manoprotect.com",
+    "https://admin.manoprotect.com",  # Employee Portal Subdomain
     "https://digital-guard-1.emergent.host",
     "https://protect-staging.preview.emergentagent.com",
 ]
