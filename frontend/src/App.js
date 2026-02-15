@@ -138,6 +138,7 @@ const SOSServices = lazy(() => import('@/pages/SOSServices'));
 const OrderConfirmation = lazy(() => import('@/pages/OrderConfirmation'));
 const BlogPage = lazy(() => import('@/pages/BlogPage'));
 const BlogPostPage = lazy(() => import('@/pages/BlogPostPage'));
+const SecurePayments = lazy(() => import('@/pages/SecurePayments'));
 
 // Enterprise Portal (Complete system)
 const EnterprisePortal = lazy(() => import('@/pages/EnterprisePortal'));
