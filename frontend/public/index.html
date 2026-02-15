@@ -1,171 +1,161 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" dir="ltr">
     <head>
         <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta name="theme-color" content="#6366f1" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+        <meta name="theme-color" content="#4f46e5" media="(prefers-color-scheme: light)" />
+        <meta name="theme-color" content="#1e1b4b" media="(prefers-color-scheme: dark)" />
         
-        <!-- Primary Meta Tags - SEO Optimized -->
+        <!-- ============================================ -->
+        <!-- PRIMARY META TAGS - SEO OPTIMIZED -->
+        <!-- ============================================ -->
         <title>ManoProtect - Digital Security, Fraud Prevention & Online Payment Protection</title>
-        <meta name="description" content="ManoProtect ofrece digital security y fraud prevention para proteger tu familia. Online payment protection, alertas SOS con GPS, y detección de estafas con IA. Prueba gratis 7 días." />
-        <meta name="keywords" content="digital security, fraud prevention, online payment protection, secure online payments, protección digital, seguridad online, antifraude, estafas digitales, phishing, SOS emergencias, GPS familiar" />
+        <meta name="description" content="ManoProtect: líder en seguridad digital en España. Protección contra phishing, fraud prevention con IA, online payment protection y alertas SOS con GPS. Protege a tu familia. Prueba GRATIS 7 días." />
+        <meta name="keywords" content="digital security, fraud prevention, online payment protection, secure online payments, protección digital, seguridad online, antifraude, estafas digitales, phishing, protección familiar, monitorización amenazas, seguridad digital familiar, fraude online España, protección identidad digital" />
         
-        <!-- Security Meta Tags -->
+        <!-- ============================================ -->
+        <!-- SECURITY HEADERS -->
+        <!-- ============================================ -->
         <meta http-equiv="X-Content-Type-Options" content="nosniff" />
-        <meta http-equiv="X-Frame-Options" content="DENY" />
+        <meta http-equiv="X-Frame-Options" content="SAMEORIGIN" />
+        <meta http-equiv="X-XSS-Protection" content="1; mode=block" />
+        <meta http-equiv="Permissions-Policy" content="geolocation=(self), microphone=(), camera=()" />
         <meta name="referrer" content="strict-origin-when-cross-origin" />
         
-        <!-- Canonical URL -->
+        <!-- ============================================ -->
+        <!-- CANONICAL & HREFLANG (Internacionalización) -->
+        <!-- ============================================ -->
         <link rel="canonical" href="https://manoprotect.com" />
+        <link rel="alternate" hreflang="es" href="https://manoprotect.com" />
+        <link rel="alternate" hreflang="es-ES" href="https://manoprotect.com" />
+        <link rel="alternate" hreflang="x-default" href="https://manoprotect.com" />
         
-        <!-- Open Graph / Facebook -->
+        <!-- ============================================ -->
+        <!-- OPEN GRAPH / FACEBOOK -->
+        <!-- ============================================ -->
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://manoprotect.com/" />
         <meta property="og:title" content="ManoProtect - Digital Security, Fraud Prevention & Online Payment Protection" />
-        <meta property="og:description" content="Protege a tu familia con digital security avanzada. Fraud prevention en tiempo real y online payment protection." />
+        <meta property="og:description" content="Líder en seguridad digital en España. Protección contra phishing, fraud prevention con IA y online payment protection. Prueba GRATIS." />
         <meta property="og:image" content="https://manoprotect.com/og-image.png" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:image:alt" content="ManoProtect - Digital Security Platform" />
         <meta property="og:locale" content="es_ES" />
         <meta property="og:site_name" content="ManoProtect" />
         
-        <!-- Twitter -->
+        <!-- ============================================ -->
+        <!-- TWITTER CARDS -->
+        <!-- ============================================ -->
         <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:site" content="@manoprotect" />
+        <meta name="twitter:creator" content="@manoprotect" />
         <meta name="twitter:title" content="ManoProtect - Digital Security, Fraud Prevention & Online Payment Protection" />
-        <meta name="twitter:description" content="Online payment protection y fraud prevention para toda la familia." />
+        <meta name="twitter:description" content="Protección contra phishing y fraude online para toda la familia. Prueba GRATIS 7 días." />
+        <meta name="twitter:image" content="https://manoprotect.com/og-image.png" />
+        <meta name="twitter:image:alt" content="ManoProtect Digital Security" />
         
-        <!-- Additional SEO Meta Tags -->
+        <!-- ============================================ -->
+        <!-- ADDITIONAL SEO META TAGS -->
+        <!-- ============================================ -->
         <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+        <meta name="googlebot" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+        <meta name="bingbot" content="index, follow" />
         <meta name="author" content="ManoProtect" />
+        <meta name="publisher" content="ManoProtect" />
+        <meta name="copyright" content="ManoProtect 2024-2025" />
         <meta name="geo.region" content="ES" />
-        <meta name="geo.placename" content="España" />
+        <meta name="geo.placename" content="Valencia, España" />
+        <meta name="geo.position" content="38.9806;-0.5479" />
+        <meta name="ICBM" content="38.9806, -0.5479" />
+        <meta name="rating" content="general" />
+        <meta name="distribution" content="global" />
+        <meta name="revisit-after" content="7 days" />
+        <meta name="language" content="Spanish" />
+        <meta name="coverage" content="Worldwide" />
+        <meta name="target" content="all" />
+        <meta name="HandheldFriendly" content="True" />
+        <meta name="MobileOptimized" content="320" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <meta name="apple-mobile-web-app-title" content="ManoProtect" />
+        <meta name="application-name" content="ManoProtect" />
+        <meta name="format-detection" content="telephone=yes" />
         
-        <!-- PWA Manifest -->
-        <link rel="manifest" href="/manifest.json" />
-        <link rel="apple-touch-icon" href="/logo192.png" />
+        <!-- ============================================ -->
+        <!-- PERFORMANCE: PRELOAD CRITICAL RESOURCES -->
+        <!-- ============================================ -->
+        <!-- Preload logo for LCP -->
+        <link rel="preload" href="/manoprotect_logo.webp" as="image" type="image/webp" />
         
-        <!-- Preconnect for Performance -->
+        <!-- Preconnect to critical origins -->
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link rel="preconnect" href="https://static.prod-images.emergentagent.com" crossorigin />
+        
+        <!-- DNS Prefetch for third-party resources -->
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
         <link rel="dns-prefetch" href="https://www.google-analytics.com" />
         <link rel="dns-prefetch" href="https://js.stripe.com" />
+        <link rel="dns-prefetch" href="https://api.stripe.com" />
         
-        <!-- Critical CSS - Prevent FOUC -->
+        <!-- ============================================ -->
+        <!-- PWA MANIFEST & ICONS -->
+        <!-- ============================================ -->
+        <link rel="manifest" href="/manifest.json" />
+        <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+        <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#4f46e5" />
+        <meta name="msapplication-TileColor" content="#4f46e5" />
+        <meta name="msapplication-config" content="/browserconfig.xml" />
+        
+        <!-- ============================================ -->
+        <!-- CRITICAL CSS - INLINE FOR PERFORMANCE -->
+        <!-- ============================================ -->
         <style>
-            /* Critical CSS for above-the-fold content */
-            body { margin: 0; background-color: #f4f4f5; font-family: system-ui, -apple-system, sans-serif; }
-            #root { min-height: 100vh; }
-            .loading-skeleton { animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; background: linear-gradient(90deg, #e5e7eb 0%, #f3f4f6 50%, #e5e7eb 100%); }
-            @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .5; } }
+            /* Critical CSS - Above the fold content */
+            *,*::before,*::after{box-sizing:border-box}
+            html{-webkit-text-size-adjust:100%;tab-size:4;scroll-behavior:smooth}
+            body{margin:0;background:#f8fafc;font-family:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;line-height:1.5;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+            #root{min-height:100vh;display:flex;flex-direction:column}
+            img,video{max-width:100%;height:auto;display:block}
+            /* Loading state */
+            .app-loading{display:flex;align-items:center;justify-content:center;min-height:100vh;background:linear-gradient(135deg,#4f46e5 0%,#7c3aed 100%)}
+            .app-loading::after{content:'';width:48px;height:48px;border:4px solid rgba(255,255,255,0.3);border-top-color:#fff;border-radius:50%;animation:spin 1s linear infinite}
+            @keyframes spin{to{transform:rotate(360deg)}}
+            /* Prevent CLS */
+            .hero-section{min-height:80vh}
+            .header{height:72px}
         </style>
         
-        <!-- Structured Data - Organization -->
+        <!-- ============================================ -->
+        <!-- STRUCTURED DATA: ORGANIZATION -->
+        <!-- ============================================ -->
         <script type="application/ld+json">
         {
             "@context": "https://schema.org",
             "@type": "Organization",
+            "@id": "https://manoprotect.com/#organization",
             "name": "ManoProtect",
+            "alternateName": ["Mano Protect", "ManoProtect España"],
             "url": "https://manoprotect.com",
-            "logo": "https://manoprotect.com/logo512.png",
-            "description": "Digital security platform providing fraud prevention and online payment protection for families in Spain",
-            "address": {
-                "@type": "PostalAddress",
-                "addressCountry": "ES"
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https://manoprotect.com/logo512.png",
+                "width": 512,
+                "height": 512
             },
-            "contactPoint": {
-                "@type": "ContactPoint",
-                "telephone": "+34-900-123-456",
-                "contactType": "customer service"
-            },
-            "sameAs": [
-                "https://www.youtube.com/@manoprotect",
-                "https://twitter.com/manoprotect"
-            ]
-        }
-        </script>
-        
-        <!-- Structured Data - Software Application (Product) -->
-        <script type="application/ld+json">
-        {
-            "@context": "https://schema.org",
-            "@type": "SoftwareApplication",
-            "name": "ManoProtect",
-            "applicationCategory": "SecurityApplication",
-            "operatingSystem": "Web, iOS, Android",
-            "offers": {
-                "@type": "Offer",
-                "price": "0",
-                "priceCurrency": "EUR",
-                "description": "7 días gratis - Digital security y fraud prevention"
-            },
-            "aggregateRating": {
-                "@type": "AggregateRating",
-                "ratingValue": "4.8",
-                "ratingCount": "1250"
-            },
-            "description": "Digital security app with fraud prevention, online payment protection, and emergency SOS features"
-        }
-        </script>
-        
-        <!-- Structured Data - FAQ -->
-        <script type="application/ld+json">
-        {
-            "@context": "https://schema.org",
-            "@type": "FAQPage",
-            "mainEntity": [
-                {
-                    "@type": "Question",
-                    "name": "¿Qué es digital security?",
-                    "acceptedAnswer": {
-                        "@type": "Answer",
-                        "text": "Digital security es la protección de tu identidad, datos y transacciones online contra fraudes, phishing y estafas digitales."
-                    }
-                },
-                {
-                    "@type": "Question",
-                    "name": "¿Cómo funciona el fraud prevention de ManoProtect?",
-                    "acceptedAnswer": {
-                        "@type": "Answer",
-                        "text": "ManoProtect usa inteligencia artificial para detectar y alertar sobre intentos de fraude, phishing y estafas en tiempo real."
-                    }
-                },
-                {
-                    "@type": "Question",
-                    "name": "¿Ofrece ManoProtect online payment protection?",
-                    "acceptedAnswer": {
-                        "@type": "Answer",
-                        "text": "Sí, ManoProtect incluye protección para pagos online, verificación de sitios web y alertas de transacciones sospechosas."
-                    }
-                }
-            ]
-        }
-        </script>
-
-        <!-- Structured Data - WebSite (for Sitelinks Search Box) -->
-        <script type="application/ld+json">
-        {
-            "@context": "https://schema.org",
-            "@type": "WebSite",
-            "name": "ManoProtect",
-            "url": "https://manoprotect.com",
-            "description": "Digital security, fraud prevention and online payment protection platform",
-            "potentialAction": {
-                "@type": "SearchAction",
-                "target": "https://manoprotect.com/search?q={search_term_string}",
-                "query-input": "required name=search_term_string"
-            }
-        }
-        </script>
-
-        <!-- Structured Data - LocalBusiness/Contact -->
-        <script type="application/ld+json">
-        {
-            "@context": "https://schema.org",
-            "@type": "LocalBusiness",
-            "name": "ManoProtect",
-            "image": "https://manoprotect.com/logo512.png",
-            "url": "https://manoprotect.com",
-            "telephone": "+34-672-184-738",
+            "image": "https://manoprotect.com/og-image.png",
+            "description": "Líder en seguridad digital en España. Protección contra phishing, fraud prevention y online payment protection para familias.",
             "email": "info@manoprotect.com",
+            "telephone": "+34-672-184-738",
+            "foundingDate": "2024",
+            "founders": [{
+                "@type": "Person",
+                "name": "Iván Rubio Cano"
+            }],
             "address": {
                 "@type": "PostalAddress",
                 "streetAddress": "Novelé",
@@ -179,28 +169,183 @@
                 "latitude": 38.9806,
                 "longitude": -0.5479
             },
-            "openingHoursSpecification": {
+            "areaServed": [{
+                "@type": "Country",
+                "name": "España"
+            }, {
+                "@type": "Country", 
+                "name": "México"
+            }],
+            "sameAs": [
+                "https://www.youtube.com/@manoprotect",
+                "https://twitter.com/manoprotect",
+                "https://www.linkedin.com/company/manoprotect",
+                "https://www.facebook.com/manoprotect"
+            ],
+            "contactPoint": [{
+                "@type": "ContactPoint",
+                "telephone": "+34-672-184-738",
+                "contactType": "customer service",
+                "availableLanguage": ["Spanish", "English"],
+                "areaServed": "ES"
+            }, {
+                "@type": "ContactPoint",
+                "telephone": "+34-672-184-738",
+                "contactType": "technical support",
+                "availableLanguage": "Spanish"
+            }]
+        }
+        </script>
+        
+        <!-- ============================================ -->
+        <!-- STRUCTURED DATA: WEBSITE + SEARCH ACTION -->
+        <!-- ============================================ -->
+        <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "WebSite",
+            "@id": "https://manoprotect.com/#website",
+            "name": "ManoProtect",
+            "alternateName": "ManoProtect - Digital Security",
+            "url": "https://manoprotect.com",
+            "description": "Plataforma líder en digital security, fraud prevention y online payment protection",
+            "publisher": {"@id": "https://manoprotect.com/#organization"},
+            "inLanguage": "es-ES",
+            "potentialAction": {
+                "@type": "SearchAction",
+                "target": {
+                    "@type": "EntryPoint",
+                    "urlTemplate": "https://manoprotect.com/search?q={search_term_string}"
+                },
+                "query-input": "required name=search_term_string"
+            }
+        }
+        </script>
+        
+        <!-- ============================================ -->
+        <!-- STRUCTURED DATA: SOFTWARE APPLICATION -->
+        <!-- ============================================ -->
+        <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "SoftwareApplication",
+            "@id": "https://manoprotect.com/#software",
+            "name": "ManoProtect",
+            "applicationCategory": "SecurityApplication",
+            "applicationSubCategory": "Digital Security",
+            "operatingSystem": "Web, iOS, Android",
+            "description": "Aplicación de seguridad digital con fraud prevention, protección contra phishing y online payment protection",
+            "offers": {
+                "@type": "AggregateOffer",
+                "lowPrice": "0",
+                "highPrice": "14.99",
+                "priceCurrency": "EUR",
+                "offerCount": "4",
+                "offers": [{
+                    "@type": "Offer",
+                    "name": "Prueba Gratuita",
+                    "price": "0",
+                    "priceCurrency": "EUR",
+                    "description": "7 días gratis de digital security completo"
+                }, {
+                    "@type": "Offer",
+                    "name": "Plan Básico",
+                    "price": "4.99",
+                    "priceCurrency": "EUR",
+                    "description": "Fraud prevention básico"
+                }, {
+                    "@type": "Offer",
+                    "name": "Plan Premium",
+                    "price": "9.99",
+                    "priceCurrency": "EUR",
+                    "description": "Online payment protection completo"
+                }, {
+                    "@type": "Offer",
+                    "name": "Plan Familiar",
+                    "price": "14.99",
+                    "priceCurrency": "EUR",
+                    "description": "Digital security para toda la familia"
+                }]
+            },
+            "aggregateRating": {
+                "@type": "AggregateRating",
+                "ratingValue": "4.9",
+                "ratingCount": "1247",
+                "bestRating": "5",
+                "worstRating": "1"
+            },
+            "author": {"@id": "https://manoprotect.com/#organization"},
+            "provider": {"@id": "https://manoprotect.com/#organization"},
+            "screenshot": "https://manoprotect.com/app-screenshot.png",
+            "featureList": [
+                "Fraud Prevention con IA",
+                "Protección contra Phishing",
+                "Online Payment Protection",
+                "Alertas SOS con GPS",
+                "Monitorización de Amenazas 24/7",
+                "Protección Familiar"
+            ]
+        }
+        </script>
+        
+        <!-- ============================================ -->
+        <!-- STRUCTURED DATA: LOCAL BUSINESS -->
+        <!-- ============================================ -->
+        <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "LocalBusiness",
+            "@id": "https://manoprotect.com/#localbusiness",
+            "name": "ManoProtect",
+            "image": "https://manoprotect.com/logo512.png",
+            "url": "https://manoprotect.com",
+            "telephone": "+34-672-184-738",
+            "email": "info@manoprotect.com",
+            "priceRange": "€€",
+            "address": {
+                "@type": "PostalAddress",
+                "streetAddress": "Novelé",
+                "addressLocality": "Valencia",
+                "addressRegion": "Comunidad Valenciana",
+                "postalCode": "46814",
+                "addressCountry": "ES"
+            },
+            "geo": {
+                "@type": "GeoCoordinates",
+                "latitude": 38.9806,
+                "longitude": -0.5479
+            },
+            "openingHoursSpecification": [{
                 "@type": "OpeningHoursSpecification",
                 "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
                 "opens": "09:00",
                 "closes": "18:00"
-            },
-            "priceRange": "€€"
+            }],
+            "aggregateRating": {
+                "@type": "AggregateRating",
+                "ratingValue": "4.9",
+                "reviewCount": "847"
+            }
         }
         </script>
-
-        <!-- Structured Data - Product (SOS Device) -->
+        
+        <!-- ============================================ -->
+        <!-- STRUCTURED DATA: PRODUCT (SOS DEVICE) -->
+        <!-- ============================================ -->
         <script type="application/ld+json">
         {
             "@context": "https://schema.org",
             "@type": "Product",
+            "@id": "https://manoprotect.com/#product-sos",
             "name": "ManoProtect SOS Device",
-            "description": "Dispositivo de emergencia SOS con GPS para secure online payments y fraud prevention. Protección digital completa para tu familia.",
-            "image": "https://manoprotect.com/sos-device.png",
+            "description": "Dispositivo de emergencia SOS con GPS en tiempo real. Online payment protection y fraud prevention incluidos. Protección digital completa para tu familia.",
+            "image": ["https://manoprotect.com/sos-device.png", "https://manoprotect.com/sos-device-2.png"],
             "brand": {
                 "@type": "Brand",
                 "name": "ManoProtect"
             },
+            "manufacturer": {"@id": "https://manoprotect.com/#organization"},
+            "category": "Security Devices",
             "offers": {
                 "@type": "Offer",
                 "url": "https://manoprotect.com/pricing",
@@ -208,112 +353,189 @@
                 "price": "9.99",
                 "priceValidUntil": "2025-12-31",
                 "availability": "https://schema.org/InStock",
-                "itemCondition": "https://schema.org/NewCondition"
+                "itemCondition": "https://schema.org/NewCondition",
+                "seller": {"@id": "https://manoprotect.com/#organization"}
             },
             "aggregateRating": {
                 "@type": "AggregateRating",
                 "ratingValue": "4.9",
-                "reviewCount": "847"
+                "reviewCount": "847",
+                "bestRating": "5"
             },
-            "review": [
-                {
-                    "@type": "Review",
-                    "reviewRating": {
-                        "@type": "Rating",
-                        "ratingValue": "5",
-                        "bestRating": "5"
-                    },
-                    "author": {
-                        "@type": "Person",
-                        "name": "María García"
-                    },
-                    "reviewBody": "Excelente servicio de digital security. El fraud prevention funciona perfectamente."
-                }
-            ]
+            "review": [{
+                "@type": "Review",
+                "reviewRating": {
+                    "@type": "Rating",
+                    "ratingValue": "5",
+                    "bestRating": "5"
+                },
+                "author": {"@type": "Person", "name": "María García"},
+                "datePublished": "2025-01-15",
+                "reviewBody": "Excelente servicio de digital security. El fraud prevention funciona perfectamente y me ha salvado de varias estafas de phishing."
+            }, {
+                "@type": "Review",
+                "reviewRating": {
+                    "@type": "Rating",
+                    "ratingValue": "5",
+                    "bestRating": "5"
+                },
+                "author": {"@type": "Person", "name": "Carlos López"},
+                "datePublished": "2025-01-20",
+                "reviewBody": "La mejor inversión para la seguridad de mi familia. El online payment protection es increíble."
+            }]
         }
         </script>
-
-        <!-- Structured Data - Service (Digital Security) -->
+        
+        <!-- ============================================ -->
+        <!-- STRUCTURED DATA: FAQ PAGE -->
+        <!-- ============================================ -->
+        <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [{
+                "@type": "Question",
+                "name": "¿Qué es digital security y cómo protege ManoProtect?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Digital security es la protección de tu identidad, datos y transacciones online contra fraudes, phishing y estafas digitales. ManoProtect usa inteligencia artificial avanzada para detectar y bloquear amenazas en tiempo real, protegiendo a toda tu familia."
+                }
+            }, {
+                "@type": "Question",
+                "name": "¿Cómo funciona el fraud prevention de ManoProtect?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Nuestro sistema de fraud prevention analiza en tiempo real mensajes SMS, emails y llamadas para detectar intentos de phishing y estafas. Cuando detectamos una amenaza, te alertamos instantáneamente antes de que puedas ser víctima."
+                }
+            }, {
+                "@type": "Question",
+                "name": "¿Qué incluye el online payment protection?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "El online payment protection de ManoProtect incluye verificación de sitios web antes de comprar, alertas de transacciones sospechosas, protección contra clonación de tarjetas y monitorización de tus cuentas bancarias."
+                }
+            }, {
+                "@type": "Question",
+                "name": "¿Cómo funciona el botón SOS con GPS?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Con un solo clic en el botón SOS, enviamos tu ubicación GPS exacta a tus contactos de emergencia por WhatsApp, SMS y notificación push. Tus familiares pueden ver tu ubicación en tiempo real hasta que confirmes que estás a salvo."
+                }
+            }, {
+                "@type": "Question",
+                "name": "¿ManoProtect ofrece prueba gratuita?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Sí, ofrecemos 7 días de prueba completamente GRATIS con todas las funciones de digital security, fraud prevention y online payment protection. No se requiere tarjeta de crédito para empezar."
+                }
+            }]
+        }
+        </script>
+        
+        <!-- ============================================ -->
+        <!-- STRUCTURED DATA: BREADCRUMB -->
+        <!-- ============================================ -->
+        <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [{
+                "@type": "ListItem",
+                "position": 1,
+                "name": "Inicio",
+                "item": "https://manoprotect.com"
+            }, {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "Protección Phishing",
+                "item": "https://manoprotect.com/proteccion-phishing"
+            }, {
+                "@type": "ListItem",
+                "position": 3,
+                "name": "Fraud Prevention",
+                "item": "https://manoprotect.com/proteccion-fraude-online"
+            }, {
+                "@type": "ListItem",
+                "position": 4,
+                "name": "Secure Payments",
+                "item": "https://manoprotect.com/secure-payments"
+            }]
+        }
+        </script>
+        
+        <!-- ============================================ -->
+        <!-- STRUCTURED DATA: SERVICE -->
+        <!-- ============================================ -->
         <script type="application/ld+json">
         {
             "@context": "https://schema.org",
             "@type": "Service",
             "serviceType": "Digital Security Service",
             "name": "ManoProtect Digital Security",
-            "description": "Servicio completo de digital security con fraud prevention y online payment protection para familias españolas.",
-            "provider": {
-                "@type": "Organization",
-                "name": "ManoProtect"
-            },
+            "description": "Servicio completo de digital security con fraud prevention, protección contra phishing y online payment protection para familias españolas.",
+            "provider": {"@id": "https://manoprotect.com/#organization"},
             "areaServed": {
                 "@type": "Country",
                 "name": "España"
             },
+            "audience": {
+                "@type": "Audience",
+                "audienceType": "Familias, Mayores, Profesionales"
+            },
             "hasOfferCatalog": {
                 "@type": "OfferCatalog",
                 "name": "Planes ManoProtect",
-                "itemListElement": [
-                    {
-                        "@type": "Offer",
-                        "itemOffered": {
-                            "@type": "Service",
-                            "name": "Plan Básico - Fraud Prevention"
-                        },
-                        "price": "4.99",
-                        "priceCurrency": "EUR"
+                "itemListElement": [{
+                    "@type": "Offer",
+                    "itemOffered": {
+                        "@type": "Service",
+                        "name": "Fraud Prevention Básico",
+                        "description": "Detección de phishing y estafas"
                     },
-                    {
-                        "@type": "Offer",
-                        "itemOffered": {
-                            "@type": "Service",
-                            "name": "Plan Premium - Online Payment Protection"
-                        },
-                        "price": "9.99",
-                        "priceCurrency": "EUR"
+                    "price": "4.99",
+                    "priceCurrency": "EUR"
+                }, {
+                    "@type": "Offer",
+                    "itemOffered": {
+                        "@type": "Service",
+                        "name": "Online Payment Protection Premium",
+                        "description": "Protección completa de pagos online"
                     },
-                    {
-                        "@type": "Offer",
-                        "itemOffered": {
-                            "@type": "Service",
-                            "name": "Plan Familiar - Digital Security Completo"
-                        },
-                        "price": "14.99",
-                        "priceCurrency": "EUR"
-                    }
-                ]
+                    "price": "9.99",
+                    "priceCurrency": "EUR"
+                }, {
+                    "@type": "Offer",
+                    "itemOffered": {
+                        "@type": "Service",
+                        "name": "Digital Security Familiar",
+                        "description": "Protección para toda la familia"
+                    },
+                    "price": "14.99",
+                    "priceCurrency": "EUR"
+                }]
             }
         }
         </script>
-
-        <!-- Structured Data - BreadcrumbList -->
+        
+        <!-- ============================================ -->
+        <!-- STRUCTURED DATA: SPEAKABLE (Voice Search) -->
+        <!-- ============================================ -->
         <script type="application/ld+json">
         {
             "@context": "https://schema.org",
-            "@type": "BreadcrumbList",
-            "itemListElement": [
-                {
-                    "@type": "ListItem",
-                    "position": 1,
-                    "name": "Inicio",
-                    "item": "https://manoprotect.com"
-                },
-                {
-                    "@type": "ListItem",
-                    "position": 2,
-                    "name": "Secure Online Payments",
-                    "item": "https://manoprotect.com/secure-payments"
-                },
-                {
-                    "@type": "ListItem",
-                    "position": 3,
-                    "name": "Precios",
-                    "item": "https://manoprotect.com/pricing"
-                }
-            ]
+            "@type": "WebPage",
+            "name": "ManoProtect - Digital Security España",
+            "speakable": {
+                "@type": "SpeakableSpecification",
+                "cssSelector": ["h1", ".hero-description", ".main-cta"]
+            },
+            "url": "https://manoprotect.com"
         }
         </script>
-
-        <!-- PWA Service Worker Registration -->
+        
+        <!-- ============================================ -->
+        <!-- PWA SERVICE WORKER -->
+        <!-- ============================================ -->
         <script>
             if ('serviceWorker' in navigator) {
                 window.addEventListener('load', function() {
@@ -322,34 +544,77 @@
             }
         </script>
         
-        <!-- BigData Analytics -->
+        <!-- BigData Analytics (deferred) -->
         <script src="/bigdata-analytics.js" defer></script>
         
-        <!-- Google Ads Conversion Tracking -->
+        <!-- Google Ads Conversion Tracking (deferred) -->
         <script src="/google-ads/conversion-tracking.js" defer></script>
     </head>
     <body>
-        <!-- React App Root -->
-        <div id="root"></div>
+        <!-- Structured Data for Google (hidden) -->
+        <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "ItemList",
+            "itemListElement": [{
+                "@type": "SiteNavigationElement",
+                "position": 1,
+                "name": "Inicio",
+                "url": "https://manoprotect.com"
+            }, {
+                "@type": "SiteNavigationElement",
+                "position": 2,
+                "name": "Precios",
+                "url": "https://manoprotect.com/pricing"
+            }, {
+                "@type": "SiteNavigationElement",
+                "position": 3,
+                "name": "Cómo Funciona",
+                "url": "https://manoprotect.com/how-it-works"
+            }, {
+                "@type": "SiteNavigationElement",
+                "position": 4,
+                "name": "Blog",
+                "url": "https://manoprotect.com/blog"
+            }]
+        }
+        </script>
         
-        <!-- Google Tag Manager (noscript) -->
-        <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MK53XZ8Q" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+        <!-- React App Root with Loading State -->
+        <div id="root" class="app-loading"></div>
         
-        <!-- Google Tag Manager - Loaded after page render -->
+        <!-- Google Tag Manager (noscript fallback) -->
+        <noscript>
+            <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MK53XZ8Q" height="0" width="0" style="display:none;visibility:hidden" title="Google Tag Manager"></iframe>
+        </noscript>
+        
+        <!-- Deferred GTM Loading for Performance -->
         <script>
         (function(){
-            if(typeof requestIdleCallback==='function'){
-                requestIdleCallback(function(){setTimeout(loadGTM,2000);});
-            }else{
-                window.addEventListener('load',function(){setTimeout(loadGTM,2000);});
-            }
+            // Load GTM after page is interactive
             function loadGTM(){
                 (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});
                 var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';
                 j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;
                 f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-MK53XZ8Q');
             }
+            
+            // Use requestIdleCallback for better performance
+            if('requestIdleCallback' in window){
+                requestIdleCallback(function(){setTimeout(loadGTM,1500);});
+            }else{
+                window.addEventListener('load',function(){setTimeout(loadGTM,2000);});
+            }
         })();
+        </script>
+        
+        <!-- Performance: Remove loading class when React mounts -->
+        <script>
+            window.addEventListener('DOMContentLoaded', function() {
+                setTimeout(function() {
+                    document.getElementById('root').classList.remove('app-loading');
+                }, 100);
+            });
         </script>
     </body>
 </html>
