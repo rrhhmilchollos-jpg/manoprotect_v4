@@ -10,7 +10,7 @@ import {
   Shield, Users, Package, AlertTriangle, LogOut,
   Bell, Menu, X, TrendingUp, TrendingDown,
   Clock, CheckCircle, Activity,
-  DollarSign, BarChart3, BarChart,
+  DollarSign, BarChart3,
   RefreshCw, Download, Lock, Star, MessageSquare, FileText
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
