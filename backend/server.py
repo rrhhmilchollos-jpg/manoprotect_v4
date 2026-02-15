@@ -989,6 +989,44 @@ async def create_notification(user_id: str, title: str, body: str, notification_
     return notification
 
 # ============================================
+# INVESTOR PORTAL ROUTES
+# ============================================
+
+@api_router.get("/investor/verify-access")
+async def verify_investor_access(
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Check if current user has investor access and return download history"""
+    try:
+        user = await get_current_user(request, session_token)
+        
+        # Check if user has investor role
+        has_access = user.role in ["investor", "admin", "superadmin"]
+        
+        # Get download history if has access
+        download_history = []
+        if has_access:
+            cursor = db.document_downloads.find(
+                {"user_id": user.user_id}
+            ).sort("downloaded_at", -1).limit(20)
+            
+            async for doc in cursor:
+                download_history.append({
+                    "doc_type": doc.get("doc_type"),
+                    "downloaded_at": doc.get("downloaded_at"),
+                    "format": doc.get("format", "pdf")
+                })
+        
+        return {
+            "has_access": has_access,
+            "user_role": user.role,
+            "download_history": download_history
+        }
+    except HTTPException:
+        return {"has_access": False, "download_history": []}
+
+# ============================================
 # PDF GENERATION ROUTES
 # ============================================
 
