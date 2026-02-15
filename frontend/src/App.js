@@ -2,6 +2,10 @@ import { BrowserRouter, Routes, Route, useLocation, Navigate, useNavigate } from
 import { Toaster } from 'sonner';
 import { AuthProvider, useAuth } from '@/context/AuthContext';
 import { useEffect, lazy, Suspense, useState } from 'react';
+import { getSubdomainInfo } from '@/hooks/useSubdomain';
+
+// Admin subdomain router (for admin.manoprotect.com)
+const AdminSubdomainRouter = lazy(() => import('@/components/AdminSubdomainRouter'));
 
 // Defer non-critical component loading
 const PushNotificationPrompt = lazy(() => import('@/components/PushNotificationPrompt'));
