@@ -8,7 +8,7 @@ import { lazy, Suspense } from 'react';
 
 // Lazy load enterprise portal pages
 const EnterprisePortal = lazy(() => import('@/pages/EnterprisePortal'));
-const EnterpriseLogin = lazy(() => import('@/pages/enterprise/EnterpriseLogin'));
+const EnterpriseLogin = lazy(() => import('@/pages/EnterpriseLogin'));
 
 // Loading fallback
 const PortalLoader = () => (
