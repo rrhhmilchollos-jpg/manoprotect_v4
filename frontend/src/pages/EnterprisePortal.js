@@ -188,6 +188,17 @@ const EnterprisePortal = () => {
   const [realtimeNotification, setRealtimeNotification] = useState(null);
   const [exporting, setExporting] = useState(null);
 
+  // Detect admin subdomain for branding
+  const isAdminSubdomain = window.location.hostname.startsWith('admin.');
+  
+  // Theme colors based on subdomain
+  const theme = {
+    primary: isAdminSubdomain ? 'bg-emerald-600' : 'bg-indigo-600',
+    primaryHover: isAdminSubdomain ? 'hover:bg-emerald-700' : 'hover:bg-indigo-700',
+    primaryText: isAdminSubdomain ? 'text-emerald-400' : 'text-indigo-400',
+    badge: isAdminSubdomain ? 'Portal Empleados' : 'Enterprise'
+  };
+
   // Export helper function
   const handleExport = async (type, params = {}) => {
     setExporting(type);
