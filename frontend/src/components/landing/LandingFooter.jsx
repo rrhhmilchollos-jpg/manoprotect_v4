@@ -14,6 +14,12 @@ const footerLinks = {
     { name: 'Cómo Funciona', href: '/how-it-works' },
     { name: 'Empresas', href: '/enterprise' }
   ],
+  security: [
+    { name: 'Digital Security', href: '/' },
+    { name: 'Fraud Prevention', href: '/secure-payments' },
+    { name: 'Online Payment Protection', href: '/online-payment-protection' },
+    { name: 'Secure Online Payments', href: '/secure-online-payments' }
+  ],
   legal: [
     { name: 'Privacidad', href: '/privacy-policy' },
     { name: 'Términos', href: '/terms-of-service' },
@@ -22,6 +28,7 @@ const footerLinks = {
   ],
   support: [
     { name: 'FAQ', href: '/faq' },
+    { name: 'Blog', href: '/blog' },
     { name: 'Contacto', href: '/sobre-nosotros' },
     { name: 'Inversores', href: '/investor/register' }
   ]
