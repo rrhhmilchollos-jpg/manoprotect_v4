@@ -104,23 +104,44 @@ const EnterpriseLogin = () => {
     setError('');
   };
 
+  // Detect if we're on the admin subdomain for enhanced branding
+  const isAdminSubdomain = window.location.hostname.startsWith('admin.');
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 flex items-center justify-center p-4">
+    <div className={`min-h-screen flex items-center justify-center p-4 ${
+      isAdminSubdomain 
+        ? 'bg-gradient-to-br from-slate-900 via-emerald-950 to-slate-900' 
+        : 'bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900'
+    }`}>
       <Helmet>
-        <title>Login - Portal Enterprise - ManoProtect</title>
+        <title>{isAdminSubdomain ? 'Portal Empleados - ManoProtect Admin' : 'Login - Portal Enterprise - ManoProtect'}</title>
       </Helmet>
 
       <div className="w-full max-w-md">
-        {/* Logo */}
+        {/* Logo with Admin Badge */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-indigo-600 rounded-2xl mb-4">
+          <div className={`inline-flex items-center justify-center w-16 h-16 rounded-2xl mb-4 ${
+            isAdminSubdomain ? 'bg-emerald-600' : 'bg-indigo-600'
+          }`}>
             <Shield className="w-8 h-8 text-white" />
           </div>
           <h1 className="text-2xl font-bold text-white">ManoProtect</h1>
-          <p className="text-indigo-300">Portal Enterprise</p>
+          {isAdminSubdomain ? (
+            <div className="flex items-center justify-center gap-2 mt-2">
+              <span className="px-3 py-1 bg-emerald-600/30 border border-emerald-500/50 rounded-full text-emerald-300 text-xs font-semibold uppercase tracking-wider">
+                Portal Empleados
+              </span>
+            </div>
+          ) : (
+            <p className="text-indigo-300">Portal Enterprise</p>
+          )}
         </div>
 
-        <Card className="bg-slate-800/50 border-slate-700 backdrop-blur">
+        <Card className={`border backdrop-blur ${
+          isAdminSubdomain 
+            ? 'bg-slate-800/60 border-emerald-800/50' 
+            : 'bg-slate-800/50 border-slate-700'
+        }`}>
           <CardHeader className="text-center">
             <CardTitle className="text-white text-xl">
               {requires2FA ? 'Verificación 2FA' : 'Iniciar Sesión'}
@@ -171,7 +192,11 @@ const EnterpriseLogin = () => {
                 <Button
                   type="submit"
                   disabled={loading || totpCode.length < 6}
-                  className="w-full h-12 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold"
+                  className={`w-full h-12 text-white font-semibold ${
+                    isAdminSubdomain 
+                      ? 'bg-emerald-600 hover:bg-emerald-700' 
+                      : 'bg-indigo-600 hover:bg-indigo-700'
+                  }`}
                   data-testid="enterprise-2fa-submit-btn"
                 >
                   {loading ? (
@@ -246,7 +271,11 @@ const EnterpriseLogin = () => {
                 <Button
                   type="submit"
                   disabled={loading}
-                  className="w-full h-12 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold"
+                  className={`w-full h-12 text-white font-semibold ${
+                    isAdminSubdomain 
+                      ? 'bg-emerald-600 hover:bg-emerald-700' 
+                      : 'bg-indigo-600 hover:bg-indigo-700'
+                  }`}
                   data-testid="enterprise-login-btn"
                 >
                   {loading ? (
