@@ -1,75 +1,28 @@
-# ManoProtect - Robots.txt
-# Optimizado para SEO
+# ManoProtect Robots.txt
+# Digital Security, Fraud Prevention & Online Payment Protection
 
 User-agent: *
 Allow: /
-Disallow: /api/
-Disallow: /admin/
-Disallow: /dashboard/
-Disallow: /family-admin/
-Disallow: /*.json$
-Disallow: /test*
 
-# Crawl-delay para evitar sobrecarga
+# Important pages for SEO
+Allow: /secure-payments
+Allow: /secure-online-payments
+Allow: /online-payment-protection
+Allow: /pricing
+Allow: /blog
+Allow: /how-it-works
+Allow: /como-funciona
+Allow: /faq
+
+# Disallow admin and private areas
+Disallow: /enterprise
+Disallow: /admin
+Disallow: /api/
+Disallow: /dashboard
+Disallow: /settings
+
+# Sitemap location
+Sitemap: https://manoprotect.com/sitemap.xml
+
+# Crawl-delay for respectful crawling
 Crawl-delay: 1
-
-# Sitemap
-Sitemap: https://www.manoprotect.com/sitemap.xml
-
-# Google
-User-agent: Googlebot
-Allow: /
-Disallow: /api/
-Crawl-delay: 0
-
-# Google Images
-User-agent: Googlebot-Image
-Allow: /icons/
-Allow: /screenshots/
-Allow: /og-image.png
-Allow: /*.png$
-Allow: /*.jpg$
-Allow: /*.webp$
-
-# Google Ads
-User-agent: AdsBot-Google
-Allow: /
-Disallow: /api/
-
-# Bing
-User-agent: Bingbot
-Allow: /
-Crawl-delay: 1
-
-# Yandex
-User-agent: Yandex
-Allow: /
-Crawl-delay: 2
-
-# Facebook
-User-agent: facebookexternalhit
-Allow: /
-
-# Twitter
-User-agent: Twitterbot
-Allow: /
-
-# LinkedIn
-User-agent: LinkedInBot
-Allow: /
-
-# Block bad bots
-User-agent: AhrefsBot
-Disallow: /
-
-User-agent: SemrushBot
-Disallow: /
-
-User-agent: MJ12bot
-Disallow: /
-
-User-agent: DotBot
-Disallow: /
-
-# Host
-Host: https://www.manoprotect.com
