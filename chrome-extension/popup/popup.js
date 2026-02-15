@@ -1,5 +1,5 @@
 // ManoProtect Shield - Popup Script
-const API_BASE = 'https://payment-dashboard-70.preview.emergentagent.com/api';
+const API_BASE = 'https://protect-staging.preview.emergentagent.com/api';
 
 // DOM Elements
 const currentUrlEl = document.getElementById('current-url');

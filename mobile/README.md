@@ -25,7 +25,7 @@ Todas las apps se conectan al mismo backend:
 
 | Entorno | URL |
 |---------|-----|
-| Preview | https://payment-dashboard-70.preview.emergentagent.com |
+| Preview | https://protect-staging.preview.emergentagent.com |
 | Producción | [Tu dominio de producción] |
 
 ---
