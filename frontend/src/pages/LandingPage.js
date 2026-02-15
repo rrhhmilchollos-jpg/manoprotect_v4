@@ -24,7 +24,7 @@ const LandingPage = () => {
   return (
     <div className="min-h-screen bg-white">
       <Helmet>
-        <title>ManoProtect - Digital Security & Fraud Prevention | Online Payment Protection España</title>
+        <title>ManoProtect - Digital Security, Fraud Prevention & Online Payment Protection</title>
         <meta name="description" content="ManoProtect ofrece digital security líder en España. Fraud prevention con IA, online payment protection y alertas SOS con GPS. Protege a tu familia. 7 días GRATIS." />
         <meta name="keywords" content="digital security, fraud prevention, online payment protection, secure online payments, protección digital, seguridad online, antifraude, estafas digitales, phishing, SOS emergencias, GPS familiar, ciberseguridad España" />
         <link rel="canonical" href="https://manoprotect.com" />
