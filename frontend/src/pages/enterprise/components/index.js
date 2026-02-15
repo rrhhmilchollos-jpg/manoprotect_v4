@@ -3,8 +3,14 @@
  * Exports all reusable components for the Enterprise Portal
  */
 
+// UI Components
 export { default as StatCard } from './StatCard';
 export { default as SOSAlertCard } from './SOSAlertCard';
+
+// Section Components
+export { default as EmployeesSection } from './EmployeesSection';
+export { default as AlertsSection } from './AlertsSection';
+export { default as AuditSection } from './AuditSection';
 
 // Chart helper functions
 export const mergeChartData = (alerts, sos) => {
