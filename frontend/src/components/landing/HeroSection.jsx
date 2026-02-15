@@ -1,6 +1,7 @@
 /**
  * ManoProtect - Hero Section Component
  * Clean, professional hero with clear value proposition
+ * SEO Keywords: digital security, fraud prevention, online payment protection
  */
 import { useNavigate } from 'react-router-dom';
 import { ArrowRight, Shield, Check, Phone } from 'lucide-react';
@@ -21,32 +22,32 @@ const HeroSection = () => {
           
           {/* Left: Content */}
           <div className="space-y-8">
-            {/* Badge */}
+            {/* Badge - SEO: digital security */}
             <div className="inline-flex items-center gap-2 bg-indigo-100 text-indigo-700 px-4 py-2 rounded-full text-sm font-medium">
               <Shield className="w-4 h-4" />
-              <span>Protección Digital para Familias</span>
+              <span>Digital Security & Fraud Prevention</span>
             </div>
             
-            {/* Headline */}
+            {/* Headline - SEO optimized H1 */}
             <div className="space-y-4">
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-slate-900 leading-[1.1]">
-                Tu familia protegida{' '}
-                <span className="text-indigo-600">contra estafas</span>
+                Digital Security{' '}
+                <span className="text-indigo-600">contra fraudes online</span>
               </h1>
-              <p className="text-lg lg:text-xl text-slate-600 leading-relaxed max-w-xl">
-                ManoProtect detecta fraudes, SMS maliciosos y emails de phishing en tiempo real. Recibe alertas antes de ser víctima.
-              </p>
+              <h2 className="text-lg lg:text-xl text-slate-600 leading-relaxed max-w-xl">
+                ManoProtect ofrece fraud prevention avanzado y online payment protection. Detecta estafas, phishing y amenazas en tiempo real con IA.
+              </h2>
             </div>
 
-            {/* 3 Key Benefits */}
+            {/* 3 Key Benefits - SEO keywords in headings */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 py-2">
               <div className="flex items-center gap-3 p-3 bg-white rounded-xl border border-slate-200 shadow-sm">
                 <div className="w-10 h-10 bg-indigo-100 rounded-lg flex items-center justify-center">
                   <Shield className="w-5 h-5 text-indigo-600" />
                 </div>
                 <div>
-                  <div className="font-semibold text-slate-900 text-sm">Detección IA</div>
-                  <div className="text-xs text-slate-500">Analiza amenazas al instante</div>
+                  <h3 className="font-semibold text-slate-900 text-sm">Fraud Prevention</h3>
+                  <p className="text-xs text-slate-500">Detección con IA</p>
                 </div>
               </div>
               <div className="flex items-center gap-3 p-3 bg-white rounded-xl border border-slate-200 shadow-sm">
@@ -54,8 +55,8 @@ const HeroSection = () => {
                   <Phone className="w-5 h-5 text-emerald-600" />
                 </div>
                 <div>
-                  <div className="font-semibold text-slate-900 text-sm">Botón SOS</div>
-                  <div className="text-xs text-slate-500">Emergencias con 1 clic</div>
+                  <h3 className="font-semibold text-slate-900 text-sm">Botón SOS GPS</h3>
+                  <p className="text-xs text-slate-500">Emergencias con 1 clic</p>
                 </div>
               </div>
               <div className="flex items-center gap-3 p-3 bg-white rounded-xl border border-slate-200 shadow-sm">
@@ -63,8 +64,8 @@ const HeroSection = () => {
                   <Check className="w-5 h-5 text-orange-600" />
                 </div>
                 <div>
-                  <div className="font-semibold text-slate-900 text-sm">24/7 Activo</div>
-                  <div className="text-xs text-slate-500">Protección sin pausas</div>
+                  <h3 className="font-semibold text-slate-900 text-sm">Payment Protection</h3>
+                  <p className="text-xs text-slate-500">Pagos online seguros</p>
                 </div>
               </div>
             </div>
