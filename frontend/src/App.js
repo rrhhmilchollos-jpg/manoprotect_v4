@@ -123,6 +123,7 @@ const VoiceShield = lazy(() => import('@/pages/VoiceShield'));
 const SmartLocator = lazy(() => import('@/pages/SmartLocator'));
 const DeepfakeShield = lazy(() => import('@/pages/DeepfakeShield'));
 const InvestorCRM = lazy(() => import('@/pages/InvestorCRM'));
+const InvestorPortal = lazy(() => import('@/pages/InvestorPortal'));
 const VideosDemo = lazy(() => import('@/pages/VideosDemo'));
 const DigitalLegacyVault = lazy(() => import('@/pages/DigitalLegacyVault'));
 const PhishingSimulation = lazy(() => import('@/pages/PhishingSimulation'));
