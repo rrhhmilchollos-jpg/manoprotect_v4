@@ -4,15 +4,16 @@
  * Works worldwide for millions of users
  */
 
-// Geolocation options for high accuracy
+// Geolocation options for MAXIMUM accuracy
 const GEO_OPTIONS = {
-  enableHighAccuracy: true,  // Use GPS for precise location
-  timeout: 15000,            // 15 seconds timeout
-  maximumAge: 0              // Always get fresh location
+  enableHighAccuracy: true,  // Use GPS hardware for precise location
+  timeout: 20000,            // 20 seconds timeout for GPS lock
+  maximumAge: 0              // Never use cached location - always fresh
 };
 
 /**
- * Get current position with high accuracy
+ * Get current position with high accuracy using multiple readings
+ * Takes up to 3 GPS readings and returns the most accurate one
  * @returns {Promise<{latitude: number, longitude: number, accuracy: number}>}
  */
 export const getCurrentPosition = () => {
@@ -22,28 +23,63 @@ export const getCurrentPosition = () => {
       return;
     }
 
-    navigator.geolocation.getCurrentPosition(
+    let bestPosition = null;
+    let readingsCount = 0;
+    const maxReadings = 3;
+    const minAccuracyMeters = 15; // Accept if accuracy is under 15 meters
+    
+    const watchId = navigator.geolocation.watchPosition(
       (position) => {
-        resolve({
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude,
-          accuracy: position.coords.accuracy,
-          altitude: position.coords.altitude,
-          speed: position.coords.speed,
-          timestamp: position.timestamp
-        });
+        readingsCount++;
+        
+        // Keep the most accurate reading
+        if (!bestPosition || position.coords.accuracy < bestPosition.coords.accuracy) {
+          bestPosition = position;
+        }
+        
+        console.log(`[GPS] Lectura ${readingsCount}: Precisión ${Math.round(position.coords.accuracy)}m`);
+        
+        // Accept if we have excellent accuracy or enough readings
+        if (position.coords.accuracy <= minAccuracyMeters || readingsCount >= maxReadings) {
+          navigator.geolocation.clearWatch(watchId);
+          
+          resolve({
+            latitude: bestPosition.coords.latitude,
+            longitude: bestPosition.coords.longitude,
+            accuracy: Math.round(bestPosition.coords.accuracy),
+            altitude: bestPosition.coords.altitude,
+            speed: bestPosition.coords.speed,
+            heading: bestPosition.coords.heading,
+            timestamp: bestPosition.timestamp
+          });
+        }
       },
       (error) => {
+        navigator.geolocation.clearWatch(watchId);
+        
+        // If we got at least one reading, use it
+        if (bestPosition) {
+          resolve({
+            latitude: bestPosition.coords.latitude,
+            longitude: bestPosition.coords.longitude,
+            accuracy: Math.round(bestPosition.coords.accuracy),
+            altitude: bestPosition.coords.altitude,
+            speed: bestPosition.coords.speed,
+            timestamp: bestPosition.timestamp
+          });
+          return;
+        }
+        
         let message = 'Error de geolocalización';
         switch (error.code) {
           case error.PERMISSION_DENIED:
             message = 'Permiso de ubicación denegado. Activa la ubicación en tu navegador.';
             break;
           case error.POSITION_UNAVAILABLE:
-            message = 'Ubicación no disponible. Verifica tu GPS.';
+            message = 'Ubicación no disponible. Verifica que el GPS esté activado.';
             break;
           case error.TIMEOUT:
-            message = 'Tiempo de espera agotado. Intenta de nuevo.';
+            message = 'Tiempo de espera agotado. Asegúrate de estar en un lugar con buena señal GPS.';
             break;
           default:
             message = 'Error desconocido al obtener ubicación';
@@ -52,6 +88,21 @@ export const getCurrentPosition = () => {
       },
       GEO_OPTIONS
     );
+    
+    // Safety timeout - use best position after 15 seconds
+    setTimeout(() => {
+      navigator.geolocation.clearWatch(watchId);
+      if (bestPosition) {
+        resolve({
+          latitude: bestPosition.coords.latitude,
+          longitude: bestPosition.coords.longitude,
+          accuracy: Math.round(bestPosition.coords.accuracy),
+          altitude: bestPosition.coords.altitude,
+          speed: bestPosition.coords.speed,
+          timestamp: bestPosition.timestamp
+        });
+      }
+    }, 15000);
   });
 };
 
