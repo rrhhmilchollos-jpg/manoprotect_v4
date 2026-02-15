@@ -94,6 +94,31 @@ Configuración del subdominio dedicado para el portal de empleados:
   - `/dashboard` → Dashboard enterprise
 - ⚠️ **Pendiente**: Usuario debe configurar DNS CNAME para activar el subdominio
 
+### 19. Branding Dinámico Portal Empleados - COMPLETADO (15 Feb 2026)
+Sistema de branding diferenciado para admin.manoprotect.com:
+- ✅ **Detección automática** de subdominio (useSubdomain hook)
+- ✅ **Tema esmeralda** para admin.manoprotect.com (índigo para el resto)
+- ✅ **Badge "Portal Empleados"** visible en header
+- ✅ **Footer dinámico**: Muestra admin.manoprotect.com cuando corresponde
+- ✅ **Botones y sidebar** adaptados al tema del subdominio
+
+### 20. Optimización PageSpeed - COMPLETADO (15 Feb 2026)
+Mejoras de rendimiento para cargar más rápido:
+- ✅ **Conversión a WebP**: 11 imágenes optimizadas (reducción 88-98%)
+  - manoprotect_alert.png: 2.3MB → 264KB
+  - chromebook_*.png: ~1.5MB → ~70KB cada una
+  - logo512/192.png: 771KB → 16KB
+- ✅ **DNS Prefetch**: Para GTM, GA, Stripe
+- ✅ **Critical CSS**: Estilos inline para above-the-fold
+- ✅ **OptimizedImage component**: Carga WebP con fallback a PNG
+
+### 21. Refactorización EnterprisePortal - EN PROGRESO (15 Feb 2026)
+Inicio de extracción de componentes del archivo de 3600+ líneas:
+- ✅ **Creado**: `/app/frontend/src/pages/enterprise/components/`
+- ✅ **Extraído**: StatCard, SOSAlertCard, mergeChartData
+- ⚠️ **Pendiente**: Integrar imports en EnterprisePortal.js
+- ⚠️ **Pendiente**: Extraer más secciones (EmployeesSection, ClientsSection, etc.)
+
 ### 15. Portal de Pagos y Reembolsos Stripe - COMPLETADO (14 Feb 2026)
 Sistema completo para gestionar pagos y procesar reembolsos desde Stripe:
 - ✅ **Endpoints Backend**:
