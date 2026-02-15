@@ -113,11 +113,24 @@ Mejoras de rendimiento para cargar más rápido:
 - ✅ **OptimizedImage component**: Carga WebP con fallback a PNG
 
 ### 21. Refactorización EnterprisePortal - EN PROGRESO (15 Feb 2026)
-Inicio de extracción de componentes del archivo de 3600+ líneas:
-- ✅ **Creado**: `/app/frontend/src/pages/enterprise/components/`
-- ✅ **Extraído**: StatCard, SOSAlertCard, mergeChartData
-- ⚠️ **Pendiente**: Integrar imports en EnterprisePortal.js
-- ⚠️ **Pendiente**: Extraer más secciones (EmployeesSection, ClientsSection, etc.)
+Extracción de componentes del archivo de 3600+ líneas para mejor mantenibilidad:
+
+**Componentes extraídos** (7 archivos, ~29KB):
+- ✅ `StatCard.jsx` - Tarjeta de estadísticas KPI
+- ✅ `SOSAlertCard.jsx` - Card de alerta SOS en tiempo real
+- ✅ `EmployeesSection.jsx` - Gestión completa de empleados
+- ✅ `AlertsSection.jsx` - Monitor de alertas de seguridad
+- ✅ `AuditSection.jsx` - Logs de auditoría del sistema
+- ✅ `SOSSection.jsx` - Centro de emergencias SOS
+- ✅ `index.js` - Exports centralizados
+
+**Pendiente de extraer**:
+- ⚠️ `ClientsSection` (~470 líneas) - Gestión de clientes
+- ⚠️ `ReviewsSection` (~365 líneas) - Gestión de valoraciones
+- ⚠️ `OrdersSection` (~390 líneas) - Pedidos de dispositivos
+- ⚠️ `PaymentsSection` (~610 líneas) - Pagos y reembolsos Stripe
+- ⚠️ `SecuritySection` - Panel de seguridad 2FA
+- ⚠️ **Integrar imports** en EnterprisePortal.js y eliminar código duplicado
 
 ### 15. Portal de Pagos y Reembolsos Stripe - COMPLETADO (14 Feb 2026)
 Sistema completo para gestionar pagos y procesar reembolsos desde Stripe:
