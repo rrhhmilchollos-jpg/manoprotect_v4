@@ -596,6 +596,26 @@ async def send_sos_alert(
         except Exception as e2:
             print(f"Fallback push also failed: {e2}")
     
+    # Send WhatsApp notifications to contacts with phone numbers
+    whatsapp_sent = 0
+    whatsapp_results = []
+    try:
+        for contact in all_contacts:
+            phone = contact.get("phone") or contact.get("mobile") or contact.get("whatsapp")
+            if phone:
+                result = whatsapp_service.send_sos_alert(
+                    recipient_phone=phone,
+                    user_name=user.name,
+                    latitude=data.latitude,
+                    longitude=data.longitude
+                )
+                whatsapp_results.append(result)
+                if result.get("success"):
+                    whatsapp_sent += 1
+        print(f"[SOS] WhatsApp alerts sent: {whatsapp_sent}/{len(all_contacts)}")
+    except Exception as e:
+        print(f"[SOS] WhatsApp notification error: {e}")
+    
     return {
         "success": True,
         "alert_id": alert_id,
@@ -604,6 +624,7 @@ async def send_sos_alert(
         "contacts_notified": len(notifications_sent),
         "fcm_notifications_sent": fcm_sent,
         "sms_notifications_sent": sms_sent,
+        "whatsapp_notifications_sent": whatsapp_sent,
         "contacts": notifications_sent
     }
 
