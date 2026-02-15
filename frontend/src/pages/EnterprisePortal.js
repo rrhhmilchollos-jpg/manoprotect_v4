@@ -11,7 +11,7 @@ import {
   Bell, Menu, X, TrendingUp, TrendingDown,
   Clock, CheckCircle, Activity,
   DollarSign, BarChart3,
-  RefreshCw, Download, Lock
+  RefreshCw, Download, Lock, Star, MessageSquare
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
