@@ -657,15 +657,6 @@ const BlogPage = () => {
             <span className="font-bold text-slate-900 text-lg hidden sm:block">ManoProtect</span>
           </Link>
           <div className="flex items-center gap-3">
-            <a
-              href="/articulos_manoprotect.zip"
-              download
-              className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-emerald-700 bg-emerald-50 hover:bg-emerald-100 rounded-full transition-colors"
-              data-testid="download-articles-btn"
-            >
-              <Download className="w-4 h-4" />
-              <span className="hidden sm:inline">Descargar Artículos</span>
-            </a>
             <Button
               variant="ghost"
               onClick={() => navigate('/')}
