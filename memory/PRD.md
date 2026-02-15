@@ -20,6 +20,13 @@ ManoProtect es una plataforma integral de protección contra fraudes digitales p
 - **Auth**: JWT + session cookies + **2FA (TOTP) con verificación en login + protección brute force**
 - **Real-time**: Socket.IO/WebSockets
 
+### URLs del Sistema
+| Portal | URL | Descripción |
+|--------|-----|-------------|
+| App Principal | https://manoprotect.com | Landing y app consumidor |
+| Portal Empleados | https://admin.manoprotect.com | Dashboard interno |
+| Portal Inversores | https://manoprotect.com/inversores | Documentación para inversores verificados |
+
 ### Estructura de Directorios
 ```
 /app
