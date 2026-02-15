@@ -1007,7 +1007,11 @@ async def download_investor_pdf(
         "business-plan": "/app/memory/plan-de-negocio-completo.md",
         "financial-model": "/app/memory/financial-model.md",
         "pitch-deck": "/app/memory/pitch-deck-inversores.md",
-        "dossier-b2b": "/app/memory/dossier-comercial-b2b.md"
+        "dossier-b2b": "/app/memory/dossier-comercial-b2b.md",
+        "one-pager": "/app/memory/ONE_PAGER_INVERSORES.md",
+        "roadmap-tecnico": "/app/memory/roadmap-tecnico.md",
+        "business-plan-full": "/app/memory/BUSINESS_PLAN_INVERSORES.md",
+        "pitch-deck-extended": "/app/memory/PITCH_DECK_INVERSORES.md"
     }
     
     file_path = doc_map.get(doc_type)
