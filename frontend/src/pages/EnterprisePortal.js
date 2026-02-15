@@ -390,16 +390,16 @@ const EnterprisePortal = () => {
         </div>
 
         <div className="flex items-center gap-4">
-          {/* Real-time WebSocket Status */}
-          <div 
-            className={`flex items-center gap-1.5 px-2 py-1 rounded-full text-xs ${
-              wsConnected ? 'bg-emerald-500/20 text-emerald-400' : 'bg-slate-500/20 text-slate-400'
-            }`}
-            title={wsConnected ? 'Conectado en tiempo real' : 'Reconectando...'}
-          >
-            <span className={`w-2 h-2 rounded-full ${wsConnected ? 'bg-emerald-400 animate-pulse' : 'bg-slate-400'}`}></span>
-            {wsConnected ? 'En vivo' : 'Offline'}
-          </div>
+          {/* Real-time WebSocket Status - Only show when connected */}
+          {wsConnected && (
+            <div 
+              className="flex items-center gap-1.5 px-2 py-1 rounded-full text-xs bg-emerald-500/20 text-emerald-400"
+              title="Conectado en tiempo real"
+            >
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+              En vivo
+            </div>
+          )}
 
           {/* SOS Alert Indicator */}
           {pendingSOS.length > 0 && (
