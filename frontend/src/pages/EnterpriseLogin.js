@@ -295,7 +295,7 @@ const EnterpriseLogin = () => {
                 ¿Olvidaste tu contraseña?{' '}
                 <button 
                   onClick={() => setShowITModal(true)}
-                  className="text-indigo-400 hover:text-indigo-300 underline"
+                  className={`hover:underline ${isAdminSubdomain ? 'text-emerald-400 hover:text-emerald-300' : 'text-indigo-400 hover:text-indigo-300'}`}
                 >
                   Contacta con IT
                 </button>
@@ -305,14 +305,14 @@ const EnterpriseLogin = () => {
         </Card>
 
         <p className="text-center text-slate-500 text-xs mt-6">
-          © 2026 ManoProtect - Manoprotect.com. Todos los derechos reservados.
+          © 2026 ManoProtect - {isAdminSubdomain ? 'admin.manoprotect.com' : 'Manoprotect.com'}. Todos los derechos reservados.
         </p>
       </div>
 
       {/* IT Contact Modal */}
       {showITModal && (
         <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
-          <Card className="bg-slate-800 border-slate-700 w-full max-w-md">
+          <Card className={`w-full max-w-md ${isAdminSubdomain ? 'bg-slate-800 border-emerald-800/50' : 'bg-slate-800 border-slate-700'}`}>
             <CardHeader className="relative">
               <button
                 onClick={() => setShowITModal(false)}
@@ -321,7 +321,7 @@ const EnterpriseLogin = () => {
                 <X className="w-5 h-5" />
               </button>
               <CardTitle className="text-white flex items-center gap-2">
-                <Shield className="w-5 h-5 text-indigo-400" />
+                <Shield className={`w-5 h-5 ${isAdminSubdomain ? 'text-emerald-400' : 'text-indigo-400'}`} />
                 Soporte IT - ManoProtect
               </CardTitle>
               <CardDescription className="text-slate-400">
@@ -331,10 +331,10 @@ const EnterpriseLogin = () => {
             <CardContent className="space-y-4">
               <div className="bg-slate-900/50 rounded-lg p-4 space-y-3">
                 <div className="flex items-center gap-3">
-                  <Mail className="w-5 h-5 text-indigo-400" />
+                  <Mail className={`w-5 h-5 ${isAdminSubdomain ? 'text-emerald-400' : 'text-indigo-400'}`} />
                   <div>
                     <p className="text-slate-400 text-xs">Email</p>
-                    <a href="mailto:soporte@manoprotect.com" className="text-white hover:text-indigo-300">
+                    <a href="mailto:soporte@manoprotect.com" className={`text-white ${isAdminSubdomain ? 'hover:text-emerald-300' : 'hover:text-indigo-300'}`}>
                       soporte@manoprotect.com
                     </a>
                   </div>
@@ -357,8 +357,8 @@ const EnterpriseLogin = () => {
                 </div>
               </div>
               
-              <div className="bg-indigo-900/30 border border-indigo-600/30 rounded-lg p-3">
-                <p className="text-indigo-200 text-sm">
+              <div className={`rounded-lg p-3 ${isAdminSubdomain ? 'bg-emerald-900/30 border border-emerald-600/30' : 'bg-indigo-900/30 border border-indigo-600/30'}`}>
+                <p className={`text-sm ${isAdminSubdomain ? 'text-emerald-200' : 'text-indigo-200'}`}>
                   <strong>¿Problemas con 2FA?</strong><br />
                   Si no tienes acceso a tu app de autenticación, contacta con IT para restablecer tu acceso.
                 </p>
@@ -366,7 +366,7 @@ const EnterpriseLogin = () => {
 
               <Button
                 onClick={() => setShowITModal(false)}
-                className="w-full bg-indigo-600 hover:bg-indigo-700"
+                className={`w-full ${isAdminSubdomain ? 'bg-emerald-600 hover:bg-emerald-700' : 'bg-indigo-600 hover:bg-indigo-700'}`}
               >
                 Cerrar
               </Button>
