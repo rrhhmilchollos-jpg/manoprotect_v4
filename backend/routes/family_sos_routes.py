@@ -697,6 +697,75 @@ async def get_family_locations(
     }
 
 
+@router.post("/sos/whatsapp/test")
+async def test_whatsapp_sos(
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Test WhatsApp SOS integration - sends test message to user's phone"""
+    user = await require_auth(request, session_token)
+    
+    # Get user's phone
+    user_phone = getattr(user, 'phone', None)
+    if not user_phone:
+        # Try to get from database
+        user_doc = await _db.users.find_one({"user_id": user.user_id})
+        user_phone = user_doc.get("phone") if user_doc else None
+    
+    if not user_phone:
+        raise HTTPException(
+            status_code=400, 
+            detail="No tienes número de teléfono configurado. Añade tu número en tu perfil."
+        )
+    
+    result = whatsapp_service.send_test_message(user_phone)
+    
+    if result.get("success"):
+        return {
+            "success": True,
+            "message": f"Mensaje de prueba enviado a {user_phone}",
+            "details": result
+        }
+    else:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Error al enviar WhatsApp: {result.get('error')}"
+        )
+
+
+@router.post("/sos/whatsapp/send")
+async def send_whatsapp_alert_manual(
+    phone: str,
+    message: str = None,
+    latitude: float = 40.4168,
+    longitude: float = -3.7038,
+    request: Request = None,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Manually send a WhatsApp SOS alert to a specific phone number"""
+    user = await require_auth(request, session_token)
+    
+    result = whatsapp_service.send_sos_alert(
+        recipient_phone=phone,
+        user_name=user.name,
+        latitude=latitude,
+        longitude=longitude,
+        custom_message=message
+    )
+    
+    if result.get("success"):
+        return {
+            "success": True,
+            "message": f"Alerta WhatsApp enviada a {phone}",
+            "details": result
+        }
+    else:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Error al enviar WhatsApp: {result.get('error')}"
+        )
+
+
 @router.get("/sos/history")
 async def get_sos_history(
     request: Request,
