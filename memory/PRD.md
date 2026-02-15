@@ -39,11 +39,14 @@ ManoProtect es una plataforma integral de protección contra fraudes digitales p
 │       │   ├── landing/
 │       │   ├── ReviewForm.jsx        # Formulario valoraciones
 │       │   ├── TwoFactorSettings.jsx # Config 2FA
+│       │   ├── OptimizedImage.jsx    # Imágenes WebP con fallback
 │       │   └── AdminSubdomainRouter.jsx # Router para admin.manoprotect.com
 │       └── pages/
 │           ├── Dashboard.js          # Tab "Valorar" añadido
-│           ├── EnterpriseLogin.js    # Login con flujo 2FA
-│           └── EnterprisePortal.js   # Secciones: Seguridad, Pagos/Reembolsos
+│           ├── EnterpriseLogin.js    # Login con flujo 2FA + branding dinámico
+│           ├── EnterprisePortal.js   # Secciones: Seguridad, Pagos/Reembolsos
+│           └── enterprise/
+│               └── components/       # Componentes extraídos (StatCard, SOSAlertCard)
 └── memory/
     └── PRD.md
 ```
