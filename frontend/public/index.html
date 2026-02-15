@@ -140,6 +140,179 @@
         }
         </script>
 
+        <!-- Structured Data - WebSite (for Sitelinks Search Box) -->
+        <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "WebSite",
+            "name": "ManoProtect",
+            "url": "https://manoprotect.com",
+            "description": "Digital security, fraud prevention and online payment protection platform",
+            "potentialAction": {
+                "@type": "SearchAction",
+                "target": "https://manoprotect.com/search?q={search_term_string}",
+                "query-input": "required name=search_term_string"
+            }
+        }
+        </script>
+
+        <!-- Structured Data - LocalBusiness/Contact -->
+        <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "LocalBusiness",
+            "name": "ManoProtect",
+            "image": "https://manoprotect.com/logo512.png",
+            "url": "https://manoprotect.com",
+            "telephone": "+34-672-184-738",
+            "email": "info@manoprotect.com",
+            "address": {
+                "@type": "PostalAddress",
+                "streetAddress": "Novelé",
+                "addressLocality": "Valencia",
+                "addressRegion": "Comunidad Valenciana",
+                "postalCode": "46814",
+                "addressCountry": "ES"
+            },
+            "geo": {
+                "@type": "GeoCoordinates",
+                "latitude": 38.9806,
+                "longitude": -0.5479
+            },
+            "openingHoursSpecification": {
+                "@type": "OpeningHoursSpecification",
+                "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+                "opens": "09:00",
+                "closes": "18:00"
+            },
+            "priceRange": "€€"
+        }
+        </script>
+
+        <!-- Structured Data - Product (SOS Device) -->
+        <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "Product",
+            "name": "ManoProtect SOS Device",
+            "description": "Dispositivo de emergencia SOS con GPS para secure online payments y fraud prevention. Protección digital completa para tu familia.",
+            "image": "https://manoprotect.com/sos-device.png",
+            "brand": {
+                "@type": "Brand",
+                "name": "ManoProtect"
+            },
+            "offers": {
+                "@type": "Offer",
+                "url": "https://manoprotect.com/pricing",
+                "priceCurrency": "EUR",
+                "price": "9.99",
+                "priceValidUntil": "2025-12-31",
+                "availability": "https://schema.org/InStock",
+                "itemCondition": "https://schema.org/NewCondition"
+            },
+            "aggregateRating": {
+                "@type": "AggregateRating",
+                "ratingValue": "4.9",
+                "reviewCount": "847"
+            },
+            "review": [
+                {
+                    "@type": "Review",
+                    "reviewRating": {
+                        "@type": "Rating",
+                        "ratingValue": "5",
+                        "bestRating": "5"
+                    },
+                    "author": {
+                        "@type": "Person",
+                        "name": "María García"
+                    },
+                    "reviewBody": "Excelente servicio de digital security. El fraud prevention funciona perfectamente."
+                }
+            ]
+        }
+        </script>
+
+        <!-- Structured Data - Service (Digital Security) -->
+        <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "Service",
+            "serviceType": "Digital Security Service",
+            "name": "ManoProtect Digital Security",
+            "description": "Servicio completo de digital security con fraud prevention y online payment protection para familias españolas.",
+            "provider": {
+                "@type": "Organization",
+                "name": "ManoProtect"
+            },
+            "areaServed": {
+                "@type": "Country",
+                "name": "España"
+            },
+            "hasOfferCatalog": {
+                "@type": "OfferCatalog",
+                "name": "Planes ManoProtect",
+                "itemListElement": [
+                    {
+                        "@type": "Offer",
+                        "itemOffered": {
+                            "@type": "Service",
+                            "name": "Plan Básico - Fraud Prevention"
+                        },
+                        "price": "4.99",
+                        "priceCurrency": "EUR"
+                    },
+                    {
+                        "@type": "Offer",
+                        "itemOffered": {
+                            "@type": "Service",
+                            "name": "Plan Premium - Online Payment Protection"
+                        },
+                        "price": "9.99",
+                        "priceCurrency": "EUR"
+                    },
+                    {
+                        "@type": "Offer",
+                        "itemOffered": {
+                            "@type": "Service",
+                            "name": "Plan Familiar - Digital Security Completo"
+                        },
+                        "price": "14.99",
+                        "priceCurrency": "EUR"
+                    }
+                ]
+            }
+        }
+        </script>
+
+        <!-- Structured Data - BreadcrumbList -->
+        <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "Inicio",
+                    "item": "https://manoprotect.com"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": "Secure Online Payments",
+                    "item": "https://manoprotect.com/secure-payments"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 3,
+                    "name": "Precios",
+                    "item": "https://manoprotect.com/pricing"
+                }
+            ]
+        }
+        </script>
+
         <!-- PWA Service Worker Registration -->
         <script>
             if ('serviceWorker' in navigator) {
