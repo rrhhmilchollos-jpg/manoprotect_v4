@@ -11,6 +11,7 @@ export { default as SOSAlertCard } from './SOSAlertCard';
 export { default as EmployeesSection } from './EmployeesSection';
 export { default as AlertsSection } from './AlertsSection';
 export { default as AuditSection } from './AuditSection';
+export { default as SOSSection } from './SOSSection';
 
 // Chart helper functions
 export const mergeChartData = (alerts, sos) => {
