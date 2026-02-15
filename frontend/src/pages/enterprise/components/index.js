@@ -12,6 +12,15 @@ export { default as EmployeesSection } from './EmployeesSection';
 export { default as AlertsSection } from './AlertsSection';
 export { default as AuditSection } from './AuditSection';
 export { default as SOSSection } from './SOSSection';
+export { default as ClientsSection } from './ClientsSection';
+export { default as ReviewsSection } from './ReviewsSection';
+export { default as OrdersSection } from './OrdersSection';
+export { default as PaymentsSection } from './PaymentsSection';
+
+// Modal Components
+export { default as ClientDetailModal } from './ClientDetailModal';
+export { default as CreateEmployeeModal } from './CreateEmployeeModal';
+export { default as EmployeeDetailModal } from './EmployeeDetailModal';
 
 // Chart helper functions
 export const mergeChartData = (alerts, sos) => {
