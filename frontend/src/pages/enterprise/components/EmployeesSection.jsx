@@ -10,34 +10,10 @@ import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { toast } from 'sonner';
+import CreateEmployeeModal from './CreateEmployeeModal';
+import EmployeeDetailModal from './EmployeeDetailModal';
 
 const API_URL = process.env.REACT_APP_BACKEND_URL || '';
-
-// Placeholder modals - these should be extracted to separate files too
-const CreateEmployeeModal = ({ onClose, onSuccess }) => (
-  <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
-    <Card className="bg-slate-800 border-slate-700 w-full max-w-md p-6">
-      <h2 className="text-xl font-bold text-white mb-4">Crear Nuevo Empleado</h2>
-      <p className="text-slate-400 mb-4">Funcionalidad en desarrollo</p>
-      <Button onClick={onClose} className="w-full">Cerrar</Button>
-    </Card>
-  </div>
-);
-
-const EmployeeDetailModal = ({ employee, onClose }) => (
-  <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
-    <Card className="bg-slate-800 border-slate-700 w-full max-w-md p-6">
-      <h2 className="text-xl font-bold text-white mb-4">{employee.name}</h2>
-      <div className="space-y-2 text-slate-300">
-        <p><strong>Email:</strong> {employee.email}</p>
-        <p><strong>Rol:</strong> {employee.role}</p>
-        <p><strong>Departamento:</strong> {employee.department || '-'}</p>
-        <p><strong>Estado:</strong> {employee.status}</p>
-      </div>
-      <Button onClick={onClose} className="w-full mt-4">Cerrar</Button>
-    </Card>
-  </div>
-);
 
 const EmployeesSection = ({ employee, hasPermission, theme = {} }) => {
   const [employees, setEmployees] = useState([]);
