@@ -26,7 +26,7 @@ const LandingHeader = () => {
         >
           <img
             src={LOGO_URL}
-            alt="ManoProtect"
+            alt="ManoProtect - Digital Security & Fraud Prevention Logo"
             className="h-9 w-auto"
             width="36"
             height="36"
