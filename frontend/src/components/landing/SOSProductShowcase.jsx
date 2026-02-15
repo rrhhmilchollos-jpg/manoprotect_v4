@@ -34,7 +34,7 @@ const SOSProductShowcase = () => {
               <div className="relative bg-gradient-to-br from-slate-800 to-slate-900 rounded-3xl p-8 border border-slate-700/50">
                 <img
                   src="https://static.prod-images.emergentagent.com/jobs/48047d8d-d356-432e-9b76-e0dcfdb8856b/images/f99ed06308511adbc1daae4f2950cd5204c0a6d6e9b0c0050741934a2dde5029.png"
-                  alt="Botón SOS ManoProtect"
+                  alt="Dispositivo SOS ManoProtect con GPS - Online Payment Protection y Fraud Prevention para emergencias familiares"
                   className="w-full h-auto drop-shadow-2xl"
                   loading="lazy"
                 />
