@@ -14,7 +14,7 @@ import requests
 import os
 import uuid
 
-BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', 'https://staff-hub-mp.preview.emergentagent.com')
+BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', 'https://protection-hub-6.preview.emergentagent.com')
 
 class TestAdminAuth:
     """Test admin authentication"""

@@ -6,7 +6,7 @@
 // API Configuration
 export const API_CONFIG = {
   // Development/Preview URL (Emergent platform)
-  DEV_URL: 'https://staff-hub-mp.preview.emergentagent.com/api',
+  DEV_URL: 'https://protection-hub-6.preview.emergentagent.com/api',
   
   // Production URL (update when deploying to production)
   PROD_URL: 'https://mano-protect.com/api',

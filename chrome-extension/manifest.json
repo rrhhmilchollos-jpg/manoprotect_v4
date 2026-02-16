@@ -9,7 +9,7 @@
     "contextMenus"
   ],
   "host_permissions": [
-    "https://staff-hub-mp.preview.emergentagent.com/*",
+    "https://protection-hub-6.preview.emergentagent.com/*",
     "https://www.manoprotect.com/*"
   ],
   "action": {

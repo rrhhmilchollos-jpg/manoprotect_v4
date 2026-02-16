@@ -1,7 +1,7 @@
 // ManoProtect Shield - Content Script
 // Runs on every page to provide real-time protection
 
-const API_BASE = 'https://staff-hub-mp.preview.emergentagent.com/api';
+const API_BASE = 'https://protection-hub-6.preview.emergentagent.com/api';
 
 // Create notification element
 function createNotification(result, checkedValue) {
