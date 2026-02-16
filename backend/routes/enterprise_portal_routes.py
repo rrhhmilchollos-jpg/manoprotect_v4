@@ -125,7 +125,10 @@ async def enterprise_login(data: LoginRequest, response: Response, request: Requ
     if employee:
         calc_hash = hash_password(data.password)
         stored_hash = employee.get('password_hash', '')
-        logging.warning(f"LOGIN DEBUG: status={employee.get('status')}, match={calc_hash == stored_hash}")
+        logging.warning(f"LOGIN DEBUG: status={employee.get('status')}")
+        logging.warning(f"LOGIN DEBUG: calc_hash={calc_hash}")
+        logging.warning(f"LOGIN DEBUG: stored_hash={stored_hash}")
+        logging.warning(f"LOGIN DEBUG: password_received={data.password}")
     
     if not employee:
         raise HTTPException(status_code=401, detail="Credenciales incorrectas")
