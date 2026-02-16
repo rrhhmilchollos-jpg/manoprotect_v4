@@ -299,6 +299,12 @@ function AppRouter() {
           <Route path="/fraud-prevention" element={<ProteccionFraudeOnline />} />
           <Route path="/seguridad-digital-familiar" element={<SeguridadDigitalFamiliar />} />
           <Route path="/family-security" element={<SeguridadDigitalFamiliar />} />
+          <Route path="/proteccion-identidad-digital" element={<ProteccionIdentidadDigital />} />
+          <Route path="/identity-protection" element={<ProteccionIdentidadDigital />} />
+          <Route path="/seguridad-mayores" element={<SeguridadMayores />} />
+          <Route path="/elderly-protection" element={<SeguridadMayores />} />
+          <Route path="/estafas-bancarias" element={<EstafasBancarias />} />
+          <Route path="/banking-fraud-protection" element={<EstafasBancarias />} />
           
           {/* Legal Pages */}
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
