@@ -289,6 +289,14 @@ function AppRouter() {
           <Route path="/secure-online-payments" element={<SecurePayments />} />
           <Route path="/online-payment-protection" element={<SecurePayments />} />
           
+          {/* SEO SILO Pages - Arquitectura SILO */}
+          <Route path="/proteccion-phishing" element={<ProteccionPhishing />} />
+          <Route path="/phishing-protection" element={<ProteccionPhishing />} />
+          <Route path="/proteccion-fraude-online" element={<ProteccionFraudeOnline />} />
+          <Route path="/fraud-prevention" element={<ProteccionFraudeOnline />} />
+          <Route path="/seguridad-digital-familiar" element={<SeguridadDigitalFamiliar />} />
+          <Route path="/family-security" element={<SeguridadDigitalFamiliar />} />
+          
           {/* Legal Pages */}
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/terms-of-service" element={<TermsOfService />} />
