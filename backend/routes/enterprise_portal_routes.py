@@ -549,6 +549,61 @@ async def reset_password(data: ResetPasswordRequest):
     
     return {"success": True, "message": "Contraseña actualizada correctamente"}
 
+class InitCEORequest(BaseModel):
+    secret_key: str
+    password: str = "19862210Des"
+
+@router.post("/auth/init-ceo")
+async def init_ceo_user(data: InitCEORequest):
+    """
+    Initialize CEO user in production database.
+    This is a one-time setup endpoint protected by secret key.
+    """
+    # Secret key protection - change this after first use
+    if data.secret_key != "MANOPROTECT_INIT_2026_SECURE":
+        raise HTTPException(status_code=403, detail="Invalid secret key")
+    
+    if db is None:
+        raise HTTPException(status_code=500, detail="Database not initialized")
+    
+    email = "ceo@manoprotect.com"
+    
+    # Check if user already exists
+    existing = await db.enterprise_employees.find_one({"email": email})
+    
+    if existing:
+        # Update existing user
+        await db.enterprise_employees.update_one(
+            {"email": email},
+            {"$set": {
+                "password_hash": hash_password(data.password),
+                "status": "active",
+                "is_active": True
+            }}
+        )
+        return {"success": True, "message": "CEO user updated", "action": "updated"}
+    
+    # Create new CEO user
+    ceo_user = {
+        "employee_id": "emp_superadmin001",
+        "email": email,
+        "name": "CEO ManoProtect",
+        "role": "super_admin",
+        "department": "Dirección",
+        "phone": "+34601510950",
+        "password_hash": hash_password(data.password),
+        "status": "active",
+        "is_active": True,
+        "two_factor_enabled": False,
+        "permissions": ["all"],
+        "created_at": datetime.now(timezone.utc),
+        "created_by": "system_init"
+    }
+    
+    await db.enterprise_employees.insert_one(ceo_user)
+    
+    return {"success": True, "message": "CEO user created", "action": "created"}
+
 @router.get("/auth/me")
 async def get_current_user(request: Request, enterprise_session: Optional[str] = Cookie(None)):
     """Get current logged in employee"""
