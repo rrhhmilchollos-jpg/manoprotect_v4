@@ -2929,6 +2929,7 @@ allowed_origins = [
     "https://manoprotect.com",
     "https://www.manoprotect.com",
     "https://admin.manoprotect.com",  # Employee Portal Subdomain
+    "https://worker-dashboard-4.preview.emergentagent.com",  # Admin Portal Preview
     "https://digital-guard-1.emergent.host",
     "https://protection-hub-6.preview.emergentagent.com",
 ]
