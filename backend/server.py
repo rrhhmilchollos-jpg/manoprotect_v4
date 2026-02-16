@@ -2932,6 +2932,8 @@ allowed_origins = [
     "https://worker-dashboard-4.preview.emergentagent.com",  # Admin Portal Preview
     "https://digital-guard-1.emergent.host",
     "https://protection-hub-6.preview.emergentagent.com",
+    "file://",  # Electron Desktop App
+    "null",     # Electron Desktop App (some versions send null origin)
 ]
 
 # Add any additional origins from environment
