@@ -269,34 +269,45 @@ Exportación de datos en formato CSV desde el Portal Enterprise.
 | `/api/2fa/disable` | POST | Enterprise | Desactivar con código |
 | `/api/2fa/verify` | POST | Enterprise | Verificar código TOTP |
 
+### SOS + WhatsApp
+| Endpoint | Método | Auth | Descripción |
+|----------|--------|------|-------------|
+| `/api/sos/alert` | POST | User | Envía alerta SOS con GPS + WhatsApp |
+| `/api/sos/whatsapp/test` | POST | No | Test de integración Twilio |
+
 ---
 
 ## Testing
 
-### Último Test: Iteración 44 (14 Feb 2026)
-- Backend: 15/15 tests passed (100%)
-- Frontend: 10/10 tests passed (100%)
+### Último Test: Iteración 45 (16 Feb 2026)
+- Frontend: 18/18 tests passed (100%)
 - Funcionalidades verificadas:
-  - Protección brute force 2FA (5 intentos, 15 min lockout)
-  - Stripe payment lookup y refund endpoints
-  - PaymentsSection UI con 3 tabs
-  - Footer actualizado a Manoprotect.com
+  - Arquitectura SEO SILO completa (6 páginas)
+  - Rutas en español e inglés
+  - Footer con categorías SEO
+  - CTAs navegando a /register
+  - sitemap.xml con todas las URLs
 
 ---
 
 ## Backlog Pendiente
 
+### P0 - Crítico (Bloqueados)
+- [ ] **2FA deshabilitado** - Requiere decisión del usuario (TOTP, SMS, o mantener deshabilitado)
+- [ ] **Subdominio admin.manoprotect.com** - SSL no configurado en Cloudflare (requiere acción del usuario)
+- [ ] **WhatsApp en producción** - Requiere registro WhatsApp Business en Twilio/Meta
+- [ ] **SendGrid verificación** - Requiere configuración DNS en IONOS
+
 ### P1 - Alta Prioridad
+- [ ] SEO Fase 2 - Contenido para artículos pilar y cluster
 - [ ] Optimización PageSpeed (imágenes, lazy loading)
-- [ ] Verificar SendGrid sender domain para emails reales
 
 ### P2 - Media Prioridad  
 - [ ] Integración con 112 (emergencias)
-- [ ] Arquitectura subdomain (`admin.manoprotect.com`)
-- [ ] Refactorización de `EnterprisePortal.js` (archivo muy grande)
+- [ ] SEO Fase 3 - Estrategia de backlinks
 
 ### P3 - Baja Prioridad
-- [ ] Videos demo de 1 minuto (Sora 2 - limitación técnica)
+- [ ] Videos demo de 1 minuto (Sora 2 - balance agotado)
 - [ ] DNA Digital Identity
 
 ---
