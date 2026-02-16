@@ -453,6 +453,102 @@ async def enterprise_logout(
     response.delete_cookie("enterprise_session")
     return {"success": True, "message": "Sesión cerrada"}
 
+class ForgotPasswordRequest(BaseModel):
+    email: EmailStr
+
+@router.post("/auth/forgot-password")
+async def forgot_password(data: ForgotPasswordRequest, background_tasks: BackgroundTasks):
+    """Send password reset email to employee"""
+    if db is None:
+        raise HTTPException(status_code=500, detail="Database not initialized")
+    
+    employee = await db.enterprise_employees.find_one({"email": data.email.lower()})
+    
+    # Always return success to prevent email enumeration
+    if not employee:
+        return {"success": True, "message": "Si el email existe, recibirás un enlace de recuperación"}
+    
+    # Generate reset token
+    reset_token = uuid.uuid4().hex
+    reset_expires = datetime.now(timezone.utc) + timedelta(hours=1)
+    
+    # Save token to database
+    await db.enterprise_employees.update_one(
+        {"email": data.email.lower()},
+        {"$set": {
+            "reset_token": reset_token,
+            "reset_token_expires": reset_expires
+        }}
+    )
+    
+    # Send email in background
+    try:
+        from services.email_service import email_service
+        
+        reset_url = f"https://admin.manoprotect.com/reset-password?token={reset_token}"
+        
+        email_html = f"""
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+            <div style="background: #10b981; padding: 20px; text-align: center;">
+                <h1 style="color: white; margin: 0;">ManoProtect</h1>
+            </div>
+            <div style="padding: 30px; background: #f8fafc;">
+                <h2 style="color: #1e293b;">Recuperar Contraseña</h2>
+                <p style="color: #64748b;">Hola {employee.get('name', 'Usuario')},</p>
+                <p style="color: #64748b;">Hemos recibido una solicitud para restablecer tu contraseña del Portal de Empleados.</p>
+                <p style="color: #64748b;">Haz clic en el siguiente botón para crear una nueva contraseña:</p>
+                <div style="text-align: center; margin: 30px 0;">
+                    <a href="{reset_url}" style="background: #10b981; color: white; padding: 14px 28px; text-decoration: none; border-radius: 8px; font-weight: bold;">Restablecer Contraseña</a>
+                </div>
+                <p style="color: #94a3b8; font-size: 14px;">Este enlace expirará en 1 hora.</p>
+                <p style="color: #94a3b8; font-size: 14px;">Si no solicitaste este cambio, puedes ignorar este email.</p>
+            </div>
+            <div style="padding: 20px; text-align: center; color: #94a3b8; font-size: 12px;">
+                © 2026 ManoProtect - Portal de Empleados
+            </div>
+        </div>
+        """
+        
+        background_tasks.add_task(
+            email_service.send_email,
+            to_email=data.email,
+            subject="Recuperar Contraseña - ManoProtect Portal",
+            html_content=email_html
+        )
+    except Exception as e:
+        print(f"Error sending reset email: {e}")
+    
+    return {"success": True, "message": "Si el email existe, recibirás un enlace de recuperación"}
+
+class ResetPasswordRequest(BaseModel):
+    token: str
+    new_password: str = Field(..., min_length=8)
+
+@router.post("/auth/reset-password")
+async def reset_password(data: ResetPasswordRequest):
+    """Reset password using token"""
+    if db is None:
+        raise HTTPException(status_code=500, detail="Database not initialized")
+    
+    employee = await db.enterprise_employees.find_one({
+        "reset_token": data.token,
+        "reset_token_expires": {"$gt": datetime.now(timezone.utc)}
+    })
+    
+    if not employee:
+        raise HTTPException(status_code=400, detail="Token inválido o expirado")
+    
+    # Update password and clear token
+    await db.enterprise_employees.update_one(
+        {"employee_id": employee["employee_id"]},
+        {
+            "$set": {"password_hash": hash_password(data.new_password)},
+            "$unset": {"reset_token": "", "reset_token_expires": ""}
+        }
+    )
+    
+    return {"success": True, "message": "Contraseña actualizada correctamente"}
+
 @router.get("/auth/me")
 async def get_current_user(request: Request, enterprise_session: Optional[str] = Cookie(None)):
     """Get current logged in employee"""
