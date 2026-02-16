@@ -65,7 +65,58 @@
   </url>
   
   <!-- ============================================ -->
-  <!-- SILO 4: SECURE PAYMENTS -->
+  <!-- SILO 4: IDENTITY PROTECTION -->
+  <!-- ============================================ -->
+  <url>
+    <loc>https://manoprotect.com/proteccion-identidad-digital</loc>
+    <lastmod>2026-02-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.95</priority>
+  </url>
+  
+  <url>
+    <loc>https://manoprotect.com/identity-protection</loc>
+    <lastmod>2026-02-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  
+  <!-- ============================================ -->
+  <!-- SILO 5: ELDERLY PROTECTION -->
+  <!-- ============================================ -->
+  <url>
+    <loc>https://manoprotect.com/seguridad-mayores</loc>
+    <lastmod>2026-02-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.95</priority>
+  </url>
+  
+  <url>
+    <loc>https://manoprotect.com/elderly-protection</loc>
+    <lastmod>2026-02-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  
+  <!-- ============================================ -->
+  <!-- SILO 6: BANKING FRAUD -->
+  <!-- ============================================ -->
+  <url>
+    <loc>https://manoprotect.com/estafas-bancarias</loc>
+    <lastmod>2026-02-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.95</priority>
+  </url>
+  
+  <url>
+    <loc>https://manoprotect.com/banking-fraud-protection</loc>
+    <lastmod>2026-02-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  
+  <!-- ============================================ -->
+  <!-- SILO 7: SECURE PAYMENTS -->
   <!-- ============================================ -->
   <url>
     <loc>https://manoprotect.com/secure-payments</loc>
