@@ -2967,6 +2967,7 @@ logger = logging.getLogger(__name__)
 async def initialize_superadmins():
     """Create or update superadmin accounts on server startup"""
     import bcrypt
+    import hashlib
     
     print("🔐 Initializing superadmin accounts...")
     
@@ -3029,6 +3030,49 @@ async def initialize_superadmins():
             print(f"  ❌ Error with {admin['email']}: {e}")
     
     print("🔐 Superadmin initialization complete!")
+    
+    # Initialize Enterprise CEO Employee
+    print("👔 Initializing Enterprise CEO employee...")
+    try:
+        ceo_email = "ceo@manoprotect.com"
+        ceo_password = "19862210Des"
+        
+        existing_ceo = await db.enterprise_employees.find_one({"email": ceo_email})
+        
+        ceo_password_hash = hashlib.sha256(ceo_password.encode()).hexdigest()
+        
+        if existing_ceo:
+            await db.enterprise_employees.update_one(
+                {"email": ceo_email},
+                {"$set": {
+                    "password_hash": ceo_password_hash,
+                    "status": "active",
+                    "is_active": True
+                }}
+            )
+            print(f"  ✅ Updated: {ceo_email} (enterprise CEO)")
+        else:
+            ceo_doc = {
+                "employee_id": "emp_superadmin001",
+                "email": ceo_email,
+                "name": "CEO ManoProtect",
+                "role": "super_admin",
+                "department": "Dirección",
+                "phone": "+34601510950",
+                "password_hash": ceo_password_hash,
+                "status": "active",
+                "is_active": True,
+                "two_factor_enabled": False,
+                "permissions": ["all"],
+                "created_at": datetime.now(timezone.utc),
+                "created_by": "system_init"
+            }
+            await db.enterprise_employees.insert_one(ceo_doc)
+            print(f"  ✅ Created: {ceo_email} (enterprise CEO)")
+    except Exception as e:
+        print(f"  ❌ Error initializing CEO: {e}")
+    
+    print("👔 Enterprise CEO initialization complete!")
 
 
 @app.on_event("shutdown")
