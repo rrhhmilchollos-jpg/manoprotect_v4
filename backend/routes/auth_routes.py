@@ -116,6 +116,9 @@ async def register_user(data: UserRegister, request: Request, response: Response
         {"registration": True}
     )
     
+    # Detect if we're in production (manoprotect.com) for cross-subdomain cookies
+    is_production = "manoprotect.com" in str(request.base_url) if hasattr(request, 'base_url') else False
+    
     response.set_cookie(
         key="session_token",
         value=session["session_token"],
@@ -123,7 +126,8 @@ async def register_user(data: UserRegister, request: Request, response: Response
         secure=True,
         samesite="none",
         path="/",
-        max_age=24 * 60 * 60  # 24 hours for new registrations
+        max_age=24 * 60 * 60,  # 24 hours for new registrations
+        domain=".manoprotect.com" if is_production else None
     )
     
     return {
@@ -263,6 +267,9 @@ async def login_user(data: UserLogin, request: Request, response: Response):
         {"suspicious": is_suspicious, "suspicious_reason": suspicious_reason}
     )
     
+    # Detect if we're in production for cross-subdomain cookies
+    is_production = "manoprotect.com" in str(request.base_url) if hasattr(request, 'base_url') else False
+    
     response.set_cookie(
         key="session_token",
         value=session["session_token"],
@@ -270,7 +277,8 @@ async def login_user(data: UserLogin, request: Request, response: Response):
         secure=True,
         samesite="none",
         path="/",
-        max_age=30 * 24 * 60 * 60 if getattr(data, 'remember_device', False) else 24 * 60 * 60
+        max_age=30 * 24 * 60 * 60 if getattr(data, 'remember_device', False) else 24 * 60 * 60,
+        domain=".manoprotect.com" if is_production else None
     )
     
     return {
