@@ -15,10 +15,17 @@ const footerLinks = {
     { name: 'Empresas', href: '/enterprise' }
   ],
   security: [
-    { name: 'Digital Security', href: '/' },
-    { name: 'Fraud Prevention', href: '/secure-payments' },
-    { name: 'Online Payment Protection', href: '/online-payment-protection' },
-    { name: 'Secure Online Payments', href: '/secure-online-payments' }
+    { name: 'Protección Phishing', href: '/proteccion-phishing' },
+    { name: 'Fraud Prevention', href: '/proteccion-fraude-online' },
+    { name: 'Estafas Bancarias', href: '/estafas-bancarias' },
+    { name: 'Identidad Digital', href: '/proteccion-identidad-digital' },
+    { name: 'Pagos Seguros', href: '/secure-payments' }
+  ],
+  family: [
+    { name: 'Seguridad Familiar', href: '/seguridad-digital-familiar' },
+    { name: 'Seguridad Mayores', href: '/seguridad-mayores' },
+    { name: 'Localizador GPS', href: '/smart-locator' },
+    { name: 'Botón SOS', href: '/servicios-sos' }
   ],
   legal: [
     { name: 'Privacidad', href: '/privacy-policy' },
