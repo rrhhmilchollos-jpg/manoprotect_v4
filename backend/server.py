@@ -71,15 +71,16 @@ class SecurityHeadersMiddleware(BaseHTTPMiddleware):
         # Content Security Policy - Prevent XSS and injection attacks
         response.headers["Content-Security-Policy"] = (
             "default-src 'self'; "
-            "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://cdnjs.cloudflare.com; "
+            "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://cdnjs.cloudflare.com https://widget.trustpilot.com; "
             "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; "
             "font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; "
             "img-src 'self' data: https: blob:; "
-            "connect-src 'self' https://*.emergentagent.com https://*.stripe.com https://api.stripe.com wss://*.emergentagent.com; "
-            "frame-src 'self' https://www.googletagmanager.com https://js.stripe.com; "
+            "connect-src 'self' https://*.emergentagent.com https://*.manoprotect.com https://*.stripe.com https://api.stripe.com wss://*.emergentagent.com; "
+            "frame-src 'self' https://www.googletagmanager.com https://js.stripe.com https://widget.trustpilot.com; "
             "frame-ancestors 'none'; "
-            "form-action 'self'; "
-            "base-uri 'self';"
+            "object-src 'none'; "
+            "base-uri 'self'; "
+            "form-action 'self';"
         )
         
         # Strict Transport Security (HSTS)
