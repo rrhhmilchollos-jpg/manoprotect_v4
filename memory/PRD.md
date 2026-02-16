@@ -1,6 +1,6 @@
 # ManoProtect - Product Requirements Document
 
-## Última Actualización: 15 Febrero 2026
+## Última Actualización: 16 Febrero 2026
 
 ---
 
@@ -19,6 +19,7 @@ ManoProtect es una plataforma integral de protección contra fraudes digitales p
 - **Email**: SendGrid
 - **Auth**: JWT + session cookies + **2FA (TOTP) con verificación en login + protección brute force**
 - **Real-time**: Socket.IO/WebSockets
+- **Messaging**: Twilio (WhatsApp Sandbox)
 
 ### URLs del Sistema
 | Portal | URL | Descripción |
@@ -36,14 +37,21 @@ ManoProtect es una plataforma integral de protección contra fraudes digitales p
 │   │   ├── export_routes.py          # Exportación CSV
 │   │   ├── two_factor_routes.py      # 2FA TOTP setup/config
 │   │   ├── sos_device.py             # Pedidos SOS con Stripe
+│   │   ├── sos_routes.py             # SOS + WhatsApp integration
 │   │   └── enterprise_portal_routes.py # Login 2FA + Pagos/Reembolsos
+│   ├── services/
+│   │   └── whatsapp_service.py       # Twilio WhatsApp integration
 │   └── server.py
 ├── frontend/
+│   ├── public/
+│   │   ├── sitemap.xml               # SEO Sitemap con todas las SILO pages
+│   │   └── index.html                # SEO Schema.org optimizado
 │   └── src/
 │       ├── hooks/
 │       │   └── useSubdomain.js       # Detección de subdominios
 │       ├── components/
 │       │   ├── landing/
+│       │   │   └── LandingFooter.jsx # Footer con enlaces SEO SILO
 │       │   ├── ReviewForm.jsx        # Formulario valoraciones
 │       │   ├── TwoFactorSettings.jsx # Config 2FA
 │       │   ├── OptimizedImage.jsx    # Imágenes WebP con fallback
@@ -52,6 +60,13 @@ ManoProtect es una plataforma integral de protección contra fraudes digitales p
 │           ├── Dashboard.js          # Tab "Valorar" añadido
 │           ├── EnterpriseLogin.js    # Login con flujo 2FA + branding dinámico
 │           ├── EnterprisePortal.js   # Secciones: Seguridad, Pagos/Reembolsos
+│           ├── ProteccionPhishing.jsx         # SEO SILO - Anti-Phishing
+│           ├── ProteccionFraudeOnline.jsx     # SEO SILO - Fraud Prevention
+│           ├── SeguridadDigitalFamiliar.jsx   # SEO SILO - Family Security
+│           ├── ProteccionIdentidadDigital.jsx # SEO SILO - Identity Protection
+│           ├── SeguridadMayores.jsx           # SEO SILO - Elderly Protection
+│           ├── EstafasBancarias.jsx           # SEO SILO - Banking Fraud
+│           ├── SecurePayments.jsx             # SEO SILO - Secure Payments
 │           └── enterprise/
 │               └── components/       # Componentes extraídos (StatCard, SOSAlertCard)
 └── memory/
@@ -87,6 +102,24 @@ Para activar el subdominio `admin.manoprotect.com`:
 ---
 
 ## Funcionalidades Completadas ✅
+
+### 23. Arquitectura SEO SILO - COMPLETADO (16 Feb 2026)
+Implementación completa de arquitectura SILO para SEO:
+- ✅ **6 Páginas SILO principales** optimizadas para keywords:
+  1. `/proteccion-phishing` (hero rojo) - Anti-phishing, smishing, vishing
+  2. `/proteccion-fraude-online` (hero naranja) - Fraud prevention
+  3. `/seguridad-digital-familiar` (hero púrpura) - Family digital security
+  4. `/proteccion-identidad-digital` (hero esmeralda) - Identity theft protection
+  5. `/seguridad-mayores` (hero rosa) - Elderly protection
+  6. `/estafas-bancarias` (hero azul) - Banking fraud protection
+- ✅ **Aliases en inglés** para SEO internacional:
+  - `/phishing-protection`, `/fraud-prevention`, `/family-security`
+  - `/identity-protection`, `/elderly-protection`, `/banking-fraud-protection`
+- ✅ **Enlaces internos** entre páginas SILO
+- ✅ **Footer actualizado** con categorías "Seguridad" y "Familia"
+- ✅ **sitemap.xml** actualizado con todas las URLs SILO
+- ✅ **Schema.org BreadcrumbList** ampliado en index.html
+- ✅ **Test 100% pasados** (18/18 tests - iteración 45)
 
 ### 18. Subdominio admin.manoprotect.com - COMPLETADO (15 Feb 2026)
 Configuración del subdominio dedicado para el portal de empleados:
