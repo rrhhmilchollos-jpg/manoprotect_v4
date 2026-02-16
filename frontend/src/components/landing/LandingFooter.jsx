@@ -157,6 +157,21 @@ const LandingFooter = () => {
 
         {/* Trust Badge - Protected by ManoProtect */}
         <div className="mt-12 pt-8 border-t border-slate-800">
+          {/* Trustpilot Widget */}
+          <div className="flex justify-center mb-8">
+            <div 
+              className="trustpilot-widget" 
+              data-locale="es-ES" 
+              data-template-id="56278e9abfbbba0bdcd568bc" 
+              data-businessunit-id="6986ca33c5b7f0ff5cd402ad" 
+              data-style-height="52px" 
+              data-style-width="100%" 
+              data-token="7cc1b885-248f-4443-832e-4bd486c78afa"
+            >
+              <a href="https://es.trustpilot.com/review/manoprotect.com" target="_blank" rel="noopener noreferrer">Trustpilot</a>
+            </div>
+          </div>
+          
           <div className="flex justify-center mb-8">
             <div className="inline-flex items-center gap-3 bg-gradient-to-r from-emerald-900/50 to-indigo-900/50 border border-emerald-500/30 rounded-2xl px-6 py-4">
               <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-xl flex items-center justify-center shadow-lg shadow-emerald-500/30">
