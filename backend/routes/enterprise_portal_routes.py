@@ -113,11 +113,19 @@ class Login2FARequest(BaseModel):
 async def enterprise_login(data: LoginRequest, response: Response, request: Request):
     """Enterprise employee login - Step 1: Validate credentials and send SMS code if 2FA enabled"""
     from services.sms_service import sms_service
+    import logging
     
     if db is None:
         raise HTTPException(status_code=500, detail="Database not initialized")
     
     employee = await db.enterprise_employees.find_one({"email": data.email.lower()})
+    
+    # Debug logging
+    logging.warning(f"LOGIN ATTEMPT: email={data.email}, found={employee is not None}")
+    if employee:
+        calc_hash = hash_password(data.password)
+        stored_hash = employee.get('password_hash', '')
+        logging.warning(f"LOGIN DEBUG: status={employee.get('status')}, match={calc_hash == stored_hash}")
     
     if not employee:
         raise HTTPException(status_code=401, detail="Credenciales incorrectas")
