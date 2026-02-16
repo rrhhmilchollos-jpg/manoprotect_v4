@@ -144,6 +144,9 @@ const SecurePayments = lazy(() => import('@/pages/SecurePayments'));
 const ProteccionPhishing = lazy(() => import('@/pages/ProteccionPhishing'));
 const ProteccionFraudeOnline = lazy(() => import('@/pages/ProteccionFraudeOnline'));
 const SeguridadDigitalFamiliar = lazy(() => import('@/pages/SeguridadDigitalFamiliar'));
+const ProteccionIdentidadDigital = lazy(() => import('@/pages/ProteccionIdentidadDigital'));
+const SeguridadMayores = lazy(() => import('@/pages/SeguridadMayores'));
+const EstafasBancarias = lazy(() => import('@/pages/EstafasBancarias'));
 
 // Enterprise Portal (Complete system)
 const EnterprisePortal = lazy(() => import('@/pages/EnterprisePortal'));
