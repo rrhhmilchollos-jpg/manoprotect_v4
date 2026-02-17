@@ -874,6 +874,21 @@ async def stripe_webhook(request: Request):
         session = event["data"]["object"]
         metadata = session.get("metadata", {})
         
+        # ========== PREPAID CARD VALIDATION ==========
+        # Check if we need to validate the card type
+        if metadata.get("reject_prepaid") == "true" and session.get("payment_method"):
+            try:
+                pm = stripe.PaymentMethod.retrieve(session["payment_method"])
+                if pm.card and pm.card.funding == "prepaid":
+                    # Cancel the subscription immediately
+                    if session.get("subscription"):
+                        stripe.Subscription.delete(session["subscription"])
+                    print(f"[WEBHOOK] REJECTED PREPAID CARD for session {session['id']}")
+                    # TODO: Send email to user about rejected prepaid card
+                    return {"status": "rejected_prepaid_card"}
+            except Exception as e:
+                print(f"[WEBHOOK] Error checking card type: {e}")
+        
         if metadata.get("type") == "device_order":
             db.payment_transactions.update_one(
                 {"session_id": session["id"]},
