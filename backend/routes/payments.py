@@ -407,9 +407,13 @@ async def create_device_order_with_code(request: DeviceOrderWithCodeRequest):
         if not code_record:
             raise HTTPException(status_code=400, detail="Código no válido o ya utilizado")
         
-        # Check expiration
-        if code_record.get("expires_at") and code_record["expires_at"] < datetime.now(timezone.utc):
-            raise HTTPException(status_code=400, detail="El código ha expirado")
+        # Check expiration (handle timezone-naive dates from MongoDB)
+        expires_at = code_record.get("expires_at")
+        if expires_at:
+            if expires_at.tzinfo is None:
+                expires_at = expires_at.replace(tzinfo=timezone.utc)
+            if expires_at < datetime.now(timezone.utc):
+                raise HTTPException(status_code=400, detail="El código ha expirado")
         
         # Check remaining devices
         max_devices = code_record.get("max_devices", 1)
