@@ -192,7 +192,7 @@ const LandingFooter = () => {
         {/* Bottom bar */}
         <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
           <p className="text-sm">
-            © {new Date().getFullYear()} STARTBOOKING SL (CIF: B19427723). Todos los derechos reservados.
+            © {new Date().getFullYear()} Manoprotect.com. Todos los derechos reservados.
           </p>
           <div className="flex items-center gap-4 text-sm">
             <span className="flex items-center gap-1">
