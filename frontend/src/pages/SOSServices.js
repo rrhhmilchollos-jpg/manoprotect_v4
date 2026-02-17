@@ -910,21 +910,37 @@ export default function SOSServices() {
                   {/* Submit Button */}
                   <Button 
                     onClick={handleSubmitOrder}
-                    disabled={loading}
-                    className="w-full h-16 text-xl bg-gradient-to-r from-red-600 to-orange-500 hover:from-red-700 hover:to-orange-600 shadow-xl"
+                    disabled={loading || !codeVerified}
+                    className="w-full h-16 text-xl bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-700 hover:to-emerald-600 shadow-xl"
                     data-testid="submit-sos-order"
                   >
                     {loading ? 'Procesando...' : (
                       <>
-                        <ShoppingCart className="w-6 h-6 mr-3" />
-                        Solicitar GRATIS (Envío: {shippingCost.toFixed(2)}€)
+                        <Gift className="w-6 h-6 mr-3" />
+                        Solicitar Dispositivo GRATIS
                       </>
                     )}
                   </Button>
+                  )}
+
+                  {/* Show subscribe prompt if no code */}
+                  {!codeVerified && (
+                    <div className="text-center py-8">
+                      <p className="text-zinc-500 mb-4">
+                        Verifica tu código o suscríbete a un plan para solicitar tu dispositivo SOS GRATIS
+                      </p>
+                      <Button 
+                        onClick={() => setActiveTab('planes')}
+                        className="bg-gradient-to-r from-red-600 to-orange-500 hover:from-red-700 hover:to-orange-600"
+                      >
+                        Ver Planes de Suscripción
+                      </Button>
+                    </div>
+                  )}
 
                   {/* Trust Badges */}
                   <div className="flex items-center justify-center gap-6 text-xs text-zinc-500">
-                    <span className="flex items-center gap-1"><CheckCircle className="w-4 h-4 text-emerald-500" /> Pago seguro</span>
+                    <span className="flex items-center gap-1"><CheckCircle className="w-4 h-4 text-emerald-500" /> 100% Gratis</span>
                     <span className="flex items-center gap-1"><Truck className="w-4 h-4 text-emerald-500" /> Envío 24-48h</span>
                     <span className="flex items-center gap-1"><Shield className="w-4 h-4 text-emerald-500" /> Garantía 2 años</span>
                   </div>
