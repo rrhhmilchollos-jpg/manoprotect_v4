@@ -161,13 +161,14 @@ const EmployeePortalDashboard = () => {
   // Logout
   const handleLogout = async () => {
     try {
-      await fetch(`${API}/api/employee-portal/logout`, {
+      await fetch(`${API}/api/enterprise/auth/logout`, {
         method: 'POST',
-        credentials: 'include'
+        credentials: 'include',
+        headers: { 'X-Session-Token': localStorage.getItem('enterprise_session') }
       });
     } catch (e) {}
     
-    localStorage.removeItem('employee_session');
+    localStorage.removeItem('enterprise_session');
     navigate('/empleados/login');
   };
 
