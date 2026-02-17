@@ -278,9 +278,9 @@ Para activar el subdominio `admin.manoprotect.com`:
 ### Preview (Actual)
 | Portal | URL |
 |--------|-----|
-| Landing Page | https://mano-protect-preview.preview.emergentagent.com |
-| Portal Enterprise | https://mano-protect-preview.preview.emergentagent.com/enterprise/login |
-| Portal Director | https://mano-protect-preview.preview.emergentagent.com/employee-login |
+| Landing Page | https://protect-staging-1.preview.emergentagent.com |
+| Portal Enterprise | https://protect-staging-1.preview.emergentagent.com/enterprise/login |
+| Portal Director | https://protect-staging-1.preview.emergentagent.com/employee-login |
 
 ---
 

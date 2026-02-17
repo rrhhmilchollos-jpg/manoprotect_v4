@@ -2974,9 +2974,9 @@ allowed_origins = [
     "https://manoprotect.com",
     "https://www.manoprotect.com",
     "https://admin.manoprotect.com",  # Employee Portal Subdomain
-    "https://mano-protect-preview.preview.emergentagent.com",  # Admin Portal Preview
+    "https://protect-staging-1.preview.emergentagent.com",  # Admin Portal Preview
     "https://digital-guard-1.emergent.host",
-    "https://mano-protect-preview.preview.emergentagent.com",
+    "https://protect-staging-1.preview.emergentagent.com",
     "file://",  # Electron Desktop App
     "null",     # Electron Desktop App (some versions send null origin)
 ]
