@@ -4,6 +4,7 @@
  */
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import LandingFooter from '@/components/landing/LandingFooter';
 import { Helmet } from 'react-helmet-async';
 import { useAuth } from '@/context/AuthContext';
 import { 
