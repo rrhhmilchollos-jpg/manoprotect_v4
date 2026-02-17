@@ -124,10 +124,11 @@ const EmployeePortalDashboard = () => {
     setCreatedInvite(null);
 
     try {
-      const response = await fetch(`${API}/api/employee-portal/invites`, {
+      const response = await fetch(`${API}/api/enterprise/invites`, {
         method: 'POST',
         headers: { 
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'X-Session-Token': localStorage.getItem('enterprise_session')
         },
         credentials: 'include',
         body: JSON.stringify(inviteForm)
