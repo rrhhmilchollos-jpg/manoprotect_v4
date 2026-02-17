@@ -316,36 +316,51 @@ export default function SOSServices() {
     }
   };
 
-  // Submit device order - redirect to Stripe
+  // Submit device order - FREE with verification code
   const handleSubmitOrder = async () => {
+    // Require verification code
+    if (!codeVerified) {
+      toast.error('Necesitas un código de verificación válido. Suscríbete a un plan para obtenerlo.');
+      setActiveTab('planes');
+      return;
+    }
+
     if (!shippingInfo.fullName || !shippingInfo.phone || !shippingInfo.address || 
         !shippingInfo.city || !shippingInfo.postalCode || !shippingInfo.province) {
       toast.error('Por favor, completa todos los campos de envío');
       return;
     }
 
+    // Check quantity doesn't exceed plan limit
+    if (codeInfo && quantity > codeInfo.max_devices) {
+      toast.error(`Tu plan permite máximo ${codeInfo.max_devices} dispositivo(s)`);
+      return;
+    }
+
     setLoading(true);
     try {
-      const response = await fetch(`${API}/api/payments/device/checkout`, {
+      const response = await fetch(`${API}/api/payments/device/create-free-order`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
         body: JSON.stringify({
+          code: verificationCode,
           quantity,
-          colors: deviceColors, // Array of colors for each device
+          colors: deviceColors,
           device_style: selectedDeviceStyle,
-          shipping: shippingInfo,
-          origin_url: window.location.origin
+          shipping: shippingInfo
         })
       });
 
       const data = await response.json();
       
-      if (data.url) {
-        // Redirect to Stripe Checkout
-        window.location.href = data.url;
+      if (response.ok && data.success) {
+        setPaymentStatus('success');
+        toast.success('¡Pedido realizado! Tu dispositivo SOS será enviado en 24-48h');
+        // Navigate to tracking
+        navigate(`/order-tracking?order=${data.order_id}`);
       } else {
-        toast.error('Error al crear sesión de pago');
+        toast.error(data.detail || data.error || 'Error al crear el pedido');
       }
     } catch (error) {
       toast.error('Error de conexión');
