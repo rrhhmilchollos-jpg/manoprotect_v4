@@ -2933,6 +2933,17 @@ try:
 except Exception as e:
     print(f"⚠️ Password Recovery routes not loaded: {e}")
 
+# Employee Portal Extended Modules (Absences, Payslips, Documents, Notifications, Holidays)
+try:
+    api_router.include_router(absences_router)
+    api_router.include_router(payslips_router)
+    api_router.include_router(documents_router)
+    api_router.include_router(emp_notifications_router)
+    api_router.include_router(holidays_router)
+    print("✅ Employee Portal Extended Modules loaded (Absences, Payslips, Documents, Notifications, Holidays)")
+except Exception as e:
+    print(f"⚠️ Employee Portal Extended Modules not loaded: {e}")
+
 app.include_router(api_router)
 app.include_router(public_router)
 
