@@ -9,6 +9,37 @@ ManoProtect es una plataforma integral de protección contra fraudes digitales p
 
 ---
 
+## Aclaración de Arquitectura (17 Feb 2026 - Sesión 4)
+
+### Portales y Subdominios
+
+| Portal | URL | Proyecto | Propósito |
+|--------|-----|----------|-----------|
+| App Principal | manoprotect.com | Este proyecto | Landing, app consumidor, dashboard usuarios |
+| Portal Empleados ManoProtect | admin.manoprotect.com | **PROYECTO SEPARADO** | Dashboard interno de empleados de ManoProtect |
+| Portal Empleados B2B | manoprotect.com/empleados/* | Este proyecto | Para empleados de empresas CLIENTES |
+
+### Backend API para admin.manoprotect.com
+El backend `/api/enterprise/*` está **COMPLETAMENTE LISTO** para conectarse con el frontend en `admin.manoprotect.com`:
+
+**Endpoints verificados y funcionando:**
+- ✅ `POST /api/enterprise/auth/login` - Login
+- ✅ `GET /api/enterprise/auth/me` - Usuario actual
+- ✅ `GET /api/enterprise/dashboard/stats` - Estadísticas (4 empleados, 8 clientes, 1 SOS pendiente)
+- ✅ `GET /api/enterprise/employees` - Lista empleados
+- ✅ `GET /api/enterprise/clients` - Lista clientes
+- ✅ `GET /api/enterprise/invites` - Invitaciones
+- ✅ `GET /api/enterprise/sos` - Eventos SOS
+- ✅ `GET /api/enterprise/device-orders` - Pedidos dispositivos
+- ✅ `GET /api/enterprise/payments` - Pagos
+- ✅ `GET /api/enterprise/alerts` - Alertas
+
+**CORS configurado** para `https://admin.manoprotect.com`
+
+**Documentación completa**: `/app/CONEXION_ADMIN_MANOPROTECT.md`
+
+---
+
 ## Actualizaciones Recientes (17 Feb 2026 - Sesión 3)
 
 ### Sistema de Suscripción y Bloqueo - IMPLEMENTADO ✅
