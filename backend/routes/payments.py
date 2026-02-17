@@ -6,8 +6,11 @@ Handles:
 - Card validation (no prepaid cards)
 - Auto-charge after trial
 - Downgrade to basic on cancellation
+- Device verification codes (generated on subscription payment confirmation)
 """
 import os
+import secrets
+import string
 from datetime import datetime, timezone, timedelta
 from fastapi import APIRouter, HTTPException, Request
 from pydantic import BaseModel, Field
@@ -29,6 +32,36 @@ MONGO_URL = os.environ.get("MONGO_URL", "mongodb://localhost:27017")
 DB_NAME = os.environ.get("DB_NAME", "test_database")
 client = MongoClient(MONGO_URL)
 db = client[DB_NAME]
+
+# ==================== DEVICE VERIFICATION CODE SYSTEM ====================
+
+def generate_device_code() -> str:
+    """Generate a unique verification code for device orders (format: MP-XXXX-XXXX)"""
+    chars = string.ascii_uppercase + string.digits
+    part1 = ''.join(secrets.choice(chars) for _ in range(4))
+    part2 = ''.join(secrets.choice(chars) for _ in range(4))
+    return f"MP-{part1}-{part2}"
+
+def create_device_verification_code(user_id: str, user_email: str, plan_id: str, subscription_id: str) -> str:
+    """Create and store a device verification code for a user after successful subscription payment"""
+    code = generate_device_code()
+    
+    # Store the code
+    db.device_verification_codes.insert_one({
+        "code": code,
+        "user_id": user_id,
+        "user_email": user_email,
+        "plan_id": plan_id,
+        "subscription_id": subscription_id,
+        "status": "active",  # active, used, expired
+        "max_devices": 5 if "famil" in plan_id.lower() else 1,
+        "devices_ordered": 0,
+        "created_at": datetime.now(timezone.utc),
+        "used_at": None,
+        "expires_at": datetime.now(timezone.utc) + timedelta(days=365)  # Valid for 1 year
+    })
+    
+    return code
 
 # ==================== PRICING PACKAGES ====================
 # SECURITY: All prices defined server-side only
