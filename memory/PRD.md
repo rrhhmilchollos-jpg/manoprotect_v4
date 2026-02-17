@@ -11,6 +11,16 @@ ManoProtect es una plataforma integral de protección contra fraudes digitales p
 
 ## Actualizaciones Recientes (17 Feb 2026 - Sesión 3)
 
+### WebSocket para Notificaciones del Portal de Empleados - IMPLEMENTADO ✅
+- Funciones `notify_employee()` y `notify_all_admins()` añadidas a `/backend/services/websocket_manager.py`
+- Permite notificaciones en tiempo real para el portal de empleados
+
+### SEO Phase 2 - Páginas de Contenido ✅
+**Páginas SEO creadas/mejoradas:**
+- `/estafas-bancarias` - Guía completa de estafas bancarias con estadísticas y consejos
+- `/seguridad-mayores` - Protección digital para mayores, estafas comunes a ancianos
+- `/quienes-somos` (SobreNosotros.js) - Añadido footer unificado
+
 ### Portal de Empleados - BACKEND COMPLETO ✅
 Implementación completa del sistema de gestión de empleados según especificaciones del ZIP proporcionado.
 
