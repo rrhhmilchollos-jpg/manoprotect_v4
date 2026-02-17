@@ -244,13 +244,15 @@ const EnterprisePortal = () => {
       if (res.ok) {
         const data = await res.json();
         setEmployee(data);
+        setLoading(false);
       } else {
+        setLoading(false);
         navigate('/enterprise/login');
       }
     } catch (err) {
-      navigate('/enterprise/login');
-    } finally {
+      console.error('Auth check error:', err);
       setLoading(false);
+      navigate('/enterprise/login');
     }
   };
 
