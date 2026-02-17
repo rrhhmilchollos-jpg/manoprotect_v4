@@ -338,6 +338,10 @@ init_employee_portal(db)
 from services.email_service import email_service
 init_employee_email(email_service)
 
+# Password Recovery System (Email + SMS)
+from routes.password_recovery_routes import router as recovery_router, set_database as init_recovery
+init_recovery(db)
+
 # Banking and Compliance services - RESERVED for ManoBank.es
 # from services.compliance_service import init_compliance_service
 # from routes.compliance_routes import router as compliance_router, init_compliance_routes
