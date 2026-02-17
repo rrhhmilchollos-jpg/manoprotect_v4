@@ -86,10 +86,11 @@ const EmployeePortalDashboard = () => {
         setStats(await statsRes.json());
       }
 
-      // Fetch employees (director only)
-      if (employee.role === 'director' || employee.role === 'superadmin') {
-        const empRes = await fetch(`${API}/api/employee-portal/employees`, {
-          credentials: 'include'
+      // Fetch employees (admin roles only)
+      if (['director', 'superadmin', 'super_admin', 'admin', 'ceo'].includes(employee.role)) {
+        const empRes = await fetch(`${API}/api/enterprise/employees`, {
+          credentials: 'include',
+          headers: { 'X-Session-Token': localStorage.getItem('enterprise_session') }
         });
         if (empRes.ok) {
           const data = await empRes.json();
@@ -97,8 +98,9 @@ const EmployeePortalDashboard = () => {
         }
 
         // Fetch invites
-        const invRes = await fetch(`${API}/api/employee-portal/invites`, {
-          credentials: 'include'
+        const invRes = await fetch(`${API}/api/enterprise/invites`, {
+          credentials: 'include',
+          headers: { 'X-Session-Token': localStorage.getItem('enterprise_session') }
         });
         if (invRes.ok) {
           const data = await invRes.json();
