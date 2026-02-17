@@ -67,8 +67,40 @@ def get_client_info(request: Request) -> tuple:
 
 @router.post("/auth/register")
 async def register_user(data: UserRegister, request: Request, response: Response):
-    """Register new user with email/password - Enhanced security"""
+    """Register new user with email/password - Enhanced security with block verification"""
     ip_address, user_agent = get_client_info(request)
+    
+    # ========== CHECK IF USER IS BLOCKED ==========
+    # Check by email and IP
+    from routes.subscription_manager import is_user_blocked
+    
+    device_id = request.headers.get("X-Device-ID")
+    block_check = is_user_blocked(
+        email=data.email,
+        ip_address=ip_address,
+        device_id=device_id
+    )
+    
+    if block_check.get("blocked"):
+        if block_check.get("has_second_chance"):
+            raise HTTPException(
+                status_code=403, 
+                detail={
+                    "code": "BLOCKED_WITH_SECOND_CHANCE",
+                    "message": block_check.get("message"),
+                    "action_required": "subscribe",
+                    "redirect_url": "/planes?second_chance=true"
+                }
+            )
+        else:
+            raise HTTPException(
+                status_code=403, 
+                detail={
+                    "code": "PERMANENTLY_BLOCKED",
+                    "message": block_check.get("message"),
+                    "action_required": None
+                }
+            )
     
     # Validate password strength
     password_check = validate_password_strength(data.password)
@@ -101,6 +133,8 @@ async def register_user(data: UserRegister, request: Request, response: Response
         "login_notifications": True,
         "trusted_devices": []
     }
+    user_doc['registration_ip'] = ip_address
+    user_doc['registration_device_id'] = device_id
     await _db.users.insert_one(user_doc)
     
     # Create secure session
