@@ -4,15 +4,39 @@
 User-agent: *
 Allow: /
 
-# Important pages for SEO
+# Important pages for SEO - Main
 Allow: /secure-payments
 Allow: /secure-online-payments
 Allow: /online-payment-protection
 Allow: /pricing
+Allow: /plans
 Allow: /blog
 Allow: /how-it-works
 Allow: /como-funciona
 Allow: /faq
+Allow: /sobre-nosotros
+Allow: /servicios-sos
+
+# SEO SILO Pages - Security
+Allow: /proteccion-phishing
+Allow: /phishing-protection
+Allow: /proteccion-fraude-online
+Allow: /fraud-prevention
+Allow: /estafas-bancarias
+Allow: /banking-fraud-protection
+Allow: /proteccion-identidad-digital
+Allow: /identity-protection
+
+# SEO SILO Pages - Family
+Allow: /seguridad-digital-familiar
+Allow: /family-security
+Allow: /seguridad-mayores
+Allow: /elderly-protection
+
+# Legal pages
+Allow: /privacy-policy
+Allow: /terms-of-service
+Allow: /legal-notice
 
 # Disallow admin and private areas
 Disallow: /enterprise
@@ -20,6 +44,8 @@ Disallow: /admin
 Disallow: /api/
 Disallow: /dashboard
 Disallow: /settings
+Disallow: /employee-login
+Disallow: /investor
 
 # Sitemap location
 Sitemap: https://manoprotect.com/sitemap.xml
