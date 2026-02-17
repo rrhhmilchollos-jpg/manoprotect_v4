@@ -392,7 +392,152 @@ async def verify_device_code(request: VerifyCodeRequest):
         raise HTTPException(status_code=500, detail=str(e))
 
 
-@router.post("/device/order-with-code")
+@router.get("/device/my-code")
+async def get_my_verification_code(request: Request):
+    """Get the user's verification code if they have one"""
+    try:
+        # Get session token from cookie or header
+        session_token = request.cookies.get('session_token')
+        if not session_token:
+            session_token = request.headers.get('X-Session-Token')
+        
+        if not session_token:
+            return {"has_code": False}
+        
+        # Find user session
+        session = db.user_sessions.find_one({"session_token": session_token})
+        if not session:
+            return {"has_code": False}
+        
+        user_id = session.get("user_id")
+        
+        # Find user's verification code
+        code_record = db.device_verification_codes.find_one({
+            "user_id": user_id,
+            "status": "active"
+        })
+        
+        if not code_record:
+            return {"has_code": False}
+        
+        # Check expiration
+        expires_at = code_record.get("expires_at")
+        if expires_at:
+            if expires_at.tzinfo is None:
+                expires_at = expires_at.replace(tzinfo=timezone.utc)
+            if expires_at < datetime.now(timezone.utc):
+                return {"has_code": False, "error": "Código expirado"}
+        
+        max_devices = code_record.get("max_devices", 1)
+        devices_ordered = code_record.get("devices_ordered", 0)
+        
+        return {
+            "has_code": True,
+            "code": code_record.get("code"),
+            "plan_id": code_record.get("plan_id"),
+            "max_devices": max_devices,
+            "devices_ordered": devices_ordered,
+            "remaining_devices": max_devices - devices_ordered
+        }
+        
+    except Exception as e:
+        print(f"Error getting user code: {e}")
+        return {"has_code": False}
+
+
+class FreeDeviceOrderRequest(BaseModel):
+    code: str
+    quantity: int = 1
+    colors: List[str] = []
+    device_style: str = "adult"
+    shipping: Dict
+
+
+@router.post("/device/create-free-order")
+async def create_free_device_order(request: Request, data: FreeDeviceOrderRequest):
+    """Create a FREE device order using verification code (no payment required)"""
+    try:
+        code = data.code.upper().strip()
+        
+        # Verify code first
+        code_record = db.device_verification_codes.find_one({
+            "code": code,
+            "status": "active"
+        })
+        
+        if not code_record:
+            raise HTTPException(status_code=400, detail="Código no válido o ya utilizado")
+        
+        # Check expiration
+        expires_at = code_record.get("expires_at")
+        if expires_at:
+            if expires_at.tzinfo is None:
+                expires_at = expires_at.replace(tzinfo=timezone.utc)
+            if expires_at < datetime.now(timezone.utc):
+                raise HTTPException(status_code=400, detail="El código ha expirado")
+        
+        # Check remaining devices
+        max_devices = code_record.get("max_devices", 1)
+        devices_ordered = code_record.get("devices_ordered", 0)
+        remaining = max_devices - devices_ordered
+        
+        if data.quantity > remaining:
+            raise HTTPException(
+                status_code=400, 
+                detail=f"Solo puedes solicitar {remaining} dispositivo(s) más con este código"
+            )
+        
+        # Create the order - COMPLETELY FREE
+        order_id = f"ORD-{secrets.token_hex(8).upper()}"
+        
+        order_doc = {
+            "order_id": order_id,
+            "user_email": code_record.get("user_email"),
+            "user_id": code_record.get("user_id"),
+            "verification_code": code,
+            "quantity": data.quantity,
+            "colors": data.colors,
+            "device_style": data.device_style,
+            "shipping": data.shipping,
+            "order_status": "confirmed",
+            "payment_status": "free_with_subscription",
+            "amount_paid": 0,
+            "shipping_cost": 0,  # FREE shipping
+            "created_at": datetime.now(timezone.utc),
+            "updated_at": datetime.now(timezone.utc)
+        }
+        
+        db.device_orders.insert_one(order_doc)
+        
+        # Update the code usage
+        db.device_verification_codes.update_one(
+            {"code": code},
+            {
+                "$inc": {"devices_ordered": data.quantity},
+                "$set": {"updated_at": datetime.now(timezone.utc)}
+            }
+        )
+        
+        # Mark code as used if all devices ordered
+        new_devices_ordered = devices_ordered + data.quantity
+        if new_devices_ordered >= max_devices:
+            db.device_verification_codes.update_one(
+                {"code": code},
+                {"$set": {"status": "fully_used"}}
+            )
+        
+        return {
+            "success": True,
+            "order_id": order_id,
+            "message": f"Pedido creado correctamente. Tu dispositivo SOS será enviado en 24-48h.",
+            "shipping_cost": 0,
+            "total": 0
+        }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 async def create_device_order_with_code(request: DeviceOrderWithCodeRequest):
     """Create a device order using verification code (FREE shipping)"""
     try:
