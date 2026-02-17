@@ -115,7 +115,7 @@ const TermsOfService = () => {
             <h2 className="text-xl font-bold text-zinc-900">7. Propiedad Intelectual</h2>
             <p className="text-zinc-600">
               Todos los contenidos de ManoProtect (diseños, logos, textos, código, algoritmos) son 
-              propiedad de STARTBOOKING SL o sus licenciantes. Queda prohibida su reproducción 
+              propiedad de ManoProtect S.L. o sus licenciantes. Queda prohibida su reproducción 
               sin autorización expresa.
             </p>
           </section>
