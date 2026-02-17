@@ -6,6 +6,8 @@ from fastapi import APIRouter, HTTPException, Request, Cookie
 from typing import Optional
 from datetime import datetime, timezone, timedelta
 import uuid
+import os
+import httpx
 
 from models.all_schemas import (
     SOSAlert, SOSRequest, SOSAlertRequest, LocationUpdate,
