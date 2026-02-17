@@ -48,13 +48,18 @@ def hash_password(password: str) -> str:
 def generate_id(prefix: str = "") -> str:
     return f"{prefix}{uuid.uuid4().hex[:12]}"
 
-async def get_current_employee(request: Request, session_token: Optional[str] = Cookie(None)):
-    """Get current logged in employee from session"""
-    if not session_token:
+async def get_current_employee(request: Request, session_token: Optional[str] = Cookie(None, alias="enterprise_session")):
+    """Get current logged in employee from session - supports both cookie and header token"""
+    # Try cookie first, then fallback to header
+    token = session_token
+    if not token:
+        token = request.headers.get("X-Session-Token")
+    
+    if not token:
         raise HTTPException(status_code=401, detail="No autenticado")
     
     employee = await db.enterprise_employees.find_one(
-        {"session_token": session_token},
+        {"session_token": token},
         {"_id": 0, "password_hash": 0}
     )
     if not employee:
