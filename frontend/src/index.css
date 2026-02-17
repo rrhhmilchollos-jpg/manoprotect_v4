@@ -1,4 +1,10 @@
-/* Fonts loaded via HTML preload for non-blocking rendering */
+/* ============================================
+   MANOPROTECT - ENTERPRISE PREMIUM DESIGN SYSTEM
+   Optimized for Conversion & Trust
+   ============================================ */
+
+/* Premium Font Stack - Inter for body, Plus Jakarta Sans for headings */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -6,47 +12,94 @@
 
 body {
     margin: 0;
-    font-family: 'Public Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
 }
 
 h1, h2, h3, h4, h5, h6 {
-    font-family: 'Outfit', sans-serif;
-    letter-spacing: -0.02em;
+    font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+    letter-spacing: -0.025em;
+    font-weight: 700;
 }
 
 code {
-    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+    font-family: 'JetBrains Mono', source-code-pro, Menlo, Monaco, Consolas, monospace;
 }
 
 @layer base {
     :root {
-        --background: 0 0% 98%;
-        --foreground: 240 10% 10%;
+        /* ========== PREMIUM COLOR PALETTE ========== */
+        /* Primary: Deep Navy - Inspira Confianza y Autoridad */
+        --background: 210 20% 98%;
+        --foreground: 222 47% 11%;
+        
+        /* Cards & Surfaces */
         --card: 0 0% 100%;
-        --card-foreground: 240 10% 10%;
+        --card-foreground: 222 47% 11%;
         --popover: 0 0% 100%;
-        --popover-foreground: 240 10% 10%;
-        --primary: 239 84% 50%;
+        --popover-foreground: 222 47% 11%;
+        
+        /* Primary: Steel Blue - Profesional y Seguro */
+        --primary: 217 91% 60%;
         --primary-foreground: 0 0% 100%;
+        
+        /* Secondary: Emerald - Confianza y Éxito */
         --secondary: 160 84% 39%;
         --secondary-foreground: 0 0% 100%;
-        --muted: 240 4% 65%;
-        --muted-foreground: 240 5% 34%;
-        --accent: 25 95% 53%;
+        
+        /* Accent: Warm Gold - Premium y Exclusivo */
+        --accent: 38 92% 50%;
         --accent-foreground: 0 0% 100%;
-        --destructive: 348 83% 47%;
+        
+        /* Muted & Borders */
+        --muted: 220 14% 96%;
+        --muted-foreground: 220 9% 46%;
+        --border: 220 13% 91%;
+        --input: 220 13% 91%;
+        
+        /* States */
+        --destructive: 0 84% 60%;
         --destructive-foreground: 0 0% 100%;
-        --border: 240 6% 90%;
-        --input: 240 6% 90%;
-        --ring: 239 84% 67%;
-        --radius: 0.5rem;
-        --chart-1: 239 84% 67%;
+        --ring: 217 91% 60%;
+        
+        /* System */
+        --radius: 0.625rem;
+        
+        /* Chart Colors - Data Visualization */
+        --chart-1: 217 91% 60%;
         --chart-2: 160 84% 39%;
-        --chart-3: 25 95% 53%;
-        --chart-4: 348 83% 47%;
-        --chart-5: 240 4% 65%;
+        --chart-3: 38 92% 50%;
+        --chart-4: 280 68% 60%;
+        --chart-5: 220 9% 46%;
+        
+        /* Premium Gradients */
+        --gradient-primary: linear-gradient(135deg, hsl(217, 91%, 60%) 0%, hsl(199, 89%, 48%) 100%);
+        --gradient-secondary: linear-gradient(135deg, hsl(160, 84%, 39%) 0%, hsl(142, 76%, 36%) 100%);
+        --gradient-dark: linear-gradient(135deg, hsl(222, 47%, 11%) 0%, hsl(217, 33%, 17%) 100%);
+        --gradient-premium: linear-gradient(135deg, hsl(38, 92%, 50%) 0%, hsl(25, 95%, 53%) 100%);
+    }
+    
+    /* Dark Mode - Enterprise Dashboard */
+    .dark {
+        --background: 222 47% 11%;
+        --foreground: 210 20% 98%;
+        --card: 217 33% 17%;
+        --card-foreground: 210 20% 98%;
+        --popover: 217 33% 17%;
+        --popover-foreground: 210 20% 98%;
+        --primary: 199 89% 48%;
+        --primary-foreground: 222 47% 11%;
+        --secondary: 160 84% 39%;
+        --secondary-foreground: 0 0% 100%;
+        --muted: 217 33% 17%;
+        --muted-foreground: 215 20% 65%;
+        --accent: 38 92% 50%;
+        --accent-foreground: 222 47% 11%;
+        --border: 217 33% 25%;
+        --input: 217 33% 25%;
+        --ring: 199 89% 48%;
     }
 }
 
