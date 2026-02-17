@@ -658,32 +658,102 @@ export default function SOSDeviceOrder() {
                 </CardContent>
               </Card>
 
+              {/* Verification Code Section */}
+              <Card className="border-2 border-emerald-200 bg-gradient-to-br from-emerald-50 to-teal-50">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 text-emerald-700">
+                    <Shield className="w-5 h-5" />
+                    Código de Verificación de Compra
+                  </CardTitle>
+                  <CardDescription>
+                    Introduce el código que recibiste al comprar tu plan ManoProtect
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  {checkingUserCode ? (
+                    <div className="flex items-center justify-center py-4">
+                      <div className="animate-spin w-6 h-6 border-2 border-emerald-500 border-t-transparent rounded-full" />
+                      <span className="ml-2 text-emerald-600">Verificando...</span>
+                    </div>
+                  ) : codeVerified ? (
+                    <div className="bg-emerald-100 border border-emerald-300 rounded-lg p-4">
+                      <div className="flex items-center gap-3">
+                        <CheckCircle className="w-6 h-6 text-emerald-600" />
+                        <div>
+                          <p className="font-semibold text-emerald-800">¡Código verificado!</p>
+                          <p className="text-sm text-emerald-600">
+                            Código: <span className="font-mono font-bold">{verificationCode}</span>
+                          </p>
+                          {codeInfo && (
+                            <p className="text-xs text-emerald-500 mt-1">
+                              Puedes solicitar hasta {codeInfo.remaining_devices || codeInfo.remaining} dispositivo(s) más
+                            </p>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  ) : (
+                    <>
+                      <div className="flex gap-2">
+                        <Input
+                          placeholder="Ej: MP-XXXX-XXXX"
+                          value={verificationCode}
+                          onChange={(e) => setVerificationCode(e.target.value.toUpperCase())}
+                          className="font-mono text-lg tracking-wider uppercase"
+                          maxLength={12}
+                        />
+                        <Button 
+                          onClick={handleVerifyCode}
+                          disabled={verifyingCode || !verificationCode.trim()}
+                          className="bg-emerald-600 hover:bg-emerald-700 px-6"
+                        >
+                          {verifyingCode ? 'Verificando...' : 'Verificar'}
+                        </Button>
+                      </div>
+                      <div className="bg-amber-50 border border-amber-200 rounded-lg p-3">
+                        <p className="text-sm text-amber-800">
+                          <AlertTriangle className="w-4 h-4 inline mr-1" />
+                          <strong>¿No tienes código?</strong> Se genera automáticamente al comprar un plan Individual o Familiar. 
+                          <Button 
+                            variant="link" 
+                            className="text-amber-700 p-0 h-auto ml-1"
+                            onClick={() => navigate('/plans')}
+                          >
+                            Ver planes disponibles
+                          </Button>
+                        </p>
+                      </div>
+                    </>
+                  )}
+                </CardContent>
+              </Card>
+
               {/* Order Button */}
-              {isInTrialPeriod ? (
+              {!codeVerified ? (
                 <div className="space-y-3">
                   <Button 
                     disabled
                     className="w-full h-14 text-lg bg-zinc-400 cursor-not-allowed"
                   >
                     <Clock className="w-5 h-5 mr-2" />
-                    Disponible tras el período de prueba
+                    Introduce tu código de verificación para continuar
                   </Button>
                   <p className="text-center text-sm text-amber-600">
-                    Tu suscripción se activará automáticamente en unos días
+                    Necesitas un código válido de compra para solicitar tu dispositivo SOS gratuito
                   </p>
                 </div>
               ) : (
                 <Button 
                   onClick={handleSubmitOrder}
                   disabled={loading}
-                  className="w-full h-14 text-lg bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700"
+                  className="w-full h-14 text-lg bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 shadow-lg hover:shadow-xl transition-all"
                 >
                   {loading ? (
                     'Procesando...'
                   ) : (
                     <>
                       <ShoppingCart className="w-5 h-5 mr-2" />
-                      Solicitar Dispositivo GRATIS (Solo envío: 4,95€)
+                      Solicitar Dispositivo GRATIS (Envío Gratis)
                     </>
                   )}
                 </Button>
