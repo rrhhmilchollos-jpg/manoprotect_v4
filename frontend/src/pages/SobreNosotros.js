@@ -278,6 +278,9 @@ const SobreNosotros = () => {
           </Button>
         </div>
       </section>
+
+      {/* Footer */}
+      <LandingFooter />
     </div>
   );
 };
