@@ -110,3 +110,7 @@ frontend/public/ManoProtect-iOS-Project.zip
 *.env.*
 frontend/build/ManoProtect-iOS-Project.zip
 frontend/node_modules/.cache/default-development/1.pack
+-e 
+# Environment files
+*.env
+*.env.*
