@@ -47,7 +47,7 @@ const LegalNotice = () => {
             <p className="text-zinc-600">
               El presente Aviso Legal regula el uso del sitio web <strong>www.manoprotect.com</strong> y 
               de la aplicación móvil ManoProtect (en adelante, conjuntamente, "la Plataforma"), 
-              del que es titular STARTBOOKING SL
+              del que es titular ManoProtect S.L.
             </p>
             <p className="text-zinc-600">
               La navegación por la Plataforma atribuye la condición de Usuario e implica la aceptación 
@@ -58,7 +58,7 @@ const LegalNotice = () => {
           <section className="space-y-4">
             <h2 className="text-xl font-bold text-zinc-900">3. Actividad</h2>
             <p className="text-zinc-600">
-              STARTBOOKING SL ofrece servicios de:
+              ManoProtect S.L. ofrece servicios de:
             </p>
             <ul className="list-disc pl-6 space-y-2 text-zinc-600">
               <li>Detección y prevención de fraudes digitales (vishing, smishing, phishing)</li>
