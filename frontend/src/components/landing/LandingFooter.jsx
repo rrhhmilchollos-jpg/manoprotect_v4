@@ -3,9 +3,56 @@
  * Professional, organized footer with clear hierarchy
  */
 import { Link } from 'react-router-dom';
-import { Shield, Phone, Mail, MapPin, Lock, CreditCard, Award, Smartphone, Truck } from 'lucide-react';
+import { Shield, Phone, Mail, MapPin, Lock, CreditCard, Award, Smartphone, Truck, Star, CheckCircle, ExternalLink } from 'lucide-react';
 
 const LOGO_URL = '/manoprotect_logo.webp';
+
+// Trustpilot Rating Component with animation
+const TrustpilotWidget = () => (
+  <a 
+    href="https://es.trustpilot.com/review/manoprotect.com"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="group flex items-center gap-3 px-4 py-3 bg-slate-800/50 hover:bg-slate-800 rounded-xl border border-slate-700 hover:border-emerald-500/50 transition-all duration-300"
+  >
+    <div className="flex items-center gap-1">
+      {[...Array(5)].map((_, i) => (
+        <Star 
+          key={i} 
+          className={`w-4 h-4 fill-emerald-400 text-emerald-400 transition-transform duration-300 ${i < 4 ? '' : 'fill-emerald-400/50'}`}
+          style={{ animationDelay: `${i * 100}ms` }}
+        />
+      ))}
+    </div>
+    <div className="text-left">
+      <p className="text-xs text-slate-400 group-hover:text-slate-300 transition-colors">
+        Excelente en
+      </p>
+      <p className="text-sm font-bold text-white flex items-center gap-1">
+        Trustpilot
+        <ExternalLink className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
+      </p>
+    </div>
+  </a>
+);
+
+// ManoProtect Verified Seal Component  
+const ManoProtectSeal = () => (
+  <div className="flex items-center gap-3 px-4 py-3 bg-gradient-to-r from-emerald-500/10 to-teal-500/10 rounded-xl border border-emerald-500/30">
+    <div className="relative">
+      <div className="w-10 h-10 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-lg flex items-center justify-center shadow-lg shadow-emerald-500/20">
+        <Shield className="w-5 h-5 text-white" />
+      </div>
+      <div className="absolute -top-1 -right-1 w-4 h-4 bg-emerald-400 rounded-full border-2 border-slate-900 flex items-center justify-center">
+        <CheckCircle className="w-2.5 h-2.5 text-white" />
+      </div>
+    </div>
+    <div>
+      <p className="text-xs text-emerald-400 font-medium">Verificado por</p>
+      <p className="text-sm font-bold text-white">ManoProtect.com</p>
+    </div>
+  </div>
+);
 
 // App Store URLs
 const PLAY_STORE_URL = 'https://play.google.com/store/apps/details?id=com.manoprotect.www.twa';
