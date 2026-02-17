@@ -116,8 +116,12 @@ const ChildTracking = () => {
     }
   };
 
+  // State for showing location modal
+  const [locationResult, setLocationResult] = useState(null);
+
   const handleLocateChild = async (child) => {
     setLocatingChild(child.child_id);
+    setLocationResult(null);
     
     try {
       const response = await axios.post(
@@ -126,8 +130,30 @@ const ChildTracking = () => {
         { withCredentials: true }
       );
       
-      // Show detailed message about what was sent
-      const { fcm_sent, sms_sent, message } = response.data;
+      const data = response.data;
+      
+      // SILENT MODE: Location returned immediately
+      if (data.mode === 'silent' && data.location) {
+        setLocationResult({
+          child_name: data.child_name,
+          location: data.location,
+          mode: 'silent'
+        });
+        toast.success(`📍 Ubicación de ${data.child_name} obtenida silenciosamente`);
+        setLocatingChild(null);
+        loadChildren();
+        return;
+      }
+      
+      // SILENT MODE but no location available
+      if (data.mode === 'silent' && !data.location) {
+        toast.warning(data.message || `No hay ubicación disponible para ${data.child_name}`);
+        setLocatingChild(null);
+        return;
+      }
+      
+      // NORMAL MODE: Request sent, waiting for response
+      const { fcm_sent, sms_sent, message } = data;
       
       if (fcm_sent) {
         toast.success(`📱 Notificación enviada a ${child.name}. Esperando respuesta...`);
