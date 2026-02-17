@@ -343,10 +343,15 @@ const Pricing = () => {
                         Ahorras €{plan.annualSavings}/año
                       </p>
                     )}
-                    {plan.hasTrial && (
+                    {plan.requiresCard ? (
                       <p className="text-xs text-slate-500 mt-2">
                         Requiere tarjeta de débito/crédito<br/>
                         <span className="text-amber-600">Se verificará con tu banco (3D Secure)</span>
+                      </p>
+                    ) : plan.hasTrial && (
+                      <p className="text-xs text-emerald-600 mt-2 font-medium">
+                        Sin tarjeta requerida<br/>
+                        <span className="text-slate-500">Solo necesitas registrarte</span>
                       </p>
                     )}
                   </div>
