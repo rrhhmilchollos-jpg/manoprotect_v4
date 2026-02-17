@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Shield, ChevronDown, ChevronUp, Search, ArrowRight, HelpCircle, MessageCircle, Mail, Phone } from 'lucide-react';
+import LandingFooter from '@/components/landing/LandingFooter';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent } from '@/components/ui/card';
@@ -249,18 +250,7 @@ const FAQ = () => {
       </div>
 
       {/* Footer */}
-      <footer className="bg-zinc-900 text-zinc-400 py-8 px-6">
-        <div className="max-w-5xl mx-auto text-center">
-          <p className="text-sm">
-            © 2026 Manoprotect.com
-          </p>
-          <div className="flex justify-center gap-6 mt-4 text-sm">
-            <a href="/privacy-policy" className="hover:text-white">Privacidad</a>
-            <a href="/terms-of-service" className="hover:text-white">Términos</a>
-            <a href="/legal-notice" className="hover:text-white">Aviso Legal</a>
-          </div>
-        </div>
-      </footer>
+      <LandingFooter />
     </div>
   );
 };

@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Shield, Check, Users, ArrowRight, Loader2, HelpCircle, Building2, TrendingUp } from 'lucide-react';
+import LandingFooter from '@/components/landing/LandingFooter';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -511,22 +512,7 @@ const Pricing = () => {
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-slate-200 bg-slate-50 py-8 mt-16">
-        <div className="max-w-6xl mx-auto px-6 text-center text-sm text-slate-500">
-          <p>© 2026 ManoProtect. Todos los derechos reservados.</p>
-          <div className="flex items-center justify-center gap-6 mt-4">
-            <button onClick={() => navigate('/privacy')} className="hover:text-slate-700">
-              Privacidad
-            </button>
-            <button onClick={() => navigate('/terms')} className="hover:text-slate-700">
-              Términos
-            </button>
-            <button onClick={() => navigate('/contact')} className="hover:text-slate-700">
-              Contacto
-            </button>
-          </div>
-        </div>
-      </footer>
+      <LandingFooter />
     </div>
   );
 };

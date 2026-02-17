@@ -1286,46 +1286,7 @@ export default function SOSServices() {
         </main>
 
         {/* Footer */}
-        <footer className="bg-zinc-900 text-white py-12 mt-16">
-          <div className="max-w-7xl mx-auto px-4">
-            <div className="grid md:grid-cols-4 gap-8">
-              <div>
-                <h4 className="font-bold mb-4">ManoProtect SOS</h4>
-                <p className="text-zinc-400 text-sm">
-                  Protección de emergencias para toda la familia con tecnología GPS y conexión al 112.
-                </p>
-              </div>
-              <div>
-                <h4 className="font-bold mb-4">Servicios</h4>
-                <ul className="space-y-2 text-sm text-zinc-400">
-                  <li><button onClick={() => setActiveTab('dispositivo')} className="hover:text-white">Dispositivo SOS</button></li>
-                  <li><button onClick={() => setActiveTab('planes')} className="hover:text-white">Planes y Precios</button></li>
-                  <li><button onClick={() => setActiveTab('funciones')} className="hover:text-white">Funcionalidades</button></li>
-                  <li><button onClick={() => setActiveTab('tracking')} className="hover:text-white">Seguir Pedido</button></li>
-                </ul>
-              </div>
-              <div>
-                <h4 className="font-bold mb-4">Legal</h4>
-                <ul className="space-y-2 text-sm text-zinc-400">
-                  <li><Link to="/privacy-policy" className="hover:text-white">Privacidad</Link></li>
-                  <li><Link to="/terms-of-service" className="hover:text-white">Términos</Link></li>
-                  <li><Link to="/refund-policy" className="hover:text-white">Reembolsos</Link></li>
-                </ul>
-              </div>
-              <div>
-                <h4 className="font-bold mb-4">Contacto</h4>
-                <ul className="space-y-2 text-sm text-zinc-400">
-                  <li>info@manoprotect.com</li>
-                  <li>+34 900 123 456</li>
-                  <li>España</li>
-                </ul>
-              </div>
-            </div>
-            <div className="border-t border-zinc-800 mt-8 pt-8 text-center text-sm text-zinc-500">
-              © 2025 ManoProtect. Todos los derechos reservados.
-            </div>
-          </div>
-        </footer>
+        <LandingFooter />
       </div>
     </>
   );
