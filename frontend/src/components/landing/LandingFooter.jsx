@@ -250,6 +250,14 @@ const LandingFooter = () => {
           </div>
         </div>
 
+        {/* Trustpilot + ManoProtect Seal Section */}
+        <div className="py-6 border-b border-slate-800">
+          <div className="flex flex-wrap items-center justify-center gap-6">
+            <TrustpilotWidget />
+            <ManoProtectSeal />
+          </div>
+        </div>
+
         {/* Bottom Bar */}
         <div className="pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center gap-6">
