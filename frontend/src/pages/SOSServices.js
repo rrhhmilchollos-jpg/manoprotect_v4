@@ -204,6 +204,72 @@ export default function SOSServices() {
     province: ''
   });
 
+  // Verification code system
+  const [verificationCode, setVerificationCode] = useState('');
+  const [codeVerified, setCodeVerified] = useState(false);
+  const [codeInfo, setCodeInfo] = useState(null);
+  const [checkingCode, setCheckingCode] = useState(false);
+
+  // Check if user has a verification code on load
+  useEffect(() => {
+    if (isAuthenticated) {
+      checkUserVerificationCode();
+    }
+  }, [isAuthenticated]);
+
+  const checkUserVerificationCode = async () => {
+    try {
+      const response = await fetch(`${API}/api/payments/device/my-code`, {
+        credentials: 'include'
+      });
+      if (response.ok) {
+        const data = await response.json();
+        if (data.has_code && data.code) {
+          setVerificationCode(data.code);
+          setCodeVerified(true);
+          setCodeInfo(data);
+        }
+      }
+    } catch (error) {
+      console.log('No verification code found');
+    }
+  };
+
+  const handleVerifyCode = async () => {
+    if (!verificationCode.trim()) {
+      toast.error('Introduce tu código de verificación');
+      return;
+    }
+
+    setCheckingCode(true);
+    try {
+      const response = await fetch(`${API}/api/payments/device/verify-code`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ 
+          code: verificationCode.toUpperCase(),
+          user_email: user?.email || ''
+        })
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.valid) {
+        setCodeVerified(true);
+        setCodeInfo(data);
+        toast.success('¡Código verificado! Puedes solicitar tu dispositivo GRATIS');
+      } else {
+        toast.error(data.error || 'Código inválido o expirado');
+        setCodeVerified(false);
+      }
+    } catch (error) {
+      toast.error('Error al verificar código');
+    } finally {
+      setCheckingCode(false);
+    }
+  };
+
   // Check URL params for payment status
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
