@@ -1142,6 +1142,105 @@ async def delete_invite(
     
     return {"success": True, "message": "Invitación eliminada"}
 
+# ==================== PUBLIC INVITE VERIFICATION ====================
+
+@router.get("/invites/verify/{invite_code}")
+async def verify_invite_public(invite_code: str):
+    """Public endpoint to verify an invitation code (no auth required)"""
+    invite = await db.enterprise_invites.find_one(
+        {"invite_code": invite_code, "status": "pending"},
+        {"_id": 0}
+    )
+    
+    if not invite:
+        raise HTTPException(status_code=404, detail="Invitación no válida o ya utilizada")
+    
+    # Check if expired
+    expires_at = datetime.fromisoformat(invite["expires_at"].replace("Z", "+00:00"))
+    if datetime.now(timezone.utc) > expires_at:
+        raise HTTPException(status_code=400, detail="La invitación ha expirado")
+    
+    return {
+        "valid": True,
+        "name": invite.get("name"),
+        "email": invite.get("email"),
+        "role": invite.get("role"),
+        "department": invite.get("department"),
+        "expires_at": invite.get("expires_at")
+    }
+
+class EmployeeRegisterRequest(BaseModel):
+    invite_code: str
+    password: str = Field(..., min_length=8)
+    phone: Optional[str] = None
+
+@router.post("/register")
+async def register_employee_from_invite(data: EmployeeRegisterRequest):
+    """Register a new employee using an invitation code"""
+    # Find and validate invite
+    invite = await db.enterprise_invites.find_one(
+        {"invite_code": data.invite_code, "status": "pending"}
+    )
+    
+    if not invite:
+        raise HTTPException(status_code=404, detail="Invitación no válida o ya utilizada")
+    
+    # Check if expired
+    expires_at = datetime.fromisoformat(invite["expires_at"].replace("Z", "+00:00"))
+    if datetime.now(timezone.utc) > expires_at:
+        raise HTTPException(status_code=400, detail="La invitación ha expirado")
+    
+    # Check if email already exists as employee
+    existing = await db.enterprise_employees.find_one({"email": invite["email"].lower()})
+    if existing:
+        raise HTTPException(status_code=400, detail="Este email ya está registrado como empleado")
+    
+    # Create employee
+    employee = {
+        "employee_id": generate_id("emp_"),
+        "company_id": "manoprotect",
+        "name": invite.get("name"),
+        "email": invite["email"].lower(),
+        "phone": data.phone,
+        "department": invite.get("department", ""),
+        "role": invite.get("role", "employee"),
+        "status": "active",
+        "password_hash": hash_password(data.password),
+        "permissions": [],
+        "avatar_url": None,
+        "risk_score": 0,
+        "risk_level": "low",
+        "failed_simulations": 0,
+        "phishing_clicks": 0,
+        "devices": [],
+        "two_factor_enabled": False,
+        "last_login": None,
+        "last_ip": None,
+        "login_history": [],
+        "created_at": datetime.now(timezone.utc).isoformat(),
+        "updated_at": datetime.now(timezone.utc).isoformat()
+    }
+    
+    await db.enterprise_employees.insert_one(employee)
+    
+    # Mark invite as used
+    await db.enterprise_invites.update_one(
+        {"invite_code": data.invite_code},
+        {"$set": {
+            "status": "used",
+            "used_at": datetime.now(timezone.utc).isoformat(),
+            "employee_id": employee["employee_id"]
+        }}
+    )
+    
+    return {
+        "success": True,
+        "message": "Cuenta creada exitosamente",
+        "employee_id": employee["employee_id"],
+        "name": employee["name"],
+        "email": employee["email"]
+    }
+
 @router.get("/employees/{employee_id}/activity")
 async def get_employee_activity(
     employee_id: str,
