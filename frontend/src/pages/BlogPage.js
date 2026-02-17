@@ -10,6 +10,7 @@ import {
   MessageSquare, Users, TrendingUp, ExternalLink, ChevronRight,
   Clock, Eye, Tag, Search, Download, FileText
 } from 'lucide-react';
+import LandingFooter from '@/components/landing/LandingFooter';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
@@ -895,18 +896,7 @@ const BlogPage = () => {
       </section>
 
       {/* Footer */}
-      <footer className="bg-slate-900 text-slate-400 py-8 px-6">
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
-          <p className="text-sm">
-            © {new Date().getFullYear()} ManoProtect - Manoprotect.com
-          </p>
-          <div className="flex items-center gap-4 text-sm">
-            <Link to="/privacy-policy" className="hover:text-white">Privacidad</Link>
-            <Link to="/terms-of-service" className="hover:text-white">Términos</Link>
-            <Link to="/" className="hover:text-white">Inicio</Link>
-          </div>
-        </div>
-      </footer>
+      <LandingFooter />
     </div>
   );
 };

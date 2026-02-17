@@ -10,6 +10,7 @@ import {
   AlertTriangle, ArrowRight, Facebook, Twitter, Linkedin,
   Copy, Check
 } from 'lucide-react';
+import LandingFooter from '@/components/landing/LandingFooter';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
@@ -483,15 +484,7 @@ const BlogPostPage = () => {
       </article>
 
       {/* Footer */}
-      <footer className="bg-slate-900 text-slate-400 py-8 px-6">
-        <div className="max-w-5xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
-          <p className="text-sm">© {new Date().getFullYear()} ManoProtect</p>
-          <div className="flex items-center gap-4 text-sm">
-            <Link to="/blog" className="hover:text-white">Blog</Link>
-            <Link to="/" className="hover:text-white">Inicio</Link>
-          </div>
-        </div>
-      </footer>
+      <LandingFooter />
     </div>
   );
 };
