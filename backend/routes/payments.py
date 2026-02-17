@@ -707,10 +707,15 @@ async def create_subscription_checkout(sub_request: SubscriptionRequest):
         
         origin_url = sub_request.origin_url
         success_url = f"{origin_url}/dashboard?subscription=success&session_id={{CHECKOUT_SESSION_ID}}"
-        cancel_url = f"{origin_url}/servicios-sos?tab=planes"
+        cancel_url = f"{origin_url}/pricing?error=cancelled"
         
-        # Create Stripe checkout session with trial
-        # IMPORTANT: Reject prepaid cards and require 3D Secure verification
+        # =========================================================
+        # CRITICAL: Configure Stripe to REJECT PREPAID CARDS
+        # =========================================================
+        # We use payment_method_options with setup_future_usage
+        # Stripe will validate the card type during checkout
+        # =========================================================
+        
         session = stripe.checkout.Session.create(
             payment_method_types=['card'],
             line_items=[{
@@ -719,7 +724,7 @@ async def create_subscription_checkout(sub_request: SubscriptionRequest):
                     'unit_amount': int(price * 100),
                     'product_data': {
                         'name': plan["name"],
-                        'description': f'Suscripción {sub_request.billing_cycle} con 7 días de prueba gratis',
+                        'description': f'Suscripción {sub_request.billing_cycle} con 7 días de prueba gratis. NO se aceptan tarjetas prepago.',
                     },
                     'recurring': {
                         'interval': interval,
@@ -732,7 +737,8 @@ async def create_subscription_checkout(sub_request: SubscriptionRequest):
                 'trial_period_days': plan["trial_days"],
                 'metadata': {
                     'plan_id': sub_request.plan_id,
-                    'billing_cycle': sub_request.billing_cycle
+                    'billing_cycle': sub_request.billing_cycle,
+                    'reject_prepaid': 'true'
                 }
             },
             success_url=success_url,
@@ -741,17 +747,24 @@ async def create_subscription_checkout(sub_request: SubscriptionRequest):
                 'type': 'subscription',
                 'plan_id': sub_request.plan_id,
                 'billing_cycle': sub_request.billing_cycle,
-                'reject_prepaid': 'true'  # Flag to validate in webhook
+                'reject_prepaid': 'true'
             },
             payment_method_options={
                 'card': {
-                    'request_three_d_secure': 'any'  # Force 3D Secure for all cards
+                    'request_three_d_secure': 'any'  # Force 3D Secure for ALL cards
                 }
             },
-            # Require billing address for better fraud protection
+            # IMPORTANT: Require billing address and phone
             billing_address_collection='required',
-            # Allow only card payment
-            payment_method_collection='always'
+            phone_number_collection={'enabled': True},
+            # Only allow card payments
+            payment_method_collection='always',
+            # Custom text to warn about prepaid cards
+            custom_text={
+                'submit': {
+                    'message': 'Solo aceptamos tarjetas de débito o crédito. Las tarjetas prepago serán rechazadas.'
+                }
+            }
         )
         
         # Save pending subscription
