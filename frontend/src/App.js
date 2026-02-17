@@ -151,6 +151,7 @@ const EstafasBancarias = lazy(() => import('@/pages/EstafasBancarias'));
 // Enterprise Portal (Complete system)
 const EnterprisePortal = lazy(() => import('@/pages/EnterprisePortal'));
 const EnterpriseLogin = lazy(() => import('@/pages/EnterpriseLogin'));
+const EmpleadoRecuperarPassword = lazy(() => import('@/pages/EmpleadoRecuperarPassword'));
 
 // Lazy load non-critical UI components to reduce main thread blocking
 const CookieConsent = lazy(() => import('@/components/CookieConsent'));
