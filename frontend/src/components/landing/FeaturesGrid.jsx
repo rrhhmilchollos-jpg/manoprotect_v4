@@ -8,56 +8,57 @@ import { Button } from '@/components/ui/button';
 
 const features = [
   {
+    id: 'locator',
+    title: 'Localización GPS Familiar',
+    description: 'Sabe dónde están tus hijos, padres y seres queridos en tiempo real. Visualiza su ubicación exacta en el mapa 24/7.',
+    icon: MapPin,
+    color: 'bg-emerald-500',
+    bgColor: 'bg-emerald-50',
+    borderColor: 'border-emerald-200',
+    link: '/smart-locator',
+    span: 'lg:col-span-2',
+    featured: true
+  },
+  {
     id: 'sos',
-    title: 'Botón SOS',
-    description: 'Alerta instantánea a familiares con tu ubicación exacta en caso de emergencia.',
+    title: 'Botón SOS de Emergencias',
+    description: 'Con un solo clic envía tu ubicación a familiares y pide ayuda al instante.',
     icon: AlertTriangle,
     color: 'bg-red-500',
     bgColor: 'bg-red-50',
     borderColor: 'border-red-200',
     link: '/servicios-sos',
-    span: 'lg:col-span-2',
     featured: true
   },
   {
+    id: 'family',
+    title: 'Protección Mayores',
+    description: 'Cuida a tus padres y abuelos. Alertas automáticas si no hay actividad.',
+    icon: Users,
+    color: 'bg-amber-500',
+    bgColor: 'bg-amber-50',
+    borderColor: 'border-amber-200',
+    link: '/seguridad-mayores'
+  },
+  {
     id: 'antiphishing',
-    title: 'Anti-Phishing',
-    description: 'Detectamos emails y webs fraudulentas antes de que caigas.',
+    title: 'Anti-Estafas',
+    description: 'Protección adicional contra phishing y fraudes online.',
     icon: Shield,
-    color: 'bg-indigo-500',
-    bgColor: 'bg-indigo-50',
-    borderColor: 'border-indigo-200',
+    color: 'bg-blue-500',
+    bgColor: 'bg-blue-50',
+    borderColor: 'border-blue-200',
     link: '/verificar-estafa'
   },
   {
     id: 'voiceshield',
-    title: 'AI Voice Shield',
-    description: 'IA que detecta estafas telefónicas en tiempo real.',
+    title: 'Alertas Inteligentes',
+    description: 'Notificaciones cuando tus familiares llegan o salen de lugares.',
     icon: Phone,
     color: 'bg-purple-500',
     bgColor: 'bg-purple-50',
     borderColor: 'border-purple-200',
     link: '/voice-shield'
-  },
-  {
-    id: 'locator',
-    title: 'Localizador Familiar',
-    description: 'Sabe dónde están tus seres queridos en todo momento.',
-    icon: MapPin,
-    color: 'bg-emerald-500',
-    bgColor: 'bg-emerald-50',
-    borderColor: 'border-emerald-200',
-    link: '/smart-locator'
-  },
-  {
-    id: 'family',
-    title: 'Modo Familiar',
-    description: 'Protección especial para mayores y niños.',
-    icon: Users,
-    color: 'bg-amber-500',
-    bgColor: 'bg-amber-50',
-    borderColor: 'border-amber-200',
-    link: '/family-mode'
   }
 ];
 
