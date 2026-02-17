@@ -9,11 +9,18 @@ import os
 
 # Get allowed origins for CORS
 cors_origins = [
+    # Development
     "http://localhost:3000",
     "http://localhost:3001",
+    # Production - Main Site
     "https://manoprotect.com",
     "https://www.manoprotect.com",
+    # Production - Employee Portal
     "https://admin.manoprotect.com",
+    "https://www.admin.manoprotect.com",
+    # Production - API
+    "https://api.manoprotect.com",
+    # Emergent Previews
     "https://staff-connect-22.preview.emergentagent.com",
     "https://protect-staging-1.preview.emergentagent.com",
 ]
