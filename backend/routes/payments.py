@@ -710,6 +710,7 @@ async def create_subscription_checkout(sub_request: SubscriptionRequest):
         cancel_url = f"{origin_url}/servicios-sos?tab=planes"
         
         # Create Stripe checkout session with trial
+        # IMPORTANT: Reject prepaid cards and require 3D Secure verification
         session = stripe.checkout.Session.create(
             payment_method_types=['card'],
             line_items=[{
@@ -739,13 +740,18 @@ async def create_subscription_checkout(sub_request: SubscriptionRequest):
             metadata={
                 'type': 'subscription',
                 'plan_id': sub_request.plan_id,
-                'billing_cycle': sub_request.billing_cycle
+                'billing_cycle': sub_request.billing_cycle,
+                'reject_prepaid': 'true'  # Flag to validate in webhook
             },
             payment_method_options={
                 'card': {
-                    'request_three_d_secure': 'automatic'
+                    'request_three_d_secure': 'any'  # Force 3D Secure for all cards
                 }
-            }
+            },
+            # Require billing address for better fraud protection
+            billing_address_collection='required',
+            # Allow only card payment
+            payment_method_collection='always'
         )
         
         # Save pending subscription
