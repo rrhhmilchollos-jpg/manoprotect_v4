@@ -122,15 +122,13 @@ app.add_middleware(SecurityHeadersMiddleware)
 app.add_middleware(RateLimitMiddleware)
 
 # Initialize WebSocket manager
-from services.websocket_manager import sio, init_websocket, get_socketio_app
+from services.websocket_manager import sio, init_websocket
 init_websocket(db)
 
-# Create Socket.IO ASGI app
-socket_app = get_socketio_app()
-
-# Mount Socket.IO BEFORE defining routes (important for path resolution)
-app.mount('/ws', socket_app)
-print("✅ WebSocket mounted at /ws/socket.io")
+# Socket.IO will be mounted directly on the app using ASGIApp wrapper
+# This allows handling at /socket.io path
+import socketio as socketio_lib
+socket_app = socketio_lib.ASGIApp(sio, other_asgi_app=app, socketio_path='socket.io')
 
 EMERGENT_LLM_KEY = os.environ.get('EMERGENT_LLM_KEY')
 STRIPE_API_KEY = os.environ.get('STRIPE_API_KEY')
