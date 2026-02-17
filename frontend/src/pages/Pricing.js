@@ -71,73 +71,83 @@ const Pricing = () => {
   }, [searchParams, setSearchParams, pollPaymentStatus]);
 
   // Precios simplificados - 3 planes claros
+  // PLAN BÁSICO: 7 días gratis SIN tarjeta, después obliga a pagar o se bloquea
+  // PLANES PAGO: 7 días gratis CON tarjeta obligatoria, cobro automático después
   const plans = [
     {
-      id: 'free',
+      id: 'basic-trial',
       name: 'Básico',
-      description: 'Para empezar a protegerte',
+      description: '7 días gratis para probar',
       monthlyPrice: 0,
       annualPrice: 0,
       icon: Shield,
       color: 'zinc',
       features: [
-        'Protección 24/7 básica',
-        '10 análisis de amenazas/mes',
+        '7 días de prueba GRATIS',
+        'Protección básica 24/7',
+        '10 análisis de amenazas',
         'Alertas de seguridad',
-        'Base de conocimiento',
-        'Soporte por email'
+        'Sin tarjeta requerida',
+        'Una sola oportunidad'
       ],
-      cta: 'Comenzar Gratis',
+      cta: 'Probar 7 Días Gratis',
       popular: false,
-      hasTrial: false
+      hasTrial: true,
+      trialDays: 7,
+      requiresCard: false,
+      badge: 'Sin compromiso'
     },
     {
       id: isAnnual ? 'yearly' : 'monthly',
       name: 'Individual',
-      description: 'La mejor opción para ti y tu familia cercana',
+      description: 'La mejor opción para ti',
       monthlyPrice: 29.99,
       annualPrice: 249.99, // ~20.83/mes
       annualSavings: 110,
       icon: Shield,
       color: 'indigo',
       features: [
+        '7 días de prueba GRATIS',
         'Protección 24/7 avanzada',
         'Análisis ilimitados con IA',
         'Bloqueo automático de amenazas',
         'Hasta 2 familiares incluidos',
-        'Botón SOS de emergencia (tras trial)',
+        'Botón SOS de emergencia',
         'Historial completo',
-        'Sin anuncios',
         'Soporte prioritario'
       ],
-      cta: 'Probar 7 Días Gratis',
+      cta: 'Empezar con 7 Días Gratis',
       popular: true,
       hasTrial: true,
-      trialDays: 7
+      trialDays: 7,
+      requiresCard: true,
+      badge: 'Más popular'
     },
     {
       id: isAnnual ? 'family-yearly' : 'family-monthly',
       name: 'Familiar',
-      description: 'Protección completa para toda la familia',
+      description: 'Protección para toda la familia',
       monthlyPrice: 49.99,
       annualPrice: 399.99, // ~33.33/mes
       annualSavings: 200,
       icon: Users,
       color: 'emerald',
       features: [
+        '7 días de prueba GRATIS',
         'Todo de Individual +',
         'Hasta 5 miembros familia',
-        'Localización GPS en emergencias',
-        'Tracking de niños bajo demanda',
-        'Dispositivo SOS físico GRATIS (tras trial)',
+        'Localización GPS emergencias',
+        'Tracking de niños',
+        'Dispositivo SOS físico GRATIS',
         'Modo Senior simplificado',
-        'Panel familiar centralizado',
-        'Garantía satisfacción 7 días'
+        'Panel familiar centralizado'
       ],
-      cta: 'Probar 7 Días Gratis',
+      cta: 'Empezar con 7 Días Gratis',
       popular: false,
       hasTrial: true,
-      trialDays: 7
+      trialDays: 7,
+      requiresCard: true,
+      badge: 'Para familias'
     }
   ];
 
