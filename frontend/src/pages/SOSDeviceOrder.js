@@ -231,9 +231,15 @@ export default function SOSDeviceOrder() {
       return;
     }
 
-    // Check if user is in trial period - cannot order during trial
-    if (isInTrialPeriod) {
-      toast.error('El dispositivo SOS solo está disponible para suscriptores de pago. Espera a que finalice tu período de prueba.');
+    // Check if code is verified
+    if (!codeVerified) {
+      toast.error('Debes introducir un código de verificación válido para solicitar tu dispositivo SOS');
+      return;
+    }
+    
+    // Check remaining devices with this code
+    if (codeInfo && quantity > codeInfo.remaining_devices) {
+      toast.error(`Solo puedes solicitar ${codeInfo.remaining_devices} dispositivo(s) más con tu código`);
       return;
     }
 
@@ -246,32 +252,26 @@ export default function SOSDeviceOrder() {
 
     setLoading(true);
     try {
-      const response = await fetch(`${API}/api/sos-device/order`, {
+      // Use the new endpoint with verification code
+      const response = await fetch(`${API}/api/payments/device/order-with-code`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
         body: JSON.stringify({
+          code: verificationCode.toUpperCase().trim(),
           quantity,
-          family_members: familyMembers,
+          colors: selectedColors,
+          device_style: 'adulto',
           shipping: shippingInfo,
-          selected_colors: selectedColors,
-          total_price: calculatePrice()
+          user_email: user?.email || ''
         })
       });
 
       const data = await response.json();
 
-      if (response.ok) {
-        // Check if payment is required (redirect to Stripe)
-        if (data.requires_payment && data.checkout_url) {
-          toast.info('Redirigiendo al pago seguro...');
-          // Redirect to Stripe Checkout
-          window.location.href = data.checkout_url;
-        } else {
-          // Free order (shouldn't happen normally)
-          toast.success('¡Pedido realizado! Te contactaremos para confirmar el envío.');
-          navigate('/dashboard');
-        }
+      if (response.ok && data.success) {
+        toast.success('¡Pedido confirmado! Tu dispositivo SOS será enviado pronto.');
+        navigate('/order-confirmation?order_id=' + data.order_id);
       } else {
         toast.error(data.detail || 'Error al procesar el pedido');
       }
