@@ -26,7 +26,7 @@ const EmployeeLogin = () => {
     setLoading(true);
 
     try {
-      const response = await fetch(`${API}/api/employee-portal/login`, {
+      const response = await fetch(`${API}/api/enterprise/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
@@ -39,14 +39,16 @@ const EmployeeLogin = () => {
         throw new Error(data.detail || 'Error al iniciar sesión');
       }
 
-      // Store session in localStorage for employee portal
-      localStorage.setItem('employee_session', JSON.stringify({
+      // Store session in both localStorage keys for compatibility
+      const sessionData = {
         employee_id: data.employee_id,
         name: data.name,
         email: data.email,
         role: data.role,
         session_token: data.session_token
-      }));
+      };
+      localStorage.setItem('employee_session', JSON.stringify(sessionData));
+      localStorage.setItem('enterprise_session', data.session_token);
 
       toast.success(`Bienvenido, ${data.name}`);
       navigate('/empleados/dashboard');
