@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
+import LandingFooter from '@/components/landing/LandingFooter';
 import { 
   Shield, Award, Building2, Users, CheckCircle, ArrowRight, 
   Phone, Mail, Lock, Zap, BarChart3, Globe, Brain, Fingerprint,
@@ -442,15 +443,7 @@ const EnterpriseLanding = () => {
       </section>
 
       {/* Footer */}
-      <footer className="py-8 bg-slate-900 text-white/60">
-        <div className="max-w-7xl mx-auto px-4 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Shield className="w-5 h-5" />
-            <span>ManoProtect Enterprise</span>
-          </div>
-          <p>© 2026 ManoProtect. Todos los derechos reservados.</p>
-        </div>
-      </footer>
+      <LandingFooter />
     </div>
   );
 };
