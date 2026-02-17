@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '../components/ui/button';
 import { toast } from 'sonner';
+import LandingFooter from '@/components/landing/LandingFooter';
 import { 
   Shield, Lock, Eye, EyeOff, User, Mail, Phone,
   CheckCircle, AlertTriangle, ArrowRight, ChevronRight,
@@ -444,11 +445,7 @@ const ManoProtectRegistro = () => {
       </main>
 
       {/* Footer */}
-      <footer className="bg-black/20 backdrop-blur-sm border-t border-white/10 py-4">
-        <div className="max-w-7xl mx-auto px-4 text-center text-xs text-white/50">
-          © 2025 Manoprotect.com | Calle de la Innovación, 15 - Valencia
-        </div>
-      </footer>
+      <LandingFooter />
     </div>
   );
 };

@@ -15,6 +15,7 @@ import {
   Check,
   Share2
 } from 'lucide-react';
+import LandingFooter from '@/components/landing/LandingFooter';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { toast } from 'sonner';
@@ -333,16 +334,7 @@ const InstruccionesFamiliares = () => {
       </main>
 
       {/* Footer */}
-      <footer className="bg-slate-900/80 border-t border-slate-700 py-6">
-        <div className="max-w-4xl mx-auto px-4 text-center text-slate-500 text-sm">
-          <p>ManoProtect © 2025 - Protección para toda la familia</p>
-          <div className="flex justify-center gap-4 mt-2">
-            <Link to="/privacy-policy" className="hover:text-slate-300">Privacidad</Link>
-            <Link to="/terms-of-service" className="hover:text-slate-300">Términos</Link>
-            <Link to="/faq" className="hover:text-slate-300">FAQ</Link>
-          </div>
-        </div>
-      </footer>
+      <LandingFooter />
     </div>
   );
 };
