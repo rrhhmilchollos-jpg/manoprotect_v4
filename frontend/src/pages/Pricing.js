@@ -151,9 +151,10 @@ const Pricing = () => {
     }
   ];
 
-  const handleSubscribe = async (planId) => {
-    if (planId === 'free') {
-      navigate('/register');
+  const handleSubscribe = async (planId, requiresCard = true) => {
+    // Plan básico sin tarjeta - redirigir a registro
+    if (planId === 'basic-trial') {
+      navigate('/register?plan=basic-trial');
       return;
     }
 
@@ -163,7 +164,7 @@ const Pricing = () => {
     }
 
     setLoadingPlan(planId);
-    toast.info('Conectando con pasarela de pago...');
+    toast.info('Conectando con pasarela de pago seguro...');
 
     try {
       const originUrl = window.location.origin;
@@ -174,7 +175,9 @@ const Pricing = () => {
         credentials: 'include',
         body: JSON.stringify({
           plan_type: planId,
-          origin_url: originUrl
+          origin_url: originUrl,
+          require_card_validation: true,  // Siempre validar tarjeta
+          reject_prepaid: true  // Rechazar tarjetas prepago
         }),
       });
 
