@@ -356,12 +356,17 @@ async def verify_device_code(request: VerifyCodeRequest):
                     "error": "Código no válido o ya utilizado"
                 }
         
-        # Check expiration
-        if code_record.get("expires_at") and code_record["expires_at"] < datetime.now(timezone.utc):
-            return {
-                "valid": False,
-                "error": "El código ha expirado"
-            }
+        # Check expiration (handle timezone-naive dates from MongoDB)
+        expires_at = code_record.get("expires_at")
+        if expires_at:
+            # Make timezone-aware if needed
+            if expires_at.tzinfo is None:
+                expires_at = expires_at.replace(tzinfo=timezone.utc)
+            if expires_at < datetime.now(timezone.utc):
+                return {
+                    "valid": False,
+                    "error": "El código ha expirado"
+                }
         
         # Check remaining devices
         max_devices = code_record.get("max_devices", 1)
