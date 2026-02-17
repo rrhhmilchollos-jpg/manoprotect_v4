@@ -90,6 +90,10 @@ const EnterpriseLogin = () => {
       const data = await res.json();
 
       if (res.ok && data.success) {
+        // Store session token as backup
+        if (data.session_token) {
+          localStorage.setItem('enterprise_session_token', data.session_token);
+        }
         toast.success(`Bienvenido, ${data.name}`);
         navigate('/enterprise');
       } else {
