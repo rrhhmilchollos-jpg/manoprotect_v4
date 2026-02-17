@@ -2973,10 +2973,10 @@ allowed_origins = [
     "http://localhost:8002",
     "https://manoprotect.com",
     "https://www.manoprotect.com",
-    "https://admin.manoprotect.com",  # Employee Portal Subdomain
-    "https://protect-staging-1.preview.emergentagent.com",  # Admin Portal Preview
+    "https://admin.manoprotect.com",  # Employee Portal Subdomain (Production)
+    "https://staff-connect-22.preview.emergentagent.com",  # Employee Portal Preview (Emergent)
+    "https://protect-staging-1.preview.emergentagent.com",  # Main App Preview
     "https://digital-guard-1.emergent.host",
-    "https://protect-staging-1.preview.emergentagent.com",
     "file://",  # Electron Desktop App
     "null",     # Electron Desktop App (some versions send null origin)
 ]
