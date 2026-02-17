@@ -11,12 +11,55 @@ ManoProtect es una plataforma integral de protección contra fraudes digitales p
 
 ## Actualizaciones Recientes (17 Feb 2026 - Sesión 3)
 
+### Portal de Empleados - BACKEND COMPLETO ✅
+Implementación completa del sistema de gestión de empleados según especificaciones del ZIP proporcionado.
+
+**Nuevos módulos backend:**
+1. **Sistema de Ausencias/Vacaciones** (`/routes/employee_absences_routes.py`)
+   - `GET /api/enterprise/absences` - Listar solicitudes
+   - `GET /api/enterprise/absences/my-balance` - Balance de vacaciones (22 días/año)
+   - `GET /api/enterprise/absences/calendar` - Calendario de equipo
+   - `POST /api/enterprise/absences` - Crear solicitud (calcula días laborables automáticamente)
+   - `PATCH /api/enterprise/absences/:id/approve` - Aprobar (admin)
+   - `PATCH /api/enterprise/absences/:id/reject` - Rechazar con motivo (admin)
+
+2. **Sistema de Nóminas** (`/routes/employee_payslips_routes.py`)
+   - `GET /api/enterprise/payslips` - Listar nóminas por año
+   - `GET /api/enterprise/payslips/:id/download` - Descargar PDF
+   - `POST /api/enterprise/payslips` - Subir nómina individual (admin)
+   - `POST /api/enterprise/payslips/bulk-upload` - Subida masiva (admin)
+   - `DELETE /api/enterprise/payslips/:id` - Eliminar (admin)
+
+3. **Sistema de Documentos** (`/routes/employee_documents_routes.py`)
+   - `GET /api/enterprise/documents` - Listar documentos
+   - `GET /api/enterprise/documents/:id/download` - Descargar archivo
+   - `POST /api/enterprise/documents` - Subir documento (admin)
+   - `DELETE /api/enterprise/documents/:id` - Eliminar (admin)
+
+4. **Sistema de Notificaciones** (`/routes/employee_notifications_routes.py`)
+   - `GET /api/enterprise/notifications` - Listar con contador no leídas
+   - `GET /api/enterprise/notifications/unread-count` - Solo contador
+   - `PATCH /api/enterprise/notifications/:id/read` - Marcar como leída
+   - `PATCH /api/enterprise/notifications/read-all` - Marcar todas
+
+5. **Sistema de Festivos** (`/routes/employee_holidays_routes.py`)
+   - `GET /api/enterprise/holidays` - Listar por año
+   - `POST /api/enterprise/holidays` - Crear festivo (admin)
+   - `POST /api/enterprise/holidays/init-spain-{year}` - Inicializar festivos España
+   - Festivos España 2025 ya inicializados ✅
+
+**Documento para frontend**: `/app/FRONTEND_PORTAL_EMPLEADOS.md`
+- Contiene código completo de componentes React para admin.manoprotect.com
+- AbsencesPage.jsx, PayslipsPage.jsx, DocumentsPage.jsx, NotificationsBell.jsx
+
 ### Footer Unificado con Trust Badges - COMPLETADO ✅
 - **Componente principal**: `/components/landing/LandingFooter.jsx`
 - **Nuevos Trust Badges**: 
   - `100% Gratis` (verde esmeralda)
   - `Envío 24-48h` (azul)
   - `Garantía 2 años` (ámbar)
+- **Widget Trustpilot**: Con estrellas y enlace a reseñas
+- **Sello ManoProtect.com**: Badge "Verificado por ManoProtect.com"
 - **Páginas actualizadas** (ahora usan LandingFooter):
   - ✅ SOSServices.js
   - ✅ Pricing.js
