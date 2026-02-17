@@ -760,6 +760,113 @@ const ChildTracking = () => {
             </Card>
           </div>
         )}
+
+        {/* Location Result Modal - Shows location immediately for silent mode */}
+        {locationResult && (
+          <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4">
+            <Card className="w-full max-w-lg bg-white shadow-2xl">
+              <CardHeader className="bg-gradient-to-r from-emerald-500 to-emerald-600 text-white rounded-t-lg">
+                <CardTitle className="flex items-center gap-2">
+                  <MapPin className="w-6 h-6" />
+                  Ubicación de {locationResult.child_name}
+                </CardTitle>
+                <p className="text-emerald-100 text-sm mt-1">
+                  {locationResult.mode === 'silent' ? '🔕 Obtenida silenciosamente' : '📍 Ubicación actual'}
+                </p>
+              </CardHeader>
+              <CardContent className="p-6 space-y-4">
+                {locationResult.location ? (
+                  <>
+                    {/* Map Preview */}
+                    <div className="relative rounded-xl overflow-hidden border-2 border-emerald-100">
+                      <iframe
+                        src={`https://maps.google.com/maps?q=${locationResult.location.latitude},${locationResult.location.longitude}&z=16&output=embed`}
+                        width="100%"
+                        height="250"
+                        style={{ border: 0 }}
+                        allowFullScreen
+                        loading="lazy"
+                        referrerPolicy="no-referrer-when-downgrade"
+                        title="Ubicación en mapa"
+                      />
+                    </div>
+                    
+                    {/* Location Details */}
+                    <div className="space-y-3 bg-slate-50 rounded-xl p-4">
+                      <div className="flex items-start gap-3">
+                        <MapPin className="w-5 h-5 text-emerald-600 mt-0.5 flex-shrink-0" />
+                        <div>
+                          <p className="text-sm font-medium text-slate-700">Dirección</p>
+                          <p className="text-slate-600">{locationResult.location.address || 'Dirección no disponible'}</p>
+                        </div>
+                      </div>
+                      
+                      <div className="flex items-center gap-3">
+                        <Clock className="w-5 h-5 text-blue-600 flex-shrink-0" />
+                        <div>
+                          <p className="text-sm font-medium text-slate-700">Última actualización</p>
+                          <p className="text-slate-600">
+                            {locationResult.location.timestamp 
+                              ? new Date(locationResult.location.timestamp).toLocaleString('es-ES')
+                              : 'Ahora mismo'}
+                          </p>
+                        </div>
+                      </div>
+                      
+                      <div className="flex items-center gap-3">
+                        <CheckCircle2 className="w-5 h-5 text-green-600 flex-shrink-0" />
+                        <div>
+                          <p className="text-sm font-medium text-slate-700">Precisión</p>
+                          <p className="text-slate-600">{locationResult.location.accuracy || 0} metros</p>
+                        </div>
+                      </div>
+                      
+                      <div className="pt-2 border-t border-slate-200">
+                        <p className="text-xs text-slate-500 mb-2">Coordenadas GPS:</p>
+                        <code className="text-xs bg-slate-200 px-2 py-1 rounded">
+                          {locationResult.location.latitude}, {locationResult.location.longitude}
+                        </code>
+                      </div>
+                    </div>
+                    
+                    {/* Actions */}
+                    <div className="flex gap-3">
+                      <Button
+                        onClick={() => window.open(locationResult.location.google_maps_url, '_blank')}
+                        className="flex-1 bg-emerald-600 hover:bg-emerald-700"
+                      >
+                        <ExternalLink className="w-4 h-4 mr-2" />
+                        Abrir en Google Maps
+                      </Button>
+                      <Button
+                        variant="outline"
+                        onClick={() => {
+                          navigator.clipboard.writeText(locationResult.location.google_maps_url);
+                          toast.success('Enlace copiado');
+                        }}
+                      >
+                        <Copy className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  </>
+                ) : (
+                  <div className="text-center py-8">
+                    <AlertTriangle className="w-12 h-12 text-yellow-500 mx-auto mb-3" />
+                    <p className="text-slate-600">No hay ubicación disponible</p>
+                  </div>
+                )}
+                
+                <Button
+                  variant="ghost"
+                  onClick={() => setLocationResult(null)}
+                  className="w-full"
+                >
+                  Cerrar
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
+        )}
       </div>
     </div>
   );
