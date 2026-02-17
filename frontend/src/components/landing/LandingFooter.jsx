@@ -30,12 +30,14 @@ const footerLinks = {
   legal: [
     { name: 'Privacidad', href: '/privacy-policy' },
     { name: 'Términos', href: '/terms-of-service' },
+    { name: 'Reembolsos', href: '/refund-policy' },
     { name: 'Cookies', href: '/privacy-policy#cookies' },
     { name: 'Aviso Legal', href: '/legal-notice' }
   ],
   support: [
     { name: 'FAQ', href: '/faq' },
     { name: 'Blog', href: '/blog' },
+    { name: 'Quiénes Somos', href: '/about-us' },
     { name: 'Contacto', href: '/sobre-nosotros' },
     { name: 'Inversores', href: '/investor/register' }
   ]
