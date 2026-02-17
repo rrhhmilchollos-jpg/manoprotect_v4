@@ -237,8 +237,13 @@ const EnterprisePortal = () => {
 
   const checkAuth = async () => {
     try {
+      // Get stored token as backup
+      const storedToken = localStorage.getItem('enterprise_session_token');
+      
+      // First try with cookies (primary method)
       const res = await fetch(`${API_URL}/api/enterprise/auth/me`, {
-        credentials: 'include'
+        credentials: 'include',
+        headers: storedToken ? { 'X-Session-Token': storedToken } : {}
       });
       
       if (res.ok) {
@@ -246,11 +251,14 @@ const EnterprisePortal = () => {
         setEmployee(data);
         setLoading(false);
       } else {
+        // Clear stored token if auth fails
+        localStorage.removeItem('enterprise_session_token');
         setLoading(false);
         navigate('/enterprise/login');
       }
     } catch (err) {
       console.error('Auth check error:', err);
+      localStorage.removeItem('enterprise_session_token');
       setLoading(false);
       navigate('/enterprise/login');
     }
