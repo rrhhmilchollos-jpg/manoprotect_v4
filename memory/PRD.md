@@ -25,6 +25,22 @@ ManoProtect es una plataforma integral de protección contra fraudes digitales p
 - **Ubicación**: Footer (`/components/landing/LandingFooter.jsx`)
 - **Diseño**: Badges oficiales con hover effect
 
+### Endpoint init-ceo DESHABILITADO ✅
+- **Seguridad**: El endpoint `POST /api/enterprise/auth/init-ceo` ha sido permanentemente deshabilitado
+- **Razón**: Usuario CEO ya inicializado, endpoint era one-time setup
+- **Archivo**: `/backend/routes/enterprise_portal_routes.py`
+
+### Páginas Legales Actualizadas ✅
+- **Cambio**: "STARTBOOKING SL" → "ManoProtect S.L." en todas las páginas legales
+- **Archivos actualizados**:
+  - `/pages/TermsOfService.js`
+  - `/pages/PrivacyPolicy.js`  
+  - `/pages/LegalNotice.js`
+
+### Rutas de "Quiénes Somos" Añadidas ✅
+- **Rutas disponibles**: `/about-us`, `/quienes-somos`, `/sobre-nosotros`, `/about`
+- **Página existente**: `SobreNosotros.js` (con info del fundador Daniel Escrivá)
+
 ---
 
 ## Optimizaciones CRO Implementadas (17 Feb 2026)
