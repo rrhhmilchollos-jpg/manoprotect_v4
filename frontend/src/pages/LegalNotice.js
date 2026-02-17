@@ -90,20 +90,20 @@ const LegalNotice = () => {
               gráficos, imágenes, iconos, tecnología, software, código fuente, diseños, marcas, 
               nombres comerciales, así como la estructura, selección, ordenación y presentación de 
               sus contenidos, están protegidos por derechos de propiedad intelectual e industrial 
-              de STARTBOOKING SL o de terceros.
+              de ManoProtect S.L. o de terceros.
             </p>
             <div className="bg-orange-50 border-l-4 border-orange-500 p-4 rounded-r-lg">
               <p className="text-orange-800">
                 <strong>Queda prohibida</strong> la reproducción, distribución, comunicación pública, 
                 transformación o cualquier otra forma de explotación de los contenidos sin autorización 
-                expresa y por escrito de STARTBOOKING SL
+                expresa y por escrito de ManoProtect S.L.
               </p>
             </div>
           </section>
 
           <section className="space-y-4">
             <h2 className="text-xl font-bold text-zinc-900">6. Exclusión de Responsabilidad</h2>
-            <p className="text-zinc-600">STARTBOOKING SL no se hace responsable de:</p>
+            <p className="text-zinc-600">ManoProtect S.L. no se hace responsable de:</p>
             <ul className="list-disc pl-6 space-y-2 text-zinc-600">
               <li>Los daños que pudieran derivarse del uso indebido de la Plataforma</li>
               <li>Los fallos o errores técnicos de la red de telecomunicaciones</li>
