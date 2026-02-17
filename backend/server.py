@@ -125,10 +125,9 @@ app.add_middleware(RateLimitMiddleware)
 from services.websocket_manager import sio, init_websocket
 init_websocket(db)
 
-# Socket.IO will be mounted directly on the app using ASGIApp wrapper
-# This allows handling at /socket.io path
-import socketio as socketio_lib
-socket_app = socketio_lib.ASGIApp(sio, other_asgi_app=app, socketio_path='socket.io')
+# Create combined ASGI app that handles both FastAPI and Socket.IO
+# Socket.IO will be available at /socket.io path
+combined_asgi_app = None  # Will be set after all routes are defined
 
 EMERGENT_LLM_KEY = os.environ.get('EMERGENT_LLM_KEY')
 STRIPE_API_KEY = os.environ.get('STRIPE_API_KEY')
