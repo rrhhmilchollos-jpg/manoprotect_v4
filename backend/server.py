@@ -125,8 +125,12 @@ app.add_middleware(RateLimitMiddleware)
 from services.websocket_manager import sio, init_websocket, get_socketio_app
 init_websocket(db)
 
-# Mount Socket.IO at /ws
+# Create Socket.IO ASGI app
 socket_app = get_socketio_app()
+
+# Mount Socket.IO BEFORE defining routes (important for path resolution)
+app.mount('/ws', socket_app)
+print("✅ WebSocket mounted at /ws/socket.io")
 
 EMERGENT_LLM_KEY = os.environ.get('EMERGENT_LLM_KEY')
 STRIPE_API_KEY = os.environ.get('STRIPE_API_KEY')
