@@ -3,6 +3,7 @@ import { Shield, Users, Award, Heart, Target, Zap, Linkedin, Twitter, Mail, MapP
 import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
 import SEO from '@/components/SEO';
+import LandingFooter from '@/components/landing/LandingFooter';
 
 /**
  * Sobre Nosotros - Página del equipo y empresa
