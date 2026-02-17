@@ -96,6 +96,7 @@ const PrivacyPolicy = lazy(() => import('@/pages/PrivacyPolicy'));
 const TermsOfService = lazy(() => import('@/pages/TermsOfService'));
 const RefundPolicy = lazy(() => import('@/pages/RefundPolicy'));
 const LegalNotice = lazy(() => import('@/pages/LegalNotice'));
+const AboutUs = lazy(() => import('@/pages/AboutUs'));
 const LandingPromo = lazy(() => import('@/pages/LandingPromo'));
 const RecuperarPassword = lazy(() => import('@/pages/RecuperarPassword'));
 const VerificarEstafa = lazy(() => import('@/pages/VerificarEstafa'));
