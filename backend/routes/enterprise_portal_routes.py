@@ -561,53 +561,13 @@ class InitCEORequest(BaseModel):
 @router.post("/auth/init-ceo")
 async def init_ceo_user(data: InitCEORequest):
     """
-    Initialize CEO user in production database.
-    This is a one-time setup endpoint protected by secret key.
+    DISABLED FOR SECURITY - CEO user has been initialized.
+    This endpoint was a one-time setup and is now permanently disabled.
     """
-    # Secret key protection - change this after first use
-    if data.secret_key != "MANOPROTECT_INIT_2026_SECURE":
-        raise HTTPException(status_code=403, detail="Invalid secret key")
-    
-    if db is None:
-        raise HTTPException(status_code=500, detail="Database not initialized")
-    
-    email = "ceo@manoprotect.com"
-    
-    # Check if user already exists
-    existing = await db.enterprise_employees.find_one({"email": email})
-    
-    if existing:
-        # Update existing user
-        await db.enterprise_employees.update_one(
-            {"email": email},
-            {"$set": {
-                "password_hash": hash_password(data.password),
-                "status": "active",
-                "is_active": True
-            }}
-        )
-        return {"success": True, "message": "CEO user updated", "action": "updated"}
-    
-    # Create new CEO user
-    ceo_user = {
-        "employee_id": "emp_superadmin001",
-        "email": email,
-        "name": "CEO ManoProtect",
-        "role": "super_admin",
-        "department": "Dirección",
-        "phone": "+34601510950",
-        "password_hash": hash_password(data.password),
-        "status": "active",
-        "is_active": True,
-        "two_factor_enabled": False,
-        "permissions": ["all"],
-        "created_at": datetime.now(timezone.utc),
-        "created_by": "system_init"
-    }
-    
-    await db.enterprise_employees.insert_one(ceo_user)
-    
-    return {"success": True, "message": "CEO user created", "action": "created"}
+    raise HTTPException(
+        status_code=403, 
+        detail="Este endpoint ha sido deshabilitado por seguridad. El usuario CEO ya fue inicializado."
+    )
 
 @router.get("/auth/me")
 async def get_current_user(request: Request, enterprise_session: Optional[str] = Cookie(None)):
