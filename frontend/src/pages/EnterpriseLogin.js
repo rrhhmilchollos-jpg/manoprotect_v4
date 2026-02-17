@@ -351,8 +351,8 @@ const EnterpriseLogin = () => {
                   <Phone className="w-5 h-5 text-emerald-400" />
                   <div>
                     <p className="text-slate-400 text-xs">Teléfono</p>
-                    <a href="tel:+34900123456" className="text-white hover:text-emerald-300">
-                      +34 900 123 456
+                    <a href="tel:+34601510950" className="text-white hover:text-emerald-300">
+                      +34 601 510 950
                     </a>
                   </div>
                 </div>
