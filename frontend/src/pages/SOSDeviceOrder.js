@@ -97,9 +97,79 @@ export default function SOSDeviceOrder() {
   const [activeImage, setActiveImage] = useState('front');
   const [loading, setLoading] = useState(false);
   
+  // Verification code system
+  const [verificationCode, setVerificationCode] = useState('');
+  const [codeVerified, setCodeVerified] = useState(false);
+  const [codeInfo, setCodeInfo] = useState(null);
+  const [verifyingCode, setVerifyingCode] = useState(false);
+  const [checkingUserCode, setCheckingUserCode] = useState(true);
+  
   // Check if user is in trial period
   const isInTrialPeriod = user?.subscription_status === 'trial' || user?.is_trial === true;
   const hasPaidSubscription = user?.subscription_status === 'active' && !user?.is_trial;
+  
+  // Check if user already has a verification code
+  useEffect(() => {
+    const checkUserCode = async () => {
+      if (!user?.email) {
+        setCheckingUserCode(false);
+        return;
+      }
+      
+      try {
+        const res = await fetch(`${API}/api/payments/device/my-code?email=${encodeURIComponent(user.email)}`);
+        const data = await res.json();
+        
+        if (data.has_code && data.status === 'active' && data.remaining > 0) {
+          setVerificationCode(data.code);
+          setCodeVerified(true);
+          setCodeInfo(data);
+        }
+      } catch (err) {
+        console.error('Error checking user code:', err);
+      } finally {
+        setCheckingUserCode(false);
+      }
+    };
+    
+    checkUserCode();
+  }, [user?.email]);
+  
+  // Verify code function
+  const handleVerifyCode = async () => {
+    if (!verificationCode.trim()) {
+      toast.error('Introduce un código de verificación');
+      return;
+    }
+    
+    setVerifyingCode(true);
+    try {
+      const res = await fetch(`${API}/api/payments/device/verify-code`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          code: verificationCode.toUpperCase().trim(),
+          user_email: user?.email || ''
+        })
+      });
+      
+      const data = await res.json();
+      
+      if (data.valid) {
+        setCodeVerified(true);
+        setCodeInfo(data);
+        toast.success('¡Código válido! Puedes solicitar tu dispositivo.');
+      } else {
+        setCodeVerified(false);
+        setCodeInfo(null);
+        toast.error(data.error || 'Código no válido');
+      }
+    } catch (err) {
+      toast.error('Error verificando el código');
+    } finally {
+      setVerifyingCode(false);
+    }
+  };
   
   // Shipping info
   const [shippingInfo, setShippingInfo] = useState({
