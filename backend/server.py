@@ -342,6 +342,18 @@ init_employee_email(email_service)
 from routes.password_recovery_routes import router as recovery_router, set_database as init_recovery
 init_recovery(db)
 
+# Employee Portal Extended Modules
+from routes.employee_absences_routes import router as absences_router, set_database as init_absences
+from routes.employee_payslips_routes import router as payslips_router, set_database as init_payslips
+from routes.employee_documents_routes import router as documents_router, set_database as init_documents
+from routes.employee_notifications_routes import router as emp_notifications_router, set_database as init_emp_notifications
+from routes.employee_holidays_routes import router as holidays_router, set_database as init_holidays
+init_absences(db)
+init_payslips(db)
+init_documents(db)
+init_emp_notifications(db)
+init_holidays(db)
+
 # Banking and Compliance services - RESERVED for ManoBank.es
 # from services.compliance_service import init_compliance_service
 # from routes.compliance_routes import router as compliance_router, init_compliance_routes
