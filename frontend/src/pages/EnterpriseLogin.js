@@ -302,10 +302,10 @@ const EnterpriseLogin = () => {
               <p className="text-center text-slate-500 text-sm">
                 ¿Olvidaste tu contraseña?{' '}
                 <button 
-                  onClick={() => setShowITModal(true)}
+                  onClick={() => navigate('/empleados/recuperar-password')}
                   className={`hover:underline ${isAdminSubdomain ? 'text-emerald-400 hover:text-emerald-300' : 'text-indigo-400 hover:text-indigo-300'}`}
                 >
-                  Contacta con IT
+                  Recuperar acceso
                 </button>
               </p>
             </div>
