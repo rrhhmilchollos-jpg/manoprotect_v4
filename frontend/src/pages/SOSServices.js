@@ -921,6 +921,7 @@ export default function SOSServices() {
                       </>
                     )}
                   </Button>
+                  </>
                   )}
 
                   {/* Show subscribe prompt if no code */}
