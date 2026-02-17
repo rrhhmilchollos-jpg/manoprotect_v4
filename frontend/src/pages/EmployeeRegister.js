@@ -38,7 +38,7 @@ const EmployeeRegister = () => {
       }
 
       try {
-        const response = await fetch(`${API}/api/employee-portal/verify-invite/${token}`);
+        const response = await fetch(`${API}/api/enterprise/invites/verify/${token}`);
         const data = await response.json();
 
         if (!response.ok) {
@@ -72,12 +72,12 @@ const EmployeeRegister = () => {
     setLoading(true);
 
     try {
-      const response = await fetch(`${API}/api/employee-portal/register`, {
+      const response = await fetch(`${API}/api/enterprise/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
         body: JSON.stringify({
-          token,
+          invite_code: token,
           password: formData.password,
           phone: formData.phone || null
         })
