@@ -3,7 +3,7 @@
  * Professional, organized footer with clear hierarchy
  */
 import { Link } from 'react-router-dom';
-import { Shield, Phone, Mail, MapPin, Lock, CreditCard, Award, Smartphone } from 'lucide-react';
+import { Shield, Phone, Mail, MapPin, Lock, CreditCard, Award, Smartphone, Truck } from 'lucide-react';
 
 const LOGO_URL = '/manoprotect_logo.webp';
 
@@ -148,8 +148,33 @@ const LandingFooter = () => {
           </div>
         </div>
 
-        {/* Trust Badges Section */}
+        {/* Customer Trust Badges Section */}
         <div className="py-8 border-b border-slate-800">
+          <div className="flex flex-wrap items-center justify-center gap-6 md:gap-10">
+            {/* Customer Promise Badges */}
+            <div className="flex items-center gap-3 bg-emerald-500/10 px-4 py-2 rounded-full">
+              <div className="w-8 h-8 bg-emerald-500 rounded-full flex items-center justify-center">
+                <Shield className="w-4 h-4 text-white" />
+              </div>
+              <span className="text-sm font-bold text-emerald-400">100% Gratis</span>
+            </div>
+            <div className="flex items-center gap-3 bg-blue-500/10 px-4 py-2 rounded-full">
+              <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
+                <Truck className="w-4 h-4 text-white" />
+              </div>
+              <span className="text-sm font-bold text-blue-400">Envío 24-48h</span>
+            </div>
+            <div className="flex items-center gap-3 bg-amber-500/10 px-4 py-2 rounded-full">
+              <div className="w-8 h-8 bg-amber-500 rounded-full flex items-center justify-center">
+                <Award className="w-4 h-4 text-white" />
+              </div>
+              <span className="text-sm font-bold text-amber-400">Garantía 2 años</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Security Trust Badges Section */}
+        <div className="py-6 border-b border-slate-800">
           <div className="flex flex-wrap items-center justify-center gap-8">
             <div className="flex items-center gap-2 text-slate-400">
               <div className="w-8 h-8 bg-slate-800 rounded-lg flex items-center justify-center">
