@@ -3005,6 +3005,28 @@ logger = logging.getLogger(__name__)
 
 
 # ============================================
+# STARTUP: Initialize Cron Jobs
+# ============================================
+@app.on_event("startup")
+async def start_cron_jobs():
+    """Start scheduled cron jobs for subscription management"""
+    try:
+        from services.cron_jobs import start_scheduler
+        start_scheduler()
+        print("✅ Cron jobs scheduler started")
+    except Exception as e:
+        print(f"⚠️ Could not start cron jobs: {e}")
+
+@app.on_event("shutdown")
+async def stop_cron_jobs():
+    """Stop scheduled cron jobs on shutdown"""
+    try:
+        from services.cron_jobs import stop_scheduler
+        stop_scheduler()
+    except Exception:
+        pass
+
+# ============================================
 # STARTUP: Initialize Superadmins
 # ============================================
 @app.on_event("startup")
