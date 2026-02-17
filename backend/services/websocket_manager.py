@@ -459,6 +459,52 @@ async def send_sos_to_family(user_id: str, user_name: str, alert_data: dict):
     # Notify family
     return await notify_family_sos(user_id, alert_data)
 
+# ============================================
+# EMPLOYEE PORTAL NOTIFICATIONS
+# ============================================
+
+async def notify_employee(employee_id: str, notification_type: str, title: str, message: str, data: dict = None):
+    """Send real-time notification to a specific employee"""
+    enterprise_id = f"enterprise_{employee_id}"
+    
+    if enterprise_id in active_connections:
+        notification_data = {
+            'type': notification_type,
+            'title': title,
+            'message': message,
+            'data': data or {},
+            'timestamp': datetime.now(timezone.utc).isoformat()
+        }
+        
+        for sid in active_connections[enterprise_id]:
+            await sio.emit('employee_notification', notification_data, to=sid)
+            print(f"[WS] Notification sent to employee {employee_id}: {title}")
+        return True
+    return False
+
+async def notify_all_admins(notification_type: str, title: str, message: str, data: dict = None):
+    """Send real-time notification to all admin employees"""
+    notified = 0
+    
+    for conn_id, sids in active_connections.items():
+        if conn_id.startswith('enterprise_'):
+            for sid in sids:
+                info = connection_info.get(sid, {})
+                if info.get('is_enterprise') and info.get('role') in ['super_admin', 'admin', 'ceo']:
+                    notification_data = {
+                        'type': notification_type,
+                        'title': title,
+                        'message': message,
+                        'data': data or {},
+                        'timestamp': datetime.now(timezone.utc).isoformat()
+                    }
+                    await sio.emit('employee_notification', notification_data, to=sid)
+                    notified += 1
+    
+    if notified > 0:
+        print(f"[WS] Admin notification sent to {notified} employees: {title}")
+    return notified
+
 # Get Socket.IO ASGI app
 def get_socketio_app():
     """Return ASGI app for Socket.IO"""
