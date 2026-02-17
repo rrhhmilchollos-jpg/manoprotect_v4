@@ -33,26 +33,23 @@ db = client[DB_NAME]
 # ==================== PRICING PACKAGES ====================
 # SECURITY: All prices defined server-side only
 
-# Shipping costs scale with quantity
+# Shipping costs - AHORA GRATIS
 SHIPPING_COSTS = {
-    1: 4.95,
-    2: 6.95,
-    3: 8.95,
-    4: 10.95,
-    5: 12.95,
-    6: 14.95,
-    7: 16.95,
-    8: 18.95,
-    9: 20.95,
-    10: 22.95
+    1: 0,
+    2: 0,
+    3: 0,
+    4: 0,
+    5: 0,
+    6: 0,
+    7: 0,
+    8: 0,
+    9: 0,
+    10: 0
 }
 
 def get_shipping_cost(quantity: int) -> float:
-    """Get shipping cost based on quantity - escalates with more devices"""
-    if quantity in SHIPPING_COSTS:
-        return SHIPPING_COSTS[quantity]
-    # For quantities > 10, use the max + extra per device
-    return SHIPPING_COSTS[10] + (quantity - 10) * 2.0
+    """Get shipping cost based on quantity - NOW FREE"""
+    return 0  # Envío GRATIS
 
 SUBSCRIPTION_PLANS = {
     "individual": {
