@@ -374,23 +374,65 @@ const Pricing = () => {
           })}
         </div>
 
-        {/* Trust Badges */}
-        <div className="flex flex-wrap items-center justify-center gap-8 mb-20 py-8 border-y border-slate-200">
-          <div className="flex items-center gap-2 text-slate-600">
-            <Check className="w-5 h-5 text-emerald-500" />
-            <span className="text-sm font-medium">Sin permanencia</span>
+        {/* Trust Badges - Enterprise Grade Security */}
+        <div className="mb-20 py-10 bg-gradient-to-br from-slate-50 to-blue-50/30 rounded-3xl border border-slate-200">
+          <div className="text-center mb-6">
+            <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Seguridad de nivel bancario</p>
+            <p className="text-sm text-slate-600">Tu información está protegida con los más altos estándares</p>
           </div>
-          <div className="flex items-center gap-2 text-slate-600">
-            <Check className="w-5 h-5 text-emerald-500" />
-            <span className="text-sm font-medium">Garantía 7 días</span>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 px-6">
+            <div className="flex flex-col items-center text-center p-4">
+              <div className="w-14 h-14 bg-emerald-100 rounded-2xl flex items-center justify-center mb-3 shadow-sm">
+                <svg className="w-7 h-7 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                </svg>
+              </div>
+              <p className="font-bold text-slate-900 text-sm">SSL 256-bit</p>
+              <p className="text-xs text-slate-500">Encriptación bancaria</p>
+            </div>
+            <div className="flex flex-col items-center text-center p-4">
+              <div className="w-14 h-14 bg-blue-100 rounded-2xl flex items-center justify-center mb-3 shadow-sm">
+                <svg className="w-7 h-7 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+                </svg>
+              </div>
+              <p className="font-bold text-slate-900 text-sm">PCI DSS</p>
+              <p className="text-xs text-slate-500">Pagos certificados</p>
+            </div>
+            <div className="flex flex-col items-center text-center p-4">
+              <div className="w-14 h-14 bg-violet-100 rounded-2xl flex items-center justify-center mb-3 shadow-sm">
+                <Shield className="w-7 h-7 text-violet-600" />
+              </div>
+              <p className="font-bold text-slate-900 text-sm">RGPD</p>
+              <p className="text-xs text-slate-500">Datos protegidos</p>
+            </div>
+            <div className="flex flex-col items-center text-center p-4">
+              <div className="w-14 h-14 bg-amber-100 rounded-2xl flex items-center justify-center mb-3 shadow-sm">
+                <svg className="w-7 h-7 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
+                </svg>
+              </div>
+              <p className="font-bold text-slate-900 text-sm">3D Secure</p>
+              <p className="text-xs text-slate-500">Verificación bancaria</p>
+            </div>
           </div>
-          <div className="flex items-center gap-2 text-slate-600">
-            <Check className="w-5 h-5 text-emerald-500" />
-            <span className="text-sm font-medium">Pago seguro con Stripe</span>
-          </div>
-          <div className="flex items-center gap-2 text-slate-600">
-            <Check className="w-5 h-5 text-emerald-500" />
-            <span className="text-sm font-medium">Soporte en español</span>
+          <div className="flex flex-wrap items-center justify-center gap-6 mt-6 pt-6 border-t border-slate-200 mx-6">
+            <div className="flex items-center gap-2 text-slate-600">
+              <Check className="w-4 h-4 text-emerald-500" />
+              <span className="text-sm">Sin permanencia</span>
+            </div>
+            <div className="flex items-center gap-2 text-slate-600">
+              <Check className="w-4 h-4 text-emerald-500" />
+              <span className="text-sm">Garantía 14 días</span>
+            </div>
+            <div className="flex items-center gap-2 text-slate-600">
+              <Check className="w-4 h-4 text-emerald-500" />
+              <span className="text-sm">Procesado por Stripe</span>
+            </div>
+            <div className="flex items-center gap-2 text-slate-600">
+              <Check className="w-4 h-4 text-emerald-500" />
+              <span className="text-sm">Soporte en español 24/7</span>
+            </div>
           </div>
         </div>
 
