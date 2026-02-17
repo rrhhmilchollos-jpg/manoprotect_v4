@@ -33,12 +33,12 @@ const LegalNotice = () => {
               1. Datos Identificativos
             </h2>
             <div className="bg-indigo-50 p-6 rounded-xl space-y-3">
-              <p><strong>Denominación Social:</strong> STARTBOOKING SL</p>
+              <p><strong>Denominación Social:</strong> ManoProtect S.L.</p>
               <p><strong>CIF:</strong> B19427723</p>
               <p><strong>Domicilio Social:</strong> España</p>
               <p><strong>Email de contacto:</strong> info@manoprotect.com</p>
               <p><strong>Teléfono:</strong> +34 601 510 950</p>
-              <p><strong>Inscripción:</strong> Inscrita en el Registro Mercantil de Valencia, Tomo XXXX, Folio XXX, Hoja V-XXXXX</p>
+              <p><strong>Inscripción:</strong> Inscrita en el Registro Mercantil de Valencia</p>
             </div>
           </section>
 
