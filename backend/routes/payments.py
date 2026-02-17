@@ -888,19 +888,54 @@ async def stripe_webhook(request: Request):
         metadata = session.get("metadata", {})
         
         # ========== PREPAID CARD VALIDATION ==========
-        # Check if we need to validate the card type
-        if metadata.get("reject_prepaid") == "true" and session.get("payment_method"):
-            try:
-                pm = stripe.PaymentMethod.retrieve(session["payment_method"])
-                if pm.card and pm.card.funding == "prepaid":
-                    # Cancel the subscription immediately
-                    if session.get("subscription"):
-                        stripe.Subscription.delete(session["subscription"])
-                    print(f"[WEBHOOK] REJECTED PREPAID CARD for session {session['id']}")
-                    # TODO: Send email to user about rejected prepaid card
-                    return {"status": "rejected_prepaid_card"}
-            except Exception as e:
-                print(f"[WEBHOOK] Error checking card type: {e}")
+        # CRITICAL: Reject prepaid cards immediately
+        if metadata.get("reject_prepaid") == "true":
+            payment_method_id = session.get("payment_method")
+            subscription_id = session.get("subscription")
+            
+            if payment_method_id:
+                try:
+                    pm = stripe.PaymentMethod.retrieve(payment_method_id)
+                    if pm.card and pm.card.funding == "prepaid":
+                        # ===== PREPAID CARD DETECTED - CANCEL EVERYTHING =====
+                        print(f"[WEBHOOK] ❌ PREPAID CARD REJECTED for session {session['id']}")
+                        print(f"[WEBHOOK] Card brand: {pm.card.brand}, last4: {pm.card.last4}")
+                        
+                        # Cancel the subscription immediately
+                        if subscription_id:
+                            try:
+                                stripe.Subscription.delete(subscription_id)
+                                print(f"[WEBHOOK] Subscription {subscription_id} cancelled due to prepaid card")
+                            except Exception as cancel_err:
+                                print(f"[WEBHOOK] Error cancelling subscription: {cancel_err}")
+                        
+                        # Refund any charge if made
+                        if session.get("payment_intent"):
+                            try:
+                                stripe.Refund.create(payment_intent=session["payment_intent"])
+                                print(f"[WEBHOOK] Refund created for payment intent {session['payment_intent']}")
+                            except Exception as refund_err:
+                                print(f"[WEBHOOK] Error creating refund: {refund_err}")
+                        
+                        # Log the rejected attempt
+                        db.rejected_cards.insert_one({
+                            "session_id": session["id"],
+                            "customer_email": session.get("customer_email"),
+                            "card_brand": pm.card.brand,
+                            "card_last4": pm.card.last4,
+                            "card_funding": pm.card.funding,
+                            "reason": "prepaid_card_not_allowed",
+                            "rejected_at": datetime.now(timezone.utc).isoformat()
+                        })
+                        
+                        return {
+                            "status": "rejected",
+                            "reason": "prepaid_card",
+                            "message": "Las tarjetas prepago no están permitidas. Use una tarjeta de débito o crédito."
+                        }
+                        
+                except Exception as e:
+                    print(f"[WEBHOOK] Error checking card type: {e}")
         
         if metadata.get("type") == "device_order":
             db.payment_transactions.update_one(
