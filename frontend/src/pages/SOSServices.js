@@ -856,6 +856,7 @@ export default function SOSServices() {
 
                   {/* Shipping Form - Only show if code is verified */}
                   {codeVerified && (
+                  <>
                   <Card>
                     <CardHeader>
                       <CardTitle className="flex items-center gap-2">
