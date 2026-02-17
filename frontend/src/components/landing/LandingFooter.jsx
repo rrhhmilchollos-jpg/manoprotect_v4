@@ -7,9 +7,9 @@ import { Shield, Phone, Mail, MapPin, Lock, CreditCard, Award, Smartphone } from
 
 const LOGO_URL = '/manoprotect_logo.webp';
 
-// App Store URLs - Update with actual links
-const PLAY_STORE_URL = 'https://play.google.com/store/apps/details?id=com.manoprotect.app';
-const APP_STORE_URL = 'https://apps.apple.com/es/app/manoprotect/id123456789'; // Placeholder until iOS app is published
+// App Store URLs
+const PLAY_STORE_URL = 'https://play.google.com/store/apps/details?id=com.manoprotect.www.twa';
+const APP_STORE_URL = 'https://apps.apple.com/es/app/manoprotect/id123456789'; // Placeholder - iOS app coming soon
 
 const LandingFooter = () => {
   return (
