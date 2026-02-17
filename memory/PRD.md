@@ -24,28 +24,40 @@ ManoProtect es una plataforma integral de protección contra fraudes digitales p
 
 2. **Planes de Pago (7 días gratis CON tarjeta obligatoria)**:
    - Tarjeta de débito/crédito OBLIGATORIA
-   - NO se aceptan tarjetas prepago (validación en Stripe)
-   - Verificación 3D Secure obligatoria
+   - **NO SE ACEPTAN TARJETAS PREPAGO** - Rechazo automático en Stripe
+   - Verificación 3D Secure obligatoria para TODAS las tarjetas
    - Cobro automático al terminar trial si no cancela
+   - Dirección de facturación y teléfono requeridos
 
 3. **Sistema de Bloqueo**:
    - Bloqueo por email, IP y device_id
    - Segunda oportunidad única (24 horas para pagar)
    - Bloqueo permanente si no convierte
    - Eliminación automática de cuenta
+   - Registro de tarjetas rechazadas en `rejected_cards`
+
+4. **Cron Jobs Automáticos** (`/backend/services/cron_jobs.py`):
+   - `process_expired_trials`: Cada hora verifica trials expirados
+   - `send_trial_reminders`: Diario a las 9 AM (pendiente implementar emails)
+   - `cleanup_old_sessions`: Diario a las 3 AM
 
 **Endpoints nuevos:**
 - `POST /api/subscription-manager/check-blocked` - Verificar bloqueo antes de registro
 - `GET /api/subscription-manager/trial-status/{user_id}` - Estado del trial
-- `POST /api/subscription-manager/process-expired-trials` - Cron para procesar trials expirados
+- `POST /api/subscription-manager/process-expired-trials` - Procesar trials expirados
 - `POST /api/subscription-manager/use-second-chance` - Usar segunda oportunidad
 - `POST /api/subscription-manager/validate-card` - Validar que no sea prepago
 - `GET /api/subscription-manager/stats` - Estadísticas de suscripciones
 
 **Modificaciones:**
 - `auth_routes.py`: Verifica bloqueo antes de permitir registro
-- `payments.py`: Rechaza tarjetas prepago, fuerza 3D Secure
+- `payments.py`: 
+  - Rechaza tarjetas prepago en webhook
+  - Fuerza 3D Secure para todas las tarjetas
+  - Custom message: "Solo aceptamos tarjetas de débito o crédito. Las tarjetas prepago serán rechazadas."
+  - Reembolso automático si se detecta prepago después del pago
 - `Pricing.js`: UI actualizada con mensajes claros por plan
+- `server.py`: Integración de cron jobs en startup/shutdown
 
 ### WebSocket para Notificaciones del Portal de Empleados - IMPLEMENTADO ✅
 - Funciones `notify_employee()` y `notify_all_admins()` añadidas a `/backend/services/websocket_manager.py`
