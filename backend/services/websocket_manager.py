@@ -5,11 +5,23 @@ Handles real-time communication between users and their family members
 import socketio
 from datetime import datetime, timezone
 import json
+import os
 
-# Create Socket.IO server with CORS
+# Get allowed origins for CORS
+cors_origins = [
+    "http://localhost:3000",
+    "http://localhost:3001",
+    "https://manoprotect.com",
+    "https://www.manoprotect.com",
+    "https://admin.manoprotect.com",
+    "https://staff-connect-22.preview.emergentagent.com",
+    "https://protect-staging-1.preview.emergentagent.com",
+]
+
+# Create Socket.IO server with specific CORS origins
 sio = socketio.AsyncServer(
     async_mode='asgi',
-    cors_allowed_origins='*',
+    cors_allowed_origins=cors_origins,
     logger=False,
     engineio_logger=False
 )
