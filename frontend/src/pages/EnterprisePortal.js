@@ -346,6 +346,8 @@ const EnterprisePortal = () => {
       method: 'POST',
       credentials: 'include'
     });
+    // Clear stored session token
+    localStorage.removeItem('enterprise_session_token');
     navigate('/enterprise/login');
   };
 
