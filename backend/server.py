@@ -2966,18 +2966,26 @@ cors_origins_env = os.environ.get('CORS_ORIGINS', '')
 
 # Define allowed origins explicitly (wildcard '*' not compatible with credentials)
 allowed_origins = [
+    # Development
     "http://localhost:3000",
     "http://localhost:3001", 
     "http://localhost:8001",
     "http://localhost:8002",
+    # Production - Main Site
     "https://manoprotect.com",
     "https://www.manoprotect.com",
-    "https://admin.manoprotect.com",  # Employee Portal Subdomain (Production)
-    "https://staff-connect-22.preview.emergentagent.com",  # Employee Portal Preview (Emergent)
+    # Production - Employee Portal (admin.manoprotect.com)
+    "https://admin.manoprotect.com",
+    "https://www.admin.manoprotect.com",
+    # Production - API subdomain (if used)
+    "https://api.manoprotect.com",
+    # Emergent Previews
+    "https://staff-connect-22.preview.emergentagent.com",  # Employee Portal Preview
     "https://protect-staging-1.preview.emergentagent.com",  # Main App Preview
     "https://digital-guard-1.emergent.host",
-    "file://",  # Electron Desktop App
-    "null",     # Electron Desktop App (some versions send null origin)
+    # Desktop App
+    "file://",
+    "null",
 ]
 
 # Add any additional origins from environment
