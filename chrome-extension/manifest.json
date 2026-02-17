@@ -9,7 +9,7 @@
     "contextMenus"
   ],
   "host_permissions": [
-    "https://family-safety-stage.preview.emergentagent.com/*",
+    "https://mano-protect-preview.preview.emergentagent.com/*",
     "https://www.manoprotect.com/*"
   ],
   "action": {

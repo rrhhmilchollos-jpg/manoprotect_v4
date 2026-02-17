@@ -154,9 +154,9 @@ Para activar el subdominio `admin.manoprotect.com`:
 ### Preview (Actual)
 | Portal | URL |
 |--------|-----|
-| Landing Page | https://family-safety-stage.preview.emergentagent.com |
-| Portal Enterprise | https://family-safety-stage.preview.emergentagent.com/enterprise/login |
-| Portal Director | https://family-safety-stage.preview.emergentagent.com/employee-login |
+| Landing Page | https://mano-protect-preview.preview.emergentagent.com |
+| Portal Enterprise | https://mano-protect-preview.preview.emergentagent.com/enterprise/login |
+| Portal Director | https://mano-protect-preview.preview.emergentagent.com/employee-login |
 
 ---
 
