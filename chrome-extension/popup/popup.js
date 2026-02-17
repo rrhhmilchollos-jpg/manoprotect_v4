@@ -1,5 +1,5 @@
 // ManoProtect Shield - Popup Script
-const API_BASE = 'https://portal-test-2.preview.emergentagent.com/api';
+const API_BASE = 'https://family-safety-stage.preview.emergentagent.com/api';
 
 // DOM Elements
 const currentUrlEl = document.getElementById('current-url');
