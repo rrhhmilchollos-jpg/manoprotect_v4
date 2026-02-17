@@ -2,6 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '../components/ui/button';
 import SEO from '../components/SEO';
+import LandingFooter from '@/components/landing/LandingFooter';
 import { 
   Shield, CheckCircle, ArrowRight, Star, Users, 
   TrendingUp, Award, Zap, Lock, Phone, AlertTriangle,
@@ -325,31 +326,7 @@ const LandingPromo = () => {
       </section>
 
       {/* Footer */}
-      <footer className="py-12 px-4 bg-gray-900 text-gray-400">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-6">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center">
-                <Shield className="w-6 h-6 text-white" />
-              </div>
-              <span className="text-xl font-bold text-white">ManoProtect</span>
-            </div>
-            
-            <div className="flex items-center gap-6 text-sm">
-              <a href="/privacy-policy" className="hover:text-white">Privacidad</a>
-              <a href="/terms-of-service" className="hover:text-white">Términos</a>
-              <a href="mailto:info@manoprotect.com" className="hover:text-white flex items-center gap-2">
-                <Mail className="w-4 h-4" />
-                info@manoprotect.com
-              </a>
-            </div>
-          </div>
-          
-          <div className="border-t border-gray-800 mt-8 pt-8 text-center text-sm">
-            © 2026 ManoProtect · Protección Digital para Familias Españolas
-          </div>
-        </div>
-      </footer>
+      <LandingFooter />
     </div>
   );
 };

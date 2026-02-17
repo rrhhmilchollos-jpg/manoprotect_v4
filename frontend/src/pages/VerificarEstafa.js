@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from '../components/ui/button';
 import { toast } from 'sonner';
+import LandingFooter from '@/components/landing/LandingFooter';
 import { 
   Shield, Phone, Mail, AlertTriangle, CheckCircle, Search, 
   XCircle, Globe, Users, TrendingUp, Send, Landmark,
@@ -782,14 +783,7 @@ const VerificarEstafa = () => {
       </main>
 
       {/* Footer */}
-      <footer className="bg-slate-900 border-t border-slate-700 py-8 mt-12">
-        <div className="max-w-6xl mx-auto px-4 text-center text-slate-400 text-sm">
-          <p>© 2026 ManoProtect · Servicio de verificación antifraude</p>
-          <p className="mt-2">
-            Si has sido víctima de una estafa, denúncialo a la Policía Nacional o Guardia Civil
-          </p>
-        </div>
-      </footer>
+      <LandingFooter />
     </div>
   );
 };
