@@ -140,7 +140,7 @@ const LegalNotice = () => {
             <p className="text-zinc-600">
               El presente Aviso Legal se rige íntegramente por la legislación española. Para la 
               resolución de cualquier controversia que pudiera derivarse del acceso o uso de la 
-              Plataforma, STARTBOOKING SL y el Usuario acuerdan someterse expresamente a los 
+              Plataforma, ManoProtect S.L. y el Usuario acuerdan someterse expresamente a los 
               Juzgados y Tribunales de la ciudad de Valencia, con renuncia a cualquier otro fuero 
               que pudiera corresponderles.
             </p>
@@ -149,7 +149,7 @@ const LegalNotice = () => {
           <section className="space-y-4">
             <h2 className="text-xl font-bold text-zinc-900">10. Modificaciones</h2>
             <p className="text-zinc-600">
-              STARTBOOKING SL se reserva el derecho de modificar, en cualquier momento y sin 
+              ManoProtect S.L. se reserva el derecho de modificar, en cualquier momento y sin 
               previo aviso, la presentación y configuración de la Plataforma, así como el presente 
               Aviso Legal. Por ello, el Usuario debe leer atentamente este Aviso Legal cada vez 
               que acceda a la Plataforma.
