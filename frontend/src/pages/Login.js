@@ -137,6 +137,17 @@ const Login = () => {
               </div>
             </div>
 
+            {/* Forgot Password Link */}
+            <div className="text-right">
+              <Link 
+                to="/recuperar-password" 
+                className="text-sm text-indigo-600 hover:underline"
+                data-testid="forgot-password-link"
+              >
+                ¿Olvidaste tu contraseña?
+              </Link>
+            </div>
+
             <Button
               type="submit"
               className="w-full h-12 bg-indigo-600 hover:bg-indigo-700 text-white"
