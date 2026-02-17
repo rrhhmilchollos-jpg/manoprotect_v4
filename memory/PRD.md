@@ -11,6 +11,42 @@ ManoProtect es una plataforma integral de protección contra fraudes digitales p
 
 ## Actualizaciones Recientes (17 Feb 2026 - Sesión 3)
 
+### Sistema de Suscripción y Bloqueo - IMPLEMENTADO ✅
+**Nuevo módulo**: `/backend/routes/subscription_manager.py`
+
+**Características implementadas:**
+1. **Plan Básico (7 días gratis SIN tarjeta)**:
+   - Usuario se registra solo con email
+   - 7 días de prueba gratuita
+   - Si no pasa a plan de pago: período de gracia de 3 días más
+   - Si sigue sin pagar: bloqueo + UNA segunda oportunidad
+   - Si no convierte: bloqueo permanente (email, IP, device_id)
+
+2. **Planes de Pago (7 días gratis CON tarjeta obligatoria)**:
+   - Tarjeta de débito/crédito OBLIGATORIA
+   - NO se aceptan tarjetas prepago (validación en Stripe)
+   - Verificación 3D Secure obligatoria
+   - Cobro automático al terminar trial si no cancela
+
+3. **Sistema de Bloqueo**:
+   - Bloqueo por email, IP y device_id
+   - Segunda oportunidad única (24 horas para pagar)
+   - Bloqueo permanente si no convierte
+   - Eliminación automática de cuenta
+
+**Endpoints nuevos:**
+- `POST /api/subscription-manager/check-blocked` - Verificar bloqueo antes de registro
+- `GET /api/subscription-manager/trial-status/{user_id}` - Estado del trial
+- `POST /api/subscription-manager/process-expired-trials` - Cron para procesar trials expirados
+- `POST /api/subscription-manager/use-second-chance` - Usar segunda oportunidad
+- `POST /api/subscription-manager/validate-card` - Validar que no sea prepago
+- `GET /api/subscription-manager/stats` - Estadísticas de suscripciones
+
+**Modificaciones:**
+- `auth_routes.py`: Verifica bloqueo antes de permitir registro
+- `payments.py`: Rechaza tarjetas prepago, fuerza 3D Secure
+- `Pricing.js`: UI actualizada con mensajes claros por plan
+
 ### WebSocket para Notificaciones del Portal de Empleados - IMPLEMENTADO ✅
 - Funciones `notify_employee()` y `notify_all_admins()` añadidas a `/backend/services/websocket_manager.py`
 - Permite notificaciones en tiempo real para el portal de empleados
