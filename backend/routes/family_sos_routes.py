@@ -1828,6 +1828,7 @@ async def update_child_location(
     latitude: float,
     longitude: float,
     accuracy: float = 0,
+    address: str = "",
     request: Request = None,
     session_token: Optional[str] = Cookie(None)
 ):
@@ -1836,6 +1837,7 @@ async def update_child_location(
         "latitude": latitude,
         "longitude": longitude,
         "accuracy": accuracy,
+        "address": address,
         "google_maps_url": f"https://maps.google.com/?q={latitude},{longitude}",
         "timestamp": datetime.now(timezone.utc).isoformat()
     }
@@ -1859,6 +1861,169 @@ async def update_child_location(
     )
     
     return {"success": True}
+
+
+@router.post("/family/background-location")
+async def background_location_update(
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """
+    Receive background location updates from child's device
+    This endpoint is called automatically by the mobile app
+    """
+    try:
+        body = await request.json()
+    except:
+        raise HTTPException(status_code=400, detail="Invalid JSON")
+    
+    user_id = body.get("user_id")
+    latitude = body.get("latitude")
+    longitude = body.get("longitude")
+    accuracy = body.get("accuracy", 0)
+    battery_level = body.get("battery_level")
+    
+    if not user_id or latitude is None or longitude is None:
+        raise HTTPException(status_code=400, detail="Missing required fields: user_id, latitude, longitude")
+    
+    # Find child record linked to this user
+    user = await _db.users.find_one({"user_id": user_id}, {"_id": 0, "phone": 1, "email": 1})
+    
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    # Find child by phone or email
+    child = await _db.family_children.find_one({
+        "$or": [
+            {"phone": user.get("phone")},
+            {"email": user.get("email")}
+        ]
+    }, {"_id": 0, "child_id": 1})
+    
+    if not child:
+        return {"success": True, "message": "No family tracking configured for this user"}
+    
+    # Get address from coordinates using reverse geocoding
+    address = ""
+    try:
+        async with httpx.AsyncClient(timeout=5.0) as client:
+            geo_response = await client.get(
+                f"https://nominatim.openstreetmap.org/reverse",
+                params={
+                    "lat": latitude,
+                    "lon": longitude,
+                    "format": "json"
+                },
+                headers={"User-Agent": "ManoProtect/1.0"}
+            )
+            if geo_response.status_code == 200:
+                geo_data = geo_response.json()
+                address = geo_data.get("display_name", "")[:200]  # Limit address length
+    except:
+        pass  # Address is optional
+    
+    location_data = {
+        "latitude": latitude,
+        "longitude": longitude,
+        "accuracy": accuracy,
+        "address": address,
+        "google_maps_url": f"https://maps.google.com/?q={latitude},{longitude}",
+        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "battery_level": battery_level
+    }
+    
+    # Update child's last location
+    await _db.family_children.update_one(
+        {"child_id": child["child_id"]},
+        {"$set": {
+            "last_location": location_data, 
+            "device_linked": True,
+            "last_seen": datetime.now(timezone.utc).isoformat()
+        }}
+    )
+    
+    # Save to history (limit to avoid too many records)
+    # Only save if moved more than 50 meters from last saved position
+    last_history = await _db.location_history.find_one(
+        {"child_id": child["child_id"]},
+        {"_id": 0, "location": 1},
+        sort=[("created_at", -1)]
+    )
+    
+    should_save = True
+    if last_history and last_history.get("location"):
+        last_loc = last_history["location"]
+        # Simple distance check (not precise but fast)
+        lat_diff = abs(float(last_loc.get("latitude", 0)) - latitude)
+        lon_diff = abs(float(last_loc.get("longitude", 0)) - longitude)
+        # Roughly 50 meters
+        if lat_diff < 0.0005 and lon_diff < 0.0005:
+            should_save = False
+    
+    if should_save:
+        await _db.location_history.insert_one({
+            "history_id": f"hist_{uuid.uuid4().hex[:12]}",
+            "child_id": child["child_id"],
+            "location": location_data,
+            "source": "background",
+            "created_at": datetime.now(timezone.utc).isoformat()
+        })
+    
+    # Complete any pending location requests silently
+    await _db.location_requests.update_many(
+        {"child_id": child["child_id"], "status": "pending"},
+        {"$set": {"status": "completed", "location": location_data, "completed_at": datetime.now(timezone.utc).isoformat()}}
+    )
+    
+    return {
+        "success": True,
+        "child_id": child["child_id"],
+        "location_saved": should_save
+    }
+
+
+@router.get("/family/children/{child_id}/last-location")
+async def get_child_last_location(
+    child_id: str,
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Get the last known location of a child - for polling"""
+    user = await require_auth(request, session_token)
+    
+    child = await _db.family_children.find_one(
+        {"child_id": child_id, "family_owner_id": user.user_id},
+        {"_id": 0}
+    )
+    
+    if not child:
+        raise HTTPException(status_code=404, detail="Niño no encontrado en tu familia")
+    
+    last_location = child.get("last_location")
+    
+    if not last_location:
+        return {
+            "success": False,
+            "child_name": child.get("name"),
+            "location": None,
+            "message": "No hay ubicación disponible"
+        }
+    
+    return {
+        "success": True,
+        "child_name": child.get("name"),
+        "location": {
+            "latitude": last_location.get("latitude"),
+            "longitude": last_location.get("longitude"),
+            "accuracy": last_location.get("accuracy", 0),
+            "address": last_location.get("address", ""),
+            "google_maps_url": last_location.get("google_maps_url"),
+            "timestamp": last_location.get("timestamp"),
+            "battery_level": last_location.get("battery_level")
+        },
+        "last_seen": child.get("last_seen"),
+        "device_linked": child.get("device_linked", False)
+    }
 
 
 @router.get("/family/children/{child_id}/history")
