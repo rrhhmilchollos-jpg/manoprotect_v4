@@ -780,7 +780,82 @@ export default function SOSServices() {
                     </CardContent>
                   </Card>
 
-                  {/* Shipping Form */}
+                  {/* Verification Code Section */}
+                  <Card className={codeVerified ? 'border-emerald-500 bg-emerald-50' : 'border-orange-300 bg-orange-50'}>
+                    <CardHeader>
+                      <CardTitle className="flex items-center gap-2">
+                        {codeVerified ? (
+                          <>
+                            <CheckCircle className="w-5 h-5 text-emerald-600" />
+                            <span className="text-emerald-700">Código Verificado</span>
+                          </>
+                        ) : (
+                          <>
+                            <Lock className="w-5 h-5 text-orange-600" />
+                            <span className="text-orange-700">Código de Verificación Requerido</span>
+                          </>
+                        )}
+                      </CardTitle>
+                      {!codeVerified && (
+                        <CardDescription className="text-orange-600">
+                          Para obtener tu dispositivo SOS GRATIS, necesitas un código de verificación que se genera al suscribirte a un plan.
+                        </CardDescription>
+                      )}
+                    </CardHeader>
+                    <CardContent>
+                      {codeVerified ? (
+                        <div className="space-y-3">
+                          <div className="flex items-center gap-3">
+                            <Badge className="bg-emerald-600 text-white text-lg px-4 py-2">
+                              {verificationCode}
+                            </Badge>
+                            <span className="text-emerald-700 font-medium">✓ Código válido</span>
+                          </div>
+                          {codeInfo && (
+                            <div className="text-sm text-emerald-600 space-y-1">
+                              <p>• Plan: <strong>{codeInfo.plan_id}</strong></p>
+                              <p>• Dispositivos disponibles: <strong>{codeInfo.max_devices - codeInfo.devices_ordered}</strong> de {codeInfo.max_devices}</p>
+                              <p>• Envío: <strong className="text-emerald-700">GRATIS</strong></p>
+                            </div>
+                          )}
+                        </div>
+                      ) : (
+                        <div className="space-y-4">
+                          <div className="flex gap-2">
+                            <Input
+                              placeholder="Introduce tu código (ej: MP-XXXX-XXXX)"
+                              value={verificationCode}
+                              onChange={(e) => setVerificationCode(e.target.value.toUpperCase())}
+                              className="flex-1 text-center font-mono text-lg tracking-wider"
+                            />
+                            <Button 
+                              onClick={handleVerifyCode}
+                              disabled={checkingCode}
+                              className="bg-orange-600 hover:bg-orange-700"
+                            >
+                              {checkingCode ? 'Verificando...' : 'Verificar'}
+                            </Button>
+                          </div>
+                          <div className="bg-white rounded-lg p-4 border border-orange-200">
+                            <p className="text-sm text-orange-800 mb-3">
+                              <strong>¿No tienes código?</strong> Suscríbete a un plan para obtenerlo:
+                            </p>
+                            <Button 
+                              onClick={() => setActiveTab('planes')}
+                              variant="outline"
+                              className="w-full border-orange-500 text-orange-600 hover:bg-orange-100"
+                            >
+                              <CreditCard className="w-4 h-4 mr-2" />
+                              Ver Planes y Obtener Código
+                            </Button>
+                          </div>
+                        </div>
+                      )}
+                    </CardContent>
+                  </Card>
+
+                  {/* Shipping Form - Only show if code is verified */}
+                  {codeVerified && (
                   <Card>
                     <CardHeader>
                       <CardTitle className="flex items-center gap-2">
@@ -788,9 +863,9 @@ export default function SOSServices() {
                         Dirección de Envío
                       </CardTitle>
                       <CardDescription>
-                        <Badge className="bg-amber-100 text-amber-700">
-                          <Clock className="w-3 h-3 mr-1" />
-                          Envío Express 24-48h
+                        <Badge className="bg-emerald-100 text-emerald-700">
+                          <Gift className="w-3 h-3 mr-1" />
+                          Envío GRATIS con tu suscripción
                         </Badge>
                       </CardDescription>
                     </CardHeader>
