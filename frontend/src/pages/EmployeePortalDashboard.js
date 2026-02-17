@@ -180,7 +180,7 @@ const EmployeePortalDashboard = () => {
     );
   }
 
-  const isDirector = employee?.role === 'director' || employee?.role === 'superadmin';
+  const isDirector = ['director', 'superadmin', 'super_admin', 'admin', 'ceo'].includes(employee?.role);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
