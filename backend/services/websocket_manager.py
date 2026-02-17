@@ -520,4 +520,4 @@ async def notify_all_admins(notification_type: str, title: str, message: str, da
 # Get Socket.IO ASGI app
 def get_socketio_app():
     """Return ASGI app for Socket.IO"""
-    return socketio.ASGIApp(sio)
+    return socketio.ASGIApp(sio, socketio_path='socket.io')
