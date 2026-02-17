@@ -61,6 +61,40 @@ const LandingFooter = () => {
                 </div>
               </a>
             </div>
+
+            {/* App Download Badges */}
+            <div className="mt-6 pt-6 border-t border-slate-800">
+              <p className="text-xs text-slate-500 uppercase tracking-wider mb-3 flex items-center gap-2">
+                <Smartphone className="w-4 h-4" />
+                Descarga la App
+              </p>
+              <div className="flex flex-wrap gap-3">
+                <a 
+                  href={PLAY_STORE_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="transition-transform hover:scale-105"
+                >
+                  <img 
+                    src="https://play.google.com/intl/en_us/badges/static/images/badges/es_badge_web_generic.png" 
+                    alt="Disponible en Google Play"
+                    className="h-12 w-auto"
+                  />
+                </a>
+                <a 
+                  href={APP_STORE_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="transition-transform hover:scale-105"
+                >
+                  <img 
+                    src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" 
+                    alt="Descargar en App Store"
+                    className="h-12 w-auto rounded"
+                  />
+                </a>
+              </div>
+            </div>
           </div>
 
           {/* Links Columns */}
