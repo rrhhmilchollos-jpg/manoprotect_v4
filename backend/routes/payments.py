@@ -722,13 +722,56 @@ async def stripe_webhook(request: Request):
         
         elif metadata.get("type") == "subscription":
             user_email = session.get("customer_email")
+            plan_id = metadata.get("plan_id", "")
+            
             if user_email and session.get("subscription"):
                 create_or_update_subscription_db(
                     user_id=user_email,
-                    plan_id=metadata.get("plan_id"),
+                    plan_id=plan_id,
                     stripe_subscription_id=session["subscription"],
                     status="trialing"
                 )
+                
+                # Generate device verification code for the user
+                existing_code = db.device_verification_codes.find_one({
+                    "user_email": user_email,
+                    "status": "active"
+                })
+                
+                if not existing_code:
+                    code = create_device_verification_code(
+                        user_id=user_email,
+                        user_email=user_email,
+                        plan_id=plan_id,
+                        subscription_id=session["subscription"]
+                    )
+                    print(f"[WEBHOOK] Generated device code {code} for {user_email}")
+    
+    elif event["type"] == "invoice.paid":
+        # Also generate code when invoice is paid (for renewals or first payment after trial)
+        invoice = event["data"]["object"]
+        customer_email = invoice.get("customer_email")
+        subscription_id = invoice.get("subscription")
+        
+        if customer_email and subscription_id and invoice.get("paid"):
+            # Check if user already has an active code
+            existing = db.device_verification_codes.find_one({
+                "user_email": customer_email,
+                "status": "active"
+            })
+            
+            if not existing:
+                # Get plan info from subscription
+                sub = db.subscriptions.find_one({"stripe_subscription_id": subscription_id})
+                plan_id = sub.get("plan_id", "individual") if sub else "individual"
+                
+                code = create_device_verification_code(
+                    user_id=customer_email,
+                    user_email=customer_email,
+                    plan_id=plan_id,
+                    subscription_id=subscription_id
+                )
+                print(f"[WEBHOOK] Generated device code {code} for {customer_email} (invoice paid)")
     
     elif event["type"] == "customer.subscription.updated":
         subscription = event["data"]["object"]
