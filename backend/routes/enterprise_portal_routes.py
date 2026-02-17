@@ -1039,6 +1039,108 @@ async def delete_employee(
     
     return {"success": True, "message": "Empleado eliminado"}
 
+# ==================== INVITATIONS SYSTEM ====================
+
+class InviteCreate(BaseModel):
+    email: str
+    name: str
+    role: str = "employee"
+    department: str = ""
+
+@router.get("/invites")
+async def get_invites(
+    request: Request,
+    enterprise_session: Optional[str] = Cookie(None)
+):
+    """Get all pending invitations"""
+    current = await get_current_employee(request, enterprise_session)
+    
+    if not check_permission(current, "manage_employees"):
+        raise HTTPException(status_code=403, detail="Sin permisos")
+    
+    invites = await db.enterprise_invites.find(
+        {"status": "pending"},
+        {"_id": 0}
+    ).sort("created_at", -1).to_list(100)
+    
+    return {"invites": invites}
+
+@router.post("/invites")
+async def create_invite(
+    data: InviteCreate,
+    request: Request,
+    enterprise_session: Optional[str] = Cookie(None)
+):
+    """Create an invitation for a new employee"""
+    current = await get_current_employee(request, enterprise_session)
+    
+    if not check_permission(current, "manage_employees"):
+        raise HTTPException(status_code=403, detail="Sin permisos")
+    
+    # Check if email already exists
+    existing = await db.enterprise_employees.find_one({"email": data.email.lower()})
+    if existing:
+        raise HTTPException(status_code=400, detail="Este email ya está registrado como empleado")
+    
+    # Check if invite already exists
+    existing_invite = await db.enterprise_invites.find_one({
+        "email": data.email.lower(),
+        "status": "pending"
+    })
+    if existing_invite:
+        raise HTTPException(status_code=400, detail="Ya existe una invitación pendiente para este email")
+    
+    # Generate invite code
+    import secrets
+    invite_code = secrets.token_urlsafe(32)
+    
+    invite = {
+        "invite_id": generate_id("inv_"),
+        "email": data.email.lower(),
+        "name": data.name,
+        "role": data.role,
+        "department": data.department,
+        "invite_code": invite_code,
+        "status": "pending",
+        "created_by": current["employee_id"],
+        "created_at": datetime.now(timezone.utc).isoformat(),
+        "expires_at": (datetime.now(timezone.utc) + timedelta(days=7)).isoformat()
+    }
+    
+    await db.enterprise_invites.insert_one(invite)
+    
+    # Generate invite URL
+    base_url = str(request.base_url).rstrip('/')
+    invite_url = f"{base_url}/empleados/registro?invite={invite_code}"
+    
+    invite["invite_url"] = invite_url
+    del invite["_id"] if "_id" in invite else None
+    
+    return {
+        "success": True,
+        "invite": invite,
+        "invite_url": invite_url
+    }
+
+@router.delete("/invites/{invite_id}")
+async def delete_invite(
+    invite_id: str,
+    request: Request,
+    enterprise_session: Optional[str] = Cookie(None)
+):
+    """Delete/cancel an invitation"""
+    current = await get_current_employee(request, enterprise_session)
+    
+    if not check_permission(current, "manage_employees"):
+        raise HTTPException(status_code=403, detail="Sin permisos")
+    
+    result = await db.enterprise_invites.delete_one({"invite_id": invite_id})
+    
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Invitación no encontrada")
+    
+    return {"success": True, "message": "Invitación eliminada"}
+
 @router.get("/employees/{employee_id}/activity")
 async def get_employee_activity(
     employee_id: str,
