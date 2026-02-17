@@ -2914,6 +2914,13 @@ try:
 except Exception as e:
     print(f"⚠️ Enterprise Portal routes not loaded: {e}")
 
+# Password Recovery routes (Email + SMS)
+try:
+    api_router.include_router(recovery_router)
+    print("✅ Password Recovery routes loaded")
+except Exception as e:
+    print(f"⚠️ Password Recovery routes not loaded: {e}")
+
 app.include_router(api_router)
 app.include_router(public_router)
 
