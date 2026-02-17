@@ -70,14 +70,14 @@ const FeaturesGrid = () => {
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="text-center mb-16">
-          <span className="inline-block text-indigo-600 font-semibold text-sm uppercase tracking-wider mb-3">
+          <span className="inline-block text-emerald-600 font-semibold text-sm uppercase tracking-wider mb-3">
             Funcionalidades
           </span>
           <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 mb-4">
-            Protección completa para tu familia
+            Tu familia siempre localizada y protegida
           </h2>
           <p className="text-lg text-slate-600 max-w-2xl mx-auto">
-            Herramientas diseñadas para mantener seguros a los que más quieres
+            Localiza a tus seres queridos en tiempo real y recibe alertas SOS al instante. La tranquilidad de saber que están bien.
           </p>
         </div>
 
