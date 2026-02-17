@@ -2947,6 +2947,13 @@ try:
 except Exception as e:
     print(f"⚠️ Employee Portal Extended Modules not loaded: {e}")
 
+# Subscription Manager routes (Trial, Blocking, Card Validation)
+try:
+    api_router.include_router(subscription_manager_router)
+    print("✅ Subscription Manager loaded (Trial management, User blocking, Card validation)")
+except Exception as e:
+    print(f"⚠️ Subscription Manager not loaded: {e}")
+
 app.include_router(api_router)
 app.include_router(public_router)
 
