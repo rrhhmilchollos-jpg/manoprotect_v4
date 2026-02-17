@@ -2961,9 +2961,7 @@ except Exception as e:
 app.include_router(api_router)
 app.include_router(public_router)
 
-# Mount Socket.IO for real-time WebSocket communication
-app.mount('/ws', socket_app)
-print("✅ WebSocket server mounted at /ws")
+# Note: Socket.IO is mounted earlier in the file (after WebSocket manager init)
 
 # Configure CORS - read from environment for deployment flexibility
 # IMPORTANT: When using credentials, we cannot use wildcard '*' for origins
