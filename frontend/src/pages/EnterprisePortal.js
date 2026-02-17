@@ -352,6 +352,18 @@ const EnterprisePortal = () => {
     );
   }
 
+  // If not loading but no employee, redirect to login
+  if (!employee) {
+    return (
+      <div className="min-h-screen bg-slate-900 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin w-8 h-8 border-4 border-indigo-500 border-t-transparent rounded-full mx-auto mb-4"></div>
+          <p className="text-slate-400">Verificando sesión...</p>
+        </div>
+      </div>
+    );
+  }
+
   const menuItems = [
     { id: 'dashboard', label: 'Panel Principal', icon: BarChart3, permission: null },
     { id: 'employees', label: 'Empleados', icon: Users, permission: 'view_employees' },
