@@ -79,8 +79,9 @@ const EmployeePortalDashboard = () => {
 
     try {
       // Fetch stats
-      const statsRes = await fetch(`${API}/api/employee-portal/dashboard/stats`, {
-        credentials: 'include'
+      const statsRes = await fetch(`${API}/api/enterprise/dashboard/stats`, {
+        credentials: 'include',
+        headers: { 'X-Session-Token': localStorage.getItem('enterprise_session') }
       });
       if (statsRes.ok) {
         setStats(await statsRes.json());
