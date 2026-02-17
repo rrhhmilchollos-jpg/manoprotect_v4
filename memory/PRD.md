@@ -1,6 +1,6 @@
 # ManoProtect - Product Requirements Document
 
-## Última Actualización: 16 Febrero 2026
+## Última Actualización: 17 Febrero 2026
 
 ---
 
