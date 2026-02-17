@@ -9,6 +9,24 @@ ManoProtect es una plataforma integral de protección contra fraudes digitales p
 
 ---
 
+## Actualizaciones Recientes (17 Feb 2026 - Sesión 2)
+
+### Sistema de Verificación de Códigos SOS - VERIFICADO ✅
+- **Endpoint**: `POST /api/payments/device/verify-code`
+- **Fix aplicado**: Manejo correcto de timezone en comparación de fechas (MongoDB naive vs Python aware)
+- **Pruebas realizadas**:
+  - ✅ Código válido → Devuelve `valid: true` + info del plan
+  - ✅ Código expirado → Devuelve error "El código ha expirado"
+  - ✅ Código inexistente → Devuelve "Código no válido"
+
+### Badges de Descarga de App - COMPLETADO ✅
+- **Play Store**: `https://play.google.com/store/apps/details?id=com.manoprotect.www.twa`
+- **App Store**: Placeholder (iOS app coming soon)
+- **Ubicación**: Footer (`/components/landing/LandingFooter.jsx`)
+- **Diseño**: Badges oficiales con hover effect
+
+---
+
 ## Optimizaciones CRO Implementadas (17 Feb 2026)
 
 ### 1. Sistema de Diseño Premium
