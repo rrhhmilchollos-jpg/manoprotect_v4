@@ -1114,7 +1114,8 @@ async def create_invite(
     invite_url = f"{base_url}/empleados/registro?invite={invite_code}"
     
     invite["invite_url"] = invite_url
-    del invite["_id"] if "_id" in invite else None
+    if "_id" in invite:
+        del invite["_id"]
     
     return {
         "success": True,
