@@ -25,7 +25,7 @@ Todas las apps se conectan al mismo backend:
 
 | Entorno | URL |
 |---------|-----|
-| Preview | https://protection-hub-6.preview.emergentagent.com |
+| Preview | https://portal-test-2.preview.emergentagent.com |
 | Producción | [Tu dominio de producción] |
 
 ---
