@@ -293,6 +293,7 @@ Exportación de datos en formato CSV desde el Portal Enterprise.
 ## Backlog Pendiente
 
 ### P0 - Crítico (Bloqueados)
+- [x] **Pantalla blanca portal empleados** - SOLUCIONADO (17 Feb 2026) - Implementado respaldo de token en localStorage + soporte de header X-Session-Token
 - [ ] **2FA deshabilitado** - Requiere decisión del usuario (TOTP, SMS, o mantener deshabilitado)
 - [ ] **Subdominio admin.manoprotect.com** - SSL no configurado en Cloudflare (requiere acción del usuario)
 - [ ] **WhatsApp en producción** - Requiere registro WhatsApp Business en Twilio/Meta
