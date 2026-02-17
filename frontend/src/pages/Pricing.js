@@ -370,12 +370,12 @@ const Pricing = () => {
 
                   {/* CTA Button */}
                   <Button
-                    onClick={() => handleSubscribe(plan.id)}
+                    onClick={() => handleSubscribe(plan.id, plan.requiresCard)}
                     disabled={loadingPlan === plan.id}
                     className={`w-full h-12 rounded-xl font-semibold transition-all ${
                       plan.popular
                         ? 'bg-indigo-600 hover:bg-indigo-700 text-white shadow-lg shadow-indigo-200'
-                        : plan.id === 'free'
+                        : plan.id === 'basic-trial'
                           ? 'bg-slate-100 hover:bg-slate-200 text-slate-900'
                           : 'bg-emerald-600 hover:bg-emerald-700 text-white'
                     }`}
