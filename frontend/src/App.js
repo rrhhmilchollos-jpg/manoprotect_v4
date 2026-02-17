@@ -413,6 +413,10 @@ function AppRouter() {
           <Route path="/empresas" element={<EnterpriseLanding />} />
           <Route path="/b2b" element={<EnterpriseLanding />} />
           
+          {/* Employee Password Recovery */}
+          <Route path="/empleados/recuperar-password" element={<EmpleadoRecuperarPassword />} />
+          <Route path="/employee/recovery" element={<EmpleadoRecuperarPassword />} />
+          
           {/* Investor Routes */}
           <Route path="/investor/register" element={<InvestorRegister />} />
           <Route path="/investor/portal" element={<InvestorPortal />} />
