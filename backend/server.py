@@ -3151,7 +3151,7 @@ import socketio as socketio_module
 from services.websocket_manager import sio
 
 # Create combined ASGI app that handles both FastAPI and Socket.IO
-# The socketio_path must match what the client uses (default: 'socket.io')
-combined_app = socketio_module.ASGIApp(sio, other_asgi_app=app, socketio_path='socket.io')
+# Using '/api/socket.io' path so it goes through the Kubernetes ingress API route
+combined_app = socketio_module.ASGIApp(sio, other_asgi_app=app, socketio_path='api/socket.io')
 
-print("✅ Socket.IO configured at /socket.io")
+print("✅ Socket.IO configured at /api/socket.io")
