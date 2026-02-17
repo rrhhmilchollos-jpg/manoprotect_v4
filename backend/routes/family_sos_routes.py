@@ -1495,7 +1495,11 @@ async def locate_child(
     silent: bool = False,
     session_token: Optional[str] = Cookie(None)
 ):
-    """Request location of a child - sends push notification to get location"""
+    """
+    Request location of a child
+    - Normal mode: sends push notification to child's device asking for location
+    - Silent mode: returns last known location immediately without notifying the child
+    """
     user = await require_auth(request, session_token)
     features = get_plan_features_for_user(user)
     
@@ -1515,12 +1519,85 @@ async def locate_child(
     
     use_silent = silent if silent is not None else child.get("silent_mode", False)
     
+    # ==========================================
+    # SILENT MODE: Return last known location immediately
+    # ==========================================
+    if use_silent:
+        last_location = child.get("last_location")
+        
+        if last_location:
+            # Return last known location without notifying the child
+            return {
+                "success": True,
+                "mode": "silent",
+                "child_name": child.get("name"),
+                "location": {
+                    "latitude": last_location.get("latitude"),
+                    "longitude": last_location.get("longitude"),
+                    "accuracy": last_location.get("accuracy", 0),
+                    "address": last_location.get("address", ""),
+                    "google_maps_url": last_location.get("google_maps_url") or f"https://maps.google.com/?q={last_location.get('latitude')},{last_location.get('longitude')}",
+                    "timestamp": last_location.get("timestamp"),
+                    "is_last_known": True
+                },
+                "message": f"Última ubicación conocida de {child.get('name')}"
+            }
+        else:
+            # No location available, need to request but silently via background service
+            # Try to get location via WebSocket if device is online
+            child_user = await _db.users.find_one(
+                {"$or": [
+                    {"phone": child.get("phone")},
+                    {"email": child.get("email")}
+                ]},
+                {"_id": 0, "user_id": 1}
+            )
+            
+            if child_user:
+                # Check if device has recent activity (last 5 minutes)
+                recent_location = await _db.location_history.find_one(
+                    {
+                        "child_id": child_id,
+                        "created_at": {"$gte": (datetime.now(timezone.utc) - timedelta(minutes=5)).isoformat()}
+                    },
+                    {"_id": 0}
+                )
+                
+                if recent_location:
+                    loc = recent_location.get("location", {})
+                    return {
+                        "success": True,
+                        "mode": "silent",
+                        "child_name": child.get("name"),
+                        "location": {
+                            "latitude": loc.get("latitude"),
+                            "longitude": loc.get("longitude"),
+                            "accuracy": loc.get("accuracy", 0),
+                            "address": loc.get("address", ""),
+                            "google_maps_url": f"https://maps.google.com/?q={loc.get('latitude')},{loc.get('longitude')}",
+                            "timestamp": loc.get("timestamp") or recent_location.get("created_at"),
+                            "is_last_known": True
+                        },
+                        "message": f"Ubicación reciente de {child.get('name')}"
+                    }
+            
+            return {
+                "success": False,
+                "mode": "silent",
+                "child_name": child.get("name"),
+                "location": None,
+                "message": f"No hay ubicación disponible para {child.get('name')}. El dispositivo no ha compartido su ubicación recientemente. Active el seguimiento en segundo plano en su dispositivo."
+            }
+    
+    # ==========================================
+    # NORMAL MODE: Send notification to child
+    # ==========================================
     location_request = {
         "request_id": f"locreq_{uuid.uuid4().hex[:12]}",
         "child_id": child_id,
         "requester_id": user.user_id,
         "requester_name": user.name,
-        "silent_mode": use_silent,
+        "silent_mode": False,
         "status": "pending",
         "created_at": datetime.now(timezone.utc).isoformat()
     }
@@ -1551,14 +1628,14 @@ async def locate_child(
                 from services.emergency_notifications import send_fcm_high_priority
                 fcm_result = await send_fcm_high_priority(
                     fcm_tokens=[fcm_token["fcm_token"]],
-                    title="📍 Solicitud de Ubicación" if not use_silent else "📍",
-                    body=f"{user.name} necesita saber tu ubicación" if not use_silent else "Compartiendo ubicación...",
+                    title="📍 Solicitud de Ubicación",
+                    body=f"{user.name} necesita saber tu ubicación",
                     data={
                         "type": "location_request",
                         "request_id": location_request["request_id"],
                         "requester_name": user.name,
                         "requester_id": user.user_id,
-                        "silent": str(use_silent),
+                        "silent": "false",
                         "action": "share_location"
                     }
                 )
@@ -1568,46 +1645,48 @@ async def locate_child(
                 print(f"FCM error: {e}")
     
     # Send SMS as backup with location request link
-    if child.get("phone") and not use_silent:
+    if child.get("phone") and not fcm_sent:
         try:
-            from services.infobip_sms import send_sms
-            sms_result = await send_sms(
-                phone_number=child["phone"],
-                message=f"ManoProtect: {user.name} solicita tu ubicacion. Abre la app para compartirla: {os.environ.get('FRONTEND_URL', 'https://manoprotect.com')}/compartir-ubicacion?req={location_request['request_id']}"
-            )
-            if sms_result.get("success"):
-                sms_sent = True
+            from services.infobip_sms import send_sms, is_configured
+            if is_configured():
+                sms_result = await send_sms(
+                    phone_number=child["phone"],
+                    message=f"ManoProtect: {user.name} solicita tu ubicacion. Abre la app para compartirla: {os.environ.get('FRONTEND_URL', 'https://manoprotect.com')}/compartir-ubicacion?req={location_request['request_id']}"
+                )
+                if sms_result.get("success"):
+                    sms_sent = True
+                else:
+                    print(f"[Locate] SMS error: {sms_result.get('error')}")
         except Exception as e:
             print(f"SMS error: {e}")
     
     # Create in-app notification
-    if not use_silent:
-        notification = {
-            "notification_id": f"notif_{uuid.uuid4().hex[:12]}",
-            "target_phone": child.get("phone"),
-            "user_id": child_user["user_id"] if child_user else None,
-            "type": "location_request",
-            "title": "📍 Solicitud de ubicación",
-            "message": f"{user.name} necesita saber dónde estás. Pulsa para compartir tu ubicación.",
-            "data": {
-                "request_id": location_request["request_id"],
-                "action": "share_location"
-            },
-            "read": False,
-            "created_at": datetime.now(timezone.utc).isoformat()
-        }
-        await _db.notifications.insert_one(notification)
+    notification = {
+        "notification_id": f"notif_{uuid.uuid4().hex[:12]}",
+        "target_phone": child.get("phone"),
+        "user_id": child_user["user_id"] if child_user else None,
+        "type": "location_request",
+        "title": "📍 Solicitud de ubicación",
+        "message": f"{user.name} necesita saber dónde estás. Pulsa para compartir tu ubicación.",
+        "data": {
+            "request_id": location_request["request_id"],
+            "action": "share_location"
+        },
+        "read": False,
+        "created_at": datetime.now(timezone.utc).isoformat()
+    }
+    await _db.notifications.insert_one(notification)
     
     return {
         "success": True,
+        "mode": "request",
         "request_id": location_request["request_id"],
         "child_name": child.get("name"),
-        "silent_mode": use_silent,
         "fcm_sent": fcm_sent,
         "sms_sent": sms_sent,
         "message": f"Solicitud enviada a {child.get('name')}. " + 
-                   ("Recibirá una notificación push." if fcm_sent else "Se le ha enviado un SMS.") if not use_silent 
-                   else "Solicitando ubicación silenciosamente..."
+                   ("Recibirá una notificación push." if fcm_sent else 
+                    ("Se le ha enviado un SMS." if sms_sent else "Se ha creado una notificación en la app."))
     }
 
 
