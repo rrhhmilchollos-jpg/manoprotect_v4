@@ -354,6 +354,9 @@ init_documents(db)
 init_emp_notifications(db)
 init_holidays(db)
 
+# Subscription Manager (Trial management, blocking system)
+from routes.subscription_manager import router as subscription_manager_router
+
 # Banking and Compliance services - RESERVED for ManoBank.es
 # from services.compliance_service import init_compliance_service
 # from routes.compliance_routes import router as compliance_router, init_compliance_routes
