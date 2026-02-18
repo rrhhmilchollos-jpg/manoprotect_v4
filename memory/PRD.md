@@ -560,3 +560,31 @@ qrcode==8.2        # Generación de QR codes
 pillow==12.1.0     # Dependencia de qrcode
 stripe==14.1.0     # Pagos y reembolsos
 ```
+
+---
+
+## Actualización 18 Febrero 2026 - Rediseño Landing Page
+
+### Cambios Realizados:
+- **Landing Page completamente rediseñada** basada en la imagen proporcionada por el usuario
+- Diseño enfocado en GPS/Localizadores para familias
+- Estructura similar a la imagen de referencia:
+  - Hero con imagen de familia
+  - Badge "#1 en localizadores GPS para familias en España"
+  - Stats: "+2,000 familias protegidas"
+  - Logos de medios: EL PAÍS, ABC, LA RAZÓN, cuatro
+  - Sección "Localiza y Protege a tus Seres Queridos"
+  - Sección "Compra sin riesgos, tranquilidad garantizada"
+  - Testimonios de clientes
+  - Sección "Quiénes Somos"
+  - CTA final con botón COMPRAR GPS AHORA
+
+### Botones y Navegación:
+- VER GPS PARA FAMILIAS → /dispositivo-sos
+- CÓMO FUNCIONA → /como-funciona
+- MI CUENTA → /login
+- COMPRAR GPS AHORA → /dispositivo-sos
+- WhatsApp → wa.me/34601510950
+
+### Archivos Modificados:
+- /app/frontend/src/pages/LandingPage.js (rediseño completo)
