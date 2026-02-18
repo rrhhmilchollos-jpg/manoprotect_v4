@@ -578,46 +578,75 @@ export default function SOSServices() {
                 {/* Product Gallery with Dynamic Color Preview */}
                 <div className="space-y-4">
                   <div className="bg-white rounded-2xl p-6 shadow-lg relative overflow-hidden">
-                    {/* Main image - changes based on selected device style */}
+                    {/* Main image - changes based on selected COLOR */}
                     <div className="relative">
                       <img 
-                        src={DEVICE_STYLE_IMAGES[selectedDeviceStyle] || DEVICE_IMAGES.front} 
-                        alt={`ManoProtect SOS Button - Estilo ${selectedDeviceStyle}`}
-                        className="w-full h-auto rounded-xl"
+                        src={currentDeviceImage} 
+                        alt={`ManoProtect SOS Button - Color ${currentPreviewColorName}`}
+                        className="w-full h-auto rounded-xl transition-all duration-300"
+                        data-testid="device-preview-image"
                       />
-                      {/* Color overlay indicator */}
+                      {/* Device number badge */}
                       <div 
-                        className="absolute top-4 right-4 w-16 h-16 rounded-full border-4 border-white shadow-lg flex items-center justify-center"
-                        style={{ backgroundColor: currentPreviewColor }}
+                        className="absolute top-4 right-4 w-14 h-14 rounded-full border-4 border-white shadow-lg flex items-center justify-center bg-red-600"
                       >
-                        <span className="text-xs font-bold text-white drop-shadow">
+                        <span className="text-sm font-bold text-white">
                           #{previewColorIndex + 1}
                         </span>
                       </div>
-                      {/* Style badge */}
-                      <div className="absolute top-4 left-4 bg-white/90 backdrop-blur px-3 py-1 rounded-full shadow">
-                        <span className="text-sm font-semibold">
-                          {selectedDeviceStyle === 'juvenil' ? '🎨 Juvenil' : 
-                           selectedDeviceStyle === 'adulto' ? '💼 Adulto' : '🌿 Senior'}
-                        </span>
+                      {/* Color name badge */}
+                      <div 
+                        className="absolute bottom-4 left-4 px-4 py-2 rounded-full shadow-lg backdrop-blur-sm flex items-center gap-2"
+                        style={{ 
+                          backgroundColor: currentPreviewColor,
+                          color: ['#FEFEFA', '#F7E7CE', '#E6E6FA', '#98FF98', '#87CEEB', '#C0C0C0'].includes(currentPreviewColor) ? '#333' : '#fff'
+                        }}
+                      >
+                        <div className="w-4 h-4 rounded-full border-2 border-white/50" style={{ backgroundColor: currentPreviewColor }} />
+                        <span className="text-sm font-bold">{currentPreviewColorName}</span>
                       </div>
                     </div>
                     {/* Selected color indicator */}
                     <div className="mt-4 text-center">
                       <p className="text-sm text-zinc-600">
-                        Visualizando color del <strong>Dispositivo {previewColorIndex + 1}</strong>: 
-                        <span className="ml-2 px-2 py-1 rounded-full text-xs font-bold" style={{ backgroundColor: currentPreviewColor, color: currentPreviewColor === '#FEFEFA' || currentPreviewColor === '#F7E7CE' || currentPreviewColor === '#E6E6FA' || currentPreviewColor === '#98FF98' || currentPreviewColor === '#87CEEB' ? '#333' : '#fff' }}>
-                          {COLOR_OPTIONS.find(c => c.id === deviceColors[previewColorIndex])?.name}
-                        </span>
+                        👆 Selecciona un color abajo para previsualizar el dispositivo
                       </p>
                     </div>
                   </div>
-                  {/* Style preview thumbnails */}
-                  <div className="flex gap-3">
-                    {Object.entries(DEVICE_STYLE_IMAGES).map(([key, url]) => (
-                      <button
-                        key={key}
-                        onClick={() => setSelectedDeviceStyle(key)}
+                  
+                  {/* Color preview thumbnails - Quick selection */}
+                  <Card>
+                    <CardHeader className="pb-3">
+                      <CardTitle className="text-base flex items-center gap-2">
+                        <span className="text-lg">🎨</span> Vista Rápida de Colores
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="grid grid-cols-6 gap-2">
+                        {COLOR_OPTIONS.map((color) => (
+                          <button
+                            key={color.id}
+                            onClick={() => updateDeviceColor(previewColorIndex, color.id)}
+                            className={`relative p-1 rounded-lg border-2 transition-all hover:scale-105 ${
+                              currentPreviewColorId === color.id ? 'border-red-500 shadow-md ring-2 ring-red-200' : 'border-transparent hover:border-zinc-300'
+                            }`}
+                            title={color.name}
+                            data-testid={`color-option-${color.id}`}
+                          >
+                            <div 
+                              className="w-10 h-10 rounded-lg border border-zinc-200"
+                              style={{ backgroundColor: color.hex }}
+                            />
+                            {currentPreviewColorId === color.id && (
+                              <div className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full flex items-center justify-center">
+                                <Check className="w-3 h-3 text-white" />
+                              </div>
+                            )}
+                          </button>
+                        ))}
+                      </div>
+                    </CardContent>
+                  </Card>
                         className={`w-20 h-20 rounded-lg overflow-hidden border-2 transition-all ${
                           selectedDeviceStyle === key ? 'border-red-500 shadow-lg scale-105' : 'border-zinc-200'
                         }`}
