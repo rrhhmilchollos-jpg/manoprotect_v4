@@ -91,7 +91,7 @@ const LandingPage = () => {
               >
                 MI CUENTA
               </Link>
-              <Link to="/tienda" className="text-gray-600 hover:text-green-600" data-testid="header-cart-btn">
+              <Link to="/dispositivo-sos" className="text-gray-600 hover:text-green-600" data-testid="header-cart-btn">
                 <ShoppingCart className="w-6 h-6" />
               </Link>
               <button className="text-gray-600 hover:text-green-600">
