@@ -5,7 +5,7 @@
 import { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
-import { Check, Star, Play, ChevronRight, MapPin, Lock, Phone, Shield, Users, MapPinned } from 'lucide-react';
+import { Check, Star, Play, ChevronRight, MapPin, Lock, Phone, Shield, Users } from 'lucide-react';
 import LandingFooter from '@/components/landing/LandingFooter';
 
 const LandingPage = () => {
@@ -29,13 +29,6 @@ const LandingPage = () => {
           <span className="text-[#4CAF50] text-2xl font-bold">ManoProtect</span>
         </div>
 
-        {/* Center */}
-        <div className="hidden md:flex items-center gap-3">
-          <span className="text-[#4CAF50] font-medium">&gt; Optimizado para SEO</span>
-          <span className="text-gray-400 italic text-sm">Reseña-creativa GPS familiar en meneros, que soluciona en línea</span>
-          <ChevronRight className="w-4 h-4 text-[#4CAF50]" />
-        </div>
-
         {/* Right */}
         <div className="flex items-center gap-4">
           <Link to="/login" className="border-2 border-gray-800 text-gray-800 px-5 py-2 font-bold text-sm hover:bg-gray-800 hover:text-white transition-colors">
@@ -46,7 +39,7 @@ const LandingPage = () => {
         </div>
       </header>
 
-      {/* ============ HERO - FONDO VERDE CON FAMILIA ============ */}
+      {/* ============ HERO - FONDO CON FAMILIA ============ */}
       <section className="relative">
         {/* Background Image */}
         <div 
@@ -63,8 +56,8 @@ const LandingPage = () => {
             <div className="flex gap-0.5">
               {[1,2,3,4,5].map(i => <Star key={i} className="w-3 h-3 fill-yellow-400 text-yellow-400" />)}
             </div>
-            <span className="font-bold ml-2">$ co 2885d</span>
-            <span className="text-gray-300 text-xs ml-2">Imateres tiende si smo Fonsi reas sudo Lincar vasiencive</span>
+            <span className="font-bold ml-2">4.8/5</span>
+            <span className="text-gray-300 text-xs ml-2">Basado en 327 opiniones verificadas</span>
           </div>
 
           {/* Contenido principal */}
@@ -106,7 +99,7 @@ const LandingPage = () => {
             {/* Trust row */}
             <div className="flex flex-wrap items-center gap-4 text-sm">
               <div className="flex items-center gap-1">
-                <span className="text-yellow-500">⭐⭐⭐</span>
+                <span className="text-yellow-500">⭐⭐⭐⭐⭐</span>
                 <span className="font-bold">4,8/5 en 327 familias</span>
               </div>
               <div className="flex items-center gap-1 text-gray-400">
@@ -124,10 +117,7 @@ const LandingPage = () => {
 
       {/* ============ STATS BAR ============ */}
       <section className="bg-white py-4 border-y border-gray-200">
-        <div className="max-w-7xl mx-auto px-6 flex flex-wrap items-center justify-between gap-4 text-sm">
-          <div className="text-gray-500">
-            Optimizado<br />para SEO
-          </div>
+        <div className="max-w-7xl mx-auto px-6 flex flex-wrap items-center justify-center gap-4">
           <div className="flex items-center gap-2">
             <ChevronRight className="w-4 h-4 text-gray-400" />
             <span className="text-[#4CAF50] font-bold text-lg">+2,000 familias protegidas en España</span>
@@ -135,21 +125,6 @@ const LandingPage = () => {
               <MapPin className="w-3 h-3 text-white" />
             </div>
           </div>
-          <div className="text-gray-500 text-xs">
-            Pop c das sesvics GOS SEO:<br />
-            be locali para en cuentas, egales MD, GPS
-          </div>
-        </div>
-      </section>
-
-      {/* ============ MEDIA LOGOS ============ */}
-      <section className="bg-white py-4">
-        <div className="max-w-7xl mx-auto px-6 flex flex-wrap items-center justify-center gap-8">
-          <span className="text-gray-400 text-sm">Nos-encontrà en</span>
-          <span className="text-xl font-serif font-bold text-gray-800">EL PAÍS</span>
-          <span className="text-2xl font-serif font-black text-gray-800">ABC</span>
-          <span className="text-xl font-serif font-bold text-gray-800 tracking-wide">LA RAZÓN</span>
-          <span className="text-xl font-bold text-gray-800">cuatro<sup className="text-xs">•</sup></span>
         </div>
       </section>
 
@@ -208,15 +183,6 @@ const LandingPage = () => {
               </ul>
             </div>
           </div>
-
-          {/* Links pequeños */}
-          <div className="flex flex-wrap gap-6 mt-6 text-xs text-gray-500">
-            <span className="flex items-center gap-1"><MapPinned className="w-3 h-3" /> Pegymape</span>
-            <span>Desvecciones</span>
-            <span>⚙ Essppreciasconas toriegeis</span>
-            <span>📋 Regrará de fes hornejos entagarabülas</span>
-            <span>📊 Extendiantes: ens. cpkñectu penlas: tiems, ena sñeprecöas, uñña, atlicäcion</span>
-          </div>
         </div>
       </section>
 
@@ -250,7 +216,7 @@ const LandingPage = () => {
                 <div>
                   <span className="font-bold text-gray-800">PAGO SEGURO</span>
                   <span className="text-gray-500 ml-1">GARANTIZADO</span>
-                  <span className="text-gray-600 ml-2">Transacciones cifradas SSL - / DiS</span>
+                  <span className="text-gray-600 ml-2">Transacciones cifradas SSL</span>
                 </div>
               </div>
               <div className="flex items-start gap-3">
@@ -258,14 +224,14 @@ const LandingPage = () => {
                 <div>
                   <span className="font-bold text-gray-800">SOPORTE REAL</span>
                   <span className="text-gray-500 ml-1">POR WHATSAPP</span>
-                  <span className="text-gray-600 ml-2">Asistencia personalizada: 24/7</span>
+                  <span className="text-gray-600 ml-2">Asistencia personalizada 24/7</span>
                 </div>
               </div>
 
               {/* Pregunta */}
               <div className="flex items-center gap-2 pt-4 border-t border-gray-200 mt-4">
                 <span className="font-bold text-gray-800">¿Qué garantía ofrecen?</span>
-                <span className="text-gray-500 text-sm">30 días de prueba, sin utilizar de escasez.</span>
+                <span className="text-gray-500 text-sm">30 días de prueba sin compromiso.</span>
                 <ChevronRight className="w-5 h-5 text-[#4CAF50]" />
               </div>
             </div>
@@ -319,7 +285,7 @@ const LandingPage = () => {
               </h2>
 
               <div className="grid sm:grid-cols-2 gap-4">
-                {/* Testimonio 1 */}
+                {/* Testimonio 1 - Laura */}
                 <div className="bg-white rounded-lg p-4 shadow-lg">
                   <div className="flex items-center gap-3 mb-2">
                     <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=60&h=60&fit=crop&crop=face" alt="Laura" className="w-10 h-10 rounded-full" />
@@ -327,12 +293,13 @@ const LandingPage = () => {
                       <span className="font-bold text-gray-800">Laura S.</span>
                       <div className="flex text-yellow-400 text-xs">★★★★★</div>
                     </div>
+                    <img src="https://www.google.com/favicon.ico" alt="Google" className="w-4 h-4 ml-auto" />
                   </div>
-                  <p className="text-gray-600 text-sm">Gracias a ManoProtect, siempre sé dónde están mis hijos. Estoy mucho más tranquila...</p>
+                  <p className="text-gray-600 text-sm">Gracias a ManoProtect, siempre sé dónde están mis hijos. Estoy mucho más tranquila cuando salen solos.</p>
                   <div className="mt-2 flex justify-end"><span className="w-2 h-2 bg-green-400 rounded-full"></span></div>
                 </div>
 
-                {/* Testimonio 2 */}
+                {/* Testimonio 2 - Pedro */}
                 <div className="bg-white rounded-lg p-4 shadow-lg">
                   <div className="flex items-center gap-3 mb-2">
                     <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=60&h=60&fit=crop&crop=face" alt="Pedro" className="w-10 h-10 rounded-full" />
@@ -340,11 +307,12 @@ const LandingPage = () => {
                       <span className="font-bold text-gray-800">Pedro M.</span>
                       <div className="flex text-yellow-400 text-xs">★★★★★</div>
                     </div>
+                    <img src="https://www.google.com/favicon.ico" alt="Google" className="w-4 h-4 ml-auto" />
                   </div>
-                  <p className="text-gray-600 text-sm">Un GPS que salva vidas, Lo recomiendo 100%.</p>
+                  <p className="text-gray-600 text-sm">Un GPS que salva vidas. Lo recomiendo 100%. El botón SOS nos da mucha tranquilidad.</p>
                 </div>
 
-                {/* Testimonio 3 */}
+                {/* Testimonio 3 - Marta */}
                 <div className="bg-white rounded-lg p-4 shadow-lg">
                   <div className="flex items-center gap-3 mb-2">
                     <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=60&h=60&fit=crop&crop=face" alt="Marta" className="w-10 h-10 rounded-full" />
@@ -352,22 +320,24 @@ const LandingPage = () => {
                       <span className="font-bold text-gray-800">Marta G.</span>
                       <div className="flex text-yellow-400 text-xs">★★★★★</div>
                     </div>
+                    <img src="https://www.google.com/favicon.ico" alt="Google" className="w-4 h-4 ml-auto" />
                   </div>
-                  <p className="text-gray-600 text-sm">Mis padres mayores ahora están mucho más seguros. ¡Muy contenta!</p>
+                  <p className="text-gray-600 text-sm">Mis padres mayores ahora están mucho más seguros. ¡Muy contenta con la compra!</p>
                   <div className="mt-2 flex justify-end"><span className="w-2 h-2 bg-green-400 rounded-full"></span></div>
                 </div>
 
-                {/* Testimonio 4 */}
+                {/* Testimonio 4 - Carlos */}
                 <div className="bg-white rounded-lg p-4 shadow-lg">
                   <div className="flex items-center gap-3 mb-2">
-                    <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=60&h=60&fit=crop&crop=face" alt="Marta" className="w-10 h-10 rounded-full" />
+                    <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=60&h=60&fit=crop&crop=face" alt="Carlos" className="w-10 h-10 rounded-full" />
                     <div>
-                      <span className="font-bold text-gray-800">Marta G.</span>
+                      <span className="font-bold text-gray-800">Carlos R.</span>
                       <div className="flex text-yellow-400 text-xs">★★★★★</div>
                     </div>
+                    <img src="https://www.google.com/favicon.ico" alt="Google" className="w-4 h-4 ml-auto" />
                   </div>
-                  <p className="text-gray-600 text-sm">Mis padres mayores ahora están mucho más seguros. ¡Muy contento!</p>
-                  <div className="mt-2 flex justify-end text-xs text-gray-400">⭐ Ver otros</div>
+                  <p className="text-gray-600 text-sm">El mejor localizador que he probado. La app funciona perfectamente y el soporte es excelente.</p>
+                  <div className="mt-2 flex justify-end text-xs text-gray-400">⭐ Ver más opiniones</div>
                 </div>
               </div>
             </div>
@@ -393,18 +363,18 @@ const LandingPage = () => {
             </div>
 
             {/* Derecha - Links */}
-            <div className="flex flex-wrap gap-6 justify-end text-white/80 text-sm">
+            <div className="flex flex-wrap gap-6 justify-end text-white/90 text-sm">
               <div className="flex items-center gap-2">
                 <Shield className="w-4 h-4" />
-                <span>Empresa de Prevención<br /><span className="text-xs">Señora</span></span>
+                <span>Empresa de<br />Prevención</span>
               </div>
               <div className="flex items-center gap-2">
                 <Users className="w-4 h-4" />
-                <span>Somos dedicados<br /><span className="text-xs">Dhícatzcaos</span></span>
+                <span>Equipo<br />Dedicado</span>
               </div>
               <div className="flex items-center gap-2">
                 <MapPin className="w-4 h-4" />
-                <span>Vía sensores</span>
+                <span>Tecnología<br />GPS avanzada</span>
               </div>
             </div>
           </div>
