@@ -647,50 +647,6 @@ export default function SOSServices() {
                       </div>
                     </CardContent>
                   </Card>
-                        className={`w-20 h-20 rounded-lg overflow-hidden border-2 transition-all ${
-                          selectedDeviceStyle === key ? 'border-red-500 shadow-lg scale-105' : 'border-zinc-200'
-                        }`}
-                        title={`Estilo ${key}`}
-                      >
-                        <img src={url} alt={`Estilo ${key}`} className="w-full h-full object-cover" />
-                      </button>
-                    ))}
-                  </div>
-                  
-                  {/* Device Style Selection */}
-                  <Card>
-                    <CardHeader>
-                      <CardTitle className="flex items-center gap-2">
-                        <Heart className="w-5 h-5 text-red-600" />
-                        Estilo del Dispositivo
-                      </CardTitle>
-                      <CardDescription>Elige el diseño según la edad del usuario</CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="grid grid-cols-3 gap-3">
-                        {DEVICE_STYLES.map((style) => (
-                          <button
-                            key={style.id}
-                            onClick={() => setSelectedDeviceStyle(style.id)}
-                            className={`p-4 rounded-xl border-2 transition-all text-center hover:shadow-md ${
-                              selectedDeviceStyle === style.id 
-                                ? 'border-red-500 bg-red-50' 
-                                : 'border-zinc-200 hover:border-zinc-300'
-                            }`}
-                          >
-                            <div className={`w-10 h-10 mx-auto rounded-full flex items-center justify-center mb-2 ${
-                              style.id === 'juvenil' ? 'bg-orange-100' : 
-                              style.id === 'adulto' ? 'bg-indigo-100' : 'bg-emerald-100'
-                            }`}>
-                              {style.id === 'juvenil' ? '🎨' : style.id === 'adulto' ? '💼' : '🌿'}
-                            </div>
-                            <p className="font-semibold text-sm">{style.name}</p>
-                            <p className="text-xs text-zinc-500">{style.targetAge}</p>
-                          </button>
-                        ))}
-                      </div>
-                    </CardContent>
-                  </Card>
 
                   {/* Features Grid */}
                   <Card>
