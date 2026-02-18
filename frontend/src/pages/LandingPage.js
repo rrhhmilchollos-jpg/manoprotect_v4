@@ -349,7 +349,7 @@ const LandingPage = () => {
                 />
                 <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/80 to-transparent">
                   <Link 
-                    to="/tienda"
+                    to="/dispositivo-sos"
                     className="inline-flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white font-bold px-8 py-4 rounded-lg transition-colors w-full justify-center text-lg"
                     data-testid="garantias-cta"
                   >
