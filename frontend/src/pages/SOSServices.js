@@ -523,7 +523,7 @@ export default function SOSServices() {
                     </div>
                   </div>
                   <Badge className="bg-yellow-400 text-yellow-900 text-lg px-4 py-2">
-                    Hasta 30 Abril 2026
+                    Hasta 22 Febrero 2026
                   </Badge>
                 </div>
               </div>
