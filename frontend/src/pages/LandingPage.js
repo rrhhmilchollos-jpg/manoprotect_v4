@@ -145,7 +145,7 @@ const LandingPage = () => {
             {/* CTA Buttons */}
             <div className="flex flex-wrap gap-4 mb-8">
               <Link 
-                to="/tienda"
+                to="/dispositivo-sos"
                 className="inline-flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white font-bold px-6 py-3 rounded-full transition-colors shadow-lg"
                 data-testid="hero-cta-gps"
               >
