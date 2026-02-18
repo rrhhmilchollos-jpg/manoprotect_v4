@@ -579,6 +579,29 @@ stripe==14.1.0     # Pagos y reembolsos
   - Sección "Quiénes Somos"
   - CTA final con botón COMPRAR GPS AHORA
 
+### Funcionalidad de Búsqueda y Carrito - COMPLETADO ✅ (18 Feb 2026)
+
+**Barra de Búsqueda Funcional:**
+- Modal centrado que se abre al hacer clic en el icono de búsqueda
+- Busca productos (Dispositivo SOS, Planes) y páginas informativas
+- Búsquedas populares predefinidas: GPS, Dispositivo SOS, Precios, Familia
+- Resultados categorizados por tipo (Productos / Páginas)
+- Navegación directa al hacer clic en un resultado
+
+**Carrito Profesional Slide-out:**
+- Panel deslizante desde la derecha
+- Gestión de cantidad (+/-) y eliminación de productos
+- Persistencia en localStorage (carrito se mantiene entre sesiones)
+- Contador dinámico en el icono del header
+- Cálculo de subtotal, envío (4.95€) y total
+- Botón "Ver Dispositivos" cuando está vacío
+- Mensaje de "Pago seguro con encriptación SSL"
+
+**Header Unificado:**
+- LandingHeader.jsx actualizado con iconos de búsqueda y carrito
+- Consistente en todas las páginas SEO SILO
+- Soporte de hash URLs (#search, #cart) para navegación entre páginas
+
 ### Botones y Navegación:
 - VER GPS PARA FAMILIAS → /dispositivo-sos
 - CÓMO FUNCIONA → /como-funciona
@@ -587,4 +610,5 @@ stripe==14.1.0     # Pagos y reembolsos
 - WhatsApp → wa.me/34601510950
 
 ### Archivos Modificados:
-- /app/frontend/src/pages/LandingPage.js (rediseño completo)
+- /app/frontend/src/pages/LandingPage.js (búsqueda + carrito integrados)
+- /app/frontend/src/components/landing/LandingHeader.jsx (iconos búsqueda/carrito)
