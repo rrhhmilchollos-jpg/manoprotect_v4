@@ -478,7 +478,7 @@ const LandingPage = () => {
             Empieza a proteger a tu familia hoy mismo
           </h2>
           <Link 
-            to="/tienda"
+            to="/dispositivo-sos"
             className="inline-flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white font-bold px-10 py-4 rounded-lg transition-colors text-xl shadow-lg"
             data-testid="final-cta-btn"
           >
