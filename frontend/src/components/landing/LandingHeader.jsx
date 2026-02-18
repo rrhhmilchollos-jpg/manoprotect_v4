@@ -1,16 +1,129 @@
 /**
  * ManoProtect - Landing Page Header
- * Clean, professional navigation
+ * Clean, professional navigation with search and cart icons
  */
-import { useNavigate } from 'react-router-dom';
-import { LogIn, Menu, X } from 'lucide-react';
+import { useNavigate, Link } from 'react-router-dom';
+import { LogIn, Menu, X, Search, ShoppingCart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/context/AuthContext';
-import { useState } from 'react';
-
-const LOGO_URL = '/manoprotect_logo.webp';
+import { useState, useEffect } from 'react';
 
 const LandingHeader = () => {
+  const navigate = useNavigate();
+  const { isAuthenticated } = useAuth();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [cartCount, setCartCount] = useState(0);
+
+  // Load cart count from localStorage
+  useEffect(() => {
+    const savedCart = localStorage.getItem('manoprotect_cart');
+    if (savedCart) {
+      const cart = JSON.parse(savedCart);
+      const count = cart.reduce((total, item) => total + item.cantidad, 0);
+      setCartCount(count);
+    }
+  }, []);
+
+  return (
+    <header className="bg-white py-3 px-6 flex items-center justify-between border-b border-gray-100 sticky top-0 z-40">
+      <Link to="/" className="flex items-center gap-2">
+        <div className="w-10 h-10 bg-[#4CAF50] rounded-full flex items-center justify-center">
+          <span className="text-white text-xl">🖐</span>
+        </div>
+        <span className="text-[#4CAF50] text-2xl font-bold">ManoProtect</span>
+      </Link>
+
+      {/* Desktop Navigation */}
+      <div className="hidden md:flex items-center gap-4">
+        <Link 
+          to="/login" 
+          className="border-2 border-gray-800 text-gray-800 px-5 py-2 font-bold text-sm hover:bg-gray-800 hover:text-white transition-colors"
+        >
+          MI CUENTA
+        </Link>
+        
+        {/* Cart - links to homepage */}
+        <Link 
+          to="/?cart=open"
+          className="relative text-gray-600 hover:text-[#4CAF50] transition-colors"
+          data-testid="header-cart-btn"
+        >
+          <ShoppingCart className="w-6 h-6" />
+          {cartCount > 0 && (
+            <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold">
+              {cartCount}
+            </span>
+          )}
+        </Link>
+        
+        {/* Search - links to homepage */}
+        <Link 
+          to="/?search=open"
+          className="text-gray-600 hover:text-[#4CAF50] transition-colors"
+          data-testid="header-search-btn"
+        >
+          <Search className="w-6 h-6" />
+        </Link>
+      </div>
+
+      {/* Mobile menu button */}
+      <Button
+        variant="ghost"
+        size="icon"
+        className="md:hidden"
+        onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+        data-testid="mobile-menu-btn"
+      >
+        {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+      </Button>
+
+      {/* Mobile menu */}
+      {mobileMenuOpen && (
+        <div className="absolute top-full left-0 right-0 md:hidden bg-white border-t border-gray-200 px-6 py-4 space-y-2 shadow-lg">
+          <Link
+            to="/dispositivo-sos"
+            className="block py-2 text-gray-700 hover:text-[#4CAF50]"
+            onClick={() => setMobileMenuOpen(false)}
+          >
+            Dispositivo SOS
+          </Link>
+          <Link
+            to="/pricing"
+            className="block py-2 text-gray-700 hover:text-[#4CAF50]"
+            onClick={() => setMobileMenuOpen(false)}
+          >
+            Precios
+          </Link>
+          <Link
+            to="/como-funciona"
+            className="block py-2 text-gray-700 hover:text-[#4CAF50]"
+            onClick={() => setMobileMenuOpen(false)}
+          >
+            Cómo Funciona
+          </Link>
+          <div className="pt-2 border-t border-gray-200 flex items-center gap-4">
+            <Link
+              to="/login"
+              className="flex-1 text-center py-2 border-2 border-gray-800 text-gray-800 font-bold text-sm"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              MI CUENTA
+            </Link>
+            <Link to="/?cart=open" className="text-gray-600" onClick={() => setMobileMenuOpen(false)}>
+              <ShoppingCart className="w-6 h-6" />
+            </Link>
+            <Link to="/?search=open" className="text-gray-600" onClick={() => setMobileMenuOpen(false)}>
+              <Search className="w-6 h-6" />
+            </Link>
+          </div>
+        </div>
+      )}
+    </header>
+  );
+};
+
+// Keep this part for backwards compatibility but simplified
+const LandingHeaderLegacy = () => {
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -24,13 +137,9 @@ const LandingHeader = () => {
           onClick={() => navigate('/')}
           data-testid="header-logo"
         >
-          <img
-            src={LOGO_URL}
-            alt="ManoProtect - Digital Security & Fraud Prevention Logo"
-            className="h-9 w-auto"
-            width="36"
-            height="36"
-          />
+          <div className="w-9 h-9 bg-[#4CAF50] rounded-full flex items-center justify-center">
+            <span className="text-white text-lg">🖐</span>
+          </div>
           <span className="font-bold text-slate-900 text-lg hidden sm:block">ManoProtect</span>
         </div>
 
