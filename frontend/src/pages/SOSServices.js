@@ -208,8 +208,13 @@ export default function SOSServices() {
     setPreviewColorIndex(index);
   };
   
-  // Get the current preview color (for main image tint)
-  const currentPreviewColor = COLOR_OPTIONS.find(c => c.id === deviceColors[previewColorIndex])?.hex || '#C0C0C0';
+  // Get the current preview color info
+  const currentPreviewColorId = deviceColors[previewColorIndex];
+  const currentPreviewColor = COLOR_OPTIONS.find(c => c.id === currentPreviewColorId)?.hex || '#C0C0C0';
+  const currentPreviewColorName = COLOR_OPTIONS.find(c => c.id === currentPreviewColorId)?.name || 'Plata';
+  
+  // Get the actual device image for the selected color
+  const currentDeviceImage = DEVICE_COLOR_IMAGES[currentPreviewColorId] || DEVICE_COLOR_IMAGES['plata'];
   
   // Shipping info
   const [shippingInfo, setShippingInfo] = useState({
