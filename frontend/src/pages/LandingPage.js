@@ -4,7 +4,7 @@
  */
 import { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Check, Star, Play, ChevronRight, MapPin, Lock, Phone, Shield, Users, Search, ShoppingCart, X, Plus, Minus, Trash2 } from 'lucide-react';
 import LandingFooter from '@/components/landing/LandingFooter';
 
@@ -29,12 +29,27 @@ const paginas = [
 
 const LandingPage = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [showVideo, setShowVideo] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
   const [showCart, setShowCart] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState({ productos: [], paginas: [] });
   const [cart, setCart] = useState([]);
+
+  // Handle URL hash for opening search/cart from other pages
+  useEffect(() => {
+    const hash = location.hash;
+    if (hash === '#search') {
+      setShowSearch(true);
+      // Clean the hash from URL
+      window.history.replaceState(null, '', location.pathname);
+    } else if (hash === '#cart') {
+      setShowCart(true);
+      // Clean the hash from URL
+      window.history.replaceState(null, '', location.pathname);
+    }
+  }, [location]);
 
   // Cargar carrito del localStorage
   useEffect(() => {
