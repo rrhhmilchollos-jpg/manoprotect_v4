@@ -1631,7 +1631,7 @@ class EmailNotificationService:
                         </div>
                         
                         <div style="text-align: center; margin-top: 24px;">
-                            <a href="https://protect-staging-1.preview.emergentagent.com/enterprise" class="btn btn-secondary">Ir al Portal</a>
+                            <a href="https://mano-protect-preview-1.preview.emergentagent.com/enterprise" class="btn btn-secondary">Ir al Portal</a>
                             <a href="mailto:it@manoprotect.com?subject=Alerta%20de%20Seguridad%20-%20Acceso%20no%20reconocido" class="btn btn-danger">Reportar acceso sospechoso</a>
                         </div>
                     </div>
@@ -1700,7 +1700,7 @@ class EmailNotificationService:
                     </div>
                     
                     <div style="text-align: center; margin-top: 32px;">
-                        <a href="https://protect-staging-1.preview.emergentagent.com/enterprise" class="btn">Ir al Portal</a>
+                        <a href="https://mano-protect-preview-1.preview.emergentagent.com/enterprise" class="btn">Ir al Portal</a>
                     </div>
                 </div>
                 
