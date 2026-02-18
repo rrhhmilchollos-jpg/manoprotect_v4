@@ -235,7 +235,7 @@ const LandingPage = () => {
               {/* CTA Below Image */}
               <div className="mt-6">
                 <Link 
-                  to="/tienda"
+                  to="/dispositivo-sos"
                   className="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white font-bold px-8 py-4 rounded-lg transition-colors w-full justify-center text-lg"
                   data-testid="features-cta"
                 >
