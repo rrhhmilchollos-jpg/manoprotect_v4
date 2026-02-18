@@ -29,6 +29,22 @@ const DEVICE_IMAGES = {
   technical: 'https://static.prod-images.emergentagent.com/jobs/48047d8d-d356-432e-9b76-e0dcfdb8856b/images/4b647ec828d739fb0904598a6e137bae97a1f71b4929ea76564f21cfc820d543.png'
 };
 
+// Device images by COLOR - Real product images for each color
+const DEVICE_COLOR_IMAGES = {
+  'azul-cielo': 'https://static.prod-images.emergentagent.com/jobs/57731f5f-bdc3-4065-aa81-f8dc7ddad247/images/ef7bbf7d306761bdaccbd591c6c4d70f0105d31f798a1e9ec04628c6f382810f.png',
+  'verde-menta': 'https://static.prod-images.emergentagent.com/jobs/57731f5f-bdc3-4065-aa81-f8dc7ddad247/images/35eb8c93f0fbba5d890935857b133dca91a2771fb36a525cbe5d0b0a400412a7.png',
+  'naranja-energy': 'https://static.prod-images.emergentagent.com/jobs/57731f5f-bdc3-4065-aa81-f8dc7ddad247/images/3f368e694cec63077769b9aafe2ce7b2f8bc56e57b49cb3f2cf6cb3639e52df7.png',
+  'rosa-coral': 'https://static.prod-images.emergentagent.com/jobs/57731f5f-bdc3-4065-aa81-f8dc7ddad247/images/ce224cab49b83e0236e72828ab3524070c7c289225a20a8752fa7c39ba910d2e.png',
+  'lila-lavanda': 'https://static.prod-images.emergentagent.com/jobs/57731f5f-bdc3-4065-aa81-f8dc7ddad247/images/99efbafa1cbeb3f27433d81cfeb3ebd6cf2d52808480a3404963360943c431e5.png',
+  'azul-marino': 'https://static.prod-images.emergentagent.com/jobs/57731f5f-bdc3-4065-aa81-f8dc7ddad247/images/4bbe7989a7d842233fe4a15feda52280bf93608bdc5b230559d7070167493e76.png',
+  'gris-titanio': 'https://static.prod-images.emergentagent.com/jobs/57731f5f-bdc3-4065-aa81-f8dc7ddad247/images/8b25bed0512715295024c4d9254ab6ef63563ca70a6c4624efc6ca3d78fb4ddb.png',
+  'negro-mate': 'https://static.prod-images.emergentagent.com/jobs/57731f5f-bdc3-4065-aa81-f8dc7ddad247/images/dd457dbbbd82c0624396d1b3c13c3565df2e59e36fd8dae92ae970a58af331d1.png',
+  'champagne': 'https://static.prod-images.emergentagent.com/jobs/57731f5f-bdc3-4065-aa81-f8dc7ddad247/images/3045a031b4dfb1846ecedd7ea06e47e386e70448c8cedc2f4b544752c5fbc55a.png',
+  'burdeos': 'https://static.prod-images.emergentagent.com/jobs/57731f5f-bdc3-4065-aa81-f8dc7ddad247/images/62677db8c5d250bddf4d2c83807e18d25172c25124fab1229f4ddcea9e5cd45b.png',
+  'plata': 'https://static.prod-images.emergentagent.com/jobs/57731f5f-bdc3-4065-aa81-f8dc7ddad247/images/4a10ef76a79b16a8b4b57b4d18673d1fdf11d23b55e68841a8c3c2dadeea1a97.png',
+  'blanco-perla': 'https://static.prod-images.emergentagent.com/jobs/57731f5f-bdc3-4065-aa81-f8dc7ddad247/images/86cf83870f57142f6d99596a3ec46778b5ef2aac3f5edf1fae11313561423308.png',
+};
+
 // Device style images for different age groups
 const DEVICE_STYLE_IMAGES = {
   juvenil: 'https://static.prod-images.emergentagent.com/jobs/c13be6f9-89ef-4434-a847-7778f3eee8d1/images/bb64a7f70094ffb604400158534639a5c44a2917e4d5ff1019a542b4c075de9a.png',
