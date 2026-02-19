@@ -679,3 +679,50 @@ stripe==14.1.0     # Pagos y reembolsos
 5. Toast confirma la acción
 6. Contador del carrito se actualiza
 7. Usuario puede continuar comprando o ir al checkout
+
+---
+
+## Actualización 19 Febrero 2026 - Mejoras SEO Avanzadas
+
+### SEO Técnico Implementado ✅
+
+**1. Schema Markup (JSON-LD) Actualizado:**
+- `SoftwareApplication` con precios correctos (0€, 249.99€, 399.99€)
+- `Product` para Dispositivo SOS con reviews reales
+- `AggregateOffer` con especificaciones de precios anuales
+- `ShippingDetails` y `MerchantReturnPolicy` para Rich Snippets
+
+**2. Componentes SEO Reutilizables:**
+- `/app/frontend/src/components/SEOHead.jsx` - Helmet dinámico para cada página
+- `/app/frontend/src/utils/seoHelpers.js` - Generadores de Schema para:
+  - Organization, Product, FAQ, HowTo, Video, Review
+  - Breadcrumbs, Article, Event, Speakable
+  - IndexNow API para indexación instantánea
+
+**3. IndexNow Integration:**
+- Key file: `/app/frontend/public/manoprotect-indexnow-key.txt`
+- Función para submit automático a Bing y motores compatibles
+
+**4. Robots.txt Optimizado:**
+- Reglas específicas para GoogleBot, BingBot, GPTBot, ClaudeBot, PerplexityBot
+- Allow/Disallow inteligente para páginas de producto vs admin
+- Crawl-delay y sitemap declarado
+
+**5. Sitemap.xml Actualizado:**
+- Todas las URLs con lastmod 2026-02-19
+- Image sitemap integration
+- Prioridades correctas (homepage 1.0, productos 0.95, legal 0.30)
+
+**6. Meta Tags en Página de Registro:**
+- Title, description, keywords optimizados
+- Open Graph para compartir en redes sociales
+- Schema.org inline para la página
+
+**Archivos creados/modificados:**
+- `/app/frontend/src/components/SEOHead.jsx` (nuevo)
+- `/app/frontend/src/utils/seoHelpers.js` (nuevo)
+- `/app/frontend/public/manoprotect-indexnow-key.txt` (nuevo)
+- `/app/frontend/public/sitemap.xml` (actualizado)
+- `/app/frontend/public/robots.txt` (actualizado)
+- `/app/frontend/public/index.html` (Schema actualizado)
+- `/app/frontend/src/pages/ManoProtectRegistro.js` (SEO meta tags)
