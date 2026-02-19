@@ -43,9 +43,16 @@ const ManoProtectRegistro = () => {
       name: 'Básico',
       price: '0€',
       priceDetail: '7 días gratis para probar',
-      description: 'Protección personal completa',
-      features: ['1 usuario', 'Detección de estafas', 'Alertas en tiempo real', 'Soporte por email'],
-      isFree: true
+      description: 'Sin tarjeta requerida',
+      features: [
+        '7 días de prueba GRATIS',
+        'Protección básica 24/7',
+        '10 análisis de amenazas',
+        'Alertas de seguridad',
+        'Soporte por email'
+      ],
+      isFree: true,
+      badge: 'Sin compromiso'
     },
     {
       id: 'individual',
@@ -53,8 +60,15 @@ const ManoProtectRegistro = () => {
       price: '20,83€/mes',
       priceDetail: '249,99€/año - Ahorras 110€',
       description: 'La mejor opción para ti',
-      features: ['1 usuario', 'Protección 24/7 avanzada', 'Análisis ilimitados con IA', 'Alertas en tiempo real'],
-      popular: true
+      features: [
+        '7 días de prueba GRATIS',
+        'Protección 24/7 avanzada',
+        'Análisis ilimitados con IA',
+        'Bloqueo automático amenazas',
+        'Soporte prioritario'
+      ],
+      popular: true,
+      requiresCard: true
     },
     {
       id: 'familiar',
@@ -62,7 +76,14 @@ const ManoProtectRegistro = () => {
       price: '33,33€/mes',
       priceDetail: '399,99€/año - Ahorras 200€',
       description: 'Protección para toda la familia',
-      features: ['Hasta 5 usuarios', 'Todo de Individual +', 'Control parental', 'Localización GPS emergencias']
+      features: [
+        '7 días de prueba GRATIS',
+        'Todo de Individual +',
+        'Hasta 5 miembros familia',
+        'Localización GPS emergencias',
+        'Soporte 24/7 dedicado'
+      ],
+      requiresCard: true
     }
   ];
 
