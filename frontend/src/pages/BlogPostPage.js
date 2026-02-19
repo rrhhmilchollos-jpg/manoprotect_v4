@@ -24,7 +24,7 @@ const blogPosts = [
     title: 'Alerta: Nueva oleada de SMS falsos de Correos pide datos bancarios',
     excerpt: 'Miles de españoles reciben SMS fraudulentos haciéndose pasar por Correos.',
     category: 'Smishing',
-    categoryColor: 'bg-orange-500',
+    categoryColor: 'bg-[#4CAF50]',
     date: '12 Feb 2025',
     readTime: '3 min',
     views: 12453,

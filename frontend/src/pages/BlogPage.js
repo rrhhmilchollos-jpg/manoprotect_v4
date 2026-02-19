@@ -24,7 +24,7 @@ const blogPosts = [
     title: 'Alerta: Nueva oleada de SMS falsos de Correos pide datos bancarios',
     excerpt: 'Miles de españoles reciben SMS fraudulentos haciéndose pasar por Correos. "Tu paquete está retenido, paga 1,99€ para recibirlo". La Policía advierte del aumento de estas estafas.',
     category: 'Smishing',
-    categoryColor: 'bg-orange-500',
+    categoryColor: 'bg-[#4CAF50]',
     date: '12 Feb 2025',
     readTime: '3 min',
     views: 12453,
@@ -610,7 +610,7 @@ Ofrecemos protección B2B con:
 
 const categories = [
   { name: 'Todos', value: 'all', color: 'bg-slate-500' },
-  { name: 'Smishing', value: 'Smishing', color: 'bg-orange-500' },
+  { name: 'Smishing', value: 'Smishing', color: 'bg-[#4CAF50]' },
   { name: 'Vishing', value: 'Vishing', color: 'bg-[#4CAF50]' },
   { name: 'Phishing', value: 'Phishing', color: 'bg-blue-500' },
   { name: 'WhatsApp', value: 'WhatsApp', color: 'bg-green-500' },

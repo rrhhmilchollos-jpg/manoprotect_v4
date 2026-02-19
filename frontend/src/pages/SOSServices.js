@@ -798,13 +798,13 @@ export default function SOSServices() {
                           </>
                         ) : (
                           <>
-                            <Lock className="w-5 h-5 text-orange-600" />
+                            <Lock className="w-5 h-5 text-[#4CAF50]" />
                             <span className="text-orange-700">Código de Verificación Requerido</span>
                           </>
                         )}
                       </CardTitle>
                       {!codeVerified && (
-                        <CardDescription className="text-orange-600">
+                        <CardDescription className="text-[#4CAF50]">
                           Para obtener tu dispositivo SOS GRATIS, necesitas un código de verificación que se genera al suscribirte a un plan.
                         </CardDescription>
                       )}
@@ -838,7 +838,7 @@ export default function SOSServices() {
                             <Button 
                               onClick={handleVerifyCode}
                               disabled={checkingCode}
-                              className="bg-orange-600 hover:bg-orange-700"
+                              className="bg-[#4CAF50] hover:bg-orange-700"
                             >
                               {checkingCode ? 'Verificando...' : 'Verificar'}
                             </Button>
@@ -850,7 +850,7 @@ export default function SOSServices() {
                             <Button 
                               onClick={() => setActiveTab('planes')}
                               variant="outline"
-                              className="w-full border-orange-500 text-orange-600 hover:bg-orange-100"
+                              className="w-full border-[#4CAF50] text-[#4CAF50] hover:bg-orange-100"
                             >
                               <CreditCard className="w-4 h-4 mr-2" />
                               Ver Planes y Obtener Código
@@ -940,7 +940,7 @@ export default function SOSServices() {
                       </p>
                       <Button 
                         onClick={() => setActiveTab('planes')}
-                        className="bg-gradient-to-r from-[#4CAF50] to-[#66BB6A] hover:from-red-700 hover:to-orange-600"
+                        className="bg-gradient-to-r from-[#4CAF50] to-[#66BB6A] hover:from-red-700 hover:to-[#66BB6A]"
                       >
                         Ver Planes de Suscripción
                       </Button>
