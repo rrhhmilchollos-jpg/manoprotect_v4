@@ -25,7 +25,7 @@ Todas las apps se conectan al mismo backend:
 
 | Entorno | URL |
 |---------|-----|
-| Preview | https://mano-protect-preview-1.preview.emergentagent.com |
+| Preview | https://sos-device-preview.preview.emergentagent.com |
 | Producción | [Tu dominio de producción] |
 
 ---

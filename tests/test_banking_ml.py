@@ -6,7 +6,7 @@ import pytest
 import requests
 import os
 
-BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', 'https://mano-protect-preview-1.preview.emergentagent.com').rstrip('/')
+BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', 'https://sos-device-preview.preview.emergentagent.com').rstrip('/')
 
 # Test credentials
 TEST_EMAIL = "testuser@mano.com"

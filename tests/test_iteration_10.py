@@ -14,7 +14,7 @@ import requests
 import os
 import uuid
 
-BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', 'https://mano-protect-preview-1.preview.emergentagent.com')
+BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', 'https://sos-device-preview.preview.emergentagent.com')
 
 class TestAdminAuth:
     """Test admin authentication"""
