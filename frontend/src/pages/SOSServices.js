@@ -532,7 +532,7 @@ export default function SOSServices() {
           {activeTab === 'dispositivo' && (
             <div className="space-y-8">
               {/* Promo Banner */}
-              <div className="bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 rounded-2xl p-6 text-white shadow-xl">
+              <div className="bg-gradient-to-r from-amber-500 via-[#66BB6A] to-red-500 rounded-2xl p-6 text-white shadow-xl">
                 <div className="flex flex-col md:flex-row items-center justify-between gap-4">
                   <div className="flex items-center gap-4">
                     <div className="w-16 h-16 bg-white/20 backdrop-blur rounded-xl flex items-center justify-center">
@@ -550,7 +550,7 @@ export default function SOSServices() {
               </div>
               
               {/* Call Support Button - Similar to Securitas Direct */}
-              <Card className="bg-gradient-to-r from-red-600 to-red-700 text-white border-0">
+              <Card className="bg-gradient-to-r from-[#4CAF50] to-red-700 text-white border-0">
                 <CardContent className="p-6">
                   <div className="flex flex-col md:flex-row items-center justify-between gap-4">
                     <div className="flex items-center gap-4">
@@ -564,7 +564,7 @@ export default function SOSServices() {
                     </div>
                     <Button 
                       onClick={handleCallSupport}
-                      className="bg-white text-red-600 hover:bg-zinc-100 h-14 px-8 text-lg font-bold shadow-lg"
+                      className="bg-white text-[#4CAF50] hover:bg-zinc-100 h-14 px-8 text-lg font-bold shadow-lg"
                       data-testid="call-support-btn"
                     >
                       <Phone className="w-6 h-6 mr-2" />
@@ -588,7 +588,7 @@ export default function SOSServices() {
                       />
                       {/* Device number badge */}
                       <div 
-                        className="absolute top-4 right-4 w-14 h-14 rounded-full border-4 border-white shadow-lg flex items-center justify-center bg-red-600"
+                        className="absolute top-4 right-4 w-14 h-14 rounded-full border-4 border-white shadow-lg flex items-center justify-center bg-[#4CAF50]"
                       >
                         <span className="text-sm font-bold text-white">
                           #{previewColorIndex + 1}
@@ -628,7 +628,7 @@ export default function SOSServices() {
                             key={color.id}
                             onClick={() => updateDeviceColor(previewColorIndex, color.id)}
                             className={`relative p-1 rounded-lg border-2 transition-all hover:scale-105 ${
-                              currentPreviewColorId === color.id ? 'border-red-500 shadow-md ring-2 ring-red-200' : 'border-transparent hover:border-zinc-300'
+                              currentPreviewColorId === color.id ? 'border-[#4CAF50] shadow-md ring-2 ring-red-200' : 'border-transparent hover:border-zinc-300'
                             }`}
                             title={color.name}
                             data-testid={`color-option-${color.id}`}
@@ -638,7 +638,7 @@ export default function SOSServices() {
                               style={{ backgroundColor: color.hex }}
                             />
                             {currentPreviewColorId === color.id && (
-                              <div className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full flex items-center justify-center">
+                              <div className="absolute -top-1 -right-1 w-4 h-4 bg-[#4CAF50] rounded-full flex items-center justify-center">
                                 <Check className="w-3 h-3 text-white" />
                               </div>
                             )}
@@ -657,7 +657,7 @@ export default function SOSServices() {
                       <div className="grid grid-cols-2 gap-3">
                         {DEVICE_FEATURES.map((feature, idx) => (
                           <div key={idx} className="flex items-start gap-2 p-3 bg-zinc-50 rounded-lg">
-                            <feature.icon className="w-5 h-5 text-red-600 mt-0.5" />
+                            <feature.icon className="w-5 h-5 text-[#4CAF50] mt-0.5" />
                             <div>
                               <p className="text-sm font-medium">{feature.title}</p>
                               <p className="text-xs text-zinc-500">{feature.desc}</p>
@@ -675,7 +675,7 @@ export default function SOSServices() {
                   <Card>
                     <CardHeader>
                       <CardTitle className="flex items-center gap-2">
-                        <Package className="w-5 h-5 text-red-600" />
+                        <Package className="w-5 h-5 text-[#4CAF50]" />
                         Cantidad de Dispositivos
                       </CardTitle>
                     </CardHeader>
@@ -689,7 +689,7 @@ export default function SOSServices() {
                           <Minus className="w-4 h-4" />
                         </Button>
                         <div className="text-center">
-                          <span className="text-5xl font-bold text-red-600">{quantity}</span>
+                          <span className="text-5xl font-bold text-[#4CAF50]">{quantity}</span>
                           <p className="text-sm text-zinc-500">dispositivo{quantity > 1 ? 's' : ''}</p>
                         </div>
                         <Button 
@@ -743,7 +743,7 @@ export default function SOSServices() {
                         const selectedColorObj = COLOR_OPTIONS.find(c => c.id === colorId);
                         return (
                           <div key={index} className={`p-4 rounded-xl border-2 transition-all ${
-                            previewColorIndex === index ? 'border-red-500 bg-red-50' : 'border-zinc-200'
+                            previewColorIndex === index ? 'border-[#4CAF50] bg-red-50' : 'border-zinc-200'
                           }`}>
                             <div className="flex items-center justify-between mb-3">
                               <span className="font-semibold text-sm">
@@ -764,7 +764,7 @@ export default function SOSServices() {
                                   key={color.id}
                                   onClick={() => updateDeviceColor(index, color.id)}
                                   className={`p-1 rounded-lg border-2 transition-all hover:scale-105 ${
-                                    colorId === color.id ? 'border-red-500 shadow-md' : 'border-transparent'
+                                    colorId === color.id ? 'border-[#4CAF50] shadow-md' : 'border-transparent'
                                   }`}
                                   title={color.name}
                                 >
@@ -867,7 +867,7 @@ export default function SOSServices() {
                   <Card>
                     <CardHeader>
                       <CardTitle className="flex items-center gap-2">
-                        <Truck className="w-5 h-5 text-red-600" />
+                        <Truck className="w-5 h-5 text-[#4CAF50]" />
                         Dirección de Envío
                       </CardTitle>
                       <CardDescription>
@@ -940,7 +940,7 @@ export default function SOSServices() {
                       </p>
                       <Button 
                         onClick={() => setActiveTab('planes')}
-                        className="bg-gradient-to-r from-red-600 to-orange-500 hover:from-red-700 hover:to-orange-600"
+                        className="bg-gradient-to-r from-[#4CAF50] to-[#66BB6A] hover:from-red-700 hover:to-orange-600"
                       >
                         Ver Planes de Suscripción
                       </Button>
@@ -1118,7 +1118,7 @@ export default function SOSServices() {
                     </div>
                     <div className="text-center">
                       <div className="w-14 h-14 mx-auto bg-red-100 rounded-full flex items-center justify-center mb-3">
-                        <Package className="w-7 h-7 text-red-600" />
+                        <Package className="w-7 h-7 text-[#4CAF50]" />
                       </div>
                       <h4 className="font-semibold">5 Dispositivos SOS</h4>
                       <p className="text-sm text-zinc-500">Incluidos GRATIS</p>
@@ -1223,14 +1223,14 @@ export default function SOSServices() {
               </div>
 
               {/* CTA */}
-              <Card className="bg-gradient-to-r from-red-600 to-orange-500 text-white border-0">
+              <Card className="bg-gradient-to-r from-[#4CAF50] to-[#66BB6A] text-white border-0">
                 <CardContent className="p-8 text-center">
                   <h3 className="text-2xl font-bold mb-4">¿Listo para proteger a tu familia?</h3>
                   <p className="mb-6 text-white/90">Obtén tu dispositivo SOS GRATIS durante la promoción de lanzamiento</p>
                   <div className="flex flex-col sm:flex-row gap-4 justify-center">
                     <Button 
                       onClick={() => setActiveTab('dispositivo')}
-                      className="bg-white text-red-600 hover:bg-zinc-100 h-12 px-8"
+                      className="bg-white text-[#4CAF50] hover:bg-zinc-100 h-12 px-8"
                     >
                       <Package className="w-5 h-5 mr-2" />
                       Solicitar Dispositivo GRATIS
@@ -1263,7 +1263,7 @@ export default function SOSServices() {
                       placeholder="Número de seguimiento (ej: MP-123456)"
                       className="h-14 text-lg"
                     />
-                    <Button className="w-full h-14 text-lg bg-red-600 hover:bg-red-700">
+                    <Button className="w-full h-14 text-lg bg-[#4CAF50] hover:bg-[#45a049]">
                       <Truck className="w-5 h-5 mr-2" />
                       Buscar Pedido
                     </Button>
@@ -1281,7 +1281,7 @@ export default function SOSServices() {
 
               <div className="text-center">
                 <p className="text-zinc-500 mb-4">¿Todavía no has hecho tu pedido?</p>
-                <Button onClick={() => setActiveTab('dispositivo')} variant="outline" className="border-red-600 text-red-600 hover:bg-red-50">
+                <Button onClick={() => setActiveTab('dispositivo')} variant="outline" className="border-[#4CAF50] text-[#4CAF50] hover:bg-red-50">
                   <ShoppingCart className="w-4 h-4 mr-2" />
                   Solicitar Dispositivo SOS
                 </Button>
