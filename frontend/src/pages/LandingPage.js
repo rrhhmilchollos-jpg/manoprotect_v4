@@ -39,6 +39,7 @@ const LandingPage = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState({ productos: [], paginas: [] });
   const [cart, setCart] = useState([]);
+  const [checkoutLoading, setCheckoutLoading] = useState(false);
 
   // Handle URL hash for opening search/cart from other pages
   useEffect(() => {
@@ -66,6 +67,65 @@ const LandingPage = () => {
   useEffect(() => {
     localStorage.setItem('manoprotect_cart', JSON.stringify(cart));
   }, [cart]);
+
+  // Checkout con Stripe
+  const handleCheckout = async () => {
+    if (cart.length === 0) {
+      toast.error('El carrito está vacío');
+      return;
+    }
+
+    // Check if all items are free (like free device with just shipping)
+    const hasPayableItems = cart.some(item => item.precio > 0) || cartEnvio > 0;
+    
+    if (!hasPayableItems) {
+      toast.error('No hay productos de pago en el carrito');
+      navigate('/dispositivo-sos');
+      return;
+    }
+
+    setCheckoutLoading(true);
+    
+    try {
+      const response = await fetch(`${API}/api/payments/cart/checkout`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          items: cart.map(item => ({
+            id: item.id,
+            nombre: item.nombre,
+            descripcion: item.descripcion || '',
+            precio: item.precio,
+            cantidad: item.cantidad,
+            imagen: item.imagen
+          })),
+          shipping_cost: cartEnvio,
+          origin_url: window.location.origin
+        })
+      });
+
+      const data = await response.json();
+      
+      if (data.url) {
+        // Clear cart before redirecting to Stripe
+        localStorage.setItem('manoprotect_cart_backup', JSON.stringify(cart));
+        window.location.href = data.url;
+      } else if (data.error) {
+        toast.error(data.error);
+        // If cart only has free items, redirect to device page
+        if (cart.every(item => item.precio === 0)) {
+          navigate('/dispositivo-sos');
+        }
+      } else {
+        toast.error('Error al procesar el pago');
+      }
+    } catch (error) {
+      console.error('Checkout error:', error);
+      toast.error('Error de conexión. Intenta de nuevo.');
+    } finally {
+      setCheckoutLoading(false);
+    }
+  };
 
   // Función de búsqueda
   const handleSearch = (query) => {
