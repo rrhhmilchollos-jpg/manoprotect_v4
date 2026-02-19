@@ -305,13 +305,13 @@ const ChildTracking = () => {
             <div className="flex items-center justify-between">
               <div className="text-white">
                 <h3 className="text-xl font-bold mb-1">¿Necesitas ayuda urgente?</h3>
-                <p className="text-red-100 text-sm">
+                <p className="text-green-100 text-sm">
                   Este botón envía TU ubicación a todos tus familiares
                 </p>
               </div>
               <Button
                 onClick={() => navigate('/sos-quick')}
-                className="w-20 h-20 rounded-full bg-white hover:bg-red-100 text-[#4CAF50] font-black shadow-xl flex flex-col items-center justify-center"
+                className="w-20 h-20 rounded-full bg-white hover:bg-green-100 text-[#4CAF50] font-black shadow-xl flex flex-col items-center justify-center"
                 data-testid="sos-main-button"
               >
                 <span className="text-2xl">SOS</span>
@@ -577,7 +577,7 @@ const ChildTracking = () => {
                         variant="ghost"
                         size="sm"
                         onClick={() => handleRemoveChild(child)}
-                        className="text-[#4CAF50] hover:text-red-700"
+                        className="text-[#4CAF50] hover:text-green-700"
                       >
                         <Trash2 className="w-4 h-4" />
                       </Button>

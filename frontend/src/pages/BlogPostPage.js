@@ -417,7 +417,7 @@ const BlogPostPage = () => {
               li: ({node, ...props}) => <li className="text-slate-700" {...props} />,
               strong: ({node, ...props}) => <strong className="font-bold text-slate-900" {...props} />,
               blockquote: ({node, ...props}) => (
-                <blockquote className="border-l-4 border-[#4CAF50] pl-4 py-2 bg-red-50 my-4 italic text-slate-700" {...props} />
+                <blockquote className="border-l-4 border-[#4CAF50] pl-4 py-2 bg-green-50 my-4 italic text-slate-700" {...props} />
               ),
             }}
           >

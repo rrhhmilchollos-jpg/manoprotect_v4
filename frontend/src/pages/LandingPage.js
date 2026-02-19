@@ -204,7 +204,7 @@ const LandingPage = () => {
           >
             <ShoppingCart className="w-6 h-6" />
             {cartCount > 0 && (
-              <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold">
+              <span className="absolute -top-2 -right-2 bg-green-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold">
                 {cartCount}
               </span>
             )}
@@ -403,7 +403,7 @@ const LandingPage = () => {
                       </div>
                       <button 
                         onClick={() => removeFromCart(item.id)}
-                        className="text-red-400 hover:text-red-600 self-start"
+                        className="text-green-400 hover:text-green-600 self-start"
                       >
                         <Trash2 className="w-5 h-5" />
                       </button>
@@ -501,8 +501,8 @@ const LandingPage = () => {
               y recibe alertas en tiempo real.
             </p>
 
-            <div className="inline-flex items-center gap-2 bg-white border-2 border-red-500 px-4 py-2 rounded mb-6">
-              <span className="text-red-500 font-bold">#</span>
+            <div className="inline-flex items-center gap-2 bg-white border-2 border-green-500 px-4 py-2 rounded mb-6">
+              <span className="text-green-500 font-bold">#</span>
               <span className="text-gray-800 font-bold">1 en localizadores GPS para familias en España</span>
               <span className="text-xl">🇪🇸</span>
             </div>

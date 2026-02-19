@@ -150,8 +150,8 @@ const ProteccionMayores = () => {
                   <div className="flex items-center justify-between mb-3">
                     <h3 className="font-bold text-slate-900">{scam.title}</h3>
                     <span className={`text-xs px-2 py-1 rounded-full ${
-                      scam.risk === 'Muy Alto' ? 'bg-red-100 text-red-700' :
-                      scam.risk === 'Alto' ? 'bg-orange-100 text-orange-700' :
+                      scam.risk === 'Muy Alto' ? 'bg-green-100 text-green-700' :
+                      scam.risk === 'Alto' ? 'bg-green-100 text-green-700' :
                       'bg-yellow-100 text-yellow-700'
                     }`}>
                       {scam.risk}

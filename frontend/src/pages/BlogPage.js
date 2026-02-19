@@ -678,7 +678,7 @@ const BlogPage = () => {
       {/* Hero */}
       <section className="bg-gradient-to-br from-slate-900 via-red-900 to-slate-900 text-white py-16 px-6">
         <div className="max-w-7xl mx-auto">
-          <div className="flex items-center gap-2 text-red-400 mb-4">
+          <div className="flex items-center gap-2 text-green-400 mb-4">
             <AlertTriangle className="w-5 h-5" />
             <span className="text-sm font-semibold uppercase tracking-wider">Alertas de Seguridad</span>
           </div>
@@ -691,11 +691,11 @@ const BlogPage = () => {
           </p>
           <div className="flex flex-wrap gap-4">
             <div className="flex items-center gap-2 bg-white/10 rounded-full px-4 py-2">
-              <TrendingUp className="w-4 h-4 text-red-400" />
+              <TrendingUp className="w-4 h-4 text-green-400" />
               <span className="text-sm">+340% estafas SMS en 2025</span>
             </div>
             <div className="flex items-center gap-2 bg-white/10 rounded-full px-4 py-2">
-              <Users className="w-4 h-4 text-orange-400" />
+              <Users className="w-4 h-4 text-green-400" />
               <span className="text-sm">67% víctimas mayores de 50</span>
             </div>
             <div className="flex items-center gap-2 bg-white/10 rounded-full px-4 py-2">

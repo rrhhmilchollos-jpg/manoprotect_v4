@@ -38,7 +38,7 @@ const SeguridadMayores = () => {
       icon: Heart,
       title: "Botón SOS",
       description: "Un solo toque para alertar a familiares y emergencias con ubicación GPS exacta.",
-      color: "bg-red-100 text-[#4CAF50]"
+      color: "bg-green-100 text-[#4CAF50]"
     },
     {
       icon: MapPin,
