@@ -43,6 +43,14 @@ const LandingHeader = () => {
 
       {/* Desktop Navigation */}
       <div className="hidden md:flex items-center gap-4">
+        {/* Blog Button */}
+        <Link 
+          to="/blog"
+          className="bg-[#4CAF50] text-white px-4 py-2 rounded-full font-bold text-sm hover:bg-[#45a049] transition-colors"
+        >
+          Blog Seguridad
+        </Link>
+        
         <Link 
           to="/login" 
           className="border-2 border-gray-800 text-gray-800 px-5 py-2 font-bold text-sm hover:bg-gray-800 hover:text-white transition-colors"
@@ -58,7 +66,7 @@ const LandingHeader = () => {
         >
           <ShoppingCart className="w-6 h-6" />
           {cartCount > 0 && (
-            <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold">
+            <span className="absolute -top-2 -right-2 bg-[#4CAF50] text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold">
               {cartCount}
             </span>
           )}
