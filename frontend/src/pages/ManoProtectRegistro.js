@@ -134,12 +134,23 @@ const ManoProtectRegistro = () => {
               </div>
             )}
             
+            {plan.isFree && (
+              <div className="absolute -top-3 left-1/2 -translate-x-1/2">
+                <span className="bg-gradient-to-r from-green-500 to-emerald-600 text-white text-xs font-bold px-3 py-1 rounded-full">
+                  7 DÍAS GRATIS
+                </span>
+              </div>
+            )}
+            
             <div className="text-center">
               <h3 className="font-bold text-lg text-gray-900">{plan.name}</h3>
               <div className="mt-2">
                 <span className="text-3xl font-bold text-indigo-600">{plan.price.split('/')[0]}</span>
-                <span className="text-gray-500">/mes</span>
+                {plan.price.includes('/') && <span className="text-gray-500">/{plan.price.split('/')[1]}</span>}
               </div>
+              {plan.priceDetail && (
+                <p className="text-xs text-green-600 font-medium mt-1">{plan.priceDetail}</p>
+              )}
               <p className="text-sm text-gray-500 mt-2">{plan.description}</p>
             </div>
             
