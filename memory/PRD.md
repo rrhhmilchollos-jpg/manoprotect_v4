@@ -612,3 +612,44 @@ stripe==14.1.0     # Pagos y reembolsos
 ### Archivos Modificados:
 - /app/frontend/src/pages/LandingPage.js (búsqueda + carrito integrados)
 - /app/frontend/src/components/landing/LandingHeader.jsx (iconos búsqueda/carrito)
+
+---
+
+## Actualización 19 Febrero 2026 - Previsualización Colores + Checkout Stripe
+
+### 1. Previsualización del Dispositivo por Color - COMPLETADO ✅
+
+**Descripción**: Cuando el usuario selecciona un color en la página `/dispositivo-sos`, la imagen del producto cambia para mostrar el dispositivo en ese color.
+
+**Implementación técnica**:
+- Generadas 12 imágenes del dispositivo SOS en diferentes colores
+- `DEVICE_COLOR_IMAGES` mapping en `SOSServices.js` (líneas 33-46)
+- La variable `currentDeviceImage` obtiene la imagen correcta según `currentPreviewColorId`
+- Grid de colores con `data-testid="color-option-{colorId}"` para testing
+
+**Colores disponibles**:
+- Azul Cielo, Verde Menta, Naranja Energy, Rosa Coral
+- Lila Lavanda, Azul Marino, Gris Titanio, Negro Mate
+- Champagne, Burdeos, Plata (default), Blanco Perla
+
+### 2. Checkout del Carrito con Stripe - COMPLETADO ✅
+
+**Descripción**: El carrito de la homepage ahora permite finalizar la compra directamente con Stripe.
+
+**Backend** (`/api/payments/cart/checkout`):
+- Crea sesión de Stripe con items del carrito
+- Guarda orden en colección `cart_orders`
+- Retorna URL de checkout de Stripe
+
+**Frontend** (LandingPage.js):
+- Función `handleCheckout()` llama al API
+- Botón "Pagar con Stripe" aparece cuando `cartTotal > 0`
+- Loading state con spinner
+- Backup del carrito en localStorage antes de redirect
+
+**Archivos modificados**:
+- `/app/frontend/src/pages/SOSServices.js` - Imágenes por color, selector mejorado
+- `/app/frontend/src/pages/LandingPage.js` - Checkout con Stripe
+- `/app/backend/routes/payments.py` - Endpoint `/cart/checkout`
+
+**Testing**: Iteración 48 - 100% tests pasados
