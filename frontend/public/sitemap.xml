@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
+        xmlns:video="http://www.google.com/schemas/sitemap-video/1.1"
         xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
   
   <!-- ============================================ -->
@@ -8,9 +10,43 @@
   <!-- ============================================ -->
   <url>
     <loc>https://manoprotect.com/</loc>
-    <lastmod>2026-02-16</lastmod>
-    <changefreq>weekly</changefreq>
+    <lastmod>2026-02-19</lastmod>
+    <changefreq>daily</changefreq>
     <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://manoprotect.com/og-image.png</image:loc>
+      <image:title>ManoProtect - Seguridad Digital para Familias</image:title>
+      <image:caption>Plataforma líder en España de protección contra phishing, fraud prevention y seguridad familiar</image:caption>
+    </image:image>
+  </url>
+  
+  <!-- ============================================ -->
+  <!-- PRODUCT PAGES - HIGH PRIORITY -->
+  <!-- ============================================ -->
+  <url>
+    <loc>https://manoprotect.com/dispositivo-sos</loc>
+    <lastmod>2026-02-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.95</priority>
+    <image:image>
+      <image:loc>https://static.prod-images.emergentagent.com/jobs/57731f5f-bdc3-4065-aa81-f8dc7ddad247/images/4a10ef76a79b16a8b4b57b4d18673d1fdf11d23b55e68841a8c3c2dadeea1a97.png</image:loc>
+      <image:title>Dispositivo SOS GPS ManoProtect</image:title>
+      <image:caption>Localizador GPS con botón de emergencia para familias y mayores</image:caption>
+    </image:image>
+  </url>
+  
+  <url>
+    <loc>https://manoprotect.com/pricing</loc>
+    <lastmod>2026-02-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.95</priority>
+  </url>
+  
+  <url>
+    <loc>https://manoprotect.com/registro</loc>
+    <lastmod>2026-02-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.90</priority>
   </url>
   
   <!-- ============================================ -->
@@ -18,14 +54,14 @@
   <!-- ============================================ -->
   <url>
     <loc>https://manoprotect.com/proteccion-phishing</loc>
-    <lastmod>2026-02-16</lastmod>
+    <lastmod>2026-02-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.95</priority>
   </url>
   
   <url>
     <loc>https://manoprotect.com/phishing-protection</loc>
-    <lastmod>2026-02-16</lastmod>
+    <lastmod>2026-02-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
@@ -35,14 +71,14 @@
   <!-- ============================================ -->
   <url>
     <loc>https://manoprotect.com/proteccion-fraude-online</loc>
-    <lastmod>2026-02-16</lastmod>
+    <lastmod>2026-02-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.95</priority>
   </url>
   
   <url>
     <loc>https://manoprotect.com/fraud-prevention</loc>
-    <lastmod>2026-02-16</lastmod>
+    <lastmod>2026-02-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
@@ -52,14 +88,14 @@
   <!-- ============================================ -->
   <url>
     <loc>https://manoprotect.com/seguridad-digital-familiar</loc>
-    <lastmod>2026-02-16</lastmod>
+    <lastmod>2026-02-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.95</priority>
   </url>
   
   <url>
     <loc>https://manoprotect.com/family-security</loc>
-    <lastmod>2026-02-16</lastmod>
+    <lastmod>2026-02-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
@@ -69,14 +105,14 @@
   <!-- ============================================ -->
   <url>
     <loc>https://manoprotect.com/proteccion-identidad-digital</loc>
-    <lastmod>2026-02-16</lastmod>
+    <lastmod>2026-02-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.95</priority>
   </url>
   
   <url>
     <loc>https://manoprotect.com/identity-protection</loc>
-    <lastmod>2026-02-16</lastmod>
+    <lastmod>2026-02-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
@@ -86,14 +122,14 @@
   <!-- ============================================ -->
   <url>
     <loc>https://manoprotect.com/seguridad-mayores</loc>
-    <lastmod>2026-02-16</lastmod>
+    <lastmod>2026-02-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.95</priority>
   </url>
   
   <url>
     <loc>https://manoprotect.com/elderly-protection</loc>
-    <lastmod>2026-02-16</lastmod>
+    <lastmod>2026-02-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
@@ -103,14 +139,14 @@
   <!-- ============================================ -->
   <url>
     <loc>https://manoprotect.com/estafas-bancarias</loc>
-    <lastmod>2026-02-16</lastmod>
+    <lastmod>2026-02-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.95</priority>
   </url>
   
   <url>
     <loc>https://manoprotect.com/banking-fraud-protection</loc>
-    <lastmod>2026-02-16</lastmod>
+    <lastmod>2026-02-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
@@ -120,171 +156,116 @@
   <!-- ============================================ -->
   <url>
     <loc>https://manoprotect.com/secure-payments</loc>
-    <lastmod>2026-02-16</lastmod>
+    <lastmod>2026-02-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.95</priority>
   </url>
   
   <url>
     <loc>https://manoprotect.com/secure-online-payments</loc>
-    <lastmod>2026-02-16</lastmod>
+    <lastmod>2026-02-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   
   <url>
     <loc>https://manoprotect.com/online-payment-protection</loc>
-    <lastmod>2026-02-16</lastmod>
+    <lastmod>2026-02-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   
-  <!-- Pricing Page -->
-  <url>
-    <loc>https://manoprotect.com/pricing</loc>
-    <lastmod>2025-02-15</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  
-  <!-- How It Works -->
-  <url>
-    <loc>https://manoprotect.com/how-it-works</loc>
-    <lastmod>2025-02-15</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  
+  <!-- ============================================ -->
+  <!-- INFORMATIONAL PAGES -->
+  <!-- ============================================ -->
   <url>
     <loc>https://manoprotect.com/como-funciona</loc>
-    <lastmod>2025-02-15</lastmod>
+    <lastmod>2026-02-19</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.80</priority>
   </url>
   
-  <!-- Blog -->
+  <url>
+    <loc>https://manoprotect.com/how-it-works</loc>
+    <lastmod>2026-02-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.80</priority>
+  </url>
+  
   <url>
     <loc>https://manoprotect.com/blog</loc>
-    <lastmod>2025-02-15</lastmod>
+    <lastmod>2026-02-19</lastmod>
     <changefreq>daily</changefreq>
-    <priority>0.8</priority>
+    <priority>0.85</priority>
   </url>
   
-  <!-- FAQ -->
   <url>
     <loc>https://manoprotect.com/faq</loc>
-    <lastmod>2025-02-15</lastmod>
+    <lastmod>2026-02-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+  </url>
+  
+  <url>
+    <loc>https://manoprotect.com/quienes-somos</loc>
+    <lastmod>2026-02-19</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.70</priority>
   </url>
   
   <url>
-    <loc>https://manoprotect.com/preguntas-frecuentes</loc>
-    <lastmod>2025-02-15</lastmod>
+    <loc>https://manoprotect.com/contacto</loc>
+    <lastmod>2026-02-19</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  
-  <!-- About -->
-  <url>
-    <loc>https://manoprotect.com/sobre-nosotros</loc>
-    <lastmod>2025-02-15</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <!-- Legal Pages -->
-  <url>
-    <loc>https://manoprotect.com/privacy-policy</loc>
-    <lastmod>2025-02-15</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.3</priority>
-  </url>
-  
-  <url>
-    <loc>https://manoprotect.com/terms-of-service</loc>
-    <lastmod>2025-02-15</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.3</priority>
-  </url>
-  
-  <url>
-    <loc>https://manoprotect.com/legal-notice</loc>
-    <lastmod>2026-02-16</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.3</priority>
+    <priority>0.70</priority>
   </url>
   
   <!-- ============================================ -->
-  <!-- PRODUCT PAGES -->
+  <!-- PRODUCT FEATURE PAGES -->
   <!-- ============================================ -->
   <url>
     <loc>https://manoprotect.com/servicios-sos</loc>
-    <lastmod>2026-02-16</lastmod>
+    <lastmod>2026-02-19</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.80</priority>
   </url>
   
   <url>
     <loc>https://manoprotect.com/voice-shield</loc>
-    <lastmod>2026-02-16</lastmod>
+    <lastmod>2026-02-19</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.75</priority>
   </url>
   
   <url>
     <loc>https://manoprotect.com/smart-locator</loc>
-    <lastmod>2026-02-16</lastmod>
+    <lastmod>2026-02-19</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.75</priority>
   </url>
   
   <url>
     <loc>https://manoprotect.com/deepfake-shield</loc>
-    <lastmod>2026-02-16</lastmod>
+    <lastmod>2026-02-19</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  
-  <url>
-    <loc>https://manoprotect.com/shield</loc>
-    <lastmod>2026-02-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.75</priority>
   </url>
   
   <!-- ============================================ -->
   <!-- ENTERPRISE / B2B -->
   <!-- ============================================ -->
   <url>
-    <loc>https://manoprotect.com/enterprise</loc>
-    <lastmod>2026-02-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  
-  <url>
     <loc>https://manoprotect.com/empresas</loc>
-    <lastmod>2026-02-16</lastmod>
+    <lastmod>2026-02-19</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.70</priority>
   </url>
   
   <url>
     <loc>https://manoprotect.com/phishing-simulation</loc>
-    <lastmod>2026-02-16</lastmod>
+    <lastmod>2026-02-19</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  
-  <!-- ============================================ -->
-  <!-- INVESTOR PORTAL -->
-  <!-- ============================================ -->
-  <url>
-    <loc>https://manoprotect.com/inversores</loc>
-    <lastmod>2026-02-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <priority>0.70</priority>
   </url>
   
   <!-- ============================================ -->
@@ -292,22 +273,40 @@
   <!-- ============================================ -->
   <url>
     <loc>https://manoprotect.com/login</loc>
-    <lastmod>2026-02-16</lastmod>
+    <lastmod>2026-02-19</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
+    <priority>0.50</priority>
+  </url>
+  
+  <!-- ============================================ -->
+  <!-- LEGAL PAGES -->
+  <!-- ============================================ -->
+  <url>
+    <loc>https://manoprotect.com/privacy-policy</loc>
+    <lastmod>2026-02-19</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.30</priority>
   </url>
   
   <url>
-    <loc>https://manoprotect.com/register</loc>
-    <lastmod>2026-02-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
+    <loc>https://manoprotect.com/terms-of-service</loc>
+    <lastmod>2026-02-19</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.30</priority>
   </url>
   
   <url>
-    <loc>https://manoprotect.com/registro</loc>
-    <lastmod>2026-02-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
+    <loc>https://manoprotect.com/legal-notice</loc>
+    <lastmod>2026-02-19</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.30</priority>
   </url>
+  
+  <url>
+    <loc>https://manoprotect.com/refund-policy</loc>
+    <lastmod>2026-02-19</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.30</priority>
+  </url>
+  
 </urlset>
