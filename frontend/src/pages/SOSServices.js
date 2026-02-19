@@ -464,7 +464,7 @@ export default function SOSServices() {
       
       <div className="min-h-screen bg-zinc-50">
         {/* Header */}
-        <header className="bg-gradient-to-r from-red-600 via-orange-500 to-red-600 text-white">
+        <header className="bg-gradient-to-r from-[#4CAF50] via-[#66BB6A] to-[#4CAF50] text-white">
           <div className="max-w-7xl mx-auto px-4 py-6">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-4">
