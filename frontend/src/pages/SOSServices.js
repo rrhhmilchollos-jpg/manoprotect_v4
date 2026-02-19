@@ -482,7 +482,7 @@ export default function SOSServices() {
               </div>
               <div className="flex items-center gap-3">
                 {isAuthenticated ? (
-                  <Button onClick={() => navigate('/dashboard')} className="bg-white text-red-600 hover:bg-zinc-100">
+                  <Button onClick={() => navigate('/dashboard')} className="bg-white text-[#4CAF50] hover:bg-zinc-100">
                     Mi Panel
                   </Button>
                 ) : (
@@ -490,7 +490,7 @@ export default function SOSServices() {
                     <Button onClick={() => navigate('/login')} variant="outline" className="border-white text-white hover:bg-white/10">
                       Iniciar Sesión
                     </Button>
-                    <Button onClick={() => navigate('/register')} className="bg-white text-red-600 hover:bg-zinc-100">
+                    <Button onClick={() => navigate('/register')} className="bg-white text-[#4CAF50] hover:bg-zinc-100">
                       Registrarse
                     </Button>
                   </>
