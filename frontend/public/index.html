@@ -238,52 +238,62 @@
             "offers": {
                 "@type": "AggregateOffer",
                 "lowPrice": "0",
-                "highPrice": "14.99",
+                "highPrice": "399.99",
                 "priceCurrency": "EUR",
-                "offerCount": "4",
+                "offerCount": "3",
                 "offers": [{
                     "@type": "Offer",
-                    "name": "Prueba Gratuita",
+                    "name": "Plan Básico - Prueba Gratuita",
                     "price": "0",
                     "priceCurrency": "EUR",
-                    "description": "7 días gratis de digital security completo"
+                    "description": "7 días gratis de digital security - Sin tarjeta requerida"
                 }, {
                     "@type": "Offer",
-                    "name": "Plan Básico",
-                    "price": "4.99",
+                    "name": "Plan Individual",
+                    "price": "249.99",
                     "priceCurrency": "EUR",
-                    "description": "Fraud prevention básico"
-                }, {
-                    "@type": "Offer",
-                    "name": "Plan Premium",
-                    "price": "9.99",
-                    "priceCurrency": "EUR",
-                    "description": "Online payment protection completo"
+                    "priceSpecification": {
+                        "@type": "UnitPriceSpecification",
+                        "price": "249.99",
+                        "priceCurrency": "EUR",
+                        "billingDuration": "P1Y",
+                        "unitText": "año"
+                    },
+                    "description": "Protección 24/7 avanzada - 20,83€/mes facturado anualmente. Ahorras 110€"
                 }, {
                     "@type": "Offer",
                     "name": "Plan Familiar",
-                    "price": "14.99",
+                    "price": "399.99",
                     "priceCurrency": "EUR",
-                    "description": "Digital security para toda la familia"
+                    "priceSpecification": {
+                        "@type": "UnitPriceSpecification",
+                        "price": "399.99",
+                        "priceCurrency": "EUR",
+                        "billingDuration": "P1Y",
+                        "unitText": "año"
+                    },
+                    "description": "Hasta 5 miembros familia - 33,33€/mes facturado anualmente. Ahorras 200€"
                 }]
             },
             "aggregateRating": {
                 "@type": "AggregateRating",
-                "ratingValue": "4.9",
-                "ratingCount": "1247",
+                "ratingValue": "4.8",
+                "ratingCount": "327",
                 "bestRating": "5",
                 "worstRating": "1"
             },
             "author": {"@id": "https://manoprotect.com/#organization"},
             "provider": {"@id": "https://manoprotect.com/#organization"},
-            "screenshot": "https://manoprotect.com/app-screenshot.png",
+            "screenshot": "https://manoprotect.com/screenshots/dashboard.png",
             "featureList": [
                 "Fraud Prevention con IA",
                 "Protección contra Phishing",
                 "Online Payment Protection",
-                "Alertas SOS con GPS",
+                "Alertas SOS con GPS en tiempo real",
                 "Monitorización de Amenazas 24/7",
-                "Protección Familiar"
+                "Protección Familiar hasta 5 miembros",
+                "Análisis ilimitados con Inteligencia Artificial",
+                "Bloqueo automático de amenazas"
             ]
         }
         </script>
