@@ -134,6 +134,7 @@ const ManoProtectRegistro = () => {
       <div className="text-center mb-8">
         <h2 className="text-2xl font-bold text-gray-900">Elige tu plan</h2>
         <p className="text-gray-500 mt-2">Selecciona el nivel de protección que necesitas</p>
+        <p className="text-xs text-indigo-600 mt-1">✨ Todos los planes incluyen 7 días de prueba gratis</p>
       </div>
       
       <div className="grid md:grid-cols-3 gap-4">
@@ -141,41 +142,48 @@ const ManoProtectRegistro = () => {
           <div
             key={plan.id}
             onClick={() => setFormData({ ...formData, plan: plan.id })}
-            className={`relative cursor-pointer rounded-2xl border-2 p-6 transition-all ${
+            className={`relative cursor-pointer rounded-2xl border-2 p-5 transition-all ${
               formData.plan === plan.id
-                ? 'border-indigo-600 bg-indigo-50 shadow-lg'
-                : 'border-gray-200 hover:border-indigo-300'
+                ? 'border-indigo-600 bg-indigo-50 shadow-lg scale-[1.02]'
+                : 'border-gray-200 hover:border-indigo-300 hover:shadow-md'
             }`}
           >
             {plan.popular && (
               <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                <span className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white text-xs font-bold px-3 py-1 rounded-full">
+                <span className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-md">
                   MÁS POPULAR
                 </span>
               </div>
             )}
             
-            {plan.isFree && (
+            {plan.badge && !plan.popular && (
               <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                <span className="bg-gradient-to-r from-green-500 to-emerald-600 text-white text-xs font-bold px-3 py-1 rounded-full">
-                  7 DÍAS GRATIS
+                <span className="bg-gradient-to-r from-green-500 to-emerald-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-md">
+                  {plan.badge.toUpperCase()}
                 </span>
               </div>
             )}
             
-            <div className="text-center">
+            <div className="text-center pt-2">
               <h3 className="font-bold text-lg text-gray-900">{plan.name}</h3>
-              <div className="mt-2">
+              <div className="mt-3">
                 <span className="text-3xl font-bold text-indigo-600">{plan.price.split('/')[0]}</span>
-                {plan.price.includes('/') && <span className="text-gray-500">/{plan.price.split('/')[1]}</span>}
+                {plan.price.includes('/') && <span className="text-gray-500 text-sm">/{plan.price.split('/')[1]}</span>}
               </div>
               {plan.priceDetail && (
-                <p className="text-xs text-green-600 font-medium mt-1">{plan.priceDetail}</p>
+                <p className="text-xs text-green-600 font-semibold mt-1">{plan.priceDetail}</p>
               )}
               <p className="text-sm text-gray-500 mt-2">{plan.description}</p>
+              
+              {/* Indicador de tarjeta requerida */}
+              {plan.requiresCard && (
+                <p className="text-xs text-amber-600 mt-2 flex items-center justify-center gap-1">
+                  <span>💳</span> Requiere tarjeta de débito/crédito
+                </p>
+              )}
             </div>
             
-            <ul className="mt-6 space-y-2">
+            <ul className="mt-5 space-y-2">
               {plan.features.map((feature, idx) => (
                 <li key={idx} className="flex items-center gap-2 text-sm text-gray-600">
                   <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />
