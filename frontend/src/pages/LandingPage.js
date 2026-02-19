@@ -409,16 +409,38 @@ const LandingPage = () => {
                   </div>
                 </div>
                 
-                <Link 
-                  to="/dispositivo-sos"
-                  onClick={() => setShowCart(false)}
-                  className="block w-full bg-[#4CAF50] text-white text-center py-4 rounded-xl font-bold hover:bg-[#45a049] transition-colors"
-                >
-                  Finalizar Compra
-                </Link>
+                {/* Botón de Checkout */}
+                {cartTotal > 0 ? (
+                  <button 
+                    onClick={handleCheckout}
+                    disabled={checkoutLoading}
+                    className="w-full bg-[#4CAF50] text-white py-4 rounded-xl font-bold hover:bg-[#45a049] transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                    data-testid="checkout-btn"
+                  >
+                    {checkoutLoading ? (
+                      <>
+                        <Loader2 className="w-5 h-5 animate-spin" />
+                        Procesando...
+                      </>
+                    ) : (
+                      <>
+                        <CreditCard className="w-5 h-5" />
+                        Pagar con Stripe
+                      </>
+                    )}
+                  </button>
+                ) : (
+                  <Link 
+                    to="/dispositivo-sos"
+                    onClick={() => setShowCart(false)}
+                    className="block w-full bg-[#4CAF50] text-white text-center py-4 rounded-xl font-bold hover:bg-[#45a049] transition-colors"
+                  >
+                    Finalizar Pedido
+                  </Link>
+                )}
                 
                 <p className="text-xs text-center text-gray-500">
-                  🔒 Pago seguro con encriptación SSL
+                  🔒 Pago seguro con encriptación SSL de Stripe
                 </p>
               </div>
             )}
