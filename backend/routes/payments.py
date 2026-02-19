@@ -543,7 +543,7 @@ async def create_free_device_order(request: Request, data: FreeDeviceOrderReques
         return {
             "success": True,
             "order_id": order_id,
-            "message": f"Pedido creado correctamente. Tu dispositivo SOS será enviado en 24-48h.",
+            "message": "Pedido creado correctamente. Tu dispositivo SOS será enviado en 24-48h.",
             "shipping_cost": 0,
             "total": 0
         }
