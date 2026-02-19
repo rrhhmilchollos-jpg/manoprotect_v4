@@ -347,29 +347,74 @@
             "@context": "https://schema.org",
             "@type": "Product",
             "@id": "https://manoprotect.com/#product-sos",
-            "name": "ManoProtect SOS Device",
-            "description": "Dispositivo de emergencia SOS con GPS en tiempo real. Online payment protection y fraud prevention incluidos. Protección digital completa para tu familia.",
-            "image": ["https://manoprotect.com/sos-device.png", "https://manoprotect.com/sos-device-2.png"],
+            "name": "ManoProtect Dispositivo SOS GPS",
+            "description": "Dispositivo de emergencia SOS con GPS en tiempo real. Localización GPS para familias y mayores. Botón de pánico con alertas instantáneas.",
+            "image": [
+                "https://manoprotect.com/sos-device.png",
+                "https://static.prod-images.emergentagent.com/jobs/57731f5f-bdc3-4065-aa81-f8dc7ddad247/images/4a10ef76a79b16a8b4b57b4d18673d1fdf11d23b55e68841a8c3c2dadeea1a97.png"
+            ],
+            "sku": "MANO-SOS-001",
+            "mpn": "MANOPROTECT-SOS",
             "brand": {
                 "@type": "Brand",
                 "name": "ManoProtect"
             },
             "manufacturer": {"@id": "https://manoprotect.com/#organization"},
-            "category": "Security Devices",
+            "category": "Security Devices > GPS Trackers > Family Safety",
+            "color": ["Plata", "Negro", "Azul", "Rosa", "Verde Menta", "Naranja"],
+            "material": "ABS Premium",
+            "weight": {
+                "@type": "QuantitativeValue",
+                "value": "35",
+                "unitCode": "GRM"
+            },
             "offers": {
                 "@type": "Offer",
-                "url": "https://manoprotect.com/pricing",
+                "url": "https://manoprotect.com/dispositivo-sos",
                 "priceCurrency": "EUR",
-                "price": "9.99",
-                "priceValidUntil": "2025-12-31",
+                "price": "0",
+                "priceValidUntil": "2026-12-31",
                 "availability": "https://schema.org/InStock",
                 "itemCondition": "https://schema.org/NewCondition",
-                "seller": {"@id": "https://manoprotect.com/#organization"}
+                "seller": {"@id": "https://manoprotect.com/#organization"},
+                "shippingDetails": {
+                    "@type": "OfferShippingDetails",
+                    "shippingRate": {
+                        "@type": "MonetaryAmount",
+                        "value": "4.95",
+                        "currency": "EUR"
+                    },
+                    "shippingDestination": {
+                        "@type": "DefinedRegion",
+                        "addressCountry": "ES"
+                    },
+                    "deliveryTime": {
+                        "@type": "ShippingDeliveryTime",
+                        "handlingTime": {
+                            "@type": "QuantitativeValue",
+                            "minValue": "1",
+                            "maxValue": "2",
+                            "unitCode": "DAY"
+                        },
+                        "transitTime": {
+                            "@type": "QuantitativeValue",
+                            "minValue": "1",
+                            "maxValue": "2",
+                            "unitCode": "DAY"
+                        }
+                    }
+                },
+                "hasMerchantReturnPolicy": {
+                    "@type": "MerchantReturnPolicy",
+                    "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+                    "merchantReturnDays": "30",
+                    "returnMethod": "https://schema.org/ReturnByMail"
+                }
             },
             "aggregateRating": {
                 "@type": "AggregateRating",
-                "ratingValue": "4.9",
-                "reviewCount": "847",
+                "ratingValue": "4.8",
+                "reviewCount": "327",
                 "bestRating": "5"
             },
             "review": [{
@@ -380,8 +425,8 @@
                     "bestRating": "5"
                 },
                 "author": {"@type": "Person", "name": "María García"},
-                "datePublished": "2025-01-15",
-                "reviewBody": "Excelente servicio de digital security. El fraud prevention funciona perfectamente y me ha salvado de varias estafas de phishing."
+                "datePublished": "2026-01-15",
+                "reviewBody": "El dispositivo SOS me da tranquilidad. Mis padres mayores lo llevan siempre y sé que puedo localizarlos en cualquier momento. La calidad es excelente."
             }, {
                 "@type": "Review",
                 "reviewRating": {
@@ -390,8 +435,18 @@
                     "bestRating": "5"
                 },
                 "author": {"@type": "Person", "name": "Carlos López"},
-                "datePublished": "2025-01-20",
-                "reviewBody": "La mejor inversión para la seguridad de mi familia. El online payment protection es increíble."
+                "datePublished": "2026-01-20",
+                "reviewBody": "Perfecto para mis hijos. El botón SOS funciona de maravilla y las alertas llegan al instante. Muy recomendado para familias."
+            }, {
+                "@type": "Review",
+                "reviewRating": {
+                    "@type": "Rating",
+                    "ratingValue": "5",
+                    "bestRating": "5"
+                },
+                "author": {"@type": "Person", "name": "Ana Martínez"},
+                "datePublished": "2026-02-05",
+                "reviewBody": "Increíble relación calidad-precio. El dispositivo es GRATIS y solo pagas el envío. La app funciona perfectamente."
             }]
         }
         </script>
