@@ -39,26 +39,30 @@ const ManoProtectRegistro = () => {
 
   const plans = [
     {
+      id: 'basico',
+      name: 'Básico',
+      price: '0€',
+      priceDetail: '7 días gratis para probar',
+      description: 'Protección personal completa',
+      features: ['1 usuario', 'Detección de estafas', 'Alertas en tiempo real', 'Soporte por email'],
+      isFree: true
+    },
+    {
       id: 'individual',
       name: 'Individual',
-      price: '4,99€/mes',
-      description: 'Protección personal completa',
-      features: ['1 usuario', 'Detección de estafas', 'Alertas en tiempo real', 'Soporte por email']
+      price: '20,83€/mes',
+      priceDetail: '249,99€/año - Ahorras 110€',
+      description: 'La mejor opción para ti',
+      features: ['1 usuario', 'Protección 24/7 avanzada', 'Análisis ilimitados con IA', 'Alertas en tiempo real'],
+      popular: true
     },
     {
       id: 'familiar',
       name: 'Familiar',
-      price: '9,99€/mes',
-      description: 'Protege a toda tu familia',
-      features: ['Hasta 5 usuarios', 'Control parental', 'Seguimiento GPS', 'Soporte prioritario'],
-      popular: true
-    },
-    {
-      id: 'premium',
-      name: 'Premium',
-      price: '19,99€/mes',
-      description: 'Máxima protección',
-      features: ['Usuarios ilimitados', 'Todas las funciones', 'Gestor personal', 'Soporte 24/7']
+      price: '33,33€/mes',
+      priceDetail: '399,99€/año - Ahorras 200€',
+      description: 'Protección para toda la familia',
+      features: ['Hasta 5 usuarios', 'Todo de Individual +', 'Control parental', 'Localización GPS emergencias']
     }
   ];
 
