@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import { Button } from '../components/ui/button';
 import { toast } from 'sonner';
 import LandingFooter from '@/components/landing/LandingFooter';
@@ -10,6 +11,26 @@ import {
 } from 'lucide-react';
 
 const API_URL = process.env.REACT_APP_BACKEND_URL;
+
+// SEO Schema for Registration Page
+const registrationSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "Registro ManoProtect - Crea tu cuenta de seguridad digital",
+  "description": "Regístrate en ManoProtect y protege a tu familia con nuestra plataforma de seguridad digital. 7 días gratis, sin tarjeta requerida.",
+  "url": "https://manoprotect.com/registro",
+  "mainEntity": {
+    "@type": "Product",
+    "name": "ManoProtect Suscripción",
+    "offers": {
+      "@type": "AggregateOffer",
+      "lowPrice": "0",
+      "highPrice": "399.99",
+      "priceCurrency": "EUR",
+      "offerCount": "3"
+    }
+  }
+};
 
 const ManoProtectRegistro = () => {
   const navigate = useNavigate();
