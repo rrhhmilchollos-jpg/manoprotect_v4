@@ -701,6 +701,123 @@ async def get_user_orders(request: Request):
         raise HTTPException(status_code=500, detail=str(e))
 
 
+# ==================== CART CHECKOUT ENDPOINTS ====================
+
+@router.post("/cart/checkout")
+async def create_cart_checkout(cart_request: CartCheckoutRequest):
+    """Create Stripe checkout session for shopping cart from homepage"""
+    try:
+        origin_url = cart_request.origin_url
+        success_url = f"{origin_url}/pedido-confirmado?payment=success&session_id={{CHECKOUT_SESSION_ID}}&type=cart"
+        cancel_url = f"{origin_url}/?payment=cancelled"
+        
+        # Build line items from cart
+        line_items = []
+        
+        # Add products
+        for item in cart_request.items:
+            if item.precio > 0:
+                line_items.append({
+                    'price_data': {
+                        'currency': 'eur',
+                        'unit_amount': int(item.precio * 100),  # Convert to cents
+                        'product_data': {
+                            'name': item.nombre,
+                            'description': item.descripcion,
+                        },
+                    },
+                    'quantity': item.cantidad,
+                })
+        
+        # Add shipping cost if there are paid items or cart has items
+        if cart_request.shipping_cost > 0:
+            line_items.append({
+                'price_data': {
+                    'currency': 'eur',
+                    'unit_amount': int(cart_request.shipping_cost * 100),
+                    'product_data': {
+                        'name': 'Envío Express 24-48h',
+                        'description': 'Envío a toda España peninsular',
+                    },
+                },
+                'quantity': 1,
+            })
+        
+        # If all items are free, just charge shipping
+        if not line_items:
+            return {"error": "El carrito está vacío o no hay productos de pago"}
+        
+        # Calculate totals for metadata
+        subtotal = sum(item.precio * item.cantidad for item in cart_request.items)
+        total = subtotal + cart_request.shipping_cost
+        
+        # Create Stripe checkout session
+        session_params = {
+            'payment_method_types': ['card'],
+            'line_items': line_items,
+            'mode': 'payment',
+            'success_url': success_url,
+            'cancel_url': cancel_url,
+            'metadata': {
+                'type': 'cart_order',
+                'items_count': str(len(cart_request.items)),
+                'subtotal': str(subtotal),
+                'shipping': str(cart_request.shipping_cost),
+                'total': str(total),
+                'items_json': str([{"id": i.id, "nombre": i.nombre, "cantidad": i.cantidad, "precio": i.precio} for i in cart_request.items])
+            }
+        }
+        
+        # Add customer email if provided
+        if cart_request.customer_email:
+            session_params['customer_email'] = cart_request.customer_email
+        
+        session = stripe.checkout.Session.create(**session_params)
+        
+        # Save pending transaction
+        db.cart_orders.insert_one({
+            "session_id": session.id,
+            "type": "cart_order",
+            "items": [item.dict() for item in cart_request.items],
+            "subtotal": subtotal,
+            "shipping_cost": cart_request.shipping_cost,
+            "total": total,
+            "status": "pending",
+            "payment_status": "initiated",
+            "customer_email": cart_request.customer_email,
+            "created_at": datetime.now(timezone.utc)
+        })
+        
+        return {"url": session.url, "session_id": session.id}
+        
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.get("/cart/status/{session_id}")
+async def get_cart_payment_status(session_id: str):
+    """Get payment status for cart order"""
+    try:
+        session = stripe.checkout.Session.retrieve(session_id)
+        
+        # Update database
+        db.cart_orders.update_one(
+            {"session_id": session_id},
+            {"$set": {
+                "status": session.status,
+                "payment_status": session.payment_status,
+                "updated_at": datetime.now(timezone.utc)
+            }}
+        )
+        
+        return {
+            "status": session.status,
+            "payment_status": session.payment_status,
+            "amount_total": session.amount_total / 100 if session.amount_total else 0
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
 # ==================== SUBSCRIPTION ENDPOINTS ====================
 
 @router.post("/subscription/checkout")
