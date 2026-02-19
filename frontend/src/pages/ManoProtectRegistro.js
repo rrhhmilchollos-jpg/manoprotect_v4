@@ -19,7 +19,7 @@ const ManoProtectRegistro = () => {
   
   const [formData, setFormData] = useState({
     // Step 1: Plan selection
-    plan: 'familiar',
+    plan: 'individual',
     
     // Step 2: Personal info
     name: '',
