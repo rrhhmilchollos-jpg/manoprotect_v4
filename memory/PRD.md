@@ -653,3 +653,29 @@ stripe==14.1.0     # Pagos y reembolsos
 - `/app/backend/routes/payments.py` - Endpoint `/cart/checkout`
 
 **Testing**: Iteración 48 - 100% tests pasados
+
+---
+
+## Actualización 19 Febrero 2026 - Añadir al Carrito desde Búsqueda
+
+### Mejora UX: Botón "Añadir al Carrito" en Resultados de Búsqueda - COMPLETADO ✅
+
+**Descripción**: Los usuarios ahora pueden añadir productos directamente al carrito desde los resultados de búsqueda, sin necesidad de navegar a la página del producto.
+
+**Implementación**:
+- Botón "**+ Añadir**" aparece al hover sobre un producto en los resultados
+- Toast de confirmación: "Plan Premium añadido al carrito"
+- Contador del carrito en el header se actualiza instantáneamente
+- `data-testid="add-to-cart-{id}"` para testing
+
+**Archivos modificados**:
+- `/app/frontend/src/pages/LandingPage.js` - Líneas 280-320: Resultados de búsqueda con botón añadir
+
+**Flujo del usuario**:
+1. Clic en icono de búsqueda
+2. Escribir nombre del producto (ej: "Premium")
+3. Hover sobre el resultado
+4. Clic en "+ Añadir"
+5. Toast confirma la acción
+6. Contador del carrito se actualiza
+7. Usuario puede continuar comprando o ir al checkout
