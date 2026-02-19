@@ -532,7 +532,7 @@ export default function SOSServices() {
           {activeTab === 'dispositivo' && (
             <div className="space-y-8">
               {/* Promo Banner */}
-              <div className="bg-gradient-to-r from-amber-500 via-[#66BB6A] to-red-500 rounded-2xl p-6 text-white shadow-xl">
+              <div className="bg-gradient-to-r from-[#81C784] via-[#66BB6A] to-[#81C784] rounded-2xl p-6 text-white shadow-xl">
                 <div className="flex flex-col md:flex-row items-center justify-between gap-4">
                   <div className="flex items-center gap-4">
                     <div className="w-16 h-16 bg-white/20 backdrop-blur rounded-xl flex items-center justify-center">
@@ -550,7 +550,7 @@ export default function SOSServices() {
               </div>
               
               {/* Call Support Button - Similar to Securitas Direct */}
-              <Card className="bg-gradient-to-r from-[#4CAF50] to-red-700 text-white border-0">
+              <Card className="bg-gradient-to-r from-[#4CAF50] to-[#66BB6A] text-white border-0">
                 <CardContent className="p-6">
                   <div className="flex flex-col md:flex-row items-center justify-between gap-4">
                     <div className="flex items-center gap-4">
@@ -628,7 +628,7 @@ export default function SOSServices() {
                             key={color.id}
                             onClick={() => updateDeviceColor(previewColorIndex, color.id)}
                             className={`relative p-1 rounded-lg border-2 transition-all hover:scale-105 ${
-                              currentPreviewColorId === color.id ? 'border-[#4CAF50] shadow-md ring-2 ring-red-200' : 'border-transparent hover:border-zinc-300'
+                              currentPreviewColorId === color.id ? 'border-[#4CAF50] shadow-md ring-2 ring-green-200' : 'border-transparent hover:border-zinc-300'
                             }`}
                             title={color.name}
                             data-testid={`color-option-${color.id}`}
@@ -743,7 +743,7 @@ export default function SOSServices() {
                         const selectedColorObj = COLOR_OPTIONS.find(c => c.id === colorId);
                         return (
                           <div key={index} className={`p-4 rounded-xl border-2 transition-all ${
-                            previewColorIndex === index ? 'border-[#4CAF50] bg-red-50' : 'border-zinc-200'
+                            previewColorIndex === index ? 'border-[#4CAF50] bg-green-50' : 'border-zinc-200'
                           }`}>
                             <div className="flex items-center justify-between mb-3">
                               <span className="font-semibold text-sm">
@@ -788,7 +788,7 @@ export default function SOSServices() {
                   </Card>
 
                   {/* Verification Code Section */}
-                  <Card className={codeVerified ? 'border-emerald-500 bg-emerald-50' : 'border-orange-300 bg-orange-50'}>
+                  <Card className={codeVerified ? 'border-emerald-500 bg-emerald-50' : 'border-green-300 bg-green-50'}>
                     <CardHeader>
                       <CardTitle className="flex items-center gap-2">
                         {codeVerified ? (
@@ -799,7 +799,7 @@ export default function SOSServices() {
                         ) : (
                           <>
                             <Lock className="w-5 h-5 text-[#4CAF50]" />
-                            <span className="text-orange-700">Código de Verificación Requerido</span>
+                            <span className="text-green-700">Código de Verificación Requerido</span>
                           </>
                         )}
                       </CardTitle>
@@ -838,19 +838,19 @@ export default function SOSServices() {
                             <Button 
                               onClick={handleVerifyCode}
                               disabled={checkingCode}
-                              className="bg-[#4CAF50] hover:bg-orange-700"
+                              className="bg-[#4CAF50] hover:bg-[#45a049]"
                             >
                               {checkingCode ? 'Verificando...' : 'Verificar'}
                             </Button>
                           </div>
-                          <div className="bg-white rounded-lg p-4 border border-orange-200">
-                            <p className="text-sm text-orange-800 mb-3">
+                          <div className="bg-white rounded-lg p-4 border border-green-200">
+                            <p className="text-sm text-green-800 mb-3">
                               <strong>¿No tienes código?</strong> Suscríbete a un plan para obtenerlo:
                             </p>
                             <Button 
                               onClick={() => setActiveTab('planes')}
                               variant="outline"
-                              className="w-full border-[#4CAF50] text-[#4CAF50] hover:bg-orange-100"
+                              className="w-full border-[#4CAF50] text-[#4CAF50] hover:bg-green-100"
                             >
                               <CreditCard className="w-4 h-4 mr-2" />
                               Ver Planes y Obtener Código
@@ -940,7 +940,7 @@ export default function SOSServices() {
                       </p>
                       <Button 
                         onClick={() => setActiveTab('planes')}
-                        className="bg-gradient-to-r from-[#4CAF50] to-[#66BB6A] hover:from-red-700 hover:to-[#66BB6A]"
+                        className="bg-gradient-to-r from-[#4CAF50] to-[#66BB6A] hover:from-[#45a049] hover:to-[#66BB6A]"
                       >
                         Ver Planes de Suscripción
                       </Button>
@@ -1117,7 +1117,7 @@ export default function SOSServices() {
                       <p className="text-sm text-zinc-500">Protege a toda la familia</p>
                     </div>
                     <div className="text-center">
-                      <div className="w-14 h-14 mx-auto bg-red-100 rounded-full flex items-center justify-center mb-3">
+                      <div className="w-14 h-14 mx-auto bg-green-100 rounded-full flex items-center justify-center mb-3">
                         <Package className="w-7 h-7 text-[#4CAF50]" />
                       </div>
                       <h4 className="font-semibold">5 Dispositivos SOS</h4>
@@ -1281,7 +1281,7 @@ export default function SOSServices() {
 
               <div className="text-center">
                 <p className="text-zinc-500 mb-4">¿Todavía no has hecho tu pedido?</p>
-                <Button onClick={() => setActiveTab('dispositivo')} variant="outline" className="border-[#4CAF50] text-[#4CAF50] hover:bg-red-50">
+                <Button onClick={() => setActiveTab('dispositivo')} variant="outline" className="border-[#4CAF50] text-[#4CAF50] hover:bg-green-50">
                   <ShoppingCart className="w-4 h-4 mr-2" />
                   Solicitar Dispositivo SOS
                 </Button>
