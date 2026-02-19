@@ -676,7 +676,7 @@ const BlogPage = () => {
       </header>
 
       {/* Hero */}
-      <section className="bg-gradient-to-br from-slate-900 via-red-900 to-slate-900 text-white py-16 px-6">
+      <section className="bg-gradient-to-br from-slate-900 via-emerald-900 to-slate-900 text-white py-16 px-6">
         <div className="max-w-7xl mx-auto">
           <div className="flex items-center gap-2 text-green-400 mb-4">
             <AlertTriangle className="w-5 h-5" />

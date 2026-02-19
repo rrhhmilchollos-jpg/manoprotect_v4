@@ -300,7 +300,7 @@ const ChildTracking = () => {
 
       <div className="max-w-4xl mx-auto px-6 py-8">
         {/* SOS Emergency Button Card - YOUR emergency, sends YOUR location to family */}
-        <Card className="mb-6 bg-gradient-to-br from-[#4CAF50] to-red-700 border-0 shadow-lg shadow-red-500/30">
+        <Card className="mb-6 bg-gradient-to-br from-[#4CAF50] to-[#66BB6A] border-0 shadow-lg shadow-green-500/30">
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div className="text-white">
