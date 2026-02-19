@@ -269,21 +269,43 @@ const LandingPage = () => {
                     <div className="p-4">
                       <h3 className="text-sm font-bold text-gray-500 uppercase mb-3">Productos</h3>
                       {searchResults.productos.map(producto => (
-                        <Link
+                        <div
                           key={producto.id}
-                          to={producto.url}
-                          onClick={() => setShowSearch(false)}
-                          className="flex items-center gap-4 p-3 rounded-lg hover:bg-gray-50 transition-colors"
+                          className="flex items-center gap-4 p-3 rounded-lg hover:bg-gray-50 transition-colors group"
                         >
-                          <img src={producto.imagen} alt={producto.nombre} className="w-12 h-12 rounded-lg object-cover" />
-                          <div className="flex-1">
-                            <p className="font-bold text-gray-800">{producto.nombre}</p>
-                            <p className="text-sm text-gray-500">{producto.descripcion}</p>
-                          </div>
-                          <span className="font-bold text-[#4CAF50]">
-                            {producto.precio === 0 ? 'GRATIS' : `${producto.precio}€/mes`}
-                          </span>
-                        </Link>
+                          <Link
+                            to={producto.url}
+                            onClick={() => setShowSearch(false)}
+                            className="flex items-center gap-4 flex-1"
+                          >
+                            <img src={producto.imagen} alt={producto.nombre} className="w-12 h-12 rounded-lg object-cover" />
+                            <div className="flex-1">
+                              <p className="font-bold text-gray-800">{producto.nombre}</p>
+                              <p className="text-sm text-gray-500">{producto.descripcion}</p>
+                            </div>
+                            <span className="font-bold text-[#4CAF50]">
+                              {producto.precio === 0 ? 'GRATIS' : `${producto.precio}€/mes`}
+                            </span>
+                          </Link>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              addToCart({
+                                id: producto.id,
+                                nombre: producto.nombre,
+                                descripcion: producto.descripcion,
+                                precio: producto.precio,
+                                imagen: producto.imagen
+                              });
+                              toast.success(`${producto.nombre} añadido al carrito`);
+                            }}
+                            className="opacity-0 group-hover:opacity-100 bg-[#4CAF50] text-white px-3 py-2 rounded-lg text-sm font-bold hover:bg-[#45a049] transition-all flex items-center gap-1 whitespace-nowrap"
+                            data-testid={`add-to-cart-${producto.id}`}
+                          >
+                            <Plus className="w-4 h-4" />
+                            Añadir
+                          </button>
+                        </div>
                       ))}
                     </div>
                   )}
