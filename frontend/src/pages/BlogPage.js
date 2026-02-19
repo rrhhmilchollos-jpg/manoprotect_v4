@@ -62,7 +62,7 @@ Desde principios de 2025, la Policía Nacional ha detectado un **aumento del 340
     title: 'Llamadas falsas del Banco Santander y BBVA: así roban miles de euros',
     excerpt: 'Los estafadores llaman haciéndose pasar por tu banco. Dicen que hay "movimientos sospechosos" y te piden las claves. Víctimas pierden hasta 50.000€.',
     category: 'Vishing',
-    categoryColor: 'bg-red-500',
+    categoryColor: 'bg-[#4CAF50]',
     date: '10 Feb 2025',
     readTime: '5 min',
     views: 8932,
@@ -274,7 +274,7 @@ Los estafadores usan imágenes de famosos españoles para promocionar plataforma
     title: 'CASO REAL: Secuestro en Corbera (Xàtiva) - Una llamada desde el maletero salvó sus vidas',
     excerpt: 'Una pareja secuestrada en Valencia logró ser rescatada porque la mujer llamó a su cuñada desde el maletero del coche y compartió su ubicación GPS. La Policía detuvo a los captores.',
     category: 'Secuestro Real',
-    categoryColor: 'bg-red-600',
+    categoryColor: 'bg-[#4CAF50]',
     date: '9 Feb 2026',
     readTime: '6 min',
     views: 45230,
@@ -611,11 +611,11 @@ Ofrecemos protección B2B con:
 const categories = [
   { name: 'Todos', value: 'all', color: 'bg-slate-500' },
   { name: 'Smishing', value: 'Smishing', color: 'bg-orange-500' },
-  { name: 'Vishing', value: 'Vishing', color: 'bg-red-500' },
+  { name: 'Vishing', value: 'Vishing', color: 'bg-[#4CAF50]' },
   { name: 'Phishing', value: 'Phishing', color: 'bg-blue-500' },
   { name: 'WhatsApp', value: 'WhatsApp', color: 'bg-green-500' },
   { name: 'Secuestro Virtual', value: 'Secuestro Virtual', color: 'bg-purple-500' },
-  { name: 'Secuestro Real', value: 'Secuestro Real', color: 'bg-red-600' },
+  { name: 'Secuestro Real', value: 'Secuestro Real', color: 'bg-[#4CAF50]' },
   { name: 'Menores', value: 'Menores', color: 'bg-pink-600' },
   { name: 'Mayores', value: 'Mayores', color: 'bg-amber-600' },
   { name: 'Empresas', value: 'Empresas', color: 'bg-slate-700' }
@@ -745,7 +745,7 @@ const BlogPage = () => {
         <section className="py-12 px-6 bg-white">
           <div className="max-w-7xl mx-auto">
             <h2 className="text-2xl font-bold text-slate-900 mb-8 flex items-center gap-2">
-              <AlertTriangle className="w-6 h-6 text-red-500" />
+              <AlertTriangle className="w-6 h-6 text-[#4CAF50]" />
               Alertas Destacadas
             </h2>
             <div className="grid md:grid-cols-3 gap-6">

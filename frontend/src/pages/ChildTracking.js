@@ -300,7 +300,7 @@ const ChildTracking = () => {
 
       <div className="max-w-4xl mx-auto px-6 py-8">
         {/* SOS Emergency Button Card - YOUR emergency, sends YOUR location to family */}
-        <Card className="mb-6 bg-gradient-to-br from-red-600 to-red-700 border-0 shadow-lg shadow-red-500/30">
+        <Card className="mb-6 bg-gradient-to-br from-[#4CAF50] to-red-700 border-0 shadow-lg shadow-red-500/30">
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div className="text-white">
@@ -311,7 +311,7 @@ const ChildTracking = () => {
               </div>
               <Button
                 onClick={() => navigate('/sos-quick')}
-                className="w-20 h-20 rounded-full bg-white hover:bg-red-100 text-red-600 font-black shadow-xl flex flex-col items-center justify-center"
+                className="w-20 h-20 rounded-full bg-white hover:bg-red-100 text-[#4CAF50] font-black shadow-xl flex flex-col items-center justify-center"
                 data-testid="sos-main-button"
               >
                 <span className="text-2xl">SOS</span>
@@ -430,7 +430,7 @@ const ChildTracking = () => {
                 </div>
                 
                 <div>
-                  <Label htmlFor="email">Email <span className="text-red-500">*</span></Label>
+                  <Label htmlFor="email">Email <span className="text-[#4CAF50]">*</span></Label>
                   <Input
                     id="email"
                     type="email"
@@ -577,7 +577,7 @@ const ChildTracking = () => {
                         variant="ghost"
                         size="sm"
                         onClick={() => handleRemoveChild(child)}
-                        className="text-red-500 hover:text-red-700"
+                        className="text-[#4CAF50] hover:text-red-700"
                       >
                         <Trash2 className="w-4 h-4" />
                       </Button>

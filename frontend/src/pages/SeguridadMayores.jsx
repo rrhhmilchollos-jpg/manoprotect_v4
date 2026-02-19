@@ -38,7 +38,7 @@ const SeguridadMayores = () => {
       icon: Heart,
       title: "Botón SOS",
       description: "Un solo toque para alertar a familiares y emergencias con ubicación GPS exacta.",
-      color: "bg-red-100 text-red-600"
+      color: "bg-red-100 text-[#4CAF50]"
     },
     {
       icon: MapPin,
@@ -268,14 +268,14 @@ const SeguridadMayores = () => {
                 <p className="text-sm text-slate-600">Protección para niños, adultos y mayores</p>
               </Link>
               <Link to="/servicios-sos" className="group bg-slate-50 rounded-xl p-6 hover:bg-slate-100 transition-colors">
-                <h3 className="font-bold text-slate-900 mb-2 group-hover:text-red-600 flex items-center gap-2">
+                <h3 className="font-bold text-slate-900 mb-2 group-hover:text-[#4CAF50] flex items-center gap-2">
                   Botón SOS con GPS
                   <ArrowRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" />
                 </h3>
                 <p className="text-sm text-slate-600">Alertas de emergencia con localización</p>
               </Link>
               <Link to="/proteccion-phishing" className="group bg-slate-50 rounded-xl p-6 hover:bg-slate-100 transition-colors">
-                <h3 className="font-bold text-slate-900 mb-2 group-hover:text-red-600 flex items-center gap-2">
+                <h3 className="font-bold text-slate-900 mb-2 group-hover:text-[#4CAF50] flex items-center gap-2">
                   Anti-Phishing
                   <ArrowRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" />
                 </h3>

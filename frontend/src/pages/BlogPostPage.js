@@ -61,7 +61,7 @@ Desde principios de 2025, la Policía Nacional ha detectado un **aumento del 340
     title: 'Llamadas falsas del Banco Santander y BBVA: así roban miles de euros',
     excerpt: 'Los estafadores llaman haciéndose pasar por tu banco.',
     category: 'Vishing',
-    categoryColor: 'bg-red-500',
+    categoryColor: 'bg-[#4CAF50]',
     date: '10 Feb 2025',
     readTime: '5 min',
     views: 8932,
@@ -417,7 +417,7 @@ const BlogPostPage = () => {
               li: ({node, ...props}) => <li className="text-slate-700" {...props} />,
               strong: ({node, ...props}) => <strong className="font-bold text-slate-900" {...props} />,
               blockquote: ({node, ...props}) => (
-                <blockquote className="border-l-4 border-red-500 pl-4 py-2 bg-red-50 my-4 italic text-slate-700" {...props} />
+                <blockquote className="border-l-4 border-[#4CAF50] pl-4 py-2 bg-red-50 my-4 italic text-slate-700" {...props} />
               ),
             }}
           >
