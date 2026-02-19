@@ -505,7 +505,7 @@ export default function SOSServices() {
           <div className="max-w-7xl mx-auto px-4">
             <nav className="flex gap-1 overflow-x-auto py-2">
               {[
-                { id: 'dispositivo', label: '🔴 Dispositivo SOS', icon: Package },
+                { id: 'dispositivo', label: '📱 Dispositivo SOS', icon: Package },
                 { id: 'planes', label: '💰 Planes y Precios', icon: CreditCard },
                 { id: 'funciones', label: '⚡ Funcionalidades', icon: Zap },
                 { id: 'tracking', label: '📦 Seguir Pedido', icon: Truck },
@@ -515,7 +515,7 @@ export default function SOSServices() {
                   onClick={() => setActiveTab(tab.id)}
                   className={`flex items-center gap-2 px-4 py-3 rounded-lg font-medium transition-all whitespace-nowrap ${
                     activeTab === tab.id 
-                      ? 'bg-red-600 text-white shadow-md' 
+                      ? 'bg-[#4CAF50] text-white shadow-md' 
                       : 'text-zinc-600 hover:bg-zinc-100'
                   }`}
                 >
