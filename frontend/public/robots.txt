@@ -1,21 +1,94 @@
 # ManoProtect Robots.txt
 # Digital Security, Fraud Prevention & Online Payment Protection
+# Updated: 2026-02-19
 
+# ============================================
+# GOOGLE BOT
+# ============================================
+User-agent: Googlebot
+Allow: /
+Disallow: /api/
+Disallow: /dashboard
+Disallow: /settings
+Disallow: /admin
+Disallow: /employee-login
+Disallow: /enterprise/portal
+Disallow: /*.json$
+Disallow: /*?*session
+Disallow: /*?*token
+
+# ============================================
+# GOOGLE IMAGES
+# ============================================
+User-agent: Googlebot-Image
+Allow: /
+Allow: /og-image.png
+Allow: /icons/
+Allow: /screenshots/
+Allow: /google-ads/
+
+# ============================================
+# BING BOT
+# ============================================
+User-agent: Bingbot
+Allow: /
+Disallow: /api/
+Disallow: /dashboard
+Disallow: /settings
+Disallow: /admin
+
+# ============================================
+# GPT BOT (OpenAI)
+# ============================================
+User-agent: GPTBot
+Allow: /
+Allow: /blog
+Allow: /faq
+Allow: /como-funciona
+Allow: /pricing
+Disallow: /api/
+Disallow: /dashboard
+Disallow: /admin
+
+# ============================================
+# CLAUDE BOT (Anthropic)
+# ============================================
+User-agent: ClaudeBot
+Allow: /
+Allow: /blog
+Allow: /faq
+Disallow: /api/
+Disallow: /dashboard
+
+# ============================================
+# PERPLEXITY BOT
+# ============================================
+User-agent: PerplexityBot
+Allow: /
+Allow: /blog
+Allow: /faq
+Disallow: /api/
+Disallow: /dashboard
+
+# ============================================
+# ALL OTHER BOTS
+# ============================================
 User-agent: *
 Allow: /
 
 # Important pages for SEO - Main
+Allow: /dispositivo-sos
 Allow: /secure-payments
 Allow: /secure-online-payments
 Allow: /online-payment-protection
 Allow: /pricing
-Allow: /plans
+Allow: /registro
 Allow: /blog
 Allow: /how-it-works
 Allow: /como-funciona
 Allow: /faq
-Allow: /sobre-nosotros
-Allow: /servicios-sos
+Allow: /quienes-somos
+Allow: /contacto
 
 # SEO SILO Pages - Security
 Allow: /proteccion-phishing
@@ -37,9 +110,20 @@ Allow: /elderly-protection
 Allow: /privacy-policy
 Allow: /terms-of-service
 Allow: /legal-notice
+Allow: /refund-policy
+
+# Product pages
+Allow: /servicios-sos
+Allow: /voice-shield
+Allow: /smart-locator
+Allow: /deepfake-shield
+
+# Enterprise pages
+Allow: /empresas
+Allow: /phishing-simulation
 
 # Disallow admin and private areas
-Disallow: /enterprise
+Disallow: /enterprise/portal
 Disallow: /admin
 Disallow: /api/
 Disallow: /dashboard
@@ -47,8 +131,28 @@ Disallow: /settings
 Disallow: /employee-login
 Disallow: /investor
 
-# Sitemap location
+# Disallow query parameters that create duplicates
+Disallow: /*?session=
+Disallow: /*?token=
+Disallow: /*?ref=
+Disallow: /*?utm_
+
+# ============================================
+# SITEMAPS
+# ============================================
 Sitemap: https://manoprotect.com/sitemap.xml
 
-# Crawl-delay for respectful crawling
+# ============================================
+# INDEXNOW KEY LOCATION
+# ============================================
+# IndexNow key: https://manoprotect.com/manoprotect-indexnow-key.txt
+
+# ============================================
+# CRAWL SETTINGS
+# ============================================
 Crawl-delay: 1
+
+# ============================================
+# HOST
+# ============================================
+Host: https://manoprotect.com
