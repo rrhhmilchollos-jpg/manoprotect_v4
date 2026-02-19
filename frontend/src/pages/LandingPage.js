@@ -1,12 +1,15 @@
 /**
  * ManoProtect - Landing Page
- * Con búsqueda funcional y carrito profesional
+ * Con búsqueda funcional y carrito profesional con checkout Stripe
  */
 import { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { Check, Star, Play, ChevronRight, MapPin, Lock, Phone, Shield, Users, Search, ShoppingCart, X, Plus, Minus, Trash2 } from 'lucide-react';
+import { Check, Star, Play, ChevronRight, MapPin, Lock, Phone, Shield, Users, Search, ShoppingCart, X, Plus, Minus, Trash2, CreditCard, Loader2 } from 'lucide-react';
+import { toast } from 'sonner';
 import LandingFooter from '@/components/landing/LandingFooter';
+
+const API = process.env.REACT_APP_BACKEND_URL;
 
 // Productos disponibles para búsqueda
 const productos = [
