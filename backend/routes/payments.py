@@ -122,6 +122,20 @@ class SubscriptionRequest(BaseModel):
 class CancelSubscriptionRequest(BaseModel):
     user_id: str
 
+class CartItem(BaseModel):
+    id: int
+    nombre: str
+    descripcion: str
+    precio: float
+    cantidad: int
+    imagen: Optional[str] = None
+
+class CartCheckoutRequest(BaseModel):
+    items: List[CartItem]
+    shipping_cost: float = 4.95
+    origin_url: str
+    customer_email: Optional[str] = None
+
 # ==================== HELPER FUNCTIONS ====================
 
 def validate_card_not_prepaid(payment_method_id: str) -> bool:
