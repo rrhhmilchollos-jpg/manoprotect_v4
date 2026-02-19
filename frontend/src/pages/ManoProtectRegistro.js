@@ -382,6 +382,25 @@ const ManoProtectRegistro = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-indigo-900">
+      {/* SEO Meta Tags */}
+      <Helmet>
+        <title>Registro | ManoProtect - Crea tu cuenta de seguridad digital</title>
+        <meta name="description" content="Regístrate en ManoProtect y protege a tu familia. Planes desde 0€. 7 días de prueba gratis. Protección contra phishing, fraud prevention y localización GPS." />
+        <meta name="keywords" content="registro manoprotect, crear cuenta seguridad digital, protección familiar, plan básico gratis, plan individual, plan familiar" />
+        <link rel="canonical" href="https://manoprotect.com/registro" />
+        
+        {/* Open Graph */}
+        <meta property="og:title" content="Registro | ManoProtect - Crea tu cuenta de seguridad digital" />
+        <meta property="og:description" content="Regístrate en ManoProtect y protege a tu familia. Planes desde 0€. 7 días de prueba gratis." />
+        <meta property="og:url" content="https://manoprotect.com/registro" />
+        <meta property="og:type" content="website" />
+        
+        {/* Schema.org */}
+        <script type="application/ld+json">
+          {JSON.stringify(registrationSchema)}
+        </script>
+      </Helmet>
+      
       {/* Header */}
       <header className="bg-white/5 backdrop-blur-sm border-b border-white/10">
         <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
