@@ -258,7 +258,7 @@ async def create_checkout_session(
             raise HTTPException(status_code=400, detail="Plan de suscripción no válido")
         
         # Redirigir a página de éxito personalizada
-        success_url = f"{data.origin_url}/payment-success?session_id={{CHECKOUT_SESSION_ID}}"
+        success_url = f"{data.origin_url}/gracias?success=true&session_id={{CHECKOUT_SESSION_ID}}&product=suscripcion&plan={data.plan_type}"
         cancel_url = f"{data.origin_url}/pricing?canceled=true"
         
         host_url = str(http_request.base_url).rstrip('/')
