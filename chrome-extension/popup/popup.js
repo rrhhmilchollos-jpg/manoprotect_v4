@@ -1,5 +1,5 @@
 // ManoProtect Shield - Popup Script
-const API_BASE = 'https://sos-device-preview.preview.emergentagent.com/api';
+const API_BASE = 'https://ios-release-preview-1.preview.emergentagent.com/api';
 
 // DOM Elements
 const currentUrlEl = document.getElementById('current-url');

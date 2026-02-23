@@ -309,9 +309,9 @@ Para activar el subdominio `admin.manoprotect.com`:
 ### Preview (Actual)
 | Portal | URL |
 |--------|-----|
-| Landing Page | https://sos-device-preview.preview.emergentagent.com |
-| Portal Enterprise | https://sos-device-preview.preview.emergentagent.com/enterprise/login |
-| Portal Director | https://sos-device-preview.preview.emergentagent.com/employee-login |
+| Landing Page | https://ios-release-preview-1.preview.emergentagent.com |
+| Portal Enterprise | https://ios-release-preview-1.preview.emergentagent.com/enterprise/login |
+| Portal Director | https://ios-release-preview-1.preview.emergentagent.com/employee-login |
 
 ---
 
