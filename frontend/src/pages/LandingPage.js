@@ -554,32 +554,32 @@ const LandingPage = () => {
       </section>
 
       {/* ============ SENTINEL X PROMO BANNER ============ */}
-      <section className="relative bg-black py-16 overflow-hidden">
+      <section className="relative bg-black py-10 overflow-hidden">
         {/* Background effects */}
         <div className="absolute inset-0 bg-gradient-to-r from-cyan-900/20 via-transparent to-blue-900/20" />
-        <div className="absolute top-0 right-0 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 left-0 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl" />
+        <div className="absolute top-0 right-0 w-64 h-64 bg-cyan-500/10 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 left-0 w-48 h-48 bg-blue-500/10 rounded-full blur-3xl" />
         
-        <div className="max-w-7xl mx-auto px-6 relative z-10">
-          <div className="grid lg:grid-cols-2 gap-8 items-center">
+        <div className="max-w-6xl mx-auto px-6 relative z-10">
+          <div className="grid lg:grid-cols-2 gap-6 items-center">
             {/* Product Image */}
             <div className="relative order-2 lg:order-1">
-              <div className="relative group">
+              <div className="relative group flex justify-center">
                 {/* Glow effect */}
-                <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/30 to-blue-500/30 blur-2xl rounded-full transform scale-75 group-hover:scale-90 transition-transform duration-700" />
+                <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/20 to-blue-500/20 blur-xl rounded-full transform scale-50" />
                 
                 <Link to="/sentinel-x" className="block">
                   <img 
                     src="https://customer-assets.emergentagent.com/job_8161c713-bb69-4bfd-84d2-fde54657d491/artifacts/acz8j630_Reloj%20inteligente%20ManoProtect%20SENTINEL%20X.png"
                     alt="ManoProtect SENTINEL X - Smartwatch de Seguridad"
-                    className="relative z-10 w-full max-w-md mx-auto transform group-hover:scale-105 transition-transform duration-500 drop-shadow-2xl"
+                    className="relative z-10 w-48 sm:w-56 lg:w-64 transform group-hover:scale-105 transition-transform duration-500 drop-shadow-2xl"
                     data-testid="sentinel-x-promo-image"
                   />
                 </Link>
                 
                 {/* Floating badge */}
-                <div className="absolute top-4 right-4 lg:right-12 animate-bounce">
-                  <div className="bg-gradient-to-r from-amber-500 to-orange-500 text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg">
+                <div className="absolute top-0 right-8 lg:right-16 animate-bounce">
+                  <div className="bg-gradient-to-r from-amber-500 to-orange-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
                     🔥 NUEVO
                   </div>
                 </div>
@@ -588,12 +588,12 @@ const LandingPage = () => {
 
             {/* Content */}
             <div className="text-center lg:text-left order-1 lg:order-2">
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-cyan-500/10 border border-cyan-500/30 rounded-full text-cyan-400 text-sm mb-4">
-                <span className="w-2 h-2 bg-cyan-400 rounded-full animate-pulse" />
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-cyan-500/10 border border-cyan-500/30 rounded-full text-cyan-400 text-xs mb-3">
+                <span className="w-1.5 h-1.5 bg-cyan-400 rounded-full animate-pulse" />
                 Edición Fundadores - Solo 500 unidades
               </div>
               
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4">
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-3">
                 SENTINEL X
                 <span className="block text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">
                   Tu Guardián Personal
