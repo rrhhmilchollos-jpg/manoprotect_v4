@@ -77,6 +77,7 @@ User-agent: *
 Allow: /
 
 # Important pages for SEO - Main
+Allow: /sentinel-x
 Allow: /dispositivo-sos
 Allow: /secure-payments
 Allow: /secure-online-payments
