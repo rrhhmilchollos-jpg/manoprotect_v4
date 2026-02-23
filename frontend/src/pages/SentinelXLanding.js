@@ -207,41 +207,59 @@ const SentinelXLanding = () => {
                   </a>
                 </div>
 
-                {/* Reservation Counter */}
-                <div className={`mt-6 p-4 bg-gradient-to-r from-amber-500/10 to-orange-500/10 border rounded-xl transition-all duration-300 ${
-                  (MAX_FOUNDERS_UNITS - reservedCount) < 100 
-                    ? 'border-red-500/50 animate-pulse shadow-lg shadow-red-500/20' 
-                    : 'border-amber-500/30'
+                {/* Units Remaining Counter - Countdown */}
+                <div className={`mt-6 p-4 bg-gradient-to-r border rounded-xl transition-all duration-500 ${
+                  unitsRemaining <= 50 
+                    ? 'from-red-500/20 to-orange-500/20 border-red-500/50 animate-pulse shadow-lg shadow-red-500/20' 
+                    : unitsRemaining <= 100
+                    ? 'from-orange-500/15 to-amber-500/15 border-orange-500/40'
+                    : 'from-amber-500/10 to-orange-500/10 border-amber-500/30'
                 }`}>
                   <div className="flex items-center justify-between mb-2">
                     <div className={`flex items-center gap-2 ${
-                      (MAX_FOUNDERS_UNITS - reservedCount) < 100 ? 'text-red-400' : 'text-amber-400'
+                      unitsRemaining <= 50 ? 'text-red-400' : unitsRemaining <= 100 ? 'text-orange-400' : 'text-amber-400'
                     }`}>
-                      <Users className="w-5 h-5" />
+                      {unitsRemaining <= 50 ? (
+                        <AlertTriangle className="w-5 h-5 animate-pulse" />
+                      ) : (
+                        <Users className="w-5 h-5" />
+                      )}
                       <span className="font-semibold">
-                        {(MAX_FOUNDERS_UNITS - reservedCount) < 100 ? '🔥 ¡ÚLTIMAS UNIDADES!' : 'Unidades Reservadas'}
+                        {unitsRemaining <= 20 
+                          ? '🔥 ¡ÚLTIMAS UNIDADES!' 
+                          : unitsRemaining <= 50 
+                          ? '⚡ ¡QUEDAN POCAS!' 
+                          : 'Unidades Disponibles'}
                       </span>
                     </div>
-                    <span className={`font-bold ${
-                      (MAX_FOUNDERS_UNITS - reservedCount) < 100 ? 'text-red-400' : 'text-white'
-                    }`}>{reservedCount} / {MAX_FOUNDERS_UNITS}</span>
+                    <span className={`text-2xl font-bold tabular-nums transition-all duration-300 ${
+                      unitsRemaining <= 50 ? 'text-red-400 scale-110' : unitsRemaining <= 100 ? 'text-orange-400' : 'text-white'
+                    }`}>
+                      {unitsRemaining}
+                    </span>
                   </div>
                   <div className="w-full bg-gray-700 rounded-full h-3 overflow-hidden">
                     <div 
                       className={`h-full rounded-full transition-all duration-1000 ease-out ${
-                        (MAX_FOUNDERS_UNITS - reservedCount) < 100 
+                        unitsRemaining <= 50 
                           ? 'bg-gradient-to-r from-red-500 to-orange-500' 
-                          : 'bg-gradient-to-r from-amber-500 to-orange-500'
+                          : unitsRemaining <= 100
+                          ? 'bg-gradient-to-r from-orange-500 to-amber-500'
+                          : 'bg-gradient-to-r from-amber-500 to-yellow-500'
                       }`}
-                      style={{ width: `${Math.min((reservedCount / MAX_FOUNDERS_UNITS) * 100, 100)}%` }}
+                      style={{ width: `${(unitsRemaining / MAX_UNITS) * 100}%` }}
                     />
                   </div>
-                  <p className={`text-xs mt-2 text-center ${
-                    (MAX_FOUNDERS_UNITS - reservedCount) < 100 ? 'text-red-400 font-semibold' : 'text-gray-400'
+                  <p className={`text-xs mt-2 text-center transition-all duration-300 ${
+                    unitsRemaining <= 50 ? 'text-red-400 font-bold' : unitsRemaining <= 100 ? 'text-orange-400 font-semibold' : 'text-gray-400'
                   }`}>
-                    {(MAX_FOUNDERS_UNITS - reservedCount) < 100 
-                      ? `⚠️ ¡ATENCIÓN! Solo quedan ${MAX_FOUNDERS_UNITS - reservedCount} unidades. ¡No te quedes sin la tuya!`
-                      : `¡Solo quedan ${MAX_FOUNDERS_UNITS - reservedCount} unidades de la Edición Fundadores!`
+                    {unitsRemaining <= 20 
+                      ? `⚠️ ¡ATENCIÓN! Solo quedan ${unitsRemaining} unidades. ¡Reserva AHORA!`
+                      : unitsRemaining <= 50
+                      ? `¡Solo ${unitsRemaining} unidades restantes! La demanda es muy alta.`
+                      : unitsRemaining <= 100
+                      ? `Quedan ${unitsRemaining} unidades de ${MAX_UNITS} - Edición Fundadores`
+                      : `${unitsRemaining} unidades disponibles de la Edición Fundadores`
                     }
                   </p>
                 </div>
