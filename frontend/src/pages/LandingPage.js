@@ -50,17 +50,12 @@ const LandingPage = () => {
   const [showSocialProof, setShowSocialProof] = useState(false);
   const [socialProofData, setSocialProofData] = useState({ name: '', city: '', product: '' });
 
-  // Social proof data - random Spanish names and cities
-  const socialProofNames = ['Juan', 'María', 'Carlos', 'Ana', 'Pedro', 'Laura', 'Miguel', 'Carmen', 'David', 'Isabel', 'Javier', 'Elena'];
-  const socialProofCities = ['Madrid', 'Barcelona', 'Valencia', 'Sevilla', 'Bilbao', 'Málaga', 'Zaragoza', 'Murcia', 'Palma', 'Alicante'];
-  const socialProofProducts = ['SENTINEL X', 'Dispositivo SOS', 'Plan Familiar'];
-
   // Social Proof Effect
   useEffect(() => {
     const showNotification = () => {
-      const randomName = socialProofNames[Math.floor(Math.random() * socialProofNames.length)];
-      const randomCity = socialProofCities[Math.floor(Math.random() * socialProofCities.length)];
-      const randomProduct = socialProofProducts[Math.floor(Math.random() * socialProofProducts.length)];
+      const randomName = SOCIAL_PROOF_NAMES[Math.floor(Math.random() * SOCIAL_PROOF_NAMES.length)];
+      const randomCity = SOCIAL_PROOF_CITIES[Math.floor(Math.random() * SOCIAL_PROOF_CITIES.length)];
+      const randomProduct = SOCIAL_PROOF_PRODUCTS[Math.floor(Math.random() * SOCIAL_PROOF_PRODUCTS.length)];
       
       setSocialProofData({ name: randomName, city: randomCity, product: randomProduct });
       setShowSocialProof(true);
