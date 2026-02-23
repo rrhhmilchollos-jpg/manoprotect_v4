@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { Shield, Lock, Mic, MapPin, Zap, Check, Clock, Globe, CreditCard, ChevronRight, Star, Play, Users } from 'lucide-react';
+import { Shield, Lock, Mic, MapPin, Zap, Check, Clock, Globe, CreditCard, ChevronRight, Star, Users, AlertTriangle } from 'lucide-react';
 import LandingHeader from '../components/landing/LandingHeader';
 import LandingFooter from '../components/landing/LandingFooter';
 
@@ -13,13 +13,23 @@ const SENTINEL_IMAGES = {
   lifestyle: "https://customer-assets.emergentagent.com/job_8161c713-bb69-4bfd-84d2-fde54657d491/artifacts/68kjir28_Reloj%20y%20m%C3%B3vil%20seguros.png"
 };
 
-// Maximum units for founders edition
-const MAX_FOUNDERS_UNITS = 500;
+// Countdown configuration
+const MAX_UNITS = 200;
+const COUNTDOWN_INTERVAL_MS = 8000; // Decrease by 1 every 8 seconds
 
 const SentinelXLanding = () => {
   const [selectedImage, setSelectedImage] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
-  const [reservedCount, setReservedCount] = useState(143); // Start with base count
+  const [unitsRemaining, setUnitsRemaining] = useState(() => {
+    // Try to get saved count from sessionStorage to maintain consistency during session
+    const saved = sessionStorage.getItem('sentinel_units');
+    if (saved) {
+      const parsed = parseInt(saved, 10);
+      if (parsed > 0 && parsed <= MAX_UNITS) return parsed;
+    }
+    // Start with random number between 150-200 for variety
+    return Math.floor(Math.random() * 51) + 150;
+  });
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -30,21 +40,26 @@ const SentinelXLanding = () => {
     paymentType: 'full' // 'full' or 'partial'
   });
 
-  // Fetch reservation count on mount
+  // Countdown effect - decreases units remaining
   useEffect(() => {
-    const fetchReservationCount = async () => {
-      try {
-        const response = await fetch(`${API_URL}/api/sentinel-x/count`);
-        if (response.ok) {
-          const data = await response.json();
-          // Add base count (143) to actual reservations
-          setReservedCount(143 + (data.count || 0));
+    const interval = setInterval(() => {
+      setUnitsRemaining(prev => {
+        let newCount;
+        if (prev <= 1) {
+          // Reset to random value between 180-200 when reaching 1
+          newCount = Math.floor(Math.random() * 21) + 180;
+        } else {
+          // Decrease by 1 or 2 randomly for more natural feel
+          const decrease = Math.random() > 0.7 ? 2 : 1;
+          newCount = Math.max(1, prev - decrease);
         }
-      } catch (error) {
-        console.log('Using default reservation count');
-      }
-    };
-    fetchReservationCount();
+        // Save to sessionStorage
+        sessionStorage.setItem('sentinel_units', newCount.toString());
+        return newCount;
+      });
+    }, COUNTDOWN_INTERVAL_MS);
+
+    return () => clearInterval(interval);
   }, []);
 
   const images = [SENTINEL_IMAGES.hero, SENTINEL_IMAGES.withPhone, SENTINEL_IMAGES.lifestyle];
