@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
-import { Check, Loader2, Calendar, CreditCard, Shield, AlertTriangle } from 'lucide-react';
+import { useNavigate, useSearchParams, useLocation } from 'react-router-dom';
+import { Check, Loader2, Calendar, CreditCard, Shield, AlertTriangle, PartyPopper } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { toast } from 'sonner';
@@ -8,8 +8,16 @@ import { toast } from 'sonner';
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
 
+// Plan info mapping
+const PLAN_INFO = {
+  basico: { name: 'Básico', price: { mensual: 0, anual: 0 } },
+  individual: { name: 'Individual', price: { mensual: 29.99, anual: 249.99 } },
+  familiar: { name: 'Familiar', price: { mensual: 49.99, anual: 399.99 } }
+};
+
 const TrialSuccess = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [searchParams] = useSearchParams();
   const [loading, setLoading] = useState(true);
   const [trialInfo, setTrialInfo] = useState(null);
@@ -44,14 +52,45 @@ const TrialSuccess = () => {
   }, []);
 
   useEffect(() => {
+    // First check if we have state from registration
+    const stateData = location.state;
+    
+    if (stateData && stateData.plan) {
+      // We came from registration page with data
+      const planInfo = PLAN_INFO[stateData.plan] || PLAN_INFO.individual;
+      const price = planInfo.price[stateData.periodo || 'mensual'];
+      
+      setTrialInfo({
+        status: 'trialing',
+        trial_end: stateData.trialEnd,
+        plan_after_trial: `${planInfo.name} ${stateData.periodo === 'anual' ? 'Anual' : 'Mensual'}`,
+        amount_after_trial: price,
+        email: stateData.email,
+        periodo: stateData.periodo,
+        message: price === 0 
+          ? 'Después del trial, deberás elegir un plan de pago para continuar.'
+          : 'Si no cancelas antes de que termine el trial, se cobrará automáticamente el plan seleccionado.'
+      });
+      setLoading(false);
+      toast.success('¡Cuenta creada exitosamente!');
+      return;
+    }
+    
+    // Otherwise, check via session_id
     const sessionId = searchParams.get('session_id');
     if (sessionId) {
       checkTrialStatus(sessionId);
     } else {
-      setError('No se encontró información del trial');
+      // If no session_id and no state, show generic success
+      setTrialInfo({
+        status: 'trialing',
+        trial_end: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
+        plan_after_trial: 'Tu plan seleccionado',
+        message: 'Disfruta de tu periodo de prueba de 7 días.'
+      });
       setLoading(false);
     }
-  }, [searchParams, checkTrialStatus]);
+  }, [searchParams, location.state, checkTrialStatus]);
 
   if (loading) {
     return (
