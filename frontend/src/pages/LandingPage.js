@@ -600,53 +600,53 @@ const LandingPage = () => {
                 </span>
               </h2>
               
-              <p className="text-gray-400 text-lg mb-6 max-w-lg mx-auto lg:mx-0">
+              <p className="text-gray-400 text-sm mb-4 max-w-md mx-auto lg:mx-0">
                 El smartwatch que actúa cuando tú no puedes. SOS invisible, grabación en la nube 
                 y trayecto seguro. <span className="text-cyan-400 font-semibold">Funciona sin teléfono.</span>
               </p>
 
               {/* Key features */}
-              <div className="grid grid-cols-2 gap-3 mb-6 max-w-md mx-auto lg:mx-0">
-                <div className="flex items-center gap-2 text-gray-300 text-sm">
-                  <div className="w-2 h-2 bg-cyan-400 rounded-full" />
+              <div className="grid grid-cols-2 gap-2 mb-4 max-w-sm mx-auto lg:mx-0">
+                <div className="flex items-center gap-2 text-gray-300 text-xs">
+                  <div className="w-1.5 h-1.5 bg-cyan-400 rounded-full" />
                   SOS Invisible
                 </div>
-                <div className="flex items-center gap-2 text-gray-300 text-sm">
-                  <div className="w-2 h-2 bg-cyan-400 rounded-full" />
+                <div className="flex items-center gap-2 text-gray-300 text-xs">
+                  <div className="w-1.5 h-1.5 bg-cyan-400 rounded-full" />
                   Modo PIN Falso
                 </div>
-                <div className="flex items-center gap-2 text-gray-300 text-sm">
-                  <div className="w-2 h-2 bg-cyan-400 rounded-full" />
+                <div className="flex items-center gap-2 text-gray-300 text-xs">
+                  <div className="w-1.5 h-1.5 bg-cyan-400 rounded-full" />
                   Grabación Nube
                 </div>
-                <div className="flex items-center gap-2 text-gray-300 text-sm">
-                  <div className="w-2 h-2 bg-cyan-400 rounded-full" />
+                <div className="flex items-center gap-2 text-gray-300 text-xs">
+                  <div className="w-1.5 h-1.5 bg-cyan-400 rounded-full" />
                   5 días batería
                 </div>
               </div>
 
               {/* Price and CTA */}
-              <div className="flex flex-col sm:flex-row items-center gap-4 justify-center lg:justify-start">
+              <div className="flex flex-col sm:flex-row items-center gap-3 justify-center lg:justify-start">
                 <div className="text-center sm:text-left">
                   <div className="flex items-baseline gap-2">
-                    <span className="text-4xl font-bold text-white">149€</span>
-                    <span className="text-gray-500 line-through text-lg">249€</span>
+                    <span className="text-3xl font-bold text-white">149€</span>
+                    <span className="text-gray-500 line-through text-sm">249€</span>
                   </div>
-                  <p className="text-green-400 text-sm">Ahorras 100€</p>
+                  <p className="text-green-400 text-xs">Ahorras 100€</p>
                 </div>
                 
                 <Link 
                   to="/sentinel-x"
-                  className="group inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-bold rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg shadow-cyan-500/25"
+                  className="group inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-bold text-sm rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg shadow-cyan-500/25"
                   data-testid="sentinel-x-promo-cta"
                 >
                   Ver SENTINEL X
-                  <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                  <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </Link>
               </div>
 
               {/* Trust line */}
-              <div className="flex items-center gap-4 mt-6 justify-center lg:justify-start text-xs text-gray-500">
+              <div className="flex items-center gap-3 mt-4 justify-center lg:justify-start text-xs text-gray-500">
                 <div className="flex items-center gap-1">
                   <Shield className="w-3 h-3 text-cyan-500" />
                   <span>Garantía 12 meses</span>
