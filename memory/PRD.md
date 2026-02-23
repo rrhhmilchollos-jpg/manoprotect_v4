@@ -726,3 +726,111 @@ stripe==14.1.0     # Pagos y reembolsos
 - `/app/frontend/public/robots.txt` (actualizado)
 - `/app/frontend/public/index.html` (Schema actualizado)
 - `/app/frontend/src/pages/ManoProtectRegistro.js` (SEO meta tags)
+
+---
+
+## Actualizaciones - 23 Febrero 2026
+
+### SENTINEL X Landing Page - IMPLEMENTADO ✅
+
+**Nueva página**: `/sentinel-x` - Landing page premium para el smartwatch de seguridad SENTINEL X
+
+**Características implementadas:**
+1. **Hero Section**: 
+   - Título y subtítulo impactantes
+   - Badge "Edición Fundadores - Cantidad Limitada"
+   - Galería de imágenes del producto (3 renders)
+   - CTA principal a 149€
+
+2. **Sección de Características**:
+   - SOS Invisible
+   - Modo PIN Falso
+   - Grabación Segura en la Nube
+   - Trayecto Seguro Automático
+   - Autonomía 5 días
+
+3. **Sección de Diseño y Especificaciones**:
+   - Pantalla AMOLED 1.78"
+   - Caja titanio/negro mate
+   - Conectividad 4G LTE
+   - GPS multi-banda
+   - IP68 + 5ATM
+
+4. **Sistema de Preventa con Stripe**:
+   - Pago completo: 149€
+   - Reserva parcial: 10€ + 139€ antes del envío
+   - Formulario completo con dirección de envío
+   - Integración Stripe funcional
+
+5. **Sección de Confianza**:
+   - Garantía 12 meses
+   - Envío a toda Europa
+   - Cancelación flexible
+   - FAQ integrado
+
+**Backend**:
+- `POST /api/checkout/sentinel-x` - Crea sesión de pago Stripe
+- `GET /api/sentinel-x/preorders` - Lista de preorders (admin)
+- Colección MongoDB: `sentinel_x_preorders`
+
+**SEO**:
+- Schema.org Product añadido
+- Sitemap actualizado
+- robots.txt actualizado
+
+**Rutas disponibles**:
+- `/sentinel-x`
+- `/sentinel`
+- `/reloj`
+
+---
+
+### SEO Avanzado - IMPLEMENTADO ✅
+
+**Meta tags añadidos**:
+- Google Search Console verification
+- Bing/Yandex verification
+- Dublin Core metadata (13 tags)
+- Pinterest Rich Pins
+- Google News keywords
+- Apple iTunes App / Google Play App
+- Subject, abstract, topic, summary, classification
+- Business owner and category metadata
+
+**Schema.org mejorado**:
+- Todos los Offers ahora tienen `shippingDetails` y `hasMerchantReturnPolicy`
+- 7 ofertas actualizadas con campos de devolución
+- Total de 11 schemas JSON-LD válidos
+
+---
+
+## Estado de Integraciones
+
+| Integración | Estado | Notas |
+|-------------|--------|-------|
+| Stripe | ✅ Funcional | Checkout cart y SENTINEL X |
+| Infobip SMS | ❌ Bloqueado | API key inválida |
+| Twilio WhatsApp | ⚠️ Sandbox | Producción pendiente |
+| SendGrid | ⚠️ Pendiente | Verificación dominio |
+
+---
+
+## Próximas Tareas (Backlog)
+
+### P0 - Crítico
+- [ ] Obtener API key válida de Infobip para SMS
+
+### P1 - Alta
+- [ ] Habilitar 2FA cuando SMS funcione
+- [ ] Producción Twilio WhatsApp
+- [ ] Verificar SendGrid dominio
+
+### P2 - Media
+- [ ] Página "Quiénes Somos" con fotos del equipo
+- [ ] SEO Fase 3: Backlinks y autoridad
+- [ ] Integración con 112
+
+### P3 - Baja
+- [ ] Emails de recordatorio trial
+- [ ] Blog automatizado de alertas de estafas
+- [ ] Extraer carrito a React Context global
