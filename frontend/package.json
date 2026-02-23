@@ -37,6 +37,8 @@
     "@radix-ui/react-toggle": "^1.1.6",
     "@radix-ui/react-toggle-group": "^1.1.7",
     "@radix-ui/react-tooltip": "^1.2.4",
+    "@stripe/react-stripe-js": "^5.6.0",
+    "@stripe/stripe-js": "^8.8.0",
     "@zoom/videosdk": "^2.3.12",
     "axios": "^1.8.4",
     "canvas-confetti": "^1.9.4",
