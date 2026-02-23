@@ -958,7 +958,7 @@ async def create_sentinel_x_checkout(
     """
     Create Stripe checkout session for SENTINEL X pre-order
     - Full payment: 149€
-    - Partial payment (deposit): 10€
+    - Partial payment (deposit): 29.99€
     """
     try:
         # Validate payment type
@@ -966,8 +966,8 @@ async def create_sentinel_x_checkout(
             amount = 149.00
             product_name = "SENTINEL X - Edición Fundadores (Pago Completo)"
         elif data.paymentType == "partial":
-            amount = 10.00
-            product_name = "SENTINEL X - Edición Fundadores (Reserva 10€)"
+            amount = 29.99
+            product_name = "SENTINEL X - Edición Fundadores (Reserva 29,99€)"
         else:
             raise HTTPException(status_code=400, detail="Tipo de pago no válido")
         
