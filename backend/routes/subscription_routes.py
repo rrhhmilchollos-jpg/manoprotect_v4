@@ -185,6 +185,22 @@ async def registrar_usuario(
         
         logger.info(f"Usuario básico registrado: {data.email}")
         
+        # Enviar email de bienvenida
+        try:
+            await email_service.send_trial_started_email(
+                user_id=user_id,
+                email=data.email,
+                trial_data={
+                    "trial_end": user_doc["trial_end"],
+                    "plan_name": "Plan Básico",
+                    "plan_price": "0",
+                    "nombre": data.nombre
+                }
+            )
+            logger.info(f"Email de bienvenida enviado a: {data.email}")
+        except Exception as e:
+            logger.warning(f"No se pudo enviar email de bienvenida: {e}")
+        
         return {
             "success": True,
             "message": "Cuenta básica activa con 7 días de prueba gratuita",
