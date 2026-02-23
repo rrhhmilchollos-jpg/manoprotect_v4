@@ -102,27 +102,11 @@ async def get_subscription_users(
     # Get total count
     total = await _db.users.count_documents(query)
     
-    # Get paginated users with subscription fields
+    # Get paginated users (exclude sensitive fields only)
     skip = (page - 1) * limit
     users = await _db.users.find(
         query,
-        {
-            "_id": 0, 
-            "password_hash": 0,
-            # Include subscription fields
-            "user_id": 1,
-            "email": 1,
-            "nombre": 1,
-            "name": 1,
-            "phone": 1,
-            "plan_type": 1,
-            "plan_period": 1,
-            "estado": 1,
-            "trial_start": 1,
-            "trial_end": 1,
-            "grace_end": 1,
-            "stripe_customer_id": 1,
-            "stripe_subscription_id": 1,
+        {"_id": 0, "password_hash": 0}
             "card_last4": 1,
             "card_brand": 1,
             "created_at": 1,
