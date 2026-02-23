@@ -141,6 +141,7 @@ const BlogPage = lazy(() => import('@/pages/BlogPage'));
 const BlogPostPage = lazy(() => import('@/pages/BlogPostPage'));
 const SecurePayments = lazy(() => import('@/pages/SecurePayments'));
 const SentinelXLanding = lazy(() => import('@/pages/SentinelXLanding'));
+const AdminOrders = lazy(() => import('@/pages/AdminOrders'));
 
 // SEO SILO Pages
 const ProteccionPhishing = lazy(() => import('@/pages/ProteccionPhishing'));
