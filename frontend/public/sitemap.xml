@@ -21,6 +21,21 @@
   </url>
   
   <!-- ============================================ -->
+  <!-- SENTINEL X SMARTWATCH LANDING -->
+  <!-- ============================================ -->
+  <url>
+    <loc>https://manoprotect.com/sentinel-x</loc>
+    <lastmod>2026-02-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.95</priority>
+    <image:image>
+      <image:loc>https://customer-assets.emergentagent.com/job_8161c713-bb69-4bfd-84d2-fde54657d491/artifacts/acz8j630_Reloj%20inteligente%20ManoProtect%20SENTINEL%20X.png</image:loc>
+      <image:title>ManoProtect SENTINEL X Smartwatch de Seguridad</image:title>
+      <image:caption>Reloj inteligente con SOS invisible, modo PIN falso y grabación en la nube</image:caption>
+    </image:image>
+  </url>
+  
+  <!-- ============================================ -->
   <!-- PRODUCT PAGES - HIGH PRIORITY -->
   <!-- ============================================ -->
   <url>
