@@ -429,7 +429,7 @@ async def bloquear_usuario_interno(email: str, motivo: str):
     if user_doc.get("stripe_subscription_id"):
         try:
             stripe.Subscription.delete(user_doc["stripe_subscription_id"])
-        except:
+        except stripe.error.StripeError:
             pass
     
     # Actualizar estado del usuario
