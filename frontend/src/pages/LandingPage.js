@@ -40,6 +40,45 @@ const LandingPage = () => {
   const [searchResults, setSearchResults] = useState({ productos: [], paginas: [] });
   const [cart, setCart] = useState([]);
   const [checkoutLoading, setCheckoutLoading] = useState(false);
+  
+  // Social Proof Notification State
+  const [showSocialProof, setShowSocialProof] = useState(false);
+  const [socialProofData, setSocialProofData] = useState({ name: '', city: '', product: '' });
+
+  // Social proof data - random Spanish names and cities
+  const socialProofNames = ['Juan', 'María', 'Carlos', 'Ana', 'Pedro', 'Laura', 'Miguel', 'Carmen', 'David', 'Isabel', 'Javier', 'Elena'];
+  const socialProofCities = ['Madrid', 'Barcelona', 'Valencia', 'Sevilla', 'Bilbao', 'Málaga', 'Zaragoza', 'Murcia', 'Palma', 'Alicante'];
+  const socialProofProducts = ['SENTINEL X', 'Dispositivo SOS', 'Plan Familiar'];
+
+  // Social Proof Effect
+  useEffect(() => {
+    const showNotification = () => {
+      const randomName = socialProofNames[Math.floor(Math.random() * socialProofNames.length)];
+      const randomCity = socialProofCities[Math.floor(Math.random() * socialProofCities.length)];
+      const randomProduct = socialProofProducts[Math.floor(Math.random() * socialProofProducts.length)];
+      
+      setSocialProofData({ name: randomName, city: randomCity, product: randomProduct });
+      setShowSocialProof(true);
+      
+      // Hide after 5 seconds
+      setTimeout(() => {
+        setShowSocialProof(false);
+      }, 5000);
+    };
+
+    // Show first notification after 10 seconds
+    const initialTimeout = setTimeout(showNotification, 10000);
+    
+    // Then show every 30-60 seconds randomly
+    const interval = setInterval(() => {
+      showNotification();
+    }, 30000 + Math.random() * 30000);
+
+    return () => {
+      clearTimeout(initialTimeout);
+      clearInterval(interval);
+    };
+  }, []);
 
   // Handle URL hash for opening search/cart from other pages
   useEffect(() => {
