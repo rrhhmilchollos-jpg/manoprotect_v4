@@ -82,7 +82,7 @@ async def get_current_user(request: Request, session_token: Optional[str] = None
     return User(**user)
 
 
-async def require_auth(request: Request, session_token: Optional[str] = Cookie(None)) -> User:
+async def require_auth(request: Request, session_token: Optional[str] = None) -> User:
     """Require authentication - raises 401 if not authenticated"""
     user = await get_current_user(request, session_token)
     if not user:
@@ -90,7 +90,7 @@ async def require_auth(request: Request, session_token: Optional[str] = Cookie(N
     return user
 
 
-async def require_admin(request: Request, session_token: Optional[str] = Cookie(None)) -> User:
+async def require_admin(request: Request, session_token: Optional[str] = None) -> User:
     """Require admin role (superadmin, admin, or director)"""
     user = await require_auth(request, session_token)
     admin_roles = ["superadmin", "admin", "director"]
@@ -99,7 +99,7 @@ async def require_admin(request: Request, session_token: Optional[str] = Cookie(
     return user
 
 
-async def require_investor(request: Request, session_token: Optional[str] = Cookie(None)) -> User:
+async def require_investor(request: Request, session_token: Optional[str] = None) -> User:
     """Require investor role"""
     user = await require_auth(request, session_token)
     if user.role not in ["investor", "admin", "superadmin"]:
