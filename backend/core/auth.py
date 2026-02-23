@@ -4,7 +4,7 @@ Shared authentication functions for all routes
 
 These functions are initialized with database connection on import.
 """
-from fastapi import HTTPException, Request, Cookie
+from fastapi import HTTPException, Request
 from typing import Optional
 from datetime import datetime, timezone
 import hashlib
