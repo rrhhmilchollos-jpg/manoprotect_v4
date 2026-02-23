@@ -10,6 +10,7 @@ import logging
 import stripe
 import os
 import hashlib
+import uuid
 
 from core.database import db, get_current_user, STRIPE_API_KEY
 
