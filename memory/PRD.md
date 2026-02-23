@@ -913,3 +913,75 @@ stripe==14.1.0     # Pagos y reembolsos
 - `/app/backend/routes/subscription_routes.py` (NUEVO)
 - `/app/backend/services/cron_jobs.py` (ACTUALIZADO)
 - `/app/backend/server.py` (ACTUALIZADO)
+
+---
+
+## Actualización 23 Febrero 2026 - Integración Frontend Suscripciones
+
+### Página de Registro con Suscripciones - COMPLETADO ✅
+
+**Descripción**: Integración completa del frontend `/registro` con el sistema de suscripciones backend, incluyendo Stripe Elements para planes premium.
+
+**Características implementadas:**
+
+1. **Selección de Plan (Paso 1)**:
+   - 3 planes visibles: Básico (0€), Individual (249.99€/año), Familiar (399.99€/año)
+   - Toggle Mensual/Anual con indicador de ahorro (-30%)
+   - Badges distintivos: "Sin Compromiso", "Más Popular", "Para Familias"
+   - Indicador de tarjeta requerida para planes premium
+
+2. **Formulario de Registro (Paso 2)**:
+   - Campos: Nombre, Email, Teléfono, Contraseña, Confirmar contraseña
+   - **Stripe Elements CardElement** solo para planes premium
+   - Indicadores de seguridad: SSL, PCI Compliant, 3D Secure
+   - Checkboxes de términos y privacidad obligatorios
+
+3. **Integración Backend**:
+   - `POST /api/subscriptions/registrar` - Registro con trial de 7 días
+   - Plan básico: Sin tarjeta, trial gratuito
+   - Planes premium: Tarjeta obligatoria con verificación 3D Secure
+   - Redirección a `/trial-success` tras registro exitoso
+
+4. **UX/UI**:
+   - Diseño split-screen (features izquierda, form derecha)
+   - Progress indicator (pasos 1-2)
+   - Botones contextuales: "Crear cuenta" vs "Empezar prueba gratis"
+   - Toast notifications con Sonner
+
+**Dependencias añadidas:**
+```bash
+yarn add @stripe/react-stripe-js @stripe/stripe-js
+```
+
+**Archivos modificados:**
+- `/app/frontend/src/pages/ManoProtectRegistro.js` - Refactorizado completamente
+- `/app/frontend/src/pages/TrialSuccess.js` - Añadido soporte para datos de registro
+- `/app/backend/routes/subscription_routes.py` - Añadido `user_id` y campo `email` en response
+
+**Testing:**
+- Backend: 11/11 tests pasados (100%)
+- Frontend: Todos los features verificados funcionando
+- Test file: `/app/backend/tests/test_subscription_registro.py`
+
+---
+
+## Próximas Tareas (Backlog Actualizado)
+
+### P0 - Crítico
+- [ ] Obtener API key válida de Infobip para SMS
+
+### P1 - Alta
+- [x] ~~Integrar frontend con endpoints de suscripción~~ ✅ COMPLETADO (23 Feb 2026)
+- [ ] Crear app iOS con Capacitor
+- [ ] Habilitar 2FA cuando SMS funcione
+- [ ] Producción Twilio WhatsApp
+
+### P2 - Media
+- [ ] Página "Quiénes Somos" con fotos del equipo
+- [ ] SEO Fase 3: Backlinks y autoridad
+- [ ] Integración con 112
+
+### P3 - Baja
+- [ ] Emails de recordatorio trial
+- [ ] Blog automatizado de alertas de estafas
+- [ ] Extraer carrito a React Context global
