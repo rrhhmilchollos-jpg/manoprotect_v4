@@ -834,3 +834,27 @@ stripe==14.1.0     # Pagos y reembolsos
 - [ ] Emails de recordatorio trial
 - [ ] Blog automatizado de alertas de estafas
 - [ ] Extraer carrito a React Context global
+
+---
+
+### Video Landing Page - IMPLEMENTADO ✅ (23 Feb 2026)
+
+**Video añadido a la sección "Localiza y Protege":**
+- URL: `https://customer-assets.emergentagent.com/.../ManoProtect Sentinel X Oferta_720p_caption.mp4`
+- Modal de video funcional con controles nativos
+- Autoplay al abrir
+- Botón de cerrar (X)
+
+### Contador de Reservas SENTINEL X - IMPLEMENTADO ✅
+
+**Frontend:**
+- Barra de progreso visual (X de 500 unidades)
+- Colores amber/orange para urgencia
+- Texto "¡Solo quedan X unidades!"
+- Actualización dinámica desde API
+
+**Backend:**
+- `GET /api/sentinel-x/count` - Devuelve contador de preorders
+- Base inicial: 143 unidades (social proof)
+- Se suma con las reservas reales de la BD
+
