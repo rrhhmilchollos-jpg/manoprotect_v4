@@ -136,6 +136,7 @@ const SOSDeviceOrder = lazy(() => import('@/pages/SOSDeviceOrder'));
 const OrderTracking = lazy(() => import('@/pages/OrderTracking'));
 const SOSServices = lazy(() => import('@/pages/SOSServices'));
 const OrderConfirmation = lazy(() => import('@/pages/OrderConfirmation'));
+const ThankYouPage = lazy(() => import('@/pages/ThankYouPage'));
 const BlogPage = lazy(() => import('@/pages/BlogPage'));
 const BlogPostPage = lazy(() => import('@/pages/BlogPostPage'));
 const SecurePayments = lazy(() => import('@/pages/SecurePayments'));
