@@ -812,9 +812,21 @@ const LandingPage = () => {
       {/* Video Modal */}
       {showVideo && (
         <div className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4" onClick={() => setShowVideo(false)}>
-          <div className="relative max-w-4xl w-full aspect-video bg-black rounded-lg">
-            <button onClick={() => setShowVideo(false)} className="absolute top-4 right-4 text-white text-3xl">&times;</button>
-            <div className="w-full h-full flex items-center justify-center text-white">Video</div>
+          <div className="relative max-w-4xl w-full aspect-video bg-black rounded-lg overflow-hidden" onClick={(e) => e.stopPropagation()}>
+            <button 
+              onClick={() => setShowVideo(false)} 
+              className="absolute top-4 right-4 text-white text-3xl z-10 hover:text-gray-300 transition-colors"
+            >
+              &times;
+            </button>
+            <video 
+              className="w-full h-full object-contain"
+              controls
+              autoPlay
+              src="https://customer-assets.emergentagent.com/job_8161c713-bb69-4bfd-84d2-fde54657d491/artifacts/zbay1jyq_ManoProtect%20Sentinel%20X%20Oferta_720p_caption%20%281%29.mp4"
+            >
+              Tu navegador no soporta el elemento de video.
+            </video>
           </div>
         </div>
       )}
