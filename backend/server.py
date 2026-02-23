@@ -2955,6 +2955,14 @@ try:
 except Exception as e:
     print(f"⚠️ Subscription Manager not loaded: {e}")
 
+# New Subscription System routes (Full trial flow with Stripe)
+try:
+    from routes.subscription_routes import router as subscription_routes_router
+    api_router.include_router(subscription_routes_router)
+    print("✅ Subscription Routes loaded (Full trial system with Stripe)")
+except Exception as e:
+    print(f"⚠️ Subscription Routes not loaded: {e}")
+
 app.include_router(api_router)
 app.include_router(public_router)
 
