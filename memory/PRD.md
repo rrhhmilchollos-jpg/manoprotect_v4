@@ -948,6 +948,12 @@ stripe==14.1.0     # Pagos y reembolsos
    - Botones contextuales: "Crear cuenta" vs "Empezar prueba gratis"
    - Toast notifications con Sonner
 
+5. **Email de Bienvenida Automático** ✅:
+   - Se envía automáticamente tras el registro exitoso
+   - Incluye: fecha fin del trial, nombre del plan, precio (si aplica)
+   - Guardado en MongoDB para reenvío cuando SendGrid esté configurado
+   - Diseño profesional con información del onboarding
+
 **Dependencias añadidas:**
 ```bash
 yarn add @stripe/react-stripe-js @stripe/stripe-js
@@ -956,12 +962,15 @@ yarn add @stripe/react-stripe-js @stripe/stripe-js
 **Archivos modificados:**
 - `/app/frontend/src/pages/ManoProtectRegistro.js` - Refactorizado completamente
 - `/app/frontend/src/pages/TrialSuccess.js` - Añadido soporte para datos de registro
-- `/app/backend/routes/subscription_routes.py` - Añadido `user_id` y campo `email` en response
+- `/app/backend/routes/subscription_routes.py` - Añadido `user_id`, campo `email` en response, y email de bienvenida
 
 **Testing:**
 - Backend: 11/11 tests pasados (100%)
 - Frontend: Todos los features verificados funcionando
+- Email de bienvenida: Se registra correctamente en `email_notifications` collection
 - Test file: `/app/backend/tests/test_subscription_registro.py`
+
+**Nota sobre emails:** Los emails se guardan en MongoDB con estado "queued" o "failed" según la configuración de SendGrid. Cuando el usuario complete la verificación de dominio en SendGrid, los emails se enviarán automáticamente.
 
 ---
 
