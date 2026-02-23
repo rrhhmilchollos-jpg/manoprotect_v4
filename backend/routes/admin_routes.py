@@ -107,11 +107,6 @@ async def get_subscription_users(
     users = await _db.users.find(
         query,
         {"_id": 0, "password_hash": 0}
-            "card_last4": 1,
-            "card_brand": 1,
-            "created_at": 1,
-            "updated_at": 1
-        }
     ).sort("created_at", -1).skip(skip).limit(limit).to_list(length=limit)
     
     # Get subscription stats
