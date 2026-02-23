@@ -193,22 +193,41 @@ const SentinelXLanding = () => {
                 </div>
 
                 {/* Reservation Counter */}
-                <div className="mt-6 p-4 bg-gradient-to-r from-amber-500/10 to-orange-500/10 border border-amber-500/30 rounded-xl">
+                <div className={`mt-6 p-4 bg-gradient-to-r from-amber-500/10 to-orange-500/10 border rounded-xl transition-all duration-300 ${
+                  (MAX_FOUNDERS_UNITS - reservedCount) < 100 
+                    ? 'border-red-500/50 animate-pulse shadow-lg shadow-red-500/20' 
+                    : 'border-amber-500/30'
+                }`}>
                   <div className="flex items-center justify-between mb-2">
-                    <div className="flex items-center gap-2 text-amber-400">
+                    <div className={`flex items-center gap-2 ${
+                      (MAX_FOUNDERS_UNITS - reservedCount) < 100 ? 'text-red-400' : 'text-amber-400'
+                    }`}>
                       <Users className="w-5 h-5" />
-                      <span className="font-semibold">Unidades Reservadas</span>
+                      <span className="font-semibold">
+                        {(MAX_FOUNDERS_UNITS - reservedCount) < 100 ? '🔥 ¡ÚLTIMAS UNIDADES!' : 'Unidades Reservadas'}
+                      </span>
                     </div>
-                    <span className="text-white font-bold">{reservedCount} / {MAX_FOUNDERS_UNITS}</span>
+                    <span className={`font-bold ${
+                      (MAX_FOUNDERS_UNITS - reservedCount) < 100 ? 'text-red-400' : 'text-white'
+                    }`}>{reservedCount} / {MAX_FOUNDERS_UNITS}</span>
                   </div>
                   <div className="w-full bg-gray-700 rounded-full h-3 overflow-hidden">
                     <div 
-                      className="h-full bg-gradient-to-r from-amber-500 to-orange-500 rounded-full transition-all duration-1000 ease-out"
+                      className={`h-full rounded-full transition-all duration-1000 ease-out ${
+                        (MAX_FOUNDERS_UNITS - reservedCount) < 100 
+                          ? 'bg-gradient-to-r from-red-500 to-orange-500' 
+                          : 'bg-gradient-to-r from-amber-500 to-orange-500'
+                      }`}
                       style={{ width: `${Math.min((reservedCount / MAX_FOUNDERS_UNITS) * 100, 100)}%` }}
                     />
                   </div>
-                  <p className="text-xs text-gray-400 mt-2 text-center">
-                    ¡Solo quedan <span className="text-amber-400 font-bold">{MAX_FOUNDERS_UNITS - reservedCount}</span> unidades de la Edición Fundadores!
+                  <p className={`text-xs mt-2 text-center ${
+                    (MAX_FOUNDERS_UNITS - reservedCount) < 100 ? 'text-red-400 font-semibold' : 'text-gray-400'
+                  }`}>
+                    {(MAX_FOUNDERS_UNITS - reservedCount) < 100 
+                      ? `⚠️ ¡ATENCIÓN! Solo quedan ${MAX_FOUNDERS_UNITS - reservedCount} unidades. ¡No te quedes sin la tuya!`
+                      : `¡Solo quedan ${MAX_FOUNDERS_UNITS - reservedCount} unidades de la Edición Fundadores!`
+                    }
                   </p>
                 </div>
 
