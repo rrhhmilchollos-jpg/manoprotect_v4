@@ -933,3 +933,148 @@ async def get_user_trial_info(
         "message": f"Trial activo. {days_remaining} días restantes antes del cargo."
     }
 
+
+
+# ============================================
+# SENTINEL X PRE-ORDER ENDPOINT
+# ============================================
+
+class SentinelXPreorderRequest(BaseModel):
+    name: str
+    email: str
+    address: str
+    city: str
+    postalCode: str
+    country: str = "ES"
+    paymentType: str = "full"  # 'full' or 'partial'
+    amount: float
+    product: str = "SENTINEL X - Edición Fundadores"
+
+@router.post("/checkout/sentinel-x")
+async def create_sentinel_x_checkout(
+    data: SentinelXPreorderRequest,
+    http_request: Request
+):
+    """
+    Create Stripe checkout session for SENTINEL X pre-order
+    - Full payment: 149€
+    - Partial payment (deposit): 10€
+    """
+    try:
+        # Validate payment type
+        if data.paymentType == "full":
+            amount = 149.00
+            product_name = "SENTINEL X - Edición Fundadores (Pago Completo)"
+        elif data.paymentType == "partial":
+            amount = 10.00
+            product_name = "SENTINEL X - Edición Fundadores (Reserva 10€)"
+        else:
+            raise HTTPException(status_code=400, detail="Tipo de pago no válido")
+        
+        # Get base URL for redirects
+        host_url = str(http_request.headers.get('origin', 'https://manoprotect.com'))
+        
+        success_url = f"{host_url}/sentinel-x?success=true&session_id={{CHECKOUT_SESSION_ID}}"
+        cancel_url = f"{host_url}/sentinel-x?canceled=true"
+        
+        # Create Stripe checkout session
+        checkout_session = stripe.checkout.Session.create(
+            payment_method_types=['card'],
+            line_items=[{
+                'price_data': {
+                    'currency': 'eur',
+                    'product_data': {
+                        'name': product_name,
+                        'description': f'Smartwatch de seguridad ManoProtect SENTINEL X. Entrega estimada: 90-120 días.',
+                        'images': ['https://customer-assets.emergentagent.com/job_8161c713-bb69-4bfd-84d2-fde54657d491/artifacts/acz8j630_Reloj%20inteligente%20ManoProtect%20SENTINEL%20X.png'],
+                    },
+                    'unit_amount': int(amount * 100),  # Stripe expects cents
+                },
+                'quantity': 1,
+            }],
+            mode='payment',
+            success_url=success_url,
+            cancel_url=cancel_url,
+            customer_email=data.email,
+            metadata={
+                'product': 'sentinel-x',
+                'payment_type': data.paymentType,
+                'customer_name': data.name,
+                'shipping_address': data.address,
+                'shipping_city': data.city,
+                'shipping_postal_code': data.postalCode,
+                'shipping_country': data.country,
+                'amount_pending': str(149 - amount) if data.paymentType == 'partial' else '0'
+            },
+            shipping_address_collection={
+                'allowed_countries': ['ES', 'PT', 'FR', 'DE', 'IT', 'NL', 'BE', 'AT']
+            },
+        )
+        
+        # Store pre-order in database
+        preorder_doc = {
+            "session_id": checkout_session.id,
+            "product": "sentinel-x",
+            "customer_name": data.name,
+            "customer_email": data.email,
+            "shipping_address": {
+                "address": data.address,
+                "city": data.city,
+                "postal_code": data.postalCode,
+                "country": data.country
+            },
+            "payment_type": data.paymentType,
+            "amount_paid": amount,
+            "amount_pending": 149 - amount if data.paymentType == 'partial' else 0,
+            "total_amount": 149.00,
+            "status": "pending",
+            "created_at": datetime.now(timezone.utc).isoformat(),
+            "updated_at": datetime.now(timezone.utc).isoformat()
+        }
+        
+        await db.sentinel_x_preorders.insert_one(preorder_doc)
+        
+        logging.info(f"SENTINEL X pre-order created: {checkout_session.id} for {data.email}")
+        
+        return {
+            "checkout_url": checkout_session.url,
+            "session_id": checkout_session.id
+        }
+    
+    except stripe.error.StripeError as e:
+        logging.error(f"Stripe error creating SENTINEL X checkout: {e}")
+        raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        logging.error(f"Error creating SENTINEL X checkout: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/sentinel-x/preorders")
+async def get_sentinel_x_preorders(
+    http_request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Get all SENTINEL X pre-orders (admin only)"""
+    user = await get_current_user(http_request, session_token)
+    if not user or user.role not in ["admin", "superadmin"]:
+        raise HTTPException(status_code=403, detail="Acceso denegado")
+    
+    preorders = await db.sentinel_x_preorders.find(
+        {},
+        {"_id": 0}
+    ).sort("created_at", -1).to_list(length=500)
+    
+    # Calculate totals
+    total_preorders = len(preorders)
+    total_paid = sum(p.get("amount_paid", 0) for p in preorders if p.get("status") == "paid")
+    total_pending = sum(p.get("amount_pending", 0) for p in preorders if p.get("status") == "paid")
+    
+    return {
+        "preorders": preorders,
+        "summary": {
+            "total_preorders": total_preorders,
+            "total_paid": total_paid,
+            "total_pending_collection": total_pending,
+            "estimated_total_revenue": total_preorders * 149
+        }
+    }
