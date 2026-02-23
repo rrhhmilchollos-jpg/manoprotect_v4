@@ -21,6 +21,7 @@ async def process_expired_trials():
     
     try:
         async with httpx.AsyncClient() as client:
+            # Old subscription manager endpoint
             response = await client.post(
                 f"{API_BASE_URL}/subscription-manager/process-expired-trials",
                 timeout=60.0
@@ -28,9 +29,21 @@ async def process_expired_trials():
             
             if response.status_code == 200:
                 result = response.json()
-                print(f"[CRON] Expired trials processed: {result}")
+                print(f"[CRON] Expired trials processed (old system): {result}")
             else:
-                print(f"[CRON] Error processing trials: {response.status_code} - {response.text}")
+                print(f"[CRON] Error processing trials (old): {response.status_code}")
+            
+            # New subscription system endpoint
+            response2 = await client.post(
+                f"{API_BASE_URL}/subscriptions/cron/revisar-trials",
+                timeout=60.0
+            )
+            
+            if response2.status_code == 200:
+                result2 = response2.json()
+                print(f"[CRON] Trials reviewed (new system): {result2.get('resultados', {})}")
+            else:
+                print(f"[CRON] Error reviewing trials (new): {response2.status_code}")
                 
     except Exception as e:
         print(f"[CRON] Exception processing trials: {e}")
