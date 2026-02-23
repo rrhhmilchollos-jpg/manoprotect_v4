@@ -30,6 +30,11 @@ const paginas = [
   { nombre: 'FAQ - Preguntas Frecuentes', url: '/faq' },
 ];
 
+// Social proof data - random Spanish names and cities (outside component to avoid re-creation)
+const SOCIAL_PROOF_NAMES = ['Juan', 'María', 'Carlos', 'Ana', 'Pedro', 'Laura', 'Miguel', 'Carmen', 'David', 'Isabel', 'Javier', 'Elena'];
+const SOCIAL_PROOF_CITIES = ['Madrid', 'Barcelona', 'Valencia', 'Sevilla', 'Bilbao', 'Málaga', 'Zaragoza', 'Murcia', 'Palma', 'Alicante'];
+const SOCIAL_PROOF_PRODUCTS = ['SENTINEL X', 'Dispositivo SOS', 'Plan Familiar'];
+
 const LandingPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
