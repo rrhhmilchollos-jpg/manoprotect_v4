@@ -1,11 +1,48 @@
 # ManoProtect - Product Requirements Document
 
-## Última Actualización: 17 Febrero 2026
+## Última Actualización: 23 Febrero 2026
 
 ---
 
 ## Descripción del Proyecto
 ManoProtect es una plataforma integral de protección contra fraudes digitales para usuarios individuales, familias y empresas en España. Incluye análisis de amenazas con IA, botón SOS de emergencia físico, localización familiar, y un portal enterprise para la gestión interna.
+
+---
+
+## Actualizaciones 23 Febrero 2026
+
+### 1. Integración Frontend Suscripciones - COMPLETADO ✅
+- Página `/registro` refactorizada con selección de plan y Stripe Elements
+- Email de bienvenida automático tras registro exitoso
+
+### 2. Email Recordatorio Trial - COMPLETADO ✅
+- Cron job diario a las 9 AM UTC
+- Envía recordatorio 2 días antes de expirar el trial
+- Integrado con `EmailNotificationService.send_trial_ending_soon_email()`
+
+### 3. Panel Admin Mejorado - COMPLETADO ✅
+
+**Nuevos endpoints de administración:**
+
+| Endpoint | Descripción |
+|----------|-------------|
+| `GET /api/admin/users/subscriptions` | Usuarios con suscripciones (filtros, stats, paginación) |
+| `GET /api/admin/users/recent` | Usuarios registrados recientemente |
+| `GET /api/admin/device-orders` | Todos los pedidos de dispositivos con datos completos |
+| `GET /api/admin/device-orders/pending-shipment` | Pedidos pendientes de envío |
+| `GET /api/admin/device-orders/{order_id}` | Detalle de pedido individual |
+| `PUT /api/admin/device-orders/{order_id}` | Actualizar estado de pedido (envía email de tracking) |
+| `GET /api/admin/device-orders/export/csv` | Exportar pedidos a CSV |
+
+**Datos disponibles en pedidos:**
+- Nombre completo, Email, Teléfono, DNI
+- Dirección, Ciudad, Código Postal, Provincia
+- Cantidad, Colores, Estilo dispositivo
+- Estado, Nº Seguimiento, Transportista, Notas
+
+**Credenciales Admin:**
+- Email: `admin@manoprotect.com`
+- Password: `Admin2024!`
 
 ---
 
