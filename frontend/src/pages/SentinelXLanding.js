@@ -107,7 +107,7 @@ const SentinelXLanding = () => {
         },
         body: JSON.stringify({
           ...formData,
-          amount: formData.paymentType === 'full' ? 149 : 10,
+          amount: formData.paymentType === 'full' ? 149 : 29.99,
           product: 'SENTINEL X - Edición Fundadores',
           paymentType: formData.paymentType
         }),
@@ -453,9 +453,9 @@ const SentinelXLanding = () => {
                       />
                       <div className="flex-1">
                         <p className="font-medium text-white">Reserva con señal</p>
-                        <p className="text-sm text-gray-400">10€ ahora + 139€ antes del envío</p>
+                        <p className="text-sm text-gray-400">29,99€ ahora + 119,01€ antes del envío</p>
                       </div>
-                      <span className="text-cyan-400 font-bold">10€</span>
+                      <span className="text-cyan-400 font-bold">29,99€</span>
                     </label>
                   </div>
                 </div>
@@ -567,7 +567,7 @@ const SentinelXLanding = () => {
                     ) : (
                       <>
                         <CreditCard className="w-5 h-5" />
-                        Reserva Ahora - {formData.paymentType === 'full' ? '149€' : '10€'}
+                        Reserva Ahora - {formData.paymentType === 'full' ? '149€' : '29,99€'}
                       </>
                     )}
                   </button>
@@ -618,7 +618,7 @@ const SentinelXLanding = () => {
                 { q: '¿Cuándo recibiré mi SENTINEL X?', a: 'La entrega estimada es de 90-120 días desde la fecha de reserva. Te mantendremos informado del estado de tu pedido.' },
                 { q: '¿Puedo cancelar mi reserva?', a: 'Sí, puedes cancelar tu reserva en cualquier momento antes del envío y recibir un reembolso completo.' },
                 { q: '¿Funciona sin móvil?', a: 'Sí, SENTINEL X tiene conectividad 4G LTE independiente. Puede enviar alertas y grabar audio sin necesidad de un smartphone.' },
-                { q: '¿Qué pasa si pago solo la señal de 10€?', a: 'Tu reserva queda confirmada. Te contactaremos antes del envío para completar el pago de los 139€ restantes.' }
+                { q: '¿Qué pasa si pago solo la señal de 29,99€?', a: 'Tu reserva queda confirmada. Te contactaremos antes del envío para completar el pago de los 119,01€ restantes.' }
               ].map((faq, index) => (
                 <details key={index} className="group bg-gray-800/50 rounded-xl border border-gray-700/50">
                   <summary className="flex items-center justify-between p-4 cursor-pointer font-medium hover:text-cyan-400 transition-colors">
