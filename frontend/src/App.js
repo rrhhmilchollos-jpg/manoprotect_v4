@@ -368,7 +368,9 @@ function AppRouter() {
           {/* Order Confirmation Page (After Stripe Payment) */}
           <Route path="/pedido-confirmado" element={<OrderConfirmation />} />
           <Route path="/order-confirmation" element={<OrderConfirmation />} />
-          <Route path="/gracias" element={<OrderConfirmation />} />
+          <Route path="/gracias" element={<ThankYouPage />} />
+          <Route path="/thank-you" element={<ThankYouPage />} />
+          <Route path="/compra-exitosa" element={<ThankYouPage />} />
           
           {/* SENTINEL X Smartwatch Landing */}
           <Route path="/sentinel-x" element={<SentinelXLanding />} />
