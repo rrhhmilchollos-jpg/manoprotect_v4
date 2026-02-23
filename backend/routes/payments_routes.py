@@ -985,7 +985,7 @@ async def create_sentinel_x_checkout(
                     'currency': 'eur',
                     'product_data': {
                         'name': product_name,
-                        'description': f'Smartwatch de seguridad ManoProtect SENTINEL X. Entrega estimada: 90-120 días.',
+                        'description': 'Smartwatch de seguridad ManoProtect SENTINEL X. Entrega estimada: 90-120 días.',
                         'images': ['https://customer-assets.emergentagent.com/job_8161c713-bb69-4bfd-84d2-fde54657d491/artifacts/acz8j630_Reloj%20inteligente%20ManoProtect%20SENTINEL%20X.png'],
                     },
                     'unit_amount': int(amount * 100),  # Stripe expects cents
