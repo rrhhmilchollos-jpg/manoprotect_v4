@@ -858,3 +858,58 @@ stripe==14.1.0     # Pagos y reembolsos
 - Base inicial: 143 unidades (social proof)
 - Se suma con las reservas reales de la BD
 
+
+---
+
+## Sistema de Suscripciones con Trial - IMPLEMENTADO ✅ (23 Feb 2026)
+
+### Endpoints Implementados
+
+| Endpoint | Método | Descripción |
+|----------|--------|-------------|
+| `/api/subscriptions/registrar` | POST | Registrar usuario con trial |
+| `/api/subscriptions/cancelar-trial` | POST | Cancelar trial + periodo de gracia |
+| `/api/subscriptions/procesar-cobro/{email}` | POST | Cobro automático (interno) |
+| `/api/subscriptions/bloquear/{email}` | POST | Bloquear usuario (admin) |
+| `/api/subscriptions/cron/revisar-trials` | POST | Revisión diaria de trials |
+| `/api/subscriptions/mi-suscripcion` | GET | Estado de suscripción |
+| `/api/subscriptions/planes` | GET | Info de planes disponibles |
+
+### Flujo Implementado
+
+1. **Registro con Trial (7 días)**
+   - Plan Básico: Sin tarjeta, trial gratuito
+   - Planes Premium: Tarjeta con verificación 3D Secure, sin cargo inicial
+
+2. **Durante el Trial**
+   - Usuario puede cancelar → Activa periodo de gracia 7 días
+   - Usuario puede cambiar de plan
+
+3. **Fin del Trial**
+   - Plan Básico: Bloqueo automático
+   - Planes Premium: Cobro automático vía Stripe
+
+4. **Fallos de Pago**
+   - 3 reintentos automáticos
+   - Bloqueo tras 3 fallos
+
+5. **Bloqueos**
+   - Por email, IP y tarjeta (hashes)
+   - Impide reregistro con datos bloqueados
+
+### Cron Jobs Configurados
+
+- **Cada hora**: Procesar trials expirados
+- **9:00 AM UTC**: Enviar recordatorios
+- **3:00 AM UTC**: Limpiar sesiones antiguas
+
+### Colecciones MongoDB
+
+- `users`: Añadidos campos: `estado`, `trial_start`, `trial_end`, `grace_end`, `stripe_customer_id`, `stripe_subscription_id`, `card_hash`, `payment_attempts`
+- `blocked_users`: Nueva colección para registro de bloqueos
+
+### Archivos Modificados/Creados
+
+- `/app/backend/routes/subscription_routes.py` (NUEVO)
+- `/app/backend/services/cron_jobs.py` (ACTUALIZADO)
+- `/app/backend/server.py` (ACTUALIZADO)
