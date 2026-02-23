@@ -186,6 +186,7 @@ async def registrar_usuario(
             "message": "Cuenta básica activa con 7 días de prueba gratuita",
             "trial_end": user_doc["trial_end"],
             "plan": "basico",
+            "email": data.email,
             "requires_card": False
         }
     
