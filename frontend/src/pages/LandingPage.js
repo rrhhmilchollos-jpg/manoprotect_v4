@@ -546,18 +546,28 @@ const LandingPage = () => {
               <span className="text-xl">🇪🇸</span>
             </div>
 
-            <div className="flex gap-3 mb-6">
+            <div className="flex flex-wrap gap-3 mb-6">
               <Link 
                 to="/dispositivo-sos"
                 className="bg-[#4CAF50] text-white font-bold px-6 py-3 text-sm hover:bg-[#45a049] transition-colors"
+                data-testid="hero-cta-gps"
               >
                 VER GPS PARA FAMILIAS
               </Link>
               <Link 
                 to="/como-funciona"
                 className="border-2 border-[#4CAF50] text-[#4CAF50] font-bold px-6 py-3 text-sm hover:bg-[#4CAF50] hover:text-white transition-colors"
+                data-testid="hero-cta-how"
               >
                 CÓMO FUNCIONA
+              </Link>
+              <Link 
+                to="/blog"
+                className="border-2 border-gray-800 text-gray-800 font-bold px-6 py-3 text-sm hover:bg-gray-800 hover:text-white transition-colors flex items-center gap-2"
+                data-testid="hero-cta-blog"
+              >
+                <span>📰</span>
+                ALERTAS Y NOTICIAS
               </Link>
             </div>
 
