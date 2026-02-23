@@ -13,9 +13,13 @@ import hashlib
 import uuid
 
 from core.database import db, get_current_user, STRIPE_API_KEY
+from services.email_service import EmailNotificationService
 
 # Configure Stripe
 stripe.api_key = STRIPE_API_KEY
+
+# Email service instance
+email_service = EmailNotificationService()
 
 router = APIRouter(prefix="/subscriptions", tags=["Subscriptions"])
 logger = logging.getLogger(__name__)
