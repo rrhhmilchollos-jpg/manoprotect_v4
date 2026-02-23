@@ -275,6 +275,23 @@ async def registrar_usuario(
         
         logger.info(f"Usuario premium registrado: {data.email}, plan: {data.plan}")
         
+        # Enviar email de bienvenida
+        plan_price = STRIPE_PRICES[data.plan][f"amount_{'monthly' if data.periodo == 'mensual' else 'yearly'}"]
+        try:
+            await email_service.send_trial_started_email(
+                user_id=user_id,
+                email=data.email,
+                trial_data={
+                    "trial_end": user_doc["trial_end"],
+                    "plan_name": f"{PLAN_FEATURES[data.plan]['name']} {'Anual' if data.periodo == 'anual' else 'Mensual'}",
+                    "plan_price": f"{plan_price:.2f}",
+                    "nombre": data.nombre
+                }
+            )
+            logger.info(f"Email de bienvenida enviado a: {data.email}")
+        except Exception as e:
+            logger.warning(f"No se pudo enviar email de bienvenida: {e}")
+        
         # Verificar si se requiere 3D Secure
         requires_action = False
         client_secret = None
@@ -296,7 +313,7 @@ async def registrar_usuario(
             "requires_action": requires_action,
             "client_secret": client_secret,
             "next_billing_date": (now + timedelta(days=7)).isoformat(),
-            "amount": STRIPE_PRICES[data.plan][f"amount_{'monthly' if data.periodo == 'mensual' else 'yearly'}"]
+            "amount": plan_price
         }
         
     except stripe.error.CardError as e:
