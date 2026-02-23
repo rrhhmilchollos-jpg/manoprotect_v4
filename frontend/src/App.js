@@ -349,6 +349,8 @@ function AppRouter() {
           <Route path="/admin/audios" element={<AdminAudios />} />
           <Route path="/admin/devices" element={<AdminDevices />} />
           <Route path="/admin/shipping" element={<ShippingAdmin />} />
+          <Route path="/admin/orders" element={<AdminOrders />} />
+          <Route path="/admin/pedidos" element={<AdminOrders />} />
           
           {/* Shield Security Hub - Public */}
           <Route path="/shield" element={<ShieldPage />} />
