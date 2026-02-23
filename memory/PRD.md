@@ -44,6 +44,21 @@ ManoProtect es una plataforma integral de protección contra fraudes digitales p
 - Email: `admin@manoprotect.com`
 - Password: `Admin2024!`
 
+### 4. Frontend Admin Pedidos - COMPLETADO ✅
+- Nueva página `/admin/orders` (también `/admin/pedidos`)
+- Vista de tabla con todos los pedidos
+- Filtros por estado (Pendiente, Procesando, Enviado, Entregado)
+- Búsqueda por email, nombre, ID pedido o DNI
+- Modal de detalle con todos los datos del cliente
+- Edición de estado y número de tracking
+- Exportación a CSV para envíos
+- Stats de pedidos (totales por estado)
+
+### 5. Botón Blog en Hero - COMPLETADO ✅
+- Añadido botón "ALERTAS Y NOTICIAS" (📰) en el hero de la landing
+- Añadido enlace "Alertas" en el header
+- Enlaza a `/blog` con todos los artículos de actualidad sobre estafas
+
 ---
 
 ## Aclaración de Arquitectura (17 Feb 2026 - Sesión 4)
