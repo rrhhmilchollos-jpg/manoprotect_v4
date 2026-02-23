@@ -1078,3 +1078,14 @@ async def get_sentinel_x_preorders(
             "estimated_total_revenue": total_preorders * 149
         }
     }
+
+
+@router.get("/sentinel-x/count")
+async def get_sentinel_x_reservation_count():
+    """Get the count of SENTINEL X pre-orders (public endpoint for counter)"""
+    try:
+        count = await db.sentinel_x_preorders.count_documents({"status": {"$in": ["pending", "paid"]}})
+        return {"count": count}
+    except Exception as e:
+        logging.error(f"Error getting SENTINEL X count: {e}")
+        return {"count": 0}
