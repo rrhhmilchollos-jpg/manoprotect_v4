@@ -271,6 +271,7 @@ async def registrar_usuario(
             "trial_end": user_doc["trial_end"],
             "plan": data.plan,
             "periodo": data.periodo,
+            "email": data.email,
             "stripe_subscription_id": subscription.id,
             "requires_action": requires_action,
             "client_secret": client_secret,
