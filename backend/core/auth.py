@@ -37,12 +37,16 @@ def generate_session_token() -> str:
     return f"session_{uuid.uuid4().hex}"
 
 
-async def get_current_user(request: Request, session_token: Optional[str] = Cookie(None)) -> Optional[User]:
+async def get_current_user(request: Request, session_token: Optional[str] = None) -> Optional[User]:
     """Get current user from session token (cookie or header)"""
     if _db is None:
         raise RuntimeError("Auth module not initialized. Call init_auth(db) first.")
     
     token = session_token
+    
+    # Try to get from cookies first
+    if not token:
+        token = request.cookies.get("session_token")
     
     # Fallback to Authorization header
     if not token:
