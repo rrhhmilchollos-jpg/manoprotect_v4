@@ -150,12 +150,17 @@ async def registrar_usuario(
     await verificar_bloqueos(data.email, client_ip)
     
     # Crear documento base del usuario
+    user_id = f"user_{uuid.uuid4().hex[:12]}"
     user_doc = {
+        "user_id": user_id,
         "email": data.email,
         "nombre": data.nombre,
+        "name": data.nombre,  # Compatibility with other parts of the app
         "password_hash": hashlib.sha256(data.password.encode()).hexdigest(),
         "plan_type": data.plan,
         "plan_period": data.periodo,
+        "plan": data.plan,  # Compatibility
+        "role": "user",
         "estado": "trial_active",
         "trial_start": now.isoformat(),
         "trial_end": (now + timedelta(days=7)).isoformat(),
@@ -164,7 +169,9 @@ async def registrar_usuario(
         "payment_attempts": 0,
         "ip_registro": hash_ip(client_ip),
         "features": PLAN_FEATURES.get(data.plan, PLAN_FEATURES["basico"])["features"],
-        "max_users": PLAN_FEATURES.get(data.plan, PLAN_FEATURES["basico"])["max_users"]
+        "max_users": PLAN_FEATURES.get(data.plan, PLAN_FEATURES["basico"])["max_users"],
+        "is_active": True,
+        "auth_provider": "email"
     }
     
     # PLAN BÁSICO - Sin tarjeta
