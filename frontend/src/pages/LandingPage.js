@@ -960,6 +960,53 @@ const LandingPage = () => {
       {/* Footer */}
       <LandingFooter />
 
+      {/* Social Proof Notification */}
+      {showSocialProof && (
+        <div 
+          className="fixed bottom-24 left-6 z-40 animate-in slide-in-from-left duration-500"
+          data-testid="social-proof-notification"
+        >
+          <div className="bg-white rounded-xl shadow-2xl border border-gray-100 p-4 max-w-xs flex items-start gap-3 relative overflow-hidden">
+            {/* Left accent bar */}
+            <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-cyan-500 to-blue-600" />
+            
+            {/* Watch icon */}
+            <div className="w-12 h-12 bg-gradient-to-br from-cyan-500/10 to-blue-500/10 rounded-lg flex items-center justify-center flex-shrink-0">
+              <img 
+                src="https://customer-assets.emergentagent.com/job_8161c713-bb69-4bfd-84d2-fde54657d491/artifacts/acz8j630_Reloj%20inteligente%20ManoProtect%20SENTINEL%20X.png"
+                alt="SENTINEL X"
+                className="w-10 h-10 object-contain"
+              />
+            </div>
+            
+            {/* Content */}
+            <div className="flex-1 min-w-0">
+              <p className="text-sm text-gray-800 font-medium">
+                🔔 <span className="font-bold">{socialProofData.name}</span> de {socialProofData.city}
+              </p>
+              <p className="text-xs text-gray-500 mt-0.5">
+                acaba de reservar un <span className="text-cyan-600 font-semibold">{socialProofData.product}</span>
+              </p>
+              <p className="text-xs text-gray-400 mt-1">Hace unos segundos</p>
+            </div>
+            
+            {/* Close button */}
+            <button 
+              onClick={() => setShowSocialProof(false)}
+              className="absolute top-2 right-2 text-gray-400 hover:text-gray-600 transition-colors"
+            >
+              <X className="w-4 h-4" />
+            </button>
+            
+            {/* Verified badge */}
+            <div className="absolute bottom-2 right-3 flex items-center gap-1">
+              <Check className="w-3 h-3 text-green-500" />
+              <span className="text-xs text-green-600 font-medium">Verificado</span>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Video Modal */}
       {showVideo && (
         <div className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4" onClick={() => setShowVideo(false)}>
