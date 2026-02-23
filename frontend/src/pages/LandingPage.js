@@ -553,6 +553,118 @@ const LandingPage = () => {
         </div>
       </section>
 
+      {/* ============ SENTINEL X PROMO BANNER ============ */}
+      <section className="relative bg-black py-16 overflow-hidden">
+        {/* Background effects */}
+        <div className="absolute inset-0 bg-gradient-to-r from-cyan-900/20 via-transparent to-blue-900/20" />
+        <div className="absolute top-0 right-0 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 left-0 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl" />
+        
+        <div className="max-w-7xl mx-auto px-6 relative z-10">
+          <div className="grid lg:grid-cols-2 gap-8 items-center">
+            {/* Product Image */}
+            <div className="relative order-2 lg:order-1">
+              <div className="relative group">
+                {/* Glow effect */}
+                <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/30 to-blue-500/30 blur-2xl rounded-full transform scale-75 group-hover:scale-90 transition-transform duration-700" />
+                
+                <Link to="/sentinel-x" className="block">
+                  <img 
+                    src="https://customer-assets.emergentagent.com/job_8161c713-bb69-4bfd-84d2-fde54657d491/artifacts/acz8j630_Reloj%20inteligente%20ManoProtect%20SENTINEL%20X.png"
+                    alt="ManoProtect SENTINEL X - Smartwatch de Seguridad"
+                    className="relative z-10 w-full max-w-md mx-auto transform group-hover:scale-105 transition-transform duration-500 drop-shadow-2xl"
+                    data-testid="sentinel-x-promo-image"
+                  />
+                </Link>
+                
+                {/* Floating badge */}
+                <div className="absolute top-4 right-4 lg:right-12 animate-bounce">
+                  <div className="bg-gradient-to-r from-amber-500 to-orange-500 text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg">
+                    🔥 NUEVO
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Content */}
+            <div className="text-center lg:text-left order-1 lg:order-2">
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-cyan-500/10 border border-cyan-500/30 rounded-full text-cyan-400 text-sm mb-4">
+                <span className="w-2 h-2 bg-cyan-400 rounded-full animate-pulse" />
+                Edición Fundadores - Solo 500 unidades
+              </div>
+              
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4">
+                SENTINEL X
+                <span className="block text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">
+                  Tu Guardián Personal
+                </span>
+              </h2>
+              
+              <p className="text-gray-400 text-lg mb-6 max-w-lg mx-auto lg:mx-0">
+                El smartwatch que actúa cuando tú no puedes. SOS invisible, grabación en la nube 
+                y trayecto seguro. <span className="text-cyan-400 font-semibold">Funciona sin teléfono.</span>
+              </p>
+
+              {/* Key features */}
+              <div className="grid grid-cols-2 gap-3 mb-6 max-w-md mx-auto lg:mx-0">
+                <div className="flex items-center gap-2 text-gray-300 text-sm">
+                  <div className="w-2 h-2 bg-cyan-400 rounded-full" />
+                  SOS Invisible
+                </div>
+                <div className="flex items-center gap-2 text-gray-300 text-sm">
+                  <div className="w-2 h-2 bg-cyan-400 rounded-full" />
+                  Modo PIN Falso
+                </div>
+                <div className="flex items-center gap-2 text-gray-300 text-sm">
+                  <div className="w-2 h-2 bg-cyan-400 rounded-full" />
+                  Grabación Nube
+                </div>
+                <div className="flex items-center gap-2 text-gray-300 text-sm">
+                  <div className="w-2 h-2 bg-cyan-400 rounded-full" />
+                  5 días batería
+                </div>
+              </div>
+
+              {/* Price and CTA */}
+              <div className="flex flex-col sm:flex-row items-center gap-4 justify-center lg:justify-start">
+                <div className="text-center sm:text-left">
+                  <div className="flex items-baseline gap-2">
+                    <span className="text-4xl font-bold text-white">149€</span>
+                    <span className="text-gray-500 line-through text-lg">249€</span>
+                  </div>
+                  <p className="text-green-400 text-sm">Ahorras 100€</p>
+                </div>
+                
+                <Link 
+                  to="/sentinel-x"
+                  className="group inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-bold rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg shadow-cyan-500/25"
+                  data-testid="sentinel-x-promo-cta"
+                >
+                  Ver SENTINEL X
+                  <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                </Link>
+              </div>
+
+              {/* Trust line */}
+              <div className="flex items-center gap-4 mt-6 justify-center lg:justify-start text-xs text-gray-500">
+                <div className="flex items-center gap-1">
+                  <Shield className="w-3 h-3 text-cyan-500" />
+                  <span>Garantía 12 meses</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <MapPin className="w-3 h-3 text-cyan-500" />
+                  <span>Envío Europa</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <Check className="w-3 h-3 text-cyan-500" />
+                  <span>Devolución fácil</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* ============ LOCALIZA Y PROTEGE ============ */}
       <section className="bg-gradient-to-br from-[#E8F5E9] to-[#C8E6C9] py-12">
         <div className="max-w-7xl mx-auto px-6">
