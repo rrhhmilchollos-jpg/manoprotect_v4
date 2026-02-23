@@ -369,6 +369,11 @@ function AppRouter() {
           <Route path="/order-confirmation" element={<OrderConfirmation />} />
           <Route path="/gracias" element={<OrderConfirmation />} />
           
+          {/* SENTINEL X Smartwatch Landing */}
+          <Route path="/sentinel-x" element={<SentinelXLanding />} />
+          <Route path="/sentinel" element={<SentinelXLanding />} />
+          <Route path="/reloj" element={<SentinelXLanding />} />
+          
           {/* SOS Device Order (Physical Keychain) - Redirect to Services */}
           <Route path="/sos-device" element={<SOSServices />} />
           <Route path="/dispositivo-sos" element={<SOSServices />} />
