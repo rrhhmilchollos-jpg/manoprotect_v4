@@ -141,21 +141,7 @@ async def get_recent_users(request: Request, limit: int = Query(20, ge=1, le=100
     
     users = await _db.users.find(
         {},
-        {
-            "_id": 0,
-            "password_hash": 0,
-            "user_id": 1,
-            "email": 1,
-            "nombre": 1,
-            "name": 1,
-            "phone": 1,
-            "plan_type": 1,
-            "plan_period": 1,
-            "estado": 1,
-            "trial_end": 1,
-            "created_at": 1,
-            "auth_provider": 1
-        }
+        {"_id": 0, "password_hash": 0}
     ).sort("created_at", -1).limit(limit).to_list(length=limit)
     
     return {"users": users, "count": len(users)}
