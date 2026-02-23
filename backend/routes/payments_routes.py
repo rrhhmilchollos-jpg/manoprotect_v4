@@ -974,7 +974,7 @@ async def create_sentinel_x_checkout(
         # Get base URL for redirects
         host_url = str(http_request.headers.get('origin', 'https://manoprotect.com'))
         
-        success_url = f"{host_url}/sentinel-x?success=true&session_id={{CHECKOUT_SESSION_ID}}"
+        success_url = f"{host_url}/gracias?success=true&session_id={{CHECKOUT_SESSION_ID}}&product=sentinel-x&amount={amount}"
         cancel_url = f"{host_url}/sentinel-x?canceled=true"
         
         # Create Stripe checkout session
