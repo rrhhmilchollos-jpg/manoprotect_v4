@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { Shield, Lock, Mic, MapPin, Zap, Check, Clock, Globe, CreditCard, ChevronRight, Star, Play } from 'lucide-react';
+import { Shield, Lock, Mic, MapPin, Zap, Check, Clock, Globe, CreditCard, ChevronRight, Star, Play, Users } from 'lucide-react';
 import LandingHeader from '../components/landing/LandingHeader';
 import LandingFooter from '../components/landing/LandingFooter';
 
@@ -13,9 +13,13 @@ const SENTINEL_IMAGES = {
   lifestyle: "https://customer-assets.emergentagent.com/job_8161c713-bb69-4bfd-84d2-fde54657d491/artifacts/68kjir28_Reloj%20y%20m%C3%B3vil%20seguros.png"
 };
 
+// Maximum units for founders edition
+const MAX_FOUNDERS_UNITS = 500;
+
 const SentinelXLanding = () => {
   const [selectedImage, setSelectedImage] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
+  const [reservedCount, setReservedCount] = useState(143); // Start with base count
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -25,6 +29,23 @@ const SentinelXLanding = () => {
     country: 'ES',
     paymentType: 'full' // 'full' or 'partial'
   });
+
+  // Fetch reservation count on mount
+  useEffect(() => {
+    const fetchReservationCount = async () => {
+      try {
+        const response = await fetch(`${API_URL}/api/sentinel-x/count`);
+        if (response.ok) {
+          const data = await response.json();
+          // Add base count (143) to actual reservations
+          setReservedCount(143 + (data.count || 0));
+        }
+      } catch (error) {
+        console.log('Using default reservation count');
+      }
+    };
+    fetchReservationCount();
+  }, []);
 
   const images = [SENTINEL_IMAGES.hero, SENTINEL_IMAGES.withPhone, SENTINEL_IMAGES.lifestyle];
 
