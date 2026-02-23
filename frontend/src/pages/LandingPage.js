@@ -231,6 +231,16 @@ const LandingPage = () => {
         </Link>
 
         <div className="flex items-center gap-4">
+          {/* Link al Blog */}
+          <Link 
+            to="/blog" 
+            className="hidden md:flex items-center gap-1.5 text-gray-600 hover:text-[#4CAF50] transition-colors font-medium text-sm"
+            data-testid="header-blog-link"
+          >
+            <span>📰</span>
+            <span>Alertas</span>
+          </Link>
+          
           <Link to="/login" className="hidden sm:block border-2 border-gray-800 text-gray-800 px-5 py-2 font-bold text-sm hover:bg-gray-800 hover:text-white transition-colors">
             MI CUENTA
           </Link>
