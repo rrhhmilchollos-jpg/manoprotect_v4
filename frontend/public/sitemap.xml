@@ -1,327 +1,206 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
-        xmlns:video="http://www.google.com/schemas/sitemap-video/1.1"
-        xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+        xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
   
   <!-- ============================================ -->
-  <!-- HOMEPAGE - Digital Security Hub -->
+  <!-- PÁGINAS DE ALTA PRIORIDAD - VENTAS          -->
   <!-- ============================================ -->
+  
+  <!-- HOME - Principal -->
   <url>
     <loc>https://manoprotect.com/</loc>
-    <lastmod>2026-02-19</lastmod>
+    <lastmod>2026-02-24</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
     <image:image>
       <image:loc>https://manoprotect.com/og-image.png</image:loc>
-      <image:title>ManoProtect - Seguridad Digital para Familias</image:title>
-      <image:caption>Plataforma líder en España de protección contra phishing, fraud prevention y seguridad familiar</image:caption>
+      <image:title>ManoProtect - Protección Digital para Familias</image:title>
     </image:image>
   </url>
   
-  <!-- ============================================ -->
-  <!-- SENTINEL X SMARTWATCH LANDING -->
-  <!-- ============================================ -->
+  <!-- SENTINEL X - Producto Estrella -->
   <url>
     <loc>https://manoprotect.com/sentinel-x</loc>
-    <lastmod>2026-02-23</lastmod>
+    <lastmod>2026-02-24</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.95</priority>
+    <priority>1.0</priority>
     <image:image>
-      <image:loc>https://customer-assets.emergentagent.com/job_8161c713-bb69-4bfd-84d2-fde54657d491/artifacts/acz8j630_Reloj%20inteligente%20ManoProtect%20SENTINEL%20X.png</image:loc>
-      <image:title>ManoProtect SENTINEL X Smartwatch de Seguridad</image:title>
-      <image:caption>Reloj inteligente con SOS invisible, modo PIN falso y grabación en la nube</image:caption>
+      <image:loc>https://manoprotect.com/icons/sentinel-x-watch.png</image:loc>
+      <image:title>ManoProtect Sentinel X - Reloj SOS con GPS</image:title>
     </image:image>
   </url>
   
-  <!-- ============================================ -->
-  <!-- PRODUCT PAGES - HIGH PRIORITY -->
-  <!-- ============================================ -->
+  <!-- BOTÓN SOS - Producto Principal -->
   <url>
     <loc>https://manoprotect.com/dispositivo-sos</loc>
-    <lastmod>2026-02-19</lastmod>
+    <lastmod>2026-02-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.95</priority>
     <image:image>
-      <image:loc>https://static.prod-images.emergentagent.com/jobs/57731f5f-bdc3-4065-aa81-f8dc7ddad247/images/4a10ef76a79b16a8b4b57b4d18673d1fdf11d23b55e68841a8c3c2dadeea1a97.png</image:loc>
-      <image:title>Dispositivo SOS GPS ManoProtect</image:title>
-      <image:caption>Localizador GPS con botón de emergencia para familias y mayores</image:caption>
+      <image:loc>https://manoprotect.com/icons/sos-button.png</image:loc>
+      <image:title>Botón SOS ManoProtect - Emergencias para Mayores</image:title>
     </image:image>
   </url>
   
+  <!-- RELOJ SOS - Landing SEO -->
   <url>
-    <loc>https://manoprotect.com/pricing</loc>
-    <lastmod>2026-02-19</lastmod>
+    <loc>https://manoprotect.com/reloj-sos</loc>
+    <lastmod>2026-02-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.95</priority>
   </url>
   
+  <!-- PRECIOS -->
+  <url>
+    <loc>https://manoprotect.com/precios</loc>
+    <lastmod>2026-02-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.90</priority>
+  </url>
+  
+  <!-- REGISTRO - Conversión -->
   <url>
     <loc>https://manoprotect.com/registro</loc>
-    <lastmod>2026-02-19</lastmod>
+    <lastmod>2026-02-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.90</priority>
   </url>
   
   <!-- ============================================ -->
-  <!-- SILO 1: PHISHING PROTECTION -->
+  <!-- PÁGINAS DE CONTENIDO - SEO                  -->
   <!-- ============================================ -->
-  <url>
-    <loc>https://manoprotect.com/proteccion-phishing</loc>
-    <lastmod>2026-02-19</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.95</priority>
-  </url>
   
-  <url>
-    <loc>https://manoprotect.com/phishing-protection</loc>
-    <lastmod>2026-02-19</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
-  </url>
-  
-  <!-- ============================================ -->
-  <!-- SILO 2: FRAUD PREVENTION -->
-  <!-- ============================================ -->
-  <url>
-    <loc>https://manoprotect.com/proteccion-fraude-online</loc>
-    <lastmod>2026-02-19</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.95</priority>
-  </url>
-  
-  <url>
-    <loc>https://manoprotect.com/fraud-prevention</loc>
-    <lastmod>2026-02-19</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
-  </url>
-  
-  <!-- ============================================ -->
-  <!-- SILO 3: FAMILY DIGITAL SECURITY -->
-  <!-- ============================================ -->
-  <url>
-    <loc>https://manoprotect.com/seguridad-digital-familiar</loc>
-    <lastmod>2026-02-19</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.95</priority>
-  </url>
-  
-  <url>
-    <loc>https://manoprotect.com/family-security</loc>
-    <lastmod>2026-02-19</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
-  </url>
-  
-  <!-- ============================================ -->
-  <!-- SILO 4: IDENTITY PROTECTION -->
-  <!-- ============================================ -->
-  <url>
-    <loc>https://manoprotect.com/proteccion-identidad-digital</loc>
-    <lastmod>2026-02-19</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.95</priority>
-  </url>
-  
-  <url>
-    <loc>https://manoprotect.com/identity-protection</loc>
-    <lastmod>2026-02-19</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
-  </url>
-  
-  <!-- ============================================ -->
-  <!-- SILO 5: ELDERLY PROTECTION -->
-  <!-- ============================================ -->
-  <url>
-    <loc>https://manoprotect.com/seguridad-mayores</loc>
-    <lastmod>2026-02-19</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.95</priority>
-  </url>
-  
-  <url>
-    <loc>https://manoprotect.com/elderly-protection</loc>
-    <lastmod>2026-02-19</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
-  </url>
-  
-  <!-- ============================================ -->
-  <!-- SILO 6: BANKING FRAUD -->
-  <!-- ============================================ -->
-  <url>
-    <loc>https://manoprotect.com/estafas-bancarias</loc>
-    <lastmod>2026-02-19</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.95</priority>
-  </url>
-  
-  <url>
-    <loc>https://manoprotect.com/banking-fraud-protection</loc>
-    <lastmod>2026-02-19</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
-  </url>
-  
-  <!-- ============================================ -->
-  <!-- SILO 7: SECURE PAYMENTS -->
-  <!-- ============================================ -->
-  <url>
-    <loc>https://manoprotect.com/secure-payments</loc>
-    <lastmod>2026-02-19</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.95</priority>
-  </url>
-  
-  <url>
-    <loc>https://manoprotect.com/secure-online-payments</loc>
-    <lastmod>2026-02-19</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
-  </url>
-  
-  <url>
-    <loc>https://manoprotect.com/online-payment-protection</loc>
-    <lastmod>2026-02-19</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
-  </url>
-  
-  <!-- ============================================ -->
-  <!-- INFORMATIONAL PAGES -->
-  <!-- ============================================ -->
-  <url>
-    <loc>https://manoprotect.com/como-funciona</loc>
-    <lastmod>2026-02-19</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.80</priority>
-  </url>
-  
-  <url>
-    <loc>https://manoprotect.com/how-it-works</loc>
-    <lastmod>2026-02-19</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.80</priority>
-  </url>
-  
+  <!-- BLOG - Noticias y Alertas -->
   <url>
     <loc>https://manoprotect.com/blog</loc>
-    <lastmod>2026-02-19</lastmod>
+    <lastmod>2026-02-24</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.85</priority>
   </url>
   
+  <!-- Artículos del Blog -->
   <url>
-    <loc>https://manoprotect.com/faq</loc>
-    <lastmod>2026-02-19</lastmod>
-    <changefreq>weekly</changefreq>
+    <loc>https://manoprotect.com/blog/alerta-smishing-bankinter</loc>
+    <lastmod>2026-02-24</lastmod>
+    <changefreq>monthly</changefreq>
     <priority>0.75</priority>
+  </url>
+  <url>
+    <loc>https://manoprotect.com/blog/estafa-correos-sms</loc>
+    <lastmod>2026-02-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.75</priority>
+  </url>
+  <url>
+    <loc>https://manoprotect.com/blog/fraude-whatsapp-familiar</loc>
+    <lastmod>2026-02-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.75</priority>
+  </url>
+  <url>
+    <loc>https://manoprotect.com/blog/vishing-llamadas-falsas</loc>
+    <lastmod>2026-02-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.75</priority>
+  </url>
+  
+  <!-- CÓMO FUNCIONA -->
+  <url>
+    <loc>https://manoprotect.com/como-funciona</loc>
+    <lastmod>2026-02-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.80</priority>
+  </url>
+  
+  <!-- ESTAFAS BANCARIAS - SEO -->
+  <url>
+    <loc>https://manoprotect.com/estafas-bancarias</loc>
+    <lastmod>2026-02-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+  </url>
+  
+  <!-- ============================================ -->
+  <!-- PÁGINAS SECUNDARIAS                         -->
+  <!-- ============================================ -->
+  
+  <url>
+    <loc>https://manoprotect.com/login</loc>
+    <lastmod>2026-02-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.60</priority>
   </url>
   
   <url>
     <loc>https://manoprotect.com/quienes-somos</loc>
-    <lastmod>2026-02-19</lastmod>
+    <lastmod>2026-02-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.70</priority>
   </url>
   
   <url>
     <loc>https://manoprotect.com/contacto</loc>
-    <lastmod>2026-02-19</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.70</priority>
-  </url>
-  
-  <!-- ============================================ -->
-  <!-- PRODUCT FEATURE PAGES -->
-  <!-- ============================================ -->
-  <url>
-    <loc>https://manoprotect.com/servicios-sos</loc>
-    <lastmod>2026-02-19</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.80</priority>
-  </url>
-  
-  <url>
-    <loc>https://manoprotect.com/voice-shield</loc>
-    <lastmod>2026-02-19</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.75</priority>
-  </url>
-  
-  <url>
-    <loc>https://manoprotect.com/smart-locator</loc>
-    <lastmod>2026-02-19</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.75</priority>
-  </url>
-  
-  <url>
-    <loc>https://manoprotect.com/deepfake-shield</loc>
-    <lastmod>2026-02-19</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.75</priority>
-  </url>
-  
-  <!-- ============================================ -->
-  <!-- ENTERPRISE / B2B -->
-  <!-- ============================================ -->
-  <url>
-    <loc>https://manoprotect.com/empresas</loc>
-    <lastmod>2026-02-19</lastmod>
+    <lastmod>2026-02-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.70</priority>
   </url>
   
   <url>
-    <loc>https://manoprotect.com/phishing-simulation</loc>
-    <lastmod>2026-02-19</lastmod>
+    <loc>https://manoprotect.com/faq</loc>
+    <lastmod>2026-02-24</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.70</priority>
+    <priority>0.75</priority>
   </url>
   
   <!-- ============================================ -->
-  <!-- AUTH PAGES -->
+  <!-- PÁGINAS LEGALES                             -->
   <!-- ============================================ -->
-  <url>
-    <loc>https://manoprotect.com/login</loc>
-    <lastmod>2026-02-19</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.50</priority>
-  </url>
   
-  <!-- ============================================ -->
-  <!-- LEGAL PAGES -->
-  <!-- ============================================ -->
   <url>
     <loc>https://manoprotect.com/privacy-policy</loc>
-    <lastmod>2026-02-19</lastmod>
+    <lastmod>2026-02-24</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.30</priority>
   </url>
   
   <url>
     <loc>https://manoprotect.com/terms-of-service</loc>
-    <lastmod>2026-02-19</lastmod>
+    <lastmod>2026-02-24</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.30</priority>
   </url>
   
   <url>
-    <loc>https://manoprotect.com/legal-notice</loc>
-    <lastmod>2026-02-19</lastmod>
+    <loc>https://manoprotect.com/cookies-policy</loc>
+    <lastmod>2026-02-24</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.30</priority>
+  </url>
+  
+  <!-- ============================================ -->
+  <!-- LANDINGS SEM (NUEVAS)                       -->
+  <!-- ============================================ -->
+  
+  <url>
+    <loc>https://manoprotect.com/reloj-sos-ancianos</loc>
+    <lastmod>2026-02-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.90</priority>
   </url>
   
   <url>
-    <loc>https://manoprotect.com/refund-policy</loc>
-    <lastmod>2026-02-19</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.30</priority>
+    <loc>https://manoprotect.com/reloj-gps-mayores</loc>
+    <lastmod>2026-02-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.90</priority>
   </url>
   
+  <url>
+    <loc>https://manoprotect.com/boton-sos-senior</loc>
+    <lastmod>2026-02-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.90</priority>
+  </url>
+
 </urlset>
