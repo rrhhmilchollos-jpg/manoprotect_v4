@@ -315,6 +315,12 @@ function AppRouter() {
           <Route path="/estafas-bancarias" element={<EstafasBancarias />} />
           <Route path="/banking-fraud-protection" element={<EstafasBancarias />} />
           
+          {/* SEO Landing Pages - SEM Ready */}
+          <Route path="/reloj-sos-ancianos" element={<RelojSOSAncianos />} />
+          <Route path="/reloj-gps-mayores" element={<RelojGPSMayores />} />
+          <Route path="/boton-sos-senior" element={<BotonSOSSenior />} />
+          <Route path="/reloj-sos" element={<RelojSOSAncianos />} />
+          
           {/* Legal Pages */}
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/terms-of-service" element={<TermsOfService />} />
