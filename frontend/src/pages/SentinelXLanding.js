@@ -675,6 +675,18 @@ const SentinelXLanding = () => {
         </section>
 
         <LandingFooter />
+
+        {/* Sticky CTA Bar */}
+        <StickyCTA 
+          productName="SENTINEL X - Edición Fundadores"
+          price={149}
+          originalPrice={249}
+          ctaText="Reservar Ahora"
+          onCTAClick={() => {
+            const el = document.getElementById('reservar');
+            if (el) el.scrollIntoView({ behavior: 'smooth' });
+          }}
+        />
       </div>
     </>
   );
