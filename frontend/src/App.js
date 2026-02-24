@@ -143,6 +143,11 @@ const SecurePayments = lazy(() => import('@/pages/SecurePayments'));
 const SentinelXLanding = lazy(() => import('@/pages/SentinelXLanding'));
 const AdminOrders = lazy(() => import('@/pages/AdminOrders'));
 
+// SEO Landing Pages - SEM Ready
+const RelojSOSAncianos = lazy(() => import('@/pages/RelojSOSAncianos'));
+const RelojGPSMayores = lazy(() => import('@/pages/RelojGPSMayores'));
+const BotonSOSSenior = lazy(() => import('@/pages/BotonSOSSenior'));
+
 // SEO SILO Pages
 const ProteccionPhishing = lazy(() => import('@/pages/ProteccionPhishing'));
 const ProteccionFraudeOnline = lazy(() => import('@/pages/ProteccionFraudeOnline'));
