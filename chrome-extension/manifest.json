@@ -9,7 +9,7 @@
     "contextMenus"
   ],
   "host_permissions": [
-    "https://ios-release-preview-1.preview.emergentagent.com/*",
+    "https://manoprotect-v2.preview.emergentagent.com/*",
     "https://www.manoprotect.com/*"
   ],
   "action": {
