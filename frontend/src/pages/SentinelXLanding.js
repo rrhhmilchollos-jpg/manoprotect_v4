@@ -3,6 +3,9 @@ import { Helmet } from 'react-helmet-async';
 import { Shield, Lock, Mic, MapPin, Zap, Check, Clock, Globe, CreditCard, ChevronRight, Star, Users, AlertTriangle } from 'lucide-react';
 import LandingHeader from '../components/landing/LandingHeader';
 import LandingFooter from '../components/landing/LandingFooter';
+import StickyCTA from '../components/cro/StickyCTA';
+import Testimonials from '../components/cro/Testimonials';
+import ProductComparison from '../components/cro/ProductComparison';
 
 const API_URL = process.env.REACT_APP_BACKEND_URL;
 

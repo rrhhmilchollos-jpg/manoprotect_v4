@@ -856,6 +856,67 @@ const BlogPage = () => {
         </div>
       </section>
 
+      {/* Strategic Guide Articles */}
+      {selectedCategory === 'all' && searchTerm === '' && (
+        <section className="py-12 px-6 bg-white border-t border-slate-200">
+          <div className="max-w-7xl mx-auto">
+            <h2 className="text-2xl font-bold text-slate-900 mb-2 flex items-center gap-2">
+              <FileText className="w-6 h-6 text-[#4CAF50]" />
+              Guías y Comparativas
+            </h2>
+            <p className="text-slate-500 mb-8">Artículos detallados para proteger a tu familia</p>
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
+              {[
+                {
+                  slug: '/blog/mejores-relojes-sos-2026',
+                  title: 'Los 5 Mejores Relojes SOS para Mayores en 2026',
+                  desc: 'Ranking actualizado con análisis de funciones, precios y opiniones.',
+                  tag: 'Ranking',
+                  tagColor: 'bg-amber-100 text-amber-800'
+                },
+                {
+                  slug: '/blog/como-funciona-reloj-sos',
+                  title: 'Cómo Funciona un Reloj SOS Paso a Paso',
+                  desc: 'Guía completa: GPS, llamadas, detección de caídas y alertas.',
+                  tag: 'Guía',
+                  tagColor: 'bg-blue-100 text-blue-800'
+                },
+                {
+                  slug: '/blog/reloj-gps-alzheimer',
+                  title: 'Reloj GPS para Personas con Alzheimer',
+                  desc: 'Zonas seguras, alertas automáticas y consejos para familiares.',
+                  tag: 'Salud',
+                  tagColor: 'bg-purple-100 text-purple-800'
+                },
+                {
+                  slug: '/blog/reloj-gps-sin-cuotas',
+                  title: 'Reloj GPS Sin Cuotas: La Verdad',
+                  desc: 'Costes ocultos, SIM necesaria y comparativa real de precios.',
+                  tag: 'Análisis',
+                  tagColor: 'bg-red-100 text-red-800'
+                }
+              ].map((article) => (
+                <Link
+                  key={article.slug}
+                  to={article.slug}
+                  className="group bg-white rounded-xl border border-slate-200 p-5 hover:shadow-lg transition-all hover:border-[#4CAF50]/30"
+                  data-testid={`guide-${article.slug.split('/').pop()}`}
+                >
+                  <Badge className={`${article.tagColor} text-xs mb-3`}>{article.tag}</Badge>
+                  <h3 className="font-semibold text-slate-900 mb-2 group-hover:text-[#4CAF50] transition-colors text-sm leading-tight">
+                    {article.title}
+                  </h3>
+                  <p className="text-xs text-slate-500">{article.desc}</p>
+                  <div className="flex items-center gap-1 text-[#4CAF50] text-xs font-medium mt-3 opacity-0 group-hover:opacity-100 transition-opacity">
+                    Leer artículo <ChevronRight className="w-3 h-3" />
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* CTA Section */}
       <section className="py-16 px-6 bg-gradient-to-r from-indigo-600 to-purple-600">
         <div className="max-w-4xl mx-auto text-center">
