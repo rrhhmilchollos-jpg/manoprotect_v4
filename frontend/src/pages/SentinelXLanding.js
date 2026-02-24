@@ -407,8 +407,14 @@ const SentinelXLanding = () => {
           </div>
         </section>
 
+        {/* Social Proof - Testimonials */}
+        <Testimonials />
+
+        {/* Product Comparison Table */}
+        <ProductComparison />
+
         {/* Pre-order Section */}
-        <section className="py-20 bg-black" id="reservar">
+        <section className="py-20 bg-black" id="reservar" data-testid="purchase-section">
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
               <div className="text-center mb-12">
