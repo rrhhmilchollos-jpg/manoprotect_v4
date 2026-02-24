@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
+  
+  <!-- ============================================ -->
+  <!-- BLOG PRINCIPAL                              -->
+  <!-- ============================================ -->
+  
+  <url>
+    <loc>https://manoprotect.com/blog</loc>
+    <lastmod>2026-02-24</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.85</priority>
+  </url>
+  
+  <!-- ============================================ -->
+  <!-- ARTÍCULOS - ALERTAS DE ESTAFAS              -->
+  <!-- ============================================ -->
+  
+  <url>
+    <loc>https://manoprotect.com/blog/alerta-smishing-bankinter</loc>
+    <lastmod>2026-02-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.80</priority>
+    <news:news>
+      <news:publication>
+        <news:name>ManoProtect Alertas</news:name>
+        <news:language>es</news:language>
+      </news:publication>
+      <news:publication_date>2026-02-20</news:publication_date>
+      <news:title>ALERTA: Nueva estafa SMS suplantando a Bankinter</news:title>
+      <news:keywords>smishing, bankinter, estafa sms, fraude bancario</news:keywords>
+    </news:news>
+  </url>
+  
+  <url>
+    <loc>https://manoprotect.com/blog/estafa-correos-sms</loc>
+    <lastmod>2026-02-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.80</priority>
+    <news:news>
+      <news:publication>
+        <news:name>ManoProtect Alertas</news:name>
+        <news:language>es</news:language>
+      </news:publication>
+      <news:publication_date>2026-02-18</news:publication_date>
+      <news:title>Estafa de Correos por SMS: Cómo identificarla y protegerte</news:title>
+      <news:keywords>estafa correos, sms falso, paquete pendiente, phishing</news:keywords>
+    </news:news>
+  </url>
+  
+  <url>
+    <loc>https://manoprotect.com/blog/fraude-whatsapp-familiar</loc>
+    <lastmod>2026-02-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.80</priority>
+    <news:news>
+      <news:publication>
+        <news:name>ManoProtect Alertas</news:name>
+        <news:language>es</news:language>
+      </news:publication>
+      <news:publication_date>2026-02-15</news:publication_date>
+      <news:title>El fraude del familiar en WhatsApp: Mamá soy yo</news:title>
+      <news:keywords>whatsapp, estafa familiar, mama soy yo, fraude</news:keywords>
+    </news:news>
+  </url>
+  
+  <url>
+    <loc>https://manoprotect.com/blog/vishing-llamadas-falsas</loc>
+    <lastmod>2026-02-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.80</priority>
+    <news:news>
+      <news:publication>
+        <news:name>ManoProtect Alertas</news:name>
+        <news:language>es</news:language>
+      </news:publication>
+      <news:publication_date>2026-02-10</news:publication_date>
+      <news:title>Vishing: Llamadas falsas de tu banco - Cómo protegerte</news:title>
+      <news:keywords>vishing, llamadas falsas, banco, fraude telefónico</news:keywords>
+    </news:news>
+  </url>
+  
+  <!-- ============================================ -->
+  <!-- PÁGINAS INFORMATIVAS                        -->
+  <!-- ============================================ -->
+  
+  <url>
+    <loc>https://manoprotect.com/estafas-bancarias</loc>
+    <lastmod>2026-02-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+  </url>
+  
+  <url>
+    <loc>https://manoprotect.com/como-funciona</loc>
+    <lastmod>2026-02-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.75</priority>
+  </url>
+  
+  <url>
+    <loc>https://manoprotect.com/faq</loc>
+    <lastmod>2026-02-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.75</priority>
+  </url>
+
+</urlset>
