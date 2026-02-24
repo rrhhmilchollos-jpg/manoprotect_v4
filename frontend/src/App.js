@@ -148,6 +148,12 @@ const RelojSOSAncianos = lazy(() => import('@/pages/RelojSOSAncianos'));
 const RelojGPSMayores = lazy(() => import('@/pages/RelojGPSMayores'));
 const BotonSOSSenior = lazy(() => import('@/pages/BotonSOSSenior'));
 
+// Strategic Blog Articles
+const MejoresRelojesSOS2026 = lazy(() => import('@/pages/blog/MejoresRelojesSOS2026'));
+const ComoFuncionaRelojSOS = lazy(() => import('@/pages/blog/ComoFuncionaRelojSOS'));
+const RelojParaAlzheimer = lazy(() => import('@/pages/blog/RelojParaAlzheimer'));
+const RelojGPSSinCuotas = lazy(() => import('@/pages/blog/RelojGPSSinCuotas'));
+
 // SEO SILO Pages
 const ProteccionPhishing = lazy(() => import('@/pages/ProteccionPhishing'));
 const ProteccionFraudeOnline = lazy(() => import('@/pages/ProteccionFraudeOnline'));
@@ -320,6 +326,12 @@ function AppRouter() {
           <Route path="/reloj-gps-mayores" element={<RelojGPSMayores />} />
           <Route path="/boton-sos-senior" element={<BotonSOSSenior />} />
           <Route path="/reloj-sos" element={<RelojSOSAncianos />} />
+          
+          {/* Strategic Blog Articles */}
+          <Route path="/blog/mejores-relojes-sos-2026" element={<MejoresRelojesSOS2026 />} />
+          <Route path="/blog/como-funciona-reloj-sos" element={<ComoFuncionaRelojSOS />} />
+          <Route path="/blog/reloj-gps-alzheimer" element={<RelojParaAlzheimer />} />
+          <Route path="/blog/reloj-gps-sin-cuotas" element={<RelojGPSSinCuotas />} />
           
           {/* Legal Pages */}
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
