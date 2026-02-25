@@ -237,19 +237,43 @@ const BotonSOSSenior = () => {
         </div>
       </section>
 
+      {/* FAQ */}
+      <section className="py-16 bg-white" data-testid="faq-senior">
+        <div className="max-w-3xl mx-auto px-4">
+          <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Preguntas Frecuentes</h2>
+          <div className="space-y-4">
+            {[
+              { q: "¿Cómo funciona el botón SOS para mayores?", a: "Basta con mantener pulsado el botón durante 3 segundos. El dispositivo envía automáticamente tu ubicación GPS a los familiares configurados y realiza una llamada de emergencia. Sin pantallas, sin menús, sin complicaciones." },
+              { q: "¿Detecta caídas automáticamente?", a: "Sí. Los sensores de movimiento integrados detectan caídas automáticamente. Si el usuario no cancela la alerta en 30 segundos, se envía la emergencia a todos los contactos. Funciona incluso si la persona está inconsciente." },
+              { q: "¿Quién recibe la llamada de emergencia?", a: "Los familiares y contactos que tú configures (hasta 5). Reciben notificación push, SMS con ubicación y llamada automática. También puedes incluir el número de emergencias 112." },
+              { q: "¿Es fácil de usar y visible?", a: "Sí. Está diseñado específicamente para personas mayores: botón grande y visible, sonido alto, sin pantallas complicadas. Se puede llevar como colgante, pulsera o en el bolsillo." }
+            ].map((faq, i) => (
+              <details key={i} className="bg-gray-50 rounded-xl border border-gray-200 group">
+                <summary className="flex items-center justify-between p-5 cursor-pointer font-medium text-gray-900 hover:text-red-600 transition-colors">
+                  {faq.q}
+                  <ArrowRight className="w-4 h-4 group-open:rotate-90 transition-transform flex-shrink-0 ml-2" />
+                </summary>
+                <p className="px-5 pb-5 text-gray-600">{faq.a}</p>
+              </details>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* CTA */}
       <section className="py-16 bg-gradient-to-r from-red-600 to-orange-600">
         <div className="max-w-4xl mx-auto px-4 text-center">
-          <h2 className="text-3xl lg:text-4xl font-bold text-white mb-6">
+          <h2 className="text-3xl lg:text-4xl font-bold text-white mb-4">
             Dale tranquilidad a tu familia
           </h2>
-          <p className="text-xl text-red-100 mb-8">
-            Por solo 29,99€, tus mayores tendrán ayuda al alcance de un botón
+          <p className="text-xl text-red-100 mb-2">
+            Oferta de lanzamiento hasta el 30 de Marzo
           </p>
+          <p className="text-red-200 mb-8">Envío gratuito a toda España | Sin cuotas ni permanencia</p>
           <div className="flex flex-wrap justify-center gap-4">
             <Link to="/dispositivo-sos">
-              <Button size="lg" className="bg-white text-red-600 hover:bg-gray-100 text-lg px-8">
-                Comprar Botón SOS - 29,99€
+              <Button size="lg" className="bg-white text-red-600 hover:bg-gray-100 text-lg px-8" data-testid="cta-comprar-senior">
+                Comprar Botón SOS Senior - 29,99€
               </Button>
             </Link>
             <a href="tel:601510950">
@@ -258,6 +282,27 @@ const BotonSOSSenior = () => {
                 Llamar: 601 510 950
               </Button>
             </a>
+          </div>
+        </div>
+      </section>
+
+      {/* Internal Links */}
+      <section className="py-12 bg-white">
+        <div className="max-w-7xl mx-auto px-4">
+          <h3 className="text-lg font-bold text-gray-900 mb-4">Otros productos de seguridad</h3>
+          <div className="grid md:grid-cols-3 gap-4">
+            <Link to="/sentinel-x-ninos" className="p-4 bg-gray-50 rounded-xl hover:shadow-md transition-shadow border border-gray-100">
+              <p className="font-medium text-gray-900">Sentinel X para Niños</p>
+              <p className="text-sm text-gray-500">Protección para 12-16 años</p>
+            </Link>
+            <Link to="/sentinel-x-adultos" className="p-4 bg-gray-50 rounded-xl hover:shadow-md transition-shadow border border-gray-100">
+              <p className="font-medium text-gray-900">Sentinel X para Adultos</p>
+              <p className="text-sm text-gray-500">Seguridad personal 17-55 años</p>
+            </Link>
+            <Link to="/boton-sos-valencia" className="p-4 bg-gray-50 rounded-xl hover:shadow-md transition-shadow border border-gray-100">
+              <p className="font-medium text-gray-900">Botón SOS en Valencia</p>
+              <p className="text-sm text-gray-500">Entrega y soporte local</p>
+            </Link>
           </div>
         </div>
       </section>
