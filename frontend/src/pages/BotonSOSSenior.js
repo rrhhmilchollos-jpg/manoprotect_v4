@@ -130,46 +130,59 @@ const BotonSOSSenior = () => {
         </div>
       </section>
 
-      {/* Why Button SOS */}
+      {/* H2: Protección Completa para Mayores */}
       <section className="py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center text-gray-900 mb-4">
-            ¿Por qué un Botón SOS es Perfecto para Seniors?
+        <div className="max-w-4xl mx-auto px-4">
+          <h2 className="text-3xl font-bold text-gray-900 mb-6">
+            Protección Completa para Mayores
           </h2>
-          <p className="text-center text-gray-600 mb-12 max-w-2xl mx-auto">
-            Diseñado específicamente para personas mayores que necesitan una solución simple y efectiva
+          <p className="text-lg text-gray-600">
+            El botón SOS físico para mayores está diseñado para garantizar seguridad y asistencia inmediata. Detecta caídas automáticamente y envía alertas a tus contactos o servicios de emergencia sin complicaciones.
           </p>
+        </div>
+      </section>
+
+      {/* H2: Funcionalidades Principales */}
+      <section className="py-16 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4">
+          <h2 className="text-3xl font-bold text-center text-gray-900 mb-8">
+            Funcionalidades Principales
+          </h2>
           
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="bg-gray-50 rounded-xl p-6">
-              <div className="w-14 h-14 bg-red-100 rounded-full flex items-center justify-center mb-4">
-                <Zap className="w-7 h-7 text-red-600" />
+          <div className="grid md:grid-cols-3 lg:grid-cols-5 gap-6">
+            {[
+              { icon: <Zap className="w-7 h-7" />, title: "Botón SOS físico obligatorio", desc: "Un botón grande y fácil de pulsar. Sin pantallas, sin menús, sin complicaciones. Funciona con un solo toque.", color: "bg-red-100 text-red-600" },
+              { icon: <AlertTriangle className="w-7 h-7" />, title: "Detector de caídas automático", desc: "Sensores de movimiento detectan caídas automáticamente y envían alertas sin necesidad de pulsar el botón.", color: "bg-amber-100 text-amber-600" },
+              { icon: <PhoneCall className="w-7 h-7" />, title: "Llamada de emergencia inmediata", desc: "Llama automáticamente a familiares y contactos de emergencia. Sonido alto para facilitar la comunicación.", color: "bg-green-100 text-green-600" },
+              { icon: <Heart className="w-7 h-7" />, title: "Ubicación en tiempo real", desc: "GPS integrado para que tus familiares sepan exactamente dónde estás en todo momento.", color: "bg-blue-100 text-blue-600" },
+              { icon: <Volume2 className="w-7 h-7" />, title: "Pantalla grande y sonido alto", desc: "Diseñado para personas mayores: pantalla legible, sonido fuerte y botones grandes.", color: "bg-purple-100 text-purple-600" }
+            ].map((f, i) => (
+              <div key={i} className="bg-white rounded-xl p-5 border border-gray-100 text-center">
+                <div className={`w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-3 ${f.color}`}>{f.icon}</div>
+                <h3 className="font-bold text-gray-900 text-sm mb-2">{f.title}</h3>
+                <p className="text-gray-600 text-xs">{f.desc}</p>
               </div>
-              <h3 className="font-bold text-xl text-gray-900 mb-2">Un Solo Botón</h3>
-              <p className="text-gray-600">
-                Sin pantallas, sin menús, sin complicaciones. Un botón grande y fácil de pulsar.
-              </p>
-            </div>
-            
-            <div className="bg-gray-50 rounded-xl p-6">
-              <div className="w-14 h-14 bg-green-100 rounded-full flex items-center justify-center mb-4">
-                <Battery className="w-7 h-7 text-green-600" />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* H2: Ventajas de Nuestro Botón SOS para Mayores */}
+      <section className="py-16 bg-white">
+        <div className="max-w-4xl mx-auto px-4">
+          <h2 className="text-3xl font-bold text-center text-gray-900 mb-8">Ventajas de Nuestro Botón SOS para Mayores</h2>
+          <div className="grid md:grid-cols-3 gap-6">
+            {[
+              { title: "Respuesta rápida ante cualquier emergencia", desc: "Alerta inmediata a familiares y servicios de emergencia con ubicación GPS exacta." },
+              { title: "Fácil de usar y accesible", desc: "Sin pantallas complejas ni menús. Un solo botón grande que cualquier persona mayor puede usar." },
+              { title: "Teleasistencia sin cuotas ni contratos largos", desc: "Sin permanencia, sin letras pequeñas. Envío gratuito y 30 días de prueba." }
+            ].map((v, i) => (
+              <div key={i} className="bg-red-50 rounded-xl p-6 border border-red-100 text-center">
+                <CheckCircle className="w-8 h-8 text-red-500 mx-auto mb-3" />
+                <h3 className="font-bold text-gray-900 mb-2">{v.title}</h3>
+                <p className="text-gray-600 text-sm">{v.desc}</p>
               </div>
-              <h3 className="font-bold text-xl text-gray-900 mb-2">30 Días de Batería</h3>
-              <p className="text-gray-600">
-                Carga una vez al mes. No hay que preocuparse de quedarse sin batería.
-              </p>
-            </div>
-            
-            <div className="bg-gray-50 rounded-xl p-6">
-              <div className="w-14 h-14 bg-blue-100 rounded-full flex items-center justify-center mb-4">
-                <Volume2 className="w-7 h-7 text-blue-600" />
-              </div>
-              <h3 className="font-bold text-xl text-gray-900 mb-2">Alerta Sonora</h3>
-              <p className="text-gray-600">
-                Emite un sonido fuerte para alertar a personas cercanas además de enviar la alerta.
-              </p>
-            </div>
+            ))}
           </div>
         </div>
       </section>
