@@ -1,6 +1,6 @@
 // ManoProtect Desktop App - Main JavaScript
 
-const API_BASE = 'https://manoprotect-v2.preview.emergentagent.com';
+const API_BASE = 'https://sos-platform.preview.emergentagent.com';
 
 // Navigation
 document.querySelectorAll('.nav-item').forEach(item => {
