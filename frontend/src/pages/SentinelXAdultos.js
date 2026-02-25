@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import {
   Shield, MapPin, Phone, CheckCircle, Star, ArrowRight,
-  Briefcase, Dumbbell, Lock, Battery, Bell, Zap, Heart, Droplets
+  Briefcase, Dumbbell, Lock, Battery, Bell, Zap, Heart, Droplets, Smartphone
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import LandingHeader from '@/components/landing/LandingHeader';
