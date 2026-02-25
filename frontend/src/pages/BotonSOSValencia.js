@@ -121,9 +121,7 @@ const BotonSOSValencia = () => {
             </h1>
 
             <p className="text-xl text-gray-600 mb-8">
-              Compra tu botón SOS físico con <strong>entrega en 24-48 horas en toda la provincia de Valencia</strong>.
-              Soporte local por teléfono y WhatsApp. Atención personalizada para configurar
-              tu dispositivo y proteger a tu familia.
+              Compra tu botón SOS físico en Valencia y protege a tus hijos, adultos o mayores con un dispositivo que ofrece asistencia inmediata y localización en tiempo real. Nuestro servicio local garantiza entrega rápida y soporte especializado para cualquier necesidad.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 mb-8">
