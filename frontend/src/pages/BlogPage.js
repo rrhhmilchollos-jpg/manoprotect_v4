@@ -948,8 +948,8 @@ const BlogPage = () => {
                 },
                 {
                   slug: '/blog/cuidado-mayores-teleasistencia',
-                  title: 'Cuidado de Mayores: Teleasistencia Moderna',
-                  desc: 'Detector de caídas, GPS y alertas. Compara teleasistencia tradicional vs moderna.',
+                  title: 'Botón SOS Físico para Mayores – Seguridad y Tranquilidad',
+                  desc: 'Detector de caídas, GPS y alertas. Teleasistencia moderna para seniors.',
                   tag: 'Senior 55+',
                   tagColor: 'bg-red-100 text-red-800',
                   productLink: '/boton-sos-senior',
