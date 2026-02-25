@@ -156,6 +156,7 @@ const RelojGPSSinCuotas = lazy(() => import('@/pages/blog/RelojGPSSinCuotas'));
 const SeguridadHijosBotonSOS = lazy(() => import('@/pages/blog/SeguridadHijosBotonSOS'));
 const SeguridadPersonalAdultos = lazy(() => import('@/pages/blog/SeguridadPersonalAdultos'));
 const CuidadoMayoresTeleasistencia = lazy(() => import('@/pages/blog/CuidadoMayoresTeleasistencia'));
+const ComoElegirBotonSOSEdad = lazy(() => import('@/pages/blog/ComoElegirBotonSOSEdad'));
 
 // Age-Segmented Product Pages
 const SentinelXNinos = lazy(() => import('@/pages/SentinelXNinos'));
@@ -343,6 +344,7 @@ function AppRouter() {
           <Route path="/blog/seguridad-hijos-boton-sos" element={<SeguridadHijosBotonSOS />} />
           <Route path="/blog/seguridad-personal-adultos" element={<SeguridadPersonalAdultos />} />
           <Route path="/blog/cuidado-mayores-teleasistencia" element={<CuidadoMayoresTeleasistencia />} />
+          <Route path="/blog/como-elegir-boton-sos-edad" element={<ComoElegirBotonSOSEdad />} />
           
           {/* Age-Segmented Product Pages */}
           <Route path="/sentinel-x-ninos" element={<SentinelXNinos />} />
