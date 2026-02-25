@@ -291,9 +291,10 @@ const BotonSOSValencia = () => {
       <section className="py-16 bg-gradient-to-r from-orange-500 to-amber-600 text-white">
         <div className="max-w-4xl mx-auto px-4 text-center">
           <h2 className="text-3xl lg:text-4xl font-bold mb-4">Protege a tu familia en Valencia</h2>
-          <p className="text-xl text-orange-100 mb-8">
-            Entrega en 24-48h, soporte local y atención personalizada. Empresa valenciana de confianza.
+          <p className="text-xl text-orange-100 mb-2">
+            Oferta de lanzamiento hasta el 30 de Marzo
           </p>
+          <p className="text-orange-200 mb-8">Envío gratuito | Soporte local | Atención personalizada</p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link to="/servicios-sos">
               <Button size="lg" className="bg-white text-orange-700 hover:bg-orange-50 text-lg px-10 py-6 rounded-xl font-bold">
