@@ -917,6 +917,72 @@ const BlogPage = () => {
         </section>
       )}
 
+      {/* Blog Articles by Age Segment */}
+      {selectedCategory === 'all' && searchTerm === '' && (
+        <section className="py-12 px-6 bg-gray-50 border-t border-slate-200">
+          <div className="max-w-7xl mx-auto">
+            <h2 className="text-2xl font-bold text-slate-900 mb-2 flex items-center gap-2">
+              <Users className="w-6 h-6 text-[#4CAF50]" />
+              Seguridad por Edades
+            </h2>
+            <p className="text-slate-500 mb-8">Artículos especializados por segmento de edad</p>
+            <div className="grid md:grid-cols-3 gap-5">
+              {[
+                {
+                  slug: '/blog/seguridad-hijos-boton-sos',
+                  title: 'Seguridad para Niños y Adolescentes con Botón SOS',
+                  desc: 'Localización escolar, control parental y botón de emergencia para tus hijos.',
+                  tag: 'Niños 12-16',
+                  tagColor: 'bg-blue-100 text-blue-800',
+                  productLink: '/sentinel-x-ninos',
+                  productLabel: 'Ver Sentinel X Niños'
+                },
+                {
+                  slug: '/blog/seguridad-personal-adultos',
+                  title: 'Seguridad Personal para Adultos: Trabajo y Deporte',
+                  desc: 'Botón SOS para trabajadores solitarios, runners, ciclistas y viajeros.',
+                  tag: 'Adultos 17-55',
+                  tagColor: 'bg-emerald-100 text-emerald-800',
+                  productLink: '/sentinel-x-adultos',
+                  productLabel: 'Ver Sentinel X Adultos'
+                },
+                {
+                  slug: '/blog/cuidado-mayores-teleasistencia',
+                  title: 'Cuidado de Mayores: Teleasistencia Moderna',
+                  desc: 'Detector de caídas, GPS y alertas. Compara teleasistencia tradicional vs moderna.',
+                  tag: 'Senior 55+',
+                  tagColor: 'bg-red-100 text-red-800',
+                  productLink: '/boton-sos-senior',
+                  productLabel: 'Ver Botón SOS Senior'
+                }
+              ].map((article) => (
+                <div
+                  key={article.slug}
+                  className="bg-white rounded-xl border border-slate-200 p-5 hover:shadow-lg transition-all"
+                  data-testid={`age-guide-${article.slug.split('/').pop()}`}
+                >
+                  <Badge className={`${article.tagColor} text-xs mb-3`}>{article.tag}</Badge>
+                  <Link to={article.slug}>
+                    <h3 className="font-semibold text-slate-900 mb-2 hover:text-[#4CAF50] transition-colors text-sm leading-tight">
+                      {article.title}
+                    </h3>
+                  </Link>
+                  <p className="text-xs text-slate-500 mb-3">{article.desc}</p>
+                  <div className="flex items-center gap-3">
+                    <Link to={article.slug} className="text-[#4CAF50] text-xs font-medium flex items-center gap-1 hover:underline">
+                      Leer artículo <ChevronRight className="w-3 h-3" />
+                    </Link>
+                    <Link to={article.productLink} className="text-slate-400 text-xs font-medium flex items-center gap-1 hover:text-slate-600">
+                      {article.productLabel} <ArrowRight className="w-3 h-3" />
+                    </Link>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* CTA Section */}
       <section className="py-16 px-6 bg-gradient-to-r from-indigo-600 to-purple-600">
         <div className="max-w-4xl mx-auto text-center">
