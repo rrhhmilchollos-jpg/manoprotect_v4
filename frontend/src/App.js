@@ -153,6 +153,14 @@ const MejoresRelojesSOS2026 = lazy(() => import('@/pages/blog/MejoresRelojesSOS2
 const ComoFuncionaRelojSOS = lazy(() => import('@/pages/blog/ComoFuncionaRelojSOS'));
 const RelojParaAlzheimer = lazy(() => import('@/pages/blog/RelojParaAlzheimer'));
 const RelojGPSSinCuotas = lazy(() => import('@/pages/blog/RelojGPSSinCuotas'));
+const SeguridadHijosBotonSOS = lazy(() => import('@/pages/blog/SeguridadHijosBotonSOS'));
+const SeguridadPersonalAdultos = lazy(() => import('@/pages/blog/SeguridadPersonalAdultos'));
+const CuidadoMayoresTeleasistencia = lazy(() => import('@/pages/blog/CuidadoMayoresTeleasistencia'));
+
+// Age-Segmented Product Pages
+const SentinelXNinos = lazy(() => import('@/pages/SentinelXNinos'));
+const SentinelXAdultos = lazy(() => import('@/pages/SentinelXAdultos'));
+const BotonSOSValencia = lazy(() => import('@/pages/BotonSOSValencia'));
 
 // SEO SILO Pages
 const ProteccionPhishing = lazy(() => import('@/pages/ProteccionPhishing'));
