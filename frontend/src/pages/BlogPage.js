@@ -894,6 +894,13 @@ const BlogPage = () => {
                   desc: 'Costes ocultos, SIM necesaria y comparativa real de precios.',
                   tag: 'Análisis',
                   tagColor: 'bg-red-100 text-red-800'
+                },
+                {
+                  slug: '/blog/como-elegir-boton-sos-edad',
+                  title: 'Cómo Elegir el Botón SOS Adecuado para Cada Edad',
+                  desc: 'Comparativa por segmento: niños, adultos y seniors.',
+                  tag: 'Comparativa',
+                  tagColor: 'bg-purple-100 text-purple-800'
                 }
               ].map((article) => (
                 <Link
