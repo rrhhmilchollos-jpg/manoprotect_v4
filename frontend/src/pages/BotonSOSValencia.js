@@ -252,6 +252,26 @@ const BotonSOSValencia = () => {
         </div>
       </section>
 
+      {/* H2: Por Qué Elegir ManoProtect en Valencia */}
+      <section className="py-16 bg-white">
+        <div className="max-w-4xl mx-auto px-4">
+          <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Por Qué Elegir ManoProtect en Valencia</h2>
+          <div className="grid md:grid-cols-3 gap-6">
+            {[
+              { title: "Servicio local confiable", desc: "Empresa valenciana con equipo local de soporte técnico y atención al cliente." },
+              { title: "Experiencia y respaldo en seguridad familiar", desc: "Más de 500 familias valencianas protegidas. Conocemos las necesidades de nuestra tierra." },
+              { title: "Atención rápida ante cualquier emergencia", desc: "Soporte por teléfono y WhatsApp con tiempos de respuesta inferiores a 10 minutos." }
+            ].map((v, i) => (
+              <div key={i} className="text-center p-6 bg-orange-50 rounded-xl border border-orange-100">
+                <CheckCircle className="w-8 h-8 text-orange-500 mx-auto mb-3" />
+                <h3 className="font-bold text-gray-900 mb-2">{v.title}</h3>
+                <p className="text-gray-600 text-sm">{v.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Coverage Area */}
       <section className="py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4">
