@@ -5,42 +5,41 @@
 ---
 
 ## Descripción del Proyecto
-ManoProtect es una plataforma integral de seguridad personal y protección contra fraudes digitales para familias en España. Incluye dispositivos físicos (Sentinel X y Botón SOS), análisis de amenazas con IA, localización familiar, y un portal enterprise.
+ManoProtect es una plataforma integral de seguridad personal y protección contra fraudes para familias en España. Producto principal: Sentinel X (reloj con botón SOS) y Botón SOS físico para seniors.
 
 ---
 
 ## Arquitectura SEO por Segmento de Edad (COMPLETADO)
 
 ### Páginas de Producto por Edad
-| Página | Público | Estado |
-|--------|---------|--------|
-| `/sentinel-x-ninos` | 12-16 años | COMPLETADO |
-| `/sentinel-x-adultos` | 17-55 años | COMPLETADO |
-| `/boton-sos-senior` | 55+ años | EXISTENTE (no modificado) |
-| `/boton-sos-valencia` | Local SEO Valencia | COMPLETADO |
+| Página | Público | H1 | Estado |
+|--------|---------|-----|--------|
+| `/sentinel-x-ninos` | 12-16 años | Sentinel X para Niños y Adolescentes – Botón SOS Físico | COMPLETADO |
+| `/sentinel-x-adultos` | 17-55 años | Sentinel X para Adultos – Botón SOS Físico Personal | COMPLETADO |
+| `/boton-sos-senior` | 55+ años | Botón SOS Físico para Mayores – Seguridad Senior | COMPLETADO |
+| `/boton-sos-valencia` | Local SEO | Botón SOS en Valencia – Entrega y Soporte Local | COMPLETADO |
 
-### Artículos de Blog por Edad
-| Artículo | Segmento | Estado |
-|----------|----------|--------|
-| `/blog/seguridad-hijos-boton-sos` | Niños | COMPLETADO |
-| `/blog/seguridad-personal-adultos` | Adultos | COMPLETADO |
-| `/blog/cuidado-mayores-teleasistencia` | Senior | COMPLETADO |
+Cada página incluye:
+- Schema.org (Product, FAQ, Review, Breadcrumb)
+- 1000+ palabras SEO optimizadas
+- H2 estructurados con párrafos descriptivos
+- FAQs expandibles (4 por página)
+- CTAs con "Oferta de lanzamiento hasta 30 de Marzo"
+- Envío GRATUITO (sin costes de envío)
+- Internal linking cruzado entre segmentos
+- Testimonios verificados
 
-### SEO Técnico Implementado
-- H1 único por página con edad y producto
-- 1.000+ palabras por página de producto
-- Meta titles y descriptions con keywords principales
-- FAQs expandibles con Schema.org por edad
-- Product Schema, Review Schema, Breadcrumb Schema
-- CTAs destacados y visibles
-- Enlaces internos cruzados entre segmentos
-- Sitemap actualizado con todas las nuevas páginas
-
-### Artículos Blog Estratégicos Previos (COMPLETADO)
-- `/blog/mejores-relojes-sos-2026`
-- `/blog/como-funciona-reloj-sos`
-- `/blog/reloj-gps-alzheimer`
-- `/blog/reloj-gps-sin-cuotas`
+### Blog Estratégico
+| Artículo | Segmento | H1 | Estado |
+|----------|----------|-----|--------|
+| `/blog/seguridad-hijos-boton-sos` | Niños | Cómo Garantizar la Seguridad de tus Hijos con un Botón SOS | COMPLETADO |
+| `/blog/seguridad-personal-adultos` | Adultos | Protección Personal con Sentinel X – Botón SOS para Adultos | COMPLETADO |
+| `/blog/cuidado-mayores-teleasistencia` | Senior | Botón SOS Físico para Mayores – Seguridad y Tranquilidad | COMPLETADO |
+| `/blog/como-elegir-boton-sos-edad` | Comparativa | Cómo Elegir el Botón SOS Adecuado para Cada Edad | COMPLETADO |
+| `/blog/mejores-relojes-sos-2026` | General | Los 5 mejores relojes SOS en 2026 | COMPLETADO |
+| `/blog/como-funciona-reloj-sos` | General | Cómo Funciona un Reloj SOS para Mayores | COMPLETADO |
+| `/blog/reloj-gps-alzheimer` | General | Reloj GPS para Personas con Alzheimer | COMPLETADO |
+| `/blog/reloj-gps-sin-cuotas` | General | Reloj GPS Sin Cuotas: La Verdad | COMPLETADO |
 
 ### CRO en Sentinel X (COMPLETADO)
 - Testimonials, ProductComparison, StickyCTA integrados en `/sentinel-x`
@@ -54,59 +53,43 @@ ManoProtect es una plataforma integral de seguridad personal y protección contr
 - **Frontend**: React 18, TailwindCSS, Shadcn/UI, react-helmet-async
 - **Backend**: FastAPI, Python 3.11, Pydantic
 - **Database**: MongoDB (Motor async)
-- **Payments**: Stripe (checkout + webhooks + Stripe Elements)
-- **Email**: SendGrid (pendiente verificación dominio)
+- **Payments**: Stripe (Elements + trial 7 días)
 - **Auth**: JWT + session cookies
-
----
-
-## Estado de Integraciones
-
-| Integración | Estado | Notas |
-|-------------|--------|-------|
-| Stripe | Funcional | Suscripciones con trial 7 días |
-| Infobip SMS | Bloqueado | API key inválida |
-| Twilio WhatsApp | Sandbox | Producción pendiente |
-| SendGrid | Pendiente | Verificación dominio |
 
 ---
 
 ## Backlog Pendiente
 
 ### P0 - Crítico
-- [ ] Configurar Price IDs reales de Stripe en .env
-- [ ] Implementar webhook de Stripe (invoice.payment_succeeded, etc.)
-- [ ] Ajustar manejo de 3D Secure / requires_action
+- [ ] Configurar Price IDs reales de Stripe en .env (usuario pendiente)
+- [ ] Implementar webhook Stripe (invoice.payment_succeeded, subscription.deleted)
+- [ ] Ajustar manejo 3D Secure / requires_action
 
 ### P1 - Alta
 - [ ] Crear app iOS con Capacitor
 - [ ] Conectar Google Tag Manager & Search Console
-- [ ] Tracking de conversiones GA4, Pixel Meta Ads
-- [ ] Landing pages locales para otras ciudades (Madrid, Barcelona, Sevilla)
+- [ ] Tracking conversiones GA4, Pixel Meta Ads
+- [ ] Landing pages locales: Madrid, Barcelona, Sevilla
 
 ### P2 - Media
-- [ ] Página "Quiénes Somos" con fotos del equipo
-- [ ] Setup BigQuery + Looker Studio Dashboards
-- [ ] SEO Fase 3: Backlinks y autoridad
-- [ ] Integración con servicios emergencia 112
-- [ ] Habilitar 2FA cuando SMS funcione
-- [ ] Producción Twilio WhatsApp
+- [ ] Página "Quiénes Somos" (esperando contenido)
+- [ ] BigQuery + Looker Studio
+- [ ] SEO Fase 3: Backlinks
+- [ ] Integración 112
 
 ### P3 - Baja
-- [ ] Emails recordatorio trial (cron job existe)
-- [ ] Blog automatizado alertas estafas
-- [ ] Core Web Vitals optimización < 1.8s
-- [ ] Imágenes WebP + lazy loading optimizadas
-
----
-
-## Credenciales
-| Usuario | Email | Password | Rol |
-|---------|-------|----------|-----|
-| CEO/Admin | ceo@manoprotect.com | 19862210Des | super_admin |
+- [ ] Emails recordatorio trial
+- [ ] Core Web Vitals < 1.8s
+- [ ] Integraciones bloqueadas (Infobip, SendGrid, Twilio)
 
 ---
 
 ## Testing
-- Iteración 49: Blog articles + CRO integration → 13/13 passed
-- Iteración 50: Age-segmented pages + blog → 11/11 passed
+- Iteración 49: Blog + CRO → 13/13 passed
+- Iteración 50: Age pages + blog → 11/11 passed
+- Iteración 51: Content updates + free shipping + March 30 → 10/10 passed
+
+## Credenciales
+| Email | Password | Rol |
+|-------|----------|-----|
+| ceo@manoprotect.com | 19862210Des | super_admin |
