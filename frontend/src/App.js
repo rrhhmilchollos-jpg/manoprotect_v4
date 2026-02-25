@@ -340,6 +340,14 @@ function AppRouter() {
           <Route path="/blog/como-funciona-reloj-sos" element={<ComoFuncionaRelojSOS />} />
           <Route path="/blog/reloj-gps-alzheimer" element={<RelojParaAlzheimer />} />
           <Route path="/blog/reloj-gps-sin-cuotas" element={<RelojGPSSinCuotas />} />
+          <Route path="/blog/seguridad-hijos-boton-sos" element={<SeguridadHijosBotonSOS />} />
+          <Route path="/blog/seguridad-personal-adultos" element={<SeguridadPersonalAdultos />} />
+          <Route path="/blog/cuidado-mayores-teleasistencia" element={<CuidadoMayoresTeleasistencia />} />
+          
+          {/* Age-Segmented Product Pages */}
+          <Route path="/sentinel-x-ninos" element={<SentinelXNinos />} />
+          <Route path="/sentinel-x-adultos" element={<SentinelXAdultos />} />
+          <Route path="/boton-sos-valencia" element={<BotonSOSValencia />} />
           
           {/* Legal Pages */}
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
