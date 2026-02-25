@@ -203,4 +203,82 @@
     <priority>0.90</priority>
   </url>
 
+  <!-- ============================================ -->
+  <!-- PÁGINAS POR SEGMENTO DE EDAD (NUEVAS)       -->
+  <!-- ============================================ -->
+
+  <url>
+    <loc>https://manoprotect.com/sentinel-x-ninos</loc>
+    <lastmod>2026-02-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.95</priority>
+  </url>
+
+  <url>
+    <loc>https://manoprotect.com/sentinel-x-adultos</loc>
+    <lastmod>2026-02-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.95</priority>
+  </url>
+
+  <url>
+    <loc>https://manoprotect.com/boton-sos-valencia</loc>
+    <lastmod>2026-02-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.90</priority>
+  </url>
+
+  <!-- ============================================ -->
+  <!-- BLOG ESTRATÉGICO POR EDADES (NUEVOS)        -->
+  <!-- ============================================ -->
+
+  <url>
+    <loc>https://manoprotect.com/blog/mejores-relojes-sos-2026</loc>
+    <lastmod>2026-02-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.80</priority>
+  </url>
+
+  <url>
+    <loc>https://manoprotect.com/blog/como-funciona-reloj-sos</loc>
+    <lastmod>2026-02-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.80</priority>
+  </url>
+
+  <url>
+    <loc>https://manoprotect.com/blog/reloj-gps-alzheimer</loc>
+    <lastmod>2026-02-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.80</priority>
+  </url>
+
+  <url>
+    <loc>https://manoprotect.com/blog/reloj-gps-sin-cuotas</loc>
+    <lastmod>2026-02-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.80</priority>
+  </url>
+
+  <url>
+    <loc>https://manoprotect.com/blog/seguridad-hijos-boton-sos</loc>
+    <lastmod>2026-02-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.80</priority>
+  </url>
+
+  <url>
+    <loc>https://manoprotect.com/blog/seguridad-personal-adultos</loc>
+    <lastmod>2026-02-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.80</priority>
+  </url>
+
+  <url>
+    <loc>https://manoprotect.com/blog/cuidado-mayores-teleasistencia</loc>
+    <lastmod>2026-02-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.80</priority>
+  </url>
+
 </urlset>
