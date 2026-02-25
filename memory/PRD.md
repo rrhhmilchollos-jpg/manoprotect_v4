@@ -1,6 +1,6 @@
 # ManoProtect - Product Requirements Document
 
-## Última Actualización: 25 Febrero 2026
+## Última Actualización: 25 Febrero 2026 (v2)
 
 ---
 
@@ -18,6 +18,9 @@ ManoProtect es una plataforma integral de seguridad personal y protección contr
 | `/sentinel-x-adultos` | 17-55 años | Sentinel X para Adultos – Botón SOS Físico Personal | COMPLETADO |
 | `/boton-sos-senior` | 55+ años | Botón SOS Físico para Mayores – Seguridad Senior | COMPLETADO |
 | `/boton-sos-valencia` | Local SEO | Botón SOS en Valencia – Entrega y Soporte Local | COMPLETADO |
+| `/boton-sos-madrid` | Local SEO | Botón SOS en Madrid – Entrega y Soporte Local | COMPLETADO |
+| `/boton-sos-barcelona` | Local SEO | Botón SOS en Barcelona – Entrega y Soporte Local | COMPLETADO |
+| `/boton-sos-sevilla` | Local SEO | Botón SOS en Sevilla – Entrega y Soporte Local | COMPLETADO |
 
 Cada página incluye:
 - Schema.org (Product, FAQ, Review, Breadcrumb)
@@ -66,10 +69,11 @@ Cada página incluye:
 - [ ] Ajustar manejo 3D Secure / requires_action
 
 ### P1 - Alta
+- [ ] Crear página de producto Sentinel J (reloj juvenil)
 - [ ] Crear app iOS con Capacitor
 - [ ] Conectar Google Tag Manager & Search Console
 - [ ] Tracking conversiones GA4, Pixel Meta Ads
-- [ ] Landing pages locales: Madrid, Barcelona, Sevilla
+- [x] Landing pages locales: Madrid, Barcelona, Sevilla ✅
 
 ### P2 - Media
 - [ ] Página "Quiénes Somos" (esperando contenido)
@@ -88,6 +92,7 @@ Cada página incluye:
 - Iteración 49: Blog + CRO → 13/13 passed
 - Iteración 50: Age pages + blog → 11/11 passed
 - Iteración 51: Content updates + free shipping + March 30 → 10/10 passed
+- Iteración 52: Local pages Madrid/Barcelona/Sevilla + regression → 12/12 passed
 
 ## Credenciales
 | Email | Password | Rol |
