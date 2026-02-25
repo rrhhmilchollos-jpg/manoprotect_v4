@@ -151,13 +151,13 @@ const BotonSOSValencia = () => {
       {/* Advantages Local */}
       <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4">
-          <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">¿Por qué comprar en ManoProtect Valencia?</h2>
+          <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Beneficios de Comprar Localmente</h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
-              { icon: <Truck className="w-8 h-8" />, title: "Entrega en 24-48h", desc: "Recibe tu botón SOS en tu casa en Valencia y alrededores en 1-2 días laborables. Sin esperas.", color: "bg-orange-100 text-orange-600" },
-              { icon: <Phone className="w-8 h-8" />, title: "Soporte Local", desc: "Atención por teléfono y WhatsApp con personas reales en Valencia. Te ayudamos a configurar todo.", color: "bg-blue-100 text-blue-600" },
-              { icon: <Users className="w-8 h-8" />, title: "+500 Clientes Valencia", desc: "Más de 500 familias valencianas ya confían en ManoProtect para proteger a sus mayores.", color: "bg-green-100 text-green-600" },
-              { icon: <Building2 className="w-8 h-8" />, title: "Empresa Valenciana", desc: "ManoProtect nace en Valencia. Conocemos las necesidades de las familias de nuestra tierra.", color: "bg-purple-100 text-purple-600" }
+              { icon: <Truck className="w-8 h-8" />, title: "Entrega rápida en Valencia y alrededores", desc: "Recibe tu botón SOS en 24-48 horas laborables. Envío gratuito.", color: "bg-orange-100 text-orange-600" },
+              { icon: <Phone className="w-8 h-8" />, title: "Soporte técnico local y personalizado", desc: "Atención por teléfono y WhatsApp con personas reales en Valencia.", color: "bg-blue-100 text-blue-600" },
+              { icon: <Users className="w-8 h-8" />, title: "Instalación y configuración guiada", desc: "Te ayudamos a configurar tu dispositivo paso a paso.", color: "bg-green-100 text-green-600" },
+              { icon: <Heart className="w-8 h-8" />, title: "Compatibilidad con todos nuestros modelos", desc: "Niños, Adultos y Senior. Garantía y asistencia completa.", color: "bg-purple-100 text-purple-600" }
             ].map((adv, i) => (
               <div key={i} className="p-6 bg-gray-50 rounded-2xl border border-gray-100 text-center">
                 <div className={`w-14 h-14 rounded-xl flex items-center justify-center mx-auto mb-4 ${adv.color}`}>{adv.icon}</div>
