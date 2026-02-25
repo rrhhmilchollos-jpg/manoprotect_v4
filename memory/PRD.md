@@ -1,6 +1,6 @@
 # ManoProtect - Product Requirements Document
 
-## Última Actualización: 25 Febrero 2026 (v2)
+## Última Actualización: 25 Febrero 2026 (v3)
 
 ---
 
@@ -69,7 +69,7 @@ Cada página incluye:
 - [ ] Ajustar manejo 3D Secure / requires_action
 
 ### P1 - Alta
-- [ ] Crear página de producto Sentinel J (reloj juvenil)
+- [x] Crear página de producto Sentinel J (reloj juvenil, correas intercambiables 8 colores) ✅
 - [ ] Crear app iOS con Capacitor
 - [ ] Conectar Google Tag Manager & Search Console
 - [ ] Tracking conversiones GA4, Pixel Meta Ads
@@ -93,6 +93,7 @@ Cada página incluye:
 - Iteración 50: Age pages + blog → 11/11 passed
 - Iteración 51: Content updates + free shipping + March 30 → 10/10 passed
 - Iteración 52: Local pages Madrid/Barcelona/Sevilla + regression → 12/12 passed
+- Iteración 53: Sentinel J product page (correas intercambiables) + regression → 16/16 passed
 
 ## Credenciales
 | Email | Password | Rol |
