@@ -177,7 +177,7 @@ const BotonSOSValencia = () => {
             <div className="bg-white rounded-2xl p-6 border border-gray-200 hover:shadow-lg transition-shadow">
               <div className="text-center mb-4">
                 <span className="text-3xl font-bold text-gray-900">29,99€</span>
-                <p className="text-gray-500 text-sm">+ 4,95€ envío</p>
+                <p className="text-green-600 text-sm font-medium">Envío gratuito</p>
               </div>
               <h3 className="font-bold text-gray-900 mb-2 text-center">Botón SOS Físico</h3>
               <ul className="space-y-2 text-sm text-gray-600 mb-4">
