@@ -70,11 +70,11 @@ const BotonSOSSenior = () => {
             <div>
               <div className="inline-flex items-center gap-2 bg-red-100 text-red-800 px-4 py-2 rounded-full text-sm font-medium mb-6">
                 <Zap className="w-4 h-4" />
-                Un toque = Ayuda inmediata
+                Oferta de lanzamiento hasta 30 de Marzo
               </div>
               
               <h1 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
-                <span className="text-red-600">Botón SOS</span> para Seniors: Ayuda con un Solo Toque
+                <span className="text-red-600">Botón SOS Físico</span> para Mayores – Seguridad Senior
               </h1>
               
               <p className="text-xl text-gray-600 mb-8">
