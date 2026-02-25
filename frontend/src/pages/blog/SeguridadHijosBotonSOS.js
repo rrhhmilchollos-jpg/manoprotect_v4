@@ -24,7 +24,7 @@ const SeguridadHijosBotonSOS = () => {
   return (
     <div className="min-h-screen bg-white">
       <Helmet>
-        <title>Seguridad para Niños con Botón SOS: Guía Completa [2026]</title>
+        <title>Cómo Garantizar la Seguridad de tus Hijos con un Botón SOS [2026]</title>
         <meta name="description" content="Protege a tus hijos con un botón SOS físico. Localización escolar, control parental, zonas seguras y alertas. Guía para padres 2026." />
         <meta name="keywords" content="seguridad niños boton sos, localización escolar, botón emergencia adolescentes, control parental gps, proteger hijos" />
         <link rel="canonical" href="https://manoprotect.com/blog/seguridad-hijos-boton-sos" />
@@ -49,7 +49,7 @@ const SeguridadHijosBotonSOS = () => {
         </div>
 
         <h1 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
-          Seguridad para Niños y Adolescentes: <span className="text-blue-600">Guía del Botón SOS</span>
+          Cómo Garantizar la Seguridad de tus Hijos con un <span className="text-blue-600">Botón SOS</span>
         </h1>
 
         <p className="text-xl text-gray-600 mb-8">
@@ -72,11 +72,9 @@ const SeguridadHijosBotonSOS = () => {
         </div>
 
         <section className="mb-12">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">Localización escolar: saber dónde están tus hijos</h2>
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">Por Qué es Importante un Botón SOS para Niños</h2>
           <p className="text-gray-600 mb-4">
-            La localización escolar permite a los padres configurar <strong>zonas seguras</strong> alrededor
-            del colegio, la casa y las actividades extraescolares. El dispositivo envía alertas automáticas
-            cuando tu hijo entra o sale de estas zonas, sin que él tenga que hacer nada.
+            La seguridad de tus hijos es una prioridad. Con un botón SOS físico y geolocalización en tiempo real, puedes recibir alertas inmediatas y garantizar su protección en la escuela, deportes o actividades externas.
           </p>
           <ul className="space-y-3 text-gray-600">
             <li className="flex gap-2"><CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" /> <strong>Alerta de salida del colegio</strong>: recibes una notificación cuando tu hijo sale del recinto escolar.</li>

@@ -24,7 +24,7 @@ const SeguridadPersonalAdultos = () => {
   return (
     <div className="min-h-screen bg-white">
       <Helmet>
-        <title>Seguridad Personal Adultos: Botón SOS en Trabajo y Deporte [2026]</title>
+        <title>Protección Personal con Sentinel X – Botón SOS para Adultos [2026]</title>
         <meta name="description" content="Protege tu seguridad personal con un botón SOS físico. Ideal para trabajo en campo, deporte solitario y viajes. Prevención de riesgos laborales." />
         <meta name="keywords" content="seguridad personal adultos, botón SOS trabajo, protección laboral, botón emergencia deporte, seguridad runners" />
         <link rel="canonical" href="https://manoprotect.com/blog/seguridad-personal-adultos" />
@@ -49,7 +49,7 @@ const SeguridadPersonalAdultos = () => {
         </div>
 
         <h1 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
-          Seguridad Personal para Adultos: <span className="text-emerald-600">Botón SOS en Trabajo y Deporte</span>
+          Protección Personal con Sentinel X – <span className="text-emerald-600">Botón SOS para Adultos</span>
         </h1>
 
         <p className="text-xl text-gray-600 mb-8">
@@ -61,12 +61,10 @@ const SeguridadPersonalAdultos = () => {
         <section className="mb-12">
           <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center gap-2">
             <Briefcase className="w-6 h-6 text-blue-600" />
-            Seguridad laboral: cumplir con la PRL
+            Por Qué Cada Adulto Debe Tener un Botón SOS
           </h2>
           <p className="text-gray-600 mb-4">
-            La <strong>Ley de Prevención de Riesgos Laborales (PRL)</strong> establece la obligación
-            de garantizar la seguridad de los trabajadores, especialmente aquellos que trabajan solos
-            o en zonas aisladas. Los <strong>trabajadores solitarios</strong> son especialmente vulnerables:
+            Sentinel X ofrece seguridad activa para adultos. Ya sea en el trabajo, deportes o viajes, un botón SOS físico garantiza que puedas alertar a tus contactos o servicios de emergencia inmediatamente.
           </p>
           <ul className="space-y-3 text-gray-600 mb-4">
             <li className="flex gap-2"><CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" /> <strong>Repartidores y mensajeros</strong>: trabajan solos en rutas urbanas y rurales</li>

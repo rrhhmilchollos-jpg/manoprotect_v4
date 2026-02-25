@@ -24,7 +24,7 @@ const CuidadoMayoresTeleasistencia = () => {
   return (
     <div className="min-h-screen bg-white">
       <Helmet>
-        <title>Cuidado de Mayores: Teleasistencia Moderna vs Tradicional [2026]</title>
+        <title>Botón SOS Físico para Mayores – Seguridad y Tranquilidad [2026]</title>
         <meta name="description" content="Compara la teleasistencia tradicional con dispositivos SOS modernos. Detector de caídas automático, GPS y alertas familiares. Guía 2026 para familiares." />
         <meta name="keywords" content="cuidado mayores, teleasistencia moderna, detector caídas ancianos, botón SOS personas mayores, teleasistencia sin cuotas" />
         <link rel="canonical" href="https://manoprotect.com/blog/cuidado-mayores-teleasistencia" />
@@ -49,7 +49,7 @@ const CuidadoMayoresTeleasistencia = () => {
         </div>
 
         <h1 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
-          Cuidado de Mayores: <span className="text-red-600">Teleasistencia Moderna</span> vs Tradicional
+          Botón SOS Físico para Mayores – <span className="text-red-600">Seguridad y Tranquilidad</span>
         </h1>
 
         <p className="text-xl text-gray-600 mb-8">
@@ -60,7 +60,10 @@ const CuidadoMayoresTeleasistencia = () => {
 
         {/* Comparison Table */}
         <section className="mb-12">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">Teleasistencia Tradicional vs Moderna</h2>
+          <h2 className="text-2xl font-bold text-gray-900 mb-6">Cómo Mantener a los Mayores Protegidos en Casa y Fuera</h2>
+          <p className="text-gray-600 mb-4">
+            Con un botón SOS físico para mayores, cualquier emergencia se comunica inmediatamente a familiares o servicios de asistencia. Incluye detector de caídas, localización en tiempo real y pantalla accesible para usuarios de 55 años en adelante.
+          </p>
           <div className="overflow-x-auto">
             <table className="w-full border-collapse bg-white rounded-xl overflow-hidden border border-gray-200">
               <thead>
