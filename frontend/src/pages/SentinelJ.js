@@ -1,5 +1,5 @@
 /**
- * ManoProtect - Sentinel J: Reloj SOS para Jovenes
+ * ManoProtect - Sentinel J: Reloj SOS para Jóvenes
  * Correas intercambiables de colores - Feature estrella
  * SEO optimizado con Schema.org Product + FAQ + Breadcrumb
  */
@@ -34,8 +34,8 @@ const SentinelJ = () => {
   const schemaProduct = {
     "@context": "https://schema.org",
     "@type": "Product",
-    "name": "ManoProtect Sentinel J - Reloj SOS para Jovenes",
-    "description": "Reloj inteligente con boton SOS fisico y correas intercambiables de colores, disenado para jovenes de 6 a 14 anos. GPS en tiempo real, llamadas a padres y zonas seguras. Sin camara ni internet.",
+    "name": "ManoProtect Sentinel J - Reloj SOS para Jóvenes",
+    "description": "Reloj inteligente con botón SOS físico y correas intercambiables de colores, diseñado para jóvenes de 6 a 14 años. GPS en tiempo real, llamadas a padres y zonas seguras. Sin cámara ni internet.",
     "brand": { "@type": "Brand", "name": "ManoProtect" },
     "category": "Seguridad infantil",
     "image": SENTINEL_J_IMG,
@@ -58,12 +58,12 @@ const SentinelJ = () => {
     "@context": "https://schema.org",
     "@type": "FAQPage",
     "mainEntity": [
-      { "@type": "Question", "name": "Las correas del Sentinel J son intercambiables?", "acceptedAnswer": { "@type": "Answer", "text": "Si. El Sentinel J incluye un sistema de liberacion rapida que permite cambiar la correa en segundos, sin herramientas. Disponible en 8 colores. Puedes comprar correas adicionales por 9,99 EUR cada una." } },
-      { "@type": "Question", "name": "Que diferencia hay entre el Sentinel J y el Sentinel X?", "acceptedAnswer": { "@type": "Answer", "text": "El Sentinel J esta disenado para jovenes de 6 a 14 anos: mas ligero (35g), correas intercambiables de colores, diseno divertido y precio mas accesible (99 EUR). El Sentinel X es para adolescentes y adultos con funciones avanzadas como monitor cardiaco y deteccion de caidas IA." } },
-      { "@type": "Question", "name": "Es seguro para ninos pequenos?", "acceptedAnswer": { "@type": "Answer", "text": "Si. Fabricado con silicona hipoalergenica de grado medico, sin bordes afilados. La correa es suave y el dispositivo pesa solo 35g. Certificado CE y apto para menores." } },
-      { "@type": "Question", "name": "Puede mi hijo hacer llamadas?", "acceptedAnswer": { "@type": "Answer", "text": "Si, pero solo a los 5 contactos autorizados por los padres. Las llamadas de numeros desconocidos se bloquean automaticamente." } },
-      { "@type": "Question", "name": "Resiste el agua y los golpes?", "acceptedAnswer": { "@type": "Answer", "text": "Si. IP68: resistente a salpicaduras, lluvia y lavado de manos. Carcasa de policarbonato reforzado que resiste caidas y golpes." } },
-      { "@type": "Question", "name": "Cuanto dura la bateria?", "acceptedAnswer": { "@type": "Answer", "text": "4 dias con uso normal. Carga magnetica segura en 90 minutos. Alerta automatica a los padres cuando baja del 15%." } }
+      { "@type": "Question", "name": "¿Las correas del Sentinel J son intercambiables?", "acceptedAnswer": { "@type": "Answer", "text": "Sí. El Sentinel J incluye un sistema de liberación rápida que permite cambiar la correa en segundos, sin herramientas. Disponible en 8 colores. Puedes comprar correas adicionales por 9,99€ cada una." } },
+      { "@type": "Question", "name": "¿Qué diferencia hay entre el Sentinel J y el Sentinel X?", "acceptedAnswer": { "@type": "Answer", "text": "El Sentinel J está diseñado para jóvenes de 6 a 14 años: más ligero (35g), correas intercambiables de colores, diseño divertido y precio más accesible (99€). El Sentinel X es para adolescentes y adultos con funciones avanzadas como monitor cardíaco y detección de caídas IA." } },
+      { "@type": "Question", "name": "¿Es seguro para niños pequeños?", "acceptedAnswer": { "@type": "Answer", "text": "Sí. Fabricado con silicona hipoalergénica de grado médico, sin bordes afilados. La correa es suave y el dispositivo pesa solo 35g. Certificado CE y apto para menores." } },
+      { "@type": "Question", "name": "¿Puede mi hijo hacer llamadas?", "acceptedAnswer": { "@type": "Answer", "text": "Sí, pero solo a los 5 contactos autorizados por los padres. Las llamadas de números desconocidos se bloquean automáticamente." } },
+      { "@type": "Question", "name": "¿Resiste el agua y los golpes?", "acceptedAnswer": { "@type": "Answer", "text": "Sí. IP68: resistente a salpicaduras, lluvia y lavado de manos. Carcasa de policarbonato reforzado que resiste caídas y golpes." } },
+      { "@type": "Question", "name": "¿Cuánto dura la batería?", "acceptedAnswer": { "@type": "Answer", "text": "4 días con uso normal. Carga magnética segura en 90 minutos. Alerta automática a los padres cuando baja del 15%." } }
     ]
   };
 
@@ -77,21 +77,21 @@ const SentinelJ = () => {
   };
 
   const features = [
-    { icon: <RefreshCw className="w-7 h-7" />, title: "Correas Intercambiables", desc: "8 colores vibrantes con sistema de cambio rapido. Tu hijo elige un color nuevo cada dia. Sin herramientas, en 3 segundos.", color: "bg-gradient-to-br from-pink-100 to-violet-100 text-pink-600", highlight: true },
-    { icon: <Bell className="w-7 h-7" />, title: "Boton SOS Grande", desc: "Boton rojo grande y facil de pulsar. 3 segundos para activar la emergencia. Envia ubicacion GPS y llama a papa y mama.", color: "bg-red-100 text-red-600" },
-    { icon: <MapPin className="w-7 h-7" />, title: "GPS Tiempo Real", desc: "Los padres ven la ubicacion exacta desde la app. Precision de 3-5 metros. Funciona en colegio, parque, calle e interiores.", color: "bg-blue-100 text-blue-600" },
-    { icon: <Phone className="w-7 h-7" />, title: "Llamadas a Papa y Mama", desc: "Solo a los 5 contactos que autorices. Numeros desconocidos bloqueados automaticamente. Un toque para llamar.", color: "bg-green-100 text-green-600" },
-    { icon: <Shield className="w-7 h-7" />, title: "Zonas Seguras", desc: "Configura colegio, casa, parque y abuelos. Alerta instantanea si tu hijo entra o sale de cualquier zona.", color: "bg-purple-100 text-purple-600" },
-    { icon: <Lock className="w-7 h-7" />, title: "Control Parental Total", desc: "Sin camara, sin internet, sin redes sociales. Modo silencioso en horario escolar. Todo desde la app de los padres.", color: "bg-amber-100 text-amber-600" }
+    { icon: <RefreshCw className="w-7 h-7" />, title: "Correas Intercambiables", desc: "8 colores vibrantes con sistema de cambio rápido. Tu hijo elige un color nuevo cada día. Sin herramientas, en 3 segundos.", color: "bg-gradient-to-br from-pink-100 to-violet-100 text-pink-600", highlight: true },
+    { icon: <Bell className="w-7 h-7" />, title: "Botón SOS Grande", desc: "Botón rojo grande y fácil de pulsar. 3 segundos para activar la emergencia. Envía ubicación GPS y llama a papá y mamá.", color: "bg-red-100 text-red-600" },
+    { icon: <MapPin className="w-7 h-7" />, title: "GPS Tiempo Real", desc: "Los padres ven la ubicación exacta desde la app. Precisión de 3-5 metros. Funciona en colegio, parque, calle e interiores.", color: "bg-blue-100 text-blue-600" },
+    { icon: <Phone className="w-7 h-7" />, title: "Llamadas a Papá y Mamá", desc: "Solo a los 5 contactos que autorices. Números desconocidos bloqueados automáticamente. Un toque para llamar.", color: "bg-green-100 text-green-600" },
+    { icon: <Shield className="w-7 h-7" />, title: "Zonas Seguras", desc: "Configura colegio, casa, parque y abuelos. Alerta instantánea si tu hijo entra o sale de cualquier zona.", color: "bg-purple-100 text-purple-600" },
+    { icon: <Lock className="w-7 h-7" />, title: "Control Parental Total", desc: "Sin cámara, sin internet, sin redes sociales. Modo silencioso en horario escolar. Todo desde la app de los padres.", color: "bg-amber-100 text-amber-600" }
   ];
 
   const testimonials = [
-    { name: "Sandra L.", location: "Madrid", role: "Madre de Lucia (8 anos)", text: "Lucia tiene 3 correas y las cambia segun la ropa. Le encanta el rosa y el morado. Yo estoy tranquila sabiendo donde esta siempre. El boton SOS nos da paz.", rating: 5 },
-    { name: "Roberto M.", location: "Valencia", role: "Padre de Pablo (10 anos)", text: "Pablo va solo al cole y las zonas seguras me avisan cuando llega y sale. Lo mejor: sin camara ni internet. La correa verde bosque es su favorita.", rating: 5 },
-    { name: "Carmen G.", location: "Barcelona", role: "Madre de Marc (7 anos)", text: "Marc dice que es 'su reloj de superheroe'. Pesa tan poco que no se lo quiere quitar. La bateria dura 4 dias y resiste los golpes del patio.", rating: 5 },
-    { name: "Javier A.", location: "Sevilla", role: "Padre de Sofia (11 anos)", text: "Mucho mejor que darle un movil. Sofia cambio del azul al amarillo rayo y esta encantada. Sin distracciones, solo seguridad. 10/10.", rating: 5 },
-    { name: "Laura P.", location: "Madrid", role: "Madre de Diego (9 anos)", text: "Compramos 2 correas extra (rojo turbo y negro ninja). Diego las colecciona como si fueran cromos. Y nosotros dormimos tranquilos.", rating: 5 },
-    { name: "Ana R.", location: "Malaga", role: "Madre de Martina (6 anos)", text: "Martina es la mas pequena del cole con reloj y esta orgullosisima. La correa rosa es su tesoro. El boton SOS funciona perfecto, lo probamos el primer dia.", rating: 5 }
+    { name: "Sandra L.", location: "Madrid", role: "Madre de Lucía (8 años)", text: "Lucía tiene 3 correas y las cambia según la ropa. Le encanta el rosa y el morado. Yo estoy tranquila sabiendo dónde está siempre. El botón SOS nos da paz.", rating: 5 },
+    { name: "Roberto M.", location: "Valencia", role: "Padre de Pablo (10 años)", text: "Pablo va solo al cole y las zonas seguras me avisan cuando llega y sale. Lo mejor: sin cámara ni internet. La correa verde bosque es su favorita.", rating: 5 },
+    { name: "Carmen G.", location: "Barcelona", role: "Madre de Marc (7 años)", text: "Marc dice que es 'su reloj de superhéroe'. Pesa tan poco que no se lo quiere quitar. La batería dura 4 días y resiste los golpes del patio.", rating: 5 },
+    { name: "Javier A.", location: "Sevilla", role: "Padre de Sofía (11 años)", text: "Mucho mejor que darle un móvil. Sofía cambió del azul al amarillo rayo y está encantada. Sin distracciones, solo seguridad. 10/10.", rating: 5 },
+    { name: "Laura P.", location: "Madrid", role: "Madre de Diego (9 años)", text: "Compramos 2 correas extra (rojo turbo y negro ninja). Diego las colecciona como si fueran cromos. Y nosotros dormimos tranquilos.", rating: 5 },
+    { name: "Ana R.", location: "Málaga", role: "Madre de Martina (6 años)", text: "Martina es la más pequeña del cole con reloj y está orgullosísima. La correa rosa es su tesoro. El botón SOS funciona perfecto, lo probamos el primer día.", rating: 5 }
   ];
 
   const selected = strapColors[activeColor];
@@ -99,12 +99,12 @@ const SentinelJ = () => {
   return (
     <div className="min-h-screen bg-white">
       <Helmet>
-        <title>Sentinel J | Reloj SOS para Jovenes con Correas Intercambiables | ManoProtect</title>
-        <meta name="description" content="Sentinel J: reloj con boton SOS y correas intercambiables de 8 colores para jovenes de 6 a 14 anos. GPS, llamadas a padres, zonas seguras. Sin camara ni internet. 99 EUR envio gratuito." />
-        <meta name="keywords" content="reloj SOS jovenes, reloj GPS ninos, sentinel J, reloj seguridad infantil, smartwatch ninos sin internet, correas intercambiables reloj ninos, localizador ninos" />
+        <title>Sentinel J | Reloj SOS para Jóvenes con Correas Intercambiables | ManoProtect</title>
+        <meta name="description" content="Sentinel J: reloj con botón SOS y correas intercambiables de 8 colores para jóvenes de 6 a 14 años. GPS, llamadas a padres, zonas seguras. Sin cámara ni internet. 99€ con envío gratuito." />
+        <meta name="keywords" content="reloj SOS jóvenes, reloj GPS niños, sentinel J, reloj seguridad infantil, smartwatch niños sin internet, correas intercambiables reloj niños, localizador niños" />
         <link rel="canonical" href="https://manoprotect.com/sentinel-j" />
-        <meta property="og:title" content="Sentinel J | Reloj SOS con Correas de Colores para Jovenes" />
-        <meta property="og:description" content="8 colores de correas intercambiables. Boton SOS, GPS y sin internet. 99 EUR envio gratuito." />
+        <meta property="og:title" content="Sentinel J | Reloj SOS con Correas de Colores para Jóvenes" />
+        <meta property="og:description" content="8 colores de correas intercambiables. Botón SOS, GPS y sin internet. 99€ envío gratuito." />
         <meta property="og:image" content={SENTINEL_J_IMG} />
         <meta property="og:url" content="https://manoprotect.com/sentinel-j" />
         <meta property="og:type" content="product" />
@@ -122,10 +122,9 @@ const SentinelJ = () => {
         <span className="text-gray-900 font-medium">Sentinel J</span>
       </nav>
 
-      {/* HERO */}
+      {/* HERO - Dark immersive */}
       <section className="relative overflow-hidden py-16 lg:py-24" data-testid="hero-sentinel-j">
         <div className="absolute inset-0 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950" />
-        {/* Animated color orbs */}
         <div className="absolute top-20 left-[10%] w-72 h-72 rounded-full blur-[100px] opacity-40 animate-pulse" style={{ backgroundColor: selected.hex }} />
         <div className="absolute bottom-10 right-[15%] w-60 h-60 rounded-full blur-[80px] opacity-30 animate-pulse" style={{ backgroundColor: strapColors[(activeColor + 3) % 8].hex, animationDelay: '1s' }} />
 
@@ -146,10 +145,10 @@ const SentinelJ = () => {
 
               <p className="text-xl lg:text-2xl text-gray-300 font-medium mb-2">El reloj SOS que tus hijos quieren llevar</p>
               <p className="text-base text-gray-500 mb-8 max-w-lg">
-                Boton SOS fisico + GPS tiempo real + Llamadas a papa y mama. Correas intercambiables en 8 colores. Sin camara. Sin internet. Solo seguridad.
+                Botón SOS físico + GPS tiempo real + Llamadas a papá y mamá. Correas intercambiables en 8 colores. Sin cámara. Sin internet. Solo seguridad.
               </p>
 
-              {/* Mini color picker in hero */}
+              {/* Color picker */}
               <div className="flex items-center gap-3 mb-8">
                 <span className="text-xs text-gray-500 uppercase tracking-wider font-medium">Color:</span>
                 {strapColors.map((c, i) => (
@@ -167,15 +166,15 @@ const SentinelJ = () => {
               <div className="flex flex-col sm:flex-row gap-4 mb-6">
                 <Link to="/servicios-sos">
                   <Button size="lg" className="text-lg px-8 py-6 rounded-2xl font-bold shadow-2xl transition-all duration-300 text-white border-0" style={{ background: `linear-gradient(135deg, ${selected.hex}, ${strapColors[(activeColor + 2) % 8].hex})` }} data-testid="cta-comprar-sentinel-j">
-                    Reservar Sentinel J - 99 EUR
+                    Reservar Sentinel J – 99€
                     <ArrowRight className="w-5 h-5 ml-2" />
                   </Button>
                 </Link>
               </div>
 
               <div className="flex flex-wrap items-center gap-4 text-sm text-gray-400">
-                <span className="flex items-center gap-1"><CheckCircle className="w-4 h-4 text-green-400" /> Envio GRATUITO</span>
-                <span className="flex items-center gap-1"><CheckCircle className="w-4 h-4 text-green-400" /> 30 dias de prueba</span>
+                <span className="flex items-center gap-1"><CheckCircle className="w-4 h-4 text-green-400" /> Envío GRATUITO</span>
+                <span className="flex items-center gap-1"><CheckCircle className="w-4 h-4 text-green-400" /> 30 días de prueba</span>
                 <span className="flex items-center gap-1"><CheckCircle className="w-4 h-4 text-green-400" /> Correa incluida</span>
               </div>
               <p className="text-xs text-gray-600 mt-3">Oferta de lanzamiento hasta el 30 de Marzo</p>
@@ -186,15 +185,14 @@ const SentinelJ = () => {
               <div className="absolute inset-0 rounded-full blur-[60px] opacity-20 transition-colors duration-700" style={{ backgroundColor: selected.hex }} />
               <img
                 src={SENTINEL_J_IMG}
-                alt="Sentinel J - Reloj SOS para jovenes con correas intercambiables de colores"
+                alt="Sentinel J - Reloj SOS para jóvenes con correas intercambiables de colores"
                 className="relative z-10 w-full max-w-md drop-shadow-2xl hover:scale-105 transition-transform duration-500"
                 loading="eager"
               />
-              {/* Floating price badge */}
               <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-white/10 backdrop-blur-xl rounded-2xl px-6 py-3 shadow-2xl z-20 border border-white/20">
                 <div className="flex items-center gap-3">
-                  <span className="text-3xl font-black text-white">99 EUR</span>
-                  <span className="text-gray-400 line-through text-lg">159 EUR</span>
+                  <span className="text-3xl font-black text-white">99€</span>
+                  <span className="text-gray-400 line-through text-lg">159€</span>
                   <span className="text-xs px-2 py-1 rounded-full font-bold text-white" style={{ backgroundColor: selected.hex }}>-38%</span>
                 </div>
               </div>
@@ -211,9 +209,9 @@ const SentinelJ = () => {
               <RefreshCw className="w-4 h-4" />
               CORREAS INTERCAMBIABLES
             </div>
-            <h2 className="text-3xl lg:text-4xl font-black text-gray-900 mb-3">Un color diferente cada dia</h2>
+            <h2 className="text-3xl lg:text-4xl font-black text-gray-900 mb-3">Un color diferente cada día</h2>
             <p className="text-lg text-gray-500 max-w-2xl mx-auto">
-              Sistema de liberacion rapida: cambia la correa en 3 segundos, sin herramientas. 8 colores disponibles para que tu hijo exprese su estilo.
+              Sistema de liberación rápida: cambia la correa en 3 segundos, sin herramientas. 8 colores disponibles para que tu hijo exprese su estilo.
             </p>
           </div>
 
@@ -242,16 +240,16 @@ const SentinelJ = () => {
             <div className="text-center p-6 rounded-2xl" style={{ backgroundColor: selected.hex + '10' }}>
               <Zap className="w-8 h-8 mx-auto mb-3" style={{ color: selected.hex }} />
               <h3 className="font-bold text-gray-900 mb-1">Cambio en 3 segundos</h3>
-              <p className="text-sm text-gray-600">Sistema de liberacion rapida. Sin herramientas, sin complicaciones.</p>
+              <p className="text-sm text-gray-600">Sistema de liberación rápida. Sin herramientas, sin complicaciones.</p>
             </div>
             <div className="text-center p-6 rounded-2xl" style={{ backgroundColor: selected.hex + '10' }}>
               <Droplets className="w-8 h-8 mx-auto mb-3" style={{ color: selected.hex }} />
-              <h3 className="font-bold text-gray-900 mb-1">Silicona hipoalergenica</h3>
-              <p className="text-sm text-gray-600">Grado medico, suave y resistente al agua. Perfecta para pieles sensibles.</p>
+              <h3 className="font-bold text-gray-900 mb-1">Silicona hipoalergénica</h3>
+              <p className="text-sm text-gray-600">Grado médico, suave y resistente al agua. Perfecta para pieles sensibles.</p>
             </div>
             <div className="text-center p-6 rounded-2xl" style={{ backgroundColor: selected.hex + '10' }}>
               <Heart className="w-8 h-8 mx-auto mb-3" style={{ color: selected.hex }} />
-              <h3 className="font-bold text-gray-900 mb-1">Correas extra: 9,99 EUR</h3>
+              <h3 className="font-bold text-gray-900 mb-1">Correas extra: 9,99€</h3>
               <p className="text-sm text-gray-600">Colecciona todos los colores. Regalo perfecto para cumples y Navidad.</p>
             </div>
           </div>
@@ -261,26 +259,26 @@ const SentinelJ = () => {
       {/* WHY NOT A PHONE */}
       <section className="py-16 bg-gray-50">
         <div className="max-w-4xl mx-auto px-4">
-          <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Por que Sentinel J y no un movil?</h2>
+          <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">¿Por qué Sentinel J y no un móvil?</h2>
           <div className="grid md:grid-cols-2 gap-8">
             <div className="bg-red-50 rounded-2xl p-8 border border-red-100">
-              <h3 className="text-xl font-bold text-red-800 mb-4">Con un movil</h3>
+              <h3 className="text-xl font-bold text-red-800 mb-4">Con un móvil</h3>
               <ul className="space-y-3 text-gray-700">
                 <li className="flex items-start gap-2"><span className="text-red-500 font-bold mt-0.5">&#x2715;</span> Acceso a internet y redes sociales</li>
-                <li className="flex items-start gap-2"><span className="text-red-500 font-bold mt-0.5">&#x2715;</span> Camara y contenido inapropiado</li>
+                <li className="flex items-start gap-2"><span className="text-red-500 font-bold mt-0.5">&#x2715;</span> Cámara y contenido inapropiado</li>
                 <li className="flex items-start gap-2"><span className="text-red-500 font-bold mt-0.5">&#x2715;</span> Se pierde en la mochila</li>
-                <li className="flex items-start gap-2"><span className="text-red-500 font-bold mt-0.5">&#x2715;</span> Distraccion en clase</li>
-                <li className="flex items-start gap-2"><span className="text-red-500 font-bold mt-0.5">&#x2715;</span> Bateria dura pocas horas</li>
+                <li className="flex items-start gap-2"><span className="text-red-500 font-bold mt-0.5">&#x2715;</span> Distracción en clase</li>
+                <li className="flex items-start gap-2"><span className="text-red-500 font-bold mt-0.5">&#x2715;</span> Batería dura pocas horas</li>
               </ul>
             </div>
             <div className="bg-green-50 rounded-2xl p-8 border border-green-100">
               <h3 className="text-xl font-bold text-green-800 mb-4">Con Sentinel J</h3>
               <ul className="space-y-3 text-gray-700">
                 <li className="flex items-start gap-2"><CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" /> Sin internet ni redes sociales</li>
-                <li className="flex items-start gap-2"><CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" /> Sin camara: solo seguridad</li>
-                <li className="flex items-start gap-2"><CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" /> Siempre en la muneca</li>
+                <li className="flex items-start gap-2"><CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" /> Sin cámara: solo seguridad</li>
+                <li className="flex items-start gap-2"><CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" /> Siempre en la muñeca</li>
                 <li className="flex items-start gap-2"><CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" /> Modo silencioso en clase</li>
-                <li className="flex items-start gap-2"><CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" /> 4 dias de bateria</li>
+                <li className="flex items-start gap-2"><CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" /> 4 días de batería</li>
               </ul>
             </div>
           </div>
@@ -291,7 +289,7 @@ const SentinelJ = () => {
       <section className="py-16 bg-white" data-testid="features-sentinel-j">
         <div className="max-w-7xl mx-auto px-4">
           <h2 className="text-3xl font-bold text-gray-900 mb-2 text-center">Funcionalidades Principales</h2>
-          <p className="text-gray-500 text-center mb-10">Disenado por padres, para padres</p>
+          <p className="text-gray-500 text-center mb-10">Diseñado por padres, para padres</p>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {features.map((f, i) => (
               <div key={i} className={`p-6 rounded-2xl border transition-all duration-300 hover:shadow-lg hover:-translate-y-1 ${f.highlight ? 'border-2 border-violet-200 bg-gradient-to-br from-pink-50 to-violet-50 ring-1 ring-violet-100' : 'border-gray-100 bg-gray-50'}`}>
@@ -308,15 +306,15 @@ const SentinelJ = () => {
       {/* SPECS */}
       <section className="py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4">
-          <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Especificaciones Tecnicas</h2>
+          <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Especificaciones Técnicas</h2>
           <div className="max-w-3xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-4">
             {[
-              { label: "Pantalla", value: '1.4" IPS tactil', icon: <Sparkles className="w-5 h-5" /> },
+              { label: "Pantalla", value: '1.4" IPS táctil', icon: <Sparkles className="w-5 h-5" /> },
               { label: "Resistencia", value: "IP68", icon: <Droplets className="w-5 h-5" /> },
-              { label: "Bateria", value: "4 dias", icon: <Battery className="w-5 h-5" /> },
+              { label: "Batería", value: "4 días", icon: <Battery className="w-5 h-5" /> },
               { label: "Conectividad", value: "4G LTE", icon: <Zap className="w-5 h-5" /> },
-              { label: "GPS", value: "Alta precision", icon: <MapPin className="w-5 h-5" /> },
-              { label: "Material correa", value: "Silicona medica", icon: <Heart className="w-5 h-5" /> },
+              { label: "GPS", value: "Alta precisión", icon: <MapPin className="w-5 h-5" /> },
+              { label: "Material correa", value: "Silicona médica", icon: <Heart className="w-5 h-5" /> },
               { label: "Peso", value: "35g", icon: <Smile className="w-5 h-5" /> },
               { label: "Correas", value: "8 colores intercambiables", icon: <Palette className="w-5 h-5" /> }
             ].map((s, i) => (
@@ -338,26 +336,26 @@ const SentinelJ = () => {
             <table className="w-full border-collapse bg-white rounded-xl overflow-hidden border border-gray-200">
               <thead>
                 <tr className="bg-gray-50">
-                  <th className="p-4 text-left text-sm font-bold text-gray-900 border-b">Caracteristica</th>
+                  <th className="p-4 text-left text-sm font-bold text-gray-900 border-b">Característica</th>
                   <th className="p-4 text-center text-sm font-bold border-b" style={{ color: selected.hex }}>Sentinel J (6-14)</th>
                   <th className="p-4 text-center text-sm font-bold text-gray-500 border-b">Sentinel X (12+)</th>
                 </tr>
               </thead>
               <tbody className="text-sm">
                 {[
-                  ["Precio", "99 EUR", "149 EUR"],
+                  ["Precio", "99€", "149€"],
                   ["Correas intercambiables", "8 colores", "No"],
-                  ["Edad recomendada", "6-14 anos", "12+ anos"],
-                  ["Boton SOS fisico", "Si (grande, rojo)", "Si (lateral)"],
-                  ["GPS tiempo real", "Si", "Si"],
+                  ["Edad recomendada", "6-14 años", "12+ años"],
+                  ["Botón SOS físico", "Sí (grande, rojo)", "Sí (lateral)"],
+                  ["GPS tiempo real", "Sí", "Sí"],
                   ["Llamadas", "5 contactos", "Ilimitados"],
                   ["Zonas seguras", "Hasta 10", "Ilimitadas"],
-                  ["Camara / Internet", "No / No", "No / No"],
-                  ["Monitor cardiaco", "No", "Si"],
-                  ["Detector caidas IA", "No", "Si"],
-                  ["Bateria", "4 dias", "5 dias"],
+                  ["Cámara / Internet", "No / No", "No / No"],
+                  ["Monitor cardíaco", "No", "Sí"],
+                  ["Detector caídas IA", "No", "Sí"],
+                  ["Batería", "4 días", "5 días"],
                   ["Peso", "35g", "48g"],
-                  ["Envio", "GRATUITO", "GRATUITO"]
+                  ["Envío", "GRATUITO", "GRATUITO"]
                 ].map((row, i) => (
                   <tr key={i} className={i % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
                     <td className="p-3 font-medium text-gray-900 border-b border-gray-100">{row[0]}</td>
@@ -392,7 +390,7 @@ const SentinelJ = () => {
                   </div>
                   <div>
                     <p className="font-medium text-gray-900 text-sm">{t.name}</p>
-                    <p className="text-xs text-gray-500">{t.role} - {t.location}</p>
+                    <p className="text-xs text-gray-500">{t.role} – {t.location}</p>
                   </div>
                 </div>
               </div>
@@ -407,12 +405,12 @@ const SentinelJ = () => {
           <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Preguntas Frecuentes</h2>
           <div className="space-y-4">
             {[
-              { q: "Las correas son intercambiables de verdad?", a: "Si. El Sentinel J usa un sistema de liberacion rapida (quick-release) que permite cambiar la correa en 3 segundos sin herramientas. Solo desliza, retira y coloca la nueva. Disponible en 8 colores. Correas adicionales por 9,99 EUR." },
-              { q: "Que diferencia hay entre Sentinel J y Sentinel X?", a: "Sentinel J: disenado para jovenes de 6-14, mas ligero (35g), correas intercambiables en 8 colores, 99 EUR. Sentinel X: para 12+ anos, monitor cardiaco, deteccion caidas IA, pantalla AMOLED, 149 EUR. Ambos tienen boton SOS, GPS y sin internet." },
-              { q: "Es seguro para jovenes pequenos?", a: "Materiales hipoalergenicos de grado medico, sin bordes afilados. Correa de silicona suave. Solo 35g de peso. Certificado CE. Sin camara ni acceso a internet." },
-              { q: "Puede mi hijo hacer llamadas?", a: "Si, solo a los 5 contactos que autorices desde la app. Numeros desconocidos se bloquean automaticamente. Un toque para llamar a papa o mama." },
-              { q: "Resiste agua y golpes?", a: "Si. IP68: salpicaduras, lluvia y lavado de manos. Carcasa de policarbonato reforzado resistente a caidas y golpes del recreo." },
-              { q: "Cuanto dura la bateria?", a: "4 dias con uso normal. Carga magnetica segura en 90 minutos. Los padres reciben alerta cuando baja del 15%." }
+              { q: "¿Las correas son intercambiables de verdad?", a: "Sí. El Sentinel J usa un sistema de liberación rápida (quick-release) que permite cambiar la correa en 3 segundos sin herramientas. Solo desliza, retira y coloca la nueva. Disponible en 8 colores. Correas adicionales por 9,99€." },
+              { q: "¿Qué diferencia hay entre Sentinel J y Sentinel X?", a: "Sentinel J: diseñado para jóvenes de 6-14, más ligero (35g), correas intercambiables en 8 colores, 99€. Sentinel X: para 12+ años, monitor cardíaco, detección caídas IA, pantalla AMOLED, 149€. Ambos tienen botón SOS, GPS y sin internet." },
+              { q: "¿Es seguro para niños pequeños?", a: "Sí. Materiales hipoalergénicos de grado médico, sin bordes afilados. Correa de silicona suave. Solo 35g de peso. Certificado CE. Sin cámara ni acceso a internet." },
+              { q: "¿Puede mi hijo hacer llamadas?", a: "Sí, solo a los 5 contactos que autorices desde la app. Números desconocidos se bloquean automáticamente. Un toque para llamar a papá o mamá." },
+              { q: "¿Resiste agua y golpes?", a: "Sí. IP68: salpicaduras, lluvia y lavado de manos. Carcasa de policarbonato reforzado resistente a caídas y golpes del recreo." },
+              { q: "¿Cuánto dura la batería?", a: "4 días con uso normal. Carga magnética segura en 90 minutos. Los padres reciben alerta cuando baja del 15%." }
             ].map((faq, i) => (
               <details key={i} className="bg-gray-50 rounded-xl border border-gray-200 group" data-testid={`faq-item-${i}`}>
                 <summary className="flex items-center justify-between p-5 cursor-pointer font-medium text-gray-900 hover:text-blue-600 transition-colors">
@@ -426,7 +424,7 @@ const SentinelJ = () => {
         </div>
       </section>
 
-      {/* CTA FINAL */}
+      {/* CTA FINAL - Dark immersive */}
       <section className="py-20 text-white relative overflow-hidden" data-testid="cta-final-section">
         <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950" />
         <div className="absolute top-0 left-1/4 w-96 h-96 rounded-full blur-[120px] opacity-30" style={{ backgroundColor: selected.hex }} />
@@ -439,11 +437,11 @@ const SentinelJ = () => {
             ))}
           </div>
           <h2 className="text-3xl lg:text-4xl font-black mb-4">Dale seguridad con su color favorito</h2>
-          <p className="text-xl text-gray-300 mb-2">Sentinel J: disenado para jovenes, pensado por padres</p>
-          <p className="text-gray-500 mb-8">Envio GRATUITO | 30 dias de prueba | Oferta hasta 30 de Marzo</p>
+          <p className="text-xl text-gray-300 mb-2">Sentinel J: diseñado para jóvenes, pensado por padres</p>
+          <p className="text-gray-500 mb-8">Envío GRATUITO | 30 días de prueba | Oferta hasta 30 de Marzo</p>
           <Link to="/servicios-sos">
             <Button size="lg" className="text-lg px-10 py-6 rounded-2xl font-bold shadow-2xl text-white border-0" style={{ background: `linear-gradient(135deg, ${selected.hex}, ${strapColors[(activeColor + 2) % 8].hex})` }} data-testid="cta-final-sentinel-j">
-              Reservar Sentinel J - 99 EUR
+              Reservar Sentinel J – 99€
               <ArrowRight className="w-5 h-5 ml-2" />
             </Button>
           </Link>
@@ -457,15 +455,15 @@ const SentinelJ = () => {
           <div className="grid md:grid-cols-3 gap-4">
             <Link to="/sentinel-x-ninos" className="p-4 bg-gray-50 rounded-xl hover:shadow-md transition-shadow border border-gray-100" data-testid="link-sentinel-x-ninos">
               <p className="font-medium text-gray-900">Sentinel X para Adolescentes</p>
-              <p className="text-sm text-gray-500">12-16 anos | 149 EUR</p>
+              <p className="text-sm text-gray-500">12-16 años | 149€</p>
             </Link>
             <Link to="/sentinel-x-adultos" className="p-4 bg-gray-50 rounded-xl hover:shadow-md transition-shadow border border-gray-100" data-testid="link-sentinel-x-adultos">
               <p className="font-medium text-gray-900">Sentinel X para Adultos</p>
-              <p className="text-sm text-gray-500">17-55 anos | 149 EUR</p>
+              <p className="text-sm text-gray-500">17-55 años | 149€</p>
             </Link>
             <Link to="/boton-sos-senior" className="p-4 bg-gray-50 rounded-xl hover:shadow-md transition-shadow border border-gray-100" data-testid="link-boton-sos-senior">
-              <p className="font-medium text-gray-900">Boton SOS Senior</p>
-              <p className="text-sm text-gray-500">55+ anos | 29,99 EUR</p>
+              <p className="font-medium text-gray-900">Botón SOS Senior</p>
+              <p className="text-sm text-gray-500">55+ años | 29,99€</p>
             </Link>
           </div>
         </div>
