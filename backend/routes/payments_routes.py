@@ -942,13 +942,22 @@ async def get_user_trial_info(
 class SentinelXPreorderRequest(BaseModel):
     name: str
     email: str
+    phone: str = ""
     address: str
     city: str
     postalCode: str
     country: str = "ES"
-    paymentType: str = "full"  # 'full' or 'partial'
+    paymentType: str = "full"
     amount: float
-    product: str = "SENTINEL X - Edición Fundadores"
+    product: str = "SENTINEL X"
+    selectedProduct: Optional[str] = None
+    subscriptionPlan: Optional[str] = None
+
+# Subscription pricing for Basic watch service plan
+BASIC_SUBSCRIPTION_PRICES = {
+    "mensual": {"amount": 999, "interval": "month", "label": "Mensual", "display": "9,99€/mes"},
+    "anual": {"amount": 9999, "interval": "year", "label": "Anual", "display": "99,99€/año"},
+}
 
 @router.post("/checkout/sentinel-x")
 async def create_sentinel_x_checkout(
@@ -956,28 +965,156 @@ async def create_sentinel_x_checkout(
     http_request: Request
 ):
     """
-    Create Stripe checkout session for SENTINEL X pre-order
-    - Full payment: 149€
-    - Partial payment (deposit): 29.99€
+    Create Stripe checkout session for SENTINEL X orders.
+    - subscription: Basic watch with mandatory family service plan (recurring + shipping)
+    - shipping_only: Basic/Junior products shipping only (one-time)
+    - full_payment: Fundadores/Premium full payment (one-time)
     """
     try:
-        # Validate payment type
-        if data.paymentType == "full":
+        host_url = str(http_request.headers.get('origin', 'https://manoprotect.com'))
+        sentinel_img = 'https://customer-assets.emergentagent.com/job_8161c713-bb69-4bfd-84d2-fde54657d491/artifacts/acz8j630_Reloj%20inteligente%20ManoProtect%20SENTINEL%20X.png'
+
+        # --- SUBSCRIPTION MODE: Basic watch with mandatory family plan ---
+        if data.paymentType == "subscription":
+            plan_key = data.subscriptionPlan or "mensual"
+            plan = BASIC_SUBSCRIPTION_PRICES.get(plan_key, BASIC_SUBSCRIPTION_PRICES["mensual"])
+
+            success_url = f"{host_url}/gracias?success=true&session_id={{CHECKOUT_SESSION_ID}}&product=sentinel-x-basic&type=subscription&plan={plan_key}"
+            cancel_url = f"{host_url}/sentinel-x?canceled=true"
+
+            checkout_session = stripe.checkout.Session.create(
+                payment_method_types=['card'],
+                line_items=[
+                    {
+                        'price_data': {
+                            'currency': 'eur',
+                            'product_data': {
+                                'name': f'Plan Familiar ManoProtect ({plan["label"]})',
+                                'description': 'Servicio de seguridad familiar: GPS tracking, alertas SOS, localización en tiempo real, zonas seguras.',
+                                'images': [sentinel_img],
+                            },
+                            'unit_amount': plan['amount'],
+                            'recurring': {'interval': plan['interval']},
+                        },
+                        'quantity': 1,
+                    },
+                    {
+                        'price_data': {
+                            'currency': 'eur',
+                            'product_data': {
+                                'name': 'Envío Sentinel X Basic',
+                                'description': 'Gastos de envío del dispositivo Sentinel X Basic. Entrega estimada: 90-120 días.',
+                            },
+                            'unit_amount': 995,
+                        },
+                        'quantity': 1,
+                    },
+                ],
+                mode='subscription',
+                success_url=success_url,
+                cancel_url=cancel_url,
+                customer_email=data.email,
+                metadata={
+                    'product': 'sentinel-x-basic',
+                    'payment_type': 'subscription',
+                    'subscription_plan': plan_key,
+                    'customer_name': data.name,
+                    'customer_phone': data.phone,
+                    'shipping_address': data.address,
+                    'shipping_city': data.city,
+                    'shipping_postal_code': data.postalCode,
+                    'shipping_country': data.country,
+                },
+                allow_promotion_codes=True,
+            )
+
+            preorder_doc = {
+                "session_id": checkout_session.id,
+                "product": "sentinel-x-basic",
+                "customer_name": data.name,
+                "customer_email": data.email,
+                "customer_phone": data.phone,
+                "shipping_address": {"address": data.address, "city": data.city, "postal_code": data.postalCode, "country": data.country},
+                "payment_type": "subscription",
+                "subscription_plan": plan_key,
+                "subscription_price": plan['display'],
+                "shipping_amount": 9.95,
+                "status": "pending",
+                "created_at": datetime.now(timezone.utc).isoformat(),
+                "updated_at": datetime.now(timezone.utc).isoformat()
+            }
+            await db.sentinel_x_preorders.insert_one(preorder_doc)
+            logging.info(f"SENTINEL X Basic subscription checkout created: {checkout_session.id} for {data.email}, plan: {plan_key}")
+            return {"checkout_url": checkout_session.url, "session_id": checkout_session.id}
+
+        # --- SHIPPING ONLY: Basic/Junior without subscription (fallback) ---
+        if data.paymentType == "shipping_only":
+            amount = data.amount if data.amount > 0 else 9.95
+            product_name = f"{data.product} (Solo envío)"
+            success_url = f"{host_url}/gracias?success=true&session_id={{CHECKOUT_SESSION_ID}}&product={data.selectedProduct or 'sentinel-x-basic'}&amount={amount}"
+            cancel_url = f"{host_url}/sentinel-x?canceled=true"
+
+            checkout_session = stripe.checkout.Session.create(
+                payment_method_types=['card'],
+                line_items=[{
+                    'price_data': {
+                        'currency': 'eur',
+                        'product_data': {
+                            'name': product_name,
+                            'description': 'Gastos de envío. Entrega estimada: 90-120 días.',
+                            'images': [sentinel_img],
+                        },
+                        'unit_amount': int(amount * 100),
+                    },
+                    'quantity': 1,
+                }],
+                mode='payment',
+                success_url=success_url,
+                cancel_url=cancel_url,
+                customer_email=data.email,
+                metadata={
+                    'product': data.selectedProduct or 'sentinel-x-basic',
+                    'payment_type': 'shipping_only',
+                    'customer_name': data.name,
+                    'customer_phone': data.phone,
+                    'shipping_address': data.address,
+                    'shipping_city': data.city,
+                    'shipping_postal_code': data.postalCode,
+                    'shipping_country': data.country,
+                },
+            )
+
+            preorder_doc = {
+                "session_id": checkout_session.id,
+                "product": data.selectedProduct or "sentinel-x-basic",
+                "customer_name": data.name,
+                "customer_email": data.email,
+                "customer_phone": data.phone,
+                "shipping_address": {"address": data.address, "city": data.city, "postal_code": data.postalCode, "country": data.country},
+                "payment_type": "shipping_only",
+                "amount_paid": amount,
+                "status": "pending",
+                "created_at": datetime.now(timezone.utc).isoformat(),
+                "updated_at": datetime.now(timezone.utc).isoformat()
+            }
+            await db.sentinel_x_preorders.insert_one(preorder_doc)
+            logging.info(f"SENTINEL X shipping-only checkout created: {checkout_session.id} for {data.email}")
+            return {"checkout_url": checkout_session.url, "session_id": checkout_session.id}
+
+        # --- FULL PAYMENT: Fundadores/Premium ---
+        if data.paymentType == "full_payment":
+            amount = data.amount
+        elif data.paymentType == "full":
             amount = 149.00
-            product_name = "SENTINEL X - Edición Fundadores (Pago Completo)"
         elif data.paymentType == "partial":
             amount = 29.99
-            product_name = "SENTINEL X - Edición Fundadores (Reserva 29,99€)"
         else:
             raise HTTPException(status_code=400, detail="Tipo de pago no válido")
-        
-        # Get base URL for redirects
-        host_url = str(http_request.headers.get('origin', 'https://manoprotect.com'))
-        
+
+        product_name = data.product or "SENTINEL X"
         success_url = f"{host_url}/gracias?success=true&session_id={{CHECKOUT_SESSION_ID}}&product=sentinel-x&amount={amount}"
         cancel_url = f"{host_url}/sentinel-x?canceled=true"
-        
-        # Create Stripe checkout session
+
         checkout_session = stripe.checkout.Session.create(
             payment_method_types=['card'],
             line_items=[{
@@ -985,10 +1122,10 @@ async def create_sentinel_x_checkout(
                     'currency': 'eur',
                     'product_data': {
                         'name': product_name,
-                        'description': 'Smartwatch de seguridad ManoProtect SENTINEL X. Entrega estimada: 90-120 días.',
-                        'images': ['https://customer-assets.emergentagent.com/job_8161c713-bb69-4bfd-84d2-fde54657d491/artifacts/acz8j630_Reloj%20inteligente%20ManoProtect%20SENTINEL%20X.png'],
+                        'description': 'Smartwatch de seguridad ManoProtect SENTINEL X. Envío GRATIS. Entrega estimada: 90-120 días.',
+                        'images': [sentinel_img],
                     },
-                    'unit_amount': int(amount * 100),  # Stripe expects cents
+                    'unit_amount': int(amount * 100),
                 },
                 'quantity': 1,
             }],
@@ -997,50 +1134,37 @@ async def create_sentinel_x_checkout(
             cancel_url=cancel_url,
             customer_email=data.email,
             metadata={
-                'product': 'sentinel-x',
+                'product': data.selectedProduct or 'sentinel-x',
                 'payment_type': data.paymentType,
                 'customer_name': data.name,
+                'customer_phone': data.phone,
                 'shipping_address': data.address,
                 'shipping_city': data.city,
                 'shipping_postal_code': data.postalCode,
                 'shipping_country': data.country,
-                'amount_pending': str(149 - amount) if data.paymentType == 'partial' else '0'
             },
             shipping_address_collection={
                 'allowed_countries': ['ES', 'PT', 'FR', 'DE', 'IT', 'NL', 'BE', 'AT']
             },
         )
-        
-        # Store pre-order in database
+
         preorder_doc = {
             "session_id": checkout_session.id,
-            "product": "sentinel-x",
+            "product": data.selectedProduct or "sentinel-x",
             "customer_name": data.name,
             "customer_email": data.email,
-            "shipping_address": {
-                "address": data.address,
-                "city": data.city,
-                "postal_code": data.postalCode,
-                "country": data.country
-            },
+            "customer_phone": data.phone,
+            "shipping_address": {"address": data.address, "city": data.city, "postal_code": data.postalCode, "country": data.country},
             "payment_type": data.paymentType,
             "amount_paid": amount,
-            "amount_pending": 149 - amount if data.paymentType == 'partial' else 0,
-            "total_amount": 149.00,
             "status": "pending",
             "created_at": datetime.now(timezone.utc).isoformat(),
             "updated_at": datetime.now(timezone.utc).isoformat()
         }
-        
         await db.sentinel_x_preorders.insert_one(preorder_doc)
-        
-        logging.info(f"SENTINEL X pre-order created: {checkout_session.id} for {data.email}")
-        
-        return {
-            "checkout_url": checkout_session.url,
-            "session_id": checkout_session.id
-        }
-    
+        logging.info(f"SENTINEL X checkout created: {checkout_session.id} for {data.email}")
+        return {"checkout_url": checkout_session.url, "session_id": checkout_session.id}
+
     except stripe.error.StripeError as e:
         logging.error(f"Stripe error creating SENTINEL X checkout: {e}")
         raise HTTPException(status_code=400, detail=str(e))
