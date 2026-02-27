@@ -1,6 +1,6 @@
 # ManoProtect - Product Requirements Document
 
-## Última Actualización: 27 Febrero 2026 (v5)
+## Última Actualización: 27 Febrero 2026 (v6)
 
 ---
 
@@ -44,20 +44,66 @@ Cada página incluye:
 | `/blog/reloj-gps-alzheimer` | General | Reloj GPS para Personas con Alzheimer | COMPLETADO |
 | `/blog/reloj-gps-sin-cuotas` | General | Reloj GPS Sin Cuotas: La Verdad | COMPLETADO |
 
-### CRO en Sentinel X (COMPLETADO)
-- Testimonials, ProductComparison, StickyCTA integrados en `/sentinel-x`
-
-### Landing Pages SEM (COMPLETADO)
-- `/reloj-sos-ancianos`, `/reloj-gps-mayores`, `/boton-sos-senior`
-
 ---
 
 ## Stack Técnico
 - **Frontend**: React 18, TailwindCSS, Shadcn/UI, react-helmet-async
 - **Backend**: FastAPI, Python 3.11, Pydantic
 - **Database**: MongoDB (Motor async)
-- **Payments**: Stripe (Elements + trial 7 días)
+- **Payments**: Stripe (Elements + subscriptions + one-time payments)
 - **Auth**: JWT + session cookies
+- **Mobile**: Capacitor (Android configured, iOS config prepared)
+
+---
+
+## Embudo de Conversión (IMPLEMENTADO v6)
+
+### Flujo para relojes GRATIS (Basic, J, S)
+1. Usuario llega a `/sentinel-x` y elige producto
+2. Rellena formulario de pedido (nombre, email, teléfono, dirección)
+3. Al pulsar "Pedir GRATIS" → aparece modal de suscripción obligatoria
+4. Elige plan: Mensual (9,99€/mes) o Anual (99,99€/año)
+5. Stripe crea checkout con suscripción recurrente + envío único
+6. Primer cobro: envío (9,95€/4,95€) + primera cuota del plan
+
+### Flujo para relojes de pago (Fundadores, Premium)
+1. Usuario elige Fundadores (149€) o Premium (199€)
+2. Checkout directo con Stripe (pago único, envío GRATIS)
+3. Sin suscripción obligatoria (servicio incluido)
+
+### Precios de suscripción
+| Plan | Precio | Intervalo | Badge |
+|------|--------|-----------|-------|
+| Mensual | 9,99€ | /mes | — |
+| Anual | 99,99€ | /año | MEJOR PRECIO (8,33€/mes) |
+
+---
+
+## Background Location Tracking (IMPLEMENTADO v6)
+
+### Android
+- ACCESS_FINE_LOCATION ✅
+- ACCESS_COARSE_LOCATION ✅
+- ACCESS_BACKGROUND_LOCATION ✅
+- FOREGROUND_SERVICE + FOREGROUND_SERVICE_LOCATION ✅
+- REQUEST_IGNORE_BATTERY_OPTIMIZATIONS ✅
+- WAKE_LOCK ✅
+- RECEIVE_BOOT_COMPLETED ✅
+
+### iOS
+- NSLocationWhenInUseUsageDescription ✅
+- NSLocationAlwaysAndWhenInUseUsageDescription ✅
+- Background Modes: location, fetch, remote-notification ✅
+
+### Runtime Permission Flow
+1. Pedir ubicación foreground
+2. Android: guiar a Ajustes → "Permitir todo el tiempo"
+3. Android: solicitar exclusión optimización batería
+4. iOS: solicitar "Siempre" (automático)
+5. Iniciar background watcher
+
+### Textos para Stores
+- Documento completo: `/app/STORE_JUSTIFICATION_TEXTS.md`
 
 ---
 
@@ -69,16 +115,15 @@ Cada página incluye:
 - [ ] Ajustar manejo 3D Secure / requires_action
 
 ### P1 - Alta
-- [x] Crear página de producto Sentinel J (reloj juvenil, correas intercambiables 8 colores) ✅
-- [x] Crear página de producto Sentinel S (niños 3-12, cerámica+rose gold, 6 correas pastel, anti-secuestro) ✅
-- [x] Sentinel X rediseñado con 2 modelos (Fundadores cuadrado + Premium redondo) + promo 50 GRATIS ✅
+- [x] Crear página de producto Sentinel J ✅
+- [x] Crear página de producto Sentinel S ✅
+- [x] Sentinel X rediseñado con modelo freemium ✅
+- [x] Suscripción obligatoria para relojes gratis (Basic, J, S) ✅
 - [x] Landing pages locales: Madrid, Barcelona, Sevilla ✅
-- [x] Crear app iOS con Capacitor ✅ (Android sync completo, iOS config preparada)
-- [x] Conectar Google Tag Manager & Search Console ✅ (GTM-MK53XZ8Q + placeholders Search Console)
-- [x] Background Location Tracking para Android e iOS ✅
+- [x] Background Location Tracking completo (Android + iOS) ✅
 - [x] Meta Pixel integrado en index.html ✅ (requiere ID real del usuario)
-- [ ] Tracking conversiones GA4, Pixel Meta Ads
-- [x] Landing pages locales: Madrid, Barcelona, Sevilla ✅
+- [x] Google Tag Manager conectado ✅ (requiere verificación del usuario)
+- [ ] Tracking conversiones GA4, Pixel Meta Ads (IDs del usuario pendientes)
 
 ### P2 - Media
 - [ ] Página "Quiénes Somos" (esperando contenido)
@@ -90,6 +135,7 @@ Cada página incluye:
 - [ ] Emails recordatorio trial
 - [ ] Core Web Vitals < 1.8s
 - [ ] Integraciones bloqueadas (Infobip, SendGrid, Twilio)
+- [ ] Refactorizar landing pages locales en componente reutilizable
 
 ---
 
@@ -98,8 +144,10 @@ Cada página incluye:
 - Iteración 50: Age pages + blog → 11/11 passed
 - Iteración 51: Content updates + free shipping + March 30 → 10/10 passed
 - Iteración 52: Local pages Madrid/Barcelona/Sevilla + regression → 12/12 passed
-- Iteración 53: Sentinel J product page (correas intercambiables) + regression → 16/16 passed
-- Iteración 54: Sentinel S page (premium niños) + Sentinel X 2 modelos + promo GRATIS + regression → 14/14 passed
+- Iteración 53: Sentinel J product page + regression → 16/16 passed
+- Iteración 54: Sentinel S + Sentinel X 2 modelos + promo GRATIS + regression → 14/14 passed
+- Iteración 55: Sentinel X freemium model verification → 15/15 passed
+- Iteración 56: Subscription modal + checkout flows + regression → 16/16 passed
 
 ## Credenciales
 | Email | Password | Rol |
