@@ -3115,7 +3115,7 @@ async def initialize_superadmins():
     print("👔 Initializing Enterprise CEO employee...")
     try:
         ceo_email = "ceo@manoprotect.com"
-        ceo_password = "19862210Des"
+        ceo_password = os.environ.get('SUPERADMIN_PASSWORD_1', '')
         
         existing_ceo = await db.enterprise_employees.find_one({"email": ceo_email})
         
