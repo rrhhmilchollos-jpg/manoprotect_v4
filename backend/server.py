@@ -2988,8 +2988,7 @@ allowed_origins = [
     # Production - API subdomain (if used)
     "https://api.manoprotect.com",
     # Emergent Previews
-    "https://sos-platform.preview.emergentagent.com",  # Employee Portal Preview
-    "https://sos-platform.preview.emergentagent.com",  # Main App Preview
+    "https://sos-platform.preview.emergentagent.com",
     "https://digital-guard-1.emergent.host",
     # Desktop App
     "file://",
