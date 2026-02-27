@@ -316,4 +316,11 @@
     <priority>0.80</priority>
   </url>
 
+  <url>
+    <loc>https://manoprotect.com/sentinel-s</loc>
+    <lastmod>2026-02-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.90</priority>
+  </url>
+
 </urlset>
