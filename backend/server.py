@@ -2969,47 +2969,58 @@ app.include_router(public_router)
 # Note: Socket.IO is mounted earlier in the file (after WebSocket manager init)
 
 # Configure CORS - read from environment for deployment flexibility
-# IMPORTANT: When using credentials, we cannot use wildcard '*' for origins
 cors_origins_env = os.environ.get('CORS_ORIGINS', '')
+app_url = os.environ.get('APP_URL', '')
 
-# Define allowed origins explicitly (wildcard '*' not compatible with credentials)
-allowed_origins = [
-    # Development
-    "http://localhost:3000",
-    "http://localhost:3001", 
-    "http://localhost:8001",
-    "http://localhost:8002",
-    # Production - Main Site
-    "https://manoprotect.com",
-    "https://www.manoprotect.com",
-    # Production - Employee Portal (admin.manoprotect.com)
-    "https://admin.manoprotect.com",
-    "https://www.admin.manoprotect.com",
-    # Production - API subdomain (if used)
-    "https://api.manoprotect.com",
-    # Emergent Previews
-    "https://sos-platform.preview.emergentagent.com",
-    "https://digital-guard-1.emergent.host",
-    # Desktop App
-    "file://",
-    "null",
-]
+# Check if wildcard mode (no credentials support needed)
+use_wildcard_cors = cors_origins_env.strip() == '*'
 
-# Add any additional origins from environment
-if cors_origins_env and cors_origins_env != '*':
-    for origin in cors_origins_env.split(','):
-        origin = origin.strip()
-        if origin and origin != '*' and origin not in allowed_origins:
-            allowed_origins.append(origin)
+if use_wildcard_cors:
+    app.add_middleware(
+        CORSMiddleware,
+        allow_credentials=False,
+        allow_origins=["*"],
+        allow_methods=["*"],
+        allow_headers=["*"],
+        expose_headers=["*"],
+    )
+else:
+    # Define allowed origins explicitly (wildcard '*' not compatible with credentials)
+    allowed_origins = [
+        "http://localhost:3000",
+        "http://localhost:3001",
+        "http://localhost:8001",
+        "http://localhost:8002",
+        "https://manoprotect.com",
+        "https://www.manoprotect.com",
+        "https://admin.manoprotect.com",
+        "https://www.admin.manoprotect.com",
+        "https://api.manoprotect.com",
+        "https://sos-platform.preview.emergentagent.com",
+        "https://digital-guard-1.emergent.host",
+        "file://",
+        "null",
+    ]
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_credentials=True,
-    allow_origins=allowed_origins,
-    allow_methods=["*"],
-    allow_headers=["*"],
-    expose_headers=["*"],
-)
+    # Add APP_URL from deployment environment
+    if app_url and app_url not in allowed_origins:
+        allowed_origins.append(app_url)
+
+    # Add any additional origins from environment
+    if cors_origins_env:
+        for origin in cors_origins_env.split(','):
+            origin = origin.strip()
+            if origin and origin != '*' and origin not in allowed_origins:
+                allowed_origins.append(origin)
+
+    app.add_middleware(
+        CORSMiddleware,
+        allow_credentials=True,
+        allow_origins=allowed_origins,
+        allow_methods=["*"],
+        allow_headers=["*"],
+        expose_headers=["*"],
+    )
 
 logging.basicConfig(
     level=logging.INFO,
