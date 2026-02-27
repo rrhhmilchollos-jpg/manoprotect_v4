@@ -31,7 +31,7 @@ const FEATURES = [
   { icon: <Zap className="w-4 h-4" />, text: 'Zonas seguras y notificaciones' },
 ];
 
-const SubscriptionPlanModal = ({ isOpen, onClose, onConfirm, isLoading }) => {
+const SubscriptionPlanModal = ({ isOpen, onClose, onConfirm, isLoading, productName = 'Sentinel X Basic', shippingCost = '9,95' }) => {
   const [selected, setSelected] = useState('anual');
 
   if (!isOpen) return null;
@@ -53,7 +53,7 @@ const SubscriptionPlanModal = ({ isOpen, onClose, onConfirm, isLoading }) => {
           <div className="w-12 h-12 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-3">
             <Shield className="w-6 h-6 text-green-400" />
           </div>
-          <h3 className="text-xl font-bold text-white mb-2">Activa tu Sentinel X Basic</h3>
+          <h3 className="text-xl font-bold text-white mb-2">Activa tu {productName}</h3>
           <p className="text-sm text-gray-400">
             Para que las funciones de seguridad, GPS y SOS funcionen, tu reloj necesita un plan de servicio familiar.
           </p>
@@ -112,12 +112,12 @@ const SubscriptionPlanModal = ({ isOpen, onClose, onConfirm, isLoading }) => {
 
         <div className="bg-gray-800/30 rounded-xl p-3 mb-5 border border-gray-700/30">
           <div className="flex justify-between text-sm text-gray-300">
-            <span>Dispositivo Sentinel X Basic</span>
+            <span>Dispositivo {productName}</span>
             <span className="text-green-400 font-bold">GRATIS</span>
           </div>
           <div className="flex justify-between text-sm text-gray-300 mt-1">
             <span>Envío</span>
-            <span>9,95€</span>
+            <span>{shippingCost}€</span>
           </div>
           <div className="flex justify-between text-sm text-gray-300 mt-1">
             <span>Plan de servicio ({selected === 'mensual' ? 'mensual' : 'anual'})</span>
@@ -125,7 +125,7 @@ const SubscriptionPlanModal = ({ isOpen, onClose, onConfirm, isLoading }) => {
           </div>
           <div className="border-t border-gray-600 mt-2 pt-2 flex justify-between font-bold text-white">
             <span>Primer cobro</span>
-            <span>{selected === 'mensual' ? '19,94€' : '109,94€'}</span>
+            <span>{selected === 'mensual' ? (parseFloat(shippingCost.replace(',', '.')) + 9.99).toFixed(2).replace('.', ',') : (parseFloat(shippingCost.replace(',', '.')) + 99.99).toFixed(2).replace('.', ',')}€</span>
           </div>
         </div>
 
