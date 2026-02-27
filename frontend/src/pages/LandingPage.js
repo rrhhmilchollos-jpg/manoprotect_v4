@@ -647,21 +647,21 @@ const LandingPage = () => {
 
             {/* Content */}
             <div className="text-center lg:text-left order-1 lg:order-2">
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-cyan-500/10 border border-cyan-500/30 rounded-full text-cyan-400 text-xs mb-3">
-                <span className="w-1.5 h-1.5 bg-cyan-400 rounded-full animate-pulse" />
-                Edición Fundadores - Solo 500 unidades
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-green-500/10 border border-green-500/30 rounded-full text-green-400 text-xs mb-3">
+                <span className="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse" />
+                PROMOCIÓN LANZAMIENTO – Primeros 50 GRATIS
               </div>
               
               <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-3">
                 SENTINEL X
-                <span className="block text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">
-                  Tu Guardián Personal
+                <span className="block text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-emerald-500">
+                  100% GRATIS – Solo Pagas Envío
                 </span>
               </h2>
               
               <p className="text-gray-400 text-sm mb-4 max-w-md mx-auto lg:mx-0">
                 El smartwatch que actúa cuando tú no puedes. SOS invisible, grabación en la nube 
-                y trayecto seguro. <span className="text-cyan-400 font-semibold">Funciona sin teléfono.</span>
+                y trayecto seguro. <span className="text-green-400 font-semibold">Funciona sin teléfono.</span>
               </p>
 
               {/* Key features */}
@@ -688,10 +688,10 @@ const LandingPage = () => {
               <div className="flex flex-col sm:flex-row items-center gap-3 justify-center lg:justify-start">
                 <div className="text-center sm:text-left">
                   <div className="flex items-baseline gap-2">
-                    <span className="text-3xl font-bold text-white">149€</span>
+                    <span className="text-3xl font-bold text-green-400">GRATIS</span>
                     <span className="text-gray-500 line-through text-sm">249€</span>
                   </div>
-                  <p className="text-green-400 text-xs">Ahorras 100€</p>
+                  <p className="text-green-400 text-xs">Solo gastos de envío 9,95€ · Hasta 30 Marzo 2026</p>
                 </div>
                 
                 <Link 
