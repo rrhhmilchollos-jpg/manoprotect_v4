@@ -69,46 +69,24 @@ const FamilyMode = () => {
     }
   };
 
-  // Function to get GPS location
-  const getGPSLocation = () => {
-    return new Promise((resolve, reject) => {
-      if (!navigator.geolocation) {
-        reject(new Error('Geolocalización no soportada por tu navegador'));
-        return;
-      }
+  // Function to get GPS location using enhanced background service
+  const getGPSLocation = async () => {
+    const loc = await getCurrentLocation();
+    if (!loc) throw new Error('No se pudo obtener la ubicación GPS');
+    return loc;
+  };
 
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          resolve({
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude,
-            accuracy: position.coords.accuracy
-          });
-        },
-        (error) => {
-          let errorMessage = 'Error obteniendo ubicación';
-          switch (error.code) {
-            case error.PERMISSION_DENIED:
-              errorMessage = 'Permiso de ubicación denegado. Por favor, habilita el GPS.';
-              break;
-            case error.POSITION_UNAVAILABLE:
-              errorMessage = 'Información de ubicación no disponible.';
-              break;
-            case error.TIMEOUT:
-              errorMessage = 'Tiempo de espera agotado al obtener ubicación.';
-              break;
-            default:
-              errorMessage = 'Error desconocido al obtener ubicación.';
-          }
-          reject(new Error(errorMessage));
-        },
-        {
-          enableHighAccuracy: true,
-          timeout: 10000,
-          maximumAge: 0
-        }
-      );
-    });
+  const handlePermissionComplete = async (success) => {
+    setShowPermissionFlow(false);
+    if (success) {
+      setLocationReady(true);
+      toast.success('Protección GPS activada. Tu familia puede localizarte incluso con la app cerrada.');
+      const token = document.cookie.split(';').find(c => c.trim().startsWith('session_token='))?.split('=')?.[1];
+      if (token) {
+        const tracking = await startBackgroundTracking('current-user', token);
+        setBgTrackingActive(tracking);
+      }
+    }
   };
 
   const triggerSOS = async () => {
