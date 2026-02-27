@@ -164,9 +164,9 @@ const SentinelJ = () => {
               </div>
 
               <div className="flex flex-col sm:flex-row gap-4 mb-6">
-                <Link to="/servicios-sos">
+                <Link to="/sentinel-x#reservar">
                   <Button size="lg" className="text-lg px-8 py-6 rounded-2xl font-bold shadow-2xl transition-all duration-300 text-white border-0" style={{ background: `linear-gradient(135deg, ${selected.hex}, ${strapColors[(activeColor + 2) % 8].hex})` }} data-testid="cta-comprar-sentinel-j">
-                    Reservar Sentinel J – 99€
+                    Reservar Sentinel J – GRATIS
                     <ArrowRight className="w-5 h-5 ml-2" />
                   </Button>
                 </Link>
@@ -439,9 +439,9 @@ const SentinelJ = () => {
           <h2 className="text-3xl lg:text-4xl font-black mb-4">Dale seguridad con su color favorito</h2>
           <p className="text-xl text-gray-300 mb-2">Sentinel J: diseñado para jóvenes, pensado por padres</p>
           <p className="text-gray-500 mb-8">Envío GRATUITO | 30 días de prueba | Oferta hasta 30 de Marzo</p>
-          <Link to="/servicios-sos">
+          <Link to="/sentinel-x#reservar">
             <Button size="lg" className="text-lg px-10 py-6 rounded-2xl font-bold shadow-2xl text-white border-0" style={{ background: `linear-gradient(135deg, ${selected.hex}, ${strapColors[(activeColor + 2) % 8].hex})` }} data-testid="cta-final-sentinel-j">
-              Reservar Sentinel J – 99€
+              Reservar Sentinel J – GRATIS
               <ArrowRight className="w-5 h-5 ml-2" />
             </Button>
           </Link>
