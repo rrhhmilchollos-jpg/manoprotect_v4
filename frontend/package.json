@@ -3,9 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@capacitor-community/background-geolocation": "^1.2.26",
     "@capacitor/android": "6",
     "@capacitor/cli": "6",
     "@capacitor/core": "6",
+    "@capacitor/geolocation": "^8.1.0",
     "@capacitor/ios": "^8.0.2",
     "@capacitor/splash-screen": "6",
     "@capacitor/status-bar": "6",
