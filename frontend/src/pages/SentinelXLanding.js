@@ -6,6 +6,7 @@ import LandingHeader from '../components/landing/LandingHeader';
 import LandingFooter from '../components/landing/LandingFooter';
 import Testimonials from '../components/cro/Testimonials';
 import ProductComparison from '../components/cro/ProductComparison';
+import SubscriptionPlanModal from '../components/SubscriptionPlanModal';
 
 const API_URL = process.env.REACT_APP_BACKEND_URL;
 
