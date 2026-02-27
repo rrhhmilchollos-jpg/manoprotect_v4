@@ -20,6 +20,9 @@
     "StatusBar": {
       "style": "LIGHT",
       "backgroundColor": "#10b981"
+    },
+    "BackgroundGeolocation": {
+      "distanceFilter": 10
     }
   },
   "android": {
@@ -30,6 +33,7 @@
   "ios": {
     "contentInset": "automatic",
     "allowsLinkPreview": true,
-    "scrollEnabled": true
+    "scrollEnabled": true,
+    "backgroundColor": "#ffffff"
   }
 }
