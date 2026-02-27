@@ -696,10 +696,10 @@ const LandingPage = () => {
                 
                 <Link 
                   to="/sentinel-x"
-                  className="group inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-bold text-sm rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg shadow-cyan-500/25"
+                  className="group inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-400 hover:to-emerald-500 text-white font-bold text-sm rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg shadow-green-500/25"
                   data-testid="sentinel-x-promo-cta"
                 >
-                  Ver SENTINEL X
+                  Pedir GRATIS
                   <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </Link>
               </div>
