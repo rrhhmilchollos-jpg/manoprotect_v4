@@ -1,0 +1,88 @@
+{
+  "summary": "Comprehensive testing of new subscription modal feature for free watches (Basic, J, S). All 12 features tested successfully. Backend: 8/8 tests passed (subscription and full_payment checkout for all products). Frontend: Subscription modal appears correctly for Basic/J/S with dynamic product name and shipping cost, but does NOT appear for Fundadores/Premium (goes directly to Stripe). SentinelJ and SentinelS pages have CTA buttons linking to /sentinel-x#reservar with 'GRATIS' text.",
+
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+
+  "passed_tests": [
+    "TEST 1: Sentinel X page loads with promo banner (data-testid: promo-banner-free)",
+    "TEST 2: Hero section visible (data-testid: hero-sentinel-x)",
+    "TEST 3: All 3 model cards visible (model-basic, model-fundadores, model-premium)",
+    "TEST 4: Order form visible with 5 product selection options (Basic, Fundadores, Premium, J, S)",
+    "TEST 5: Subscription modal appears when selecting Basic and submitting form (data-testid: subscription-modal)",
+    "TEST 6: Modal shows two plans: Mensual (9,99€) and Anual (99,99€) with MEJOR PRECIO badge",
+    "TEST 7: Modal shows correct product name 'Sentinel X Basic' with 9,95€ shipping",
+    "TEST 8: Modal shows correct product name 'Sentinel J' with 4,95€ shipping when selecting J",
+    "TEST 9: Modal shows correct product name 'Sentinel S' with 4,95€ shipping when selecting S",
+    "TEST 10: Fundadores does NOT show subscription modal - goes directly to Stripe checkout",
+    "TEST 11: Premium does NOT show subscription modal - goes directly to Stripe checkout",
+    "TEST 12: SentinelJ page CTA buttons say 'Reservar Sentinel J – GRATIS' and link to /sentinel-x#reservar",
+    "TEST 13: SentinelS page CTA buttons say 'RESERVAR GRATIS' and link to /sentinel-x#reservar",
+    "TEST 14: POST /api/checkout/sentinel-x with paymentType='subscription' returns valid Stripe checkout URL",
+    "TEST 15: POST /api/checkout/sentinel-x with paymentType='full_payment' returns valid Stripe checkout URL",
+    "TEST 16: Regression - Home page (/) loads correctly with ManoProtect branding"
+  ],
+
+  "test_report_links": [
+    "/app/backend/tests/test_sentinel_x_subscription.py",
+    "/app/test_reports/pytest/iteration_56_subscription.xml"
+  ],
+
+  "action_items": [],
+
+  "critical_code_review_comments": [],
+
+  "updated_files": [
+    "/app/backend/tests/test_sentinel_x_subscription.py"
+  ],
+
+  "success_rate": {
+    "backend": "100% (8/8 tests passed)",
+    "frontend": "100% (16/16 features verified)"
+  },
+
+  "seed_data_creation": "None required",
+
+  "retest_needed": false,
+
+  "should_main_agent_self_test": false,
+
+  "context_for_next_testing_agent": "New subscription modal feature fully tested. Key data-testid attributes: subscription-modal, close-subscription-modal, plan-mensual, plan-anual, confirm-subscription, purchase-section, submit-preorder, select-sentinel-x-basic, select-sentinel-x-fundadores, select-sentinel-x-premium, select-sentinel-j, select-sentinel-s. Modal props: productName changes based on selection (Sentinel X Basic/Sentinel J/Sentinel S), shippingCost is 9,95 for Basic, 4,95 for J/S. Backend handles paymentType='subscription' for free watches and paymentType='full_payment' for paid watches (Fundadores/Premium). Using real Stripe API (not mocked).",
+
+  "features_verified": {
+    "subscription_modal": {
+      "testid": "subscription-modal",
+      "triggers_for": ["sentinel-x-basic", "sentinel-j", "sentinel-s"],
+      "does_not_trigger_for": ["sentinel-x-fundadores", "sentinel-x-premium"],
+      "plans": [
+        {"id": "mensual", "testid": "plan-mensual", "price": "9,99€/mes"},
+        {"id": "anual", "testid": "plan-anual", "price": "99,99€/año", "badge": "MEJOR PRECIO"}
+      ],
+      "dynamic_product_name": true,
+      "dynamic_shipping_cost": {"basic": "9,95€", "j": "4,95€", "s": "4,95€"}
+    },
+    "sentinel_j_page": {
+      "url": "/sentinel-j",
+      "cta_text": "Reservar Sentinel J – GRATIS",
+      "cta_link": "/sentinel-x#reservar"
+    },
+    "sentinel_s_page": {
+      "url": "/sentinel-s",
+      "cta_text": "RESERVAR GRATIS",
+      "cta_link": "/sentinel-x#reservar"
+    },
+    "backend_checkout": {
+      "endpoint": "/api/checkout/sentinel-x",
+      "subscription_mode": "Works for Basic/J/S - creates Stripe subscription checkout",
+      "full_payment_mode": "Works for Fundadores/Premium - creates Stripe one-time payment checkout"
+    }
+  }
+}
