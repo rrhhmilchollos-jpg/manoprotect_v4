@@ -593,6 +593,16 @@ const SentinelXLanding = () => {
             </div>
           </div>
         </div>
+
+        {/* Subscription Plan Modal */}
+        <SubscriptionPlanModal
+          isOpen={showSubscriptionModal}
+          onClose={() => setShowSubscriptionModal(false)}
+          onConfirm={handleSubscriptionConfirm}
+          isLoading={isLoading}
+          productName={formData.selectedProduct === 'sentinel-j' ? 'Sentinel J' : formData.selectedProduct === 'sentinel-s' ? 'Sentinel S' : 'Sentinel X Basic'}
+          shippingCost={formData.selectedProduct === 'sentinel-x-basic' ? '9,95' : '4,95'}
+        />
       </div>
     </>
   );
