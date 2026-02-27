@@ -22,6 +22,7 @@ const MAX_FREE = 50;
 
 const SentinelXLanding = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const [showSubscriptionModal, setShowSubscriptionModal] = useState(false);
   const [freeRemaining, setFreeRemaining] = useState(() => {
     const saved = sessionStorage.getItem('sentinel_free_units');
     if (saved) { const p = parseInt(saved, 10); if (p > 0 && p <= MAX_FREE) return p; }
