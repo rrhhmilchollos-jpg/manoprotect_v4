@@ -1,6 +1,6 @@
 # ManoProtect - Product Requirements Document
 
-## Última Actualización: 27 Febrero 2026 (v4)
+## Última Actualización: 27 Febrero 2026 (v5)
 
 ---
 
@@ -73,8 +73,10 @@ Cada página incluye:
 - [x] Crear página de producto Sentinel S (niños 3-12, cerámica+rose gold, 6 correas pastel, anti-secuestro) ✅
 - [x] Sentinel X rediseñado con 2 modelos (Fundadores cuadrado + Premium redondo) + promo 50 GRATIS ✅
 - [x] Landing pages locales: Madrid, Barcelona, Sevilla ✅
-- [ ] Crear app iOS con Capacitor
-- [ ] Conectar Google Tag Manager & Search Console
+- [x] Crear app iOS con Capacitor ✅ (Android sync completo, iOS config preparada)
+- [x] Conectar Google Tag Manager & Search Console ✅ (GTM-MK53XZ8Q + placeholders Search Console)
+- [x] Background Location Tracking para Android e iOS ✅
+- [x] Meta Pixel integrado en index.html ✅ (requiere ID real del usuario)
 - [ ] Tracking conversiones GA4, Pixel Meta Ads
 - [x] Landing pages locales: Madrid, Barcelona, Sevilla ✅
 
