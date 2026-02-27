@@ -574,7 +574,7 @@ const SentinelXLanding = () => {
                     {isLoading ? (
                       <><div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" /> Procesando...</>
                     ) : (
-                      <><Gift className="w-5 h-5" /> Pedir GRATIS – Solo {formData.selectedProduct === 'sentinel-j' ? '4,95€' : '9,95€'} de envío</>
+                      <><Gift className="w-5 h-5" /> Pedir GRATIS – Solo {(formData.selectedProduct === 'sentinel-j' || formData.selectedProduct === 'sentinel-s') ? '4,95€' : '9,95€'} de envío</>
                     )}
                   </button>
 
