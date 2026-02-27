@@ -163,6 +163,7 @@ const SentinelXNinos = lazy(() => import('@/pages/SentinelXNinos'));
 const SentinelXAdultos = lazy(() => import('@/pages/SentinelXAdultos'));
 const BotonSOSValencia = lazy(() => import('@/pages/BotonSOSValencia'));
 const SentinelJ = lazy(() => import('@/pages/SentinelJ'));
+const SentinelS = lazy(() => import('@/pages/SentinelS'));
 const BotonSOSMadrid = lazy(() => import('@/pages/BotonSOSMadrid'));
 const BotonSOSBarcelona = lazy(() => import('@/pages/BotonSOSBarcelona'));
 const BotonSOSSevilla = lazy(() => import('@/pages/BotonSOSSevilla'));
@@ -355,6 +356,7 @@ function AppRouter() {
           <Route path="/sentinel-x-adultos" element={<SentinelXAdultos />} />
           <Route path="/boton-sos-valencia" element={<BotonSOSValencia />} />
           <Route path="/sentinel-j" element={<SentinelJ />} />
+          <Route path="/sentinel-s" element={<SentinelS />} />
           <Route path="/boton-sos-madrid" element={<BotonSOSMadrid />} />
           <Route path="/boton-sos-barcelona" element={<BotonSOSBarcelona />} />
           <Route path="/boton-sos-sevilla" element={<BotonSOSSevilla />} />
