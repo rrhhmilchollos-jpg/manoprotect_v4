@@ -1,25 +1,56 @@
 /**
- * ManoProtect - Background Location Service
+ * ManoProtect - Background Location Service (Completo)
  * Gestiona el tracking GPS en segundo plano para Android e iOS
  * Funciona con la app cerrada, pantalla apagada y teléfono bloqueado
+ * 
+ * Incluye:
+ * - Solicitud escalonada de permisos (foreground → background)
+ * - Exclusión de optimización de batería (Android)
+ * - Botones para abrir ajustes directamente
+ * - Tracking continuo tipo "heartbeat"
  */
 import { Capacitor } from '@capacitor/core';
 import { Geolocation } from '@capacitor/geolocation';
 
 const API_URL = process.env.REACT_APP_BACKEND_URL;
 
-// Watcher ID para background geolocation
 let bgWatcherId = null;
+let webWatcherId = null;
+
+// ========================================
+// PLATFORM INFO
+// ========================================
+
+export function getPlatformInfo() {
+  return {
+    isNative: Capacitor.isNativePlatform(),
+    isAndroid: Capacitor.getPlatform() === 'android',
+    isIOS: Capacitor.getPlatform() === 'ios',
+    isWeb: Capacitor.getPlatform() === 'web',
+    platform: Capacitor.getPlatform()
+  };
+}
+
+// ========================================
+// PERMISSION REQUESTS
+// ========================================
 
 /**
  * Solicita permisos de ubicación de forma escalonada
- * Android: primero foreground, luego background
+ * Android: primero foreground, luego background (manual en Android 11+)
  * iOS: solicita "Always" directamente
  */
 export async function requestLocationPermissions() {
   if (!Capacitor.isNativePlatform()) {
-    console.log('[Location] No es plataforma nativa, usando web API');
-    return { granted: true, background: false };
+    // Web: solo pedir foreground
+    try {
+      const pos = await new Promise((resolve, reject) => {
+        navigator.geolocation.getCurrentPosition(resolve, reject, { timeout: 10000 });
+      });
+      return { granted: true, background: false, platform: 'web' };
+    } catch {
+      return { granted: false, background: false, reason: 'web_denied' };
+    }
   }
 
   try {
@@ -30,10 +61,8 @@ export async function requestLocationPermissions() {
       return { granted: false, background: false, reason: 'foreground_denied' };
     }
 
-    // Paso 2: En Android, solicitar permiso de background por separado
+    // Paso 2: Android - background requiere acción manual en Android 11+
     if (Capacitor.getPlatform() === 'android') {
-      // En Android 11+, el usuario debe ir a Ajustes manualmente
-      // Mostramos instrucciones en la UI
       return { 
         granted: true, 
         background: false, 
@@ -42,7 +71,7 @@ export async function requestLocationPermissions() {
       };
     }
 
-    // En iOS, el permiso "Always" se solicita con la segunda petición
+    // iOS: el permiso "Always" se solicita con la segunda petición automáticamente
     if (Capacitor.getPlatform() === 'ios') {
       return { 
         granted: true, 
@@ -58,39 +87,39 @@ export async function requestLocationPermissions() {
   }
 }
 
+// ========================================
+// BACKGROUND TRACKING
+// ========================================
+
 /**
- * Inicia el tracking en segundo plano
+ * Inicia el tracking en segundo plano (heartbeat continuo)
  * Usa @capacitor-community/background-geolocation
  */
 export async function startBackgroundTracking(userId, token) {
   if (!Capacitor.isNativePlatform()) {
-    console.log('[Location] Tracking web - solo foreground');
     return startWebTracking(userId, token);
   }
 
   try {
-    // Importar dinámicamente el plugin de background
     const { BackgroundGeolocation } = await import('@capacitor-community/background-geolocation');
 
     // Detener watcher previo si existe
     if (bgWatcherId) {
-      await BackgroundGeolocation.removeWatcher({ id: bgWatcherId });
+      try { await BackgroundGeolocation.removeWatcher({ id: bgWatcherId }); } catch {}
     }
 
     bgWatcherId = await BackgroundGeolocation.addWatcher(
       {
-        backgroundMessage: 'ManoProtect está protegiendo tu ubicación',
+        backgroundMessage: 'ManoProtect protege tu ubicación',
         backgroundTitle: 'ManoProtect Activo',
         requestPermissions: true,
         stale: false,
-        distanceFilter: 10 // metros mínimos entre actualizaciones
+        distanceFilter: 10
       },
-      // Callback con cada actualización de ubicación
       async (location, error) => {
         if (error) {
           if (error.code === 'NOT_AUTHORIZED') {
             console.warn('[Location] Permiso no autorizado para background');
-            // Aquí se puede notificar al usuario que abra Ajustes
           }
           return;
         }
@@ -127,10 +156,13 @@ export async function stopBackgroundTracking() {
       const { BackgroundGeolocation } = await import('@capacitor-community/background-geolocation');
       await BackgroundGeolocation.removeWatcher({ id: bgWatcherId });
       bgWatcherId = null;
-      console.log('[Location] Background tracking detenido');
     } catch (error) {
       console.error('[Location] Error deteniendo tracking:', error);
     }
+  }
+  if (webWatcherId !== null) {
+    navigator.geolocation.clearWatch(webWatcherId);
+    webWatcherId = null;
   }
 }
 
@@ -151,7 +183,6 @@ export async function getCurrentLocation() {
         timestamp: new Date(position.timestamp).toISOString()
       };
     } else {
-      // Fallback web
       return new Promise((resolve, reject) => {
         navigator.geolocation.getCurrentPosition(
           (pos) => resolve({
@@ -171,12 +202,72 @@ export async function getCurrentLocation() {
   }
 }
 
+// ========================================
+// SETTINGS & BATTERY OPTIMIZATION
+// ========================================
+
 /**
- * Tracking web (foreground only) como fallback
+ * Abre los ajustes de ubicación de la app
  */
+export function openLocationSettings() {
+  if (!Capacitor.isNativePlatform()) return;
+  
+  try {
+    if (Capacitor.getPlatform() === 'android') {
+      // Intent para abrir ajustes de permisos de la app
+      const { App } = require('@capacitor/app');
+      // Fallback: intentar abrir ajustes genéricos
+      window.open('intent:#Intent;action=android.settings.APPLICATION_DETAILS_SETTINGS;data=package:com.manoprotect.app;end', '_system');
+    } else if (Capacitor.getPlatform() === 'ios') {
+      // iOS: abre ajustes de la app
+      window.open('app-settings:', '_system');
+    }
+  } catch {
+    // Fallback silencioso
+    console.log('[Location] No se pudieron abrir los ajustes directamente');
+  }
+}
+
+/**
+ * Solicita exclusión de optimización de batería (Android)
+ * Muestra diálogo nativo de Android para excluir la app
+ */
+export function requestBatteryOptimizationExclusion() {
+  if (Capacitor.getPlatform() !== 'android') return;
+  
+  try {
+    // Intent para solicitar exclusión de optimización de batería
+    window.open('intent:#Intent;action=android.settings.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS;data=package:com.manoprotect.app;end', '_system');
+  } catch {
+    // Fallback: abrir ajustes de batería genéricos
+    openBatterySettings();
+  }
+}
+
+/**
+ * Abre los ajustes de batería del dispositivo
+ */
+export function openBatterySettings() {
+  if (!Capacitor.isNativePlatform()) return;
+  
+  try {
+    if (Capacitor.getPlatform() === 'android') {
+      window.open('intent:#Intent;action=android.settings.IGNORE_BATTERY_OPTIMIZATION_SETTINGS;end', '_system');
+    } else if (Capacitor.getPlatform() === 'ios') {
+      window.open('app-settings:', '_system');
+    }
+  } catch {
+    console.log('[Location] No se pudieron abrir los ajustes de batería');
+  }
+}
+
+// ========================================
+// WEB TRACKING (FOREGROUND FALLBACK)
+// ========================================
+
 function startWebTracking(userId, token) {
   if ('geolocation' in navigator) {
-    navigator.geolocation.watchPosition(
+    webWatcherId = navigator.geolocation.watchPosition(
       async (position) => {
         await sendLocationToServer(userId, token, {
           latitude: position.coords.latitude,
@@ -194,9 +285,10 @@ function startWebTracking(userId, token) {
   return false;
 }
 
-/**
- * Envía la ubicación al servidor
- */
+// ========================================
+// SERVER COMMUNICATION
+// ========================================
+
 async function sendLocationToServer(userId, token, locationData) {
   try {
     await fetch(`${API_URL}/api/family/location/update`, {
@@ -216,14 +308,19 @@ async function sendLocationToServer(userId, token, locationData) {
   }
 }
 
-/**
- * Verifica el estado actual de permisos
- */
+// ========================================
+// PERMISSION STATUS CHECK
+// ========================================
+
 export async function checkLocationPermissionStatus() {
   if (!Capacitor.isNativePlatform()) {
     if ('permissions' in navigator) {
-      const status = await navigator.permissions.query({ name: 'geolocation' });
-      return { foreground: status.state, background: 'unknown' };
+      try {
+        const status = await navigator.permissions.query({ name: 'geolocation' });
+        return { foreground: status.state, background: 'unknown' };
+      } catch {
+        return { foreground: 'unknown', background: 'unknown' };
+      }
     }
     return { foreground: 'unknown', background: 'unknown' };
   }
@@ -237,42 +334,4 @@ export async function checkLocationPermissionStatus() {
   } catch {
     return { foreground: 'unknown', background: 'unknown' };
   }
-}
-
-/**
- * Instrucciones para el usuario según plataforma
- * Para mostrar en la UI cuando se necesita permiso manual
- */
-export function getBackgroundPermissionInstructions() {
-  const platform = Capacitor.getPlatform();
-  
-  if (platform === 'android') {
-    return {
-      title: 'Activar ubicación en segundo plano',
-      steps: [
-        'Abre Ajustes del teléfono',
-        'Ve a Aplicaciones → ManoProtect',
-        'Pulsa en Permisos → Ubicación',
-        'Selecciona "Permitir todo el tiempo"',
-        'Vuelve atrás y desactiva "Optimización de batería"'
-      ],
-      note: 'En Android 11+, debes activar esto manualmente desde Ajustes para que funcione con la app cerrada.'
-    };
-  }
-  
-  if (platform === 'ios') {
-    return {
-      title: 'Activar ubicación en segundo plano',
-      steps: [
-        'Abre Ajustes del iPhone',
-        'Ve a Privacidad → Localización',
-        'Busca ManoProtect',
-        'Selecciona "Siempre"',
-        'Activa "Actualización en segundo plano"'
-      ],
-      note: 'Apple requiere "Siempre" para que el botón SOS funcione con la app cerrada.'
-    };
-  }
-
-  return null;
 }

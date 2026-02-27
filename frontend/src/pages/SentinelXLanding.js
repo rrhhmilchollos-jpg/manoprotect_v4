@@ -47,8 +47,25 @@ const SentinelXLanding = () => {
 
   const handleInputChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
 
+  const requiresSubscription = (productId) => {
+    return ['sentinel-x-basic', 'sentinel-j', 'sentinel-s'].includes(productId);
+  };
+
   const handlePreorder = async (e) => {
     e.preventDefault();
+    if (requiresSubscription(formData.selectedProduct)) {
+      setShowSubscriptionModal(true);
+      return;
+    }
+    await processCheckout('full_payment');
+  };
+
+  const handleSubscriptionConfirm = async (planId) => {
+    setShowSubscriptionModal(false);
+    await processCheckout('subscription', planId);
+  };
+
+  const processCheckout = async (paymentType, subscriptionPlan) => {
     setIsLoading(true);
     try {
       const products = {
@@ -62,7 +79,14 @@ const SentinelXLanding = () => {
       const response = await fetch(`${API_URL}/api/checkout/sentinel-x`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...formData, amount: product.amount, product: product.name, paymentType: formData.selectedProduct === 'sentinel-x-basic' ? 'shipping_only' : 'full_payment' }),
+        body: JSON.stringify({
+          ...formData,
+          amount: product.amount,
+          product: product.name,
+          paymentType,
+          selectedProduct: formData.selectedProduct,
+          subscriptionPlan: subscriptionPlan || null
+        }),
       });
       const data = await response.json();
       if (data.checkout_url) window.location.href = data.checkout_url;
