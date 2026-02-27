@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  ManoProtect iOS Configuration
+  Background location tracking for family safety
+  Copy this to ios/App/App/Info.plist when building with Xcode
+-->
+<plist version="1.0">
+<dict>
+    <key>CFBundleDevelopmentRegion</key>
+    <string>es</string>
+    <key>CFBundleDisplayName</key>
+    <string>ManoProtect</string>
+    <key>CFBundleExecutable</key>
+    <string>$(EXECUTABLE_NAME)</string>
+    <key>CFBundleIdentifier</key>
+    <string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+    <key>CFBundleInfoDictionaryVersion</key>
+    <string>6.0</string>
+    <key>CFBundleName</key>
+    <string>$(PRODUCT_NAME)</string>
+    <key>CFBundlePackageType</key>
+    <string>APPL</string>
+    <key>CFBundleShortVersionString</key>
+    <string>1.0.0</string>
+    <key>CFBundleVersion</key>
+    <string>1</string>
+    <key>LSRequiresIPhoneOS</key>
+    <true/>
+
+    <!-- ================================ -->
+    <!-- LOCATION PERMISSIONS (CRITICAL) -->
+    <!-- ================================ -->
+
+    <!-- Permission: Location while using the app -->
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>ManoProtect necesita tu ubicación para enviar alertas SOS con tu posición exacta a tus contactos de emergencia y permitir que tu familia pueda localizarte en situaciones de peligro.</string>
+
+    <!-- Permission: Location always (background) -->
+    <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+    <string>ManoProtect necesita acceder a tu ubicación en segundo plano para que tus familiares puedan localizarte en situaciones de emergencia incluso cuando la app no está abierta. Esto permite que el botón SOS funcione con la pantalla apagada y el teléfono bloqueado.</string>
+
+    <!-- Legacy iOS 10 permission (backward compatibility) -->
+    <key>NSLocationAlwaysUsageDescription</key>
+    <string>ManoProtect necesita tu ubicación permanente para proteger a tu familia. Permite localización en emergencias incluso con la app cerrada.</string>
+
+    <!-- ================================ -->
+    <!-- BACKGROUND MODES (CRITICAL) -->
+    <!-- ================================ -->
+    <key>UIBackgroundModes</key>
+    <array>
+        <!-- Background location updates -->
+        <string>location</string>
+        <!-- Background fetch for periodic updates -->
+        <string>fetch</string>
+        <!-- Remote notifications -->
+        <string>remote-notification</string>
+        <!-- Background audio for SOS siren -->
+        <string>audio</string>
+    </array>
+
+    <!-- ================================ -->
+    <!-- APP STORE REVIEW JUSTIFICATION -->
+    <!-- ================================ -->
+    <!-- 
+    For App Store Connect submission, use this justification:
+    
+    "La aplicación ManoProtect permite que familiares puedan localizar 
+    al usuario en situaciones de emergencia incluso cuando la app no 
+    está abierta. El botón SOS envía la ubicación GPS en tiempo real 
+    a los contactos de emergencia configurados. Esta funcionalidad 
+    requiere acceso continuo a la ubicación para garantizar la 
+    seguridad del usuario en todo momento, especialmente para 
+    niños, personas mayores y personas en situaciones de riesgo."
+    -->
+
+    <!-- ================================ -->
+    <!-- OTHER PERMISSIONS -->
+    <!-- ================================ -->
+
+    <!-- Camera: NOT USED (explicitly disabled) -->
+    <!-- Microphone: for SOS audio recording -->
+    <key>NSMicrophoneUsageDescription</key>
+    <string>ManoProtect puede grabar audio durante una emergencia SOS para enviar evidencia a tus contactos de emergencia.</string>
+
+    <!-- Motion: for fall detection -->
+    <key>NSMotionUsageDescription</key>
+    <string>ManoProtect usa los sensores de movimiento para detectar caídas y activar el SOS automáticamente.</string>
+
+    <!-- ================================ -->
+    <!-- APP TRANSPORT SECURITY -->
+    <!-- ================================ -->
+    <key>NSAppTransportSecurity</key>
+    <dict>
+        <key>NSAllowsArbitraryLoads</key>
+        <true/>
+    </dict>
+
+    <!-- ================================ -->
+    <!-- UI CONFIGURATION -->
+    <!-- ================================ -->
+    <key>UILaunchStoryboardName</key>
+    <string>LaunchScreen</string>
+    <key>UIMainStoryboardFile</key>
+    <string>Main</string>
+    <key>UIStatusBarStyle</key>
+    <string>UIStatusBarStyleDefault</string>
+    <key>UISupportedInterfaceOrientations</key>
+    <array>
+        <string>UIInterfaceOrientationPortrait</string>
+    </array>
+    <key>UIViewControllerBasedStatusBarAppearance</key>
+    <true/>
+</dict>
+</plist>
