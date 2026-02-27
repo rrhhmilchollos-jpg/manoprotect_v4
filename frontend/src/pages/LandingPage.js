@@ -660,23 +660,23 @@ const LandingPage = () => {
               </h2>
               
               <p className="text-gray-400 text-sm mb-4 max-w-md mx-auto lg:mx-0">
-                El smartwatch que actúa cuando tú no puedes. SOS invisible, grabación en la nube 
-                y trayecto seguro. <span className="text-green-400 font-semibold">Funciona sin teléfono.</span>
+                El smartwatch que actúa cuando tú no puedes. Botón SOS, GPS y alertas vía Bluetooth.
+                <span className="text-green-400 font-semibold"> Versiones 4G premium desde 149€.</span>
               </p>
 
               {/* Key features */}
               <div className="grid grid-cols-2 gap-2 mb-4 max-w-sm mx-auto lg:mx-0">
                 <div className="flex items-center gap-2 text-gray-300 text-xs">
-                  <div className="w-1.5 h-1.5 bg-cyan-400 rounded-full" />
-                  SOS Invisible
+                  <div className="w-1.5 h-1.5 bg-green-400 rounded-full" />
+                  Basic: GRATIS (Bluetooth)
                 </div>
                 <div className="flex items-center gap-2 text-gray-300 text-xs">
                   <div className="w-1.5 h-1.5 bg-cyan-400 rounded-full" />
-                  Modo PIN Falso
+                  Fundadores: 149€ (4G)
                 </div>
                 <div className="flex items-center gap-2 text-gray-300 text-xs">
-                  <div className="w-1.5 h-1.5 bg-cyan-400 rounded-full" />
-                  Grabación Nube
+                  <div className="w-1.5 h-1.5 bg-amber-400 rounded-full" />
+                  Premium: 199€ (4G Titanio)
                 </div>
                 <div className="flex items-center gap-2 text-gray-300 text-xs">
                   <div className="w-1.5 h-1.5 bg-cyan-400 rounded-full" />
