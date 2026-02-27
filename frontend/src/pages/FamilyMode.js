@@ -1,10 +1,17 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { Shield, AlertOctagon, Phone, Users, Navigation, ArrowLeft, MapPin, Loader2, CheckCircle2 } from 'lucide-react';
+import { Shield, AlertOctagon, Phone, Users, Navigation, ArrowLeft, MapPin, Loader2, CheckCircle2, Settings } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { toast } from 'sonner';
+import LocationPermissionFlow from '@/components/LocationPermissionFlow';
+import {
+  getCurrentLocation,
+  startBackgroundTracking,
+  checkLocationPermissionStatus,
+  getPlatformInfo
+} from '@/services/backgroundLocation';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
@@ -16,11 +23,28 @@ const FamilyMode = () => {
   const [isGettingLocation, setIsGettingLocation] = useState(false);
   const [lastLocation, setLastLocation] = useState(null);
   const [sosHistory, setSosHistory] = useState([]);
+  const [showPermissionFlow, setShowPermissionFlow] = useState(false);
+  const [locationReady, setLocationReady] = useState(false);
+  const [bgTrackingActive, setBgTrackingActive] = useState(false);
 
   useEffect(() => {
     loadEmergencyContacts();
     loadSosHistory();
+    checkLocationReady();
   }, []);
+
+  const checkLocationReady = async () => {
+    const status = await checkLocationPermissionStatus();
+    if (status.foreground === 'granted') {
+      setLocationReady(true);
+      // Auto-start background tracking if permissions are granted
+      const token = document.cookie.split(';').find(c => c.trim().startsWith('session_token='))?.split('=')?.[1];
+      if (token) {
+        const success = await startBackgroundTracking('current-user', token);
+        setBgTrackingActive(success);
+      }
+    }
+  };
 
   const loadEmergencyContacts = async () => {
     try {
