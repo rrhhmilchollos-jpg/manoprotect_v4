@@ -483,12 +483,24 @@ const SentinelXLanding = () => {
                     <label className={`flex items-center gap-3 p-4 rounded-xl border-2 cursor-pointer transition-all ${formData.selectedProduct === 'sentinel-j' ? 'border-pink-400 bg-pink-500/10' : 'border-gray-700 bg-gray-800 hover:border-gray-500'}`} data-testid="select-junior">
                       <input type="radio" name="selectedProduct" value="sentinel-j" checked={formData.selectedProduct === 'sentinel-j'} onChange={handleInputChange} className="w-4 h-4 text-pink-500" />
                       <div className="flex-1">
-                        <p className="font-bold text-white">SENTINEL J – Junior <span className="text-xs text-pink-400">(NUEVO)</span></p>
-                        <p className="text-xs text-gray-400">Para jóvenes 6-14 · 8 correas de colores · GPS</p>
+                        <p className="font-bold text-white">SENTINEL J – Junior <span className="text-xs text-pink-400">(6-14 AÑOS)</span></p>
+                        <p className="text-xs text-gray-400">8 correas de colores intercambiables · GPS</p>
                       </div>
                       <div className="text-right">
                         <p className="text-green-400 font-black">GRATIS</p>
                         <p className="text-xs text-gray-500 line-through">99€</p>
+                      </div>
+                    </label>
+
+                    <label className={`flex items-center gap-3 p-4 rounded-xl border-2 cursor-pointer transition-all ${formData.selectedProduct === 'sentinel-s' ? 'border-[#B4A7D6] bg-[#B4A7D6]/10' : 'border-gray-700 bg-gray-800 hover:border-gray-500'}`} data-testid="select-sentinel-s">
+                      <input type="radio" name="selectedProduct" value="sentinel-s" checked={formData.selectedProduct === 'sentinel-s'} onChange={handleInputChange} className="w-4 h-4 text-purple-400" />
+                      <div className="flex-1">
+                        <p className="font-bold text-white">SENTINEL S – Niños <span className="text-xs text-[#B4A7D6]">(3-12 AÑOS)</span></p>
+                        <p className="text-xs text-gray-400">Cerámica + rose gold · Anti-retirada · Sirena 120dB</p>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-green-400 font-black">GRATIS</p>
+                        <p className="text-xs text-gray-500 line-through">129€</p>
                       </div>
                     </label>
                   </div>
