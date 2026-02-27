@@ -8,7 +8,7 @@ import { MapPin, Send, Shield, Check, Loader2, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { toast } from 'sonner';
-import { getCompleteLocation } from '@/services/geolocation';
+import { getCurrentLocation } from '@/services/backgroundLocation';
 import LiveLocationMap from '@/components/LiveLocationMap';
 
 const API = process.env.REACT_APP_BACKEND_URL + '/api';
@@ -30,16 +30,25 @@ const CompartirUbicacion = () => {
   useEffect(() => {
     const loadLocation = async () => {
       try {
-        const loc = await getCompleteLocation();
-        setLocation({
-          latitude: loc.latitude,
-          longitude: loc.longitude,
-          accuracy: loc.accuracy
-        });
-        setAddress(loc.address);
+        const loc = await getCurrentLocation();
+        if (loc) {
+          setLocation({
+            latitude: loc.latitude,
+            longitude: loc.longitude,
+            accuracy: loc.accuracy
+          });
+          // Try to get address from coordinates
+          try {
+            const resp = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${loc.latitude}&lon=${loc.longitude}`);
+            const data = await resp.json();
+            if (data.display_name) setAddress(data.display_name);
+          } catch { /* address is optional */ }
+        } else {
+          setError('No se pudo obtener la ubicación GPS. Activa los permisos de ubicación.');
+        }
         setLoading(false);
       } catch (err) {
-        setError(err.message);
+        setError(err.message || 'Error obteniendo ubicación');
         setLoading(false);
       }
     };
