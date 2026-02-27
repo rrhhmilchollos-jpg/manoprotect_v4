@@ -2996,7 +2996,7 @@ else:
         "https://admin.manoprotect.com",
         "https://www.admin.manoprotect.com",
         "https://api.manoprotect.com",
-        "https://sos-platform.preview.emergentagent.com",
+        "https://mano-protect-preview-2.preview.emergentagent.com",
         "https://digital-guard-1.emergent.host",
         "file://",
         "null",

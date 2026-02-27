@@ -9,7 +9,7 @@
     "contextMenus"
   ],
   "host_permissions": [
-    "https://sos-platform.preview.emergentagent.com/*",
+    "https://mano-protect-preview-2.preview.emergentagent.com/*",
     "https://www.manoprotect.com/*"
   ],
   "action": {
