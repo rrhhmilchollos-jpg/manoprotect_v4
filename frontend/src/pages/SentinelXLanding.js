@@ -510,16 +510,16 @@ const SentinelXLanding = () => {
                     <h4 className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-3">Resumen del Pedido</h4>
                     <div className="space-y-2 text-sm">
                       <div className="flex justify-between text-gray-300">
-                        <span>{formData.selectedProduct === 'sentinel-j' ? 'SENTINEL J Junior' : formData.selectedProduct === 'sentinel-x-premium' ? 'SENTINEL X Premium' : 'SENTINEL X Fundadores'}</span>
+                        <span>{formData.selectedProduct === 'sentinel-s' ? 'SENTINEL S Niños' : formData.selectedProduct === 'sentinel-j' ? 'SENTINEL J Junior' : formData.selectedProduct === 'sentinel-x-premium' ? 'SENTINEL X Premium' : 'SENTINEL X Fundadores'}</span>
                         <span className="text-green-400 font-bold">0,00€</span>
                       </div>
                       <div className="flex justify-between text-gray-300">
                         <span>Gastos de envío</span>
-                        <span>{formData.selectedProduct === 'sentinel-j' ? '4,95€' : '9,95€'}</span>
+                        <span>{(formData.selectedProduct === 'sentinel-j' || formData.selectedProduct === 'sentinel-s') ? '4,95€' : '9,95€'}</span>
                       </div>
                       <div className="border-t border-gray-600 pt-2 flex justify-between font-bold text-white">
                         <span>Total a pagar</span>
-                        <span className="text-green-400 text-lg">{formData.selectedProduct === 'sentinel-j' ? '4,95€' : '9,95€'}</span>
+                        <span className="text-green-400 text-lg">{(formData.selectedProduct === 'sentinel-j' || formData.selectedProduct === 'sentinel-s') ? '4,95€' : '9,95€'}</span>
                       </div>
                     </div>
                     <p className="text-xs text-gray-500 mt-3 text-center">Ahorras hasta 199€ con esta promoción</p>
