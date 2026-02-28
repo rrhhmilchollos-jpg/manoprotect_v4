@@ -312,7 +312,10 @@ function AppRouter() {
           <Route path="/" element={<HighConversionLanding />} />
           <Route path="/landing-original" element={<LandingPage />} />
           <Route path="/blog" element={<BlogPage />} />
-          <Route path="/blog/:slug" element={<BlogPostPage />} />
+          <Route path="/blog/:slug" element={<BlogPostDetail />} />
+          <Route path="/contacto" element={<ContactPage />} />
+          <Route path="/testimonios" element={<TestimonialsPage />} />
+          <Route path="/productos" element={<ProductsPage />} />
           <Route path="/how-it-works" element={<HowItWorks />} />
           <Route path="/como-funciona" element={<HowItWorks />} />
           <Route path="/pricing" element={<Pricing />} />
