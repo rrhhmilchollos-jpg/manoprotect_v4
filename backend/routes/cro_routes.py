@@ -377,8 +377,6 @@ async def get_cro_dashboard():
     """Get CRO dashboard with key metrics"""
     now = datetime.now(timezone.utc)
     today = now.replace(hour=0, minute=0, second=0, microsecond=0).isoformat()
-    week_ago = (now - timedelta(days=7)).isoformat()
-    month_ago = (now - timedelta(days=30)).isoformat()
 
     # Today's events
     today_views = await db.conversion_events.count_documents(
