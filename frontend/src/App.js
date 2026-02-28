@@ -817,7 +817,6 @@ function App() {
           </Suspense>
           <Toaster position="top-center" richColors />
           <HealthCheckMonitor />
-          <FloatingSOSButton />
           <FreeTrialBanner />
           <StockUrgencyPopup />
           <AppRouter />
