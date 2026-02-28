@@ -64,7 +64,7 @@ PLAN_FEATURES = {
         "max_users": 5,
         "trial_days": 7,
         "requires_card": True,
-        "features": ["Todo del Individual", "5 miembros familia", "GPS tracking", "Modo niños", "Panel familiar"]
+        "features": ["Todo del Individual", "5 miembros familia", "GPS tracking 24/7", "Alertas SOS", "Panel familiar", "Dispositivo GRATIS (anual)"]
     }
 }
 
