@@ -99,21 +99,23 @@ const PLANS = [
   {
     id: 'familiar',
     name: 'Familiar',
-    price: { mensual: 49.99, anual: 399.99 },
-    monthlyEquivalent: { anual: 33.33 },
-    savings: { anual: 200 },
-    description: 'Protección para toda la familia',
+    price: { mensual: 9.99, anual: 99.99 },
+    monthlyEquivalent: { anual: 8.33 },
+    savings: { anual: 20 },
+    description: 'Protecci\u00f3n para toda la familia',
     features: [
-      '7 días de prueba GRATIS',
+      '7 d\u00edas de prueba GRATIS',
       'Todo de Individual +',
       'Hasta 5 miembros familia',
-      'Localización GPS emergencias',
-      'Tracking de menores',
-      'Panel familiar centralizado'
+      'Localizaci\u00f3n GPS 24/7',
+      'Alertas SOS instant\u00e1neas',
+      'Panel familiar centralizado',
+      'Dispositivo GRATIS (plan anual)'
     ],
     requiresCard: true,
-    badge: 'Para familias',
-    badgeColor: 'purple'
+    popular: true,
+    badge: 'M\u00e1s popular',
+    badgeColor: 'emerald'
   }
 ];
 
