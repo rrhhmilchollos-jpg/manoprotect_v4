@@ -241,8 +241,8 @@ const SeguridadViviendaEmpresa = () => {
               <a href="#kits" className="group bg-gradient-to-r from-orange-500 to-red-500 text-white px-8 py-4 rounded-full font-bold text-sm transition-all hover:shadow-xl hover:shadow-orange-500/30 hover:scale-105 flex items-center gap-2" data-testid="ver-kits-btn">
                 Ver kits de alarma <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </a>
-              <Link to="/contacto" className="bg-white/10 hover:bg-white/20 text-white px-8 py-4 rounded-full font-bold text-sm transition-all border border-white/20 backdrop-blur-sm">
-                Llamar al 601 510 950
+              <Link to="/calculador" className="bg-white/10 hover:bg-white/20 text-white px-8 py-4 rounded-full font-bold text-sm transition-all border border-white/20 backdrop-blur-sm flex items-center gap-2" data-testid="calculador-btn">
+                Calcular mi precio
               </Link>
             </div>
           </div>
