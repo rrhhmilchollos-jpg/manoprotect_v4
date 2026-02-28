@@ -3021,7 +3021,7 @@ else:
         "https://admin.manoprotect.com",
         "https://www.admin.manoprotect.com",
         "https://api.manoprotect.com",
-        "https://protect-cro-v1.preview.emergentagent.com",
+        "https://emerald-shield-1.preview.emergentagent.com",
         "https://digital-guard-1.emergent.host",
         "file://",
         "null",
