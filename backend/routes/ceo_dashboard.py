@@ -59,7 +59,7 @@ def init_ceo_routes(db, require_admin_fn):
         if search:
             query = {"$or": [{"email": {"$regex": search, "$options": "i"}}, {"name": {"$regex": search, "$options": "i"}}, {"full_name": {"$regex": search, "$options": "i"}}]}
         total = await db["users"].count_documents(query)
-        users = await db["users"].find(query, {"_id": 0, "password": 0}).sort("created_at", -1).skip((page - 1) * limit).limit(limit).to_list(limit)
+        users = await db["users"].find(query, {"_id": 0, "password": 0, "password_hash": 0, "hashed_password": 0, "session_token": 0}).sort("created_at", -1).skip((page - 1) * limit).limit(limit).to_list(limit)
         return {"users": users, "total": total, "page": page, "pages": max(1, (total + limit - 1) // limit)}
 
     @ceo_router.get("/subscriptions")
