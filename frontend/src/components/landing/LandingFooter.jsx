@@ -284,6 +284,7 @@ const LandingFooter = () => {
               <span>España</span>
             </div>
           </div>
+          <p className="text-center text-xs text-slate-600 mt-4">Compra segura – Garantía de devolución – Stripe 3D Secure</p>
         </div>
       </div>
     </footer>
