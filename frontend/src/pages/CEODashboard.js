@@ -96,8 +96,8 @@ const CEODashboard = () => {
       }
       if (s === 'inventory') setInventory(await fetchJSON(`/api/ceo/inventory?page=${page}`));
       if (s === 'security') {
-        const [logs, overview] = await Promise.all([fetchJSON('/api/ceo/security-logs'), fetchJSON('/api/ceo/security-overview')]);
-        setSecurityLogs(logs); setSecurityOverview(overview);
+        const [logs, overview, ips] = await Promise.all([fetchJSON('/api/ceo/security-logs'), fetchJSON('/api/ceo/security-overview'), fetchJSON('/api/ceo/blocked-ips')]);
+        setSecurityLogs(logs); setSecurityOverview(overview); setBlockedIps(ips.blocked_ips || []);
       }
     } catch {}
   }, [fetchJSON, search]);
