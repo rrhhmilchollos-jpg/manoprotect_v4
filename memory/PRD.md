@@ -16,39 +16,53 @@ Plataforma líder en España de protección digital y física para familias. Opt
 - Email: SendGrid
 - Analytics: GTM dataLayer + gtag + fbq + Hotjar (placeholder ready)
 
-## Implemented Pages (Feb 28, 2026)
-- `/` - Landing Principal (Hero familia española, beneficios, cómo funciona con fotos, productos Sentinel, comparativa, testimonios, urgencia, FAQ, trust bar, footer)
+## Implemented Pages
+- `/` - Landing Principal (Hero, beneficios, productos, comparativa, testimonios, FAQ, **videos marketing**, trust bar, footer)
 - `/productos` - Página productos completa con comparativa X vs J vs S
-- `/plans` - Precios (mensual/anual), prueba 7 días, tabla beneficios
+- `/plans` - Precios con **contadores en tiempo real** (stock Sentinel Basic + plazas promo -20%)
 - `/testimonios` - 6 testimonios + 3 casos de uso con fotos españolas
 - `/faq` - 14 preguntas en 4 categorías, búsqueda, schema SEO
 - `/contacto` - Formulario + WhatsApp + teléfono + 24/7 (API funcional)
-- `/blog` - 3 artículos SEO con meta/OG tags, fotos españolas
+- `/blog` - Artículos SEO con meta/OG tags, fotos españolas
 - `/sentinel-x`, `/sentinel-j`, `/sentinel-s` - Páginas de producto individuales
+- `/ceo` - **CEO Dashboard completo** con datos reales de BD
 - `/registro` - Registro con Stripe checkout
-- Header: Home | Productos | Precios | Testimonios | Blog | Contacto | CTA
-- Footer: Sellos SSL/Cloudflare, pago seguro Visa/MC/PayPal, "Compra segura – Garantía de devolución"
 
-## Imágenes (Familias Españolas Generadas)
-- Hero: familia española con abuelo, padres e hijos con smartwatches
-- Niño en colegio: niño español despidiéndose de su madre
-- Adolescente: adolescente española haciendo senderismo
-- Persona mayor: señora española caminando en plaza mediterránea
+## CEO Dashboard (Implemented Feb 28, 2026)
+- **Ruta**: `/ceo` (requiere login admin)
+- **Backend**: `/api/ceo/stats`, `/api/ceo/users`, `/api/ceo/subscriptions`, `/api/ceo/orders`, `/api/ceo/refunds`, `/api/ceo/messages`, `/api/ceo/activity`, `/api/ceo/promo-status`, `/api/ceo/claim-sentinel-basic`
+- **Funcionalidades**: Stats en tiempo real, 6 pestañas, búsqueda usuarios, paginación, indicadores Backend/Frontend LIVE, contadores de stock Sentinel Basic y promo -20%
+
+## Promotional Pricing (Implemented Feb 28, 2026)
+- Sentinel X Basic GRATIS (50 unidades, requiere suscripción activa)
+- 20% descuento para primeros 200 suscriptores en checkout Stripe
+- Contadores en tiempo real en `/plans` y CEO Dashboard
+- Endpoint público `/api/ceo/promo-status` para contadores
+
+## Health Check System (Implemented Feb 28, 2026)
+- Backend: `/api/heartbeat` (respuesta <5ms)
+- Backend: `/api/health` (con estado BD)
+- Frontend: `HealthCheckMonitor` global polling cada 5s con toast de alerta
+- CEO Dashboard: Indicadores "Backend LIVE" / "Frontend LIVE"
+
+## Marketing Videos (Implemented Feb 28, 2026)
+- 4 imágenes generadas de familias españolas con Sentinel
+- Sección en landing principal con cards estilo video
+- Thumbnails: familia García, vuelta al cole, senior, adolescente senderismo
 
 ## Analytics Placeholders Ready
 - **Meta Pixel**: Placeholder `META_PIXEL_ID` en index.html (usuario debe reemplazar)
 - **Hotjar**: Placeholder `HOTJAR_SITE_ID` en index.html (usuario debe reemplazar)
 - **Google Search Console**: Pendiente código de verificación del usuario
-- **gtag + fbq**: Tracking integrado en landing CTAs
 
 ## Backlog
 ### P1: Usuario proporcione IDs (Meta Pixel, Hotjar, Google SC), iOS build (requiere Mac)
-### P2: Remarketing/A/B testing avanzado, Multimedia (microvideos reales), SEO Fase 3
+### P2: Remarketing/A/B testing avanzado, SEO Fase 3
 ### P3: Activar integraciones mocked (112, BigQuery)
 ### BLOQUEADOS: SMS Infobip, SendGrid dominio, Twilio WhatsApp producción
 
 ## Credentials
 | User | Password | Role |
 |---|---|---|
-| ceo@manoprotect.com | 19862210Des | super_admin |
+| ceo@manoprotect.com | 19862210Des | admin |
 | padretest@gmail.com | secure_password_123 | family_tracking |
