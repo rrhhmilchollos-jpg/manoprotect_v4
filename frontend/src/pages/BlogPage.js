@@ -15,7 +15,7 @@ const blogPosts = [
     category: 'Seguridad infantil',
     date: '15 Feb 2026',
     readTime: '5 min',
-    img: 'https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?w=600&h=400&fit=crop',
+    img: 'https://static.prod-images.emergentagent.com/jobs/9da3b4c4-c09a-415b-8aa7-bb34b82ca31e/images/910a9c2ec4bd34474c8f1f73a4011a40e480c1a6c2227fd17299b6a14e326ad7.png',
     content: `
 La seguridad de nuestros hijos es la prioridad número uno de cualquier padre. Con la tecnología GPS actual, podemos estar tranquilos sabiendo exactamente dónde están en todo momento.
 
