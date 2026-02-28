@@ -657,10 +657,6 @@ function App() {
       <BrowserRouter>
         <AuthProvider>
           <Suspense fallback={<EmptyFallback />}>
-            <UrgencyBanner 
-              message="🎁 OFERTA ESPECIAL: 7 días GRATIS en ManoProtect"
-              link="/registro"
-            />
           </Suspense>
           <Toaster position="top-center" richColors />
           <Suspense fallback={<EmptyFallback />}>
