@@ -77,7 +77,7 @@ const PRICING = {
 
 // Promoción activa hasta Febrero 2026
 const PROMO_ACTIVE = true;
-const PROMO_END_DATE = "22 de Febrero 2026";
+const PROMO_END_DATE = "30 de Marzo 2026";
 
 // Features list
 const FEATURES = [
