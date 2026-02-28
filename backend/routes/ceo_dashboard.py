@@ -116,4 +116,44 @@ def init_ceo_routes(db, require_admin_fn):
             "discount_pct": PROMO_CONFIG["promo_200_discount_pct"],
         }
 
+    @ceo_router.post("/claim-sentinel-basic")
+    async def claim_sentinel_basic(request: Request, session_token: Optional[str] = Cookie(None)):
+        """Claim free Sentinel X Basic - requires active subscription"""
+        from core.auth import get_current_user
+        user = await get_current_user(request, session_token)
+        
+        # Check active subscription
+        active_sub = await db["subscriptions"].find_one({"user_id": user.user_id, "status": "active"})
+        if not active_sub:
+            raise HTTPException(status_code=403, detail="Necesitas una suscripción activa para reclamar tu Sentinel X Basic gratuito")
+        
+        # Check if already claimed
+        existing_claim = await db["orders"].find_one({"user_id": user.user_id, "product": "sentinel_x_basic"})
+        if existing_claim:
+            raise HTTPException(status_code=409, detail="Ya has reclamado tu Sentinel X Basic gratuito")
+        
+        # Check stock
+        basic_claimed = await db["orders"].count_documents({"product": "sentinel_x_basic"})
+        if basic_claimed >= PROMO_CONFIG["basic_stock_total"]:
+            raise HTTPException(status_code=410, detail="Lo sentimos, todas las unidades gratuitas han sido reclamadas")
+        
+        # Create order
+        order = {
+            "user_id": user.user_id,
+            "email": user.email,
+            "product": "sentinel_x_basic",
+            "product_name": "Sentinel X Basic",
+            "price": 0,
+            "status": "pending",
+            "promo_free": True,
+            "created_at": datetime.now(timezone.utc).isoformat()
+        }
+        await db["orders"].insert_one(order)
+        
+        return {
+            "success": True,
+            "message": "Sentinel X Basic reclamado correctamente. Te contactaremos para el envío.",
+            "remaining": max(0, PROMO_CONFIG["basic_stock_total"] - basic_claimed - 1)
+        }
+
     return ceo_router
