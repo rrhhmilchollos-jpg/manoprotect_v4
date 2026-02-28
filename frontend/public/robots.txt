@@ -1,8 +1,42 @@
+# ManoProtect - Robots.txt Optimizado SEO Fase 3
 User-agent: *
 Allow: /
-Disallow: /dashboard
-Disallow: /admin
-Disallow: /api/
-Disallow: /empresa/
+Allow: /blog/
+Allow: /productos
+Allow: /plans
+Allow: /testimonios
+Allow: /contacto
+Allow: /faq
+Allow: /sentinel-x
+Allow: /sentinel-j
+Allow: /sentinel-s
+Allow: /sobre-nosotros
+Allow: /reloj-sos-ancianos
+Allow: /reloj-gps-mayores
+Allow: /boton-sos-senior
+Allow: /proteccion-phishing
+Allow: /proteccion-fraude-online
+Allow: /seguridad-digital-familiar
+Allow: /seguridad-mayores
 
+Disallow: /api/
+Disallow: /ceo
+Disallow: /admin/
+Disallow: /dashboard
+Disallow: /login
+Disallow: /register
+Disallow: /profile
+Disallow: /empleados/
+Disallow: /enterprise/
+Disallow: /investor-crm
+Disallow: /investor/
+
+# Sitemaps
 Sitemap: https://manoprotect.com/sitemap.xml
+
+# Crawl-delay for bots
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Crawl-delay: 1
