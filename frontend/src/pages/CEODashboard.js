@@ -341,35 +341,71 @@ const CEODashboard = () => {
 
           {/* ═══════ INVENTORY ═══════ */}
           {section === 'inventory' && (
-            <div className="bg-white rounded-xl border border-gray-200 overflow-hidden" data-testid="inventory-section">
-              <div className="p-4 border-b flex flex-wrap items-center gap-3">
-                <h3 className="font-bold text-gray-900">Inventario Sentinel</h3>
-                <div className="flex gap-2 ml-auto">
-                  {['sentinel_x', 'sentinel_j', 'sentinel_s'].map(p => (
-                    <span key={p} className="text-xs bg-slate-100 px-2 py-1 rounded font-medium">{p.replace('sentinel_', 'Sentinel ').toUpperCase()}: {s.inventory?.[p] || 0}</span>
-                  ))}
-                </div>
-              </div>
-              <div className="overflow-x-auto">
-                <table className="w-full text-sm">
-                  <thead><tr className="bg-slate-50 text-left text-xs text-gray-500 font-medium">
-                    <th className="p-3">Producto</th><th className="p-3">Nº Serie</th><th className="p-3">Estado</th><th className="p-3">Ubicación</th><th className="p-3">Fecha</th>
-                  </tr></thead>
-                  <tbody>
-                    {inventory.items.map((item, i) => (
-                      <tr key={i} className="border-t hover:bg-slate-50">
-                        <td className="p-3 font-medium">{item.product?.replace('sentinel_', 'Sentinel ')?.toUpperCase() || '-'}</td>
-                        <td className="p-3 font-mono text-xs">{item.serial_number || '-'}</td>
-                        <td className="p-3"><span className={`px-2 py-0.5 rounded text-xs font-semibold ${item.status === 'in_stock' ? 'bg-green-100 text-green-600' : item.status === 'sold' ? 'bg-blue-100 text-blue-600' : item.status === 'returned' ? 'bg-red-100 text-red-600' : 'bg-amber-100 text-amber-600'}`}>{item.status === 'in_stock' ? 'En stock' : item.status === 'sold' ? 'Vendido' : item.status === 'returned' ? 'Devuelto' : item.status === 'shipping' ? 'En envío' : item.status}</span></td>
-                        <td className="p-3 text-gray-500">{item.location || '-'}</td>
-                        <td className="p-3 text-gray-400 text-xs">{item.created_at ? new Date(item.created_at).toLocaleDateString('es-ES') : '-'}</td>
-                      </tr>
+            <div className="space-y-4" data-testid="inventory-section">
+              <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+                <div className="p-4 border-b flex flex-wrap items-center gap-3">
+                  <h3 className="font-bold text-gray-900">Inventario Sentinel</h3>
+                  <div className="flex gap-2">
+                    {['sentinel_x', 'sentinel_j', 'sentinel_s'].map(p => (
+                      <span key={p} className="text-xs bg-slate-100 px-2 py-1 rounded font-medium">{p.replace('sentinel_', 'Sentinel ').toUpperCase()}: {s.inventory?.[p] || 0}</span>
                     ))}
-                    {inventory.items.length === 0 && <tr><td colSpan={5} className="p-8 text-center text-gray-400">Sin items en inventario. Los items se crearán cuando se procesen pedidos.</td></tr>}
-                  </tbody>
-                </table>
+                  </div>
+                  <div className="flex gap-2 ml-auto">
+                    <select id="inv-filter-product" className="text-xs border rounded-lg px-2 py-1.5" onChange={e => { document.getElementById('inv-filter-product').dataset.val = e.target.value; }}>
+                      <option value="">Todos</option>
+                      <option value="sentinel_x">Sentinel X</option>
+                      <option value="sentinel_j">Sentinel J</option>
+                      <option value="sentinel_s">Sentinel S</option>
+                    </select>
+                    <select id="inv-filter-status" className="text-xs border rounded-lg px-2 py-1.5" onChange={e => { document.getElementById('inv-filter-status').dataset.val = e.target.value; }}>
+                      <option value="">Todos estados</option>
+                      <option value="in_stock">En stock</option>
+                      <option value="sold">Vendido</option>
+                      <option value="shipping">En envío</option>
+                      <option value="returned">Devuelto</option>
+                    </select>
+                    <button onClick={() => { const p = document.getElementById('inv-filter-product')?.value || ''; const st = document.getElementById('inv-filter-status')?.value || ''; fetch(`${API}/api/ceo/inventory?product=${p}&status=${st}`, { credentials: 'include' }).then(r => r.json()).then(setInventory); }} className="px-3 py-1.5 bg-slate-100 text-gray-700 text-xs font-bold rounded-lg hover:bg-slate-200">Filtrar</button>
+                    <button onClick={() => {
+                      const product = prompt('Producto (sentinel_x, sentinel_j, sentinel_s):');
+                      if (!product) return;
+                      const location = prompt('Ubicación:', 'Almacén Madrid');
+                      fetch(`${API}/api/ceo/inventory`, { method: 'POST', credentials: 'include', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ product, location, status: 'in_stock' }) }).then(r => r.json()).then(r => { if (r.success) { loadSection('inventory'); loadDashboard(); } });
+                    }} className="px-3 py-1.5 bg-blue-600 text-white text-xs font-bold rounded-lg hover:bg-blue-700" data-testid="add-inventory-btn">+ Añadir nuevo</button>
+                  </div>
+                </div>
+                <div className="overflow-x-auto">
+                  <table className="w-full text-sm">
+                    <thead><tr className="bg-slate-50 text-left text-xs text-gray-500 font-medium">
+                      <th className="p-3">Producto</th><th className="p-3">Nº Serie</th><th className="p-3">Estado</th><th className="p-3">Cantidad</th><th className="p-3">Ubicación</th><th className="p-3">Fecha</th><th className="p-3">Acciones</th>
+                    </tr></thead>
+                    <tbody>
+                      {inventory.items.map((item, i) => (
+                        <tr key={i} className="border-t hover:bg-slate-50">
+                          <td className="p-3 font-medium">{item.product?.replace('sentinel_', 'Sentinel ')?.toUpperCase() || '-'}</td>
+                          <td className="p-3 font-mono text-xs">{item.serial_number || '-'}</td>
+                          <td className="p-3"><span className={`px-2 py-0.5 rounded text-xs font-semibold ${item.status === 'in_stock' ? 'bg-green-100 text-green-600' : item.status === 'sold' ? 'bg-blue-100 text-blue-600' : item.status === 'returned' ? 'bg-red-100 text-red-600' : 'bg-amber-100 text-amber-600'}`}>{item.status === 'in_stock' ? 'En stock' : item.status === 'sold' ? 'Vendido' : item.status === 'returned' ? 'Devuelto' : 'En envío'}</span></td>
+                          <td className="p-3">1</td>
+                          <td className="p-3 text-gray-500">{item.location || '-'}</td>
+                          <td className="p-3 text-gray-400 text-xs">{item.created_at ? new Date(item.created_at).toLocaleDateString('es-ES') : '-'}</td>
+                          <td className="p-3">
+                            <div className="flex gap-1">
+                              <button onClick={() => {
+                                const loc = prompt('Nueva ubicación:', item.location);
+                                if (loc) fetch(`${API}/api/ceo/inventory/${item.item_id}`, { method: 'PATCH', credentials: 'include', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ product: item.product, status: item.status, location: loc }) }).then(() => loadSection('inventory'));
+                              }} className="px-2 py-1 bg-blue-50 text-blue-600 text-xs rounded hover:bg-blue-100 font-semibold" data-testid={`edit-inv-${i}`}>Editar</button>
+                              {item.status === 'in_stock' && <button onClick={() => {
+                                if (window.confirm('¿Marcar como vendido?')) fetch(`${API}/api/ceo/inventory/${item.item_id}`, { method: 'PATCH', credentials: 'include', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ product: item.product, status: 'sold', location: item.location }) }).then(() => { loadSection('inventory'); loadDashboard(); });
+                              }} className="px-2 py-1 bg-orange-50 text-orange-600 text-xs rounded hover:bg-orange-100 font-semibold" data-testid={`sell-inv-${i}`}>Vendido</button>}
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                      {inventory.items.length === 0 && <tr><td colSpan={7} className="p-8 text-center text-gray-400">Sin items en inventario. Haz clic en "+ Añadir nuevo" para crear items.</td></tr>}
+                    </tbody>
+                  </table>
+                </div>
+                <Paginator data={inventory} onPage={p => loadSection('inventory', p)} />
               </div>
-              <Paginator data={inventory} onPage={p => loadSection('inventory', p)} />
             </div>
           )}
 
