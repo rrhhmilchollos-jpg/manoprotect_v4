@@ -157,6 +157,7 @@ const HighConversionLanding = () => {
 
           <nav className="hidden md:flex items-center gap-8 text-[13px] font-medium text-gray-500">
             <a href="#como-funciona" className="hover:text-emerald-600 transition-colors" data-testid="nav-como-funciona">{"C\u00f3mo funciona"}</a>
+            <a href="#dispositivos" className="hover:text-emerald-600 transition-colors" data-testid="nav-dispositivos">Dispositivos</a>
             <a href="#precios" className="hover:text-emerald-600 transition-colors" data-testid="nav-precios">Precios</a>
             <a href="#seguridad" className="hover:text-emerald-600 transition-colors" data-testid="nav-seguridad">Seguridad</a>
             <a href="https://wa.me/34601510950" target="_blank" rel="noopener noreferrer" className="hover:text-emerald-600 transition-colors" data-testid="nav-contacto">Contacto</a>
