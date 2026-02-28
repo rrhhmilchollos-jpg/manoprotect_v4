@@ -746,6 +746,7 @@ function App() {
           </Suspense>
           <Toaster position="top-center" richColors />
           <HealthCheckMonitor />
+          <FloatingSOSButton />
           <AppRouter />
           <Suspense fallback={<EmptyFallback />}>
             <CookieConsent />
