@@ -167,10 +167,10 @@ SUBSCRIPTION_PACKAGES = {
     "personal-monthly": {"amount": 29.99, "name": "Personal Mensual", "period": "mes", "max_users": 2},
     "personal-quarterly": {"amount": 74.99, "name": "Personal Trimestral", "period": "3 meses", "max_users": 2},
     "personal-yearly": {"amount": 249.99, "name": "Personal Anual", "period": "año", "max_users": 2},
-    # Planes familiares (hasta 5 usuarios + GPS + SOS)
-    "family-monthly": {"amount": 49.99, "name": "Familiar Mensual", "period": "mes", "max_users": 5, "gps": False, "sos": True},
-    "family-quarterly": {"amount": 129.99, "name": "Familiar Trimestral", "period": "3 meses", "max_users": 5, "gps": True, "sos": True},
-    "family-yearly": {"amount": 399.99, "name": "Familiar Anual", "period": "año", "max_users": 5, "gps": True, "sos": True, "child_tracking": True},
+    # Planes familiares (hasta 5 usuarios + GPS + SOS) - Sincronizado con Landing CRO
+    "family-monthly": {"amount": 9.99, "name": "Familiar Mensual", "period": "mes", "max_users": 5, "gps": True, "sos": True},
+    "family-quarterly": {"amount": 24.99, "name": "Familiar Trimestral", "period": "3 meses", "max_users": 5, "gps": True, "sos": True},
+    "family-yearly": {"amount": 99.99, "name": "Familiar Anual", "period": "año", "max_users": 5, "gps": True, "sos": True, "child_tracking": True},
     # Planes business
     "business": {"amount": 49.99, "name": "Business", "period": "mes", "max_users": 25},
     "business-monthly": {"amount": 49.99, "name": "Business Mensual", "period": "mes", "max_users": 25},
