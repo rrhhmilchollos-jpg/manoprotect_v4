@@ -325,6 +325,7 @@ async def process_pending_emails():
     now = datetime.now(timezone.utc)
     now_str = now.isoformat()
     processed = 0
+    sent = 0
 
     cursor = db.email_sequences.find(
         {"status": "active", "next_send_at": {"$lte": now_str}},
@@ -343,16 +344,38 @@ async def process_pending_emails():
         email_config = EMAIL_SEQUENCE[step]
         next_step = step + 1
 
-        # Log email send (actual sending via SendGrid would go here)
+        # Try to send via SendGrid
+        send_status = "queued"
+        if SENDGRID_API_KEY:
+            try:
+                from sendgrid import SendGridAPIClient
+                from sendgrid.helpers.mail import Mail
+
+                html = _generate_cro_email(email_config["template"], seq.get("name", ""), seq.get("email", ""))
+
+                message = Mail(
+                    from_email=SENDER_EMAIL,
+                    to_emails=seq["email"],
+                    subject=email_config["subject"],
+                    html_content=html
+                )
+                sg = SendGridAPIClient(SENDGRID_API_KEY)
+                response = sg.send(message)
+                send_status = "sent" if response.status_code in (200, 201, 202) else "failed"
+                sent += 1
+                logger.info(f"CRO email sent to {seq['email']}, step {next_step}, status {response.status_code}")
+            except Exception as e:
+                send_status = "failed"
+                logger.error(f"CRO email send error: {e}")
+
         email_log = {
             "step": next_step,
             "subject": email_config["subject"],
             "template": email_config["template"],
             "sent_at": now_str,
-            "status": "queued"
+            "status": send_status
         }
 
-        # Calculate next send time
         update = {
             "$set": {"current_step": next_step},
             "$push": {"emails_sent": email_log}
@@ -371,7 +394,73 @@ async def process_pending_emails():
         )
         processed += 1
 
-    return {"processed": processed}
+    return {"processed": processed, "sent": sent}
+
+
+def _generate_cro_email(template, name, email):
+    """Generate HTML for CRO reminder emails"""
+    greeting = f"Hola {name}," if name else "Hola,"
+
+    if template == "reminder_benefits":
+        body = f"""
+        <h2 style="color:#111827;font-size:22px;">La tranquilidad de saber d\u00f3nde est\u00e1 tu familia</h2>
+        <p style="color:#6b7280;line-height:1.7;">
+            {greeting}<br><br>
+            Sabemos lo que es esa sensaci\u00f3n de angustia cuando tu hijo no contesta al m\u00f3vil.
+            ManoProtect te permite localizarle en segundos, recibir alertas SOS instant\u00e1neas
+            y dormir tranquilo sabiendo que est\u00e1 protegido 24/7.
+        </p>
+        <ul style="color:#6b7280;line-height:2;">
+            <li>GPS en segundo plano (funciona con la app cerrada)</li>
+            <li>Alertas SOS con un solo toque</li>
+            <li>Protecci\u00f3n para hasta 5 familiares</li>
+            <li>Solo 9,99\u20ac/mes</li>
+        </ul>
+        """
+    elif template == "reminder_case_study":
+        body = f"""
+        <h2 style="color:#111827;font-size:22px;">Laura localiz\u00f3 a su hijo en 10 segundos</h2>
+        <p style="color:#6b7280;line-height:1.7;">
+            {greeting}<br><br>
+            Laura M. de Madrid ten\u00eda el mismo miedo que t\u00fa. Su hijo de 15 a\u00f1os perd\u00edo
+            el autob\u00fas y no contestaba al tel\u00e9fono. Gracias a ManoProtect, supo d\u00f3nde
+            estaba en 10 segundos.
+        </p>
+        <blockquote style="border-left:4px solid #10b981;padding:12px 16px;margin:16px 0;background:#f0fdf4;color:#374151;font-style:italic;">
+            "No tiene precio la tranquilidad que me da. Mi hijo ni se entera y yo duermo tranquila."
+            <br><strong>- Laura M., Madrid</strong>
+        </blockquote>
+        """
+    else:
+        body = f"""
+        <h2 style="color:#111827;font-size:22px;">\u00daltimo recordatorio: 7 d\u00edas gratis</h2>
+        <p style="color:#6b7280;line-height:1.7;">
+            {greeting}<br><br>
+            Esta es la \u00faltima vez que te escribimos. Tu prueba gratuita de 7 d\u00edas
+            te est\u00e1 esperando. Sin tarjeta, sin compromiso.
+        </p>
+        <p style="color:#6b7280;line-height:1.7;">
+            El 78% de los padres ha sentido angustia al no saber d\u00f3nde estaba su hijo
+            durante m\u00e1s de 30 minutos. No dejes que te pase a ti.
+        </p>
+        """
+
+    return f"""<!DOCTYPE html><html><head><meta charset="utf-8"></head><body style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;margin:0;padding:0;background:#f4f4f5;">
+    <div style="max-width:600px;margin:0 auto;padding:20px;">
+        <div style="background:white;border-radius:12px;padding:32px;box-shadow:0 4px 6px rgba(0,0,0,0.07);">
+            <div style="text-align:center;margin-bottom:24px;">
+                <span style="font-size:28px;font-weight:bold;color:#10b981;">ManoProtect</span>
+            </div>
+            {body}
+            <div style="text-align:center;margin-top:24px;">
+                <a href="https://manoprotect.com/registro" style="display:inline-block;background:#10b981;color:white;padding:14px 32px;border-radius:10px;text-decoration:none;font-weight:bold;font-size:16px;">Proteger a Mi Familia Ahora</a>
+            </div>
+            <p style="text-align:center;color:#9ca3af;font-size:12px;margin-top:24px;">
+                Si no quieres recibir m\u00e1s emails, <a href="https://manoprotect.com/unsubscribe?email={email}" style="color:#9ca3af;">cancela aqu\u00ed</a>.
+            </p>
+        </div>
+    </div>
+    </body></html>"""
 
 
 # ═══════════════════════════════════════════
