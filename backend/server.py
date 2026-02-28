@@ -2983,6 +2983,15 @@ try:
 except Exception as e:
     print(f"⚠️ Subscription Routes not loaded: {e}")
 
+# CRO System routes (A/B Testing, Email Sequences, Conversion Tracking)
+try:
+    from routes.cro_routes import router as cro_router, init_cro_routes
+    init_cro_routes(db)
+    api_router.include_router(cro_router)
+    print("\u2705 CRO System loaded (A/B Testing, Email Sequences, Conversion Tracking)")
+except Exception as e:
+    print(f"\u26a0\ufe0f CRO routes not loaded: {e}")
+
 app.include_router(api_router)
 app.include_router(public_router)
 
