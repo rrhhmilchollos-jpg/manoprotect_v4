@@ -285,7 +285,7 @@ const HighConversionLanding = () => {
       {/* ═══════ ACTIVACIÓN EMOCIONAL ═══════ */}
       <section className="py-14 sm:py-16 bg-white" data-testid="emotional-activation">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 text-center">
-          <p className="text-5xl sm:text-6xl font-extrabold text-emerald-500 mb-3" data-testid="stat-number">78%</p>
+          <p className="text-5xl sm:text-6xl font-extrabold text-emerald-500 mb-3" data-testid="stat-number"><AnimatedCounter target={78} />%</p>
           <p className="text-lg sm:text-xl text-gray-800 font-semibold mb-3" data-testid="stat-text">
             {"de los padres ha sentido angustia al no saber d\u00f3nde estaba su hijo durante m\u00e1s de 30 minutos."}
           </p>
