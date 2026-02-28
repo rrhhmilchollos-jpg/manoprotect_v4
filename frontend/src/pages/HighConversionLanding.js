@@ -38,6 +38,15 @@ const HighConversionLanding = () => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenu, setMobileMenu] = useState(false);
   const heroRef = useRef(null);
+  const [abHero, setAbHero] = useState(null);
+  const [abCta, setAbCta] = useState(null);
+
+  /* A/B test assignment */
+  useEffect(() => {
+    getABVariant('hero_headline').then(data => { if (data) setAbHero(data); });
+    getABVariant('cta_text').then(data => { if (data) setAbCta(data); });
+    trackPageView('/');
+  }, []);
 
   /* scroll header */
   useEffect(() => {
