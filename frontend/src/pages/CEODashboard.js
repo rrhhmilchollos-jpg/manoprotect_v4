@@ -13,12 +13,8 @@ import {
 
 const API = process.env.REACT_APP_BACKEND_URL;
 
-const useAuth = () => {
-  const [token, setToken] = useState(localStorage.getItem('token'));
-  return { token, headers: { Authorization: `Bearer ${token}` } };
-};
-
-const StatCard = ({ icon: Icon, label, value, sub, color = 'emerald', alert }) => (
+const CEODashboard = () => {
+  const nav = useNavigate();
   <div className={`bg-white rounded-xl border ${alert ? 'border-red-200' : 'border-gray-200'} p-4 hover:shadow-md transition-shadow`} data-testid={`stat-${label.toLowerCase().replace(/\s/g, '-')}`}>
     <div className="flex items-center justify-between mb-2">
       <div className={`w-9 h-9 bg-${color}-50 rounded-lg flex items-center justify-center`}>
