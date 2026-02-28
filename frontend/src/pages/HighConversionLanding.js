@@ -159,15 +159,15 @@ const HighConversionLanding = () => {
               className="text-4xl sm:text-5xl lg:text-[3.4rem] font-extrabold leading-[1.08] tracking-tight text-gray-900 mb-5"
               data-testid="hero-title"
             >
-              <span className="text-emerald-500">Proteccion familiar</span> 24/7
+              <span className="text-emerald-500">Protecci&oacute;n familiar</span> 24/7
             </h1>
 
             <p className="text-lg sm:text-xl text-gray-500 mb-4 max-w-xl leading-relaxed" data-testid="hero-subtitle">
-              Localizacion en tiempo real + Alertas SOS en caso de emergencia. <strong className="text-gray-800">Incluso con la app cerrada.</strong>
+              Localizaci&oacute;n en tiempo real + Alertas SOS en caso de emergencia. <strong className="text-gray-800">Incluso con la app cerrada.</strong>
             </p>
 
             <p className="text-base text-emerald-600 font-semibold mb-8" data-testid="hero-trial">
-              Prueba gratis 7 dias
+              Prueba gratis 7 d&iacute;as
             </p>
 
             {/* CTA buttons */}
