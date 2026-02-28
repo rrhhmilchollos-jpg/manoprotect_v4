@@ -542,6 +542,59 @@ const HighConversionLanding = () => {
         </div>
       </section>
 
+      {/* ═══════ SEGUNDO PLANO & E-SIM ═══════ */}
+      <section className="py-16 bg-gradient-to-b from-slate-900 to-slate-800" data-testid="background-mode-section">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6">
+          <Reveal>
+            <div className="text-center mb-10">
+              <div className="inline-flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/30 px-4 py-1.5 rounded-full mb-4">
+                <Wifi className="w-4 h-4 text-emerald-400" />
+                <span className="text-xs font-bold text-emerald-400">SIEMPRE CONECTADO</span>
+              </div>
+              <h2 className="text-2xl sm:text-3xl font-bold text-white mb-3">Funciona con el móvil apagado o bloqueado</h2>
+              <p className="text-slate-400 text-sm max-w-2xl mx-auto">Gracias a la <strong className="text-white">E-SIM integrada</strong> y el <strong className="text-white">modo segundo plano</strong>, tu Sentinel envía la ubicación GPS y recibe alertas SOS incluso cuando el teléfono está bloqueado, en modo avión o apagado.</p>
+            </div>
+          </Reveal>
+          <div className="grid sm:grid-cols-3 gap-4">
+            <Reveal delay={0}>
+              <div className="bg-slate-800/50 border border-slate-700 rounded-2xl p-6 text-center">
+                <div className="w-12 h-12 bg-blue-500/10 rounded-xl flex items-center justify-center mx-auto mb-3">
+                  <Smartphone className="w-6 h-6 text-blue-400" />
+                </div>
+                <h3 className="font-bold text-white text-sm mb-2">Móvil Bloqueado</h3>
+                <p className="text-slate-400 text-xs">El Sentinel funciona de forma independiente. No necesita que el móvil esté desbloqueado para enviar la ubicación o activar el SOS.</p>
+              </div>
+            </Reveal>
+            <Reveal delay={100}>
+              <div className="bg-slate-800/50 border border-slate-700 rounded-2xl p-6 text-center">
+                <div className="w-12 h-12 bg-emerald-500/10 rounded-xl flex items-center justify-center mx-auto mb-3">
+                  <Wifi className="w-6 h-6 text-emerald-400" />
+                </div>
+                <h3 className="font-bold text-white text-sm mb-2">E-SIM Integrada</h3>
+                <p className="text-slate-400 text-xs">Cada Sentinel tiene su propia E-SIM con conectividad 4G independiente. Funciona sin depender del WiFi ni del móvil del usuario.</p>
+              </div>
+            </Reveal>
+            <Reveal delay={200}>
+              <div className="bg-slate-800/50 border border-slate-700 rounded-2xl p-6 text-center">
+                <div className="w-12 h-12 bg-orange-500/10 rounded-xl flex items-center justify-center mx-auto mb-3">
+                  <Battery className="w-6 h-6 text-orange-400" />
+                </div>
+                <h3 className="font-bold text-white text-sm mb-2">Segundo Plano</h3>
+                <p className="text-slate-400 text-xs">La app solicita permisos de ubicación en segundo plano (Android/iOS) para seguir rastreando aunque la app esté cerrada o el móvil apagado.</p>
+              </div>
+            </Reveal>
+          </div>
+          <Reveal delay={300}>
+            <div className="mt-8 bg-slate-800/30 border border-slate-700 rounded-2xl p-4 flex flex-wrap items-center justify-center gap-4 text-xs text-slate-400">
+              <span className="flex items-center gap-1"><Check className="w-3.5 h-3.5 text-emerald-400" /> Android: Permiso ACCESS_BACKGROUND_LOCATION</span>
+              <span className="flex items-center gap-1"><Check className="w-3.5 h-3.5 text-emerald-400" /> iOS: Background Modes → Location updates</span>
+              <span className="flex items-center gap-1"><Check className="w-3.5 h-3.5 text-emerald-400" /> Popup informativo al usuario</span>
+              <span className="flex items-center gap-1"><Check className="w-3.5 h-3.5 text-emerald-400" /> Botón directo a ajustes</span>
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
       {/* ═══════ TRUST BAR ═══════ */}
       <section className="py-8 bg-slate-50 border-t border-gray-200" data-testid="trust-bar">
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
