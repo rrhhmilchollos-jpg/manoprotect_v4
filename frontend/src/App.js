@@ -659,17 +659,7 @@ function App() {
           <Suspense fallback={<EmptyFallback />}>
           </Suspense>
           <Toaster position="top-center" richColors />
-          <Suspense fallback={<EmptyFallback />}>
-            <PushNotificationPrompt />
-          </Suspense>
-          <Suspense fallback={<EmptyFallback />}>
-            <InterstitialAdManager />
-          </Suspense>
           <AppRouter />
-          {/* Defer non-critical UI components */}
-          <Suspense fallback={<EmptyFallback />}>
-            <AIChatWidget />
-          </Suspense>
           <Suspense fallback={<EmptyFallback />}>
             <CookieConsent />
           </Suspense>
