@@ -136,6 +136,7 @@ const EmployeePortalDashboard = lazy(() => import('@/pages/EmployeePortalDashboa
 const SOSDeviceOrder = lazy(() => import('@/pages/SOSDeviceOrder'));
 const OrderTracking = lazy(() => import('@/pages/OrderTracking'));
 const SOSServices = lazy(() => import('@/pages/SOSServices'));
+const SeguridadViviendaEmpresa = lazy(() => import('@/pages/SeguridadViviendaEmpresa'));
 const OrderConfirmation = lazy(() => import('@/pages/OrderConfirmation'));
 const ThankYouPage = lazy(() => import('@/pages/ThankYouPage'));
 const BlogPage = lazy(() => import('@/pages/BlogPage'));
