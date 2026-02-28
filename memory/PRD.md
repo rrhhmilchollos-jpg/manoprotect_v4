@@ -1,6 +1,6 @@
 # ManoProtect - Product Requirements Document
 
-## Última Actualización: 28 Febrero 2026 (v10.1)
+## Última Actualización: 28 Febrero 2026 (v10.2)
 
 ## Descripción
 ManoProtect - plataforma de seguridad familiar. Productos: Sentinel X (adultos), Sentinel J (jóvenes 3-12), Sentinel S (niños 6-14).
