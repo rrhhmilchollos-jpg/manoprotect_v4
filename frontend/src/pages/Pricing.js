@@ -1,14 +1,27 @@
 /**
  * ManoProtect - Página de Precios y Planes
  * Plan mensual y anual + prueba gratis 7 días + tabla de beneficios
+ * Stock en tiempo real via /api/ceo/promo-status
  */
+import { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Link, useNavigate } from 'react-router-dom';
-import { Shield, Check, ArrowRight, Clock, Star, Lock, Users, Zap } from 'lucide-react';
+import { Shield, Check, ArrowRight, Clock } from 'lucide-react';
 import LandingFooter from '@/components/landing/LandingFooter';
+
+const API = process.env.REACT_APP_BACKEND_URL;
 
 const Pricing = () => {
   const navigate = useNavigate();
+  const [promo, setPromo] = useState(null);
+
+  useEffect(() => {
+    fetch(`${API}/api/ceo/promo-status`).then(r => r.json()).then(setPromo).catch(() => {});
+  }, []);
+
+  const basicLeft = promo?.basic_stock_remaining ?? 50;
+  const promoLeft = promo?.promo_200_remaining ?? 200;
+  const discount = promo?.discount_pct ?? 20;
 
   return (
     <div className="min-h-screen bg-white">
@@ -34,13 +47,26 @@ const Pricing = () => {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center">
           <div className="inline-flex items-center gap-2 bg-red-50 border border-red-200 px-4 py-1.5 rounded-full mb-4">
             <Clock className="w-4 h-4 text-red-500" />
-            <span className="text-xs font-bold text-red-600">OFERTA LANZAMIENTO – PRIMEROS 200 SUSCRIPTORES</span>
+            <span className="text-xs font-bold text-red-600">OFERTA LANZAMIENTO – PRIMEROS {promoLeft} PLAZAS CON {discount}% DTO</span>
           </div>
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-4" data-testid="pricing-title">
             Protección familiar desde <span className="text-emerald-500">9,99€/mes</span>
           </h1>
-          <p className="text-lg text-gray-500 mb-2">Suscríbete y obtén un <strong>20% de descuento</strong> en tu dispositivo Sentinel</p>
-          <p className="text-emerald-600 font-semibold">Sentinel X Basic GRATIS (solo 50 unidades) con Plan Basic</p>
+          <p className="text-lg text-gray-500 mb-2">Suscríbete y obtén un <strong>{discount}% de descuento</strong> en tu dispositivo Sentinel</p>
+          <p className="text-emerald-600 font-semibold">Sentinel X Basic GRATIS (quedan {basicLeft} de 50 unidades)</p>
+          {/* Live stock bars */}
+          <div className="mt-6 max-w-md mx-auto grid grid-cols-2 gap-4" data-testid="promo-live-counters">
+            <div className="bg-white rounded-xl border border-gray-200 p-3 shadow-sm">
+              <p className="text-[11px] text-gray-500 mb-1">Sentinel X Basic GRATIS</p>
+              <div className="h-2 bg-gray-100 rounded-full overflow-hidden"><div className="h-full bg-emerald-500 rounded-full transition-all" style={{ width: `${((50 - basicLeft) / 50) * 100}%` }} /></div>
+              <p className="text-xs font-bold text-gray-900 mt-1">{basicLeft}/50 disponibles</p>
+            </div>
+            <div className="bg-white rounded-xl border border-gray-200 p-3 shadow-sm">
+              <p className="text-[11px] text-gray-500 mb-1">Plazas -{discount}%</p>
+              <div className="h-2 bg-gray-100 rounded-full overflow-hidden"><div className="h-full bg-blue-500 rounded-full transition-all" style={{ width: `${((200 - promoLeft) / 200) * 100}%` }} /></div>
+              <p className="text-xs font-bold text-gray-900 mt-1">{promoLeft}/200 plazas</p>
+            </div>
+          </div>
         </div>
       </section>
 
