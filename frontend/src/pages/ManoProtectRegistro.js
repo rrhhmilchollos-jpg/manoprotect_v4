@@ -93,7 +93,7 @@ const PLANS = [
     ],
     requiresCard: true,
     badge: 'Protecci\u00f3n personal',
-    badgeColor: 'indigo'
+    badgeColor: 'emerald'
   },
   {
     id: 'familiar',
