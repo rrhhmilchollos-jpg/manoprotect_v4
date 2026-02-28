@@ -1,129 +1,124 @@
 # ManoProtect - Product Requirements Document
 
-## Última Actualización: 27 Febrero 2026 (v6)
+## Última Actualización: 28 Febrero 2026 (v7)
 
 ---
 
 ## Descripción del Proyecto
-ManoProtect es una plataforma integral de seguridad personal y protección contra fraudes para familias en España. Producto principal: Sentinel X (reloj con botón SOS) y Botón SOS físico para seniors.
-
----
-
-## Arquitectura SEO por Segmento de Edad (COMPLETADO)
-
-### Páginas de Producto por Edad
-| Página | Público | H1 | Estado |
-|--------|---------|-----|--------|
-| `/sentinel-x-ninos` | 12-16 años | Sentinel X para Niños y Adolescentes – Botón SOS Físico | COMPLETADO |
-| `/sentinel-x-adultos` | 17-55 años | Sentinel X para Adultos – Botón SOS Físico Personal | COMPLETADO |
-| `/boton-sos-senior` | 55+ años | Botón SOS Físico para Mayores – Seguridad Senior | COMPLETADO |
-| `/boton-sos-valencia` | Local SEO | Botón SOS en Valencia – Entrega y Soporte Local | COMPLETADO |
-| `/boton-sos-madrid` | Local SEO | Botón SOS en Madrid – Entrega y Soporte Local | COMPLETADO |
-| `/boton-sos-barcelona` | Local SEO | Botón SOS en Barcelona – Entrega y Soporte Local | COMPLETADO |
-| `/boton-sos-sevilla` | Local SEO | Botón SOS en Sevilla – Entrega y Soporte Local | COMPLETADO |
-
-Cada página incluye:
-- Schema.org (Product, FAQ, Review, Breadcrumb)
-- 1000+ palabras SEO optimizadas
-- H2 estructurados con párrafos descriptivos
-- FAQs expandibles (4 por página)
-- CTAs con "Oferta de lanzamiento hasta 30 de Marzo"
-- Envío GRATUITO (sin costes de envío)
-- Internal linking cruzado entre segmentos
-- Testimonios verificados
-
-### Blog Estratégico
-| Artículo | Segmento | H1 | Estado |
-|----------|----------|-----|--------|
-| `/blog/seguridad-hijos-boton-sos` | Niños | Cómo Garantizar la Seguridad de tus Hijos con un Botón SOS | COMPLETADO |
-| `/blog/seguridad-personal-adultos` | Adultos | Protección Personal con Sentinel X – Botón SOS para Adultos | COMPLETADO |
-| `/blog/cuidado-mayores-teleasistencia` | Senior | Botón SOS Físico para Mayores – Seguridad y Tranquilidad | COMPLETADO |
-| `/blog/como-elegir-boton-sos-edad` | Comparativa | Cómo Elegir el Botón SOS Adecuado para Cada Edad | COMPLETADO |
-| `/blog/mejores-relojes-sos-2026` | General | Los 5 mejores relojes SOS en 2026 | COMPLETADO |
-| `/blog/como-funciona-reloj-sos` | General | Cómo Funciona un Reloj SOS para Mayores | COMPLETADO |
-| `/blog/reloj-gps-alzheimer` | General | Reloj GPS para Personas con Alzheimer | COMPLETADO |
-| `/blog/reloj-gps-sin-cuotas` | General | Reloj GPS Sin Cuotas: La Verdad | COMPLETADO |
+ManoProtect es una plataforma integral de seguridad personal y protección familiar. Producto principal: Sentinel X (reloj con botón SOS), Sentinel J (juvenil) y Sentinel S (niños premium).
 
 ---
 
 ## Stack Técnico
 - **Frontend**: React 18, TailwindCSS, Shadcn/UI, react-helmet-async
-- **Backend**: FastAPI, Python 3.11, Pydantic
+- **Backend**: FastAPI, Python 3.11, Pydantic, fpdf2
 - **Database**: MongoDB (Motor async)
-- **Payments**: Stripe (Elements + subscriptions + one-time payments)
+- **Payments**: Stripe (subscriptions + one-time)
 - **Auth**: JWT + session cookies
-- **Mobile**: Capacitor (Android configured, iOS config prepared)
+- **Mobile**: Capacitor (Android + iOS config)
 
 ---
 
-## Embudo de Conversión (IMPLEMENTADO v6)
+## Embudo de Conversión (COMPLETADO v6-v7)
 
 ### Flujo para relojes GRATIS (Basic, J, S)
 1. Usuario llega a `/sentinel-x` y elige producto
-2. Rellena formulario de pedido (nombre, email, teléfono, dirección)
-3. Al pulsar "Pedir GRATIS" → aparece modal de suscripción obligatoria
-4. Elige plan: Mensual (9,99€/mes) o Anual (99,99€/año)
-5. Stripe crea checkout con suscripción recurrente + envío único
-6. Primer cobro: envío (9,95€/4,95€) + primera cuota del plan
+2. Rellena formulario (nombre, email, teléfono, dirección)
+3. "Pedir GRATIS" → modal de suscripción obligatoria (oculta hasta checkout)
+4. Plan Mensual: 9,99€/mes | Plan Anual: 99,99€/año
+5. Stripe: suscripción recurrente + envío único (9,95€/4,95€)
 
-### Flujo para relojes de pago (Fundadores, Premium)
-1. Usuario elige Fundadores (149€) o Premium (199€)
-2. Checkout directo con Stripe (pago único, envío GRATIS)
-3. Sin suscripción obligatoria (servicio incluido)
-
-### Precios de suscripción
-| Plan | Precio | Intervalo | Badge |
-|------|--------|-----------|-------|
-| Mensual | 9,99€ | /mes | — |
-| Anual | 99,99€ | /año | MEJOR PRECIO (8,33€/mes) |
+### Flujo para relojes de pago (Fundadores 149€, Premium 199€)
+- Checkout directo sin suscripción
 
 ---
 
-## Background Location Tracking (IMPLEMENTADO v6)
+## Sistema de Bloqueo Parental (COMPLETADO v7)
+
+### Flujo
+1. Padre configura GPS en Modo Familiar → LocationPermissionFlow
+2. Al completar: `POST /api/location/lock` → settings BLOQUEADOS
+3. UI oculta toda opción de configuración → badge "BLOQUEADO"
+4. Niño NO puede ver ni desactivar permisos GPS
+5. Para desbloquear: solo admin con `POST /api/admin/unlock-location` + DNI + motivo
+6. Auditoría completa de lock/unlock
+
+### Endpoints
+| Endpoint | Método | Descripción |
+|----------|--------|-------------|
+| `/api/location/lock` | POST | Bloquea ajustes ubicación |
+| `/api/location/status` | GET | Estado del bloqueo |
+| `/api/admin/unlock-location` | POST | Desbloqueo admin (DNI required) |
+| `/api/family/location/update` | POST | Heartbeat ubicación |
+| `/api/family/member/{id}/location` | GET | Última ubicación conocida |
+
+---
+
+## Background Location Tracking (COMPLETADO v6-v7)
 
 ### Android
-- ACCESS_FINE_LOCATION ✅
-- ACCESS_COARSE_LOCATION ✅
-- ACCESS_BACKGROUND_LOCATION ✅
-- FOREGROUND_SERVICE + FOREGROUND_SERVICE_LOCATION ✅
-- REQUEST_IGNORE_BATTERY_OPTIMIZATIONS ✅
-- WAKE_LOCK ✅
-- RECEIVE_BOOT_COMPLETED ✅
+- ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION, ACCESS_BACKGROUND_LOCATION ✅
+- REQUEST_IGNORE_BATTERY_OPTIMIZATIONS, WAKE_LOCK ✅
+- FOREGROUND_SERVICE, FOREGROUND_SERVICE_LOCATION ✅
 
 ### iOS
-- NSLocationWhenInUseUsageDescription ✅
 - NSLocationAlwaysAndWhenInUseUsageDescription ✅
 - Background Modes: location, fetch, remote-notification ✅
 
-### Runtime Permission Flow
-1. Pedir ubicación foreground
-2. Android: guiar a Ajustes → "Permitir todo el tiempo"
-3. Android: solicitar exclusión optimización batería
-4. iOS: solicitar "Siempre" (automático)
-5. Iniciar background watcher
+### Heartbeat Continuo
+- Ubicación se envía al servidor periódicamente
+- Almacena últimas 100 ubicaciones por usuario
+- Familia puede consultar última ubicación conocida con maps_url
 
-### Textos para Stores
-- Documento completo: `/app/STORE_JUSTIFICATION_TEXTS.md`
+---
+
+## PDFs y WhatsApp (COMPLETADO v7)
+
+### PDF de Bienvenida (post-compra)
+- Endpoint: `GET /api/documents/welcome-pdf`
+- Contenido: datos del pedido, guía de configuración, contacto soporte
+- Descargable desde ThankYouPage
+
+### PDF de Configuración Completada (post-setup)
+- Endpoint: `GET /api/documents/setup-complete-pdf`
+- Contenido: estado protección GPS, funciones activas, soporte
+
+### WhatsApp Sharing
+- Endpoint: `GET /api/documents/whatsapp-share/{welcome|setup-complete}`
+- Genera enlace wa.me con texto predefinido
+
+### ThankYouPage (`/gracias`)
+- Detecta producto (sentinel-x-basic, sentinel-j, sentinel-s, etc.)
+- Sección "Documentos y compartir" con PDF + WhatsApp
+- Nota de plan familiar activo para suscripciones
+
+---
+
+## Páginas SEO (COMPLETADO)
+- Landing pages por edad: niños, adultos, senior
+- Landing pages locales: Valencia, Madrid, Barcelona, Sevilla
+- Blog: 8 artículos SEO optimizados
+- Schema.org completo en todas las páginas
+
+---
+
+## Testing
+| Iteración | Tests | Estado |
+|-----------|-------|--------|
+| 56 | Subscription modal + checkout flows | 16/16 ✅ |
+| 57 | Location lock + PDF + WhatsApp + heartbeat | 22/22 ✅ |
 
 ---
 
 ## Backlog Pendiente
 
 ### P0 - Crítico
-- [ ] Configurar Price IDs reales de Stripe en .env (usuario pendiente)
-- [ ] Implementar webhook Stripe (invoice.payment_succeeded, subscription.deleted)
-- [ ] Ajustar manejo 3D Secure / requires_action
+- [ ] Stripe Price IDs reales + webhooks (BLOQUEADO - usuario)
+- [ ] Meta Pixel ID + Google Search Console (BLOQUEADO - usuario)
 
 ### P1 - Alta
-- [x] Crear página de producto Sentinel J ✅
-- [x] Crear página de producto Sentinel S ✅
-- [x] Sentinel X rediseñado con modelo freemium ✅
-- [x] Suscripción obligatoria para relojes gratis (Basic, J, S) ✅
-- [x] Landing pages locales: Madrid, Barcelona, Sevilla ✅
-- [x] Background Location Tracking completo (Android + iOS) ✅
-- [x] Meta Pixel integrado en index.html ✅ (requiere ID real del usuario)
-- [x] Google Tag Manager conectado ✅ (requiere verificación del usuario)
-- [ ] Tracking conversiones GA4, Pixel Meta Ads (IDs del usuario pendientes)
+- [ ] iOS build con Capacitor (BLOQUEADO - necesita Mac + Xcode)
+- [ ] Stripe webhook: invoice.payment_succeeded, subscription.deleted
 
 ### P2 - Media
 - [ ] Página "Quiénes Somos" (esperando contenido)
@@ -133,23 +128,18 @@ Cada página incluye:
 
 ### P3 - Baja
 - [ ] Emails recordatorio trial
-- [ ] Core Web Vitals < 1.8s
-- [ ] Integraciones bloqueadas (Infobip, SendGrid, Twilio)
-- [ ] Refactorizar landing pages locales en componente reutilizable
+- [ ] Refactorizar landing pages locales
+- [ ] Integraciones bloqueadas: Infobip, SendGrid, Twilio
 
 ---
 
-## Testing
-- Iteración 49: Blog + CRO → 13/13 passed
-- Iteración 50: Age pages + blog → 11/11 passed
-- Iteración 51: Content updates + free shipping + March 30 → 10/10 passed
-- Iteración 52: Local pages Madrid/Barcelona/Sevilla + regression → 12/12 passed
-- Iteración 53: Sentinel J product page + regression → 16/16 passed
-- Iteración 54: Sentinel S + Sentinel X 2 modelos + promo GRATIS + regression → 14/14 passed
-- Iteración 55: Sentinel X freemium model verification → 15/15 passed
-- Iteración 56: Subscription modal + checkout flows + regression → 16/16 passed
+## Project Health Check
+- **Funcional**: Embudo de conversión, suscripciones Stripe, bloqueo parental, GPS tracking, PDFs, WhatsApp
+- **Bloqueado**: Stripe keys reales, Meta Pixel ID, Google SC, iOS build, Infobip/SendGrid/Twilio
+- **Roto**: SMS (Infobip key inválida), 2FA, Live email (SendGrid sin verificar)
 
 ## Credenciales
 | Email | Password | Rol |
 |-------|----------|-----|
 | ceo@manoprotect.com | 19862210Des | super_admin |
+| padretest@gmail.com | secure_password_123 | family tracking |
