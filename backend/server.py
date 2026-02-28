@@ -3128,7 +3128,7 @@ else:
         "https://admin.manoprotect.com",
         "https://www.admin.manoprotect.com",
         "https://api.manoprotect.com",
-        "https://ceo-dashboard-test.preview.emergentagent.com",
+        "https://manoprotect-preview.preview.emergentagent.com",
         "https://digital-guard-1.emergent.host",
         "file://",
         "null",

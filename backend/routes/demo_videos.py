@@ -81,7 +81,7 @@ async def generate_demo_video(request: VideoGenerationRequest):
         video_gen.save_video(video_bytes, output_path)
         
         # Get the public URL - use the file endpoint
-        backend_url = os.environ.get('REACT_APP_BACKEND_URL', 'https://ceo-dashboard-test.preview.emergentagent.com')
+        backend_url = os.environ.get('REACT_APP_BACKEND_URL', 'https://manoprotect-preview.preview.emergentagent.com')
         video_url = f"{backend_url}/api/demo-videos/file/{filename}"
         
         # Store in memory

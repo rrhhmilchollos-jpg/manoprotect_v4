@@ -9,7 +9,7 @@
     "contextMenus"
   ],
   "host_permissions": [
-    "https://ceo-dashboard-test.preview.emergentagent.com/*",
+    "https://manoprotect-preview.preview.emergentagent.com/*",
     "https://www.manoprotect.com/*"
   ],
   "action": {

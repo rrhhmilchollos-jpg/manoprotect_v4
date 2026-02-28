@@ -6,7 +6,7 @@ import pytest
 import requests
 import os
 
-BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', 'https://ceo-dashboard-test.preview.emergentagent.com').rstrip('/')
+BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', 'https://manoprotect-preview.preview.emergentagent.com').rstrip('/')
 
 class TestSEOFiles:
     """Test SEO and AdMob configuration files"""
