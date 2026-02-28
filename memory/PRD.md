@@ -1,76 +1,73 @@
-# ManoProtect - Product Requirements Document v2.1.0
+# ManoProtect - Product Requirements Document v2.2.0
 
 ## Core Product
-Plataforma lider en Espana de proteccion digital y fisica para familias con dispositivos Sentinel (X, J, S) y sistemas de alarma para viviendas y empresas.
+Plataforma lider en Espana de proteccion digital y fisica para familias con dispositivos Sentinel (X, J, S) y sistemas de alarma profesionales para viviendas y empresas.
 
 ## Tech Stack
 Frontend: React + TailwindCSS + Shadcn/UI + Recharts | Backend: FastAPI + MongoDB | Payments: Stripe | Mobile: Capacitor (Android/iOS)
 
-## Implemented Features (Feb 28, 2026)
+## Implemented Features
 
 ### CEO Dashboard Enterprise (8 secciones)
-- Dashboard: 6 stat cards, 3 inventario, 3 graficos (barras/linea/circular), alertas, contadores promo, actividad
-- Inventario: Tabla Sentinel X/J/S, filtros producto/estado, botones Anadir/Editar/Marcar vendido
-- Usuarios: Nombre, Email, ID, IP, Plan, Estado + cambiar plan + suspender + bloquear IP + CSV
-- Membresias: Tabla suscripciones, promo flag, panel gestion planes, alertas expiracion
-- Pagos: Tabla transacciones (19+ reales), CSV/PDF + Panel reembolsos Aprobar/Rechazar
-- Seguridad: Admins, 2FA, intentos fallidos, Panel bloqueo IPs, registro actividad por IP
-- Mensajes: Tabla contacto con badge no leidos
-- Reportes: Exportar CSV usuarios/pagos, resumen financiero MRR/Hoy/Mes/Total
-- Notificaciones Push: Campana con polling cada 10s
+- Dashboard, Inventario, Usuarios, Membresias, Pagos, Seguridad, Mensajes, Reportes
 
-### Sistema de Deteccion y Bloqueo de IP
-- Middleware IPBlockMiddleware bloquea IPs de lista negra (cache 30s)
-- Auto-detecta IP en login/registro (last_login_ip, registration_ip)
-- CEO puede bloquear/desbloquear desde panel Seguridad o tabla Usuarios
-- IPs bloqueadas no pueden acceder a web ni app (HTTP 403)
+### Sistema de Alarmas - 3 Paginas Premium (Feb 28, 2026)
+**Main Landing** (`/seguridad-hogar-empresa`, `/alarmas`, `/kits-alarma`):
+- Hero con villa protegida + panel "Por que elegirnos" vs competencia
+- Cards "Que quieres proteger?" -> Vivienda / Negocio
+- Galeria componentes: centralita, camaras 4K, sirena, mandos premium (3 colores)
+- 3 kits: Essential (24.99-34.99), Premium (39.99-49.99), Business (54.99-69.99)
+- Tabla comparativa vs Securitas Direct y Prosegur (10 filas)
+- Seccion Sentinel SOS integrado
+- Tabla comparativa planes internos (14 filas)
+- FAQ 8 preguntas, CTAs a /contacto
 
-### Tabla Comparativa (14 funciones premium - TODAS true para X/J/S)
-GPS en tiempo real, Boton SOS, Resistente al agua, Conectividad 4G, Bluetooth 5.0, SOS invisible, Grabacion en la nube, Correas intercambiables, Alerta anti-retirada, Sirena 120dB, E-SIM integrada, Con camara y con internet, Sensor cardiaco, Funciona en segundo plano
+**Vivienda** (`/alarmas/vivienda`):
+- Hero "Tu hogar, blindado" - pisos, chalets, adosados
+- 8 componentes (4 imagen + 4 icono), imagen kit completo
+- 2 planes (Essential + Premium) con equipo + servicios detallados
+- 4 pasos instalacion, integracion Sentinel, FAQ 6 preguntas
 
-### Segundo Plano / Background Mode
-- Seccion en landing: Movil Bloqueado + E-SIM Integrada + Segundo Plano
-- AndroidManifest.xml: ACCESS_BACKGROUND_LOCATION, FOREGROUND_SERVICE_LOCATION
-- Info.plist: UIBackgroundModes location, NSLocationAlwaysAndWhenInUseUsageDescription
+**Negocio** (`/alarmas/negocio`):
+- Hero "Tu negocio, protegido 24/7" - locales, naves, oficinas
+- 4 tipos negocio, equipamiento avanzado (warehouse image)
+- Plan Business TODO INCLUIDO detallado
+- Sentinel para equipos, FAQ 7 preguntas
 
-### Pagina de Alarmas para Viviendas y Empresas (NEW - Feb 28, 2026)
-- Ruta: /seguridad-hogar-empresa, /alarmas, /kits-alarma
-- Hero con imagen profesional de sistema de alarma instalado en hogar espanol
-- Galeria de componentes con imagenes generadas: centralita hub, camaras IP 4K, sirena exterior, sensor PIR, contacto magnetico, relojes Sentinel X/J/S
-- Pestanas de filtro interactivas: Todos, Camaras, Sensores, Centralitas y Sirenas, Relojes Sentinel
-- 3 kits de alarma con imagenes: Hogar Basico (29,99EUR/mes), Hogar Premium (49,99EUR/mes), Empresa (89,99EUR/mes)
-- Tabla comparativa de 16 filas entre los 3 kits
-- Seccion de integracion con relojes Sentinel (imagen trio + watch individual)
-- Seccion de seguridad empresarial con imagen
-- Trust badges: +2.500 hogares, +800 empresas, <60s respuesta, 4.8/5 valoracion
-- FAQ con 8 preguntas acordeon
-- CTAs que navegan a /contacto
+### Precios competitivos (vs competencia)
+| Plan | Promo 6 meses | Regular | Securitas Direct | Prosegur |
+|---|---|---|---|---|
+| Essential | 24,99 EUR | 34,99 EUR | 39,89 EUR | 44,90 EUR |
+| Premium | 39,99 EUR | 49,99 EUR | 48,90 EUR | 48,90 EUR |
+| Business | 54,99 EUR | 69,99 EUR | N/A | 48,90 EUR+ |
 
-### Boton SOS Flotante - ELIMINADO (Feb 28, 2026)
-- Componente FloatingSOSButton eliminado de App.js y archivo borrado
-- Paginas SOS originales (/servicios-sos) siguen funcionando sin cambios
+### Ventajas sobre competencia
+- SIN permanencia (Securitas: 24 meses, Prosegur: 24-36 meses)
+- Equipo GRATIS (Securitas: 149 EUR)
+- 2 camaras IA incluidas (competencia: 1 basica)
+- Sentinel SOS incluido (exclusivo ManoProtect)
+- IA en camaras (cero falsas alarmas)
 
-### UX y Conversion
-- Banner "Probar 7 dias gratis": fijo abajo en todas las paginas publicas
-- Popup urgencia stock: aparece a los 8 segundos mostrando stock restante
-- Contadores en tiempo real en /plans: 50/50 Sentinel Basic + 200/200 plazas -20%
+### Otras funciones implementadas
+- Boton SOS Flotante: ELIMINADO (per user request)
+- "Plazas" cambiado a "unidades" en popup urgencia
+- Sistema IP Blocking, Promotional Logic, SEO Phase 3
+- Background Mode, Video Marketing, Capacitor configs
 
-### SEO Fase 3
-- robots.txt optimizado, sitemap.xml 24+ URLs
-- 7 landing pages SEO long-tail
-- Schema markup avanzado
-
-### Video Marketing
-- 1 video real (Sora 2) + 3 imagenes de familias espanolas
+## Rutas clave
+- `/seguridad-hogar-empresa` - Landing alarmas principal
+- `/alarmas/vivienda` - Detalle vivienda
+- `/alarmas/negocio` - Detalle negocio
+- `/productos` - Relojes Sentinel (independientes de alarma)
+- `/servicios-sos` - Paginas SOS originales (funcionando)
 
 ## Backlog
-- P1: IDs Meta Pixel, Hotjar, Google SC (bloqueado por usuario)
-- P1: Funcionalidad de pago para kits de alarma (botones "Contratar" funcionales con Stripe)
-- P2: Remarketing/A/B testing, SEO Fase 4
-- P2: Generar videos marketing restantes (bloqueado por credito Sora 2)
-- P2: Mejorar pagina "Quienes Somos"
-- P3: Integraciones 112, BigQuery, PayPal
-- P3: App iOS con Capacitor (requiere Mac+Xcode)
+- P1: Funcionalidad pago Stripe para kits alarma
+- P1: IDs Meta Pixel, Hotjar, Google SC (bloqueado usuario)
+- P2: Videos marketing (bloqueado credito Sora 2)
+- P2: Mejorar "Quienes Somos"
+- P3: Integraciones 112, BigQuery
+- P3: App iOS Capacitor (requiere Mac+Xcode)
 
 ## Credentials
 | User | Password | Role |
