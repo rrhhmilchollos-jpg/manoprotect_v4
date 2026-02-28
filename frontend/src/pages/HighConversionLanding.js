@@ -616,7 +616,7 @@ const HighConversionLanding = () => {
       <LandingFooter />
 
       {/* WhatsApp Button */}
-      <a href="https://wa.me/34601510950" target="_blank" rel="noopener noreferrer" className="fixed bottom-16 sm:bottom-6 right-4 sm:right-6 w-12 h-12 bg-[#25D366] rounded-full flex items-center justify-center shadow-xl z-30 hover:scale-110 transition-transform" data-testid="whatsapp-btn" aria-label="WhatsApp">
+      <a href="https://wa.me/34601510950" target="_blank" rel="noopener noreferrer" className="fixed bottom-6 left-6 w-12 h-12 bg-[#25D366] rounded-full flex items-center justify-center shadow-xl z-30 hover:scale-110 transition-transform" data-testid="whatsapp-btn" aria-label="WhatsApp">
         <Phone className="w-6 h-6 text-white" />
       </a>
 
