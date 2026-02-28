@@ -60,6 +60,102 @@ SUBSCRIPTION_PACKAGES = {
 }
 
 
+@router.get("/alarm-plans")
+async def get_alarm_plans():
+    """Get alarm subscription plans for viviendas y empresas"""
+    return {
+        "plans": [
+            {
+                "id": "alarm-essential",
+                "name": "ManoProtect Essential",
+                "target": "Pisos y apartamentos",
+                "promo_price": 24.99,
+                "regular_price": 34.99,
+                "promo_plan_id": "alarm-essential",
+                "regular_plan_id": "alarm-essential-regular",
+                "equipment_count": 8,
+                "camera_count": 2,
+                "sentinel_count": 1,
+            },
+            {
+                "id": "alarm-premium",
+                "name": "ManoProtect Premium",
+                "target": "Chalets, adosados y casas",
+                "promo_price": 39.99,
+                "regular_price": 49.99,
+                "promo_plan_id": "alarm-premium",
+                "regular_plan_id": "alarm-premium-regular",
+                "equipment_count": 10,
+                "camera_count": 6,
+                "sentinel_count": 2,
+                "popular": True,
+            },
+            {
+                "id": "alarm-business",
+                "name": "ManoProtect Business",
+                "target": "Locales, naves y oficinas",
+                "promo_price": 54.99,
+                "regular_price": 69.99,
+                "promo_plan_id": "alarm-business",
+                "regular_plan_id": "alarm-business-regular",
+                "equipment_count": 10,
+                "camera_count": 10,
+                "sentinel_count": 3,
+            },
+        ]
+    }
+
+@router.post("/budget-calculator")
+async def calculate_budget(data: dict):
+    """Calculate personalized alarm budget based on property details"""
+    space_type = data.get("space_type", "piso")
+    sqm = data.get("sqm", 80)
+    accesses = data.get("accesses", 2)
+    floors = data.get("floors", 1)
+    cameras_extra = data.get("cameras_extra", 0)
+    has_garden = data.get("has_garden", False)
+
+    if space_type in ["piso", "apartamento"]:
+        base_plan = "alarm-essential"
+        base_price = 24.99
+        regular_price = 34.99
+        plan_name = "Essential"
+    elif space_type in ["chalet", "adosado", "casa"]:
+        base_plan = "alarm-premium"
+        base_price = 39.99
+        regular_price = 49.99
+        plan_name = "Premium"
+    else:
+        base_plan = "alarm-business"
+        base_price = 54.99
+        regular_price = 69.99
+        plan_name = "Business"
+
+    sensors = max(3, accesses + floors)
+    cameras = 2 if sqm < 120 else (4 if sqm < 250 else 6)
+    cameras += cameras_extra
+    sirens = 1 if sqm < 150 else 2
+    if has_garden:
+        cameras += 1
+        sirens += 1
+
+    return {
+        "recommended_plan": plan_name,
+        "plan_id": base_plan,
+        "promo_price": base_price,
+        "regular_price": regular_price,
+        "details": {
+            "sensors": sensors,
+            "cameras": cameras,
+            "sirens": sirens,
+            "contacts": accesses,
+            "sentinel_included": 1 if base_plan == "alarm-essential" else (2 if base_plan == "alarm-premium" else 3),
+        },
+        "savings_vs_securitas": round((39.89 - base_price) * 12, 2) if base_plan == "alarm-essential" else round((48.90 - base_price) * 12, 2),
+    }
+
+
+
 @router.get("/plans")
 async def get_available_plans():
     """Get all available subscription plans with features - SINCRONIZADO CON FRONTEND"""
