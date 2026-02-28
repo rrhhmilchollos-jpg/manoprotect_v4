@@ -78,8 +78,10 @@ const comparisonRows = [
   ['Correas intercambiables', true, true, true],
   ['Alerta anti-retirada', true, true, true],
   ['Sirena 120dB', true, true, true],
-  ['Sin cámara ni internet', true, true, true],
+  ['E-SIM integrada', true, true, true],
+  ['Con cámara y con internet', true, true, true],
   ['Sensor cardíaco', true, true, true],
+  ['Funciona en segundo plano', true, true, true],
 ];
 
 const ProductsPage = () => {
