@@ -317,6 +317,7 @@ function AppRouter() {
           <Route path="/contacto" element={<ContactPage />} />
           <Route path="/testimonios" element={<TestimonialsPage />} />
           <Route path="/productos" element={<ProductsPage />} />
+          <Route path="/ceo" element={<CEODashboard />} />
           <Route path="/how-it-works" element={<HowItWorks />} />
           <Route path="/como-funciona" element={<HowItWorks />} />
           <Route path="/pricing" element={<Pricing />} />
