@@ -13,6 +13,7 @@ import {
   ArrowRight, Heart, X, Smartphone
 } from 'lucide-react';
 import LandingFooter from '@/components/landing/LandingFooter';
+import PhoneDemo from '@/components/PhoneDemo';
 import { trackPageView, trackCTAClick, getABVariant } from '@/services/conversionTracking';
 
 /* ── helpers ── */
