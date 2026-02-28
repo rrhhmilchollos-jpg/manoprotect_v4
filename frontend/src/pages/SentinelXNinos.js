@@ -109,7 +109,7 @@ const SentinelXNinos = () => {
       </nav>
 
       {/* Hero */}
-      <section className="bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 py-16 lg:py-24" data-testid="hero-ninos">
+      <section className="bg-gradient-to-br from-blue-50 via-emerald-50 to-purple-50 py-16 lg:py-24" data-testid="hero-ninos">
         <div className="max-w-7xl mx-auto px-4">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
@@ -271,7 +271,7 @@ const SentinelXNinos = () => {
       </section>
 
       {/* CTA Final */}
-      <section className="py-16 bg-gradient-to-r from-blue-600 to-indigo-700 text-white">
+      <section className="py-16 bg-gradient-to-r from-blue-600 to-emerald-700 text-white">
         <div className="max-w-4xl mx-auto px-4 text-center">
           <h2 className="text-3xl lg:text-4xl font-bold mb-4">Protege a tus hijos ahora</h2>
           <p className="text-xl text-blue-100 mb-2">Oferta de lanzamiento hasta el 30 de Marzo</p>
