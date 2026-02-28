@@ -407,7 +407,7 @@ const SentinelXLanding = () => {
               <Link to="/sentinel-j" className="group flex items-center gap-5 p-5 bg-gray-800/50 border border-gray-700 rounded-2xl hover:border-pink-500/50 transition-all">
                 <img src={SENTINEL_J_IMG} alt="Sentinel J" className="w-20 h-20 object-contain" />
                 <div>
-                  <p className="font-bold text-white group-hover:text-pink-400 transition-colors">SENTINEL J – Jóvenes 6-14</p>
+                  <p className="font-bold text-white group-hover:text-pink-400 transition-colors">SENTINEL J – Jóvenes 3 - 12 años</p>
                   <p className="text-sm text-gray-400">8 correas intercambiables · GPS · Botón SOS</p>
                   <p className="text-sm text-green-400 font-bold mt-1">GRATIS – Solo 4,95€ envío</p>
                 </div>
@@ -415,7 +415,7 @@ const SentinelXLanding = () => {
               <Link to="/sentinel-s" className="group flex items-center gap-5 p-5 bg-gray-800/50 border border-gray-700 rounded-2xl hover:border-[#B4A7D6]/50 transition-all">
                 <img src={SENTINEL_S_IMG} alt="Sentinel S" className="w-20 h-20 object-contain" />
                 <div>
-                  <p className="font-bold text-white group-hover:text-[#B4A7D6] transition-colors">SENTINEL S – Niños 3-12</p>
+                  <p className="font-bold text-white group-hover:text-[#B4A7D6] transition-colors">SENTINEL S – Niños 6-14</p>
                   <p className="text-sm text-gray-400">Cerámica + rose gold · Anti-retirada · Sirena 120dB</p>
                   <p className="text-sm text-green-400 font-bold mt-1">GRATIS – Solo 4,95€ envío</p>
                 </div>
@@ -445,8 +445,8 @@ const SentinelXLanding = () => {
                       { id: 'sentinel-x-basic', label: 'SENTINEL X Basic', sub: 'Bluetooth · Necesita móvil · IPS 1.6"', price: 'GRATIS', old: '79€', accent: 'green', tag: 'GRATIS' },
                       { id: 'sentinel-x-fundadores', label: 'SENTINEL X Fundadores', sub: '4G LTE · Funciona SIN móvil · AMOLED 1.78"', price: '149€', old: '249€', accent: 'cyan', tag: '4G' },
                       { id: 'sentinel-x-premium', label: 'SENTINEL X Premium', sub: '4G LTE · Titanio + Zafiro · AMOLED 1.9"', price: '199€', old: '349€', accent: 'amber', tag: 'ÉLITE' },
-                      { id: 'sentinel-j', label: 'SENTINEL J Junior', sub: 'Jóvenes 6-14 · 8 correas colores · GPS', price: 'GRATIS', old: '99€', accent: 'pink', tag: 'NIÑOS' },
-                      { id: 'sentinel-s', label: 'SENTINEL S Niños', sub: 'Niños 3-12 · Cerámica · Anti-retirada', price: 'GRATIS', old: '129€', accent: 'purple', tag: 'NIÑOS' }
+                      { id: 'sentinel-j', label: 'SENTINEL J Junior', sub: 'Jóvenes 3-12 años · 8 correas intercambiables · GPS · Botón SOS', price: 'GRATIS', old: '99€', accent: 'pink', tag: 'NIÑOS' },
+                      { id: 'sentinel-s', label: 'SENTINEL S Niños', sub: 'Niños 6-14 · Cerámica + rose gold · Anti-retirada · Sirena 120dB', price: 'GRATIS', old: '129€', accent: 'purple', tag: 'NIÑOS' }
                     ].map((p) => (
                       <label key={p.id} className={`flex items-center gap-3 p-3 rounded-xl border-2 cursor-pointer transition-all ${formData.selectedProduct === p.id ? `border-${p.accent}-400 bg-${p.accent}-500/10` : 'border-gray-700 bg-gray-800 hover:border-gray-500'}`} data-testid={`select-${p.id}`}>
                         <input type="radio" name="selectedProduct" value={p.id} checked={formData.selectedProduct === p.id} onChange={handleInputChange} className="w-4 h-4 flex-shrink-0" />
