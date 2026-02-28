@@ -1,255 +1,156 @@
+/**
+ * ManoProtect - FAQ Completa
+ * Preguntas frecuentes optimizadas SEO + CTA
+ */
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Shield, ChevronDown, ChevronUp, Search, ArrowRight, HelpCircle, MessageCircle, Mail, Phone } from 'lucide-react';
+import { Helmet } from 'react-helmet-async';
+import { Link, useNavigate } from 'react-router-dom';
+import { Shield, ChevronDown, ArrowRight, Search } from 'lucide-react';
 import LandingFooter from '@/components/landing/LandingFooter';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Card, CardContent } from '@/components/ui/card';
+
+const faqs = [
+  {
+    category: 'Funcionamiento',
+    items: [
+      { q: '¿Cómo funciona el seguimiento en segundo plano?', a: 'ManoProtect utiliza GPS optimizado que funciona incluso con la app cerrada y el móvil bloqueado. El reloj Sentinel envía la ubicación cada pocos segundos al servidor seguro. Los padres o familiares pueden consultar la ubicación en tiempo real desde la app. El consumo de batería es mínimo: menos del 3% al día.' },
+      { q: '¿Qué pasa si la batería se agota?', a: 'Antes de agotarse, el reloj envía la última ubicación conocida y una alerta automática a todos los contactos configurados. La batería del Sentinel X dura 5 días, el Sentinel J 4 días y el Sentinel S 3 días con uso normal. La carga completa se realiza en aproximadamente 90 minutos.' },
+      { q: '¿Cómo funcionan las alertas SOS?', a: 'Cuando se pulsa el botón SOS en el reloj, se envía una notificación instantánea a todos los contactos de emergencia configurados con la ubicación GPS exacta. En los modelos 4G, también se activa la grabación de audio y se puede realizar una llamada directa. Todo funciona en menos de 3 segundos.' },
+      { q: '¿Funciona sin conexión a internet?', a: 'Los modelos con 4G (Sentinel X Fundadores/Premium y Sentinel S) funcionan de forma independiente sin necesidad de un móvil cerca. El Sentinel X Basic funciona vía Bluetooth y necesita el móvil dentro del alcance. El Sentinel J funciona con 4G LTE.' },
+    ]
+  },
+  {
+    category: 'Privacidad y seguridad',
+    items: [
+      { q: '¿Los datos son privados?', a: 'Sí. Todos los datos están cifrados con AES-256 de extremo a extremo. Cumplimos con RGPD (Reglamento General de Protección de Datos) de la UE. Solo tú y los contactos que autorices pueden ver las ubicaciones. No vendemos ni compartimos datos con terceros bajo ninguna circunstancia.' },
+      { q: '¿Es legal rastrear a mi familiar?', a: 'Sí. Como padre o tutor legal de un menor, tienes derecho a supervisar su ubicación. Para adultos y mayores, siempre se requiere consentimiento explícito del usuario. ManoProtect incluye un sistema de consentimiento integrado.' },
+      { q: '¿Pueden hackear los datos?', a: 'Utilizamos los mismos estándares de seguridad que los bancos: cifrado AES-256, SSL/TLS 1.3, servidores protegidos por Cloudflare WAF, y autenticación de dos factores. Los datos se almacenan en servidores europeos certificados ISO 27001.' },
+    ]
+  },
+  {
+    category: 'Compatibilidad',
+    items: [
+      { q: '¿Es compatible con iOS y Android?', a: 'Sí. La app ManoProtect funciona en iPhone (iOS 14 o superior) y Android (8.0 o superior). Los relojes Sentinel se conectan vía Bluetooth 5.0 o 4G LTE, según el modelo.' },
+      { q: '¿Funciona fuera de España?', a: 'Sí. Los modelos con 4G funcionan en toda Europa con cobertura LTE. El GPS funciona en cualquier lugar del mundo. La app está disponible globalmente.' },
+      { q: '¿Necesito una tarjeta SIM para el reloj?', a: 'Los modelos 4G (Sentinel X Fundadores/Premium, Sentinel J y Sentinel S) incluyen una eSIM preconfigurada. No necesitas comprar ni configurar ninguna tarjeta SIM adicional. El servicio de datos está incluido en tu suscripción.' },
+    ]
+  },
+  {
+    category: 'Compra y envío',
+    items: [
+      { q: '¿El dispositivo es realmente gratis?', a: 'Sí. Con tu suscripción, recibes el dispositivo Sentinel GRATIS. Solo pagas los gastos de envío (desde 4,95€). Es nuestra campaña de lanzamiento hasta el 30 de Marzo 2026.' },
+      { q: '¿Cuánto tarda el envío?', a: 'El envío estándar en España peninsular tarda 24-48 horas laborables. Para Baleares y Canarias, 3-5 días. Envíos a Europa: 5-7 días laborables. Recibirás un número de seguimiento por email.' },
+      { q: '¿Puedo cancelar en cualquier momento?', a: 'Sí. Sin permanencia ni penalización. Cancela tu suscripción desde la app cuando quieras. Si no te convence en los primeros 7 días, te devolvemos el 100% del dinero sin preguntas.' },
+      { q: '¿Qué incluye la suscripción?', a: 'La suscripción incluye: localización GPS en tiempo real, alertas SOS ilimitadas, zonas seguras, historial de ubicaciones, notificaciones push, soporte 24/7 y todas las actualizaciones de la app. Plan mensual: 9,99€/mes. Plan anual: 99,99€/año (ahorra 20€).' },
+    ]
+  },
+];
 
 const FAQ = () => {
   const navigate = useNavigate();
+  const [openItems, setOpenItems] = useState({});
   const [searchTerm, setSearchTerm] = useState('');
-  const [openIndex, setOpenIndex] = useState(null);
 
-  const faqs = [
-    {
-      category: "General",
-      questions: [
-        {
-          q: "¿Qué es ManoProtect?",
-          a: "ManoProtect es una plataforma de seguridad digital que protege a familias y empresas contra fraudes, phishing, smishing, vishing y otras estafas digitales. Utilizamos inteligencia artificial avanzada para analizar mensajes, correos y enlaces sospechosos en tiempo real."
-        },
-        {
-          q: "¿Cómo funciona la detección de fraudes?",
-          a: "Nuestro sistema analiza el contenido que nos envías utilizando algoritmos de inteligencia artificial. Identificamos patrones como URLs sospechosas, lenguaje de urgencia, solicitudes de datos personales, errores gramaticales típicos de estafas, y múltiples indicadores de fraude."
-        },
-        {
-          q: "¿Es seguro compartir mis mensajes con ManoProtect?",
-          a: "Absolutamente. Todos los datos son encriptados de extremo a extremo y se procesan en servidores ubicados en la Unión Europea. No almacenamos los mensajes analizados más tiempo del necesario y nunca compartimos tu información con terceros. Cumplimos con el RGPD y todas las normativas europeas de protección de datos."
-        },
-        {
-          q: "¿ManoProtect puede ver mis contraseñas o datos bancarios?",
-          a: "No. ManoProtect solo analiza el texto que tú decides compartir con nosotros. Nunca solicitamos contraseñas, números de tarjeta ni datos bancarios. Si alguien te pide estos datos haciéndose pasar por ManoProtect, es una estafa."
-        }
-      ]
-    },
-    {
-      category: "Planes y Precios",
-      questions: [
-        {
-          q: "¿Qué incluye el plan gratuito?",
-          a: "El plan gratuito incluye análisis básicos de mensajes sospechosos, acceso a nuestra base de conocimiento sobre fraudes, alertas de nuevas amenazas, y hasta 5 análisis diarios. Es perfecto para empezar a protegerte."
-        },
-        {
-          q: "¿Cuál es la diferencia entre el plan Individual y el Familiar?",
-          a: "El plan Individual protege a una sola persona con análisis ilimitados. El plan Familiar permite proteger hasta 5 miembros de tu familia, incluye un modo especial para personas mayores con interfaz simplificada, localización de menores, y botón SOS de emergencia."
-        },
-        {
-          q: "¿Puedo cancelar mi suscripción en cualquier momento?",
-          a: "Sí, puedes cancelar tu suscripción cuando quieras desde tu panel de control. No hay permanencia ni penalizaciones. Si cancelas, mantendrás el acceso hasta el final del período de facturación."
-        },
-        {
-          q: "¿Ofrecen garantía de devolución?",
-          a: "Sí, ofrecemos garantía de satisfacción de 7 días. Si no estás satisfecho con el servicio, puedes solicitar un reembolso completo sin preguntas."
-        },
-        {
-          q: "¿Los precios incluyen IVA?",
-          a: "Sí, todos los precios mostrados incluyen IVA. El importe que ves es el importe final que pagarás."
-        }
-      ]
-    },
-    {
-      category: "Protección Familiar",
-      questions: [
-        {
-          q: "¿Cómo funciona el modo para personas mayores?",
-          a: "El modo para mayores ofrece una interfaz simplificada con botones más grandes, textos más claros y menos opciones para evitar confusiones. También puedes configurar alertas automáticas que te avisen cuando un familiar mayor reciba un mensaje sospechoso."
-        },
-        {
-          q: "¿Puedo ver la actividad de mis familiares?",
-          a: "Sí, como administrador del plan familiar puedes ver un resumen de amenazas detectadas para cada miembro. Sin embargo, respetamos la privacidad: no puedes leer el contenido exacto de sus mensajes, solo los resultados del análisis."
-        },
-        {
-          q: "¿Cómo funciona el botón SOS?",
-          a: "El botón SOS permite a cualquier miembro de la familia enviar una alerta de emergencia a todos los demás miembros. Se envía la ubicación actual y una notificación push instantánea. Es ideal para situaciones donde sospechas que estás siendo víctima de una estafa en persona."
-        }
-      ]
-    },
-    {
-      category: "Técnico",
-      questions: [
-        {
-          q: "¿ManoProtect funciona en mi móvil?",
-          a: "Sí, ManoProtect funciona en cualquier dispositivo con navegador web moderno: móviles Android e iOS, tablets, y ordenadores. También puedes instalar nuestra app desde Google Play Store para una experiencia optimizada en Android."
-        },
-        {
-          q: "¿Necesito instalar algún software especial?",
-          a: "No, ManoProtect funciona directamente desde tu navegador web. No necesitas instalar nada, aunque recomendamos añadir la página a tu pantalla de inicio para acceso rápido. También tenemos app nativa para Android."
-        },
-        {
-          q: "¿Qué hago si detecto un falso positivo?",
-          a: "Si crees que hemos marcado como peligroso un mensaje que es legítimo, puedes reportarlo desde el panel de resultados. Nuestro equipo lo revisará y mejorará el sistema continuamente."
-        }
-      ]
-    }
-  ];
+  const toggle = (key) => setOpenItems(prev => ({ ...prev, [key]: !prev[key] }));
 
-  const filteredFaqs = faqs.map(category => ({
-    ...category,
-    questions: category.questions.filter(
-      faq => 
-        faq.q.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        faq.a.toLowerCase().includes(searchTerm.toLowerCase())
-    )
-  })).filter(category => category.questions.length > 0);
+  const filteredFaqs = searchTerm
+    ? faqs.map(cat => ({
+        ...cat,
+        items: cat.items.filter(item =>
+          item.q.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          item.a.toLowerCase().includes(searchTerm.toLowerCase())
+        )
+      })).filter(cat => cat.items.length > 0)
+    : faqs;
 
-  const toggleQuestion = (categoryIdx, questionIdx) => {
-    const key = `${categoryIdx}-${questionIdx}`;
-    setOpenIndex(openIndex === key ? null : key);
+  const schemaFAQ = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": faqs.flatMap(cat => cat.items.map(item => ({
+      "@type": "Question",
+      "name": item.q,
+      "acceptedAnswer": { "@type": "Answer", "text": item.a }
+    })))
   };
 
   return (
-    <div className="min-h-screen bg-zinc-50">
+    <div className="min-h-screen bg-white">
+      <Helmet>
+        <title>Preguntas Frecuentes | ManoProtect – Sentinel X, J y S</title>
+        <meta name="description" content="Encuentra respuestas a las preguntas más frecuentes sobre ManoProtect, los relojes Sentinel X, J y S, seguimiento GPS, privacidad, envíos y suscripciones." />
+        <link rel="canonical" href="https://manoprotect.com/faq" />
+        <script type="application/ld+json">{JSON.stringify(schemaFAQ)}</script>
+      </Helmet>
+
       {/* Header */}
-      <header className="bg-white border-b border-zinc-200 sticky top-0 z-50">
-        <div className="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-3 cursor-pointer" onClick={() => navigate('/')}>
-            <img 
-              src="/manoprotect_logo.webp" 
-              alt="ManoProtect Logo" 
-              className="h-8 w-auto" 
-            />
-            <span className="text-xl font-bold">ManoProtect</span>
-          </div>
-          <Button onClick={() => navigate('/pricing')} className="bg-indigo-600 hover:bg-indigo-700">
-            Ver Planes
-          </Button>
+      <header className="bg-white border-b border-gray-100">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
+          <Link to="/" className="flex items-center gap-2">
+            <div className="w-8 h-8 bg-emerald-500 rounded-lg flex items-center justify-center"><Shield className="w-4 h-4 text-white" /></div>
+            <span className="text-emerald-600 text-lg font-bold">ManoProtect</span>
+          </Link>
+          <Link to="/" className="text-sm text-gray-500 hover:text-emerald-600">Volver al inicio</Link>
         </div>
       </header>
 
-      {/* Hero */}
-      <div className="bg-gradient-to-br from-indigo-600 to-purple-700 text-white py-16 px-6">
-        <div className="max-w-3xl mx-auto text-center">
-          <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center mx-auto mb-6">
-            <HelpCircle className="w-8 h-8" />
-          </div>
-          <h1 className="text-4xl font-bold mb-4">Preguntas Frecuentes</h1>
-          <p className="text-xl text-indigo-100 mb-8">
-            Encuentra respuestas a las preguntas más comunes sobre ManoProtect
-          </p>
-          
+      <div className="max-w-3xl mx-auto px-4 sm:px-6 py-16">
+        <div className="text-center mb-10">
+          <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-3" data-testid="faq-title">Preguntas frecuentes</h1>
+          <p className="text-gray-500 mb-6">Todo lo que necesitas saber sobre ManoProtect y los relojes Sentinel.</p>
+
           {/* Search */}
-          <div className="relative max-w-md mx-auto">
-            <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-zinc-400" />
-            <Input
+          <div className="max-w-md mx-auto relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+            <input
               type="text"
-              placeholder="Buscar pregunta..."
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-12 h-14 text-lg bg-white text-zinc-900 border-0"
+              onChange={e => setSearchTerm(e.target.value)}
+              placeholder="Buscar pregunta..."
+              className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none"
+              data-testid="faq-search"
             />
           </div>
         </div>
-      </div>
 
-      {/* FAQ Content */}
-      <div className="max-w-3xl mx-auto px-6 py-12">
-        {filteredFaqs.map((category, categoryIdx) => (
-          <div key={categoryIdx} className="mb-10">
-            <h2 className="text-2xl font-bold text-zinc-900 mb-6 flex items-center gap-2">
-              <div className="w-8 h-8 bg-indigo-100 rounded-lg flex items-center justify-center">
-                <span className="text-indigo-600 font-bold text-sm">{categoryIdx + 1}</span>
-              </div>
-              {category.category}
+        {filteredFaqs.map((cat, ci) => (
+          <div key={ci} className="mb-8" data-testid={`faq-category-${ci}`}>
+            <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+              <div className="w-1.5 h-6 bg-emerald-500 rounded-full" />
+              {cat.category}
             </h2>
-            
-            <div className="space-y-3">
-              {category.questions.map((faq, questionIdx) => {
-                const key = `${categoryIdx}-${questionIdx}`;
-                const isOpen = openIndex === key;
-                
+            <div className="space-y-0 divide-y divide-gray-200 bg-gray-50 rounded-2xl border border-gray-200 overflow-hidden">
+              {cat.items.map((faq, i) => {
+                const key = `${ci}-${i}`;
                 return (
-                  <Card 
-                    key={questionIdx}
-                    className={`cursor-pointer transition-all ${isOpen ? 'ring-2 ring-indigo-500 shadow-md' : 'hover:shadow-md'}`}
-                    onClick={() => toggleQuestion(categoryIdx, questionIdx)}
-                  >
-                    <CardContent className="p-0">
-                      <div className="flex items-center justify-between p-5">
-                        <h3 className="font-semibold text-zinc-900 pr-4">{faq.q}</h3>
-                        {isOpen ? (
-                          <ChevronUp className="w-5 h-5 text-indigo-600 flex-shrink-0" />
-                        ) : (
-                          <ChevronDown className="w-5 h-5 text-zinc-400 flex-shrink-0" />
-                        )}
-                      </div>
-                      {isOpen && (
-                        <div className="px-5 pb-5 pt-0">
-                          <div className="border-t pt-4">
-                            <p className="text-zinc-600 leading-relaxed">{faq.a}</p>
-                          </div>
-                        </div>
-                      )}
-                    </CardContent>
-                  </Card>
+                  <div key={key}>
+                    <button onClick={() => toggle(key)} className="w-full flex items-center justify-between p-5 text-left hover:bg-gray-100 transition-colors" data-testid={`faq-item-${ci}-${i}`}>
+                      <span className="font-medium text-gray-900 text-[15px] pr-4">{faq.q}</span>
+                      <ChevronDown className={`w-5 h-5 text-gray-400 flex-shrink-0 transition-transform duration-200 ${openItems[key] ? 'rotate-180' : ''}`} />
+                    </button>
+                    <div className={`overflow-hidden transition-all duration-300 ${openItems[key] ? 'max-h-60 pb-5 px-5' : 'max-h-0'}`}>
+                      <p className="text-sm text-gray-500 leading-relaxed">{faq.a}</p>
+                    </div>
+                  </div>
                 );
               })}
             </div>
           </div>
         ))}
 
-        {filteredFaqs.length === 0 && (
-          <div className="text-center py-12">
-            <HelpCircle className="w-16 h-16 text-zinc-300 mx-auto mb-4" />
-            <h3 className="text-xl font-semibold text-zinc-700 mb-2">No encontramos resultados</h3>
-            <p className="text-zinc-500">Prueba con otros términos de búsqueda</p>
-          </div>
-        )}
-
-        {/* Contact Section */}
-        <Card className="mt-12 bg-gradient-to-br from-indigo-50 to-purple-50 border-indigo-200">
-          <CardContent className="p-8 text-center">
-            <MessageCircle className="w-12 h-12 text-indigo-600 mx-auto mb-4" />
-            <h3 className="text-2xl font-bold text-zinc-900 mb-2">¿No encuentras lo que buscas?</h3>
-            <p className="text-zinc-600 mb-6">
-              Nuestro equipo de soporte está disponible para ayudarte con cualquier duda
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <a 
-                href="mailto:soporte@manoprotect.com"
-                className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
-              >
-                <Mail className="w-5 h-5" />
-                soporte@manoprotect.com
-              </a>
-              <a 
-                href="tel:+34601510950"
-                className="inline-flex items-center justify-center gap-2 px-6 py-3 border-2 border-indigo-600 text-indigo-600 rounded-lg hover:bg-indigo-50 transition-colors"
-              >
-                <Phone className="w-5 h-5" />
-                +34 601 510 950
-              </a>
-            </div>
-          </CardContent>
-        </Card>
-
         {/* CTA */}
-        <div className="mt-12 text-center">
-          <h3 className="text-2xl font-bold text-zinc-900 mb-4">¿Listo para protegerte?</h3>
-          <p className="text-zinc-600 mb-6">
-            Empieza a protegerte hoy con ManoProtect
-          </p>
-          <Button 
-            onClick={() => navigate('/registro')}
-            className="bg-indigo-600 hover:bg-indigo-700 px-8 py-6 text-lg"
-          >
-            Empezar Gratis
-            <ArrowRight className="w-5 h-5 ml-2" />
-          </Button>
+        <div className="text-center mt-12 bg-emerald-50 border border-emerald-200 rounded-2xl p-8" data-testid="faq-cta">
+          <h3 className="text-xl font-bold text-gray-900 mb-2">¿No encuentras tu respuesta?</h3>
+          <p className="text-gray-500 mb-6">Nuestro equipo está disponible 24/7 para ayudarte.</p>
+          <div className="flex flex-wrap gap-3 justify-center">
+            <button onClick={() => navigate('/registro')} className="inline-flex items-center gap-2 bg-emerald-500 text-white font-bold px-6 py-3 rounded-xl hover:bg-emerald-600 transition-colors" data-testid="faq-cta-trial">
+              Probar 7 días gratis <ArrowRight className="w-4 h-4" />
+            </button>
+            <Link to="/contacto" className="inline-flex items-center gap-2 border-2 border-emerald-500 text-emerald-600 font-bold px-6 py-3 rounded-xl hover:bg-emerald-50 transition-colors" data-testid="faq-cta-contact">
+              Contactar soporte
+            </Link>
+          </div>
         </div>
       </div>
 
-      {/* Footer */}
       <LandingFooter />
     </div>
   );
