@@ -269,6 +269,13 @@ def init_ceo_routes(db, require_admin_fn):
     # REFUNDS with approve/reject
     # ═══════════════════════════════════════════
 
+    @ceo_router.get("/payments")
+    async def list_payments(request: Request, session_token: Optional[str] = Cookie(None), page: int = 1, limit: int = 20):
+        await require_admin_fn(request, session_token)
+        total = await db["payment_transactions"].count_documents({})
+        payments = await db["payment_transactions"].find({}, {"_id": 0}).sort("created_at", -1).skip((page - 1) * limit).limit(limit).to_list(limit)
+        return {"payments": payments, "total": total, "page": page, "pages": max(1, (total + limit - 1) // limit)}
+
     @ceo_router.get("/refunds")
     async def list_refunds(request: Request, session_token: Optional[str] = Cookie(None), page: int = 1, limit: int = 20):
         await require_admin_fn(request, session_token)
