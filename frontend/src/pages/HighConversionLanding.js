@@ -170,14 +170,24 @@ const HighConversionLanding = () => {
               className="text-4xl sm:text-5xl lg:text-[3.4rem] font-extrabold leading-[1.08] tracking-tight text-gray-900 mb-5"
               data-testid="hero-title"
             >
-              {"¿Y si tu hijo no responde al m\u00f3vil durante "}
-              <span className="text-emerald-500">40 minutos</span>?
+              {abHero?.config?.headline ? (
+                <>{abHero.config.headline}</>
+              ) : (
+                <>
+                  {"¿Y si tu hijo no responde al m\u00f3vil durante "}
+                  <span className="text-emerald-500">40 minutos</span>?
+                </>
+              )}
             </h1>
 
             <p className="text-lg sm:text-xl text-gray-500 mb-4 max-w-xl leading-relaxed" data-testid="hero-subtitle">
-              {"ManoProtect te permite "}
-              <strong className="text-gray-800">{"localizar a tu hijo en segundos"}</strong>
-              {" y recibir alertas SOS en caso de emergencia, incluso con la app cerrada."}
+              {abHero?.config?.subtitle || (
+                <>
+                  {"ManoProtect te permite "}
+                  <strong className="text-gray-800">{"localizar a tu hijo en segundos"}</strong>
+                  {" y recibir alertas SOS en caso de emergencia, incluso con la app cerrada."}
+                </>
+              )}
             </p>
 
             <p className="text-base text-emerald-600 font-semibold mb-8" data-testid="hero-trial">
