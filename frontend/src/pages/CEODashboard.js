@@ -89,7 +89,10 @@ const CEODashboard = () => {
       if (s === 'memberships') setSubs(await fetchJSON(`/api/ceo/subscriptions?page=${page}`));
       if (s === 'orders' || s === 'inventory-orders') setOrders(await fetchJSON(`/api/ceo/orders?page=${page}`));
       if (s === 'messages') setMessages(await fetchJSON(`/api/ceo/messages?page=${page}`));
-      if (s === 'refunds' || s === 'payments') setRefunds(await fetchJSON(`/api/ceo/refunds?page=${page}`));
+      if (s === 'payments') {
+        const [r, p] = await Promise.all([fetchJSON(`/api/ceo/refunds?page=${page}`), fetchJSON('/api/ceo/payments?page=1&limit=50')]);
+        setRefunds(r); setPayments(p.payments || []);
+      }
       if (s === 'inventory') setInventory(await fetchJSON(`/api/ceo/inventory?page=${page}`));
       if (s === 'security') {
         const [logs, overview] = await Promise.all([fetchJSON('/api/ceo/security-logs'), fetchJSON('/api/ceo/security-overview')]);
