@@ -1,822 +1,350 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useNavigate, useSearchParams, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { Button } from '../components/ui/button';
 import { toast } from 'sonner';
-import LandingFooter from '@/components/landing/LandingFooter';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements, CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
-import { 
+import {
   Shield, Lock, Eye, EyeOff, User, Mail, Phone,
-  CheckCircle, ArrowRight, ArrowLeft, CreditCard,
-  Loader2, AlertCircle, Sparkles, Star
+  Check, ArrowRight, ArrowLeft, CreditCard,
+  Loader2, AlertCircle, Star, Heart
 } from 'lucide-react';
+import { trackCTAClick, trackCheckoutStart } from '@/services/conversionTracking';
 
 const API_URL = process.env.REACT_APP_BACKEND_URL;
 const STRIPE_PK = process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY;
+const stripePromise = STRIPE_PK ? loadStripe(STRIPE_PK) : null;
 
-// Initialize Stripe
-const stripePromise = loadStripe(STRIPE_PK);
-
-// SEO Schema for Registration Page
-const registrationSchema = {
-  "@context": "https://schema.org",
-  "@type": "WebPage",
-  "name": "Registro ManoProtect - Crea tu cuenta de seguridad digital",
-  "description": "Regístrate en ManoProtect y protege a tu familia con nuestra plataforma de seguridad digital. 7 días gratis.",
-  "url": "https://manoprotect.com/registro",
-  "mainEntity": {
-    "@type": "Product",
-    "name": "ManoProtect Suscripción",
-    "offers": {
-      "@type": "AggregateOffer",
-      "lowPrice": "0",
-      "highPrice": "399.99",
-      "priceCurrency": "EUR",
-      "offerCount": "3"
-    }
-  }
-};
-
-// Stripe CardElement styles
-const cardElementOptions = {
+const cardStyle = {
   style: {
-    base: {
-      fontSize: '16px',
-      color: '#1f2937',
-      fontFamily: 'Inter, system-ui, sans-serif',
-      '::placeholder': {
-        color: '#9ca3af',
-      },
-      iconColor: '#6366f1',
-    },
-    invalid: {
-      color: '#ef4444',
-      iconColor: '#ef4444',
-    },
+    base: { fontSize: '16px', color: '#1f2937', fontFamily: 'Inter, system-ui, sans-serif', '::placeholder': { color: '#9ca3af' } },
+    invalid: { color: '#ef4444' }
   },
-  hidePostalCode: true,
+  hidePostalCode: true
 };
 
-// Plan definitions
 const PLANS = [
   {
-    id: 'basico',
-    name: 'Básico',
-    price: { mensual: 0, anual: 0 },
-    description: '7 días gratis para probar',
-    features: [
-      '7 días de prueba GRATIS',
-      'Protección básica 24/7',
-      '10 análisis de amenazas',
-      'Alertas de seguridad',
-      'Soporte por email'
-    ],
-    requiresCard: false,
-    badge: 'Sin compromiso',
-    badgeColor: 'emerald'
-  },
-  {
-    id: 'individual',
-    name: 'Individual',
-    price: { mensual: 29.99, anual: 249.99 },
-    monthlyEquivalent: { anual: 20.83 },
-    savings: { anual: 110 },
-    description: 'La mejor opci\u00f3n para ti',
-    features: [
-      '7 d\u00edas de prueba GRATIS',
-      'Protecci\u00f3n 24/7 avanzada',
-      'An\u00e1lisis ilimitados con IA',
-      'Bloqueo autom\u00e1tico amenazas',
-      'Hasta 2 familiares',
-      'Soporte prioritario'
-    ],
-    requiresCard: true,
-    badge: 'Protecci\u00f3n personal',
-    badgeColor: 'emerald'
-  },
-  {
     id: 'familiar',
-    name: 'Familiar',
-    price: { mensual: 9.99, anual: 99.99 },
-    monthlyEquivalent: { anual: 8.33 },
-    savings: { anual: 20 },
-    description: 'Protecci\u00f3n para toda la familia',
-    features: [
-      '7 d\u00edas de prueba GRATIS',
-      'Todo de Individual +',
-      'Hasta 5 miembros familia',
-      'Localizaci\u00f3n GPS 24/7',
-      'Alertas SOS instant\u00e1neas',
-      'Panel familiar centralizado',
-      'Dispositivo GRATIS (plan anual)'
-    ],
-    requiresCard: true,
+    stripeId: 'cro-monthly',
+    name: 'Mensual',
+    price: 9.99,
+    period: 'mes',
+    yearly: false,
+    features: ['GPS en segundo plano 24/7', 'Alertas SOS instant\u00e1neas', 'Hasta 5 familiares', 'Zonas seguras', 'Notificaciones push']
+  },
+  {
+    id: 'familiar-anual',
+    stripeId: 'cro-yearly',
+    name: 'Anual',
+    price: 99.99,
+    period: 'a\u00f1o',
+    yearly: true,
+    monthlyEq: 8.33,
+    savings: 20,
     popular: true,
-    badge: 'M\u00e1s popular',
-    badgeColor: 'emerald'
+    features: ['Todo del Plan Mensual', 'Prioridad en soporte', 'Alertas por WhatsApp', 'Dispositivo GRATIS incluido', 'Garant\u00eda 14 d\u00edas']
   }
 ];
 
-// Registration Form Component (with Stripe)
-const RegistrationForm = ({ plan, periodo, onBack, onSuccess }) => {
+/* ── Registration Form ── */
+const RegForm = ({ plan, onBack, onSuccess }) => {
   const stripe = useStripe();
   const elements = useElements();
-  const [isLoading, setIsLoading] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
-  const [cardError, setCardError] = useState(null);
-  const [cardComplete, setCardComplete] = useState(false);
-  
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    password: '',
-    confirmPassword: '',
-    acceptTerms: false,
-    acceptPrivacy: false,
-    acceptCommunications: false
-  });
+  const [loading, setLoading] = useState(false);
+  const [showPw, setShowPw] = useState(false);
+  const [cardOk, setCardOk] = useState(false);
+  const [cardErr, setCardErr] = useState(null);
+  const [form, setForm] = useState({ name: '', email: '', phone: '', password: '', confirm: '', terms: false, privacy: false });
 
-  const selectedPlan = PLANS.find(p => p.id === plan);
-  const requiresCard = selectedPlan?.requiresCard;
+  const set = (k, v) => setForm(f => ({ ...f, [k]: v }));
 
-  const handleCardChange = (event) => {
-    setCardError(event.error ? event.error.message : null);
-    setCardComplete(event.complete);
-  };
-
-  const handleSubmit = async (e) => {
+  const submit = async (e) => {
     e.preventDefault();
-    
-    // Validations
-    if (!formData.name || !formData.email || !formData.password) {
-      toast.error('Por favor, completa todos los campos obligatorios');
-      return;
-    }
-    
-    if (formData.password !== formData.confirmPassword) {
-      toast.error('Las contraseñas no coinciden');
-      return;
-    }
-    
-    if (formData.password.length < 8) {
-      toast.error('La contraseña debe tener al menos 8 caracteres');
-      return;
-    }
-    
-    if (!formData.acceptTerms || !formData.acceptPrivacy) {
-      toast.error('Debes aceptar los términos y la política de privacidad');
-      return;
-    }
+    if (!form.name || !form.email || !form.password) return toast.error('Completa todos los campos obligatorios');
+    if (form.password !== form.confirm) return toast.error('Las contrase\u00f1as no coinciden');
+    if (form.password.length < 8) return toast.error('M\u00ednimo 8 caracteres');
+    if (!form.terms || !form.privacy) return toast.error('Acepta t\u00e9rminos y privacidad');
+    if (!stripe || !elements || !cardOk) return toast.error('Completa los datos de tarjeta');
 
-    // For premium plans, validate card
-    if (requiresCard) {
-      if (!stripe || !elements) {
-        toast.error('Stripe no está cargado. Intenta de nuevo.');
-        return;
-      }
-      
-      if (!cardComplete) {
-        toast.error('Por favor, completa los datos de la tarjeta');
-        return;
-      }
-    }
-
-    setIsLoading(true);
+    setLoading(true);
+    trackCheckoutStart(plan.name);
 
     try {
-      let paymentMethodId = null;
+      const card = elements.getElement(CardElement);
+      const { error, paymentMethod } = await stripe.createPaymentMethod({
+        type: 'card', card, billing_details: { name: form.name, email: form.email, phone: form.phone || undefined }
+      });
+      if (error) throw new Error(error.message);
 
-      // Create PaymentMethod for premium plans
-      if (requiresCard) {
-        const cardElement = elements.getElement(CardElement);
-        const { error, paymentMethod } = await stripe.createPaymentMethod({
-          type: 'card',
-          card: cardElement,
-          billing_details: {
-            name: formData.name,
-            email: formData.email,
-            phone: formData.phone || undefined,
-          },
-        });
-
-        if (error) {
-          toast.error(error.message);
-          setIsLoading(false);
-          return;
-        }
-
-        paymentMethodId = paymentMethod.id;
-      }
-
-      // Call registration endpoint
-      const response = await fetch(`${API_URL}/api/subscriptions/registrar`, {
+      const res = await fetch(`${API_URL}/api/subscriptions/registrar`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          email: formData.email,
-          password: formData.password,
-          nombre: formData.name,
-          plan: plan,
-          periodo: periodo,
-          payment_method_id: paymentMethodId
+          email: form.email, password: form.password, nombre: form.name,
+          plan: plan.stripeId, periodo: plan.yearly ? 'anual' : 'mensual',
+          payment_method_id: paymentMethod.id
         })
       });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.detail || 'Error en el registro');
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.detail || 'Error en el registro');
-      }
-
-      // Handle 3D Secure if required
       if (data.requires_action && data.client_secret) {
         toast.info('Verificando con tu banco...');
-        
-        const { error: confirmError } = await stripe.confirmCardPayment(data.client_secret);
-        
-        if (confirmError) {
-          throw new Error(confirmError.message);
-        }
+        const { error: confirmErr } = await stripe.confirmCardPayment(data.client_secret);
+        if (confirmErr) throw new Error(confirmErr.message);
       }
 
-      // Success!
-      toast.success(data.message || '¡Cuenta creada exitosamente!');
+      toast.success(data.message || 'Cuenta creada exitosamente');
       onSuccess(data);
-      
-    } catch (error) {
-      console.error('Registration error:', error);
-      toast.error(error.message || 'Error al crear la cuenta');
+    } catch (err) {
+      toast.error(err.message || 'Error al crear la cuenta');
     } finally {
-      setIsLoading(false);
+      setLoading(false);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-5">
-      <div className="text-center mb-6">
-        <h2 className="text-2xl font-bold text-gray-900">Crea tu cuenta</h2>
-        <p className="text-gray-500 mt-2">
-          Plan: <span className="font-semibold text-emerald-600">{selectedPlan?.name}</span>
-          {periodo === 'anual' && selectedPlan?.price.anual > 0 && (
-            <span className="text-green-600 ml-2">({selectedPlan.monthlyEquivalent.anual.toFixed(2).replace('.', ',')}€/mes)</span>
-          )}
+    <form onSubmit={submit} className="space-y-4" data-testid="registration-form">
+      <div className="text-center mb-4">
+        <h2 className="text-xl font-bold text-gray-900">Crea tu cuenta</h2>
+        <p className="text-sm text-gray-500 mt-1">
+          Plan: <span className="font-semibold text-emerald-600">{plan.name}</span>
+          {plan.yearly && <span className="text-emerald-500 ml-1">(solo {plan.monthlyEq}\u20ac/mes)</span>}
         </p>
-        {requiresCard && (
-          <p className="text-xs text-amber-600 mt-1">
-            Se validará tu tarjeta. No se cobrará durante los 7 días de prueba.
-          </p>
-        )}
+        <p className="text-xs text-amber-600 mt-1">No se cobra durante los 7 d\u00edas de prueba</p>
       </div>
-      
-      {/* Name */}
+
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">Nombre completo *</label>
+        <label className="block text-sm font-medium text-gray-700 mb-1">Nombre completo *</label>
         <div className="relative">
-          <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-          <input
-            type="text"
-            value={formData.name}
-            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-            required
-            className="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors"
-            placeholder="Tu nombre completo"
-            data-testid="register-name-input"
-          />
+          <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+          <input type="text" value={form.name} onChange={e => set('name', e.target.value)} required
+            className="w-full pl-10 pr-3 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 text-sm"
+            placeholder="Tu nombre" data-testid="reg-name" />
         </div>
       </div>
 
-      {/* Email */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">Email *</label>
+        <label className="block text-sm font-medium text-gray-700 mb-1">Email *</label>
         <div className="relative">
-          <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-          <input
-            type="email"
-            value={formData.email}
-            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-            required
-            className="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors"
-            placeholder="tu@email.com"
-            data-testid="register-email-input"
-          />
+          <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+          <input type="email" value={form.email} onChange={e => set('email', e.target.value)} required
+            className="w-full pl-10 pr-3 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 text-sm"
+            placeholder="tu@email.com" data-testid="reg-email" />
         </div>
       </div>
 
-      {/* Phone */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">Teléfono móvil</label>
+        <label className="block text-sm font-medium text-gray-700 mb-1">{"Tel\u00e9fono m\u00f3vil"}</label>
         <div className="relative">
-          <Phone className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-          <input
-            type="tel"
-            value={formData.phone}
-            onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-            className="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors"
-            placeholder="+34 600 000 000"
-            data-testid="register-phone-input"
-          />
+          <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+          <input type="tel" value={form.phone} onChange={e => set('phone', e.target.value)}
+            className="w-full pl-10 pr-3 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 text-sm"
+            placeholder="+34 600 000 000" data-testid="reg-phone" />
         </div>
       </div>
 
-      {/* Passwords */}
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-2 gap-3">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">Contraseña *</label>
+          <label className="block text-sm font-medium text-gray-700 mb-1">{"Contrase\u00f1a *"}</label>
           <div className="relative">
-            <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-            <input
-              type={showPassword ? 'text' : 'password'}
-              value={formData.password}
-              onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-              required
-              minLength={8}
-              className="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors"
-              placeholder="Mín. 8 caracteres"
-              data-testid="register-password-input"
-            />
-          </div>
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">Confirmar *</label>
-          <div className="relative">
-            <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-            <input
-              type={showPassword ? 'text' : 'password'}
-              value={formData.confirmPassword}
-              onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
-              required
-              className="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors"
-              placeholder="Repetir"
-              data-testid="register-confirm-password-input"
-            />
-            <button
-              type="button"
-              onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
-            >
-              {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+            <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+            <input type={showPw ? 'text' : 'password'} value={form.password} onChange={e => set('password', e.target.value)} required minLength={8}
+              className="w-full pl-10 pr-9 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 text-sm"
+              placeholder={"M\u00edn. 8 car."} data-testid="reg-password" />
+            <button type="button" onClick={() => setShowPw(!showPw)} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400">
+              {showPw ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
             </button>
           </div>
         </div>
-      </div>
-
-      {/* Credit Card for Premium Plans */}
-      {requiresCard && (
-        <div className="pt-2">
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            <CreditCard className="w-4 h-4 inline mr-2" />
-            Tarjeta de débito/crédito *
-          </label>
-          <div className="border border-gray-200 rounded-xl p-4 bg-gray-50/50 focus-within:ring-2 focus-within:ring-emerald-500 focus-within:border-emerald-500 transition-colors">
-            <CardElement 
-              options={cardElementOptions} 
-              onChange={handleCardChange}
-              data-testid="card-element"
-            />
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Confirmar *</label>
+          <div className="relative">
+            <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+            <input type={showPw ? 'text' : 'password'} value={form.confirm} onChange={e => set('confirm', e.target.value)} required
+              className="w-full pl-10 pr-3 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 text-sm"
+              placeholder="Repetir" data-testid="reg-confirm" />
           </div>
-          {cardError && (
-            <p className="text-red-500 text-sm mt-2 flex items-center gap-1">
-              <AlertCircle className="w-4 h-4" />
-              {cardError}
-            </p>
-          )}
-          <div className="mt-3 flex items-center gap-4 text-xs text-gray-500">
-            <span className="flex items-center gap-1">
-              <Lock className="w-3 h-3" /> SSL Seguro
-            </span>
-            <span className="flex items-center gap-1">
-              <Shield className="w-3 h-3" /> PCI Compliant
-            </span>
-            <span className="flex items-center gap-1">
-              <Sparkles className="w-3 h-3" /> 3D Secure
-            </span>
-          </div>
-          <p className="text-xs text-gray-500 mt-2">
-            No se realizará ningún cargo durante los 7 días de prueba. 
-            Cancela en cualquier momento desde tu perfil.
-          </p>
         </div>
-      )}
+      </div>
 
-      {/* Consents */}
-      <div className="space-y-3 pt-4 border-t border-gray-100">
-        <label className="flex items-start gap-3 cursor-pointer">
-          <input
-            type="checkbox"
-            checked={formData.acceptTerms}
-            onChange={(e) => setFormData({ ...formData, acceptTerms: e.target.checked })}
-            className="w-4 h-4 mt-1 text-emerald-600 rounded border-gray-300 focus:ring-emerald-500"
-            data-testid="accept-terms-checkbox"
-          />
-          <span className="text-sm text-gray-600">
-            Acepto los <a href="/terms-of-service" target="_blank" className="text-emerald-600 underline hover:text-emerald-700">Términos y Condiciones</a> *
-          </span>
+      <div className="pt-2">
+        <label className="block text-sm font-medium text-gray-700 mb-1">
+          <CreditCard className="w-4 h-4 inline mr-1" /> {"Tarjeta de d\u00e9bito/cr\u00e9dito *"}
         </label>
-        
-        <label className="flex items-start gap-3 cursor-pointer">
-          <input
-            type="checkbox"
-            checked={formData.acceptPrivacy}
-            onChange={(e) => setFormData({ ...formData, acceptPrivacy: e.target.checked })}
-            className="w-4 h-4 mt-1 text-emerald-600 rounded border-gray-300 focus:ring-emerald-500"
-            data-testid="accept-privacy-checkbox"
-          />
-          <span className="text-sm text-gray-600">
-            Acepto la <a href="/privacy-policy" target="_blank" className="text-emerald-600 underline hover:text-emerald-700">Política de Privacidad</a> *
-          </span>
+        <div className="border border-gray-200 rounded-lg p-3 bg-gray-50/50 focus-within:ring-2 focus-within:ring-emerald-500">
+          <CardElement options={cardStyle} onChange={e => { setCardErr(e.error?.message || null); setCardOk(e.complete); }} />
+        </div>
+        {cardErr && <p className="text-red-500 text-xs mt-1 flex items-center gap-1"><AlertCircle className="w-3 h-3" />{cardErr}</p>}
+        <div className="mt-2 flex items-center gap-3 text-[10px] text-gray-400">
+          <span className="flex items-center gap-1"><Lock className="w-3 h-3" /> SSL</span>
+          <span className="flex items-center gap-1"><Shield className="w-3 h-3" /> PCI</span>
+          <span className="flex items-center gap-1"><Check className="w-3 h-3" /> 3D Secure</span>
+        </div>
+      </div>
+
+      <div className="space-y-2 pt-3 border-t border-gray-100 text-sm">
+        <label className="flex items-start gap-2 cursor-pointer">
+          <input type="checkbox" checked={form.terms} onChange={e => set('terms', e.target.checked)}
+            className="w-4 h-4 mt-0.5 text-emerald-600 rounded border-gray-300" data-testid="reg-terms" />
+          <span className="text-gray-600">Acepto los <Link to="/terms-of-service" className="text-emerald-600 underline">{"T\u00e9rminos"}</Link> *</span>
         </label>
-        
-        <label className="flex items-start gap-3 cursor-pointer">
-          <input
-            type="checkbox"
-            checked={formData.acceptCommunications}
-            onChange={(e) => setFormData({ ...formData, acceptCommunications: e.target.checked })}
-            className="w-4 h-4 mt-1 text-emerald-600 rounded border-gray-300 focus:ring-emerald-500"
-            data-testid="accept-communications-checkbox"
-          />
-          <span className="text-sm text-gray-600">
-            Deseo recibir comunicaciones sobre ofertas y novedades
-          </span>
+        <label className="flex items-start gap-2 cursor-pointer">
+          <input type="checkbox" checked={form.privacy} onChange={e => set('privacy', e.target.checked)}
+            className="w-4 h-4 mt-0.5 text-emerald-600 rounded border-gray-300" data-testid="reg-privacy" />
+          <span className="text-gray-600">Acepto la <Link to="/privacy-policy" className="text-emerald-600 underline">{"Pol\u00edtica de Privacidad"}</Link> *</span>
         </label>
       </div>
 
-      {/* Buttons */}
-      <div className="flex gap-3 pt-4">
-        <Button 
-          type="button"
-          variant="outline" 
-          className="flex-1 h-12"
-          onClick={onBack}
-          disabled={isLoading}
-        >
-          <ArrowLeft className="w-4 h-4 mr-2" />
-          Atrás
+      <div className="flex gap-3 pt-3">
+        <Button type="button" variant="outline" className="flex-1 h-11" onClick={onBack} disabled={loading}>
+          <ArrowLeft className="w-4 h-4 mr-1" /> {"Atr\u00e1s"}
         </Button>
-        <Button 
-          type="submit"
-          className="flex-1 h-12 bg-emerald-600 hover:bg-emerald-700"
-          disabled={isLoading || !formData.acceptTerms || !formData.acceptPrivacy || (requiresCard && !cardComplete)}
-          data-testid="submit-registration-btn"
-        >
-          {isLoading ? (
-            <>
-              <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-              Procesando...
-            </>
-          ) : (
-            <>
-              {requiresCard ? 'Empezar prueba gratis' : 'Crear cuenta'}
-              <ArrowRight className="w-5 h-5 ml-2" />
-            </>
-          )}
+        <Button type="submit" className="flex-1 h-11 bg-emerald-500 hover:bg-emerald-600" disabled={loading || !form.terms || !form.privacy || !cardOk} data-testid="reg-submit">
+          {loading ? <><Loader2 className="w-4 h-4 mr-1 animate-spin" /> Procesando...</> : <>Empezar prueba gratis <ArrowRight className="w-4 h-4 ml-1" /></>}
         </Button>
       </div>
     </form>
   );
 };
 
-// Main Registration Page
+/* ── Main Page ── */
 const ManoProtectRegistro = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [step, setStep] = useState(1);
-  const [selectedPlan, setSelectedPlan] = useState(searchParams.get('plan') || 'individual');
-  const [periodo, setPeriodo] = useState('anual');
+  const [selectedPlan, setSelectedPlan] = useState(PLANS.find(p => p.popular) || PLANS[0]);
 
-  // Check if coming from pricing page with a specific plan
   useEffect(() => {
-    const planParam = searchParams.get('plan');
-    if (planParam && PLANS.find(p => p.id === planParam)) {
-      setSelectedPlan(planParam);
-    }
+    const p = searchParams.get('plan');
+    if (p === 'mensual') setSelectedPlan(PLANS[0]);
+    if (p === 'anual') setSelectedPlan(PLANS[1]);
   }, [searchParams]);
 
-  const handlePlanSelect = (planId) => {
-    setSelectedPlan(planId);
-  };
-
   const handleSuccess = (data) => {
-    // Redirect to success page or login
-    navigate('/trial-success', { 
-      state: { 
-        plan: selectedPlan,
-        periodo: periodo,
-        trialEnd: data.trial_end,
-        email: data.email
-      } 
-    });
-  };
-
-  const renderPlanSelection = () => {
-    const currentPlan = PLANS.find(p => p.id === selectedPlan);
-    
-    return (
-      <div className="space-y-6">
-        <div className="text-center mb-8">
-          <h2 className="text-2xl font-bold text-gray-900">Elige tu plan</h2>
-          <p className="text-gray-500 mt-2">Todos los planes incluyen 7 días de prueba gratis</p>
-        </div>
-        
-        {/* Period Toggle */}
-        <div className="flex items-center justify-center gap-4 mb-6">
-          <button
-            onClick={() => setPeriodo('mensual')}
-            className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
-              periodo === 'mensual' 
-                ? 'bg-emerald-600 text-white shadow-md' 
-                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-            }`}
-            data-testid="periodo-mensual-btn"
-          >
-            Mensual
-          </button>
-          <button
-            onClick={() => setPeriodo('anual')}
-            className={`px-4 py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-2 ${
-              periodo === 'anual' 
-                ? 'bg-emerald-600 text-white shadow-md' 
-                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-            }`}
-            data-testid="periodo-anual-btn"
-          >
-            Anual
-            <span className="bg-green-500 text-white text-xs px-2 py-0.5 rounded-full">
-              -30%
-            </span>
-          </button>
-        </div>
-        
-        {/* Plan Cards */}
-        <div className="grid md:grid-cols-3 gap-4">
-          {PLANS.map((plan) => {
-            const price = periodo === 'anual' ? plan.price.anual : plan.price.mensual;
-            const isSelected = selectedPlan === plan.id;
-            
-            return (
-              <div
-                key={plan.id}
-                onClick={() => handlePlanSelect(plan.id)}
-                className={`relative cursor-pointer rounded-2xl border-2 p-5 transition-all ${
-                  isSelected
-                    ? 'border-emerald-600 bg-emerald-50 shadow-lg scale-[1.02]'
-                    : 'border-gray-200 hover:border-emerald-300 hover:shadow-md'
-                }`}
-                data-testid={`plan-card-${plan.id}`}
-              >
-                {/* Badge */}
-                {plan.badge && (
-                  <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                    <span className={`text-white text-xs font-bold px-3 py-1 rounded-full shadow-md ${
-                      plan.badgeColor === 'emerald' ? 'bg-gradient-to-r from-emerald-600 to-purple-600' :
-                      plan.badgeColor === 'emerald' ? 'bg-gradient-to-r from-green-500 to-emerald-600' :
-                      'bg-gradient-to-r from-purple-500 to-pink-600'
-                    }`}>
-                      {plan.badge.toUpperCase()}
-                    </span>
-                  </div>
-                )}
-                
-                <div className="text-center pt-2">
-                  <h3 className="font-bold text-lg text-gray-900">{plan.name}</h3>
-                  <div className="mt-3">
-                    <span className="text-3xl font-bold text-emerald-600">
-                      {price === 0 ? '0' : price.toFixed(2).replace('.', ',')}€
-                    </span>
-                    <span className="text-gray-500 text-sm">/{periodo === 'anual' ? 'año' : 'mes'}</span>
-                  </div>
-                  
-                  {/* Monthly equivalent for annual */}
-                  {periodo === 'anual' && plan.monthlyEquivalent?.anual && (
-                    <p className="text-xs text-green-600 font-semibold mt-1">
-                      Solo {plan.monthlyEquivalent.anual.toFixed(2).replace('.', ',')}€/mes
-                    </p>
-                  )}
-                  {periodo === 'anual' && plan.savings?.anual && (
-                    <p className="text-xs text-green-600 mt-0.5">
-                      Ahorras {plan.savings.anual}€/año
-                    </p>
-                  )}
-                  
-                  <p className="text-sm text-gray-500 mt-2">{plan.description}</p>
-                  
-                  {/* Card requirement indicator */}
-                  {plan.requiresCard ? (
-                    <p className="text-xs text-amber-600 mt-2 flex items-center justify-center gap-1">
-                      <CreditCard className="w-3 h-3" /> Requiere tarjeta
-                    </p>
-                  ) : (
-                    <p className="text-xs text-green-600 mt-2">Sin tarjeta requerida</p>
-                  )}
-                </div>
-                
-                {/* Features */}
-                <ul className="mt-5 space-y-2">
-                  {plan.features.map((feature, idx) => (
-                    <li key={idx} className="flex items-center gap-2 text-sm text-gray-600">
-                      <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />
-                      {feature}
-                    </li>
-                  ))}
-                </ul>
-                
-                {/* Selected indicator */}
-                {isSelected && (
-                  <div className="absolute top-4 right-4">
-                    <CheckCircle className="w-6 h-6 text-emerald-600" />
-                  </div>
-                )}
-              </div>
-            );
-          })}
-        </div>
-        
-        {/* Continue Button */}
-        <Button 
-          className="w-full h-12 bg-emerald-600 hover:bg-emerald-700"
-          onClick={() => setStep(2)}
-          data-testid="continue-to-registration-btn"
-        >
-          Continuar con {currentPlan?.name}
-          <ArrowRight className="w-5 h-5 ml-2" />
-        </Button>
-        
-        {/* Trust indicators */}
-        <div className="flex items-center justify-center gap-6 text-xs text-gray-500 pt-4">
-          <span className="flex items-center gap-1">
-            <Shield className="w-4 h-4 text-green-500" /> Pago seguro
-          </span>
-          <span className="flex items-center gap-1">
-            <Star className="w-4 h-4 text-amber-500" /> 4.9/5 en Trustpilot
-          </span>
-          <span className="flex items-center gap-1">
-            <Lock className="w-4 h-4 text-blue-500" /> Cancela cuando quieras
-          </span>
-        </div>
-      </div>
-    );
+    navigate('/trial-success', { state: { plan: selectedPlan.name, email: data.email, trialEnd: data.trial_end } });
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-emerald-900 via-purple-900 to-emerald-900">
-      {/* SEO Meta Tags */}
+    <div className="min-h-screen bg-slate-50" data-testid="registro-page">
       <Helmet>
-        <title>Registro | ManoProtect - Crea tu cuenta de seguridad digital</title>
-        <meta name="description" content="Regístrate en ManoProtect y protege a tu familia. Planes desde 0€. 7 días de prueba gratis. Protección contra phishing, fraud prevention y localización GPS." />
-        <meta name="keywords" content="registro manoprotect, crear cuenta seguridad digital, protección familiar, plan básico gratis, plan individual, plan familiar" />
-        <link rel="canonical" href="https://manoprotect.com/registro" />
-        
-        {/* Open Graph */}
-        <meta property="og:title" content="Registro | ManoProtect - Crea tu cuenta de seguridad digital" />
-        <meta property="og:description" content="Regístrate en ManoProtect y protege a tu familia. Planes desde 0€. 7 días de prueba gratis." />
-        <meta property="og:url" content="https://manoprotect.com/registro" />
-        <meta property="og:type" content="website" />
-        
-        {/* Schema.org */}
-        <script type="application/ld+json">
-          {JSON.stringify(registrationSchema)}
-        </script>
+        <title>{"Registro | ManoProtect - Protecci\u00f3n familiar 24/7"}</title>
+        <meta name="description" content={"Reg\u00edstrate en ManoProtect. Localiza a tu familia en segundos. Desde 9,99\u20ac/mes. 7 d\u00edas gratis."} />
       </Helmet>
-      
+
       {/* Header */}
-      <header className="bg-white/5 backdrop-blur-sm border-b border-white/10">
-        <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
-          <div 
-            className="flex items-center gap-3 cursor-pointer" 
-            onClick={() => navigate('/')}
-          >
-            <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg shadow-emerald-500/30">
-              <Shield className="w-7 h-7 text-white" />
+      <header className="bg-white border-b border-gray-100" data-testid="reg-header">
+        <div className="max-w-5xl mx-auto px-4 h-14 flex items-center justify-between">
+          <Link to="/" className="flex items-center gap-2">
+            <div className="w-8 h-8 bg-emerald-500 rounded-lg flex items-center justify-center">
+              <Shield className="w-4 h-4 text-white" />
             </div>
-            <div>
-              <h1 className="text-xl font-bold text-white">ManoProtect</h1>
-              <p className="text-xs text-emerald-300">Protección Digital</p>
-            </div>
-          </div>
-          
-          <div className="flex items-center gap-4">
-            <a href="tel:601510950" className="hidden md:flex items-center gap-2 text-white/70 hover:text-white text-sm">
-              <Phone className="w-4 h-4" />
-              601 510 950
+            <span className="text-emerald-600 text-lg font-bold">ManoProtect</span>
+          </Link>
+          <div className="flex items-center gap-4 text-sm">
+            <a href="tel:601510950" className="hidden sm:flex items-center gap-1 text-gray-500 hover:text-emerald-600">
+              <Phone className="w-4 h-4" /> 601 510 950
             </a>
-            <a href="/login" className="text-white/70 hover:text-white text-sm">
-              Ya tengo cuenta
-            </a>
+            <Link to="/login" className="text-gray-500 hover:text-emerald-600 font-medium">Ya tengo cuenta</Link>
           </div>
         </div>
       </header>
 
-      <main className="flex min-h-[calc(100vh-80px)]">
-        {/* Left Side - Features (Desktop only) */}
-        <div className="hidden lg:flex lg:w-1/2 flex-col justify-center px-16 py-12">
-          <div className="max-w-lg">
-            <h2 className="text-4xl font-bold text-white mb-6">
-              Protege lo que más importa
-            </h2>
-            <p className="text-lg text-emerald-200 mb-8">
-              ManoProtect te ayuda a detectar estafas, proteger a tu familia y navegar seguro por internet.
-            </p>
-            
-            {/* Features */}
-            <div className="space-y-4">
-              <div className="flex items-start gap-4 bg-white/5 rounded-xl p-4 border border-white/10">
-                <div className="w-12 h-12 bg-green-500/20 rounded-full flex items-center justify-center flex-shrink-0">
-                  <Shield className="w-6 h-6 text-green-400" />
-                </div>
-                <div>
-                  <h3 className="font-semibold text-white">Detección de estafas con IA</h3>
-                  <p className="text-sm text-emerald-200/70">Analiza mensajes, llamadas y webs sospechosas al instante</p>
-                </div>
-              </div>
-              
-              <div className="flex items-start gap-4 bg-white/5 rounded-xl p-4 border border-white/10">
-                <div className="w-12 h-12 bg-blue-500/20 rounded-full flex items-center justify-center flex-shrink-0">
-                  <CreditCard className="w-6 h-6 text-blue-400" />
-                </div>
-                <div>
-                  <h3 className="font-semibold text-white">Sin compromiso</h3>
-                  <p className="text-sm text-emerald-200/70">7 días de prueba gratis. Cancela en cualquier momento.</p>
-                </div>
-              </div>
-              
-              <div className="flex items-start gap-4 bg-white/5 rounded-xl p-4 border border-white/10">
-                <div className="w-12 h-12 bg-purple-500/20 rounded-full flex items-center justify-center flex-shrink-0">
-                  <Lock className="w-6 h-6 text-purple-400" />
-                </div>
-                <div>
-                  <h3 className="font-semibold text-white">Pago 100% seguro</h3>
-                  <p className="text-sm text-emerald-200/70">Encriptación SSL, 3D Secure y certificación PCI DSS</p>
-                </div>
-              </div>
-            </div>
-
-            {/* Stats */}
-            <div className="mt-8 pt-8 border-t border-white/10 grid grid-cols-3 gap-4">
-              <div className="text-center">
-                <p className="text-2xl font-bold text-white">+2000</p>
-                <p className="text-xs text-emerald-300">Familias protegidas</p>
-              </div>
-              <div className="text-center">
-                <p className="text-2xl font-bold text-white">24/7</p>
-                <p className="text-xs text-emerald-300">Protección continua</p>
-              </div>
-              <div className="text-center">
-                <p className="text-2xl font-bold text-white">4.9★</p>
-                <p className="text-xs text-emerald-300">Trustpilot</p>
-              </div>
-            </div>
-          </div>
+      <main className="max-w-4xl mx-auto px-4 py-8 sm:py-12">
+        {/* Progress */}
+        <div className="flex items-center justify-center gap-2 mb-8">
+          <div className="w-8 h-8 rounded-full bg-emerald-500 text-white text-sm font-bold flex items-center justify-center">1</div>
+          <div className={`w-12 h-1 rounded ${step >= 2 ? 'bg-emerald-500' : 'bg-gray-200'}`} />
+          <div className={`w-8 h-8 rounded-full text-sm font-bold flex items-center justify-center ${step >= 2 ? 'bg-emerald-500 text-white' : 'bg-gray-200 text-gray-500'}`}>2</div>
         </div>
 
-        {/* Right Side - Form */}
-        <div className="w-full lg:w-1/2 flex items-center justify-center px-4 py-12">
-          <div className="w-full max-w-lg">
-            {/* Progress indicator */}
-            <div className="flex items-center justify-center gap-2 mb-6">
-              <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                step >= 1 ? 'bg-emerald-600 text-white' : 'bg-white/20 text-white/50'
-              }`}>
-                1
-              </div>
-              <div className={`w-16 h-1 rounded ${step >= 2 ? 'bg-emerald-600' : 'bg-white/20'}`} />
-              <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                step >= 2 ? 'bg-emerald-600 text-white' : 'bg-white/20 text-white/50'
-              }`}>
-                2
-              </div>
+        {step === 1 && (
+          <div className="max-w-2xl mx-auto" data-testid="plan-selection">
+            <div className="text-center mb-8">
+              <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Elige tu plan</h1>
+              <p className="text-gray-500 mt-2">Todos incluyen 7 d\u00edas de prueba gratis. Cancela cuando quieras.</p>
             </div>
 
-            {/* Form Card */}
-            <div className="bg-white rounded-2xl shadow-2xl shadow-black/20 p-8">
-              {step === 1 && renderPlanSelection()}
-              {step === 2 && (
-                <Elements stripe={stripePromise}>
-                  <RegistrationForm 
-                    plan={selectedPlan}
-                    periodo={periodo}
-                    onBack={() => setStep(1)}
-                    onSuccess={handleSuccess}
-                  />
-                </Elements>
-              )}
+            <div className="grid sm:grid-cols-2 gap-4">
+              {PLANS.map(plan => (
+                <div
+                  key={plan.id}
+                  onClick={() => { setSelectedPlan(plan); trackCTAClick('plan_select', plan.name); }}
+                  className={`relative cursor-pointer rounded-2xl border-2 p-5 transition-all ${
+                    selectedPlan.id === plan.id
+                      ? 'border-emerald-500 bg-emerald-50/50 shadow-lg'
+                      : 'border-gray-200 hover:border-emerald-300 hover:shadow-md'
+                  }`}
+                  data-testid={`plan-card-${plan.id}`}
+                >
+                  {plan.popular && (
+                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-emerald-500 text-white text-xs font-bold px-3 py-1 rounded-full whitespace-nowrap">
+                      {"M\u00c1S POPULAR \u00b7 Ahorra "}{plan.savings}{"\u20ac"}
+                    </div>
+                  )}
+
+                  {selectedPlan.id === plan.id && (
+                    <div className="absolute top-3 right-3 w-6 h-6 bg-emerald-500 rounded-full flex items-center justify-center">
+                      <Check className="w-4 h-4 text-white" />
+                    </div>
+                  )}
+
+                  <div className="text-center pt-1">
+                    <h3 className="font-bold text-lg text-gray-900">Plan {plan.name}</h3>
+                    <div className="mt-2">
+                      <span className="text-3xl font-extrabold text-gray-900">{plan.price.toFixed(2).replace('.', ',')}{"\u20ac"}</span>
+                      <span className="text-gray-400 text-sm">/{plan.period}</span>
+                    </div>
+                    {plan.monthlyEq && (
+                      <p className="text-xs text-emerald-600 font-semibold mt-1">Solo {plan.monthlyEq.toFixed(2).replace('.', ',')}{"\u20ac"}/mes</p>
+                    )}
+                  </div>
+
+                  <ul className="mt-4 space-y-2">
+                    {plan.features.map((f, i) => (
+                      <li key={i} className="flex items-center gap-2 text-sm text-gray-600">
+                        <Check className="w-4 h-4 text-emerald-500 flex-shrink-0" />{f}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
             </div>
 
-            {/* Bottom link */}
-            <div className="mt-6 text-center">
-              <p className="text-white/60 text-sm">
-                ¿Ya tienes cuenta?{' '}
-                <a href="/login" className="text-white hover:underline font-medium">
-                  Inicia sesión
-                </a>
-              </p>
+            <Button
+              className="w-full h-12 bg-emerald-500 hover:bg-emerald-600 mt-6 text-base font-bold"
+              onClick={() => { setStep(2); trackCheckoutStart(selectedPlan.name); }}
+              data-testid="continue-btn"
+            >
+              Continuar con Plan {selectedPlan.name} <ArrowRight className="w-5 h-5 ml-2" />
+            </Button>
+
+            <div className="flex items-center justify-center gap-5 text-xs text-gray-400 mt-5">
+              <span className="flex items-center gap-1"><Shield className="w-3.5 h-3.5 text-emerald-400" /> Pago seguro</span>
+              <span className="flex items-center gap-1"><Star className="w-3.5 h-3.5 text-amber-400" /> 4.8/5</span>
+              <span className="flex items-center gap-1"><Lock className="w-3.5 h-3.5 text-blue-400" /> Cancela cuando quieras</span>
+            </div>
+
+            <div className="text-center mt-6 bg-emerald-50 border border-emerald-100 rounded-xl p-4">
+              <Heart className="w-5 h-5 text-emerald-500 mx-auto mb-2" />
+              <p className="text-sm text-gray-700 font-medium">{"Garant\u00eda de tranquilidad"}</p>
+              <p className="text-xs text-gray-500 mt-1">{"Si en 7 d\u00edas no te convence, cancela sin compromiso. Sin preguntas."}</p>
             </div>
           </div>
-        </div>
+        )}
+
+        {step === 2 && stripePromise && (
+          <div className="max-w-md mx-auto">
+            <div className="bg-white rounded-2xl shadow-xl border border-gray-100 p-6">
+              <Elements stripe={stripePromise}>
+                <RegForm plan={selectedPlan} onBack={() => setStep(1)} onSuccess={handleSuccess} />
+              </Elements>
+            </div>
+          </div>
+        )}
       </main>
-
-      {/* Footer */}
-      <LandingFooter />
     </div>
   );
 };
