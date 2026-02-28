@@ -350,6 +350,59 @@ const ThankYouPage = () => {
               </Link>
             </div>
 
+            {/* PDF Download & WhatsApp Share Section */}
+            <div className="mt-8 bg-white rounded-2xl border border-gray-200 shadow-sm p-6" data-testid="documents-section">
+              <h3 className="font-bold text-gray-900 mb-4 flex items-center gap-2">
+                <FileText className="w-5 h-5 text-green-600" />
+                Documentos y compartir
+              </h3>
+              
+              <div className="grid sm:grid-cols-2 gap-4">
+                {/* Download Welcome PDF */}
+                <a
+                  href={`${API_URL}/api/documents/welcome-pdf`}
+                  className="flex items-center gap-3 p-4 bg-green-50 border border-green-200 rounded-xl hover:bg-green-100 transition-colors"
+                  data-testid="download-welcome-pdf"
+                >
+                  <div className="w-10 h-10 bg-green-500 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <Download className="w-5 h-5 text-white" />
+                  </div>
+                  <div>
+                    <p className="font-semibold text-gray-900 text-sm">PDF de Bienvenida</p>
+                    <p className="text-xs text-gray-500">Información del pedido y guía de configuración</p>
+                  </div>
+                </a>
+
+                {/* Share via WhatsApp */}
+                <a
+                  href={`https://wa.me/?text=${encodeURIComponent(
+                    `¡Ya tengo mi ${productConfig.name} de ManoProtect! 🛡️\n\nPedido #${orderNumber}\nProtección familiar GPS + SOS activa.\n\nMás info: www.manoprotect.com`
+                  )}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-3 p-4 bg-emerald-50 border border-emerald-200 rounded-xl hover:bg-emerald-100 transition-colors"
+                  data-testid="share-whatsapp"
+                >
+                  <div className="w-10 h-10 bg-emerald-500 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <MessageCircle className="w-5 h-5 text-white" />
+                  </div>
+                  <div>
+                    <p className="font-semibold text-gray-900 text-sm">Compartir por WhatsApp</p>
+                    <p className="text-xs text-gray-500">Envía la confirmación a tu familia</p>
+                  </div>
+                </a>
+              </div>
+
+              {isSubscription && (
+                <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-xl">
+                  <p className="text-xs text-blue-700">
+                    <strong>Tu plan familiar está activo.</strong> Cuando recibas el dispositivo y lo configures, 
+                    recibirás un PDF de configuración completada que podrás compartir por WhatsApp.
+                  </p>
+                </div>
+              )}
+            </div>
+
             {/* Support Info */}
             <div className="mt-12 text-center">
               <p className="text-gray-500 text-sm mb-2">¿Tienes alguna pregunta?</p>
