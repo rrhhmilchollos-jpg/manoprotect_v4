@@ -180,6 +180,8 @@ const LandingFooter = () => {
                   <li><Link to="/smart-locator" className="text-slate-400 hover:text-emerald-400 transition-colors text-sm">Localizador GPS</Link></li>
                   <li><Link to="/servicios-sos" className="text-slate-400 hover:text-emerald-400 transition-colors text-sm">Botón SOS</Link></li>
                   <li><Link to="/seguridad-hogar-empresa" className="text-slate-400 hover:text-emerald-400 transition-colors text-sm">Alarmas Hogar y Empresa</Link></li>
+                  <li><Link to="/alarmas/vivienda" className="text-slate-400 hover:text-emerald-400 transition-colors text-sm">Alarmas Vivienda</Link></li>
+                  <li><Link to="/alarmas/negocio" className="text-slate-400 hover:text-emerald-400 transition-colors text-sm">Alarmas Negocio</Link></li>
                 </ul>
               </div>
 
