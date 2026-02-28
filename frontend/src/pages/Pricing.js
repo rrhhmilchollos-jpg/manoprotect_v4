@@ -32,15 +32,15 @@ const Pricing = () => {
       {/* Hero */}
       <section className="py-16 bg-gradient-to-b from-slate-50 to-white" data-testid="pricing-hero">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center">
-          <div className="inline-flex items-center gap-2 bg-emerald-50 border border-emerald-200 px-4 py-1.5 rounded-full mb-4">
-            <Clock className="w-4 h-4 text-emerald-600" />
-            <span className="text-xs font-bold text-emerald-700">OFERTA POR TIEMPO LIMITADO</span>
+          <div className="inline-flex items-center gap-2 bg-red-50 border border-red-200 px-4 py-1.5 rounded-full mb-4">
+            <Clock className="w-4 h-4 text-red-500" />
+            <span className="text-xs font-bold text-red-600">OFERTA LANZAMIENTO – PRIMEROS 200 SUSCRIPTORES</span>
           </div>
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-4" data-testid="pricing-title">
             Protección familiar desde <span className="text-emerald-500">9,99€/mes</span>
           </h1>
-          <p className="text-lg text-gray-500 mb-2">Dispositivo Sentinel GRATIS incluido con cualquier plan</p>
-          <p className="text-emerald-600 font-semibold">Prueba 7 días gratis – Sin compromiso</p>
+          <p className="text-lg text-gray-500 mb-2">Suscríbete y obtén un <strong>20% de descuento</strong> en tu dispositivo Sentinel</p>
+          <p className="text-emerald-600 font-semibold">Sentinel X Basic GRATIS (solo 50 unidades) con Plan Basic</p>
         </div>
       </section>
 
