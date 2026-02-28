@@ -95,14 +95,19 @@ const ThankYouPage = () => {
   const plan = searchParams.get('plan');
   const amount = searchParams.get('amount');
 
-  // Determine product type
-  const productKey = product.toLowerCase().includes('sentinel') ? 'sentinel-x' :
+  // Determine product type - check for specific product keys first
+  const productKey = PRODUCT_CONFIG[product] ? product :
+                     product.toLowerCase().includes('sentinel-x-basic') ? 'sentinel-x-basic' :
+                     product.toLowerCase().includes('sentinel-j') ? 'sentinel-j' :
+                     product.toLowerCase().includes('sentinel-s') ? 'sentinel-s' :
+                     product.toLowerCase().includes('sentinel') ? 'sentinel-x' :
                      product.toLowerCase().includes('sos') ? 'sos-device' :
                      product.toLowerCase().includes('gps') ? 'gps-tracker' :
                      product.toLowerCase().includes('suscripcion') || plan ? 'subscription' :
                      'default';
   
   const productConfig = PRODUCT_CONFIG[productKey];
+  const isSubscription = plan || ['sentinel-x-basic', 'sentinel-j', 'sentinel-s'].includes(productKey);
 
   useEffect(() => {
     const fetchOrderDetails = async () => {
