@@ -290,6 +290,36 @@ const InterstitialAdManager = () => {
   );
 };
 
+// Global Health Check - Polling cada 5 segundos
+const HealthCheckMonitor = () => {
+  useEffect(() => {
+    const API = process.env.REACT_APP_BACKEND_URL;
+    let wasDown = false;
+    const check = async () => {
+      try {
+        const r = await fetch(`${API}/api/heartbeat`, { signal: AbortSignal.timeout(4000) });
+        if (r.ok && wasDown) {
+          wasDown = false;
+          import('sonner').then(m => m.toast.success('Conexión restaurada', { description: 'El servidor vuelve a estar operativo.' }));
+        }
+        if (!r.ok && !wasDown) {
+          wasDown = true;
+          import('sonner').then(m => m.toast.error('Servidor no disponible', { description: 'Estamos trabajando para restaurar el servicio.' }));
+        }
+      } catch {
+        if (!wasDown) {
+          wasDown = true;
+          import('sonner').then(m => m.toast.error('Sin conexión al servidor', { description: 'Comprobando cada 5 segundos...' }));
+        }
+      }
+    };
+    check();
+    const iv = setInterval(check, 5000);
+    return () => clearInterval(iv);
+  }, []);
+  return null;
+};
+
 // App Router - ManoProtect.com Only
 function AppRouter() {
   const location = useLocation();
