@@ -1,44 +1,44 @@
 /**
- * ManoProtect - CEO Dashboard
- * Control total: usuarios, suscripciones, pedidos, reembolsos, métricas, stock, mensajes
+ * ManoProtect CEO Dashboard - Enterprise Edition
+ * Sidebar + Dashboard + Inventario + Usuarios + Membresías + Pagos + Seguridad + Reportes
+ * Colores corporativos: azul (#1e40af) y naranja (#ea580c)
  */
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
+  BarChart, Bar, PieChart, Pie, Cell, ResponsiveContainer, XAxis, YAxis, Tooltip, CartesianGrid, LineChart, Line
+} from 'recharts';
+import {
   Shield, Users, CreditCard, Package, RotateCcw, MessageSquare,
   TrendingUp, AlertTriangle, Search, ChevronLeft, ChevronRight,
-  Activity, RefreshCw, BarChart3, Gift, Percent
+  Activity, RefreshCw, BarChart3, Gift, Percent, Bell, Settings,
+  Layout, Box, Lock, FileText, Download, Menu, X, Eye, UserX, UserCheck,
+  CheckCircle, XCircle, ChevronDown
 } from 'lucide-react';
 
 const API = process.env.REACT_APP_BACKEND_URL;
-
-const StatCard = ({ icon: Icon, label, value, sub, color = 'emerald', alert }) => (
-  <div className={`bg-white rounded-xl border ${alert ? 'border-red-200' : 'border-gray-200'} p-4 hover:shadow-md transition-shadow`} data-testid={`stat-${label.toLowerCase().replace(/\s/g, '-')}`}>
-    <div className="flex items-center justify-between mb-2">
-      <div className={`w-9 h-9 bg-${color}-50 rounded-lg flex items-center justify-center`}>
-        <Icon className={`w-5 h-5 text-${color}-500`} />
-      </div>
-      {alert && <AlertTriangle className="w-4 h-4 text-red-500" />}
-    </div>
-    <p className="text-2xl font-bold text-gray-900">{value}</p>
-    <p className="text-xs text-gray-500">{label}</p>
-    {sub && <p className="text-[10px] text-gray-400 mt-0.5">{sub}</p>}
-  </div>
-);
+const COLORS = ['#1e40af', '#ea580c', '#16a34a', '#7c3aed', '#dc2626', '#0891b2'];
 
 const CEODashboard = () => {
   const nav = useNavigate();
+  const [section, setSection] = useState('dashboard');
   const [stats, setStats] = useState(null);
+  const [chartData, setChartData] = useState(null);
   const [activity, setActivity] = useState([]);
-  const [tab, setTab] = useState('overview');
+  const [notifications, setNotifications] = useState([]);
   const [users, setUsers] = useState({ users: [], total: 0, page: 1, pages: 1 });
   const [subs, setSubs] = useState({ subscriptions: [], total: 0, page: 1, pages: 1 });
   const [orders, setOrders] = useState({ orders: [], total: 0, page: 1, pages: 1 });
   const [messages, setMessages] = useState({ messages: [], total: 0, page: 1, pages: 1 });
   const [refunds, setRefunds] = useState({ refunds: [], total: 0, page: 1, pages: 1 });
+  const [inventory, setInventory] = useState({ items: [], total: 0, page: 1, pages: 1 });
+  const [securityLogs, setSecurityLogs] = useState({ logs: [], total: 0 });
+  const [securityOverview, setSecurityOverview] = useState(null);
   const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(true);
   const [heartbeat, setHeartbeat] = useState({ backend: false });
+  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [showNotifs, setShowNotifs] = useState(false);
 
   const fetchJSON = useCallback(async (url) => {
     const res = await fetch(`${API}${url}`, { credentials: 'include' });
@@ -46,17 +46,22 @@ const CEODashboard = () => {
     return res.json();
   }, []);
 
-  const loadStats = useCallback(async () => {
+  const loadDashboard = useCallback(async () => {
     try {
-      const [s, a] = await Promise.all([fetchJSON('/api/ceo/stats'), fetchJSON('/api/ceo/activity')]);
-      setStats(s); setActivity(a.activities || []);
+      const [s, a, c, n] = await Promise.all([
+        fetchJSON('/api/ceo/stats'),
+        fetchJSON('/api/ceo/activity'),
+        fetchJSON('/api/ceo/chart-data'),
+        fetchJSON('/api/ceo/notifications'),
+      ]);
+      setStats(s); setActivity(a.activities || []); setChartData(c); setNotifications(n.notifications || []);
     } catch (e) {
       if (String(e).includes('401') || String(e).includes('403')) nav('/login');
     }
     setLoading(false);
   }, [fetchJSON, nav]);
 
-  useEffect(() => { loadStats(); const iv = setInterval(loadStats, 30000); return () => clearInterval(iv); }, [loadStats]);
+  useEffect(() => { loadDashboard(); const iv = setInterval(loadDashboard, 30000); return () => clearInterval(iv); }, [loadDashboard]);
 
   useEffect(() => {
     const check = async () => {
@@ -65,183 +70,535 @@ const CEODashboard = () => {
     check(); const iv = setInterval(check, 5000); return () => clearInterval(iv);
   }, []);
 
-  const loadTab = useCallback(async (t, page = 1) => {
+  // Notification polling every 10s
+  useEffect(() => {
+    const poll = async () => {
+      try {
+        const n = await fetchJSON('/api/ceo/notifications');
+        setNotifications(n.notifications || []);
+      } catch {}
+    };
+    const iv = setInterval(poll, 10000);
+    return () => clearInterval(iv);
+  }, [fetchJSON]);
+
+  const loadSection = useCallback(async (s, page = 1) => {
     try {
-      if (t === 'users') setUsers(await fetchJSON(`/api/ceo/users?page=${page}&search=${search}`));
-      if (t === 'subscriptions') setSubs(await fetchJSON(`/api/ceo/subscriptions?page=${page}`));
-      if (t === 'orders') setOrders(await fetchJSON(`/api/ceo/orders?page=${page}`));
-      if (t === 'messages') setMessages(await fetchJSON(`/api/ceo/messages?page=${page}`));
-      if (t === 'refunds') setRefunds(await fetchJSON(`/api/ceo/refunds?page=${page}`));
+      if (s === 'users') setUsers(await fetchJSON(`/api/ceo/users?page=${page}&search=${search}`));
+      if (s === 'memberships') setSubs(await fetchJSON(`/api/ceo/subscriptions?page=${page}`));
+      if (s === 'orders' || s === 'inventory-orders') setOrders(await fetchJSON(`/api/ceo/orders?page=${page}`));
+      if (s === 'messages') setMessages(await fetchJSON(`/api/ceo/messages?page=${page}`));
+      if (s === 'refunds' || s === 'payments') setRefunds(await fetchJSON(`/api/ceo/refunds?page=${page}`));
+      if (s === 'inventory') setInventory(await fetchJSON(`/api/ceo/inventory?page=${page}`));
+      if (s === 'security') {
+        const [logs, overview] = await Promise.all([fetchJSON('/api/ceo/security-logs'), fetchJSON('/api/ceo/security-overview')]);
+        setSecurityLogs(logs); setSecurityOverview(overview);
+      }
     } catch {}
   }, [fetchJSON, search]);
 
-  useEffect(() => { if (tab !== 'overview') loadTab(tab); }, [tab, loadTab]);
+  useEffect(() => { if (section !== 'dashboard') loadSection(section); }, [section, loadSection]);
 
-  if (loading) return <div className="min-h-screen bg-gray-50 flex items-center justify-center"><div className="w-10 h-10 border-3 border-emerald-500 border-t-transparent rounded-full animate-spin" /></div>;
+  if (loading) return <div className="min-h-screen bg-slate-100 flex items-center justify-center"><div className="w-10 h-10 border-3 border-blue-600 border-t-transparent rounded-full animate-spin" /></div>;
 
   const s = stats || {};
-  const tabs = [
-    { id: 'overview', label: 'Resumen', icon: BarChart3 },
+  const unreadNotifs = notifications.filter(n => n.severity === 'error' || n.severity === 'warning').length;
+
+  const menuItems = [
+    { id: 'dashboard', label: 'Dashboard', icon: Layout },
+    { id: 'inventory', label: 'Inventario', icon: Box },
     { id: 'users', label: 'Usuarios', icon: Users },
-    { id: 'subscriptions', label: 'Suscripciones', icon: CreditCard },
-    { id: 'orders', label: 'Pedidos', icon: Package },
-    { id: 'refunds', label: 'Reembolsos', icon: RotateCcw },
+    { id: 'memberships', label: 'Membresías', icon: CreditCard },
+    { id: 'payments', label: 'Pagos', icon: TrendingUp },
+    { id: 'security', label: 'Seguridad', icon: Lock },
     { id: 'messages', label: 'Mensajes', icon: MessageSquare },
+    { id: 'reports', label: 'Reportes', icon: FileText },
   ];
 
   const Paginator = ({ data, onPage }) => (
-    <div className="flex items-center justify-between px-4 py-3 bg-gray-50 rounded-b-xl border-t">
+    <div className="flex items-center justify-between px-4 py-3 bg-slate-50 border-t">
       <p className="text-xs text-gray-500">Total: {data.total} | Pág {data.page}/{data.pages}</p>
       <div className="flex gap-1">
-        <button disabled={data.page <= 1} onClick={() => onPage(data.page - 1)} className="p-1.5 rounded bg-white border disabled:opacity-30"><ChevronLeft className="w-4 h-4" /></button>
-        <button disabled={data.page >= data.pages} onClick={() => onPage(data.page + 1)} className="p-1.5 rounded bg-white border disabled:opacity-30"><ChevronRight className="w-4 h-4" /></button>
+        <button disabled={data.page <= 1} onClick={() => onPage(data.page - 1)} className="p-1.5 rounded bg-white border disabled:opacity-30 hover:bg-slate-50"><ChevronLeft className="w-4 h-4" /></button>
+        <button disabled={data.page >= data.pages} onClick={() => onPage(data.page + 1)} className="p-1.5 rounded bg-white border disabled:opacity-30 hover:bg-slate-50"><ChevronRight className="w-4 h-4" /></button>
       </div>
     </div>
   );
 
   return (
-    <div className="min-h-screen bg-gray-50" data-testid="ceo-dashboard">
-      <header className="bg-white border-b border-gray-200 px-4 sm:px-6 py-3">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 bg-emerald-500 rounded-lg flex items-center justify-center"><Shield className="w-4 h-4 text-white" /></div>
-            <div><h1 className="text-lg font-bold text-gray-900">ManoProtect CEO</h1><p className="text-[10px] text-gray-400">Panel de control</p></div>
-          </div>
-          <div className="flex items-center gap-3">
-            <div className="flex items-center gap-2 text-xs">
-              <span className={`flex items-center gap-1 px-2 py-1 rounded-full ${heartbeat.backend ? 'bg-emerald-50 text-emerald-600' : 'bg-red-50 text-red-600'}`}>
-                <span className={`w-1.5 h-1.5 rounded-full ${heartbeat.backend ? 'bg-emerald-500 animate-pulse' : 'bg-red-500'}`} /> Backend {heartbeat.backend ? 'LIVE' : 'DOWN'}
-              </span>
-              <span className="flex items-center gap-1 px-2 py-1 rounded-full bg-emerald-50 text-emerald-600">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" /> Frontend LIVE
-              </span>
-            </div>
-            <button onClick={loadStats} className="p-2 hover:bg-gray-100 rounded-lg" data-testid="refresh-btn"><RefreshCw className="w-4 h-4 text-gray-500" /></button>
-            <button onClick={() => nav('/')} className="text-xs text-gray-500 hover:text-emerald-600">Ir a la web</button>
+    <div className="min-h-screen bg-slate-100 flex" data-testid="ceo-dashboard">
+      {/* ═══ SIDEBAR ═══ */}
+      <aside className={`fixed inset-y-0 left-0 z-40 bg-[#0f172a] text-white transition-all duration-300 ${sidebarOpen ? 'w-56' : 'w-0 -translate-x-full'} lg:translate-x-0 lg:static lg:${sidebarOpen ? 'w-56' : 'w-16'}`} data-testid="sidebar">
+        <div className="p-4 border-b border-slate-700">
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center flex-shrink-0"><Shield className="w-4 h-4 text-white" /></div>
+            {sidebarOpen && <div><p className="font-bold text-sm">ManoProtect</p><p className="text-[10px] text-slate-400">Panel CEO</p></div>}
           </div>
         </div>
-      </header>
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6">
-        <div className="flex gap-1 bg-white rounded-xl border border-gray-200 p-1 mb-6 overflow-x-auto" data-testid="dashboard-tabs">
-          {tabs.map(t => (
-            <button key={t.id} onClick={() => setTab(t.id)} className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium transition-colors whitespace-nowrap ${tab === t.id ? 'bg-emerald-500 text-white' : 'text-gray-500 hover:bg-gray-50'}`} data-testid={`tab-${t.id}`}>
-              <t.icon className="w-3.5 h-3.5" /> {t.label}
+        <nav className="py-3 space-y-0.5 px-2" data-testid="sidebar-nav">
+          {menuItems.map(item => (
+            <button key={item.id} onClick={() => { setSection(item.id); if (window.innerWidth < 1024) setSidebarOpen(false); }}
+              className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-colors ${section === item.id ? 'bg-blue-600 text-white' : 'text-slate-300 hover:bg-slate-800 hover:text-white'}`}
+              data-testid={`nav-${item.id}`}>
+              <item.icon className="w-4 h-4 flex-shrink-0" />
+              {sidebarOpen && <span>{item.label}</span>}
+              {item.id === 'messages' && s.messages?.unread > 0 && sidebarOpen && <span className="ml-auto bg-orange-500 text-white text-[10px] px-1.5 py-0.5 rounded-full">{s.messages.unread}</span>}
             </button>
           ))}
-        </div>
+        </nav>
+        {sidebarOpen && <div className="absolute bottom-4 left-0 right-0 px-4">
+          <button onClick={() => nav('/')} className="w-full text-xs text-slate-500 hover:text-white py-2 flex items-center gap-2 justify-center"><Eye className="w-3 h-3" /> Ver sitio web</button>
+        </div>}
+      </aside>
 
-        {tab === 'overview' && (
-          <div className="space-y-6">
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-              <StatCard icon={Users} label="Usuarios total" value={s.users?.total || 0} sub={`+${s.users?.today || 0} hoy`} />
-              <StatCard icon={CreditCard} label="Suscripciones" value={s.subscriptions?.active || 0} sub={`${s.subscriptions?.monthly || 0} mes / ${s.subscriptions?.yearly || 0} año`} />
-              <StatCard icon={TrendingUp} label="MRR" value={`${s.revenue?.mrr || 0}€`} color="blue" />
-              <StatCard icon={Package} label="Pedidos" value={s.orders?.total || 0} sub={`${s.orders?.pending || 0} pendientes`} alert={s.orders?.pending > 0} />
-              <StatCard icon={RotateCcw} label="Reembolsos" value={s.refunds?.total || 0} sub={`${s.refunds?.pending || 0} pendientes`} alert={s.refunds?.pending > 0} color="red" />
-              <StatCard icon={MessageSquare} label="Mensajes" value={s.messages?.total || 0} sub={`${s.messages?.unread || 0} sin leer`} alert={s.messages?.unread > 0} color="violet" />
+      {/* ═══ MAIN CONTENT ═══ */}
+      <div className="flex-1 flex flex-col min-w-0">
+        {/* Header */}
+        <header className="bg-white border-b border-gray-200 px-4 py-3 flex items-center justify-between sticky top-0 z-30" data-testid="dashboard-header">
+          <div className="flex items-center gap-3">
+            <button onClick={() => setSidebarOpen(!sidebarOpen)} className="p-2 hover:bg-slate-100 rounded-lg lg:hidden"><Menu className="w-5 h-5" /></button>
+            <h2 className="font-bold text-gray-900 text-lg capitalize">{menuItems.find(m => m.id === section)?.label || 'Dashboard'}</h2>
+          </div>
+          <div className="flex items-center gap-3">
+            <div className="hidden sm:flex items-center gap-2 text-xs">
+              <span className={`flex items-center gap-1 px-2 py-1 rounded-full ${heartbeat.backend ? 'bg-green-50 text-green-600' : 'bg-red-50 text-red-600'}`}>
+                <span className={`w-1.5 h-1.5 rounded-full ${heartbeat.backend ? 'bg-green-500 animate-pulse' : 'bg-red-500'}`} /> Backend {heartbeat.backend ? 'LIVE' : 'DOWN'}
+              </span>
+              <span className="flex items-center gap-1 px-2 py-1 rounded-full bg-green-50 text-green-600">
+                <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" /> Frontend LIVE
+              </span>
             </div>
-
-            <div className="grid sm:grid-cols-2 gap-4">
-              <div className="bg-white rounded-xl border border-gray-200 p-5" data-testid="promo-basic-stock">
-                <div className="flex items-center gap-2 mb-3"><Gift className="w-5 h-5 text-emerald-500" /><h3 className="font-bold text-gray-900 text-sm">Stock Sentinel X Basic (GRATIS)</h3></div>
-                <div className="flex items-center gap-4">
-                  <div className="flex-1"><div className="h-3 bg-gray-100 rounded-full overflow-hidden"><div className="h-full bg-emerald-500 rounded-full" style={{ width: `${((s.promo?.basic_stock_total - s.promo?.basic_stock_remaining) / (s.promo?.basic_stock_total || 50)) * 100}%` }} /></div></div>
-                  <p className="text-sm font-bold text-gray-900">{s.promo?.basic_stock_remaining ?? 50}/{s.promo?.basic_stock_total || 50}</p>
-                </div>
-                <p className="text-xs text-gray-400 mt-2">Quedan {s.promo?.basic_stock_remaining ?? 50} unidades gratis</p>
-              </div>
-              <div className="bg-white rounded-xl border border-gray-200 p-5" data-testid="promo-200-users">
-                <div className="flex items-center gap-2 mb-3"><Percent className="w-5 h-5 text-blue-500" /><h3 className="font-bold text-gray-900 text-sm">Promo 200 usuarios (-{s.promo?.discount_pct || 20}%)</h3></div>
-                <div className="flex items-center gap-4">
-                  <div className="flex-1"><div className="h-3 bg-gray-100 rounded-full overflow-hidden"><div className="h-full bg-blue-500 rounded-full" style={{ width: `${((s.promo?.promo_200_total - s.promo?.promo_200_remaining) / (s.promo?.promo_200_total || 200)) * 100}%` }} /></div></div>
-                  <p className="text-sm font-bold text-gray-900">{s.promo?.promo_200_remaining ?? 200}/{s.promo?.promo_200_total || 200}</p>
-                </div>
-                <p className="text-xs text-gray-400 mt-2">Quedan {s.promo?.promo_200_remaining ?? 200} plazas con descuento</p>
-              </div>
-            </div>
-
-            <div className="bg-white rounded-xl border border-gray-200 p-5" data-testid="recent-activity">
-              <h3 className="font-bold text-gray-900 mb-4 flex items-center gap-2"><Activity className="w-4 h-4 text-emerald-500" /> Actividad reciente</h3>
-              <div className="space-y-3">
-                {activity.length === 0 && <p className="text-sm text-gray-400">Sin actividad reciente</p>}
-                {activity.map((a, i) => (
-                  <div key={i} className="flex items-center gap-3 text-sm">
-                    <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${a.type === 'new_user' ? 'bg-emerald-50' : a.type === 'order' ? 'bg-blue-50' : 'bg-violet-50'}`}>
-                      {a.type === 'new_user' && <Users className="w-4 h-4 text-emerald-500" />}
-                      {a.type === 'order' && <Package className="w-4 h-4 text-blue-500" />}
-                      {a.type === 'message' && <MessageSquare className="w-4 h-4 text-violet-500" />}
+            {/* Notifications bell */}
+            <div className="relative">
+              <button onClick={() => setShowNotifs(!showNotifs)} className="p-2 hover:bg-slate-100 rounded-lg relative" data-testid="notif-bell">
+                <Bell className="w-5 h-5 text-gray-600" />
+                {unreadNotifs > 0 && <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-red-500 text-white text-[9px] rounded-full flex items-center justify-center font-bold">{unreadNotifs}</span>}
+              </button>
+              {showNotifs && (
+                <div className="absolute right-0 top-full mt-1 w-80 bg-white rounded-xl shadow-xl border z-50 max-h-80 overflow-y-auto" data-testid="notif-panel">
+                  <div className="p-3 border-b font-bold text-sm text-gray-900 flex items-center justify-between">
+                    Notificaciones
+                    <button onClick={() => setShowNotifs(false)}><X className="w-4 h-4 text-gray-400" /></button>
+                  </div>
+                  {notifications.length === 0 && <p className="p-4 text-sm text-gray-400 text-center">Sin notificaciones</p>}
+                  {notifications.map((n, i) => (
+                    <div key={i} className={`p-3 border-b last:border-0 flex items-start gap-2 ${n.severity === 'error' ? 'bg-red-50' : n.severity === 'warning' ? 'bg-amber-50' : n.severity === 'success' ? 'bg-green-50' : 'bg-blue-50'}`}>
+                      {n.severity === 'error' && <AlertTriangle className="w-4 h-4 text-red-500 flex-shrink-0 mt-0.5" />}
+                      {n.severity === 'warning' && <AlertTriangle className="w-4 h-4 text-amber-500 flex-shrink-0 mt-0.5" />}
+                      {n.severity === 'success' && <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" />}
+                      {n.severity === 'info' && <Bell className="w-4 h-4 text-blue-500 flex-shrink-0 mt-0.5" />}
+                      <p className="text-xs text-gray-700">{n.title}</p>
                     </div>
-                    <p className="flex-1 min-w-0 truncate text-gray-700">
-                      {a.type === 'new_user' && `Nuevo usuario: ${a.email}`}
-                      {a.type === 'order' && `Pedido: ${a.product} (${a.status})`}
-                      {a.type === 'message' && `Mensaje de ${a.name}: ${a.subject}`}
-                    </p>
-                    <span className="text-xs text-gray-400 flex-shrink-0">{a.time ? new Date(a.time).toLocaleDateString('es-ES') : ''}</span>
+                  ))}
+                </div>
+              )}
+            </div>
+            <button onClick={loadDashboard} className="p-2 hover:bg-slate-100 rounded-lg" data-testid="refresh-btn"><RefreshCw className="w-4 h-4 text-gray-500" /></button>
+          </div>
+        </header>
+
+        {/* Content */}
+        <main className="flex-1 p-4 sm:p-6 overflow-y-auto">
+
+          {/* ═══════ DASHBOARD ═══════ */}
+          {section === 'dashboard' && (
+            <div className="space-y-6">
+              {/* Alerts Bar */}
+              {(s.alerts?.pending_refunds || s.alerts?.failed_payments > 0 || s.alerts?.low_stock) && (
+                <div className="bg-orange-50 border border-orange-200 rounded-xl p-3 flex flex-wrap gap-3" data-testid="alerts-bar">
+                  {s.alerts?.low_stock && <span className="flex items-center gap-1 text-xs font-semibold text-orange-700"><AlertTriangle className="w-3.5 h-3.5" /> Stock bajo</span>}
+                  {s.alerts?.pending_refunds && <span className="flex items-center gap-1 text-xs font-semibold text-orange-700"><RotateCcw className="w-3.5 h-3.5" /> Reembolsos pendientes</span>}
+                  {s.alerts?.failed_payments > 0 && <span className="flex items-center gap-1 text-xs font-semibold text-red-700"><XCircle className="w-3.5 h-3.5" /> {s.alerts.failed_payments} pago(s) fallido(s)</span>}
+                  {s.alerts?.expiring_subs > 0 && <span className="flex items-center gap-1 text-xs font-semibold text-amber-700"><CreditCard className="w-3.5 h-3.5" /> {s.alerts.expiring_subs} suscripción(es) por vencer</span>}
+                </div>
+              )}
+
+              {/* Stat Cards */}
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3" data-testid="stat-cards">
+                {[
+                  { icon: Users, label: 'Usuarios', value: s.users?.total || 0, sub: `+${s.users?.today || 0} hoy`, color: 'blue' },
+                  { icon: CreditCard, label: 'Suscripciones', value: s.subscriptions?.active || 0, sub: `${s.subscriptions?.monthly || 0} mes / ${s.subscriptions?.yearly || 0} año`, color: 'blue' },
+                  { icon: TrendingUp, label: 'Ventas Mes', value: `${s.revenue?.month || 0}€`, sub: `Hoy: ${s.revenue?.today || 0}€`, color: 'orange' },
+                  { icon: Package, label: 'Pedidos', value: s.orders?.total || 0, sub: `${s.orders?.pending || 0} pendientes`, color: 'blue', alert: s.orders?.pending > 0 },
+                  { icon: RotateCcw, label: 'Reembolsos', value: s.refunds?.total || 0, sub: `${s.refunds?.pending || 0} pendientes`, color: 'red', alert: s.refunds?.pending > 0 },
+                  { icon: MessageSquare, label: 'Mensajes', value: s.messages?.total || 0, sub: `${s.messages?.unread || 0} sin leer`, color: 'orange', alert: s.messages?.unread > 0 },
+                ].map((card, i) => (
+                  <div key={i} className={`bg-white rounded-xl border ${card.alert ? 'border-orange-300' : 'border-gray-200'} p-4 hover:shadow-md transition-shadow`} data-testid={`stat-${card.label.toLowerCase()}`}>
+                    <div className="flex items-center justify-between mb-2">
+                      <div className={`w-9 h-9 ${card.color === 'orange' ? 'bg-orange-50' : card.color === 'red' ? 'bg-red-50' : 'bg-blue-50'} rounded-lg flex items-center justify-center`}>
+                        <card.icon className={`w-5 h-5 ${card.color === 'orange' ? 'text-orange-500' : card.color === 'red' ? 'text-red-500' : 'text-blue-600'}`} />
+                      </div>
+                      {card.alert && <AlertTriangle className="w-4 h-4 text-orange-500" />}
+                    </div>
+                    <p className="text-2xl font-bold text-gray-900">{card.value}</p>
+                    <p className="text-xs text-gray-500">{card.label}</p>
+                    {card.sub && <p className="text-[10px] text-gray-400 mt-0.5">{card.sub}</p>}
                   </div>
                 ))}
               </div>
-            </div>
-          </div>
-        )}
 
-        {tab === 'users' && (
-          <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
-            <div className="p-4 border-b flex items-center gap-3">
-              <div className="relative flex-1 max-w-sm">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                <input value={search} onChange={e => setSearch(e.target.value)} onKeyDown={e => e.key === 'Enter' && loadTab('users')} placeholder="Buscar..." className="w-full pl-9 pr-3 py-2 border rounded-lg text-sm focus:border-emerald-500 outline-none" data-testid="search-users" />
+              {/* Inventory Quick View */}
+              <div className="grid sm:grid-cols-3 gap-3" data-testid="inventory-quick">
+                {[
+                  { name: 'Sentinel X', stock: s.inventory?.sentinel_x || 0, color: '#1e40af' },
+                  { name: 'Sentinel J', stock: s.inventory?.sentinel_j || 0, color: '#ea580c' },
+                  { name: 'Sentinel S', stock: s.inventory?.sentinel_s || 0, color: '#16a34a' },
+                ].map((p, i) => (
+                  <div key={i} className="bg-white rounded-xl border border-gray-200 p-4">
+                    <div className="flex items-center justify-between">
+                      <p className="font-bold text-sm text-gray-900">{p.name}</p>
+                      <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${p.stock < 5 ? 'bg-red-100 text-red-600' : 'bg-green-100 text-green-600'}`}>{p.stock} uds</span>
+                    </div>
+                    <div className="mt-2 h-2 bg-gray-100 rounded-full overflow-hidden">
+                      <div className="h-full rounded-full transition-all" style={{ width: `${Math.min(100, p.stock * 2)}%`, backgroundColor: p.color }} />
+                    </div>
+                  </div>
+                ))}
               </div>
-              <button onClick={() => loadTab('users')} className="px-3 py-2 bg-emerald-500 text-white text-xs font-bold rounded-lg">Buscar</button>
+
+              {/* Charts */}
+              {chartData && (
+                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4" data-testid="charts-section">
+                  {/* Users Bar Chart */}
+                  <div className="bg-white rounded-xl border border-gray-200 p-4">
+                    <h3 className="font-bold text-sm text-gray-900 mb-3">Usuarios por Mes</h3>
+                    <ResponsiveContainer width="100%" height={180}>
+                      <BarChart data={chartData.users_by_month}>
+                        <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
+                        <XAxis dataKey="month" tick={{ fontSize: 11 }} />
+                        <YAxis tick={{ fontSize: 11 }} />
+                        <Tooltip />
+                        <Bar dataKey="users" fill="#1e40af" radius={[4, 4, 0, 0]} />
+                      </BarChart>
+                    </ResponsiveContainer>
+                  </div>
+                  {/* Revenue Line Chart */}
+                  <div className="bg-white rounded-xl border border-gray-200 p-4">
+                    <h3 className="font-bold text-sm text-gray-900 mb-3">Ingresos por Mes</h3>
+                    <ResponsiveContainer width="100%" height={180}>
+                      <LineChart data={chartData.revenue_by_month}>
+                        <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
+                        <XAxis dataKey="month" tick={{ fontSize: 11 }} />
+                        <YAxis tick={{ fontSize: 11 }} />
+                        <Tooltip />
+                        <Line type="monotone" dataKey="revenue" stroke="#ea580c" strokeWidth={2} dot={{ fill: '#ea580c' }} />
+                      </LineChart>
+                    </ResponsiveContainer>
+                  </div>
+                  {/* Plan Pie Chart */}
+                  <div className="bg-white rounded-xl border border-gray-200 p-4">
+                    <h3 className="font-bold text-sm text-gray-900 mb-3">Distribución Planes</h3>
+                    <ResponsiveContainer width="100%" height={180}>
+                      <PieChart>
+                        <Pie data={chartData.plan_distribution} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={65} label={({ name, value }) => `${name}: ${value}`} labelLine={false}>
+                          {chartData.plan_distribution.map((_, i) => <Cell key={i} fill={COLORS[i % COLORS.length]} />)}
+                        </Pie>
+                        <Tooltip />
+                      </PieChart>
+                    </ResponsiveContainer>
+                  </div>
+                </div>
+              )}
+
+              {/* Promo + Activity */}
+              <div className="grid sm:grid-cols-2 gap-4">
+                <div className="space-y-3">
+                  <div className="bg-white rounded-xl border border-gray-200 p-4" data-testid="promo-basic-stock">
+                    <div className="flex items-center gap-2 mb-2"><Gift className="w-4 h-4 text-blue-600" /><h3 className="font-bold text-gray-900 text-sm">Sentinel X Basic GRATIS</h3></div>
+                    <div className="flex items-center gap-3"><div className="flex-1 h-2.5 bg-gray-100 rounded-full overflow-hidden"><div className="h-full bg-blue-600 rounded-full" style={{ width: `${((s.promo?.basic_stock_total - s.promo?.basic_stock_remaining) / (s.promo?.basic_stock_total || 50)) * 100}%` }} /></div><p className="text-sm font-bold">{s.promo?.basic_stock_remaining ?? 50}/{s.promo?.basic_stock_total || 50}</p></div>
+                  </div>
+                  <div className="bg-white rounded-xl border border-gray-200 p-4" data-testid="promo-200-users">
+                    <div className="flex items-center gap-2 mb-2"><Percent className="w-4 h-4 text-orange-500" /><h3 className="font-bold text-gray-900 text-sm">Promo -{s.promo?.discount_pct || 20}% (200 plazas)</h3></div>
+                    <div className="flex items-center gap-3"><div className="flex-1 h-2.5 bg-gray-100 rounded-full overflow-hidden"><div className="h-full bg-orange-500 rounded-full" style={{ width: `${((s.promo?.promo_200_total - s.promo?.promo_200_remaining) / (s.promo?.promo_200_total || 200)) * 100}%` }} /></div><p className="text-sm font-bold">{s.promo?.promo_200_remaining ?? 200}/{s.promo?.promo_200_total || 200}</p></div>
+                  </div>
+                </div>
+                <div className="bg-white rounded-xl border border-gray-200 p-4" data-testid="recent-activity">
+                  <h3 className="font-bold text-gray-900 mb-3 flex items-center gap-2 text-sm"><Activity className="w-4 h-4 text-blue-600" /> Actividad Reciente</h3>
+                  <div className="space-y-2 max-h-[200px] overflow-y-auto">
+                    {activity.length === 0 && <p className="text-sm text-gray-400">Sin actividad reciente</p>}
+                    {activity.slice(0, 10).map((a, i) => (
+                      <div key={i} className="flex items-center gap-2 text-xs py-1 border-b border-gray-50 last:border-0">
+                        <div className={`w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 ${a.type === 'new_user' ? 'bg-blue-50' : a.type === 'order' ? 'bg-orange-50' : a.type === 'payment' ? 'bg-green-50' : 'bg-violet-50'}`}>
+                          {a.type === 'new_user' && <Users className="w-3 h-3 text-blue-600" />}
+                          {a.type === 'order' && <Package className="w-3 h-3 text-orange-500" />}
+                          {a.type === 'message' && <MessageSquare className="w-3 h-3 text-violet-500" />}
+                          {a.type === 'payment' && <TrendingUp className="w-3 h-3 text-green-500" />}
+                        </div>
+                        <p className="flex-1 min-w-0 truncate text-gray-600">
+                          {a.type === 'new_user' && `Nuevo: ${a.email}`}
+                          {a.type === 'order' && `Pedido: ${a.product} (${a.status})`}
+                          {a.type === 'message' && `${a.name}: ${a.subject}`}
+                          {a.type === 'payment' && `Pago: ${a.amount}€ - ${a.email}`}
+                        </p>
+                        <span className="text-[10px] text-gray-400 flex-shrink-0">{a.time ? new Date(a.time).toLocaleDateString('es-ES') : ''}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
             </div>
-            <div className="overflow-x-auto"><table className="w-full text-sm"><thead><tr className="bg-gray-50 text-left text-xs text-gray-500 font-medium"><th className="p-3">Email</th><th className="p-3">Nombre</th><th className="p-3">Rol</th><th className="p-3">Registro</th></tr></thead><tbody>
-              {users.users.map((u, i) => (<tr key={i} className="border-t hover:bg-gray-50"><td className="p-3 font-medium">{u.email}</td><td className="p-3">{u.name || u.full_name || '-'}</td><td className="p-3"><span className={`px-2 py-0.5 rounded text-xs font-semibold ${u.role === 'super_admin' || u.role === 'admin' ? 'bg-red-100 text-red-600' : 'bg-gray-100 text-gray-600'}`}>{u.role || 'user'}</span></td><td className="p-3 text-gray-400">{u.created_at ? new Date(u.created_at).toLocaleDateString('es-ES') : '-'}</td></tr>))}
-              {users.users.length === 0 && <tr><td colSpan={4} className="p-8 text-center text-gray-400">Sin usuarios</td></tr>}
-            </tbody></table></div>
-            <Paginator data={users} onPage={p => loadTab('users', p)} />
-          </div>
-        )}
+          )}
 
-        {tab === 'subscriptions' && (
-          <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
-            <div className="overflow-x-auto"><table className="w-full text-sm"><thead><tr className="bg-gray-50 text-left text-xs text-gray-500 font-medium"><th className="p-3">Email</th><th className="p-3">Plan</th><th className="p-3">Estado</th><th className="p-3">Promo</th><th className="p-3">Fecha</th></tr></thead><tbody>
-              {subs.subscriptions.map((sub, i) => (<tr key={i} className="border-t hover:bg-gray-50"><td className="p-3">{sub.email || '-'}</td><td className="p-3">{sub.plan_type || '-'}</td><td className="p-3"><span className={`px-2 py-0.5 rounded text-xs font-semibold ${sub.status === 'active' ? 'bg-emerald-100 text-emerald-600' : 'bg-gray-100 text-gray-600'}`}>{sub.status}</span></td><td className="p-3">{sub.promo_200 ? <span className="bg-blue-100 text-blue-600 px-2 py-0.5 rounded text-xs font-semibold">-20%</span> : '-'}</td><td className="p-3 text-gray-400">{sub.created_at ? new Date(sub.created_at).toLocaleDateString('es-ES') : '-'}</td></tr>))}
-              {subs.subscriptions.length === 0 && <tr><td colSpan={5} className="p-8 text-center text-gray-400">Sin suscripciones</td></tr>}
-            </tbody></table></div>
-            <Paginator data={subs} onPage={p => loadTab('subscriptions', p)} />
-          </div>
-        )}
+          {/* ═══════ INVENTORY ═══════ */}
+          {section === 'inventory' && (
+            <div className="bg-white rounded-xl border border-gray-200 overflow-hidden" data-testid="inventory-section">
+              <div className="p-4 border-b flex flex-wrap items-center gap-3">
+                <h3 className="font-bold text-gray-900">Inventario Sentinel</h3>
+                <div className="flex gap-2 ml-auto">
+                  {['sentinel_x', 'sentinel_j', 'sentinel_s'].map(p => (
+                    <span key={p} className="text-xs bg-slate-100 px-2 py-1 rounded font-medium">{p.replace('sentinel_', 'Sentinel ').toUpperCase()}: {s.inventory?.[p] || 0}</span>
+                  ))}
+                </div>
+              </div>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead><tr className="bg-slate-50 text-left text-xs text-gray-500 font-medium">
+                    <th className="p-3">Producto</th><th className="p-3">Nº Serie</th><th className="p-3">Estado</th><th className="p-3">Ubicación</th><th className="p-3">Fecha</th>
+                  </tr></thead>
+                  <tbody>
+                    {inventory.items.map((item, i) => (
+                      <tr key={i} className="border-t hover:bg-slate-50">
+                        <td className="p-3 font-medium">{item.product?.replace('sentinel_', 'Sentinel ')?.toUpperCase() || '-'}</td>
+                        <td className="p-3 font-mono text-xs">{item.serial_number || '-'}</td>
+                        <td className="p-3"><span className={`px-2 py-0.5 rounded text-xs font-semibold ${item.status === 'in_stock' ? 'bg-green-100 text-green-600' : item.status === 'sold' ? 'bg-blue-100 text-blue-600' : item.status === 'returned' ? 'bg-red-100 text-red-600' : 'bg-amber-100 text-amber-600'}`}>{item.status === 'in_stock' ? 'En stock' : item.status === 'sold' ? 'Vendido' : item.status === 'returned' ? 'Devuelto' : item.status === 'shipping' ? 'En envío' : item.status}</span></td>
+                        <td className="p-3 text-gray-500">{item.location || '-'}</td>
+                        <td className="p-3 text-gray-400 text-xs">{item.created_at ? new Date(item.created_at).toLocaleDateString('es-ES') : '-'}</td>
+                      </tr>
+                    ))}
+                    {inventory.items.length === 0 && <tr><td colSpan={5} className="p-8 text-center text-gray-400">Sin items en inventario. Los items se crearán cuando se procesen pedidos.</td></tr>}
+                  </tbody>
+                </table>
+              </div>
+              <Paginator data={inventory} onPage={p => loadSection('inventory', p)} />
+            </div>
+          )}
 
-        {tab === 'orders' && (
-          <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
-            <div className="overflow-x-auto"><table className="w-full text-sm"><thead><tr className="bg-gray-50 text-left text-xs text-gray-500 font-medium"><th className="p-3">Email</th><th className="p-3">Producto</th><th className="p-3">Estado</th><th className="p-3">Precio</th><th className="p-3">Fecha</th></tr></thead><tbody>
-              {orders.orders.map((o, i) => (<tr key={i} className="border-t hover:bg-gray-50"><td className="p-3">{o.email || '-'}</td><td className="p-3">{o.product || '-'}</td><td className="p-3"><span className={`px-2 py-0.5 rounded text-xs font-semibold ${o.status === 'shipped' ? 'bg-emerald-100 text-emerald-600' : o.status === 'pending' ? 'bg-amber-100 text-amber-600' : 'bg-gray-100 text-gray-600'}`}>{o.status || '-'}</span></td><td className="p-3">{o.price ? `${o.price}€` : '-'}</td><td className="p-3 text-gray-400">{o.created_at ? new Date(o.created_at).toLocaleDateString('es-ES') : '-'}</td></tr>))}
-              {orders.orders.length === 0 && <tr><td colSpan={5} className="p-8 text-center text-gray-400">Sin pedidos</td></tr>}
-            </tbody></table></div>
-            <Paginator data={orders} onPage={p => loadTab('orders', p)} />
-          </div>
-        )}
+          {/* ═══════ USERS ═══════ */}
+          {section === 'users' && (
+            <div className="bg-white rounded-xl border border-gray-200 overflow-hidden" data-testid="users-section">
+              <div className="p-4 border-b flex items-center gap-3">
+                <div className="relative flex-1 max-w-sm">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                  <input value={search} onChange={e => setSearch(e.target.value)} onKeyDown={e => e.key === 'Enter' && loadSection('users')} placeholder="Buscar por email, nombre, ID..." className="w-full pl-9 pr-3 py-2 border rounded-lg text-sm focus:border-blue-500 outline-none" data-testid="search-users" />
+                </div>
+                <button onClick={() => loadSection('users')} className="px-3 py-2 bg-blue-600 text-white text-xs font-bold rounded-lg hover:bg-blue-700">Buscar</button>
+                <a href={`${API}/api/ceo/export/users`} className="px-3 py-2 bg-slate-100 text-gray-700 text-xs font-bold rounded-lg hover:bg-slate-200 flex items-center gap-1"><Download className="w-3 h-3" /> CSV</a>
+              </div>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead><tr className="bg-slate-50 text-left text-xs text-gray-500 font-medium">
+                    <th className="p-3">Email</th><th className="p-3">Nombre</th><th className="p-3">ID</th><th className="p-3">Plan</th><th className="p-3">Estado</th><th className="p-3">Registro</th><th className="p-3">Acciones</th>
+                  </tr></thead>
+                  <tbody>
+                    {users.users.map((u, i) => (
+                      <tr key={i} className="border-t hover:bg-slate-50">
+                        <td className="p-3 font-medium text-gray-900">{u.email}</td>
+                        <td className="p-3">{u.name || u.full_name || '-'}</td>
+                        <td className="p-3 font-mono text-[11px] text-gray-400">{u.user_id?.slice(-8) || '-'}</td>
+                        <td className="p-3"><span className={`px-2 py-0.5 rounded text-xs font-semibold ${u.plan === 'enterprise' ? 'bg-blue-100 text-blue-700' : u.plan === 'free' ? 'bg-gray-100 text-gray-600' : 'bg-orange-100 text-orange-600'}`}>{u.plan || 'free'}</span></td>
+                        <td className="p-3">{u.is_active !== false ? <span className="text-green-600 text-xs font-semibold">Activa</span> : <span className="text-red-600 text-xs font-semibold">Suspendida</span>}</td>
+                        <td className="p-3 text-gray-400 text-xs">{u.created_at ? new Date(u.created_at).toLocaleDateString('es-ES') : '-'}</td>
+                        <td className="p-3">
+                          <div className="flex gap-1">
+                            <button onClick={async () => { await fetchJSON(`/api/ceo/users/${u.user_id}/suspend`).catch(() => fetch(`${API}/api/ceo/users/${u.user_id}/suspend`, { method: 'PATCH', credentials: 'include' }).then(r => r.json())); loadSection('users'); }}
+                              className={`p-1 rounded text-xs ${u.is_active !== false ? 'text-red-500 hover:bg-red-50' : 'text-green-500 hover:bg-green-50'}`} title={u.is_active !== false ? 'Suspender' : 'Activar'}>
+                              {u.is_active !== false ? <UserX className="w-3.5 h-3.5" /> : <UserCheck className="w-3.5 h-3.5" />}
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                    {users.users.length === 0 && <tr><td colSpan={7} className="p-8 text-center text-gray-400">Sin usuarios</td></tr>}
+                  </tbody>
+                </table>
+              </div>
+              <Paginator data={users} onPage={p => loadSection('users', p)} />
+            </div>
+          )}
 
-        {tab === 'refunds' && (
-          <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
-            <div className="overflow-x-auto"><table className="w-full text-sm"><thead><tr className="bg-gray-50 text-left text-xs text-gray-500 font-medium"><th className="p-3">Email</th><th className="p-3">Motivo</th><th className="p-3">Estado</th><th className="p-3">Importe</th><th className="p-3">Fecha</th></tr></thead><tbody>
-              {refunds.refunds.map((r, i) => (<tr key={i} className="border-t hover:bg-gray-50"><td className="p-3">{r.email || '-'}</td><td className="p-3">{r.reason || '-'}</td><td className="p-3"><span className={`px-2 py-0.5 rounded text-xs font-semibold ${r.status === 'approved' ? 'bg-emerald-100 text-emerald-600' : 'bg-amber-100 text-amber-600'}`}>{r.status || '-'}</span></td><td className="p-3">{r.amount ? `${r.amount}€` : '-'}</td><td className="p-3 text-gray-400">{r.created_at ? new Date(r.created_at).toLocaleDateString('es-ES') : '-'}</td></tr>))}
-              {refunds.refunds.length === 0 && <tr><td colSpan={5} className="p-8 text-center text-gray-400">Sin reembolsos</td></tr>}
-            </tbody></table></div>
-            <Paginator data={refunds} onPage={p => loadTab('refunds', p)} />
-          </div>
-        )}
+          {/* ═══════ MEMBERSHIPS ═══════ */}
+          {section === 'memberships' && (
+            <div className="bg-white rounded-xl border border-gray-200 overflow-hidden" data-testid="memberships-section">
+              <div className="p-4 border-b"><h3 className="font-bold text-gray-900">Suscripciones y Membresías</h3></div>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead><tr className="bg-slate-50 text-left text-xs text-gray-500 font-medium">
+                    <th className="p-3">Email</th><th className="p-3">Plan</th><th className="p-3">Estado</th><th className="p-3">Promo</th><th className="p-3">Importe</th><th className="p-3">Fecha</th>
+                  </tr></thead>
+                  <tbody>
+                    {subs.subscriptions.map((sub, i) => (
+                      <tr key={i} className="border-t hover:bg-slate-50">
+                        <td className="p-3">{sub.email || '-'}</td>
+                        <td className="p-3 font-medium">{sub.plan_type || '-'}</td>
+                        <td className="p-3"><span className={`px-2 py-0.5 rounded text-xs font-semibold ${sub.status === 'active' ? 'bg-green-100 text-green-600' : 'bg-gray-100 text-gray-600'}`}>{sub.status}</span></td>
+                        <td className="p-3">{sub.promo_200 ? <span className="bg-orange-100 text-orange-600 px-2 py-0.5 rounded text-xs font-semibold">-20%</span> : '-'}</td>
+                        <td className="p-3">{sub.amount_paid ? `${sub.amount_paid}€` : '-'}</td>
+                        <td className="p-3 text-gray-400 text-xs">{sub.created_at ? new Date(sub.created_at).toLocaleDateString('es-ES') : '-'}</td>
+                      </tr>
+                    ))}
+                    {subs.subscriptions.length === 0 && <tr><td colSpan={6} className="p-8 text-center text-gray-400">Sin suscripciones activas</td></tr>}
+                  </tbody>
+                </table>
+              </div>
+              <Paginator data={subs} onPage={p => loadSection('memberships', p)} />
+            </div>
+          )}
 
-        {tab === 'messages' && (
-          <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
-            <div className="overflow-x-auto"><table className="w-full text-sm"><thead><tr className="bg-gray-50 text-left text-xs text-gray-500 font-medium"><th className="p-3">Nombre</th><th className="p-3">Email</th><th className="p-3">Asunto</th><th className="p-3">Estado</th><th className="p-3">Fecha</th></tr></thead><tbody>
-              {messages.messages.map((m, i) => (<tr key={i} className="border-t hover:bg-gray-50"><td className="p-3 font-medium">{m.name || '-'}</td><td className="p-3">{m.email || '-'}</td><td className="p-3">{m.subject || '-'}</td><td className="p-3"><span className={`px-2 py-0.5 rounded text-xs font-semibold ${m.status === 'new' ? 'bg-blue-100 text-blue-600' : 'bg-gray-100 text-gray-600'}`}>{m.status === 'new' ? 'Nuevo' : 'Leído'}</span></td><td className="p-3 text-gray-400">{m.created_at ? new Date(m.created_at).toLocaleDateString('es-ES') : '-'}</td></tr>))}
-              {messages.messages.length === 0 && <tr><td colSpan={5} className="p-8 text-center text-gray-400">Sin mensajes</td></tr>}
-            </tbody></table></div>
-            <Paginator data={messages} onPage={p => loadTab('messages', p)} />
-          </div>
-        )}
+          {/* ═══════ PAYMENTS & REFUNDS ═══════ */}
+          {section === 'payments' && (
+            <div className="space-y-4" data-testid="payments-section">
+              <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+                <div className="p-4 border-b flex items-center justify-between">
+                  <h3 className="font-bold text-gray-900">Reembolsos</h3>
+                  <a href={`${API}/api/ceo/export/payments`} className="px-3 py-1.5 bg-slate-100 text-gray-700 text-xs font-bold rounded-lg hover:bg-slate-200 flex items-center gap-1"><Download className="w-3 h-3" /> Exportar CSV</a>
+                </div>
+                <div className="overflow-x-auto">
+                  <table className="w-full text-sm">
+                    <thead><tr className="bg-slate-50 text-left text-xs text-gray-500 font-medium">
+                      <th className="p-3">Email</th><th className="p-3">Motivo</th><th className="p-3">Estado</th><th className="p-3">Importe</th><th className="p-3">Fecha</th><th className="p-3">Acciones</th>
+                    </tr></thead>
+                    <tbody>
+                      {refunds.refunds.map((r, i) => (
+                        <tr key={i} className="border-t hover:bg-slate-50">
+                          <td className="p-3">{r.email || '-'}</td>
+                          <td className="p-3">{r.reason || '-'}</td>
+                          <td className="p-3"><span className={`px-2 py-0.5 rounded text-xs font-semibold ${r.status === 'approved' ? 'bg-green-100 text-green-600' : r.status === 'rejected' ? 'bg-red-100 text-red-600' : 'bg-amber-100 text-amber-600'}`}>{r.status === 'approved' ? 'Aprobado' : r.status === 'rejected' ? 'Rechazado' : 'Pendiente'}</span></td>
+                          <td className="p-3">{r.amount ? `${r.amount}€` : '-'}</td>
+                          <td className="p-3 text-gray-400 text-xs">{r.created_at ? new Date(r.created_at).toLocaleDateString('es-ES') : '-'}</td>
+                          <td className="p-3">
+                            {r.status === 'pending' && (
+                              <div className="flex gap-1">
+                                <button onClick={async () => { await fetch(`${API}/api/ceo/refunds/${r.refund_id}`, { method: 'PATCH', credentials: 'include', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'approve', reason: '' }) }); loadSection('payments'); }}
+                                  className="p-1 rounded text-green-600 hover:bg-green-50" title="Aprobar"><CheckCircle className="w-4 h-4" /></button>
+                                <button onClick={async () => { await fetch(`${API}/api/ceo/refunds/${r.refund_id}`, { method: 'PATCH', credentials: 'include', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'reject', reason: '' }) }); loadSection('payments'); }}
+                                  className="p-1 rounded text-red-600 hover:bg-red-50" title="Rechazar"><XCircle className="w-4 h-4" /></button>
+                              </div>
+                            )}
+                          </td>
+                        </tr>
+                      ))}
+                      {refunds.refunds.length === 0 && <tr><td colSpan={6} className="p-8 text-center text-gray-400">Sin reembolsos</td></tr>}
+                    </tbody>
+                  </table>
+                </div>
+                <Paginator data={refunds} onPage={p => loadSection('payments', p)} />
+              </div>
+            </div>
+          )}
+
+          {/* ═══════ SECURITY ═══════ */}
+          {section === 'security' && (
+            <div className="space-y-4" data-testid="security-section">
+              {securityOverview && (
+                <div className="grid sm:grid-cols-3 gap-3">
+                  <div className="bg-white rounded-xl border border-gray-200 p-4">
+                    <div className="flex items-center gap-2 mb-2"><Lock className="w-4 h-4 text-blue-600" /><h3 className="font-bold text-sm">Administradores</h3></div>
+                    <p className="text-2xl font-bold text-gray-900">{securityOverview.total_admins}</p>
+                    <div className="mt-2 space-y-1">
+                      {securityOverview.admin_users?.map((a, i) => (
+                        <p key={i} className="text-xs text-gray-500">{a.email} <span className="text-blue-600 font-semibold">({a.role})</span></p>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="bg-white rounded-xl border border-gray-200 p-4">
+                    <div className="flex items-center gap-2 mb-2"><Shield className="w-4 h-4 text-green-600" /><h3 className="font-bold text-sm">2FA Activado</h3></div>
+                    <p className="text-2xl font-bold text-gray-900">{securityOverview.two_factor_enabled_count}</p>
+                    <p className="text-xs text-gray-400">usuarios con 2FA</p>
+                  </div>
+                  <div className="bg-white rounded-xl border border-gray-200 p-4">
+                    <div className="flex items-center gap-2 mb-2"><AlertTriangle className="w-4 h-4 text-red-500" /><h3 className="font-bold text-sm">Intentos Fallidos</h3></div>
+                    <p className="text-2xl font-bold text-gray-900">{securityOverview.failed_login_attempts}</p>
+                    <p className="text-xs text-gray-400">login fallidos registrados</p>
+                  </div>
+                </div>
+              )}
+              <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+                <div className="p-4 border-b"><h3 className="font-bold text-gray-900">Registro de Actividad</h3></div>
+                <div className="overflow-x-auto">
+                  <table className="w-full text-sm">
+                    <thead><tr className="bg-slate-50 text-left text-xs text-gray-500 font-medium">
+                      <th className="p-3">Acción</th><th className="p-3">Usuario</th><th className="p-3">Detalles</th><th className="p-3">Fecha</th>
+                    </tr></thead>
+                    <tbody>
+                      {securityLogs.logs?.map((log, i) => (
+                        <tr key={i} className="border-t hover:bg-slate-50">
+                          <td className="p-3"><span className="px-2 py-0.5 rounded text-xs font-semibold bg-slate-100 text-slate-600">{log.action}</span></td>
+                          <td className="p-3">{log.user_email || log.user_id || '-'}</td>
+                          <td className="p-3 text-gray-500 text-xs">{log.old_plan ? `${log.old_plan} → ${log.new_plan}` : log.changed_by || '-'}</td>
+                          <td className="p-3 text-gray-400 text-xs">{log.created_at ? new Date(log.created_at).toLocaleDateString('es-ES') : '-'}</td>
+                        </tr>
+                      ))}
+                      {(!securityLogs.logs || securityLogs.logs.length === 0) && <tr><td colSpan={4} className="p-8 text-center text-gray-400">Sin registros</td></tr>}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* ═══════ MESSAGES ═══════ */}
+          {section === 'messages' && (
+            <div className="bg-white rounded-xl border border-gray-200 overflow-hidden" data-testid="messages-section">
+              <div className="p-4 border-b"><h3 className="font-bold text-gray-900">Mensajes de Contacto</h3></div>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead><tr className="bg-slate-50 text-left text-xs text-gray-500 font-medium">
+                    <th className="p-3">Nombre</th><th className="p-3">Email</th><th className="p-3">Asunto</th><th className="p-3">Estado</th><th className="p-3">Fecha</th>
+                  </tr></thead>
+                  <tbody>
+                    {messages.messages.map((m, i) => (
+                      <tr key={i} className="border-t hover:bg-slate-50">
+                        <td className="p-3 font-medium">{m.name || '-'}</td>
+                        <td className="p-3">{m.email || '-'}</td>
+                        <td className="p-3">{m.subject || '-'}</td>
+                        <td className="p-3"><span className={`px-2 py-0.5 rounded text-xs font-semibold ${m.status === 'new' ? 'bg-orange-100 text-orange-600' : 'bg-gray-100 text-gray-600'}`}>{m.status === 'new' ? 'Nuevo' : 'Leído'}</span></td>
+                        <td className="p-3 text-gray-400 text-xs">{m.created_at ? new Date(m.created_at).toLocaleDateString('es-ES') : '-'}</td>
+                      </tr>
+                    ))}
+                    {messages.messages.length === 0 && <tr><td colSpan={5} className="p-8 text-center text-gray-400">Sin mensajes</td></tr>}
+                  </tbody>
+                </table>
+              </div>
+              <Paginator data={messages} onPage={p => loadSection('messages', p)} />
+            </div>
+          )}
+
+          {/* ═══════ REPORTS ═══════ */}
+          {section === 'reports' && (
+            <div className="space-y-4" data-testid="reports-section">
+              <div className="bg-white rounded-xl border border-gray-200 p-6">
+                <h3 className="font-bold text-gray-900 mb-4">Exportar Reportes</h3>
+                <div className="grid sm:grid-cols-2 gap-4">
+                  <a href={`${API}/api/ceo/export/users`} className="flex items-center gap-3 p-4 border border-gray-200 rounded-xl hover:bg-slate-50 transition-colors">
+                    <div className="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center"><Users className="w-5 h-5 text-blue-600" /></div>
+                    <div><p className="font-bold text-sm text-gray-900">Usuarios CSV</p><p className="text-xs text-gray-500">Exportar todos los usuarios</p></div>
+                    <Download className="w-4 h-4 text-gray-400 ml-auto" />
+                  </a>
+                  <a href={`${API}/api/ceo/export/payments`} className="flex items-center gap-3 p-4 border border-gray-200 rounded-xl hover:bg-slate-50 transition-colors">
+                    <div className="w-10 h-10 bg-orange-50 rounded-lg flex items-center justify-center"><CreditCard className="w-5 h-5 text-orange-500" /></div>
+                    <div><p className="font-bold text-sm text-gray-900">Pagos CSV</p><p className="text-xs text-gray-500">Exportar transacciones</p></div>
+                    <Download className="w-4 h-4 text-gray-400 ml-auto" />
+                  </a>
+                </div>
+              </div>
+              {/* Revenue Summary */}
+              <div className="bg-white rounded-xl border border-gray-200 p-6">
+                <h3 className="font-bold text-gray-900 mb-4">Resumen Financiero</h3>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                  <div className="p-3 bg-blue-50 rounded-xl text-center"><p className="text-xs text-blue-600 font-semibold">MRR</p><p className="text-xl font-bold text-blue-800">{s.revenue?.mrr || 0}€</p></div>
+                  <div className="p-3 bg-orange-50 rounded-xl text-center"><p className="text-xs text-orange-600 font-semibold">Hoy</p><p className="text-xl font-bold text-orange-800">{s.revenue?.today || 0}€</p></div>
+                  <div className="p-3 bg-green-50 rounded-xl text-center"><p className="text-xs text-green-600 font-semibold">Este Mes</p><p className="text-xl font-bold text-green-800">{s.revenue?.month || 0}€</p></div>
+                  <div className="p-3 bg-purple-50 rounded-xl text-center"><p className="text-xs text-purple-600 font-semibold">Total</p><p className="text-xl font-bold text-purple-800">{s.revenue?.total || 0}€</p></div>
+                </div>
+              </div>
+            </div>
+          )}
+
+        </main>
       </div>
+
+      {/* Mobile sidebar overlay */}
+      {sidebarOpen && <div className="fixed inset-0 bg-black/40 z-30 lg:hidden" onClick={() => setSidebarOpen(false)} />}
     </div>
   );
 };
