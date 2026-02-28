@@ -395,10 +395,11 @@ async def send_2fa_code(request: Request):
     )
     
     return {
-        "message": "Código enviado",
+        "message": "C\u00f3digo enviado" + (" por email" if email_sent and not sms_sent else ""),
         "expires_in_minutes": otp_data["expires_in_minutes"],
+        "method": "sms" if sms_sent else ("email" if email_sent else "debug"),
         # Only for testing - remove in production
-        "debug_code": otp_data["otp_code"] if not _sms_configured else None
+        "debug_code": otp_data["otp_code"] if not sms_sent and not email_sent else None
     }
 
 
