@@ -522,11 +522,41 @@ const CEODashboard = () => {
           {/* ═══════ PAYMENTS & REFUNDS ═══════ */}
           {section === 'payments' && (
             <div className="space-y-4" data-testid="payments-section">
+              {/* Tabla de Transacciones */}
               <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
                 <div className="p-4 border-b flex items-center justify-between">
-                  <h3 className="font-bold text-gray-900">Reembolsos</h3>
-                  <a href={`${API}/api/ceo/export/payments`} className="px-3 py-1.5 bg-slate-100 text-gray-700 text-xs font-bold rounded-lg hover:bg-slate-200 flex items-center gap-1"><Download className="w-3 h-3" /> Exportar CSV</a>
+                  <h3 className="font-bold text-gray-900">Transacciones de Pago</h3>
+                  <div className="flex gap-2">
+                    <a href={`${API}/api/ceo/export/payments`} className="px-3 py-1.5 bg-slate-100 text-gray-700 text-xs font-bold rounded-lg hover:bg-slate-200 flex items-center gap-1"><Download className="w-3 h-3" /> CSV</a>
+                    <button onClick={() => window.print()} className="px-3 py-1.5 bg-slate-100 text-gray-700 text-xs font-bold rounded-lg hover:bg-slate-200 flex items-center gap-1"><FileText className="w-3 h-3" /> PDF</button>
+                  </div>
                 </div>
+                <div className="overflow-x-auto">
+                  <table className="w-full text-sm" data-testid="payments-table">
+                    <thead><tr className="bg-slate-50 text-left text-xs text-gray-500 font-medium">
+                      <th className="p-3">Usuario</th><th className="p-3">ID</th><th className="p-3">Email</th><th className="p-3">Método</th><th className="p-3">Importe</th><th className="p-3">Estado</th><th className="p-3">Fecha</th>
+                    </tr></thead>
+                    <tbody>
+                      {(payments || []).map((p, i) => (
+                        <tr key={i} className="border-t hover:bg-slate-50">
+                          <td className="p-3 font-medium">{p.user_id?.slice(-8) || '-'}</td>
+                          <td className="p-3 font-mono text-[11px] text-gray-400">{p.session_id?.slice(-10) || '-'}</td>
+                          <td className="p-3">{p.email || '-'}</td>
+                          <td className="p-3"><span className="bg-blue-50 text-blue-600 px-2 py-0.5 rounded text-xs font-semibold">Stripe</span></td>
+                          <td className="p-3 font-bold">{p.amount ? `${p.amount}€` : '-'}</td>
+                          <td className="p-3"><span className={`px-2 py-0.5 rounded text-xs font-semibold ${p.payment_status === 'paid' ? 'bg-green-100 text-green-600' : p.payment_status === 'failed' ? 'bg-red-100 text-red-600' : 'bg-amber-100 text-amber-600'}`}>{p.payment_status === 'paid' ? 'Completado' : p.payment_status === 'failed' ? 'Fallido' : 'Pendiente'}</span></td>
+                          <td className="p-3 text-gray-400 text-xs">{p.created_at ? new Date(p.created_at).toLocaleDateString('es-ES') : '-'}</td>
+                        </tr>
+                      ))}
+                      {(!payments || payments.length === 0) && <tr><td colSpan={7} className="p-8 text-center text-gray-400">Sin transacciones registradas</td></tr>}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              {/* Panel de Reembolsos */}
+              <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+                <div className="p-4 border-b"><h3 className="font-bold text-gray-900">Solicitudes de Reembolso</h3></div>
                 <div className="overflow-x-auto">
                   <table className="w-full text-sm">
                     <thead><tr className="bg-slate-50 text-left text-xs text-gray-500 font-medium">
@@ -544,9 +574,9 @@ const CEODashboard = () => {
                             {r.status === 'pending' && (
                               <div className="flex gap-1">
                                 <button onClick={async () => { await fetch(`${API}/api/ceo/refunds/${r.refund_id}`, { method: 'PATCH', credentials: 'include', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'approve', reason: '' }) }); loadSection('payments'); }}
-                                  className="p-1 rounded text-green-600 hover:bg-green-50" title="Aprobar"><CheckCircle className="w-4 h-4" /></button>
-                                <button onClick={async () => { await fetch(`${API}/api/ceo/refunds/${r.refund_id}`, { method: 'PATCH', credentials: 'include', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'reject', reason: '' }) }); loadSection('payments'); }}
-                                  className="p-1 rounded text-red-600 hover:bg-red-50" title="Rechazar"><XCircle className="w-4 h-4" /></button>
+                                  className="px-2 py-1 bg-green-50 text-green-600 text-xs rounded hover:bg-green-100 font-semibold flex items-center gap-1" data-testid={`approve-refund-${i}`}><CheckCircle className="w-3 h-3" /> Aprobar</button>
+                                <button onClick={async () => { const reason = prompt('Motivo del rechazo:'); await fetch(`${API}/api/ceo/refunds/${r.refund_id}`, { method: 'PATCH', credentials: 'include', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'reject', reason: reason || '' }) }); loadSection('payments'); }}
+                                  className="px-2 py-1 bg-red-50 text-red-600 text-xs rounded hover:bg-red-100 font-semibold flex items-center gap-1" data-testid={`reject-refund-${i}`}><XCircle className="w-3 h-3" /> Rechazar</button>
                               </div>
                             )}
                           </td>
