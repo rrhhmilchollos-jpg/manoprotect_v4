@@ -153,10 +153,6 @@ const AdminOrders = lazy(() => import('@/pages/AdminOrders'));
 const RelojSOSAncianos = lazy(() => import('@/pages/RelojSOSAncianos'));
 const RelojGPSMayores = lazy(() => import('@/pages/RelojGPSMayores'));
 const BotonSOSSenior = lazy(() => import('@/pages/BotonSOSSenior'));
-const ProteccionPhishing = lazy(() => import('@/pages/SeoLandingPages').then(m => ({ default: m.ProteccionPhishing })));
-const ProteccionFraudeOnline = lazy(() => import('@/pages/SeoLandingPages').then(m => ({ default: m.ProteccionFraudeOnline })));
-const SeguridadDigitalFamiliar = lazy(() => import('@/pages/SeoLandingPages').then(m => ({ default: m.SeguridadDigitalFamiliar })));
-const SeguridadMayores = lazy(() => import('@/pages/SeoLandingPages').then(m => ({ default: m.SeguridadMayores })));
 
 // Strategic Blog Articles
 const MejoresRelojesSOS2026 = lazy(() => import('@/pages/blog/MejoresRelojesSOS2026'));
