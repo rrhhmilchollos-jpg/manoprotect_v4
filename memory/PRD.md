@@ -1,6 +1,6 @@
 # ManoProtect - Product Requirements Document
 
-## Última Actualización: 28 Febrero 2026 (v9)
+## Última Actualización: 28 Febrero 2026 (v10)
 
 ## Descripción
 ManoProtect - plataforma de seguridad familiar. Productos: Sentinel X (adultos), Sentinel J (jóvenes 3-12), Sentinel S (niños 6-14).
@@ -45,6 +45,31 @@ ManoProtect - plataforma de seguridad familiar. Productos: Sentinel X (adultos),
 - **Analytics Export**: GET /api/admin/analytics/export → JSON BigQuery-ready + CSV users
 - **Textos actualizados**: Sentinel J (3-12), Sentinel S (6-14), fecha 30 Marzo 2026
 
+### v10: CRO System + Landing Alta Conversión
+- **Landing Page Alta Conversión** (`HighConversionLanding.js`): Nueva landing principal targeting padres con hijos adolescentes
+  - Hero emocional con A/B testing dinámico
+  - Trust bar (VISA, MC, PayPal, Garantía 14 días, Soporte 24/7)
+  - Activación emocional (78% stat con contador animado)
+  - "¿Por qué necesitas ManoProtect?" 4 tarjetas con scroll reveal
+  - "Cómo funciona" en 3 pasos visuales
+  - FAQ con 5 preguntas expandibles
+  - Testimonios (3 reviews)
+  - Pricing anclado al riesgo (9,99€/mes | 99,99€/año "MÁS POPULAR")
+  - Garantía 7 días + CTA final potente
+  - Exit intent popup + Social proof notifications + Mobile sticky CTA + WhatsApp
+- **Sistema A/B Testing**: Backend asigna variantes por visitor_id, frontend renderiza dinámicamente
+  - Tests activos: hero_headline, cta_text, pricing_order
+  - Resultados en GET /api/cro/ab-test/{id}/results
+- **Conversion Tracking**: Funnel completo page_view → cta_click → begin_checkout → purchase_complete
+  - Dashboard: GET /api/cro/dashboard
+  - Funnel: GET /api/cro/funnel?days=7
+- **Email Sequences**: Secuencia automática 3 emails para usuarios que no convierten
+  - Email 1 (24h): Beneficios + tranquilidad
+  - Email 2 (48h): Caso real (Laura)
+  - Email 3 (72h): Recordatorio prueba gratis
+  - Cron job cada 2h para procesamiento
+- **Performance**: Scroll reveal animations, lazy loading, smooth scroll
+
 ---
 
 ## Testing
@@ -53,6 +78,7 @@ ManoProtect - plataforma de seguridad familiar. Productos: Sentinel X (adultos),
 | 56 | Subscription + checkout | 16/16 ✅ |
 | 57 | Location lock + PDF + WhatsApp | 22/22 ✅ |
 | 58 | 112 + Trial + Analytics + textos | 26/26 ✅ |
+| 59 | CRO System + Landing (backend 17/17 + frontend all) | 100% ✅ |
 
 ---
 
