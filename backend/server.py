@@ -195,8 +195,8 @@ PLAN_FEATURES = {
     "personal-yearly": {"max_users": 2, "gps": False, "sos": False, "ai_analysis": True, "child_tracking": False, "location_history": False},
     # Family plans with tiered features
     "family": {"max_users": 5, "gps": True, "sos": True, "ai_analysis": True, "senior_mode": True, "child_tracking": False, "location_history": False},
-    "family-monthly": {"max_users": 5, "gps": False, "sos": True, "ai_analysis": True, "senior_mode": True, "child_tracking": False, "location_history": False},
-    "family-quarterly": {"max_users": 5, "gps": True, "sos": True, "ai_analysis": True, "senior_mode": True, "child_tracking": False, "location_history": False},
+    "family-monthly": {"max_users": 5, "gps": True, "sos": True, "ai_analysis": True, "senior_mode": True, "child_tracking": False, "location_history": False},
+    "family-quarterly": {"max_users": 5, "gps": True, "sos": True, "ai_analysis": True, "senior_mode": True, "child_tracking": False, "location_history": True},
     "family-yearly": {"max_users": 5, "gps": True, "sos": True, "ai_analysis": True, "senior_mode": True, "child_tracking": True, "location_history": True, "silent_mode": True},
     # Business and Enterprise
     "business": {"max_users": 25, "gps": False, "sos": False, "ai_analysis": True, "dashboard": True, "child_tracking": False, "location_history": False},
