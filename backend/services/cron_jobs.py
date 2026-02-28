@@ -154,6 +154,23 @@ async def cleanup_old_sessions():
     except Exception as e:
         print(f"[CRON] Exception cleaning sessions: {e}")
 
+async def process_email_sequences():
+    """Process pending CRO email sequences - runs every 2 hours"""
+    print(f"[CRON] Processing email sequences at {datetime.now(timezone.utc).isoformat()}")
+    try:
+        async with httpx.AsyncClient() as client:
+            response = await client.post(
+                f"{API_BASE_URL}/cro/email-sequence/process",
+                timeout=30.0
+            )
+            if response.status_code == 200:
+                result = response.json()
+                print(f"[CRON] Email sequences processed: {result.get('processed', 0)} emails")
+            else:
+                print(f"[CRON] Error processing email sequences: {response.status_code}")
+    except Exception as e:
+        print(f"[CRON] Exception processing email sequences: {e}")
+
 def start_scheduler():
     """Start the scheduler with all cron jobs"""
     # Process expired trials every hour
@@ -171,6 +188,15 @@ def start_scheduler():
         CronTrigger(hour=9, minute=0),
         id='send_trial_reminders',
         name='Send Trial Reminders',
+        replace_existing=True
+    )
+    
+    # Process CRO email sequences every 2 hours
+    scheduler.add_job(
+        process_email_sequences,
+        IntervalTrigger(hours=2),
+        id='process_email_sequences',
+        name='Process CRO Email Sequences',
         replace_existing=True
     )
     
