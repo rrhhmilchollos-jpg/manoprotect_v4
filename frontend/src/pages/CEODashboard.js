@@ -600,7 +600,7 @@ const CEODashboard = () => {
           {section === 'security' && (
             <div className="space-y-4" data-testid="security-section">
               {securityOverview && (
-                <div className="grid sm:grid-cols-3 gap-3">
+                <div className="grid sm:grid-cols-4 gap-3">
                   <div className="bg-white rounded-xl border border-gray-200 p-4">
                     <div className="flex items-center gap-2 mb-2"><Lock className="w-4 h-4 text-blue-600" /><h3 className="font-bold text-sm">Administradores</h3></div>
                     <p className="text-2xl font-bold text-gray-900">{securityOverview.total_admins}</p>
@@ -618,27 +618,79 @@ const CEODashboard = () => {
                   <div className="bg-white rounded-xl border border-gray-200 p-4">
                     <div className="flex items-center gap-2 mb-2"><AlertTriangle className="w-4 h-4 text-red-500" /><h3 className="font-bold text-sm">Intentos Fallidos</h3></div>
                     <p className="text-2xl font-bold text-gray-900">{securityOverview.failed_login_attempts}</p>
-                    <p className="text-xs text-gray-400">login fallidos registrados</p>
+                    <p className="text-xs text-gray-400">login fallidos</p>
+                  </div>
+                  <div className="bg-white rounded-xl border border-gray-200 p-4">
+                    <div className="flex items-center gap-2 mb-2"><Lock className="w-4 h-4 text-red-600" /><h3 className="font-bold text-sm">IPs Bloqueadas</h3></div>
+                    <p className="text-2xl font-bold text-gray-900">{securityOverview.blocked_ips_count || 0}</p>
+                    <p className="text-xs text-gray-400">accesos denegados</p>
                   </div>
                 </div>
               )}
+
+              {/* IP Blacklist Panel */}
+              <div className="bg-white rounded-xl border border-red-200 overflow-hidden" data-testid="ip-blacklist-panel">
+                <div className="p-4 border-b border-red-100 bg-red-50 flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Lock className="w-4 h-4 text-red-600" />
+                    <h3 className="font-bold text-red-800">Sistema de Bloqueo de IP</h3>
+                  </div>
+                  <button onClick={() => {
+                    const ip = prompt('IP a bloquear:');
+                    if (!ip) return;
+                    const reason = prompt('Motivo del bloqueo:');
+                    fetch(`${API}/api/ceo/block-ip`, { method: 'POST', credentials: 'include', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ip, reason: reason || 'Bloqueado por CEO', user_id: '' }) }).then(r => r.json()).then(() => loadSection('security'));
+                  }} className="px-3 py-1.5 bg-red-600 text-white text-xs font-bold rounded-lg hover:bg-red-700" data-testid="block-ip-btn">+ Bloquear IP</button>
+                </div>
+                <div className="overflow-x-auto">
+                  <table className="w-full text-sm">
+                    <thead><tr className="bg-red-50/50 text-left text-xs text-gray-500 font-medium">
+                      <th className="p-3">IP</th><th className="p-3">Estado</th><th className="p-3">Motivo</th><th className="p-3">Usuario</th><th className="p-3">Fecha</th><th className="p-3">Acciones</th>
+                    </tr></thead>
+                    <tbody>
+                      {blockedIps.map((ip, i) => (
+                        <tr key={i} className="border-t hover:bg-red-50/30">
+                          <td className="p-3 font-mono font-bold text-gray-900">{ip.ip}</td>
+                          <td className="p-3"><span className={`px-2 py-0.5 rounded text-xs font-semibold ${ip.active ? 'bg-red-100 text-red-600' : 'bg-green-100 text-green-600'}`}>{ip.active ? 'Bloqueada' : 'Desbloqueada'}</span></td>
+                          <td className="p-3 text-gray-500 text-xs">{ip.reason || '-'}</td>
+                          <td className="p-3 font-mono text-xs text-gray-400">{ip.user_id?.slice(-8) || '-'}</td>
+                          <td className="p-3 text-gray-400 text-xs">{ip.blocked_at ? new Date(ip.blocked_at).toLocaleDateString('es-ES') : '-'}</td>
+                          <td className="p-3">
+                            {ip.active ? (
+                              <button onClick={() => { fetch(`${API}/api/ceo/unblock-ip`, { method: 'POST', credentials: 'include', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ip: ip.ip }) }).then(() => loadSection('security')); }}
+                                className="px-2 py-1 bg-green-50 text-green-600 text-xs rounded hover:bg-green-100 font-semibold" data-testid={`unblock-ip-${i}`}>Desbloquear</button>
+                            ) : (
+                              <button onClick={() => { fetch(`${API}/api/ceo/block-ip`, { method: 'POST', credentials: 'include', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ip: ip.ip, reason: ip.reason || '' }) }).then(() => loadSection('security')); }}
+                                className="px-2 py-1 bg-red-50 text-red-600 text-xs rounded hover:bg-red-100 font-semibold">Re-bloquear</button>
+                            )}
+                          </td>
+                        </tr>
+                      ))}
+                      {blockedIps.length === 0 && <tr><td colSpan={6} className="p-8 text-center text-gray-400">No hay IPs bloqueadas. El sistema detecta automáticamente las IPs de cada usuario.</td></tr>}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              {/* Activity Log */}
               <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
-                <div className="p-4 border-b"><h3 className="font-bold text-gray-900">Registro de Actividad</h3></div>
+                <div className="p-4 border-b"><h3 className="font-bold text-gray-900">Registro de Actividad por IP</h3></div>
                 <div className="overflow-x-auto">
                   <table className="w-full text-sm">
                     <thead><tr className="bg-slate-50 text-left text-xs text-gray-500 font-medium">
-                      <th className="p-3">Acción</th><th className="p-3">Usuario</th><th className="p-3">Detalles</th><th className="p-3">Fecha</th>
+                      <th className="p-3">Acción</th><th className="p-3">IP</th><th className="p-3">Usuario</th><th className="p-3">Detalles</th><th className="p-3">Fecha</th>
                     </tr></thead>
                     <tbody>
                       {securityLogs.logs?.map((log, i) => (
                         <tr key={i} className="border-t hover:bg-slate-50">
-                          <td className="p-3"><span className="px-2 py-0.5 rounded text-xs font-semibold bg-slate-100 text-slate-600">{log.action}</span></td>
+                          <td className="p-3"><span className={`px-2 py-0.5 rounded text-xs font-semibold ${log.action?.includes('block') ? 'bg-red-100 text-red-600' : 'bg-slate-100 text-slate-600'}`}>{log.action}</span></td>
+                          <td className="p-3 font-mono text-xs">{log.ip || '-'}</td>
                           <td className="p-3">{log.user_email || log.user_id || '-'}</td>
-                          <td className="p-3 text-gray-500 text-xs">{log.old_plan ? `${log.old_plan} → ${log.new_plan}` : log.changed_by || '-'}</td>
+                          <td className="p-3 text-gray-500 text-xs">{log.reason || (log.old_plan ? `${log.old_plan} → ${log.new_plan}` : log.changed_by || '-')}</td>
                           <td className="p-3 text-gray-400 text-xs">{log.created_at ? new Date(log.created_at).toLocaleDateString('es-ES') : '-'}</td>
                         </tr>
                       ))}
-                      {(!securityLogs.logs || securityLogs.logs.length === 0) && <tr><td colSpan={4} className="p-8 text-center text-gray-400">Sin registros</td></tr>}
+                      {(!securityLogs.logs || securityLogs.logs.length === 0) && <tr><td colSpan={5} className="p-8 text-center text-gray-400">Sin registros de actividad</td></tr>}
                     </tbody>
                   </table>
                 </div>
