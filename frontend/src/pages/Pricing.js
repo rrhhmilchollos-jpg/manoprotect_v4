@@ -64,7 +64,9 @@ const Pricing = () => {
                   'Zonas seguras ilimitadas',
                   'Historial de ubicaciones',
                   'Notificaciones push',
-                  'Dispositivo Sentinel GRATIS',
+                  'Sentinel X Basic GRATIS (50 uds)',
+                  'Sentinel J: 79€ (antes 99€)',
+                  'Sentinel S: 103€ (antes 129€)',
                   'Soporte 24/7',
                 ].map((f, i) => (
                   <li key={i} className="flex items-center gap-2"><Check className="w-4 h-4 text-emerald-500 flex-shrink-0" />{f}</li>
@@ -75,7 +77,7 @@ const Pricing = () => {
                 className="block w-full text-center py-4 border-2 border-emerald-500 text-emerald-600 font-bold rounded-xl hover:bg-emerald-500 hover:text-white transition-all"
                 data-testid="plan-mensual-cta"
               >
-                Probar gratis ahora
+                Empezar con Plan Mensual
               </button>
             </div>
 
