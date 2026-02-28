@@ -773,7 +773,7 @@ async def create_checkout_session(
     http_request: Request,
     session_token: Optional[str] = Cookie(None)
 ):
-    """Create Stripe checkout session with product description and company info"""
+    """Create Stripe checkout session with promotional pricing logic"""
     user = await get_current_user(http_request, session_token)
     user_id = user.user_id if user else "anonymous"
     user_email = user.email if user else "anonymous@mano.com"
@@ -783,13 +783,31 @@ async def create_checkout_session(
         if not package:
             raise HTTPException(status_code=400, detail="Plan de suscripción no válido")
         
+        final_amount = package["amount"]
+        promo_applied = None
+        
+        # --- PROMOTIONAL LOGIC ---
+        # 1. Check if user qualifies for 20% discount (first 200 subscribers)
+        PROMO_200_LIMIT = 200
+        PROMO_DISCOUNT_PCT = 20
+        promo_subscribers = await db.subscriptions.count_documents({"promo_200": True})
+        
+        if promo_subscribers < PROMO_200_LIMIT and data.plan_type in (
+            "family-monthly", "family-yearly", "family-quarterly",
+            "monthly", "yearly", "quarterly"
+        ):
+            discount_factor = (100 - PROMO_DISCOUNT_PCT) / 100
+            final_amount = round(package["amount"] * discount_factor, 2)
+            promo_applied = f"-{PROMO_DISCOUNT_PCT}% primeros {PROMO_200_LIMIT} suscriptores"
+        
         # Build product description for checkout
         product_description = f"ManoProtect {package['name']} - Protección contra fraudes y estafas digitales"
         if package.get("max_users", 1) > 1:
             product_description += f" (hasta {package['max_users']} usuarios)"
         product_description += f". Período: {package['period']}."
+        if promo_applied:
+            product_description += f" PROMO: {promo_applied}"
         
-        # Redirigir a página de éxito personalizada
         success_url = f"{data.origin_url}/payment-success?session_id={{CHECKOUT_SESSION_ID}}"
         cancel_url = f"{data.origin_url}/pricing?canceled=true"
         
@@ -798,7 +816,7 @@ async def create_checkout_session(
         stripe_checkout = StripeCheckout(api_key=STRIPE_API_KEY, webhook_url=webhook_url)
         
         checkout_request = CheckoutSessionRequest(
-            amount=package["amount"],
+            amount=final_amount,
             currency="eur",
             success_url=success_url,
             cancel_url=cancel_url,
@@ -810,7 +828,9 @@ async def create_checkout_session(
                 "product_description": product_description,
                 "company_name": COMPANY_INFO["name"],
                 "company_cif": COMPANY_INFO["cif"],
-                "billing_period": package["period"]
+                "billing_period": package["period"],
+                "promo_applied": promo_applied or "none",
+                "original_amount": str(package["amount"])
             }
         )
         
@@ -821,7 +841,7 @@ async def create_checkout_session(
             user_id=user_id,
             email=user_email,
             plan_type=data.plan_type,
-            amount=package["amount"],
+            amount=final_amount,
             currency="eur",
             status="pending",
             payment_status="initiated",
@@ -830,7 +850,9 @@ async def create_checkout_session(
                 "plan_period": package["period"],
                 "product_description": product_description,
                 "company": COMPANY_INFO["name"],
-                "cif": COMPANY_INFO["cif"]
+                "cif": COMPANY_INFO["cif"],
+                "promo_applied": promo_applied,
+                "original_amount": package["amount"]
             }
         )
         
@@ -845,9 +867,11 @@ async def create_checkout_session(
             "product": {
                 "name": package["name"],
                 "description": product_description,
-                "amount": package["amount"],
+                "amount": final_amount,
+                "original_amount": package["amount"] if promo_applied else None,
                 "currency": "EUR",
-                "period": package["period"]
+                "period": package["period"],
+                "promo_applied": promo_applied
             },
             "company": COMPANY_INFO
         }
