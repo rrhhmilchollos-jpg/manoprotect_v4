@@ -319,6 +319,7 @@ const Dashboard = () => {
               Recompensas
             </Button>
             <PushNotificationToggle variant="compact" />
+            <NotificationBell />
             <NotificationCenter />
             <Button
               data-testid="profile-btn"
