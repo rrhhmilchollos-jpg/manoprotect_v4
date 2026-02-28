@@ -21,7 +21,7 @@ const SobreNosotros = () => {
       initials: "DE",
       bio: "Apasionado por la ciberseguridad y la protección de las familias españolas. Creó ManoProtect con la misión de hacer la tecnología de protección accesible para todos.",
       linkedin: "#",
-      color: "indigo"
+      color: "emerald"
     }
   ];
 
@@ -55,7 +55,7 @@ const SobreNosotros = () => {
   ];
 
   const colorClasses = {
-    indigo: 'bg-indigo-500',
+    emerald: 'bg-emerald-500',
     emerald: 'bg-emerald-500',
     purple: 'bg-purple-500',
     amber: 'bg-amber-500',
@@ -121,7 +121,7 @@ const SobreNosotros = () => {
             {team.map((member, index) => (
               <div 
                 key={index}
-                className="bg-white rounded-2xl p-6 border border-slate-200 hover:border-indigo-300 hover:shadow-lg transition-all"
+                className="bg-white rounded-2xl p-6 border border-slate-200 hover:border-emerald-300 hover:shadow-lg transition-all"
               >
                 {/* Avatar */}
                 <div className="flex items-center gap-4 mb-4">
@@ -130,7 +130,7 @@ const SobreNosotros = () => {
                   </div>
                   <div>
                     <h3 className="font-bold text-slate-900">{member.name}</h3>
-                    <p className="text-sm text-indigo-600 font-medium">{member.role}</p>
+                    <p className="text-sm text-emerald-600 font-medium">{member.role}</p>
                   </div>
                 </div>
                 
@@ -140,7 +140,7 @@ const SobreNosotros = () => {
                 {/* Social */}
                 <a 
                   href={member.linkedin}
-                  className="inline-flex items-center gap-2 text-sm text-slate-500 hover:text-indigo-600 transition-colors"
+                  className="inline-flex items-center gap-2 text-sm text-slate-500 hover:text-emerald-600 transition-colors"
                 >
                   <Linkedin className="w-4 h-4" />
                   LinkedIn
@@ -162,8 +162,8 @@ const SobreNosotros = () => {
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {values.map((value, index) => (
               <div key={index} className="text-center p-6">
-                <div className="w-14 h-14 bg-indigo-100 rounded-xl flex items-center justify-center mx-auto mb-4">
-                  <value.icon className="w-7 h-7 text-indigo-600" />
+                <div className="w-14 h-14 bg-emerald-100 rounded-xl flex items-center justify-center mx-auto mb-4">
+                  <value.icon className="w-7 h-7 text-emerald-600" />
                 </div>
                 <h3 className="font-bold text-slate-900 mb-2">{value.title}</h3>
                 <p className="text-sm text-slate-600">{value.description}</p>
@@ -206,9 +206,9 @@ const SobreNosotros = () => {
       {/* Contact */}
       <section className="py-16 px-6">
         <div className="max-w-4xl mx-auto">
-          <div className="bg-gradient-to-r from-indigo-600 to-indigo-700 rounded-2xl p-8 md:p-12 text-center">
+          <div className="bg-gradient-to-r from-emerald-600 to-emerald-700 rounded-2xl p-8 md:p-12 text-center">
             <h2 className="text-3xl font-bold text-white mb-4">¿Quieres unirte al equipo?</h2>
-            <p className="text-indigo-100 mb-8 max-w-xl mx-auto">
+            <p className="text-emerald-100 mb-8 max-w-xl mx-auto">
               Siempre buscamos personas apasionadas por la seguridad y la protección de las personas.
             </p>
             
@@ -238,8 +238,8 @@ const SobreNosotros = () => {
         <div className="max-w-4xl mx-auto">
           <div className="grid md:grid-cols-3 gap-8 text-center">
             <div>
-              <div className="w-12 h-12 bg-indigo-100 rounded-xl flex items-center justify-center mx-auto mb-4">
-                <MapPin className="w-6 h-6 text-indigo-600" />
+              <div className="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center mx-auto mb-4">
+                <MapPin className="w-6 h-6 text-emerald-600" />
               </div>
               <h3 className="font-semibold text-slate-900 mb-1">Oficina Central</h3>
               <p className="text-slate-600 text-sm">C/ Sor Isabel de Villena 82 bajo</p>
@@ -250,14 +250,14 @@ const SobreNosotros = () => {
                 <Phone className="w-6 h-6 text-emerald-600" />
               </div>
               <h3 className="font-semibold text-slate-900 mb-1">Teléfono</h3>
-              <a href="tel:601510950" className="text-indigo-600 hover:underline">601 510 950</a>
+              <a href="tel:601510950" className="text-emerald-600 hover:underline">601 510 950</a>
             </div>
             <div>
               <div className="w-12 h-12 bg-amber-100 rounded-xl flex items-center justify-center mx-auto mb-4">
                 <Mail className="w-6 h-6 text-amber-600" />
               </div>
               <h3 className="font-semibold text-slate-900 mb-1">Email</h3>
-              <a href="mailto:info@manoprotect.com" className="text-indigo-600 hover:underline">info@manoprotect.com</a>
+              <a href="mailto:info@manoprotect.com" className="text-emerald-600 hover:underline">info@manoprotect.com</a>
             </div>
           </div>
         </div>
