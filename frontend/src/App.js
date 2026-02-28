@@ -814,6 +814,8 @@ function App() {
           <Toaster position="top-center" richColors />
           <HealthCheckMonitor />
           <FloatingSOSButton />
+          <FreeTrialBanner />
+          <StockUrgencyPopup />
           <AppRouter />
           <Suspense fallback={<EmptyFallback />}>
             <CookieConsent />
