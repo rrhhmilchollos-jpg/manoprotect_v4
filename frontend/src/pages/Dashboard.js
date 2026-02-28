@@ -9,6 +9,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
 import NotificationCenter from '@/components/NotificationCenter';
+import NotificationBell from '@/components/NotificationBell';
 import PushNotificationToggle from '@/components/PushNotificationToggle';
 import ThreatAnalyzer from '@/components/ThreatAnalyzer';
 import AlertSubscription from '@/components/AlertSubscription';
