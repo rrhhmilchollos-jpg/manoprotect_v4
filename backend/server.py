@@ -324,6 +324,11 @@ from routes.phishing_simulation import router as phishing_router
 from routes.reviews_routes import router as reviews_router, set_database as init_reviews
 init_reviews(db)
 
+# Location Lock & Documents (Parental Control + PDF generation)
+from routes.location_lock_routes import router as location_lock_router, init_db as init_location_lock
+init_location_lock(db)
+
+
 # Export Reports (CSV/PDF)
 from routes.export_routes import router as export_router, set_database as init_export
 init_export(db)
