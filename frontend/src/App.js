@@ -367,6 +367,73 @@ const FloatingSOSButton = () => {
   );
 };
 
+// Floating "Probar 7 días gratis" Banner - Visible on all public pages
+const FreeTrialBanner = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const [dismissed, setDismissed] = useState(false);
+  
+  // Hide on admin, login, register, ceo pages
+  if (dismissed || ['/ceo', '/login', '/register', '/empleados', '/investor'].some(p => location.pathname.startsWith(p))) return null;
+  if (location.pathname === '/plans' || location.pathname === '/registro') return null;
+  
+  return (
+    <div className="fixed bottom-0 left-0 right-0 z-40 bg-gradient-to-r from-blue-700 to-blue-800 text-white px-4 py-2.5 flex items-center justify-center gap-3 shadow-lg" data-testid="free-trial-banner">
+      <span className="text-xs sm:text-sm font-semibold">Prueba ManoProtect <strong>7 días GRATIS</strong> sin compromiso</span>
+      <button onClick={() => navigate('/plans')} className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-1.5 rounded-full text-xs font-bold transition-colors whitespace-nowrap" data-testid="free-trial-btn">
+        Probar gratis
+      </button>
+      <button onClick={() => setDismissed(true)} className="text-white/60 hover:text-white ml-1 text-lg leading-none" aria-label="Cerrar">&times;</button>
+    </div>
+  );
+};
+
+// Stock Urgency Popup - Shows once per session
+const StockUrgencyPopup = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const [show, setShow] = useState(false);
+  const [promo, setPromo] = useState(null);
+  
+  useEffect(() => {
+    if (sessionStorage.getItem('urgency_shown')) return;
+    const timer = setTimeout(async () => {
+      try {
+        const API = process.env.REACT_APP_BACKEND_URL;
+        const r = await fetch(`${API}/api/ceo/promo-status`);
+        const data = await r.json();
+        setPromo(data);
+        setShow(true);
+        sessionStorage.setItem('urgency_shown', '1');
+      } catch {}
+    }, 8000);
+    return () => clearTimeout(timer);
+  }, []);
+  
+  // Hide on admin pages
+  if (!show || !promo) return null;
+  if (['/ceo', '/login', '/empleados', '/investor'].some(p => location.pathname.startsWith(p))) return null;
+  
+  return (
+    <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/40 backdrop-blur-sm" onClick={() => setShow(false)} data-testid="urgency-popup">
+      <div className="bg-white rounded-2xl shadow-2xl max-w-sm w-full mx-4 p-6 relative" onClick={e => e.stopPropagation()}>
+        <button onClick={() => setShow(false)} className="absolute top-3 right-3 text-gray-400 hover:text-gray-600 text-xl">&times;</button>
+        <div className="text-center">
+          <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-3">
+            <span className="text-red-600 text-xl">!</span>
+          </div>
+          <h3 className="font-bold text-gray-900 text-lg mb-1">Stock limitado</h3>
+          <p className="text-sm text-gray-600 mb-4">Solo quedan <strong className="text-red-600">{promo.basic_stock_remaining}</strong> unidades de Sentinel X Basic <strong>GRATIS</strong> y <strong className="text-orange-600">{promo.promo_200_remaining}</strong> plazas con <strong>{promo.discount_pct}% descuento</strong></p>
+          <button onClick={() => { setShow(false); navigate('/plans'); }} className="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-3 rounded-xl font-bold text-sm transition-colors" data-testid="urgency-cta">
+            Ver ofertas antes de que se agoten
+          </button>
+          <p className="text-[10px] text-gray-400 mt-2">Oferta por tiempo limitado</p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 // App Router - ManoProtect.com Only
 function AppRouter() {
   const location = useLocation();
