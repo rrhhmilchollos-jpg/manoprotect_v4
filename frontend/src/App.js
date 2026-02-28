@@ -197,7 +197,7 @@ import '@/App.css';
 const PageLoader = () => (
   <div className="min-h-screen bg-zinc-50 flex items-center justify-center">
     <div className="flex flex-col items-center gap-4">
-      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
+      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-600"></div>
       <p className="text-zinc-500 text-sm">Cargando...</p>
     </div>
   </div>
@@ -228,7 +228,7 @@ const ProtectedRoute = ({ children, requireInvestor = false, requireAdmin = fals
   if (loading) {
     return (
       <div className="min-h-screen bg-zinc-50 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-600"></div>
       </div>
     );
   }
