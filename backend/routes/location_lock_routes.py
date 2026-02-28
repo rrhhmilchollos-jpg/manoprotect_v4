@@ -216,11 +216,10 @@ async def update_location(data: LocationUpdate, request: Request):
 
 @router.get("/family/member/{member_id}/location")
 async def get_member_location(member_id: str, request: Request):
-    """Get last known location of a family member"""
+    """Get last known location of a family member and notify the parent"""
     session_token = request.cookies.get("session_token")
     user = await require_auth(request, session_token)
     
-    # Verify the requester is a family member/owner
     member_user = await _db.users.find_one(
         {"user_id": member_id},
         {"_id": 0, "last_location": 1, "last_location_at": 1, "name": 1, "email": 1}
@@ -233,6 +232,26 @@ async def get_member_location(member_id: str, request: Request):
     if not location:
         return {"found": False, "message": "No hay ubicación disponible para este usuario"}
     
+    # Create push notification for the requesting parent
+    now = datetime.now(timezone.utc).isoformat()
+    notification = {
+        "user_id": user.user_id,
+        "type": "location_request_success",
+        "title": "Ubicación recibida",
+        "message": f"La ubicación de {member_user.get('name', 'familiar')} ha sido recibida correctamente. GPS activo{'(segundo plano)' if location.get('is_background') else ''}.",
+        "data": {
+            "member_id": member_id,
+            "member_name": member_user.get("name", ""),
+            "latitude": location.get("latitude"),
+            "longitude": location.get("longitude"),
+            "maps_url": f"https://maps.google.com/?q={location.get('latitude')},{location.get('longitude')}",
+            "is_background": location.get("is_background", False)
+        },
+        "read": False,
+        "created_at": now
+    }
+    await _db.notifications.insert_one(notification)
+    
     return {
         "found": True,
         "name": member_user.get("name", ""),
@@ -243,6 +262,140 @@ async def get_member_location(member_id: str, request: Request):
         "last_updated": member_user.get("last_location_at"),
         "maps_url": f"https://maps.google.com/?q={location.get('latitude')},{location.get('longitude')}"
     }
+
+
+class LocationRequestNotify(BaseModel):
+    target_user_id: str
+
+
+@router.post("/family/request-location")
+async def request_family_location(data: LocationRequestNotify, request: Request):
+    """
+    Parent requests a child's location.
+    Creates notification for parent confirming request was sent.
+    Returns latest known location + stores the request in audit log.
+    """
+    session_token = request.cookies.get("session_token")
+    user = await require_auth(request, session_token)
+    
+    now = datetime.now(timezone.utc).isoformat()
+    
+    # Get target user's last location
+    target = await _db.users.find_one(
+        {"user_id": data.target_user_id},
+        {"_id": 0, "last_location": 1, "last_location_at": 1, "name": 1, "location_locked": 1, "background_tracking_active": 1}
+    )
+    
+    if not target:
+        raise HTTPException(status_code=404, detail="Usuario no encontrado")
+    
+    location = target.get("last_location")
+    target_name = target.get("name", "familiar")
+    tracking_active = target.get("background_tracking_active", False)
+    locked = target.get("location_locked", False)
+    
+    # Audit log the request
+    await _db.audit_logs.insert_one({
+        "action": "location_request",
+        "requester_id": user.user_id,
+        "target_user_id": data.target_user_id,
+        "timestamp": now,
+        "location_found": location is not None,
+        "tracking_active": tracking_active,
+        "location_locked": locked
+    })
+    
+    # Notification for the requesting parent
+    if location:
+        maps_url = f"https://maps.google.com/?q={location.get('latitude')},{location.get('longitude')}"
+        notif = {
+            "user_id": user.user_id,
+            "type": "location_found",
+            "title": f"Ubicación de {target_name}",
+            "message": f"{target_name} localizado/a correctamente. GPS {'en segundo plano' if location.get('is_background') else 'activo'}. Pulsa para ver en el mapa.",
+            "data": {
+                "member_id": data.target_user_id,
+                "member_name": target_name,
+                "latitude": location.get("latitude"),
+                "longitude": location.get("longitude"),
+                "maps_url": maps_url,
+                "is_background": location.get("is_background", False),
+                "tracking_active": tracking_active,
+                "location_locked": locked
+            },
+            "read": False,
+            "created_at": now
+        }
+        await _db.notifications.insert_one(notif)
+        
+        return {
+            "success": True,
+            "found": True,
+            "name": target_name,
+            "latitude": location.get("latitude"),
+            "longitude": location.get("longitude"),
+            "accuracy": location.get("accuracy"),
+            "maps_url": maps_url,
+            "is_background": location.get("is_background", False),
+            "tracking_active": tracking_active,
+            "location_locked": locked,
+            "last_updated": target.get("last_location_at"),
+            "notification_sent": True
+        }
+    else:
+        notif = {
+            "user_id": user.user_id,
+            "type": "location_not_found",
+            "title": f"Ubicación de {target_name} no disponible",
+            "message": f"No se pudo obtener la ubicación de {target_name}. {'El GPS en segundo plano está activo, se recibirá pronto.' if tracking_active else 'El GPS no está activado.'}",
+            "data": {
+                "member_id": data.target_user_id,
+                "member_name": target_name,
+                "tracking_active": tracking_active
+            },
+            "read": False,
+            "created_at": now
+        }
+        await _db.notifications.insert_one(notif)
+        
+        return {
+            "success": True,
+            "found": False,
+            "name": target_name,
+            "tracking_active": tracking_active,
+            "message": f"No hay ubicación disponible para {target_name}" + (" pero el GPS en segundo plano está activo." if tracking_active else ". Pide que active el GPS."),
+            "notification_sent": True
+        }
+
+
+@router.get("/notifications")
+async def get_notifications(request: Request):
+    """Get user's push notifications (location requests, etc.)"""
+    session_token = request.cookies.get("session_token")
+    user = await require_auth(request, session_token)
+    
+    notifications = await _db.notifications.find(
+        {"user_id": user.user_id},
+        {"_id": 0}
+    ).sort("created_at", -1).limit(50).to_list(50)
+    
+    unread = sum(1 for n in notifications if not n.get("read"))
+    
+    return {"notifications": notifications, "unread_count": unread}
+
+
+@router.post("/notifications/read-all")
+async def mark_all_notifications_read(request: Request):
+    """Mark all notifications as read"""
+    session_token = request.cookies.get("session_token")
+    user = await require_auth(request, session_token)
+    
+    await _db.notifications.update_many(
+        {"user_id": user.user_id, "read": False},
+        {"$set": {"read": True}}
+    )
+    
+    return {"success": True}
 
 
 # ========================================
