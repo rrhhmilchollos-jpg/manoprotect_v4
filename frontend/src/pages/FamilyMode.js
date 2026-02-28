@@ -212,8 +212,8 @@ const FamilyMode = () => {
       </header>
 
       <div className="max-w-4xl mx-auto px-6 py-12">
-        {/* Location Permission Flow (shows when user needs to activate) */}
-        {showPermissionFlow && (
+        {/* Location Permission Flow (shows ONLY first time, before lock) */}
+        {showPermissionFlow && !locationLocked && (
           <div className="mb-8" data-testid="permission-flow-container">
             <LocationPermissionFlow
               userId="current-user"
@@ -225,29 +225,36 @@ const FamilyMode = () => {
 
         {/* GPS Background Tracking Status Banner */}
         {!showPermissionFlow && (
-          <Card className={`mb-6 ${locationReady ? 'bg-green-50 border-green-200' : 'bg-amber-50 border-amber-200'}`} data-testid="gps-status-banner">
+          <Card className={`mb-6 ${locationLocked ? 'bg-green-50 border-green-200' : locationReady ? 'bg-green-50 border-green-200' : 'bg-amber-50 border-amber-200'}`} data-testid="gps-status-banner">
             <CardContent className="p-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <MapPin className={`w-6 h-6 ${locationReady ? 'text-green-600' : 'text-amber-600'}`} />
+                  {locationLocked ? (
+                    <Lock className="w-6 h-6 text-green-600" />
+                  ) : (
+                    <MapPin className={`w-6 h-6 ${locationReady ? 'text-green-600' : 'text-amber-600'}`} />
+                  )}
                   <div>
-                    <p className={`font-semibold ${locationReady ? 'text-green-800' : 'text-amber-800'}`}>
-                      {locationReady 
-                        ? (bgTrackingActive ? 'Localización GPS en segundo plano ACTIVA' : 'Localización GPS Activa')
-                        : 'Localización GPS NO configurada'
+                    <p className={`font-semibold ${locationLocked || locationReady ? 'text-green-800' : 'text-amber-800'}`}>
+                      {locationLocked 
+                        ? 'Protección GPS BLOQUEADA y activa'
+                        : locationReady 
+                          ? (bgTrackingActive ? 'Localización GPS en segundo plano ACTIVA' : 'Localización GPS Activa')
+                          : 'Localización GPS NO configurada'
                       }
                     </p>
-                    <p className={`text-sm ${locationReady ? 'text-green-600' : 'text-amber-600'}`}>
-                      {locationReady 
-                        ? (bgTrackingActive 
-                            ? 'Tu familia puede localizarte incluso con la app cerrada, pantalla apagada o teléfono bloqueado'
-                            : 'Al pulsar SOS, tu ubicación exacta se enviará a tus contactos de emergencia')
-                        : 'Activa los permisos de ubicación para que tu familia pueda localizarte en emergencias'
+                    <p className={`text-sm ${locationLocked || locationReady ? 'text-green-600' : 'text-amber-600'}`}>
+                      {locationLocked 
+                        ? 'Los ajustes de ubicación están bloqueados. Para modificarlos, contacta con ManoProtect con verificación de DNI.'
+                        : locationReady 
+                          ? 'Tu familia puede localizarte incluso con la app cerrada, pantalla apagada o teléfono bloqueado'
+                          : 'Activa los permisos de ubicación para que tu familia pueda localizarte en emergencias'
                       }
                     </p>
                   </div>
                 </div>
-                {!locationReady && (
+                {/* Only show Activate button if NOT locked and NOT configured */}
+                {!locationLocked && !locationReady && (
                   <Button 
                     onClick={() => setShowPermissionFlow(true)} 
                     size="sm" 
@@ -257,16 +264,12 @@ const FamilyMode = () => {
                     <Settings className="w-4 h-4 mr-1" /> Activar
                   </Button>
                 )}
-                {locationReady && !bgTrackingActive && (
-                  <Button 
-                    onClick={() => setShowPermissionFlow(true)} 
-                    size="sm" 
-                    variant="outline"
-                    className="border-green-400 text-green-700 hover:bg-green-50"
-                    data-testid="btn-upgrade-gps"
-                  >
-                    <Settings className="w-4 h-4 mr-1" /> Mejorar protección
-                  </Button>
+                {/* Show lock icon when locked */}
+                {locationLocked && (
+                  <div className="flex items-center gap-1 text-green-600 bg-green-100 px-3 py-1.5 rounded-lg" data-testid="locked-badge">
+                    <Lock className="w-4 h-4" />
+                    <span className="text-xs font-bold">BLOQUEADO</span>
+                  </div>
                 )}
               </div>
             </CardContent>
