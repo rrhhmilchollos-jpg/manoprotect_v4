@@ -76,6 +76,11 @@ ManoProtect - plataforma de seguridad familiar. Productos: Sentinel X (adultos),
 - **Limpieza**: Eliminada barra naranja "OFERTA ESPECIAL", eliminado InterstitialAdManager y AIChatWidget, eliminado PushNotificationPrompt, JSON basura limpiado de index.html
 - **Marca emerald**: Loading screen, theme-color, tile-color, mask-icon todos actualizados
 
+### v10.4: Restauración Sentinel en Home
+- **Sección Dispositivos Sentinel en Home**: Añadida sección "Protección física + digital" en HighConversionLanding.js con tarjetas interactivas para Sentinel X, J y S
+- **Navegación actualizada**: Añadido enlace "Dispositivos" en header desktop y menú móvil
+- **Páginas Sentinel verificadas**: /sentinel-x, /sentinel-j, /sentinel-s todas funcionando correctamente
+
 ### v10.2: Sincronización precios + Arreglos generales
 - Precios sincronizados: Familiar 9,99€/mes | 99,99€/año (landing, registro, backend)
 - 2FA con fallback email (SendGrid) cuando SMS falla
