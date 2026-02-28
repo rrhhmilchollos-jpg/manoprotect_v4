@@ -490,6 +490,39 @@ const HighConversionLanding = () => {
         </div>
       </section>
 
+      {/* ═══════ VIDEOS DE MARKETING ═══════ */}
+      <section className="py-16 bg-white" data-testid="marketing-videos">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
+          <Reveal>
+            <div className="text-center mb-10">
+              <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3">Así protege ManoProtect a las familias españolas</h2>
+              <p className="text-gray-500 text-sm sm:text-base">Historias reales de familias que confían en nosotros cada día</p>
+            </div>
+          </Reveal>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {[
+              { img: "https://static.prod-images.emergentagent.com/jobs/63935a0b-bb4d-4d95-9b2d-4d6c8716632f/images/005c4ebfc6e6209f037eb0f7b6c4020ffd9c71d1ac1503b33f84ec57d2f2b7af.png", title: "La familia García", desc: "Toda la familia protegida con Sentinel X" },
+              { img: "https://static.prod-images.emergentagent.com/jobs/63935a0b-bb4d-4d95-9b2d-4d6c8716632f/images/ef3c915bb5fc20b488ac852ce95dbeaa2637a80b9212aac7439b64e9b67b31da.png", title: "Vuelta al cole segura", desc: "Sentinel J: tranquilidad para los padres" },
+              { img: "https://static.prod-images.emergentagent.com/jobs/63935a0b-bb4d-4d95-9b2d-4d6c8716632f/images/401d940e753b9c06870dd8ef5ab10a7aff295491bb65f59d9eaabec3f78318dc.png", title: "Independencia senior", desc: "Sentinel S: seguridad para nuestros mayores" },
+              { img: "https://static.prod-images.emergentagent.com/jobs/63935a0b-bb4d-4d95-9b2d-4d6c8716632f/images/18fdfbb5fc59491f7de0c3a02cc006e5eed62ae47f50742b9f625f06c74548f0.png", title: "Aventura sin miedo", desc: "Adolescentes protegidos en cada excursión" },
+            ].map((v, i) => (
+              <Reveal key={i} delay={i * 100}>
+                <div className="group relative rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all cursor-pointer" data-testid={`video-card-${i}`}>
+                  <img src={v.img} alt={v.title} className="w-full aspect-video object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent flex flex-col justify-end p-4">
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 bg-white/90 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform shadow-lg">
+                      <ArrowRight className="w-5 h-5 text-emerald-600 ml-0.5" />
+                    </div>
+                    <h3 className="text-white font-bold text-sm">{v.title}</h3>
+                    <p className="text-white/80 text-xs">{v.desc}</p>
+                  </div>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ═══════ TRUST BAR ═══════ */}
       <section className="py-8 bg-slate-50 border-t border-gray-200" data-testid="trust-bar">
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
