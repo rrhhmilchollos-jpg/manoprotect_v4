@@ -373,8 +373,10 @@ const HighConversionLanding = () => {
                   ['Correas intercambiables', true, true, true],
                   ['Alerta anti-retirada', true, true, true],
                   ['Sirena 120dB', true, true, true],
-                  ['Sin cámara ni internet', true, true, true],
+                  ['E-SIM integrada', true, true, true],
+                  ['Con cámara y con internet', true, true, true],
                   ['Sensor cardíaco', true, true, true],
+                  ['Funciona en segundo plano', true, true, true],
                 ].map((row, i) => (
                   <tr key={i} className={i % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
                     <td className="p-3 font-medium text-gray-900 border-b border-gray-100">{row[0]}</td>
