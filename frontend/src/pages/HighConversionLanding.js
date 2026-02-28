@@ -91,7 +91,7 @@ const HighConversionLanding = () => {
           </Link>
 
           <nav className="hidden md:flex items-center gap-8 text-[13px] font-medium text-gray-500">
-            <a href="#como-funciona" className="hover:text-emerald-600 transition-colors" data-testid="nav-como-funciona">C\u00f3mo funciona</a>
+            <a href="#como-funciona" className="hover:text-emerald-600 transition-colors" data-testid="nav-como-funciona">{"C\u00f3mo funciona"}</a>
             <a href="#precios" className="hover:text-emerald-600 transition-colors" data-testid="nav-precios">Precios</a>
             <a href="#seguridad" className="hover:text-emerald-600 transition-colors" data-testid="nav-seguridad">Seguridad</a>
             <a href="https://wa.me/34601510950" target="_blank" rel="noopener noreferrer" className="hover:text-emerald-600 transition-colors" data-testid="nav-contacto">Contacto</a>
@@ -123,7 +123,7 @@ const HighConversionLanding = () => {
         {/* Mobile menu */}
         {mobileMenu && (
           <div className="md:hidden bg-white border-t border-gray-100 px-4 py-4 space-y-3" data-testid="mobile-menu">
-            <a href="#como-funciona" onClick={() => setMobileMenu(false)} className="block text-sm text-gray-600 hover:text-emerald-600">C\u00f3mo funciona</a>
+            <a href="#como-funciona" onClick={() => setMobileMenu(false)} className="block text-sm text-gray-600 hover:text-emerald-600">{"C\u00f3mo funciona"}</a>
             <a href="#precios" onClick={() => setMobileMenu(false)} className="block text-sm text-gray-600 hover:text-emerald-600">Precios</a>
             <a href="#seguridad" onClick={() => setMobileMenu(false)} className="block text-sm text-gray-600 hover:text-emerald-600">Seguridad</a>
             <a href="https://wa.me/34601510950" target="_blank" rel="noopener noreferrer" className="block text-sm text-gray-600 hover:text-emerald-600">Contacto</a>
