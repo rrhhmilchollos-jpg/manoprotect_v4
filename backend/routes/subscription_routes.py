@@ -33,14 +33,14 @@ STRIPE_PRICES = {
     "individual": {
         "mensual": os.environ.get("STRIPE_PRICE_INDIVIDUAL_MONTHLY", "price_individual_monthly"),
         "anual": os.environ.get("STRIPE_PRICE_INDIVIDUAL_YEARLY", "price_individual_yearly"),
-        "amount_monthly": 20.83,  # 249.99/12
+        "amount_monthly": 20.83,
         "amount_yearly": 249.99
     },
     "familiar": {
         "mensual": os.environ.get("STRIPE_PRICE_FAMILIAR_MONTHLY", "price_familiar_monthly"),
         "anual": os.environ.get("STRIPE_PRICE_FAMILIAR_YEARLY", "price_familiar_yearly"),
-        "amount_monthly": 33.33,  # 399.99/12
-        "amount_yearly": 399.99
+        "amount_monthly": 9.99,
+        "amount_yearly": 99.99
     }
 }
 
