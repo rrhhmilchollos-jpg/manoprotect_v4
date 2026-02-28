@@ -264,7 +264,7 @@ const ManoProtectRegistro = () => {
           <div className="max-w-2xl mx-auto" data-testid="plan-selection">
             <div className="text-center mb-8">
               <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Elige tu plan</h1>
-              <p className="text-gray-500 mt-2">Todos incluyen 7 d\u00edas de prueba gratis. Cancela cuando quieras.</p>
+              <p className="text-gray-500 mt-2">{"Todos incluyen 7 d\u00edas de prueba gratis. Cancela cuando quieras."}</p>
             </div>
 
             <div className="grid sm:grid-cols-2 gap-4">
