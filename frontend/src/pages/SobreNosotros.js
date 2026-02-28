@@ -49,8 +49,9 @@ const SobreNosotros = () => {
   ];
 
   const milestones = [
-    { year: "2024", event: "Fundación de ManoProtect", description: "Nace ManoProtect con la misión de proteger familias españolas" },
-    { year: "2025", event: "Lanzamiento oficial", description: "Disponible para todos en España" }
+    { year: "2024", event: "Fundaci\u00f3n de ManoProtect", description: "Nace ManoProtect con la misi\u00f3n de proteger familias espa\u00f1olas" },
+    { year: "2025", event: "Lanzamiento oficial", description: "Disponible para todos en Espa\u00f1a con GPS, SOS y seguimiento familiar" },
+    { year: "2026", event: "Protecci\u00f3n 24/7", description: "Localizaci\u00f3n en segundo plano, bloqueo parental y notificaciones push en tiempo real" }
   ];
 
   const colorClasses = {
