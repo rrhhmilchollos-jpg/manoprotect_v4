@@ -970,14 +970,28 @@ async def stripe_webhook(request: Request):
                     {"_id": 0}
                 )
                 if tx:
+                    promo_applied = tx.get("metadata", {}).get("promo_applied")
+                    update_fields = {
+                        "plan": tx.get("plan_type"),
+                        "subscription_status": "active",
+                        "subscription_updated_at": datetime.now(timezone.utc).isoformat()
+                    }
                     await db.users.update_one(
                         {"user_id": tx.get("user_id")},
-                        {"$set": {
-                            "plan": tx.get("plan_type"),
-                            "subscription_status": "active"
-                        }},
+                        {"$set": update_fields},
                         upsert=True
                     )
+                    # Create subscription record with promo flag
+                    sub_doc = {
+                        "user_id": tx.get("user_id"),
+                        "email": tx.get("email"),
+                        "plan_type": tx.get("plan_type"),
+                        "status": "active",
+                        "promo_200": bool(promo_applied and promo_applied != "none"),
+                        "amount_paid": tx.get("amount"),
+                        "created_at": datetime.now(timezone.utc).isoformat()
+                    }
+                    await db.subscriptions.insert_one(sub_doc)
         
         return {"status": "success", "event_type": webhook_response.event_type}
     
