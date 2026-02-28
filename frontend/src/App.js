@@ -139,6 +139,7 @@ const SOSServices = lazy(() => import('@/pages/SOSServices'));
 const SeguridadViviendaEmpresa = lazy(() => import('@/pages/SeguridadViviendaEmpresa'));
 const AlarmasVivienda = lazy(() => import('@/pages/AlarmasVivienda'));
 const AlarmasNegocio = lazy(() => import('@/pages/AlarmasNegocio'));
+const CalculadorPresupuesto = lazy(() => import('@/pages/CalculadorPresupuesto'));
 const OrderConfirmation = lazy(() => import('@/pages/OrderConfirmation'));
 const ThankYouPage = lazy(() => import('@/pages/ThankYouPage'));
 const BlogPage = lazy(() => import('@/pages/BlogPage'));
@@ -534,6 +535,8 @@ function AppRouter() {
           <Route path="/kits-alarma" element={<SeguridadViviendaEmpresa />} />
           <Route path="/alarmas/vivienda" element={<AlarmasVivienda />} />
           <Route path="/alarmas/negocio" element={<AlarmasNegocio />} />
+          <Route path="/calculador" element={<CalculadorPresupuesto />} />
+          <Route path="/presupuesto" element={<CalculadorPresupuesto />} />
           
           {/* Order Confirmation Page (After Stripe Payment) */}
           <Route path="/pedido-confirmado" element={<OrderConfirmation />} />
