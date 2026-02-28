@@ -4,7 +4,7 @@
  * Estrategia: Emoción > Dolor > Solución > Prueba social > Precio anclado > CTA
  * Una landing = Un dolor específico. Sin mezclar mensajes.
  */
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Link, useNavigate } from 'react-router-dom';
 import {
