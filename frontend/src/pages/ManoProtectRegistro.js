@@ -82,18 +82,17 @@ const PLANS = [
     price: { mensual: 29.99, anual: 249.99 },
     monthlyEquivalent: { anual: 20.83 },
     savings: { anual: 110 },
-    description: 'La mejor opción para ti',
+    description: 'La mejor opci\u00f3n para ti',
     features: [
-      '7 días de prueba GRATIS',
-      'Protección 24/7 avanzada',
-      'Análisis ilimitados con IA',
-      'Bloqueo automático amenazas',
+      '7 d\u00edas de prueba GRATIS',
+      'Protecci\u00f3n 24/7 avanzada',
+      'An\u00e1lisis ilimitados con IA',
+      'Bloqueo autom\u00e1tico amenazas',
       'Hasta 2 familiares',
       'Soporte prioritario'
     ],
     requiresCard: true,
-    popular: true,
-    badge: 'Más popular',
+    badge: 'Protecci\u00f3n personal',
     badgeColor: 'indigo'
   },
   {
