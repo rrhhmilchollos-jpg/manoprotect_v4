@@ -117,6 +117,8 @@ const FamilyMode = () => {
         const tracking = await startBackgroundTracking('current-user', token);
         setBgTrackingActive(tracking);
       }
+      // Auto-lock location settings after successful setup
+      await lockLocationSettings();
     }
   };
 
