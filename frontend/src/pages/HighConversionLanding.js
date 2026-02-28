@@ -10,7 +10,7 @@ import {
   Shield, MapPin, Phone, Bell, ChevronDown,
   Check, Star, Lock, Eye,
   ArrowRight, X, Smartphone, Watch, Gift,
-  History, Fingerprint
+  History, Fingerprint, Wifi, Battery
 } from 'lucide-react';
 import LandingFooter from '@/components/landing/LandingFooter';
 import { trackPageView, trackCTAClick } from '@/services/conversionTracking';
