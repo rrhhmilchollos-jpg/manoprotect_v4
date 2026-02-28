@@ -3008,6 +3008,15 @@ async def submit_contact_form(request: Request):
     await db["contact_messages"].insert_one(contact_entry)
     return {"status": "ok", "message": "Mensaje recibido"}
 
+# ── CEO Dashboard Routes ──
+try:
+    from routes.ceo_dashboard import ceo_router, init_ceo_routes
+    init_ceo_routes(db)
+    api_router.include_router(ceo_router)
+    print("\u2705 CEO Dashboard routes loaded")
+except Exception as e:
+    print(f"\u26a0\ufe0f CEO Dashboard routes not loaded: {e}")
+
 app.include_router(api_router)
 app.include_router(public_router)
 
