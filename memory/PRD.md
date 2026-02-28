@@ -1,6 +1,6 @@
 # ManoProtect - Product Requirements Document
 
-## Última Actualización: 28 Febrero 2026 (v10)
+## Última Actualización: 28 Febrero 2026 (v10.1)
 
 ## Descripción
 ManoProtect - plataforma de seguridad familiar. Productos: Sentinel X (adultos), Sentinel J (jóvenes 3-12), Sentinel S (niños 6-14).
@@ -68,6 +68,10 @@ ManoProtect - plataforma de seguridad familiar. Productos: Sentinel X (adultos),
   - Email 2 (48h): Caso real (Laura)
   - Email 3 (72h): Recordatorio prueba gratis
   - Cron job cada 2h para procesamiento
+- **Demo Interactiva** (`PhoneDemo.js`): Animación CSS/JS de teléfono mostrando flujo completo
+  - Fases: Idle → Tap → Searching (radar) → Found (mapa + pin) → Alert (notificación push)
+  - Ciclo automático 12.8s, activado por scroll (IntersectionObserver)
+  - 4 pasos descriptivos al lado del teléfono + CTA
 - **Performance**: Scroll reveal animations, lazy loading, smooth scroll
 
 ---
@@ -79,6 +83,7 @@ ManoProtect - plataforma de seguridad familiar. Productos: Sentinel X (adultos),
 | 57 | Location lock + PDF + WhatsApp | 22/22 ✅ |
 | 58 | 112 + Trial + Analytics + textos | 26/26 ✅ |
 | 59 | CRO System + Landing (backend 17/17 + frontend all) | 100% ✅ |
+| 60 | PhoneDemo + CRO regression (all features) | 100% ✅ |
 
 ---
 
@@ -92,6 +97,7 @@ ManoProtect - plataforma de seguridad familiar. Productos: Sentinel X (adultos),
 | Archivo | Función |
 |---------|---------|
 | frontend/src/pages/HighConversionLanding.js | Landing principal (ruta /) |
+| frontend/src/components/PhoneDemo.js | Demo animada de teléfono |
 | frontend/src/services/conversionTracking.js | Tracking de conversiones |
 | backend/routes/cro_routes.py | A/B testing + Email sequences + Funnel |
 | backend/services/cron_jobs.py | Procesamiento automático email sequences |
