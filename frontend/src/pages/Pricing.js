@@ -99,7 +99,9 @@ const Pricing = () => {
                   'GPS en tiempo real 24/7',
                   'Prioridad en soporte',
                   'Alertas por WhatsApp',
-                  'Dispositivo Sentinel GRATIS',
+                  'Sentinel X Basic GRATIS (50 uds)',
+                  'Sentinel J: 79€ (antes 99€)',
+                  'Sentinel S: 103€ (antes 129€)',
                   'Envío prioritario GRATIS',
                   'Actualizaciones premium',
                   'Descuento en accesorios',
@@ -112,7 +114,7 @@ const Pricing = () => {
                 className="block w-full text-center py-4 bg-emerald-500 text-white font-bold rounded-xl hover:bg-emerald-600 transition-all"
                 data-testid="plan-anual-cta"
               >
-                Probar gratis ahora – Mejor precio
+                Empezar con Plan Anual – Ahorra 20€
               </button>
             </div>
           </div>
