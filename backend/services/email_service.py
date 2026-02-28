@@ -9,7 +9,7 @@ from core.config import db
 
 # Email configuration - will use SendGrid when configured
 SENDGRID_API_KEY = os.environ.get('SENDGRID_API_KEY')
-FROM_EMAIL = os.environ.get('FROM_EMAIL', 'alertas@mano-security.com')
+FROM_EMAIL = os.environ.get('SENDER_EMAIL', os.environ.get('FROM_EMAIL', 'alertas@manoprotect.com'))
 
 
 class EmailNotificationService:
