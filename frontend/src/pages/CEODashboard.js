@@ -35,6 +35,7 @@ const CEODashboard = () => {
   const [inventory, setInventory] = useState({ items: [], total: 0, page: 1, pages: 1 });
   const [securityLogs, setSecurityLogs] = useState({ logs: [], total: 0 });
   const [securityOverview, setSecurityOverview] = useState(null);
+  const [blockedIps, setBlockedIps] = useState([]);
   const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(true);
   const [heartbeat, setHeartbeat] = useState({ backend: false });
