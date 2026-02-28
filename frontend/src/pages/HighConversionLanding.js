@@ -312,17 +312,13 @@ const HighConversionLanding = () => {
               { icon: <Lock className="w-6 h-6" />, bg: 'bg-blue-50', text: 'text-blue-500', title: 'Estafas digitales', desc: 'Los menores son el objetivo principal de fraudes online. Protege su identidad digital y la de tu familia.' },
               { icon: <Shield className="w-6 h-6" />, bg: 'bg-emerald-50', text: 'text-emerald-500', title: 'Tranquilidad real', desc: 'Localiza en segundos, recibe alertas si necesita ayuda. Duerme tranquilo. Eso es ManoProtect.' },
             ].map((item, i) => (
-              <div
-                key={i}
-                className="bg-white p-6 rounded-2xl border border-gray-100 hover:shadow-lg hover:border-gray-200 transition-all duration-300"
-                data-testid={`why-card-${i}`}
-              >
+              <RevealCard key={i} delay={i} testId={`why-card-${i}`}>
                 <div className={`w-11 h-11 ${item.bg} rounded-xl flex items-center justify-center ${item.text} mb-4`}>
                   {item.icon}
                 </div>
                 <h3 className="font-bold text-gray-900 mb-2 text-[15px]">{item.title}</h3>
                 <p className="text-sm text-gray-500 leading-relaxed">{item.desc}</p>
-              </div>
+              </RevealCard>
             ))}
           </div>
         </div>
