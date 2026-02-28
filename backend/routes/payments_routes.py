@@ -50,6 +50,13 @@ SUBSCRIPTION_PACKAGES = {
     "enterprise": {"amount": 199.99, "name": "Enterprise", "period": "mes", "max_users": -1},
     "enterprise-monthly": {"amount": 199.99, "name": "Enterprise Mensual", "period": "mes", "max_users": -1},
     "enterprise-yearly": {"amount": 1999.99, "name": "Enterprise Anual", "period": "año", "max_users": -1},
+    # Planes Alarmas Hogar y Empresa
+    "alarm-essential": {"amount": 24.99, "name": "Alarma Essential", "period": "mes", "max_users": 1, "is_alarm": True, "alarm_type": "essential"},
+    "alarm-essential-regular": {"amount": 34.99, "name": "Alarma Essential", "period": "mes", "max_users": 1, "is_alarm": True, "alarm_type": "essential"},
+    "alarm-premium": {"amount": 39.99, "name": "Alarma Premium", "period": "mes", "max_users": 1, "is_alarm": True, "alarm_type": "premium"},
+    "alarm-premium-regular": {"amount": 49.99, "name": "Alarma Premium", "period": "mes", "max_users": 1, "is_alarm": True, "alarm_type": "premium"},
+    "alarm-business": {"amount": 54.99, "name": "Alarma Business", "period": "mes", "max_users": 3, "is_alarm": True, "alarm_type": "business"},
+    "alarm-business-regular": {"amount": 69.99, "name": "Alarma Business", "period": "mes", "max_users": 3, "is_alarm": True, "alarm_type": "business"},
 }
 
 
