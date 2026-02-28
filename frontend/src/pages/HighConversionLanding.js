@@ -232,32 +232,48 @@ const HighConversionLanding = () => {
       {/* ═══════ PRODUCTOS DESTACADOS ═══════ */}
       <section className="py-16 sm:py-20 bg-white" id="productos" data-testid="products-section">
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
-          <div className="text-center mb-12">
+          <div className="text-center mb-4">
             <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3">Productos destacados</h2>
-            <p className="text-gray-500 max-w-xl mx-auto">Dispositivos GRATIS con tu suscripción. Fotos 360° y microvideos disponibles en cada producto.</p>
+            <p className="text-gray-500 max-w-xl mx-auto">Elige el Sentinel perfecto para tu familia.</p>
+          </div>
+          {/* Promo banner */}
+          <div className="bg-gradient-to-r from-emerald-600 to-emerald-500 rounded-xl p-4 text-center mb-8" data-testid="promo-banner">
+            <p className="text-white font-bold text-sm">OFERTA LANZAMIENTO: <span className="bg-white/20 px-2 py-0.5 rounded">-20% para los primeros 200 suscriptores</span> en planes de pago</p>
+            <p className="text-emerald-100 text-xs mt-1">Sentinel X Basic GRATIS (solo 50 unidades) con plan Basic</p>
           </div>
           <div className="grid md:grid-cols-3 gap-8">
             {/* Sentinel X */}
             <Reveal delay={0}>
-              <div className="bg-gradient-to-b from-gray-900 to-gray-950 rounded-2xl overflow-hidden border border-gray-800 hover:border-emerald-500/50 transition-all duration-300 hover:shadow-xl hover:shadow-emerald-500/10 group" data-testid="product-sentinel-x">
-                <div className="p-6 text-center">
+              <div className="bg-gradient-to-b from-gray-900 to-gray-950 rounded-2xl overflow-hidden border border-gray-800 hover:border-emerald-500/50 transition-all duration-300 hover:shadow-xl hover:shadow-emerald-500/10 group relative" data-testid="product-sentinel-x">
+                <div className="absolute top-0 left-0 right-0 bg-gradient-to-r from-red-500 to-orange-500 text-white text-center py-1 text-[11px] font-bold">SOLO 50 UNIDADES BASIC GRATIS</div>
+                <div className="p-6 pt-10 text-center">
                   <span className="inline-block text-xs font-bold bg-emerald-500/20 text-emerald-400 px-3 py-1 rounded-full mb-4">ADULTOS Y ADOLESCENTES</span>
                   <img src={SENTINEL_X_IMG} alt="Sentinel X" className="w-40 h-40 object-contain mx-auto mb-4 group-hover:scale-105 transition-transform" loading="lazy" />
-                  <h3 className="text-2xl font-bold text-white mb-2">Sentinel X-J</h3>
+                  <h3 className="text-2xl font-bold text-white mb-2">Sentinel X</h3>
                   <p className="text-sm text-gray-400 mb-4">GPS, SOS, batería larga, resistente al agua</p>
-                  <ul className="text-left space-y-2 text-sm text-gray-300 mb-6">
+                  <ul className="text-left space-y-2 text-sm text-gray-300 mb-4">
                     <li className="flex items-center gap-2"><Check className="w-4 h-4 text-emerald-400 flex-shrink-0" /> GPS en tiempo real</li>
                     <li className="flex items-center gap-2"><Check className="w-4 h-4 text-emerald-400 flex-shrink-0" /> Botón SOS invisible</li>
                     <li className="flex items-center gap-2"><Check className="w-4 h-4 text-emerald-400 flex-shrink-0" /> Batería 5 días</li>
-                    <li className="flex items-center gap-2"><Check className="w-4 h-4 text-emerald-400 flex-shrink-0" /> Resistente al agua</li>
-                    <li className="flex items-center gap-2"><Check className="w-4 h-4 text-emerald-400 flex-shrink-0" /> Conectividad 4G</li>
+                    <li className="flex items-center gap-2"><Check className="w-4 h-4 text-emerald-400 flex-shrink-0" /> Resistente al agua · 4G</li>
                   </ul>
-                  <div className="flex items-center justify-center gap-2 mb-4">
-                    <span className="text-2xl font-bold text-emerald-400">GRATIS</span>
-                    <span className="text-sm text-gray-500 line-through">249€</span>
+                  <div className="bg-white/5 rounded-xl p-3 mb-4 space-y-2">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs text-gray-400">Basic (50 uds):</span>
+                      <span className="text-lg font-bold text-emerald-400">GRATIS*</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs text-gray-400">Fundadores:</span>
+                      <div><span className="text-lg font-bold text-white">199€</span> <span className="text-xs text-gray-500 line-through">249€</span></div>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs text-gray-400">Premium:</span>
+                      <div><span className="text-lg font-bold text-white">279€</span> <span className="text-xs text-gray-500 line-through">349€</span></div>
+                    </div>
+                    <p className="text-[10px] text-gray-500 text-center">*Con suscripción Plan Basic (9,99€/mes)</p>
                   </div>
                   <Link to="/sentinel-x" className="block w-full text-center py-3 bg-emerald-500 hover:bg-emerald-400 text-white font-bold rounded-xl transition-colors" data-testid="cta-sentinel-x">
-                    Comprar Sentinel X-J
+                    Comprar ahora
                   </Link>
                 </div>
               </div>
@@ -272,19 +288,22 @@ const HighConversionLanding = () => {
                   <img src={SENTINEL_J_IMG} alt="Sentinel J" className="w-40 h-40 object-contain mx-auto mb-4 group-hover:scale-105 transition-transform" loading="lazy" />
                   <h3 className="text-2xl font-bold text-gray-900 mb-2">Sentinel J</h3>
                   <p className="text-sm text-gray-500 mb-4">GPS, SOS, batería larga, resistente al agua</p>
-                  <ul className="text-left space-y-2 text-sm text-gray-600 mb-6">
+                  <ul className="text-left space-y-2 text-sm text-gray-600 mb-4">
                     <li className="flex items-center gap-2"><Check className="w-4 h-4 text-pink-500 flex-shrink-0" /> GPS en tiempo real</li>
                     <li className="flex items-center gap-2"><Check className="w-4 h-4 text-pink-500 flex-shrink-0" /> Botón SOS grande</li>
                     <li className="flex items-center gap-2"><Check className="w-4 h-4 text-pink-500 flex-shrink-0" /> Batería 4 días</li>
-                    <li className="flex items-center gap-2"><Check className="w-4 h-4 text-pink-500 flex-shrink-0" /> Resistente al agua</li>
                     <li className="flex items-center gap-2"><Check className="w-4 h-4 text-pink-500 flex-shrink-0" /> 8 correas de colores</li>
                   </ul>
-                  <div className="flex items-center justify-center gap-2 mb-4">
-                    <span className="text-2xl font-bold text-emerald-500">GRATIS</span>
-                    <span className="text-sm text-gray-400 line-through">99€</span>
+                  <div className="bg-pink-50 rounded-xl p-3 mb-4">
+                    <div className="flex items-center justify-center gap-2">
+                      <span className="text-2xl font-bold text-pink-600">79€</span>
+                      <span className="text-sm text-gray-400 line-through">99€</span>
+                      <span className="bg-pink-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded">-20%</span>
+                    </div>
+                    <p className="text-[10px] text-gray-500 mt-1">Precio promo primeros 200 suscriptores</p>
                   </div>
                   <Link to="/sentinel-j" className="block w-full text-center py-3 bg-gradient-to-r from-pink-500 to-violet-500 hover:from-pink-400 hover:to-violet-400 text-white font-bold rounded-xl transition-colors" data-testid="cta-sentinel-j">
-                    Comprar Sentinel J
+                    Comprar ahora
                   </Link>
                 </div>
               </div>
@@ -298,19 +317,22 @@ const HighConversionLanding = () => {
                   <img src={SENTINEL_S_IMG} alt="Sentinel S" className="w-40 h-40 object-contain mx-auto mb-4 group-hover:scale-105 transition-transform" loading="lazy" />
                   <h3 className="text-2xl font-bold text-gray-900 mb-2">Sentinel S</h3>
                   <p className="text-sm text-gray-500 mb-4">GPS, SOS, monitoreo discreto, batería extendida</p>
-                  <ul className="text-left space-y-2 text-sm text-gray-600 mb-6">
-                    <li className="flex items-center gap-2"><Check className="w-4 h-4 text-[#B4A7D6] flex-shrink-0" /> GPS en tiempo real</li>
-                    <li className="flex items-center gap-2"><Check className="w-4 h-4 text-[#B4A7D6] flex-shrink-0" /> Botón SOS silencioso</li>
-                    <li className="flex items-center gap-2"><Check className="w-4 h-4 text-[#B4A7D6] flex-shrink-0" /> Monitoreo discreto</li>
+                  <ul className="text-left space-y-2 text-sm text-gray-600 mb-4">
+                    <li className="flex items-center gap-2"><Check className="w-4 h-4 text-[#B4A7D6] flex-shrink-0" /> GPS + SOS silencioso</li>
                     <li className="flex items-center gap-2"><Check className="w-4 h-4 text-[#B4A7D6] flex-shrink-0" /> Alerta anti-retirada</li>
                     <li className="flex items-center gap-2"><Check className="w-4 h-4 text-[#B4A7D6] flex-shrink-0" /> Sirena 120dB</li>
+                    <li className="flex items-center gap-2"><Check className="w-4 h-4 text-[#B4A7D6] flex-shrink-0" /> Cerámica + rose gold</li>
                   </ul>
-                  <div className="flex items-center justify-center gap-2 mb-4">
-                    <span className="text-2xl font-bold text-emerald-500">GRATIS</span>
-                    <span className="text-sm text-gray-400 line-through">129€</span>
+                  <div className="bg-[#B4A7D6]/10 rounded-xl p-3 mb-4">
+                    <div className="flex items-center justify-center gap-2">
+                      <span className="text-2xl font-bold text-[#8B7CB8]">103€</span>
+                      <span className="text-sm text-gray-400 line-through">129€</span>
+                      <span className="bg-[#B4A7D6] text-white text-[10px] font-bold px-1.5 py-0.5 rounded">-20%</span>
+                    </div>
+                    <p className="text-[10px] text-gray-500 mt-1">Precio promo primeros 200 suscriptores</p>
                   </div>
                   <Link to="/sentinel-s" className="block w-full text-center py-3 bg-[#2D2A33] hover:bg-[#3D3A43] text-white font-bold rounded-xl transition-colors" data-testid="cta-sentinel-s">
-                    Comprar Sentinel S
+                    Comprar ahora
                   </Link>
                 </div>
               </div>
@@ -318,7 +340,7 @@ const HighConversionLanding = () => {
           </div>
 
           {/* Microcopy */}
-          <p className="text-center text-xs text-gray-400 mt-8">Compatible con todas las edades y sistemas operativos (iOS 14+ / Android 8.0+)</p>
+          <p className="text-center text-xs text-gray-400 mt-8">Precios con descuento -20% válido para los primeros 200 suscriptores. Envío desde 4,95€. Compatible con iOS 14+ / Android 8.0+</p>
         </div>
       </section>
 
