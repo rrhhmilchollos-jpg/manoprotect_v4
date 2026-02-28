@@ -305,7 +305,8 @@ function AppRouter() {
       <Suspense fallback={<PageLoader />}>
         <Routes>
           {/* Public Routes */}
-          <Route path="/" element={<LandingPage />} />
+          <Route path="/" element={<HighConversionLanding />} />
+          <Route path="/landing-original" element={<LandingPage />} />
           <Route path="/blog" element={<BlogPage />} />
           <Route path="/blog/:slug" element={<BlogPostPage />} />
           <Route path="/how-it-works" element={<HowItWorks />} />
