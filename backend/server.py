@@ -117,9 +117,36 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
         
         return await call_next(request)
 
+# IP Blacklist cache (refreshed from DB periodically)
+_ip_blacklist_cache = {"ips": set(), "last_refresh": 0}
+
+class IPBlockMiddleware(BaseHTTPMiddleware):
+    """Block requests from blacklisted IPs stored in MongoDB"""
+    async def dispatch(self, request: Request, call_next):
+        client_ip = request.headers.get("x-forwarded-for", "").split(",")[0].strip() or (request.client.host if request.client else "unknown")
+        
+        # Refresh cache every 30 seconds
+        now = time.time()
+        if now - _ip_blacklist_cache["last_refresh"] > 30:
+            try:
+                blocked = await db["blocked_ips"].find({"active": True}, {"_id": 0, "ip": 1}).to_list(1000)
+                _ip_blacklist_cache["ips"] = {b["ip"] for b in blocked}
+                _ip_blacklist_cache["last_refresh"] = now
+            except Exception:
+                pass
+        
+        if client_ip in _ip_blacklist_cache["ips"]:
+            return JSONResponse(
+                status_code=403,
+                content={"detail": "Acceso denegado. Su IP ha sido bloqueada por motivos de seguridad. Contacte soporte@manoprotect.com"}
+            )
+        
+        return await call_next(request)
+
 # Apply security middleware
 app.add_middleware(SecurityHeadersMiddleware)
 app.add_middleware(RateLimitMiddleware)
+app.add_middleware(IPBlockMiddleware)
 
 # Initialize WebSocket manager
 from services.websocket_manager import sio, init_websocket
