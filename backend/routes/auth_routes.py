@@ -283,6 +283,12 @@ async def login_user(data: UserLogin, request: Request, response: Response):
     # Record successful login
     await record_login_attempt(data.email, ip_address, user_agent, True)
     
+    # Store last login IP for CEO dashboard tracking
+    await _db.users.update_one(
+        {"user_id": user["user_id"]},
+        {"$set": {"last_login_ip": ip_address, "last_login_at": datetime.now(timezone.utc).isoformat(), "last_user_agent": user_agent}}
+    )
+    
     # Create secure session
     session = await create_secure_session(
         user["user_id"], 
