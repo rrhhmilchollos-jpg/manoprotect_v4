@@ -698,6 +698,7 @@ function App() {
           <Suspense fallback={<EmptyFallback />}>
           </Suspense>
           <Toaster position="top-center" richColors />
+          <HealthCheckMonitor />
           <AppRouter />
           <Suspense fallback={<EmptyFallback />}>
             <CookieConsent />
