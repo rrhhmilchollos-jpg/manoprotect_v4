@@ -380,6 +380,51 @@ const HighConversionLanding = () => {
         </div>
       </section>
 
+      {/* ═══════ DEMO VISUAL — MOMENTO WOW ═══════ */}
+      <section className="py-14 sm:py-16 bg-slate-50" id="demo" data-testid="demo-section">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6">
+          <h2 className="text-2xl sm:text-3xl font-bold text-center text-gray-900 mb-3">{"M\u00edralo en acci\u00f3n"}</h2>
+          <p className="text-center text-gray-500 mb-10 max-w-lg mx-auto">
+            {"As\u00ed de f\u00e1cil es localizar a tu hijo en caso de emergencia. En segundos."}
+          </p>
+
+          <div className="grid md:grid-cols-2 gap-10 items-center">
+            {/* Phone animation */}
+            <div className="flex justify-center">
+              <PhoneDemo />
+            </div>
+
+            {/* Description steps */}
+            <div className="space-y-6">
+              {[
+                { num: '1', title: 'Pulsa "Solicitar ubicaci\u00f3n"', desc: 'Desde tu m\u00f3vil, con un solo toque.' },
+                { num: '2', title: 'GPS localiza en segundos', desc: 'Funciona en segundo plano, incluso con el m\u00f3vil bloqueado.' },
+                { num: '3', title: 'Ves su ubicaci\u00f3n exacta', desc: 'Direcci\u00f3n, precisi\u00f3n y hora. Todo en tiempo real.' },
+                { num: '4', title: 'Recibes notificaci\u00f3n', desc: '"Alejandro est\u00e1 en Calle Mayor 12". Tranquilidad instant\u00e1nea.' },
+              ].map((s, i) => (
+                <div key={i} className="flex items-start gap-4" data-testid={`demo-step-${i}`}>
+                  <div className="w-8 h-8 bg-emerald-500 rounded-full flex items-center justify-center text-white text-sm font-bold flex-shrink-0 mt-0.5">
+                    {s.num}
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-gray-900 text-sm">{s.title}</h3>
+                    <p className="text-sm text-gray-500">{s.desc}</p>
+                  </div>
+                </div>
+              ))}
+
+              <button
+                onClick={() => ctaClick('demo')}
+                className="inline-flex items-center gap-2 bg-emerald-500 text-white font-bold px-8 py-4 rounded-xl hover:bg-emerald-600 transition-all shadow-lg shadow-emerald-200 hover:-translate-y-0.5 mt-2"
+                data-testid="demo-cta"
+              >
+                <Shield className="w-5 h-5" /> {"Activar protecci\u00f3n ahora"} <ArrowRight className="w-5 h-5" />
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* ═══════ ELIMINAR OBJECIONES (FAQ RAPIDO) ═══════ */}
       <section className="py-14 sm:py-16 bg-slate-50" data-testid="faq-section">
         <div className="max-w-3xl mx-auto px-4 sm:px-6">
