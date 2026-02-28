@@ -103,7 +103,7 @@ const ProteccionMayores = () => {
 
       <div className="min-h-screen bg-white">
         {/* Hero */}
-        <section className="bg-gradient-to-br from-indigo-900 via-purple-900 to-slate-900 py-16 px-6">
+        <section className="bg-gradient-to-br from-emerald-900 via-purple-900 to-slate-900 py-16 px-6">
           <div className="max-w-4xl mx-auto text-center">
             <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 rounded-full text-white/80 text-sm mb-6">
               <Heart className="w-4 h-4 text-pink-400" />
@@ -165,7 +165,7 @@ const ProteccionMayores = () => {
         </section>
 
         {/* Features */}
-        <section className="py-16 px-6 bg-gradient-to-br from-indigo-50 to-purple-50">
+        <section className="py-16 px-6 bg-gradient-to-br from-emerald-50 to-purple-50">
           <div className="max-w-5xl mx-auto">
             <h2 className="text-2xl md:text-3xl font-bold text-slate-900 text-center mb-12">
               Cómo ManoProtect Protege a los Mayores
@@ -174,8 +174,8 @@ const ProteccionMayores = () => {
             <div className="grid md:grid-cols-2 gap-8">
               {features.map((feature, idx) => (
                 <div key={idx} className="bg-white rounded-xl p-6 shadow-sm flex gap-4">
-                  <div className="w-12 h-12 bg-indigo-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                    <feature.icon className="w-6 h-6 text-indigo-600" />
+                  <div className="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                    <feature.icon className="w-6 h-6 text-emerald-600" />
                   </div>
                   <div>
                     <h3 className="font-bold text-slate-900 mb-2">{feature.title}</h3>
@@ -252,7 +252,7 @@ const ProteccionMayores = () => {
               Protege a tus padres y abuelos hoy. Plan familiar desde 39,99€/mes.
             </p>
             <Link to="/register?plan=family-monthly">
-              <Button size="lg" className="bg-indigo-600 hover:bg-indigo-700 text-white">
+              <Button size="lg" className="bg-emerald-600 hover:bg-emerald-700 text-white">
                 Empezar Protección Familiar
                 <ArrowRight className="w-4 h-4 ml-2" />
               </Button>

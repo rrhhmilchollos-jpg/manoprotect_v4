@@ -339,7 +339,7 @@ const DeepfakeShield = () => {
               <Button
                 onClick={analyzeFile}
                 disabled={!selectedFile || analyzing}
-                className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700"
+                className="w-full bg-gradient-to-r from-purple-600 to-emerald-600 hover:from-purple-700 hover:to-emerald-700"
                 data-testid="analyze-btn"
               >
                 {analyzing ? (
@@ -450,7 +450,7 @@ const DeepfakeShield = () => {
 
         {/* Education Section */}
         {education && (
-          <Card className="mt-8 bg-gradient-to-br from-purple-900/30 to-indigo-900/30 border-purple-700/50">
+          <Card className="mt-8 bg-gradient-to-br from-purple-900/30 to-emerald-900/30 border-purple-700/50">
             <CardHeader>
               <CardTitle className="text-white flex items-center gap-2">
                 <BookOpen className="h-5 w-5 text-purple-400" />

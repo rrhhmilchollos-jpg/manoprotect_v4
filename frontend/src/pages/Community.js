@@ -85,13 +85,13 @@ const Community = () => {
 
       <div className="max-w-5xl mx-auto px-6 py-8">
         {/* Info Card */}
-        <Card className="mb-8 bg-indigo-50 border-indigo-200">
+        <Card className="mb-8 bg-emerald-50 border-emerald-200">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-indigo-900">
+            <CardTitle className="flex items-center gap-2 text-emerald-900">
               <Users className="w-6 h-6" />
               Red de Protección Colaborativa
             </CardTitle>
-            <CardDescription className="text-indigo-700">
+            <CardDescription className="text-emerald-700">
               Amenazas detectadas recientemente por la comunidad MANO. Manténte alerta y protégete.
             </CardDescription>
           </CardHeader>
@@ -116,11 +116,11 @@ const Community = () => {
           <Card className="bg-white border-zinc-200">
             <CardContent className="p-6">
               <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-full bg-indigo-100 flex items-center justify-center">
-                  <Users className="w-6 h-6 text-indigo-600" />
+                <div className="w-12 h-12 rounded-full bg-emerald-100 flex items-center justify-center">
+                  <Users className="w-6 h-6 text-emerald-600" />
                 </div>
                 <div>
-                  <div className="text-2xl font-bold text-indigo-600">
+                  <div className="text-2xl font-bold text-emerald-600">
                     {alerts.reduce((sum, a) => sum + a.affected_users, 0)}
                   </div>
                   <div className="text-sm text-zinc-600">Usuarios Protegidos</div>
@@ -165,7 +165,7 @@ const Community = () => {
               <Card
                 key={alert.id || idx}
                 data-testid={`alert-item-${idx}`}
-                className="bg-white border-zinc-200 hover:border-indigo-200 transition-colors"
+                className="bg-white border-zinc-200 hover:border-emerald-200 transition-colors"
               >
                 <CardContent className="p-6">
                   <div className="flex items-start justify-between mb-3">
@@ -195,7 +195,7 @@ const Community = () => {
                       variant="ghost"
                       size="sm"
                       onClick={() => navigate('/dashboard')}
-                      className="text-indigo-600 hover:bg-indigo-50 rounded-lg"
+                      className="text-emerald-600 hover:bg-emerald-50 rounded-lg"
                     >
                       Verificar contenido similar
                     </Button>
