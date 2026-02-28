@@ -1162,7 +1162,7 @@ import NotificationsBell from './NotificationsBell';
 
 ## NOTAS DE IMPLEMENTACIÓN:
 
-1. **Asegúrate de que `REACT_APP_BACKEND_URL`** apunte al backend correcto (https://emerald-shield-1.preview.emergentagent.com)
+1. **Asegúrate de que `REACT_APP_BACKEND_URL`** apunte al backend correcto (https://ceo-dashboard-test.preview.emergentagent.com)
 
 2. **Autenticación**: Los componentes usan `localStorage.getItem('enterprise_session')` para obtener el token. Asegúrate de que tu login guarde el token ahí.
 
