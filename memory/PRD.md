@@ -68,6 +68,13 @@ ManoProtect - plataforma de seguridad familiar. Productos: Sentinel X (adultos),
   - Email 2 (48h): Caso real (Laura)
   - Email 3 (72h): Recordatorio prueba gratis
   - Cron job cada 2h para procesamiento
+### v10.2: Sincronización precios + Arreglos generales
+- Precios sincronizados: Familiar 9,99€/mes | 99,99€/año (landing, registro, backend)
+- 2FA con fallback email (SendGrid) cuando SMS falla
+- CRO emails envían HTML reales vía SendGrid (3 templates)
+- Marca emerald unificada en todas las páginas
+- SEO meta tags actualizados, Meta Pixel fix, SobreNosotros milestone 2026
+
 - **Demo Interactiva** (`PhoneDemo.js`): Animación CSS/JS de teléfono mostrando flujo completo
   - Fases: Idle → Tap → Searching (radar) → Found (mapa + pin) → Alert (notificación push)
   - Ciclo automático 12.8s, activado por scroll (IntersectionObserver)
