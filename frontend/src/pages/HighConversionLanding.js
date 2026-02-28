@@ -201,7 +201,7 @@ const HighConversionLanding = () => {
                 className="inline-flex items-center gap-2 bg-emerald-500 text-white font-bold px-8 py-4 rounded-xl hover:bg-emerald-600 transition-all text-base shadow-lg shadow-emerald-200 hover:shadow-emerald-300 hover:-translate-y-0.5 active:translate-y-0"
                 data-testid="hero-cta-main"
               >
-                <Shield className="w-5 h-5" /> Proteger a Mi Hijo Ahora
+                <Shield className="w-5 h-5" /> {abCta?.config?.text || 'Proteger a Mi Hijo Ahora'}
               </button>
               <a
                 href="#como-funciona"
