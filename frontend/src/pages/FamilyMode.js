@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { Shield, AlertOctagon, Phone, Users, Navigation, ArrowLeft, MapPin, Loader2, CheckCircle2, Settings } from 'lucide-react';
+import { Shield, AlertOctagon, Phone, Users, Navigation, ArrowLeft, MapPin, Loader2, CheckCircle2, Settings, Lock, FileText, Share2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { toast } from 'sonner';
@@ -26,18 +26,49 @@ const FamilyMode = () => {
   const [showPermissionFlow, setShowPermissionFlow] = useState(false);
   const [locationReady, setLocationReady] = useState(false);
   const [bgTrackingActive, setBgTrackingActive] = useState(false);
+  const [locationLocked, setLocationLocked] = useState(false);
+  const [setupCompleted, setSetupCompleted] = useState(false);
 
   useEffect(() => {
     loadEmergencyContacts();
     loadSosHistory();
     checkLocationReady();
+    checkLockStatus();
   }, []);
+
+  const checkLockStatus = async () => {
+    try {
+      const res = await fetch(`${API}/location/status`, { credentials: 'include' });
+      if (res.ok) {
+        const data = await res.json();
+        setLocationLocked(data.locked);
+        setSetupCompleted(data.setup_completed);
+        if (data.tracking_active) setBgTrackingActive(true);
+        if (data.setup_completed) setLocationReady(true);
+      }
+    } catch {}
+  };
+
+  const lockLocationSettings = async () => {
+    try {
+      const res = await fetch(`${API}/location/lock`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({}),
+        credentials: 'include'
+      });
+      if (res.ok) {
+        setLocationLocked(true);
+        setSetupCompleted(true);
+        toast.success('Configuración de ubicación bloqueada. No se puede desactivar sin contactar con ManoProtect.');
+      }
+    } catch {}
+  };
 
   const checkLocationReady = async () => {
     const status = await checkLocationPermissionStatus();
     if (status.foreground === 'granted') {
       setLocationReady(true);
-      // Auto-start background tracking if permissions are granted
       const token = document.cookie.split(';').find(c => c.trim().startsWith('session_token='))?.split('=')?.[1];
       if (token) {
         const success = await startBackgroundTracking('current-user', token);
