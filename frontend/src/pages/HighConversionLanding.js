@@ -523,10 +523,10 @@ const HighConversionLanding = () => {
                 {"M\u00c1S POPULAR \u00b7 Ahorra 20\u20ac"}
               </div>
               <h3 className="font-bold text-gray-900 text-lg mb-1">Plan Anual</h3>
-              <p className="text-gray-500 text-sm mb-4">El m\u00e1s elegido por las familias</p>
+              <p className="text-gray-500 text-sm mb-4">{"El m\u00e1s elegido por las familias"}</p>
               <div className="mb-1">
                 <span className="text-4xl font-extrabold text-gray-900">{"99,99\u20ac"}</span>
-                <span className="text-gray-400">/a\u00f1o</span>
+                <span className="text-gray-400">{"/a\u00f1o"}</span>
               </div>
               <p className="text-xs text-emerald-600 font-semibold mb-4">{"Solo 8,33\u20ac/mes \u00b7 Ahorra 19,89\u20ac al a\u00f1o"}</p>
               <ul className="space-y-2.5 mb-6 text-sm text-gray-600">
