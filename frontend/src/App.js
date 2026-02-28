@@ -320,6 +320,53 @@ const HealthCheckMonitor = () => {
   return null;
 };
 
+// Floating SOS Button - Always visible on public pages
+const FloatingSOSButton = () => {
+  const location = useLocation();
+  const [expanded, setExpanded] = useState(false);
+  
+  // Hide on admin/CEO pages
+  if (location.pathname.startsWith('/ceo') || location.pathname.startsWith('/empleados') || location.pathname.startsWith('/investor')) return null;
+  
+  return (
+    <div className="fixed bottom-6 right-6 z-50" data-testid="floating-sos">
+      {expanded && (
+        <div className="absolute bottom-16 right-0 bg-white rounded-2xl shadow-2xl border border-gray-200 p-4 w-72 animate-in slide-in-from-bottom-2" data-testid="sos-panel">
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="font-bold text-red-600 text-sm">Emergencia SOS</h3>
+            <button onClick={() => setExpanded(false)} className="text-gray-400 hover:text-gray-600 text-lg leading-none">&times;</button>
+          </div>
+          <p className="text-xs text-gray-600 mb-3">ManoProtect funciona <strong>incluso con el móvil bloqueado o apagado</strong> gracias a la E-SIM integrada y el modo segundo plano.</p>
+          <div className="space-y-2">
+            <a href="tel:112" className="flex items-center gap-2 bg-red-600 text-white px-4 py-2.5 rounded-xl text-sm font-bold hover:bg-red-700 transition-colors w-full justify-center" data-testid="call-112">
+              Llamar al 112
+            </a>
+            <a href="tel:+34900000000" className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2.5 rounded-xl text-sm font-bold hover:bg-blue-700 transition-colors w-full justify-center" data-testid="call-manoprotect">
+              ManoProtect 24h
+            </a>
+          </div>
+          <div className="mt-3 bg-slate-50 rounded-lg p-2">
+            <p className="text-[10px] text-gray-500 font-semibold mb-1">FUNCIONA EN SEGUNDO PLANO</p>
+            <p className="text-[10px] text-gray-400">Tu Sentinel envía la ubicación GPS incluso con el teléfono bloqueado, en modo avión o apagado gracias a la E-SIM integrada.</p>
+          </div>
+        </div>
+      )}
+      <button
+        onClick={() => setExpanded(!expanded)}
+        className={`w-14 h-14 rounded-full shadow-xl flex items-center justify-center transition-all hover:scale-110 ${expanded ? 'bg-gray-600 rotate-45' : 'bg-red-600 animate-pulse'}`}
+        data-testid="sos-fab-button"
+        aria-label="Botón SOS de emergencia"
+      >
+        {expanded ? (
+          <span className="text-white text-2xl font-bold">+</span>
+        ) : (
+          <span className="text-white text-xs font-black tracking-wider">SOS</span>
+        )}
+      </button>
+    </div>
+  );
+};
+
 // App Router - ManoProtect.com Only
 function AppRouter() {
   const location = useLocation();
