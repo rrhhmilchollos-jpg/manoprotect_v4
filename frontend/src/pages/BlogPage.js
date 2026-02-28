@@ -73,7 +73,7 @@ El **Sentinel S** está diseñado específicamente para este caso: cerámica + r
     category: 'Tecnología',
     date: '5 Feb 2026',
     readTime: '6 min',
-    img: 'https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?w=600&h=400&fit=crop',
+    img: 'https://static.prod-images.emergentagent.com/jobs/9da3b4c4-c09a-415b-8aa7-bb34b82ca31e/images/87b9c67e566b3df4d280471b26a2215bd603777003e860a14633f20318652e92.png',
     content: `
 En 2026, la seguridad familiar va más allá del antivirus. La combinación de dispositivos wearables con GPS y aplicaciones inteligentes crea un ecosistema de protección integral.
 
