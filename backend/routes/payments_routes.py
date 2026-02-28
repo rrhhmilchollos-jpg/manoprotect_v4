@@ -145,54 +145,50 @@ async def get_available_plans():
         {
             "id": "family-monthly",
             "name": "Familiar Mensual",
-            "price": 49.99,
+            "price": 9.99,
             "period": "mes",
             "max_users": 5,
             "features": [
                 "Hasta 5 miembros familia",
-                "Todo Premium incluido",
-                "Modo Familiar Senior",
-                "Botón SOS de Emergencia",
-                "Panel administración familiar"
-            ],
-            "limitations": ["Sin localización GPS", "Sin tracking de niños"]
+                "GPS en segundo plano 24/7",
+                "Alertas SOS instant\u00e1neas",
+                "Zonas seguras",
+                "Notificaciones push"
+            ]
         },
         {
             "id": "family-quarterly",
             "name": "Familiar Trimestral",
-            "price": 129.99,
-            "originalPrice": 149.97,
+            "price": 24.99,
+            "originalPrice": 29.97,
             "period": "3 meses",
             "max_users": 5,
-            "badge": "Ahorro 13%",
-            "savings": 19.98,
+            "badge": "Ahorro 17%",
+            "savings": 4.98,
             "features": [
                 "Todo Familiar Mensual",
-                "Botón SOS + GPS incluido",
-                "Localización bajo demanda",
-                "Equivale a €43.33/mes"
-            ],
-            "limitations": ["Sin tracking continuo de niños"]
+                "Bot\u00f3n SOS + GPS incluido",
+                "Equivale a 8,33\u20ac/mes"
+            ]
         },
         {
             "id": "family-yearly",
             "name": "Familiar Anual",
-            "price": 399.99,
-            "originalPrice": 599.88,
-            "period": "año",
+            "price": 99.99,
+            "originalPrice": 119.88,
+            "period": "a\u00f1o",
             "max_users": 5,
-            "badge": "MÁS COMPLETO - 33% OFF",
+            "badge": "M\u00c1S POPULAR - Ahorra 20\u20ac",
             "popular": True,
-            "savings": 199.89,
+            "savings": 19.89,
             "features": [
                 "TODO de planes inferiores",
-                "Botón SOS + GPS completo",
-                "LOCALIZAR NIÑOS por teléfono",
-                "Tracking bajo demanda",
-                "Historial de ubicaciones",
-                "Modo silencioso opcional",
-                "Equivale a €33.33/mes",
-                "Garantía satisfacción 15 días"
+                "GPS 24/7 + SOS completo",
+                "Prioridad en soporte",
+                "Alertas por WhatsApp",
+                "Dispositivo GRATIS incluido",
+                "Equivale a 8,33\u20ac/mes",
+                "Garant\u00eda satisfacci\u00f3n 14 d\u00edas"
             ]
         }
     ]
