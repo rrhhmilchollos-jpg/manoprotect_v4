@@ -210,6 +210,7 @@ const SeguridadViviendaEmpresa = () => {
             <Link to="/productos" className="text-gray-600 hover:text-blue-700 transition-colors">Relojes Sentinel</Link>
             <Link to="/plans" className="text-gray-600 hover:text-blue-700 transition-colors">Planes</Link>
             <Link to="/contacto" className="bg-gradient-to-r from-orange-500 to-red-500 text-white px-5 py-2 rounded-full text-xs font-bold hover:shadow-lg hover:shadow-orange-200 transition-all">Pedir presupuesto</Link>
+            <Link to="/calculador" className="bg-gray-900 text-white px-5 py-2 rounded-full text-xs font-bold hover:bg-gray-800 transition-all hidden sm:block">Calcular precio</Link>
           </nav>
         </div>
       </header>
