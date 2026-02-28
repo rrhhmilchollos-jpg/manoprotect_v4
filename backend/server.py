@@ -2988,6 +2988,21 @@ try:
 except Exception as e:
     print(f"\u26a0\ufe0f CRO routes not loaded: {e}")
 
+# ── Contact Form Endpoint ──
+@api_router.post("/contact")
+async def submit_contact_form(request: Request):
+    data = await request.json()
+    contact_entry = {
+        "name": data.get("name", ""),
+        "email": data.get("email", ""),
+        "subject": data.get("subject", ""),
+        "message": data.get("message", ""),
+        "created_at": datetime.now(timezone.utc).isoformat(),
+        "status": "new"
+    }
+    await db["contact_messages"].insert_one(contact_entry)
+    return {"status": "ok", "message": "Mensaje recibido"}
+
 app.include_router(api_router)
 app.include_router(public_router)
 
