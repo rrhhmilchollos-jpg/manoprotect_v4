@@ -276,3 +276,23 @@ code {
         display: none !important;
     }
 }
+
+/* ========== CRO ANIMATIONS ========== */
+.reveal-up {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+.reveal-up.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+.reveal-up-delay-1 { transition-delay: 0.1s; }
+.reveal-up-delay-2 { transition-delay: 0.2s; }
+.reveal-up-delay-3 { transition-delay: 0.3s; }
+
+/* Smooth scroll for anchor links */
+html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 4rem;
+}
