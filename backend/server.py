@@ -329,6 +329,11 @@ from routes.location_lock_routes import router as location_lock_router, init_db 
 init_location_lock(db)
 
 
+# Emergency 112 + Trial Reminders + Analytics Export
+from routes.emergency_analytics_routes import router as emergency_analytics_router, init_db as init_emergency_analytics
+init_emergency_analytics(db)
+
+
 # Export Reports (CSV/PDF)
 from routes.export_routes import router as export_router, set_database as init_export
 init_export(db)
