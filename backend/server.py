@@ -392,6 +392,11 @@ async def root_health_check():
             content={"status": "error", "database": str(e)}
         )
 
+@app.get("/api/heartbeat")
+async def heartbeat():
+    """Fast heartbeat endpoint - responds in <5ms"""
+    return {"alive": True, "ts": datetime.now(timezone.utc).isoformat()}
+
 # ============================================
 # HEALTH CHECK ENDPOINT (for production monitoring)
 # ============================================
