@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import { CheckCircle, Package, Clock, Mail, ArrowRight, Shield, Heart, Watch, MapPin, Phone } from 'lucide-react';
+import { CheckCircle, Package, Clock, Mail, ArrowRight, Shield, Heart, Watch, MapPin, Phone, Download, Share2, MessageCircle, FileText } from 'lucide-react';
 import LandingHeader from '../components/landing/LandingHeader';
 import LandingFooter from '../components/landing/LandingFooter';
 
