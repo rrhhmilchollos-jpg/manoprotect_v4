@@ -371,12 +371,51 @@ def init_ceo_routes(db, require_admin_fn):
         admin_users = await db["users"].find({"role": {"$in": ["admin", "superadmin"]}}, {"_id": 0, "password_hash": 0, "hashed_password": 0}).to_list(50)
         twofa_enabled = await db["users"].count_documents({"two_factor_enabled": True})
         failed_logins = await db["admin_logs"].count_documents({"action": "failed_login"})
+        blocked_ips = await db["blocked_ips"].count_documents({"active": True})
         return {
             "admin_users": [{"email": u.get("email"), "role": u.get("role"), "name": u.get("name", "")} for u in admin_users],
             "two_factor_enabled_count": twofa_enabled,
             "failed_login_attempts": failed_logins,
             "total_admins": len(admin_users),
+            "blocked_ips_count": blocked_ips,
         }
+
+    # ═══════════════════════════════════════════
+    # IP BLOCKING SYSTEM
+    # ═══════════════════════════════════════════
+
+    @ceo_router.get("/blocked-ips")
+    async def list_blocked_ips(request: Request, session_token: Optional[str] = Cookie(None)):
+        await require_admin_fn(request, session_token)
+        ips = await db["blocked_ips"].find({}, {"_id": 0}).sort("blocked_at", -1).to_list(500)
+        return {"blocked_ips": ips}
+
+    @ceo_router.post("/block-ip")
+    async def block_ip(request: Request, session_token: Optional[str] = Cookie(None), ip: str = Body(..., embed=True), reason: str = Body("", embed=True), user_id: str = Body("", embed=True)):
+        await require_admin_fn(request, session_token)
+        existing = await db["blocked_ips"].find_one({"ip": ip})
+        if existing:
+            await db["blocked_ips"].update_one({"ip": ip}, {"$set": {"active": True, "reason": reason, "blocked_at": datetime.now(timezone.utc).isoformat()}})
+        else:
+            await db["blocked_ips"].insert_one({
+                "ip": ip, "active": True, "reason": reason, "user_id": user_id,
+                "blocked_at": datetime.now(timezone.utc).isoformat(), "blocked_by": "ceo_dashboard"
+            })
+        await db["admin_logs"].insert_one({
+            "action": "ip_blocked", "ip": ip, "reason": reason, "user_id": user_id,
+            "changed_by": "ceo_dashboard", "created_at": datetime.now(timezone.utc).isoformat()
+        })
+        return {"success": True, "message": f"IP {ip} bloqueada"}
+
+    @ceo_router.post("/unblock-ip")
+    async def unblock_ip(request: Request, session_token: Optional[str] = Cookie(None), ip: str = Body(..., embed=True)):
+        await require_admin_fn(request, session_token)
+        await db["blocked_ips"].update_one({"ip": ip}, {"$set": {"active": False}})
+        await db["admin_logs"].insert_one({
+            "action": "ip_unblocked", "ip": ip,
+            "changed_by": "ceo_dashboard", "created_at": datetime.now(timezone.utc).isoformat()
+        })
+        return {"success": True, "message": f"IP {ip} desbloqueada"}
 
     # ═══════════════════════════════════════════
     # NOTIFICATIONS (Real-time polling)
