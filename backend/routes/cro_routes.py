@@ -10,10 +10,16 @@ from typing import Optional, List
 from datetime import datetime, timezone, timedelta
 import uuid
 import random
+import os
+import logging
 
 router = APIRouter(prefix="/cro", tags=["CRO"])
 
 db = None
+logger = logging.getLogger(__name__)
+
+SENDGRID_API_KEY = os.environ.get('SENDGRID_API_KEY')
+SENDER_EMAIL = os.environ.get('SENDER_EMAIL', os.environ.get('FROM_EMAIL', 'alertas@manoprotect.com'))
 
 def init_cro_routes(database):
     global db
