@@ -425,6 +425,97 @@ const HighConversionLanding = () => {
         </div>
       </section>
 
+      {/* ═══════ DISPOSITIVOS SENTINEL ═══════ */}
+      <section className="py-14 sm:py-16 bg-white" id="dispositivos" data-testid="sentinel-products-section">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
+          <div className="text-center mb-3">
+            <div className="inline-flex items-center gap-2 bg-emerald-50 border border-emerald-200 px-4 py-1.5 rounded-full mb-4">
+              <Gift className="w-4 h-4 text-emerald-600" />
+              <span className="text-xs font-bold text-emerald-700 tracking-wide">DISPOSITIVO GRATIS CON TU SUSCRIPCIÓN</span>
+            </div>
+            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3">Protección física + digital</h2>
+            <p className="text-gray-500 max-w-xl mx-auto">
+              Cada suscripción incluye un dispositivo Sentinel GRATIS. Elige el que mejor se adapte a tu familia.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-6 mt-10">
+            {/* Sentinel X */}
+            <Link to="/sentinel-x" className="group bg-gradient-to-b from-gray-900 to-gray-950 rounded-2xl p-6 border border-gray-800 hover:border-emerald-500/50 transition-all duration-300 hover:shadow-xl hover:shadow-emerald-500/10 hover:-translate-y-1" data-testid="sentinel-x-card">
+              <div className="flex items-center gap-2 mb-4">
+                <span className="text-xs font-bold bg-emerald-500/20 text-emerald-400 px-3 py-1 rounded-full">ADULTOS</span>
+                <span className="text-xs font-bold bg-cyan-500/20 text-cyan-400 px-3 py-1 rounded-full">4G / BT</span>
+              </div>
+              <img
+                src="https://customer-assets.emergentagent.com/job_8161c713-bb69-4bfd-84d2-fde54657d491/artifacts/acz8j630_Reloj%20inteligente%20ManoProtect%20SENTINEL%20X.png"
+                alt="Sentinel X"
+                className="w-32 h-32 object-contain mx-auto mb-4 group-hover:scale-110 transition-transform duration-300"
+                loading="lazy"
+              />
+              <h3 className="text-xl font-bold text-white mb-1">SENTINEL X</h3>
+              <p className="text-sm text-gray-400 mb-3">SOS invisible, GPS, grabación en la nube. Versión Basic GRATIS.</p>
+              <div className="flex items-center justify-between">
+                <div>
+                  <span className="text-lg font-bold text-emerald-400">GRATIS</span>
+                  <span className="text-xs text-gray-500 ml-2 line-through">249€</span>
+                </div>
+                <ArrowRight className="w-5 h-5 text-gray-500 group-hover:text-emerald-400 group-hover:translate-x-1 transition-all" />
+              </div>
+            </Link>
+
+            {/* Sentinel J */}
+            <Link to="/sentinel-j" className="group bg-white rounded-2xl p-6 border-2 border-gray-100 hover:border-pink-300 transition-all duration-300 hover:shadow-xl hover:-translate-y-1" data-testid="sentinel-j-card">
+              <div className="flex items-center gap-2 mb-4">
+                <span className="text-xs font-bold bg-pink-100 text-pink-600 px-3 py-1 rounded-full">3-12 AÑOS</span>
+                <span className="text-xs font-bold bg-violet-100 text-violet-600 px-3 py-1 rounded-full">8 COLORES</span>
+              </div>
+              <img
+                src="https://static.prod-images.emergentagent.com/jobs/d9b76ada-9994-4215-9ba1-31b4da8dc333/images/691c09d64cba84d0a069b7937e6f2e651449be714b394f349f7e64ace5198a3a.png"
+                alt="Sentinel J"
+                className="w-32 h-32 object-contain mx-auto mb-4 group-hover:scale-110 transition-transform duration-300"
+                loading="lazy"
+              />
+              <h3 className="text-xl font-bold text-gray-900 mb-1">SENTINEL J</h3>
+              <p className="text-sm text-gray-500 mb-3">Correas intercambiables, GPS, botón SOS. Sin cámara ni internet.</p>
+              <div className="flex items-center justify-between">
+                <div>
+                  <span className="text-lg font-bold text-emerald-500">GRATIS</span>
+                  <span className="text-xs text-gray-400 ml-2 line-through">99€</span>
+                </div>
+                <ArrowRight className="w-5 h-5 text-gray-300 group-hover:text-pink-500 group-hover:translate-x-1 transition-all" />
+              </div>
+            </Link>
+
+            {/* Sentinel S */}
+            <Link to="/sentinel-s" className="group bg-gradient-to-b from-[#FAFAF8] to-white rounded-2xl p-6 border-2 border-gray-100 hover:border-[#B4A7D6] transition-all duration-300 hover:shadow-xl hover:-translate-y-1" data-testid="sentinel-s-card">
+              <div className="flex items-center gap-2 mb-4">
+                <span className="text-xs font-bold bg-[#B4A7D6]/20 text-[#8B7CB8] px-3 py-1 rounded-full">6-14 AÑOS</span>
+                <span className="text-xs font-bold bg-[#E8B4B8]/30 text-[#C4868C] px-3 py-1 rounded-full">PREMIUM</span>
+              </div>
+              <img
+                src="https://static.prod-images.emergentagent.com/jobs/70b9cc4e-5cf4-48c1-b710-585bbf769faa/images/e4d94aa4babe28ec14a789ee54b85cfc6b5cafb807d95c003d7a26f35491fa3d.png"
+                alt="Sentinel S"
+                className="w-32 h-32 object-contain mx-auto mb-4 group-hover:scale-110 transition-transform duration-300"
+                loading="lazy"
+              />
+              <h3 className="text-xl font-bold text-gray-900 mb-1">SENTINEL S</h3>
+              <p className="text-sm text-gray-500 mb-3">Cerámica + rose gold. Anti-retirada, sirena 120dB, GPS.</p>
+              <div className="flex items-center justify-between">
+                <div>
+                  <span className="text-lg font-bold text-emerald-500">GRATIS</span>
+                  <span className="text-xs text-gray-400 ml-2 line-through">129€</span>
+                </div>
+                <ArrowRight className="w-5 h-5 text-gray-300 group-hover:text-[#B4A7D6] group-hover:translate-x-1 transition-all" />
+              </div>
+            </Link>
+          </div>
+
+          <p className="text-center text-xs text-gray-400 mt-6">
+            Solo pagas envío (desde 4,95€). Dispositivo 100% gratis con tu plan de suscripción.
+          </p>
+        </div>
+      </section>
+
       {/* ═══════ ELIMINAR OBJECIONES (FAQ RAPIDO) ═══════ */}
       <section className="py-14 sm:py-16 bg-slate-50" data-testid="faq-section">
         <div className="max-w-3xl mx-auto px-4 sm:px-6">
