@@ -1,16 +1,16 @@
 /**
  * ManoProtect - Landing de ALTA CONVERSION
- * Target: Padres con hijos adolescentes (12-18 anos)
- * Estrategia: Emocion > Dolor > Solucion > Prueba social > Precio anclado > CTA
- * Una landing = Un dolor especifico. Sin mezclar mensajes.
+ * Target: Padres con hijos adolescentes (12-18 años)
+ * Estrategia: Emoción > Dolor > Solución > Prueba social > Precio anclado > CTA
+ * Una landing = Un dolor específico. Sin mezclar mensajes.
  */
 import { useState, useEffect, useRef } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Link, useNavigate } from 'react-router-dom';
 import {
   Shield, MapPin, Phone, Bell, ChevronRight, ChevronDown,
-  Check, Star, Lock, Users, AlertTriangle, Eye, Clock,
-  ArrowRight, Heart, X, Zap, Smartphone
+  Check, Star, Lock, Users, AlertTriangle, Eye,
+  ArrowRight, Heart, X, Smartphone
 } from 'lucide-react';
 import LandingFooter from '@/components/landing/LandingFooter';
 
@@ -20,8 +20,8 @@ const track = (name, params = {}) => {
   if (window.fbq) window.fbq('track', name, params);
 };
 
-const SOCIAL_NAMES = ['Juan', 'Maria', 'Carlos', 'Ana', 'Pedro', 'Laura', 'Miguel', 'Carmen', 'David', 'Isabel', 'Lucia', 'Pablo'];
-const SOCIAL_CITIES = ['Madrid', 'Barcelona', 'Valencia', 'Sevilla', 'Bilbao', 'Malaga', 'Zaragoza', 'Alicante'];
+const SOCIAL_NAMES = ['Juan', 'María', 'Carlos', 'Ana', 'Pedro', 'Laura', 'Miguel', 'Carmen', 'David', 'Isabel', 'Lucía', 'Pablo'];
+const SOCIAL_CITIES = ['Madrid', 'Barcelona', 'Valencia', 'Sevilla', 'Bilbao', 'Málaga', 'Zaragoza', 'Alicante'];
 const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
 
 /* ═══════════════════════════════════════════
@@ -72,7 +72,7 @@ const HighConversionLanding = () => {
     <div className="min-h-screen bg-white" data-testid="high-conversion-landing">
       <Helmet>
         <title>ManoProtect - Localiza a tu hijo en segundos en caso de emergencia</title>
-        <meta name="description" content="La app que permite localizar a tu familia en segundos en caso de emergencia. GPS en segundo plano + Alertas SOS. Prueba 7 dias gratis." />
+        <meta name="description" content="La app que permite localizar a tu familia en segundos en caso de emergencia. GPS en segundo plano + Alertas SOS. Prueba 7 días gratis." />
       </Helmet>
 
       {/* ═══════ HEADER SIMPLIFICADO ═══════ */}
@@ -91,7 +91,7 @@ const HighConversionLanding = () => {
           </Link>
 
           <nav className="hidden md:flex items-center gap-8 text-[13px] font-medium text-gray-500">
-            <a href="#como-funciona" className="hover:text-emerald-600 transition-colors" data-testid="nav-como-funciona">Como funciona</a>
+            <a href="#como-funciona" className="hover:text-emerald-600 transition-colors" data-testid="nav-como-funciona">C\u00f3mo funciona</a>
             <a href="#precios" className="hover:text-emerald-600 transition-colors" data-testid="nav-precios">Precios</a>
             <a href="#seguridad" className="hover:text-emerald-600 transition-colors" data-testid="nav-seguridad">Seguridad</a>
             <a href="https://wa.me/34601510950" target="_blank" rel="noopener noreferrer" className="hover:text-emerald-600 transition-colors" data-testid="nav-contacto">Contacto</a>
@@ -123,7 +123,7 @@ const HighConversionLanding = () => {
         {/* Mobile menu */}
         {mobileMenu && (
           <div className="md:hidden bg-white border-t border-gray-100 px-4 py-4 space-y-3" data-testid="mobile-menu">
-            <a href="#como-funciona" onClick={() => setMobileMenu(false)} className="block text-sm text-gray-600 hover:text-emerald-600">Como funciona</a>
+            <a href="#como-funciona" onClick={() => setMobileMenu(false)} className="block text-sm text-gray-600 hover:text-emerald-600">C\u00f3mo funciona</a>
             <a href="#precios" onClick={() => setMobileMenu(false)} className="block text-sm text-gray-600 hover:text-emerald-600">Precios</a>
             <a href="#seguridad" onClick={() => setMobileMenu(false)} className="block text-sm text-gray-600 hover:text-emerald-600">Seguridad</a>
             <a href="https://wa.me/34601510950" target="_blank" rel="noopener noreferrer" className="block text-sm text-gray-600 hover:text-emerald-600">Contacto</a>
@@ -159,15 +159,18 @@ const HighConversionLanding = () => {
               className="text-4xl sm:text-5xl lg:text-[3.4rem] font-extrabold leading-[1.08] tracking-tight text-gray-900 mb-5"
               data-testid="hero-title"
             >
-              <span className="text-emerald-500">Protecci&oacute;n familiar</span> 24/7
+              {"¿Y si tu hijo no responde al m\u00f3vil durante "}
+              <span className="text-emerald-500">40 minutos</span>?
             </h1>
 
             <p className="text-lg sm:text-xl text-gray-500 mb-4 max-w-xl leading-relaxed" data-testid="hero-subtitle">
-              Localizaci&oacute;n en tiempo real + Alertas SOS en caso de emergencia. <strong className="text-gray-800">Incluso con la app cerrada.</strong>
+              {"ManoProtect te permite "}
+              <strong className="text-gray-800">{"localizar a tu hijo en segundos"}</strong>
+              {" y recibir alertas SOS en caso de emergencia, incluso con la app cerrada."}
             </p>
 
             <p className="text-base text-emerald-600 font-semibold mb-8" data-testid="hero-trial">
-              Prueba gratis 7 d&iacute;as
+              {"Prueba gratis 7 d\u00edas"}
             </p>
 
             {/* CTA buttons */}
@@ -184,21 +187,21 @@ const HighConversionLanding = () => {
                 className="inline-flex items-center gap-2 border-2 border-gray-200 text-gray-700 font-semibold px-6 py-4 rounded-xl hover:border-emerald-400 hover:text-emerald-600 transition-all text-base"
                 data-testid="hero-cta-secondary"
               >
-                Como funciona <ChevronRight className="w-4 h-4" />
+                {"C\u00f3mo funciona"} <ChevronRight className="w-4 h-4" />
               </a>
             </div>
 
             {/* Micro-benefits */}
             <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-gray-500" data-testid="hero-benefits">
-              <div className="flex items-center gap-1.5"><Check className="w-4 h-4 text-emerald-500 flex-shrink-0" /><span>Prueba gratuita 7 dias</span></div>
-              <div className="flex items-center gap-1.5"><Check className="w-4 h-4 text-emerald-500 flex-shrink-0" /><span>Cancelacion en cualquier momento</span></div>
-              <div className="flex items-center gap-1.5"><Check className="w-4 h-4 text-emerald-500 flex-shrink-0" /><span>Proteccion 24/7</span></div>
+              <div className="flex items-center gap-1.5"><Check className="w-4 h-4 text-emerald-500 flex-shrink-0" /><span>{"Prueba gratuita 7 d\u00edas"}</span></div>
+              <div className="flex items-center gap-1.5"><Check className="w-4 h-4 text-emerald-500 flex-shrink-0" /><span>{"Cancelaci\u00f3n en cualquier momento"}</span></div>
+              <div className="flex items-center gap-1.5"><Check className="w-4 h-4 text-emerald-500 flex-shrink-0" /><span>{"Protecci\u00f3n 24/7"}</span></div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ═══════ TRUST BAR — Senales de confianza ═══════ */}
+      {/* ═══════ TRUST BAR — Señales de confianza ═══════ */}
       <section className="bg-white py-4 border-y border-gray-100" data-testid="trust-bar">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 flex flex-wrap items-center justify-center gap-x-6 gap-y-3 text-sm text-gray-400">
           <div className="flex items-center gap-2"><Lock className="w-4 h-4" /><span className="font-semibold">Pago 100% seguro</span></div>
@@ -209,44 +212,44 @@ const HighConversionLanding = () => {
             <span className="bg-[#003087] text-white text-[10px] px-2 py-0.5 rounded font-bold">PayPal</span>
           </div>
           <span className="hidden sm:block text-gray-200">|</span>
-          <div className="flex items-center gap-2"><Shield className="w-4 h-4" /><span className="font-semibold">Garantia 14 dias</span></div>
+          <div className="flex items-center gap-2"><Shield className="w-4 h-4" /><span className="font-semibold">{"Garant\u00eda 14 d\u00edas"}</span></div>
           <span className="hidden sm:block text-gray-200">|</span>
           <div className="flex items-center gap-2"><Users className="w-4 h-4" /><span className="font-semibold">Soporte 24/7</span></div>
           <span className="hidden sm:block text-gray-200">|</span>
           <div className="flex items-center gap-2">
-            <Link to="/privacy-policy" className="font-semibold hover:text-emerald-500 transition-colors">Politica de privacidad</Link>
+            <Link to="/privacy-policy" className="font-semibold hover:text-emerald-500 transition-colors">{"Pol\u00edtica de privacidad"}</Link>
           </div>
         </div>
       </section>
 
-      {/* ═══════ ACTIVACION EMOCIONAL ═══════ */}
+      {/* ═══════ ACTIVACIÓN EMOCIONAL ═══════ */}
       <section className="py-14 sm:py-16 bg-white" data-testid="emotional-activation">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 text-center">
           <p className="text-5xl sm:text-6xl font-extrabold text-emerald-500 mb-3" data-testid="stat-number">78%</p>
           <p className="text-lg sm:text-xl text-gray-800 font-semibold mb-3" data-testid="stat-text">
-            de los padres ha sentido angustia al no saber donde estaba su hijo durante mas de 30 minutos.
+            {"de los padres ha sentido angustia al no saber d\u00f3nde estaba su hijo durante m\u00e1s de 30 minutos."}
           </p>
           <p className="text-base text-gray-500 max-w-lg mx-auto">
-            No se trata de control. <strong className="text-gray-800">Se trata de tranquilidad.</strong>
+            {"No se trata de control. "}<strong className="text-gray-800">Se trata de tranquilidad.</strong>
           </p>
         </div>
       </section>
 
-      {/* ═══════ POR QUE NECESITAS MANOPROTECT ═══════ */}
+      {/* ═══════ POR QUÉ NECESITAS MANOPROTECT ═══════ */}
       <section className="py-14 sm:py-16 bg-slate-50" id="seguridad" data-testid="why-section">
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
           <h2 className="text-2xl sm:text-3xl font-bold text-center text-gray-900 mb-3">
-            Por que necesitas ManoProtect?
+            {"¿Por qu\u00e9 necesitas ManoProtect?"}
           </h2>
           <p className="text-center text-gray-500 mb-10 max-w-xl mx-auto">
-            Las ventas vienen del dolor, no de las funciones. Estas son las situaciones reales que puedes evitar.
+            Estas son las situaciones reales que puedes evitar con ManoProtect.
           </p>
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
             {[
-              { icon: <AlertTriangle className="w-6 h-6" />, bg: 'bg-red-50', text: 'text-red-500', title: 'Emergencias familiares', desc: 'Un accidente, una caida, un problema de salud. Cada segundo cuenta cuando no sabes donde esta tu hijo.' },
-              { icon: <Eye className="w-6 h-6" />, bg: 'bg-amber-50', text: 'text-amber-500', title: 'Desapariciones temporales', desc: 'Sale del colegio y no llega. No contesta al movil. 40 minutos de angustia que puedes evitar.' },
-              { icon: <Lock className="w-6 h-6" />, bg: 'bg-blue-50', text: 'text-blue-500', title: 'Estafas digitales', desc: 'Los menores son el objetivo principal de fraudes online. Protege su identidad digital.' },
+              { icon: <AlertTriangle className="w-6 h-6" />, bg: 'bg-red-50', text: 'text-red-500', title: 'Emergencias familiares', desc: 'Un accidente, una ca\u00edda, un problema de salud. Cada segundo cuenta cuando no sabes d\u00f3nde est\u00e1 tu hijo.' },
+              { icon: <Eye className="w-6 h-6" />, bg: 'bg-amber-50', text: 'text-amber-500', title: 'Desapariciones temporales', desc: 'Sale del colegio y no llega a casa. No contesta al m\u00f3vil. 40 minutos de angustia que puedes evitar.' },
+              { icon: <Lock className="w-6 h-6" />, bg: 'bg-blue-50', text: 'text-blue-500', title: 'Estafas digitales', desc: 'Los menores son el objetivo principal de fraudes online. Protege su identidad digital y la de tu familia.' },
               { icon: <Shield className="w-6 h-6" />, bg: 'bg-emerald-50', text: 'text-emerald-500', title: 'Tranquilidad real', desc: 'Localiza en segundos, recibe alertas si necesita ayuda. Duerme tranquilo. Eso es ManoProtect.' },
             ].map((item, i) => (
               <div
@@ -265,17 +268,17 @@ const HighConversionLanding = () => {
         </div>
       </section>
 
-      {/* ═══════ COMO FUNCIONA — 3 PASOS ═══════ */}
+      {/* ═══════ CÓMO FUNCIONA — 3 PASOS ═══════ */}
       <section className="py-14 sm:py-16 bg-white" id="como-funciona" data-testid="how-section">
         <div className="max-w-5xl mx-auto px-4 sm:px-6">
-          <h2 className="text-2xl sm:text-3xl font-bold text-center text-gray-900 mb-3">Como funciona</h2>
+          <h2 className="text-2xl sm:text-3xl font-bold text-center text-gray-900 mb-3">{"C\u00f3mo funciona"}</h2>
           <p className="text-center text-gray-500 mb-12">En 3 pasos simples. Sin complicaciones.</p>
 
           <div className="grid md:grid-cols-3 gap-8">
             {[
-              { step: '1', icon: <Smartphone className="w-7 h-7" />, title: 'Instala la app', desc: 'Instala ManoProtect en tu movil y en el de tu hijo. Solo lleva 2 minutos.' },
-              { step: '2', icon: <MapPin className="w-7 h-7" />, title: 'Activa el seguimiento seguro', desc: 'Activa el GPS en segundo plano. Funciona incluso con la app cerrada y el movil bloqueado.' },
-              { step: '3', icon: <Bell className="w-7 h-7" />, title: 'Proteccion activa 24/7', desc: 'Solicita ubicacion en cualquier momento. Recibe alertas SOS instantaneas si necesita ayuda.' },
+              { step: '1', icon: <Smartphone className="w-7 h-7" />, title: 'Instala la app', desc: 'Instala ManoProtect en tu m\u00f3vil y en el de tu hijo. Solo lleva 2 minutos.' },
+              { step: '2', icon: <MapPin className="w-7 h-7" />, title: 'Activa el seguimiento seguro', desc: 'Activa el GPS en segundo plano. Funciona incluso con la app cerrada y el m\u00f3vil bloqueado.' },
+              { step: '3', icon: <Bell className="w-7 h-7" />, title: 'Protecci\u00f3n activa 24/7', desc: 'Solicita ubicaci\u00f3n en cualquier momento. Recibe alertas SOS instant\u00e1neas si necesita ayuda.' },
             ].map((item, i) => (
               <div key={i} className="relative text-center group" data-testid={`step-${i}`}>
                 {/* Connector line */}
@@ -300,7 +303,7 @@ const HighConversionLanding = () => {
               className="inline-flex items-center gap-2 bg-emerald-500 text-white font-bold px-8 py-4 rounded-xl hover:bg-emerald-600 transition-all shadow-lg shadow-emerald-200 hover:-translate-y-0.5"
               data-testid="how-cta"
             >
-              Activar Proteccion Familiar <ArrowRight className="w-5 h-5" />
+              {"Activar Protecci\u00f3n Familiar"} <ArrowRight className="w-5 h-5" />
             </button>
           </div>
         </div>
@@ -311,11 +314,11 @@ const HighConversionLanding = () => {
         <div className="max-w-3xl mx-auto px-4 sm:px-6">
           <h2 className="text-2xl sm:text-3xl font-bold text-center text-gray-900 mb-10">Preguntas frecuentes</h2>
           {[
-            { q: 'Consume bateria?', a: 'No. ManoProtect esta optimizado para bajo consumo. El GPS en segundo plano usa menos del 3% de bateria al dia.' },
-            { q: 'Es legal rastrear a mi hijo?', a: 'Si. Como padre o tutor legal, tienes derecho a supervisar la ubicacion de tu hijo menor. ManoProtect siempre requiere consentimiento explicito.' },
-            { q: 'Espia conversaciones?', a: 'No. Solo localiza la ubicacion en caso de emergencia. No accede a mensajes, llamadas ni datos personales.' },
-            { q: 'Mi hijo puede desactivarlo?', a: 'No. Los permisos se bloquean automaticamente despues de la configuracion inicial. Solo se pueden modificar verificando identidad con DNI.' },
-            { q: 'Puedo cancelar en cualquier momento?', a: 'Si. Cancela tu suscripcion cuando quieras. Si no te convence en 14 dias, te devolvemos el dinero.' },
+            { q: '\u00bfConsume bater\u00eda?', a: 'No. ManoProtect est\u00e1 optimizado para bajo consumo. El GPS en segundo plano usa menos del 3% de bater\u00eda al d\u00eda.' },
+            { q: '\u00bfEs legal rastrear a mi hijo?', a: 'S\u00ed. Como padre o tutor legal, tienes derecho a supervisar la ubicaci\u00f3n de tu hijo menor. ManoProtect siempre requiere consentimiento expl\u00edcito.' },
+            { q: '\u00bfEsp\u00eda conversaciones?', a: 'No. Solo localiza la ubicaci\u00f3n en caso de emergencia. No accede a mensajes, llamadas ni datos personales.' },
+            { q: '\u00bfMi hijo puede desactivarlo?', a: 'No. Los permisos se bloquean autom\u00e1ticamente despu\u00e9s de la configuraci\u00f3n inicial. Solo se pueden modificar verificando identidad con DNI.' },
+            { q: '\u00bfPuedo cancelar en cualquier momento?', a: 'S\u00ed. Cancela tu suscripci\u00f3n cuando quieras. Si no te convence en 14 d\u00edas, te devolvemos el dinero.' },
           ].map((faq, i) => (
             <div key={i} className="border-b border-gray-200" data-testid={`faq-${i}`}>
               <button
@@ -339,15 +342,15 @@ const HighConversionLanding = () => {
           <h2 className="text-2xl sm:text-3xl font-bold text-center text-gray-900 mb-10">Lo que dicen las familias</h2>
           <div className="grid md:grid-cols-3 gap-6">
             {[
-              { name: 'Laura M.', city: 'Madrid', text: 'Gracias a ManoProtect localice a mi hijo cuando perdio el autobus. En 10 segundos supe donde estaba. No tiene precio.', img: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=60&h=60&fit=crop&crop=face' },
-              { name: 'Carlos R.', city: 'Barcelona', text: 'Me da una tranquilidad increible cuando mi hija sale por la noche. Se que si pasa algo, el SOS me llega al instante.', img: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=60&h=60&fit=crop&crop=face' },
+              { name: 'Laura M.', city: 'Madrid', text: 'Gracias a ManoProtect localic\u00e9 a mi hijo cuando perdi\u00f3 el autob\u00fas. En 10 segundos supe d\u00f3nde estaba. No tiene precio.', img: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=60&h=60&fit=crop&crop=face' },
+              { name: 'Carlos R.', city: 'Barcelona', text: 'Me da una tranquilidad incre\u00edble cuando mi hija sale por la noche. S\u00e9 que si pasa algo, el SOS me llega al instante.', img: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=60&h=60&fit=crop&crop=face' },
               { name: 'Marta G.', city: 'Valencia', text: 'Funciona incluso con la pantalla bloqueada. Mi hijo ni se entera y yo duermo tranquila. Lo recomiendo a todas las madres.', img: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=60&h=60&fit=crop&crop=face' },
             ].map((t, i) => (
               <div key={i} className="bg-slate-50 rounded-2xl p-6 border border-gray-100 hover:shadow-md transition-shadow" data-testid={`testimonial-${i}`}>
                 <div className="flex gap-0.5 mb-3">
                   {[1,2,3,4,5].map(s => <Star key={s} className="w-4 h-4 fill-amber-400 text-amber-400" />)}
                 </div>
-                <p className="text-sm text-gray-600 mb-5 leading-relaxed italic">"{t.text}"</p>
+                <p className="text-sm text-gray-600 mb-5 leading-relaxed italic">{`"${t.text}"`}</p>
                 <div className="flex items-center gap-3">
                   <img src={t.img} alt={t.name} className="w-10 h-10 rounded-full object-cover" loading="lazy" />
                   <div>
@@ -367,13 +370,13 @@ const HighConversionLanding = () => {
           {/* Price anchoring */}
           <div className="text-center mb-3">
             <p className="text-sm text-gray-500 mb-2" data-testid="price-anchor-text">
-              Una estafa digital media cuesta mas de <strong className="text-red-500">600 euros</strong>. Una denuncia falsa puede costar miles.
+              {"Una estafa digital media cuesta m\u00e1s de "}<strong className="text-red-500">{"600\u20ac"}</strong>{". Una denuncia falsa puede costar miles."}
             </p>
             <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">
-              La tranquilidad empieza desde <span className="text-emerald-500">9,99 euros/mes</span>
+              {"La tranquilidad empieza desde "}<span className="text-emerald-500">{"9,99\u20ac/mes"}</span>
             </h2>
           </div>
-          <p className="text-center text-gray-500 mb-10 text-sm">9,99 euros es menos que una cena familiar. Y protege a todos.</p>
+          <p className="text-center text-gray-500 mb-10 text-sm">{"9,99\u20ac es menos que una cena familiar. Y protege a todos."}</p>
 
           <div className="grid md:grid-cols-2 gap-6 max-w-3xl mx-auto">
             {/* Monthly Plan */}
@@ -381,12 +384,11 @@ const HighConversionLanding = () => {
               <h3 className="font-bold text-gray-900 text-lg mb-1">Plan Mensual</h3>
               <p className="text-gray-500 text-sm mb-4">Cancela cuando quieras</p>
               <div className="mb-4">
-                <span className="text-4xl font-extrabold text-gray-900">9,99</span>
-                <span className="text-lg text-gray-900 font-bold">euros</span>
+                <span className="text-4xl font-extrabold text-gray-900">{"9,99\u20ac"}</span>
                 <span className="text-gray-400">/mes</span>
               </div>
               <ul className="space-y-2.5 mb-6 text-sm text-gray-600">
-                {['GPS en segundo plano 24/7', 'Alertas SOS instantaneas', 'Hasta 5 familiares', 'Zonas seguras', 'Notificaciones push'].map((f, i) => (
+                {['GPS en segundo plano 24/7', 'Alertas SOS instant\u00e1neas', 'Hasta 5 familiares', 'Zonas seguras', 'Notificaciones push'].map((f, i) => (
                   <li key={i} className="flex items-center gap-2"><Check className="w-4 h-4 text-emerald-500 flex-shrink-0" />{f}</li>
                 ))}
               </ul>
@@ -402,16 +404,15 @@ const HighConversionLanding = () => {
             {/* Annual Plan — RECOMMENDED */}
             <div className="bg-white rounded-2xl border-2 border-emerald-500 p-6 relative shadow-lg shadow-emerald-100" data-testid="plan-anual">
               <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-emerald-500 text-white text-xs font-bold px-4 py-1 rounded-full whitespace-nowrap">
-                MAS POPULAR - Ahorra 20 euros
+                {"M\u00c1S POPULAR \u00b7 Ahorra 20\u20ac"}
               </div>
               <h3 className="font-bold text-gray-900 text-lg mb-1">Plan Anual</h3>
-              <p className="text-gray-500 text-sm mb-4">El mas elegido por las familias</p>
+              <p className="text-gray-500 text-sm mb-4">El m\u00e1s elegido por las familias</p>
               <div className="mb-1">
-                <span className="text-4xl font-extrabold text-gray-900">99,99</span>
-                <span className="text-lg text-gray-900 font-bold">euros</span>
-                <span className="text-gray-400">/ano</span>
+                <span className="text-4xl font-extrabold text-gray-900">{"99,99\u20ac"}</span>
+                <span className="text-gray-400">/a\u00f1o</span>
               </div>
-              <p className="text-xs text-emerald-600 font-semibold mb-4">Solo 8,33 euros/mes - Ahorra 19,89 euros al ano</p>
+              <p className="text-xs text-emerald-600 font-semibold mb-4">{"Solo 8,33\u20ac/mes \u00b7 Ahorra 19,89\u20ac al a\u00f1o"}</p>
               <ul className="space-y-2.5 mb-6 text-sm text-gray-600">
                 {['Todo del Plan Mensual', 'GPS en segundo plano 24/7', 'Prioridad en soporte', 'Alertas por WhatsApp', 'Dispositivo GRATIS incluido'].map((f, i) => (
                   <li key={i} className="flex items-center gap-2"><Check className="w-4 h-4 text-emerald-500 flex-shrink-0" />{f}</li>
@@ -422,20 +423,20 @@ const HighConversionLanding = () => {
                 className="block w-full text-center py-3.5 bg-emerald-500 text-white font-bold rounded-xl hover:bg-emerald-600 transition-all"
                 data-testid="plan-anual-cta"
               >
-                Empezar ahora - Mejor precio
+                {"Empezar ahora \u00b7 Mejor precio"}
               </button>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ═══════ GARANTIA FUERTE ═══════ */}
+      {/* ═══════ GARANTÍA FUERTE ═══════ */}
       <section className="py-12 bg-emerald-50 border-y border-emerald-100" data-testid="guarantee-section">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 text-center">
           <Shield className="w-12 h-12 text-emerald-500 mx-auto mb-4" />
-          <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-3">Garantia de tranquilidad</h2>
+          <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-3">{"Garant\u00eda de tranquilidad"}</h2>
           <p className="text-gray-600 mb-6">
-            Si en 7 dias no sientes mas tranquilidad, <strong>cancela sin compromiso y te devolvemos el dinero.</strong> Sin preguntas. Sin letras pequenas.
+            {"Si en 7 d\u00edas no sientes m\u00e1s tranquilidad, "}<strong>{"cancela sin compromiso y te devolvemos el dinero."}</strong>{" Sin preguntas. Sin letras peque\u00f1as."}
           </p>
           <button
             onClick={() => ctaClick('guarantee')}
@@ -447,13 +448,13 @@ const HighConversionLanding = () => {
         </div>
       </section>
 
-      {/* ═══════ CTA FINAL — SECCION POTENTE ═══════ */}
+      {/* ═══════ CTA FINAL — SECCIÓN POTENTE ═══════ */}
       <section className="py-16 sm:py-20 bg-gray-900" data-testid="final-cta">
         <div className="max-w-2xl mx-auto px-4 sm:px-6 text-center">
           <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4" data-testid="final-cta-title">
             La tranquilidad no tiene precio.
           </h2>
-          <p className="text-gray-400 text-lg mb-8">Pero hoy empieza con 7 dias gratis.</p>
+          <p className="text-gray-400 text-lg mb-8">{"Pero hoy empieza con 7 d\u00edas gratis."}</p>
           <button
             onClick={() => ctaClick('final')}
             className="inline-flex items-center gap-2 bg-emerald-500 text-white font-bold px-10 py-5 rounded-xl hover:bg-emerald-600 transition-all text-lg shadow-xl shadow-emerald-500/20 hover:scale-105 hover:-translate-y-0.5"
@@ -461,7 +462,7 @@ const HighConversionLanding = () => {
           >
             Proteger a Mi Familia Ahora <ArrowRight className="w-6 h-6" />
           </button>
-          <p className="text-gray-500 text-sm mt-5">Sin compromiso - Cancela cuando quieras - 14 dias de garantia</p>
+          <p className="text-gray-500 text-sm mt-5">{"Sin compromiso \u00b7 Cancela cuando quieras \u00b7 14 d\u00edas de garant\u00eda"}</p>
         </div>
       </section>
 
@@ -481,14 +482,14 @@ const HighConversionLanding = () => {
             </div>
             <h3 className="text-2xl font-bold text-gray-900 mb-2">Antes de irte...</h3>
             <p className="text-gray-500 mb-6">
-              Prueba ManoProtect <strong className="text-emerald-500">7 dias completamente gratis</strong>. Sin tarjeta. Sin compromiso.
+              {"Prueba ManoProtect "}<strong className="text-emerald-500">{"7 d\u00edas completamente gratis"}</strong>{". Sin tarjeta. Sin compromiso."}
             </p>
             <button
               onClick={() => { setShowExitPopup(false); ctaClick('exit_popup'); }}
               className="block w-full bg-emerald-500 text-white font-bold py-4 rounded-xl hover:bg-emerald-600 transition-all mb-3"
               data-testid="exit-popup-cta"
             >
-              Probar 7 dias gratis
+              {"Probar 7 d\u00edas gratis"}
             </button>
             <button onClick={() => setShowExitPopup(false)} className="text-sm text-gray-400 hover:text-gray-600">
               No gracias, prefiero no proteger a mi familia
@@ -506,7 +507,7 @@ const HighConversionLanding = () => {
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-xs text-gray-800"><strong>{socialProof.name}</strong> de {socialProof.city}</p>
-              <p className="text-[11px] text-gray-500">acaba de activar <span className="text-emerald-500 font-semibold">ManoProtect</span></p>
+              <p className="text-[11px] text-gray-500">{"acaba de activar "}<span className="text-emerald-500 font-semibold">ManoProtect</span></p>
             </div>
             <button onClick={() => setSocialProof(null)} className="text-gray-300 hover:text-gray-500">
               <X className="w-3 h-3" />
@@ -515,7 +516,7 @@ const HighConversionLanding = () => {
         </div>
       )}
 
-      {/* ═══════ BOTON FLOTANTE FIJO MOVIL ═══════ */}
+      {/* ═══════ BOTÓN FLOTANTE FIJO MÓVIL ═══════ */}
       <div className="fixed bottom-0 left-0 right-0 z-30 sm:hidden bg-white/95 backdrop-blur-md border-t border-gray-200 p-3" data-testid="mobile-sticky-cta">
         <button
           onClick={() => ctaClick('mobile_sticky')}
