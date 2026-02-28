@@ -704,16 +704,6 @@ async def get_available_plans():
             ]
         }
     ]
-                "🆘 Botón SOS + GPS completo",
-                "👶 LOCALIZAR NIÑOS por teléfono",
-                "📍 Tracking bajo demanda",
-                "📊 Historial de ubicaciones",
-                "🔕 Modo silencioso opcional",
-                "Equivale a €33.33/mes",
-                "Garantía satisfacción 15 días"
-            ]
-        }
-    ]
     
     # Planes Business y Enterprise
     business_plans = [
