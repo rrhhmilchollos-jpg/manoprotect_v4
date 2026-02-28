@@ -350,13 +350,40 @@ async def send_2fa_code(request: Request):
     # Create OTP session
     otp_data = await create_otp_session(user_id, user["email"], phone, "login")
     
-    # Send SMS via Infobip if available
+    # Send via SMS (Infobip) or fallback to email (SendGrid)
+    sms_sent = False
+    email_sent = False
+    
     if _sms_configured:
         try:
             from services.infobip_sms import send_verification_code
             await send_verification_code(phone, otp_data['otp_code'])
+            sms_sent = True
         except Exception as e:
             print(f"Error sending SMS: {e}")
+    
+    # Fallback: Send code via email if SMS fails or not configured
+    if not sms_sent and user.get("email"):
+        try:
+            import os
+            sendgrid_key = os.environ.get('SENDGRID_API_KEY')
+            sender_email = os.environ.get('SENDER_EMAIL', os.environ.get('FROM_EMAIL', 'alertas@manoprotect.com'))
+            if sendgrid_key:
+                from sendgrid import SendGridAPIClient
+                from sendgrid.helpers.mail import Mail
+                html = f"""<div style="font-family:sans-serif;max-width:400px;margin:0 auto;padding:20px;text-align:center;">
+                    <h2 style="color:#10b981;">ManoProtect</h2>
+                    <p>Tu c\u00f3digo de verificaci\u00f3n es:</p>
+                    <div style="font-size:32px;font-weight:bold;letter-spacing:8px;color:#111;margin:20px 0;padding:15px;background:#f4f4f5;border-radius:10px;">{otp_data['otp_code']}</div>
+                    <p style="color:#888;font-size:12px;">Expira en {otp_data['expires_in_minutes']} minutos.</p>
+                </div>"""
+                msg = Mail(from_email=sender_email, to_emails=user["email"],
+                           subject=f"ManoProtect - C\u00f3digo de verificaci\u00f3n: {otp_data['otp_code']}", html_content=html)
+                sg = SendGridAPIClient(sendgrid_key)
+                sg.send(msg)
+                email_sent = True
+        except Exception as e:
+            print(f"Error sending 2FA email: {e}")
     
     await log_security_event(
         SecurityEventTypes.OTP_SENT,
