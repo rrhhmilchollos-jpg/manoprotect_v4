@@ -64,6 +64,20 @@ const AnimatedCounter = ({ target, duration = 1500 }) => {
   return <span ref={ref}>{count}</span>;
 };
 
+/* ── RevealCard - scroll-triggered animation ── */
+const RevealCard = ({ children, delay = 0, testId }) => {
+  const [ref, visible] = useScrollReveal();
+  return (
+    <div
+      ref={ref}
+      className={`bg-white p-6 rounded-2xl border border-gray-100 hover:shadow-lg hover:border-gray-200 transition-all duration-300 reveal-up ${delay > 0 ? `reveal-up-delay-${delay}` : ''} ${visible ? 'visible' : ''}`}
+      data-testid={testId}
+    >
+      {children}
+    </div>
+  );
+};
+
 /* ═══════════════════════════════════════════
    MAIN COMPONENT
    ═══════════════════════════════════════════ */
