@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  ManoProtect - Info.plist
+  Permisos de ubicación en segundo plano para iOS
+  Versión: 2.0.3
+-->
+<plist version="1.0">
+<dict>
+    <key>CFBundleName</key>
+    <string>ManoProtect</string>
+    <key>CFBundleDisplayName</key>
+    <string>ManoProtect</string>
+    <key>CFBundleIdentifier</key>
+    <string>com.manoprotect.app</string>
+    <key>CFBundleVersion</key>
+    <string>203</string>
+    <key>CFBundleShortVersionString</key>
+    <string>2.0.3</string>
+    
+    <!-- Ubicación en segundo plano -->
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>ManoProtect necesita tu ubicación para localizar a tus familiares y enviar alertas SOS en caso de emergencia.</string>
+    <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+    <string>Para localizar a tus familiares incluso cuando la app no está abierta, necesitamos acceder a tu ubicación en segundo plano. Esto permite recibir alertas SOS y compartir tu ubicación GPS de forma segura con tu familia.</string>
+    <key>NSLocationAlwaysUsageDescription</key>
+    <string>Permitir siempre para seguimiento de familiares y alertas SOS 24h.</string>
+    
+    <!-- Cámara -->
+    <key>NSCameraUsageDescription</key>
+    <string>ManoProtect usa la cámara para grabación de seguridad y documentar incidencias.</string>
+    
+    <!-- Background Modes -->
+    <key>UIBackgroundModes</key>
+    <array>
+        <string>location</string>
+        <string>fetch</string>
+        <string>remote-notification</string>
+        <string>processing</string>
+    </array>
+    
+    <!-- App Transport Security -->
+    <key>NSAppTransportSecurity</key>
+    <dict>
+        <key>NSAllowsArbitraryLoads</key>
+        <true/>
+    </dict>
+    
+    <!-- Status Bar -->
+    <key>UIStatusBarStyle</key>
+    <string>UIStatusBarStyleDefault</string>
+    <key>UIViewControllerBasedStatusBarAppearance</key>
+    <true/>
+</dict>
+</plist>
