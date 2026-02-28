@@ -10,56 +10,122 @@ Plataforma líder en España de protección digital y física para familias. Opt
 - **Pricing**: 9,99€/mes o 99,99€/año. Dispositivo GRATIS con suscripción.
 
 ## Tech Stack
-- Frontend: React + TailwindCSS + Shadcn/UI
+- Frontend: React + TailwindCSS + Shadcn/UI + Recharts
 - Backend: FastAPI + MongoDB
 - Payments: Stripe (real products, 3D Secure)
 - Email: SendGrid
 - Analytics: GTM dataLayer + gtag + fbq + Hotjar (placeholder ready)
 
-## Implemented Pages
-- `/` - Landing Principal (Hero, beneficios, productos, comparativa, testimonios, FAQ, **videos marketing**, trust bar, footer)
-- `/productos` - Página productos completa con comparativa X vs J vs S
-- `/plans` - Precios con **contadores en tiempo real** (stock Sentinel Basic + plazas promo -20%)
-- `/testimonios` - 6 testimonios + 3 casos de uso con fotos españolas
-- `/faq` - 14 preguntas en 4 categorías, búsqueda, schema SEO
-- `/contacto` - Formulario + WhatsApp + teléfono + 24/7 (API funcional)
-- `/blog` - Artículos SEO con meta/OG tags, fotos españolas
-- `/sentinel-x`, `/sentinel-j`, `/sentinel-s` - Páginas de producto individuales
-- `/ceo` - **CEO Dashboard completo** con datos reales de BD
-- `/registro` - Registro con Stripe checkout
+## CEO Dashboard Enterprise Edition (Implemented Feb 28, 2026)
+Complete admin panel with sidebar navigation and 8 sections:
 
-## CEO Dashboard (Implemented Feb 28, 2026)
-- **Ruta**: `/ceo` (requiere login admin)
-- **Backend**: `/api/ceo/stats`, `/api/ceo/users`, `/api/ceo/subscriptions`, `/api/ceo/orders`, `/api/ceo/refunds`, `/api/ceo/messages`, `/api/ceo/activity`, `/api/ceo/promo-status`, `/api/ceo/claim-sentinel-basic`
-- **Funcionalidades**: Stats en tiempo real, 6 pestañas, búsqueda usuarios, paginación, indicadores Backend/Frontend LIVE, contadores de stock Sentinel Basic y promo -20%
+### Dashboard Principal
+- 6 stat cards: Usuarios, Suscripciones, Ventas Mes, Pedidos, Reembolsos, Mensajes
+- 3 inventory cards: Sentinel X/J/S con stock en tiempo real
+- 3 gráficos: Usuarios/Mes (barras), Ingresos/Mes (línea), Distribución Planes (circular)
+- Alertas automáticas: stock bajo, reembolsos pendientes, pagos fallidos, suscripciones por vencer
+- Contadores promo: Sentinel X Basic GRATIS (50 uds), Plazas -20% (200 plazas)
+- Actividad reciente: feed en tiempo real
 
-## Promotional Pricing (Implemented Feb 28, 2026)
-- Sentinel X Basic GRATIS (50 unidades, requiere suscripción activa)
-- 20% descuento para primeros 200 suscriptores en checkout Stripe
-- Contadores en tiempo real en `/plans` y CEO Dashboard
-- Endpoint público `/api/ceo/promo-status` para contadores
+### Inventario
+- Tabla de productos Sentinel (X, J, S)
+- Columnas: Producto, Nº Serie, Estado, Ubicación, Fecha
+- Filtros por producto y estado
 
-## Health Check System (Implemented Feb 28, 2026)
-- Backend: `/api/heartbeat` (respuesta <5ms)
-- Backend: `/api/health` (con estado BD)
-- Frontend: `HealthCheckMonitor` global polling cada 5s con toast de alerta
-- CEO Dashboard: Indicadores "Backend LIVE" / "Frontend LIVE"
+### Usuarios
+- Tabla con búsqueda por email, nombre, ID
+- Acciones: suspender/activar cuenta
+- Exportar CSV
 
-## Marketing Videos (Implemented Feb 28, 2026)
-- 4 imágenes generadas de familias españolas con Sentinel
+### Membresías
+- Tabla de suscripciones activas
+- Promo flag (-20%) visible
+- Importes y fechas
+
+### Pagos y Reembolsos
+- Tabla de reembolsos con botones Aprobar/Rechazar
+- Exportar pagos CSV
+- Alertas de pagos fallidos
+
+### Seguridad
+- Panel de administradores con roles
+- Contador 2FA activado
+- Registro de actividad (intentos fallidos)
+
+### Mensajes
+- Tabla de mensajes de contacto
+- Badge de no leídos en sidebar
+
+### Reportes
+- Exportar usuarios CSV
+- Exportar pagos CSV
+- Resumen financiero: MRR, Hoy, Este Mes, Total
+
+### Notificaciones Push
+- Campana en header con contador
+- Panel desplegable con notificaciones en tiempo real
+- Auto-generadas de: reembolsos pendientes, mensajes sin leer, pagos fallidos, nuevos usuarios
+- Polling cada 10 segundos
+
+### Indicadores de Salud
+- Backend LIVE / Frontend LIVE en header
+- Heartbeat polling cada 5 segundos
+
+## Promotional Pricing
+- Sentinel X Basic GRATIS (50 unidades, requiere suscripción)
+- 20% descuento automático en checkout Stripe para primeros 200 suscriptores
+- Contadores en tiempo real en /plans y CEO Dashboard
+
+## Health Check System
+- Backend: /api/heartbeat + /api/health
+- Frontend: HealthCheckMonitor global polling cada 5s con toast de alerta
+
+## SEO Phase 3 (Implemented Feb 28, 2026)
+- robots.txt optimizado con Allow/Disallow directivas
+- sitemap.xml con 24+ URLs incluyendo landing pages SEO
+- Landing pages long-tail: reloj-sos-ancianos, reloj-gps-mayores, boton-sos-senior
+- Landing pages digitales: proteccion-phishing, proteccion-fraude-online, seguridad-digital-familiar, seguridad-mayores
+- Schema markup avanzado en todas las páginas
+
+## Videos de Marketing
+- 4 imágenes fotorrealistas de familias españolas con Sentinel
 - Sección en landing principal con cards estilo video
-- Thumbnails: familia García, vuelta al cole, senior, adolescente senderismo
 
-## Analytics Placeholders Ready
-- **Meta Pixel**: Placeholder `META_PIXEL_ID` en index.html (usuario debe reemplazar)
-- **Hotjar**: Placeholder `HOTJAR_SITE_ID` en index.html (usuario debe reemplazar)
-- **Google Search Console**: Pendiente código de verificación del usuario
+## ZIP Descargable
+- Disponible en /manoprotect-com.zip (2.1MB)
+- Contiene: backend completo, frontend src, public esencial, configs
+
+## API Endpoints CEO
+| Endpoint | Método | Auth | Descripción |
+|---|---|---|---|
+| /api/ceo/stats | GET | Admin | Dashboard stats completas |
+| /api/ceo/chart-data | GET | Admin | Datos para gráficos |
+| /api/ceo/users | GET | Admin | Lista usuarios paginada |
+| /api/ceo/users/{id}/plan | PATCH | Admin | Cambiar plan usuario |
+| /api/ceo/users/{id}/suspend | PATCH | Admin | Suspender/activar usuario |
+| /api/ceo/subscriptions | GET | Admin | Lista suscripciones |
+| /api/ceo/orders | GET | Admin | Lista pedidos |
+| /api/ceo/refunds | GET | Admin | Lista reembolsos |
+| /api/ceo/refunds/{id} | PATCH | Admin | Aprobar/rechazar reembolso |
+| /api/ceo/messages | GET | Admin | Lista mensajes contacto |
+| /api/ceo/messages/{id}/read | PATCH | Admin | Marcar mensaje leído |
+| /api/ceo/inventory | GET | Admin | Lista inventario |
+| /api/ceo/inventory | POST | Admin | Añadir item inventario |
+| /api/ceo/inventory/{id} | PATCH | Admin | Actualizar item |
+| /api/ceo/security-logs | GET | Admin | Logs de actividad admin |
+| /api/ceo/security-overview | GET | Admin | Resumen seguridad |
+| /api/ceo/notifications | GET | Admin | Notificaciones |
+| /api/ceo/activity | GET | Admin | Feed actividad reciente |
+| /api/ceo/export/users | GET | Admin | CSV usuarios |
+| /api/ceo/export/payments | GET | Admin | CSV pagos |
+| /api/ceo/promo-status | GET | Público | Contadores promo |
+| /api/ceo/claim-sentinel-basic | POST | User | Reclamar Sentinel gratis |
 
 ## Backlog
-### P1: Usuario proporcione IDs (Meta Pixel, Hotjar, Google SC), iOS build (requiere Mac)
-### P2: Remarketing/A/B testing avanzado, SEO Fase 3
-### P3: Activar integraciones mocked (112, BigQuery)
-### BLOQUEADOS: SMS Infobip, SendGrid dominio, Twilio WhatsApp producción
+### P1: IDs de Meta Pixel, Hotjar, Google SC (bloqueado en usuario)
+### P2: Remarketing/A/B testing, SEO Fase 4 (backlinks externos)
+### P3: Integraciones 112, BigQuery
+### BLOQUEADOS: SMS Infobip, SendGrid producción, Twilio WhatsApp producción
 
 ## Credentials
 | User | Password | Role |
