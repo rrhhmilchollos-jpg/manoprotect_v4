@@ -258,7 +258,7 @@ const RegistrationForm = ({ plan, periodo, onBack, onSuccess }) => {
       <div className="text-center mb-6">
         <h2 className="text-2xl font-bold text-gray-900">Crea tu cuenta</h2>
         <p className="text-gray-500 mt-2">
-          Plan: <span className="font-semibold text-indigo-600">{selectedPlan?.name}</span>
+          Plan: <span className="font-semibold text-emerald-600">{selectedPlan?.name}</span>
           {periodo === 'anual' && selectedPlan?.price.anual > 0 && (
             <span className="text-green-600 ml-2">({selectedPlan.monthlyEquivalent.anual.toFixed(2).replace('.', ',')}€/mes)</span>
           )}
@@ -280,7 +280,7 @@ const RegistrationForm = ({ plan, periodo, onBack, onSuccess }) => {
             value={formData.name}
             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
             required
-            className="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
+            className="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors"
             placeholder="Tu nombre completo"
             data-testid="register-name-input"
           />
@@ -297,7 +297,7 @@ const RegistrationForm = ({ plan, periodo, onBack, onSuccess }) => {
             value={formData.email}
             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
             required
-            className="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
+            className="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors"
             placeholder="tu@email.com"
             data-testid="register-email-input"
           />
@@ -313,7 +313,7 @@ const RegistrationForm = ({ plan, periodo, onBack, onSuccess }) => {
             type="tel"
             value={formData.phone}
             onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-            className="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
+            className="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors"
             placeholder="+34 600 000 000"
             data-testid="register-phone-input"
           />
@@ -332,7 +332,7 @@ const RegistrationForm = ({ plan, periodo, onBack, onSuccess }) => {
               onChange={(e) => setFormData({ ...formData, password: e.target.value })}
               required
               minLength={8}
-              className="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
+              className="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors"
               placeholder="Mín. 8 caracteres"
               data-testid="register-password-input"
             />
@@ -347,7 +347,7 @@ const RegistrationForm = ({ plan, periodo, onBack, onSuccess }) => {
               value={formData.confirmPassword}
               onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
               required
-              className="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
+              className="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors"
               placeholder="Repetir"
               data-testid="register-confirm-password-input"
             />
@@ -369,7 +369,7 @@ const RegistrationForm = ({ plan, periodo, onBack, onSuccess }) => {
             <CreditCard className="w-4 h-4 inline mr-2" />
             Tarjeta de débito/crédito *
           </label>
-          <div className="border border-gray-200 rounded-xl p-4 bg-gray-50/50 focus-within:ring-2 focus-within:ring-indigo-500 focus-within:border-indigo-500 transition-colors">
+          <div className="border border-gray-200 rounded-xl p-4 bg-gray-50/50 focus-within:ring-2 focus-within:ring-emerald-500 focus-within:border-emerald-500 transition-colors">
             <CardElement 
               options={cardElementOptions} 
               onChange={handleCardChange}
@@ -407,11 +407,11 @@ const RegistrationForm = ({ plan, periodo, onBack, onSuccess }) => {
             type="checkbox"
             checked={formData.acceptTerms}
             onChange={(e) => setFormData({ ...formData, acceptTerms: e.target.checked })}
-            className="w-4 h-4 mt-1 text-indigo-600 rounded border-gray-300 focus:ring-indigo-500"
+            className="w-4 h-4 mt-1 text-emerald-600 rounded border-gray-300 focus:ring-emerald-500"
             data-testid="accept-terms-checkbox"
           />
           <span className="text-sm text-gray-600">
-            Acepto los <a href="/terms-of-service" target="_blank" className="text-indigo-600 underline hover:text-indigo-700">Términos y Condiciones</a> *
+            Acepto los <a href="/terms-of-service" target="_blank" className="text-emerald-600 underline hover:text-emerald-700">Términos y Condiciones</a> *
           </span>
         </label>
         
@@ -420,11 +420,11 @@ const RegistrationForm = ({ plan, periodo, onBack, onSuccess }) => {
             type="checkbox"
             checked={formData.acceptPrivacy}
             onChange={(e) => setFormData({ ...formData, acceptPrivacy: e.target.checked })}
-            className="w-4 h-4 mt-1 text-indigo-600 rounded border-gray-300 focus:ring-indigo-500"
+            className="w-4 h-4 mt-1 text-emerald-600 rounded border-gray-300 focus:ring-emerald-500"
             data-testid="accept-privacy-checkbox"
           />
           <span className="text-sm text-gray-600">
-            Acepto la <a href="/privacy-policy" target="_blank" className="text-indigo-600 underline hover:text-indigo-700">Política de Privacidad</a> *
+            Acepto la <a href="/privacy-policy" target="_blank" className="text-emerald-600 underline hover:text-emerald-700">Política de Privacidad</a> *
           </span>
         </label>
         
@@ -433,7 +433,7 @@ const RegistrationForm = ({ plan, periodo, onBack, onSuccess }) => {
             type="checkbox"
             checked={formData.acceptCommunications}
             onChange={(e) => setFormData({ ...formData, acceptCommunications: e.target.checked })}
-            className="w-4 h-4 mt-1 text-indigo-600 rounded border-gray-300 focus:ring-indigo-500"
+            className="w-4 h-4 mt-1 text-emerald-600 rounded border-gray-300 focus:ring-emerald-500"
             data-testid="accept-communications-checkbox"
           />
           <span className="text-sm text-gray-600">
@@ -456,7 +456,7 @@ const RegistrationForm = ({ plan, periodo, onBack, onSuccess }) => {
         </Button>
         <Button 
           type="submit"
-          className="flex-1 h-12 bg-indigo-600 hover:bg-indigo-700"
+          className="flex-1 h-12 bg-emerald-600 hover:bg-emerald-700"
           disabled={isLoading || !formData.acceptTerms || !formData.acceptPrivacy || (requiresCard && !cardComplete)}
           data-testid="submit-registration-btn"
         >
@@ -525,7 +525,7 @@ const ManoProtectRegistro = () => {
             onClick={() => setPeriodo('mensual')}
             className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
               periodo === 'mensual' 
-                ? 'bg-indigo-600 text-white shadow-md' 
+                ? 'bg-emerald-600 text-white shadow-md' 
                 : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
             }`}
             data-testid="periodo-mensual-btn"
@@ -536,7 +536,7 @@ const ManoProtectRegistro = () => {
             onClick={() => setPeriodo('anual')}
             className={`px-4 py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-2 ${
               periodo === 'anual' 
-                ? 'bg-indigo-600 text-white shadow-md' 
+                ? 'bg-emerald-600 text-white shadow-md' 
                 : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
             }`}
             data-testid="periodo-anual-btn"
@@ -560,8 +560,8 @@ const ManoProtectRegistro = () => {
                 onClick={() => handlePlanSelect(plan.id)}
                 className={`relative cursor-pointer rounded-2xl border-2 p-5 transition-all ${
                   isSelected
-                    ? 'border-indigo-600 bg-indigo-50 shadow-lg scale-[1.02]'
-                    : 'border-gray-200 hover:border-indigo-300 hover:shadow-md'
+                    ? 'border-emerald-600 bg-emerald-50 shadow-lg scale-[1.02]'
+                    : 'border-gray-200 hover:border-emerald-300 hover:shadow-md'
                 }`}
                 data-testid={`plan-card-${plan.id}`}
               >
@@ -569,7 +569,7 @@ const ManoProtectRegistro = () => {
                 {plan.badge && (
                   <div className="absolute -top-3 left-1/2 -translate-x-1/2">
                     <span className={`text-white text-xs font-bold px-3 py-1 rounded-full shadow-md ${
-                      plan.badgeColor === 'indigo' ? 'bg-gradient-to-r from-indigo-600 to-purple-600' :
+                      plan.badgeColor === 'emerald' ? 'bg-gradient-to-r from-emerald-600 to-purple-600' :
                       plan.badgeColor === 'emerald' ? 'bg-gradient-to-r from-green-500 to-emerald-600' :
                       'bg-gradient-to-r from-purple-500 to-pink-600'
                     }`}>
@@ -581,7 +581,7 @@ const ManoProtectRegistro = () => {
                 <div className="text-center pt-2">
                   <h3 className="font-bold text-lg text-gray-900">{plan.name}</h3>
                   <div className="mt-3">
-                    <span className="text-3xl font-bold text-indigo-600">
+                    <span className="text-3xl font-bold text-emerald-600">
                       {price === 0 ? '0' : price.toFixed(2).replace('.', ',')}€
                     </span>
                     <span className="text-gray-500 text-sm">/{periodo === 'anual' ? 'año' : 'mes'}</span>
@@ -624,7 +624,7 @@ const ManoProtectRegistro = () => {
                 {/* Selected indicator */}
                 {isSelected && (
                   <div className="absolute top-4 right-4">
-                    <CheckCircle className="w-6 h-6 text-indigo-600" />
+                    <CheckCircle className="w-6 h-6 text-emerald-600" />
                   </div>
                 )}
               </div>
@@ -634,7 +634,7 @@ const ManoProtectRegistro = () => {
         
         {/* Continue Button */}
         <Button 
-          className="w-full h-12 bg-indigo-600 hover:bg-indigo-700"
+          className="w-full h-12 bg-emerald-600 hover:bg-emerald-700"
           onClick={() => setStep(2)}
           data-testid="continue-to-registration-btn"
         >
@@ -659,7 +659,7 @@ const ManoProtectRegistro = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-indigo-900">
+    <div className="min-h-screen bg-gradient-to-br from-emerald-900 via-purple-900 to-emerald-900">
       {/* SEO Meta Tags */}
       <Helmet>
         <title>Registro | ManoProtect - Crea tu cuenta de seguridad digital</title>
@@ -686,12 +686,12 @@ const ManoProtectRegistro = () => {
             className="flex items-center gap-3 cursor-pointer" 
             onClick={() => navigate('/')}
           >
-            <div className="w-12 h-12 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-500/30">
+            <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg shadow-emerald-500/30">
               <Shield className="w-7 h-7 text-white" />
             </div>
             <div>
               <h1 className="text-xl font-bold text-white">ManoProtect</h1>
-              <p className="text-xs text-indigo-300">Protección Digital</p>
+              <p className="text-xs text-emerald-300">Protección Digital</p>
             </div>
           </div>
           
@@ -714,7 +714,7 @@ const ManoProtectRegistro = () => {
             <h2 className="text-4xl font-bold text-white mb-6">
               Protege lo que más importa
             </h2>
-            <p className="text-lg text-indigo-200 mb-8">
+            <p className="text-lg text-emerald-200 mb-8">
               ManoProtect te ayuda a detectar estafas, proteger a tu familia y navegar seguro por internet.
             </p>
             
@@ -726,7 +726,7 @@ const ManoProtectRegistro = () => {
                 </div>
                 <div>
                   <h3 className="font-semibold text-white">Detección de estafas con IA</h3>
-                  <p className="text-sm text-indigo-200/70">Analiza mensajes, llamadas y webs sospechosas al instante</p>
+                  <p className="text-sm text-emerald-200/70">Analiza mensajes, llamadas y webs sospechosas al instante</p>
                 </div>
               </div>
               
@@ -736,7 +736,7 @@ const ManoProtectRegistro = () => {
                 </div>
                 <div>
                   <h3 className="font-semibold text-white">Sin compromiso</h3>
-                  <p className="text-sm text-indigo-200/70">7 días de prueba gratis. Cancela en cualquier momento.</p>
+                  <p className="text-sm text-emerald-200/70">7 días de prueba gratis. Cancela en cualquier momento.</p>
                 </div>
               </div>
               
@@ -746,7 +746,7 @@ const ManoProtectRegistro = () => {
                 </div>
                 <div>
                   <h3 className="font-semibold text-white">Pago 100% seguro</h3>
-                  <p className="text-sm text-indigo-200/70">Encriptación SSL, 3D Secure y certificación PCI DSS</p>
+                  <p className="text-sm text-emerald-200/70">Encriptación SSL, 3D Secure y certificación PCI DSS</p>
                 </div>
               </div>
             </div>
@@ -755,15 +755,15 @@ const ManoProtectRegistro = () => {
             <div className="mt-8 pt-8 border-t border-white/10 grid grid-cols-3 gap-4">
               <div className="text-center">
                 <p className="text-2xl font-bold text-white">+2000</p>
-                <p className="text-xs text-indigo-300">Familias protegidas</p>
+                <p className="text-xs text-emerald-300">Familias protegidas</p>
               </div>
               <div className="text-center">
                 <p className="text-2xl font-bold text-white">24/7</p>
-                <p className="text-xs text-indigo-300">Protección continua</p>
+                <p className="text-xs text-emerald-300">Protección continua</p>
               </div>
               <div className="text-center">
                 <p className="text-2xl font-bold text-white">4.9★</p>
-                <p className="text-xs text-indigo-300">Trustpilot</p>
+                <p className="text-xs text-emerald-300">Trustpilot</p>
               </div>
             </div>
           </div>
@@ -775,13 +775,13 @@ const ManoProtectRegistro = () => {
             {/* Progress indicator */}
             <div className="flex items-center justify-center gap-2 mb-6">
               <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                step >= 1 ? 'bg-indigo-600 text-white' : 'bg-white/20 text-white/50'
+                step >= 1 ? 'bg-emerald-600 text-white' : 'bg-white/20 text-white/50'
               }`}>
                 1
               </div>
-              <div className={`w-16 h-1 rounded ${step >= 2 ? 'bg-indigo-600' : 'bg-white/20'}`} />
+              <div className={`w-16 h-1 rounded ${step >= 2 ? 'bg-emerald-600' : 'bg-white/20'}`} />
               <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                step >= 2 ? 'bg-indigo-600 text-white' : 'bg-white/20 text-white/50'
+                step >= 2 ? 'bg-emerald-600 text-white' : 'bg-white/20 text-white/50'
               }`}>
                 2
               </div>
