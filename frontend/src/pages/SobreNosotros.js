@@ -71,7 +71,7 @@ const SobreNosotros = () => {
       />
 
       {/* Hero */}
-      <section className="relative bg-gradient-to-br from-slate-900 via-indigo-900 to-slate-900 py-20 px-6">
+      <section className="relative bg-gradient-to-br from-gray-900 via-emerald-900 to-gray-900 py-20 px-6">
         <div className="max-w-4xl mx-auto text-center">
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 rounded-full text-white/80 text-sm mb-6">
             <Users className="w-4 h-4" />
@@ -215,7 +215,7 @@ const SobreNosotros = () => {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a 
                 href="mailto:careers@manoprotect.com"
-                className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-white text-indigo-600 font-semibold rounded-xl hover:bg-indigo-50 transition-colors"
+                className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-white text-emerald-600 font-semibold rounded-xl hover:bg-emerald-50 transition-colors"
               >
                 <Mail className="w-5 h-5" />
                 Ver Ofertas de Empleo
