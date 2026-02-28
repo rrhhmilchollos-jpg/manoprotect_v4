@@ -17,6 +17,30 @@ const PRODUCT_CONFIG = {
     deliveryTime: '90-120 días',
     description: 'Tu smartwatch de seguridad está en camino'
   },
+  'sentinel-x-basic': {
+    name: 'SENTINEL X Basic',
+    icon: <Watch className="w-12 h-12" />,
+    image: 'https://customer-assets.emergentagent.com/job_8161c713-bb69-4bfd-84d2-fde54657d491/artifacts/acz8j630_Reloj%20inteligente%20ManoProtect%20SENTINEL%20X.png',
+    color: 'green',
+    deliveryTime: '90-120 días',
+    description: 'Tu Sentinel X Basic GRATIS + Plan Familiar activado'
+  },
+  'sentinel-j': {
+    name: 'SENTINEL J Junior',
+    icon: <Watch className="w-12 h-12" />,
+    image: null,
+    color: 'blue',
+    deliveryTime: '90-120 días',
+    description: 'Tu Sentinel J para jóvenes + Plan Familiar activado'
+  },
+  'sentinel-s': {
+    name: 'SENTINEL S Niños',
+    icon: <Shield className="w-12 h-12" />,
+    image: null,
+    color: 'cyan',
+    deliveryTime: '90-120 días',
+    description: 'Tu Sentinel S premium para niños + Plan Familiar activado'
+  },
   'sos-device': {
     name: 'Dispositivo SOS',
     icon: <Shield className="w-12 h-12" />,
