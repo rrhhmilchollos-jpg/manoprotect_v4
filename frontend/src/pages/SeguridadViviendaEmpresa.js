@@ -1,9 +1,9 @@
 /**
- * ManoProtect - Seguridad para Viviendas y Empresas
- * Kits de alarmas profesionales con componentes reales
- * Galeria de productos: camaras, sensores, sirenas, centralitas, mandos, relojes Sentinel
+ * ManoProtect - Alarmas Premium para Viviendas y Empresas
+ * Landing principal: 3 kits top del mercado 2026
+ * Supera a Securitas Direct, Prosegur y Ajax
  */
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import LandingFooter from '@/components/landing/LandingFooter';
@@ -11,429 +11,502 @@ import {
   Shield, Home, Building2, Camera, Wifi, Bell, Lock, Phone,
   Check, ArrowRight, MapPin, Eye, Zap, Radio, Smartphone,
   AlertTriangle, Clock, Star, Users, Package, ChevronDown,
-  Play, Fingerprint, ThermometerSun, Droplets, Volume2, Watch
+  Fingerprint, Volume2, Watch, X, Sparkles, Award, Globe
 } from 'lucide-react';
 
-/* ─── IMAGE CONSTANTS ─── */
 const IMG = {
-  heroHome: 'https://static.prod-images.emergentagent.com/jobs/290cb2d0-b7e3-467f-bd9d-87a91a501ea4/images/bace5a48fec7754b30baaf8fee91a08ff142242d88b8cdb5fb26f449d5fae055.png',
-  componentsGrid: 'https://static.prod-images.emergentagent.com/jobs/290cb2d0-b7e3-467f-bd9d-87a91a501ea4/images/0dc5530d2d122b3fceaa54f05d036a86f9ce9a11bc0fef1b1916d3847b066dc8.png',
-  camera4k: 'https://static.prod-images.emergentagent.com/jobs/290cb2d0-b7e3-467f-bd9d-87a91a501ea4/images/8a6899331a0b3e75e77e08787983a097a23c215b55cc150a3cecb45c6af975bc.png',
-  sentinelWatch: 'https://static.prod-images.emergentagent.com/jobs/290cb2d0-b7e3-467f-bd9d-87a91a501ea4/images/7a282e42d9edfe3137fe6fd41329b2d34711dfa503f2395b7bd399d6e13437e8.png',
-  outdoorSiren: 'https://static.prod-images.emergentagent.com/jobs/290cb2d0-b7e3-467f-bd9d-87a91a501ea4/images/d0e8c61e97d2c4bd6e456307c59cd83f1a0e1dd7167d51a5a3f75d725d913df0.png',
-  controlPanel: 'https://static.prod-images.emergentagent.com/jobs/290cb2d0-b7e3-467f-bd9d-87a91a501ea4/images/72857182df814237ec3f71996472c4b706658084f7b96563893f7a9a5b5c7b03.png',
-  businessSecurity: 'https://static.prod-images.emergentagent.com/jobs/290cb2d0-b7e3-467f-bd9d-87a91a501ea4/images/ba2cdad7c989583f708e7e41ba04ebc36b3c7a80ac18961478d486f0584564cf.png',
+  villaHero: 'https://static.prod-images.emergentagent.com/jobs/290cb2d0-b7e3-467f-bd9d-87a91a501ea4/images/e164cb2cf3f4f9c1c618577b32e96516dbba057689cb6c8e981cb8b78626d495.png',
+  premiumKit: 'https://static.prod-images.emergentagent.com/jobs/290cb2d0-b7e3-467f-bd9d-87a91a501ea4/images/13a8f09b29ff0fec2ceadd8b852434aa2c738e869179e58e98faadeb177de21f.png',
+  remotesTrio: 'https://static.prod-images.emergentagent.com/jobs/290cb2d0-b7e3-467f-bd9d-87a91a501ea4/images/f4721d2b816f8bb98503fc2adb37dfca8c7517e980a3faba23bd4a409699ce8d.png',
+  businessLobby: 'https://static.prod-images.emergentagent.com/jobs/290cb2d0-b7e3-467f-bd9d-87a91a501ea4/images/849e086aebf89bbc87613eecc7dd2e68ad9829e7f3df9e73c316cb6968ad6176.png',
+  apartment: 'https://static.prod-images.emergentagent.com/jobs/290cb2d0-b7e3-467f-bd9d-87a91a501ea4/images/3491f38335afcb9caf468ea266417ef144e075a365d6a5fe69e676315b6942b6.png',
+  outdoorSiren: 'https://static.prod-images.emergentagent.com/jobs/290cb2d0-b7e3-467f-bd9d-87a91a501ea4/images/02324e10765dca960e91cd4c4dbacf1a487b245ad51052895887387edf5dd09f.png',
+  warehouse: 'https://static.prod-images.emergentagent.com/jobs/290cb2d0-b7e3-467f-bd9d-87a91a501ea4/images/d5b3ee6bbfe8654c951190925530016926f3d28ff3b43f8772f9590a60b21930.png',
+  comparison: 'https://static.prod-images.emergentagent.com/jobs/290cb2d0-b7e3-467f-bd9d-87a91a501ea4/images/df3749a5b94fa5a243e0e7b37d5619d377ad93fae43f8f5611c834cf2615ce8f.png',
   sentinelTrio: 'https://static.prod-images.emergentagent.com/jobs/290cb2d0-b7e3-467f-bd9d-87a91a501ea4/images/16e97d0972346860b882ddea3662703ffc3438f28eae4e99da63bf51db6b6e60.png',
-  stockCamera: 'https://images.unsplash.com/photo-1578096241494-6cc439ab21ad?w=800&q=80',
-  stockKeypad: 'https://images.unsplash.com/photo-1697382608786-bcf4c113b86e?w=800&q=80',
-  stockDoorSensor: 'https://images.unsplash.com/photo-1637241613318-646f2c2a854a?w=600&q=80',
+  sentinelWatch: 'https://static.prod-images.emergentagent.com/jobs/290cb2d0-b7e3-467f-bd9d-87a91a501ea4/images/7a282e42d9edfe3137fe6fd41329b2d34711dfa503f2395b7bd399d6e13437e8.png',
+  camera4k: 'https://static.prod-images.emergentagent.com/jobs/290cb2d0-b7e3-467f-bd9d-87a91a501ea4/images/8a6899331a0b3e75e77e08787983a097a23c215b55cc150a3cecb45c6af975bc.png',
+  controlPanel: 'https://static.prod-images.emergentagent.com/jobs/290cb2d0-b7e3-467f-bd9d-87a91a501ea4/images/72857182df814237ec3f71996472c4b706658084f7b96563893f7a9a5b5c7b03.png',
 };
 
-/* ─── PRODUCT COMPONENTS ─── */
-const COMPONENTS = [
-  {
-    name: 'Centralita Hub',
-    desc: 'Panel de control con pantalla tactil, sirena 110dB integrada, conexion 4G+WiFi+Ethernet. Bateria de respaldo 24h.',
-    img: IMG.controlPanel,
-    icon: Radio,
-  },
-  {
-    name: 'Camaras IP 4K',
-    desc: 'Vision nocturna infrarroja, deteccion IA de personas, audio bidireccional. Grabacion en la nube.',
-    img: IMG.camera4k,
-    icon: Camera,
-  },
-  {
-    name: 'Sirena Exterior',
-    desc: 'Sirena disuasoria 120dB con flash LED estroboscopico. Resistente a lluvia y vandalismo (IP65).',
-    img: IMG.outdoorSiren,
-    icon: Volume2,
-  },
-  {
-    name: 'Sensor de Movimiento PIR',
-    desc: 'Detector volumetrico con tecnologia anti-mascotas (hasta 25kg). Cobertura 12m, 90 grados.',
-    img: IMG.stockKeypad,
-    icon: Eye,
-  },
-  {
-    name: 'Contacto Magnetico',
-    desc: 'Sensor para puertas y ventanas. Alerta inmediata al abrir. Ultra-fino, instalacion adhesiva.',
-    img: IMG.stockDoorSensor,
-    icon: Lock,
-  },
-  {
-    name: 'Relojes Sentinel X/J/S',
-    desc: 'GPS en tiempo real, boton SOS, E-SIM integrada. Conectado al mismo centro de control 24h.',
-    img: IMG.sentinelTrio,
-    icon: Watch,
-  },
-];
-
-/* ─── ALARM KITS ─── */
 const KITS = [
   {
-    id: 'hogar-basico',
-    name: 'Kit Hogar Basico',
-    tagline: 'Proteccion esencial para tu vivienda',
-    price: 0,
-    monthly: 29.99,
+    id: 'essential',
+    name: 'ManoProtect Essential',
+    badge: 'MEJOR PRECIO',
+    subtitle: 'Pisos y apartamentos',
+    monthly: 34.99,
+    promoMonthly: 24.99,
+    promoLabel: '6 primeros meses',
+    color: 'sky',
+    gradient: 'from-sky-600 to-blue-700',
+    img: IMG.apartment,
     popular: false,
-    icon: Home,
-    color: 'blue',
-    img: IMG.controlPanel,
-    items: [
-      { text: 'Panel de control tactil con sirena 110dB', bold: true },
-      { text: '2 sensores de movimiento PIR' },
-      { text: '2 contactos magneticos puerta/ventana' },
-      { text: '1 mando a distancia' },
-      { text: '1 teclado inalambrico' },
-      { text: 'Conexion 4G + WiFi + Ethernet' },
-      { text: 'App ManoProtect incluida' },
-      { text: 'Centro de control 24h' },
+    link: '/alarmas/vivienda',
+    equipment: [
+      'Hub inteligente con pantalla tactil 7"',
+      '2 camaras IP Full HD vision nocturna',
+      '3 sensores movimiento PIR anti-mascotas',
+      '2 contactos magneticos puerta/ventana',
+      '1 sirena exterior 110dB con flash LED',
+      '1 mando premium con LED azul',
+      '1 detector de humo inteligente',
+      'Conexion 4G + WiFi + Ethernet',
+    ],
+    services: [
+      'Centro de control 24h (CRA)',
+      'Verificacion por video con IA',
+      'App ManoProtect (arma/desarma/camaras)',
+      'Anti-inhibicion multi-frecuencia',
+      'Aviso a policia y bomberos',
+      'Sentinel X de REGALO',
     ],
   },
   {
-    id: 'hogar-premium',
-    name: 'Kit Hogar Premium',
-    tagline: 'Maxima seguridad para tu familia',
-    price: 0,
+    id: 'premium',
+    name: 'ManoProtect Premium',
+    badge: 'MAS VENDIDO',
+    subtitle: 'Chalets, adosados y casas',
     monthly: 49.99,
-    popular: true,
-    icon: Shield,
+    promoMonthly: 39.99,
+    promoLabel: '6 primeros meses',
     color: 'orange',
-    img: IMG.heroHome,
-    items: [
-      { text: 'Panel de control tactil HD con sirena 120dB', bold: true },
-      { text: '4 sensores de movimiento PIR anti-mascotas' },
-      { text: '4 contactos magneticos puerta/ventana' },
-      { text: '2 camaras IP Full HD con vision nocturna', bold: true },
-      { text: '1 sensor de humo y CO2' },
-      { text: '1 sensor de inundacion' },
-      { text: '2 mandos a distancia' },
-      { text: '1 teclado inalambrico con lector RFID' },
-      { text: 'Sirena exterior disuasoria 120dB', bold: true },
-      { text: 'Conexion 4G + WiFi + Ethernet' },
-      { text: 'Grabacion en la nube 30 dias' },
-      { text: 'Centro de control 24h + verificacion por video' },
-      { text: 'Sentinel X de REGALO para un familiar', bold: true },
+    gradient: 'from-orange-500 to-red-600',
+    img: IMG.villaHero,
+    popular: true,
+    link: '/alarmas/vivienda',
+    equipment: [
+      'Hub Pro con pantalla tactil 10" HD',
+      '4 camaras IP 2K con vision nocturna e IA',
+      '2 camaras PTZ exterior 360 grados',
+      '6 sensores movimiento PIR anti-mascotas',
+      '4 contactos magneticos puerta/ventana',
+      '2 sirenas: exterior 120dB + interior',
+      '2 mandos premium (negro + dorado)',
+      'Teclado RFID con codigo + tarjeta',
+      'Detector humo + CO2 + inundacion',
+      'Conexion 4G dual SIM + WiFi + Ethernet',
+    ],
+    services: [
+      'Centro de control 24h (CRA) Premium',
+      'Verificacion por video con IA avanzada',
+      'Servicio de Acuda (vigilante en 15 min)',
+      'App ManoProtect Premium',
+      'Anti-inhibicion 17 frecuencias',
+      'Aviso policia + bomberos + ambulancia',
+      'Grabacion en la nube 30 dias',
+      'Mantenimiento preventivo semestral',
+      '2 Sentinel X de REGALO',
     ],
   },
   {
-    id: 'empresa',
-    name: 'Kit Empresa',
-    tagline: 'Seguridad profesional para negocios',
-    price: 0,
-    monthly: 89.99,
-    popular: false,
-    icon: Building2,
+    id: 'business',
+    name: 'ManoProtect Business',
+    badge: 'EMPRESAS',
+    subtitle: 'Locales, naves y oficinas',
+    monthly: 69.99,
+    promoMonthly: 54.99,
+    promoLabel: '6 primeros meses',
     color: 'emerald',
-    img: IMG.businessSecurity,
-    items: [
-      { text: 'Panel de control empresarial con pantalla 10"', bold: true },
-      { text: '8 sensores de movimiento volumetricos' },
-      { text: '6 contactos magneticos puertas/ventanas' },
-      { text: '4 camaras IP 4K con IA (deteccion personas)', bold: true },
-      { text: '2 camaras PTZ exteriores 360 grados' },
-      { text: 'Sensor de humo, CO2 y gas' },
-      { text: 'Control de acceso por huella + tarjeta RFID', bold: true },
-      { text: 'Sirena interior 120dB + exterior 130dB' },
-      { text: 'Videoportero IP con reconocimiento facial' },
-      { text: 'Conexion 4G + WiFi + Ethernet redundante' },
-      { text: 'Grabacion en la nube 90 dias' },
-      { text: 'Centro de control 24h + acuda + policia' },
-      { text: 'Mantenimiento preventivo trimestral' },
-      { text: '2 Sentinel X para propietarios', bold: true },
+    gradient: 'from-emerald-600 to-teal-700',
+    img: IMG.businessLobby,
+    popular: false,
+    link: '/alarmas/negocio',
+    equipment: [
+      'Hub Enterprise pantalla 10" + backup hub',
+      '6 camaras IP 4K con IA deteccion personas',
+      '4 camaras PTZ exterior 360 grados IP67',
+      '10 sensores movimiento volumetricos',
+      '8 contactos magneticos puertas/ventanas',
+      'Control acceso biometrico (huella + RFID)',
+      'Videoportero IP con reconocimiento facial',
+      '2 sirenas exteriores 130dB + 2 interiores',
+      'Detectores humo + CO2 + gas + inundacion',
+      'Conexion 4G dual + WiFi 6 + Ethernet x2',
+    ],
+    services: [
+      'Centro control 24h Enterprise (CRA)',
+      'Verificacion video + IA + reconocimiento',
+      'Servicio Acuda prioritario (10 min)',
+      'App ManoProtect Business (multi-sede)',
+      'Anti-inhibicion Grado 3',
+      'Custodia de llaves',
+      'Grabacion nube 90 dias',
+      'Mantenimiento preventivo trimestral',
+      '3 Sentinel X para propietarios/gerentes',
     ],
   },
 ];
 
-const FEATURES = [
-  { icon: Radio, title: 'Centro de Control 24h', desc: 'Operadores profesionales monitorizan tu alarma las 24 horas. Respuesta inmediata ante cualquier incidencia.' },
-  { icon: Camera, title: 'Verificacion por Video', desc: 'Camaras HD con IA que verifican la intrusion en tiempo real. Sin falsas alarmas. Conexion directa con policia.' },
-  { icon: Zap, title: 'Respuesta Inmediata', desc: 'Si se confirma la intrusion, avisamos a policia, bomberos o ambulancia en menos de 60 segundos.' },
-  { icon: Smartphone, title: 'App ManoProtect', desc: 'Controla tu alarma desde el movil. Arma/desarma, ve camaras en directo, recibe alertas push.' },
-  { icon: Wifi, title: 'Anti-inhibicion', desc: 'Nuestros sistemas detectan inhibidores de frecuencia y activan alerta inmediata. Triple conexion: 4G + WiFi + Ethernet.' },
-  { icon: Lock, title: 'Grado 2 Certificado', desc: 'Todos nuestros kits cumplen normativa europea EN 50131 Grado 2. Homologados por la DGP.' },
+const COMP_ROWS = [
+  { f: 'Precio mensual', e: '34,99 EUR', p: '49,99 EUR', b: '69,99 EUR' },
+  { f: 'Permanencia', e: 'SIN permanencia', p: 'SIN permanencia', b: 'SIN permanencia' },
+  { f: 'Equipo + instalacion', e: 'GRATIS', p: 'GRATIS', b: 'GRATIS' },
+  { f: 'Camaras incluidas', e: '2 Full HD', p: '4 x 2K + 2 PTZ', b: '6 x 4K + 4 PTZ' },
+  { f: 'Sensores movimiento', e: '3 PIR', p: '6 PIR', b: '10 volumetricos' },
+  { f: 'Sirena exterior', e: '110dB', p: '120dB', b: '130dB' },
+  { f: 'Anti-inhibicion', e: true, p: true, b: 'Grado 3' },
+  { f: 'Verificacion video IA', e: true, p: true, b: true },
+  { f: 'Servicio de Acuda', e: false, p: '15 min', b: '10 min prioritario' },
+  { f: 'Control acceso biometrico', e: false, p: 'RFID', b: 'Huella + RFID + facial' },
+  { f: 'Grabacion nube', e: false, p: '30 dias', b: '90 dias' },
+  { f: 'Sentinel X incluido', e: '1 unidad', p: '2 unidades', b: '3 unidades' },
+  { f: 'Mantenimiento', e: 'Remoto', p: 'Semestral', b: 'Trimestral' },
+  { f: 'Multi-sede', e: false, p: false, b: true },
 ];
 
-/* ─── COMPARISON TABLE ─── */
-const COMPARISON_ROWS = [
-  { feature: 'Centralita/Hub inteligente', basico: true, premium: true, empresa: true },
-  { feature: 'Sensores de movimiento PIR', basico: '2', premium: '4 (anti-mascotas)', empresa: '8 volumetricos' },
-  { feature: 'Contactos magneticos', basico: '2', premium: '4', empresa: '6' },
-  { feature: 'Camaras IP HD/4K', basico: false, premium: '2 Full HD', empresa: '4 x 4K + 2 PTZ 360' },
-  { feature: 'Sirena exterior', basico: false, premium: '120dB', empresa: '130dB + interior' },
-  { feature: 'Sensor humo/CO2/gas', basico: false, premium: 'Humo + CO2', empresa: 'Humo + CO2 + Gas' },
-  { feature: 'Sensor inundacion', basico: false, premium: true, empresa: true },
-  { feature: 'Control acceso biometrico', basico: false, premium: 'RFID', empresa: 'Huella + RFID' },
-  { feature: 'Videoportero IP', basico: false, premium: false, empresa: 'Reconocimiento facial' },
-  { feature: 'Grabacion nube', basico: false, premium: '30 dias', empresa: '90 dias' },
-  { feature: 'Verificacion por video', basico: false, premium: true, empresa: true },
-  { feature: 'Sentinel X de regalo', basico: false, premium: '1 unidad', empresa: '2 unidades' },
-  { feature: 'Mantenimiento preventivo', basico: false, premium: false, empresa: 'Trimestral' },
-  { feature: 'Centro de control 24h', basico: true, premium: true, empresa: true },
-  { feature: 'App ManoProtect', basico: true, premium: true, empresa: true },
-  { feature: 'Anti-inhibicion', basico: true, premium: true, empresa: true },
+const COMPETITOR_TABLE = [
+  { feat: 'Precio desde', mp: '24,99 EUR/mes', sd: '39,89 EUR/mes', pg: '44,90 EUR/mes' },
+  { feat: 'Permanencia', mp: 'SIN permanencia', sd: '24 meses', pg: '24-36 meses' },
+  { feat: 'Equipo', mp: 'GRATIS', sd: '149 EUR', pg: 'Incluido' },
+  { feat: 'Camaras en kit basico', mp: '2 Full HD', sd: '1 camara', pg: '1 camara' },
+  { feat: 'App gratuita', mp: true, sd: true, pg: true },
+  { feat: 'Smartwatch SOS incluido', mp: true, sd: false, pg: false },
+  { feat: 'Anti-inhibicion avanzada', mp: true, sd: true, pg: true },
+  { feat: 'IA en camaras', mp: true, sd: false, pg: false },
+  { feat: 'Sin falsas alarmas', mp: 'Video + IA', sd: 'Basico', pg: 'Basico' },
+  { feat: 'Funciona con movil apagado', mp: true, sd: false, pg: false },
 ];
 
-const ComparisonCell = ({ value }) => {
-  if (value === true) return <Check className="w-4 h-4 text-emerald-500 mx-auto" />;
-  if (value === false) return <span className="text-gray-300">—</span>;
-  return <span className="text-xs font-medium text-gray-700">{value}</span>;
+const CVal = ({ v }) => {
+  if (v === true) return <Check className="w-4 h-4 text-emerald-500 mx-auto" />;
+  if (v === false) return <X className="w-4 h-4 text-red-400 mx-auto" />;
+  return <span className="text-xs font-medium text-gray-700">{v}</span>;
 };
 
 const SeguridadViviendaEmpresa = () => {
   const navigate = useNavigate();
   const [openFaq, setOpenFaq] = useState(null);
-  const [activeTab, setActiveTab] = useState('todos');
 
   const faqItems = [
-    { q: 'Necesito obra para instalar la alarma?', a: 'No. Nuestros sistemas son 100% inalambricos. La instalacion profesional se realiza en menos de 2 horas sin obras ni cables.' },
-    { q: 'Que pasa si se va la luz o internet?', a: 'El panel tiene bateria de respaldo de 24h y conexion 4G independiente. Funciona aunque se corte la luz y el WiFi.' },
-    { q: 'Puedo ver las camaras desde el movil?', a: 'Si. Con la app ManoProtect puedes ver las camaras en directo, revisar grabaciones y recibir clips de alerta desde cualquier lugar del mundo.' },
-    { q: 'Hay permanencia?', a: 'No hay permanencia. Puedes cancelar cuando quieras. El equipo se instala gratis con tu suscripcion mensual.' },
-    { q: 'Como funciona el centro de control?', a: 'Operadores formados reciben las senales de tu alarma 24/7. Ante una alerta, verifican por video y actuan: avisan a policia, bomberos o envian servicio de acuda.' },
-    { q: 'Es compatible con el boton SOS de ManoProtect?', a: 'Si. Tu Sentinel (X, J o S) se conecta con el mismo centro de control. Si pulsas el SOS desde el reloj, se activa la misma cadena de respuesta inmediata.' },
-    { q: 'Que diferencia hay con Securitas Direct?', a: 'Ofrecemos la misma monitorizacion profesional 24h pero sin permanencia, con equipo mas avanzado (anti-inhibicion, camaras 4K, IA) y la integracion unica con los relojes Sentinel SOS.' },
-    { q: 'Cubren toda Espana?', a: 'Si. Servicio de instalacion y centro de control disponible en toda la peninsula, Baleares y Canarias.' },
+    { q: 'Por que ManoProtect es mejor que Securitas Direct?', a: 'Ofrecemos la misma monitorizacion CRA 24h pero SIN permanencia (ellos exigen 24 meses), mas camaras en el kit basico (2 vs 1), inteligencia artificial en las camaras para evitar falsas alarmas, y algo unico: un reloj Sentinel con boton SOS incluido GRATIS que funciona incluso con el movil apagado.' },
+    { q: 'Hay permanencia?', a: 'NO. A diferencia de Securitas Direct (24 meses) y Prosegur (24-36 meses), nosotros NO tenemos permanencia. Puedes cancelar cuando quieras sin penalizacion.' },
+    { q: 'El equipo es realmente gratis?', a: 'Si. Hub, camaras, sensores, sirenas, mandos, detectores y Sentinel SOS incluidos sin coste. Solo pagas la cuota mensual que incluye la monitorizacion 24h.' },
+    { q: 'Necesito obra para instalar?', a: 'No. Sistemas 100% inalambricos. Instalacion profesional en menos de 2 horas sin cables ni taladros. El tecnico configura todo y te ensena a usar la app.' },
+    { q: 'Que pasa si se va la luz o internet?', a: 'El hub tiene bateria de respaldo de 24h y conexion 4G independiente. Si se corta la luz o el WiFi, el sistema sigue operativo y conectado al centro de control.' },
+    { q: 'Puedo contratar solo los relojes Sentinel sin la alarma?', a: 'Por supuesto. Los relojes Sentinel X, J y S se pueden contratar de forma independiente con su propio plan de suscripcion. Van a /productos para verlos.' },
+    { q: 'Que es el servicio de Acuda?', a: 'Cuando se confirma una intrusion, ademas de avisar a la policia, enviamos un vigilante de seguridad armado a tu domicilio en 10-15 minutos. Disponible en planes Premium y Business.' },
+    { q: 'Es compatible con mascotas?', a: 'Si. Los sensores PIR anti-mascotas ignoran animales de hasta 25 kg. Puedes tener perros y gatos sin falsas alarmas.' },
   ];
-
-  const filteredComponents = activeTab === 'todos' ? COMPONENTS : COMPONENTS.filter((c) => {
-    if (activeTab === 'camaras') return c.name.toLowerCase().includes('camara');
-    if (activeTab === 'sensores') return c.name.toLowerCase().includes('sensor') || c.name.toLowerCase().includes('contacto') || c.name.toLowerCase().includes('movimiento');
-    if (activeTab === 'control') return c.name.toLowerCase().includes('central') || c.name.toLowerCase().includes('sirena');
-    if (activeTab === 'sentinel') return c.name.toLowerCase().includes('sentinel');
-    return true;
-  });
 
   return (
     <div className="min-h-screen bg-white" data-testid="seguridad-vivienda-empresa">
       <Helmet>
-        <title>Alarmas para Viviendas y Empresas | ManoProtect - Centro de Control 24h</title>
-        <meta name="description" content="Kits de alarma para hogar y empresa con centro de control 24h. Camaras 4K, sensores inteligentes, anti-inhibicion, relojes Sentinel SOS. Instalacion gratuita. Desde 29,99 euros/mes." />
+        <title>Alarmas para Casa y Negocio | ManoProtect - Mejor que Securitas Direct</title>
+        <meta name="description" content="Alarmas para viviendas y empresas desde 24,99 EUR/mes. SIN permanencia. Equipo GRATIS. Camaras IA, centro 24h, Sentinel SOS incluido. Supera a Securitas Direct y Prosegur." />
         <link rel="canonical" href="https://manoprotect.com/seguridad-hogar-empresa" />
-        <script type="application/ld+json">{JSON.stringify({
-          "@context": "https://schema.org", "@type": "Product", "name": "ManoProtect Alarmas Hogar y Empresa",
-          "description": "Sistemas de alarma profesionales con camaras 4K, sensores, sirenas y relojes Sentinel SOS.",
-          "brand": { "@type": "Brand", "name": "ManoProtect" },
-          "offers": { "@type": "AggregateOffer", "priceCurrency": "EUR", "lowPrice": "29.99", "highPrice": "89.99" }
-        })}</script>
       </Helmet>
 
-      {/* Header */}
-      <header className="bg-white border-b border-gray-100 sticky top-0 z-30">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
-          <Link to="/" className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-blue-700 rounded-lg flex items-center justify-center"><Shield className="w-4 h-4 text-white" /></div>
-            <span className="text-blue-800 text-lg font-bold">ManoProtect</span>
+      {/* ═══ HEADER ═══ */}
+      <header className="bg-white/95 backdrop-blur-md border-b border-gray-100 sticky top-0 z-30">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+          <Link to="/" className="flex items-center gap-2.5">
+            <div className="w-9 h-9 bg-gradient-to-br from-blue-600 to-blue-800 rounded-xl flex items-center justify-center shadow-md shadow-blue-200"><Shield className="w-5 h-5 text-white" /></div>
+            <span className="text-gray-900 text-lg font-extrabold tracking-tight">ManoProtect</span>
           </Link>
-          <nav className="hidden sm:flex items-center gap-4 text-sm">
-            <Link to="/productos" className="text-gray-600 hover:text-blue-700">Relojes Sentinel</Link>
-            <Link to="/servicios-sos" className="text-gray-600 hover:text-blue-700">Boton SOS</Link>
-            <Link to="/plans" className="text-gray-600 hover:text-blue-700">Precios</Link>
-            <Link to="/contacto" className="bg-blue-700 text-white px-4 py-1.5 rounded-full text-xs font-bold hover:bg-blue-800 transition-colors">Contacto</Link>
+          <nav className="hidden md:flex items-center gap-6 text-sm font-medium">
+            <Link to="/alarmas/vivienda" className="text-gray-600 hover:text-blue-700 transition-colors">Viviendas</Link>
+            <Link to="/alarmas/negocio" className="text-gray-600 hover:text-blue-700 transition-colors">Negocios</Link>
+            <Link to="/productos" className="text-gray-600 hover:text-blue-700 transition-colors">Relojes Sentinel</Link>
+            <Link to="/plans" className="text-gray-600 hover:text-blue-700 transition-colors">Planes</Link>
+            <Link to="/contacto" className="bg-gradient-to-r from-orange-500 to-red-500 text-white px-5 py-2 rounded-full text-xs font-bold hover:shadow-lg hover:shadow-orange-200 transition-all">Pedir presupuesto</Link>
           </nav>
         </div>
       </header>
 
       {/* ═══ HERO ═══ */}
-      <section className="relative overflow-hidden">
+      <section className="relative min-h-[85vh] flex items-center overflow-hidden">
         <div className="absolute inset-0">
-          <img src={IMG.heroHome} alt="Sistema de alarma ManoProtect instalado en hogar" className="w-full h-full object-cover" />
-          <div className="absolute inset-0 bg-gradient-to-r from-slate-900/95 via-slate-900/80 to-slate-900/40" />
+          <img src={IMG.villaHero} alt="Villa protegida por ManoProtect" className="w-full h-full object-cover" />
+          <div className="absolute inset-0 bg-gradient-to-r from-gray-950/90 via-gray-950/70 to-transparent" />
         </div>
-        <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 py-20 lg:py-28">
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 py-20">
           <div className="max-w-2xl">
-            <div className="inline-flex items-center gap-2 bg-orange-500/20 border border-orange-500/30 px-4 py-1.5 rounded-full mb-6">
-              <Shield className="w-4 h-4 text-orange-400" />
-              <span className="text-xs font-bold text-orange-300 tracking-wide">CENTRO DE CONTROL 24H + SENTINEL SOS</span>
+            <div className="inline-flex items-center gap-2 bg-emerald-500/15 border border-emerald-400/30 px-4 py-2 rounded-full mb-6 backdrop-blur-sm">
+              <Sparkles className="w-4 h-4 text-emerald-400" />
+              <span className="text-xs font-bold text-emerald-300 tracking-wider">N.1 EN SEGURIDAD INTELIGENTE 2026</span>
             </div>
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-5 leading-tight" data-testid="hero-title">
-              Alarmas profesionales para <span className="text-orange-400">viviendas y empresas</span>
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-white mb-6 leading-[1.1] tracking-tight" data-testid="hero-title">
+              Protege lo que <br/><span className="bg-gradient-to-r from-orange-400 to-red-400 bg-clip-text text-transparent">mas importa</span>
             </h1>
-            <p className="text-base sm:text-lg text-slate-300 mb-8 leading-relaxed">
-              Kits completos con camaras 4K, sensores inteligentes, sirenas y centro de control 24h. 
-              Incluye integracion con relojes <strong className="text-white">Sentinel X, J y S</strong>. 
-              Instalacion <strong className="text-orange-400">GRATIS</strong>. Sin permanencia.
+            <p className="text-lg text-gray-300 mb-4 leading-relaxed max-w-xl">
+              Alarmas de ultima generacion con camaras IA, centro de control 24h y el unico sistema con <strong className="text-white">reloj Sentinel SOS incluido</strong>.
             </p>
+            <div className="flex flex-wrap items-center gap-3 mb-8">
+              <span className="bg-red-500/20 border border-red-400/30 text-red-300 px-3 py-1 rounded-full text-xs font-bold">SIN permanencia</span>
+              <span className="bg-blue-500/20 border border-blue-400/30 text-blue-300 px-3 py-1 rounded-full text-xs font-bold">Equipo GRATIS</span>
+              <span className="bg-orange-500/20 border border-orange-400/30 text-orange-300 px-3 py-1 rounded-full text-xs font-bold">Desde 24,99 EUR/mes</span>
+            </div>
             <div className="flex flex-wrap gap-3">
-              <a href="#kits" className="bg-orange-500 hover:bg-orange-600 text-white px-8 py-3.5 rounded-full font-bold text-sm transition-all hover:scale-105 flex items-center gap-2" data-testid="ver-kits-btn">
-                Ver kits de alarma <ArrowRight className="w-4 h-4" />
+              <a href="#kits" className="group bg-gradient-to-r from-orange-500 to-red-500 text-white px-8 py-4 rounded-full font-bold text-sm transition-all hover:shadow-xl hover:shadow-orange-500/30 hover:scale-105 flex items-center gap-2" data-testid="ver-kits-btn">
+                Ver kits de alarma <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </a>
-              <Link to="/contacto" className="bg-white/10 hover:bg-white/20 text-white px-8 py-3.5 rounded-full font-bold text-sm transition-colors border border-white/20 backdrop-blur-sm">
-                Solicitar presupuesto
+              <Link to="/contacto" className="bg-white/10 hover:bg-white/20 text-white px-8 py-4 rounded-full font-bold text-sm transition-all border border-white/20 backdrop-blur-sm">
+                Llamar al 601 510 950
               </Link>
             </div>
-            <div className="mt-10 flex flex-wrap gap-6">
+          </div>
+        </div>
+        {/* Floating stats */}
+        <div className="hidden lg:block absolute right-12 bottom-12 z-10">
+          <div className="bg-white/10 backdrop-blur-xl rounded-2xl border border-white/20 p-6 w-72">
+            <p className="text-white/60 text-xs font-bold uppercase tracking-wider mb-4">POR QUE ELEGIRNOS</p>
+            {[
+              { icon: Award, val: 'SIN permanencia', sub: 'Ellos: 24-36 meses' },
+              { icon: Camera, val: '2 camaras IA incluidas', sub: 'Ellos: 1 camara basica' },
+              { icon: Watch, val: 'Sentinel SOS GRATIS', sub: 'Ellos: no incluyen' },
+              { icon: Zap, val: 'Respuesta < 60 seg', sub: 'Centro de control 24h' },
+            ].map((s, i) => (
+              <div key={i} className="flex items-start gap-3 mb-3 last:mb-0">
+                <div className="w-8 h-8 bg-orange-500/20 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <s.icon className="w-4 h-4 text-orange-400" />
+                </div>
+                <div>
+                  <p className="text-white text-xs font-bold">{s.val}</p>
+                  <p className="text-white/50 text-[10px]">{s.sub}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ═══ SOCIAL PROOF BAR ═══ */}
+      <section className="bg-gray-950 py-4 border-b border-gray-800">
+        <div className="max-w-7xl mx-auto px-4 flex flex-wrap justify-center gap-8 sm:gap-16">
+          {[
+            { val: '+3.200', label: 'Hogares protegidos' },
+            { val: '+950', label: 'Empresas securizadas' },
+            { val: '< 60s', label: 'Tiempo de respuesta' },
+            { val: '4.9/5', label: 'Google Reviews' },
+            { val: '0', label: 'Permanencia' },
+          ].map((s, i) => (
+            <div key={i} className="text-center">
+              <p className="text-white text-lg sm:text-xl font-black">{s.val}</p>
+              <p className="text-gray-500 text-[10px] font-medium uppercase tracking-wider">{s.label}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ═══ CHOOSE YOUR SPACE ═══ */}
+      <section className="py-20 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl sm:text-4xl font-black text-gray-900 mb-3 tracking-tight">Que quieres proteger?</h2>
+            <p className="text-gray-500 text-sm max-w-lg mx-auto">Soluciones profesionales adaptadas a tu espacio. Elige tu tipo y descubre todos los detalles.</p>
+          </div>
+          <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+            {/* Vivienda */}
+            <Link to="/alarmas/vivienda" className="group relative overflow-hidden rounded-3xl border-2 border-transparent hover:border-blue-400 transition-all duration-300 hover:shadow-2xl" data-testid="card-vivienda">
+              <div className="aspect-[16/10] overflow-hidden">
+                <img src={IMG.apartment} alt="Alarma para vivienda" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                <div className="absolute inset-0 bg-gradient-to-t from-gray-900/90 via-gray-900/30 to-transparent" />
+              </div>
+              <div className="absolute bottom-0 left-0 right-0 p-6">
+                <div className="flex items-center gap-2 mb-2">
+                  <Home className="w-5 h-5 text-blue-400" />
+                  <span className="text-blue-400 text-xs font-bold uppercase tracking-wider">Viviendas</span>
+                </div>
+                <h3 className="text-white text-xl font-bold mb-1">Pisos, chalets y casas</h3>
+                <p className="text-gray-300 text-xs mb-3">Desde 24,99 EUR/mes. Equipo + instalacion GRATIS.</p>
+                <span className="inline-flex items-center gap-1 text-blue-400 text-xs font-bold group-hover:gap-2 transition-all">
+                  Ver detalles completos <ArrowRight className="w-3 h-3" />
+                </span>
+              </div>
+            </Link>
+            {/* Negocio */}
+            <Link to="/alarmas/negocio" className="group relative overflow-hidden rounded-3xl border-2 border-transparent hover:border-emerald-400 transition-all duration-300 hover:shadow-2xl" data-testid="card-negocio">
+              <div className="aspect-[16/10] overflow-hidden">
+                <img src={IMG.businessLobby} alt="Alarma para negocio" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                <div className="absolute inset-0 bg-gradient-to-t from-gray-900/90 via-gray-900/30 to-transparent" />
+              </div>
+              <div className="absolute bottom-0 left-0 right-0 p-6">
+                <div className="flex items-center gap-2 mb-2">
+                  <Building2 className="w-5 h-5 text-emerald-400" />
+                  <span className="text-emerald-400 text-xs font-bold uppercase tracking-wider">Negocios</span>
+                </div>
+                <h3 className="text-white text-xl font-bold mb-1">Locales, naves y oficinas</h3>
+                <p className="text-gray-300 text-xs mb-3">Desde 54,99 EUR/mes. Control acceso + camaras 4K.</p>
+                <span className="inline-flex items-center gap-1 text-emerald-400 text-xs font-bold group-hover:gap-2 transition-all">
+                  Ver detalles completos <ArrowRight className="w-3 h-3" />
+                </span>
+              </div>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* ═══ COMPONENTS SHOWCASE ═══ */}
+      <section className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          <div className="text-center mb-10">
+            <h2 className="text-3xl sm:text-4xl font-black text-gray-900 mb-3 tracking-tight">Equipamiento de ultima generacion</h2>
+            <p className="text-gray-500 text-sm">Componentes premium que superan a cualquier competidor del mercado.</p>
+          </div>
+          {/* Full-width kit image */}
+          <div className="mb-10 rounded-3xl overflow-hidden shadow-2xl shadow-gray-200">
+            <img src={IMG.premiumKit} alt="Kit completo ManoProtect: centralita, camaras, sensores, sirena, mandos, detectores" className="w-full object-cover" data-testid="components-hero-img" />
+          </div>
+          {/* Component grid */}
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            {[
+              { icon: Radio, img: IMG.controlPanel, name: 'Centralita Hub Pro', desc: 'Pantalla tactil HD, sirena integrada, bateria 24h, conexion 4G+WiFi+Ethernet.' },
+              { icon: Camera, img: IMG.camera4k, name: 'Camaras IP 4K con IA', desc: 'Vision nocturna, deteccion inteligente, audio bidireccional, grabacion nube.' },
+              { icon: Volume2, img: IMG.outdoorSiren, name: 'Sirena Exterior 130dB', desc: 'Flash LED estroboscopico, resistente IP65, disuasion maxima anti-intrusion.' },
+              { icon: Watch, img: IMG.sentinelTrio, name: 'Relojes Sentinel X/J/S', desc: 'GPS, boton SOS, E-SIM integrada. Funciona sin movil. INCLUIDO en cada kit.' },
+            ].map((c, i) => (
+              <div key={i} className="group bg-gray-50 rounded-2xl overflow-hidden border border-gray-100 hover:shadow-xl hover:border-gray-200 transition-all duration-300" data-testid={`component-${i}`}>
+                <div className="aspect-[4/3] overflow-hidden">
+                  <img src={c.img} alt={c.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" />
+                </div>
+                <div className="p-4">
+                  <div className="flex items-center gap-2 mb-1.5">
+                    <c.icon className="w-4 h-4 text-blue-600" />
+                    <h3 className="font-bold text-gray-900 text-sm">{c.name}</h3>
+                  </div>
+                  <p className="text-xs text-gray-500 leading-relaxed">{c.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+          {/* Remote controls */}
+          <div className="mt-10 grid lg:grid-cols-2 gap-6 items-center">
+            <div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-3">Mandos premium con diseno exclusivo</h3>
+              <p className="text-gray-600 text-sm mb-4 leading-relaxed">Tres acabados de lujo para elegir: blanco con LED azul, negro con detalles dorados y rosa dorado con textura premium. Cada mando incluye boton de panico y activacion con un toque.</p>
+              <div className="flex gap-4">
+                {[
+                  { color: 'bg-sky-100 text-sky-700', label: 'Blanco Hielo' },
+                  { color: 'bg-gray-900 text-amber-400', label: 'Negro y Oro' },
+                  { color: 'bg-rose-100 text-rose-600', label: 'Rosa Dorado' },
+                ].map((m, i) => (
+                  <div key={i} className={`${m.color} px-4 py-2 rounded-xl text-xs font-bold`}>{m.label}</div>
+                ))}
+              </div>
+            </div>
+            <div className="rounded-2xl overflow-hidden shadow-xl">
+              <img src={IMG.remotesTrio} alt="Mandos premium ManoProtect en tres colores" className="w-full object-cover" loading="lazy" data-testid="remotes-img" />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ═══ 3 KITS ═══ */}
+      <section id="kits" className="py-20 bg-gray-950" data-testid="kits-section">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl sm:text-4xl font-black text-white mb-3 tracking-tight">Los 3 mejores kits de alarma del mercado</h2>
+            <p className="text-gray-400 text-sm">Equipo GRATIS + instalacion profesional. SIN permanencia. Sentinel SOS incluido.</p>
+          </div>
+          <div className="grid lg:grid-cols-3 gap-6">
+            {KITS.map((kit) => (
+              <div key={kit.id} className={`relative rounded-3xl overflow-hidden ${kit.popular ? 'ring-2 ring-orange-500 shadow-2xl shadow-orange-500/20' : 'ring-1 ring-gray-800'} bg-gray-900 transition-all hover:ring-2 hover:ring-gray-600`} data-testid={`kit-${kit.id}`}>
+                {kit.popular && (
+                  <div className="bg-gradient-to-r from-orange-500 to-red-500 text-white text-center py-2 text-xs font-bold tracking-wider">{kit.badge}</div>
+                )}
+                {!kit.popular && (
+                  <div className="bg-gray-800 text-gray-400 text-center py-2 text-xs font-bold tracking-wider">{kit.badge}</div>
+                )}
+                <div className="aspect-[16/9] overflow-hidden">
+                  <img src={kit.img} alt={kit.name} className="w-full h-full object-cover opacity-80" loading="lazy" />
+                </div>
+                <div className="p-6">
+                  <h3 className="text-xl font-bold text-white mb-1">{kit.name}</h3>
+                  <p className="text-gray-400 text-xs mb-4">{kit.subtitle}</p>
+                  <div className="mb-5">
+                    <div className="flex items-end gap-2">
+                      <span className="text-4xl font-black text-white">{kit.promoMonthly}</span>
+                      <span className="text-gray-500 text-sm mb-1">EUR/mes</span>
+                    </div>
+                    <p className="text-orange-400 text-xs font-bold mt-1">{kit.promoLabel} (despues {kit.monthly} EUR/mes)</p>
+                    <p className="text-emerald-400 text-xs font-bold mt-0.5">Equipo e instalacion GRATIS</p>
+                  </div>
+                  {/* Equipment */}
+                  <p className="text-gray-500 text-[10px] font-bold uppercase tracking-wider mb-2">EQUIPO INCLUIDO</p>
+                  <ul className="space-y-1.5 mb-4">
+                    {kit.equipment.slice(0, 5).map((item, i) => (
+                      <li key={i} className="flex items-start gap-2 text-xs text-gray-300">
+                        <Check className="w-3 h-3 text-emerald-500 flex-shrink-0 mt-0.5" /><span>{item}</span>
+                      </li>
+                    ))}
+                    {kit.equipment.length > 5 && <li className="text-xs text-gray-500">+ {kit.equipment.length - 5} componentes mas...</li>}
+                  </ul>
+                  {/* Services */}
+                  <p className="text-gray-500 text-[10px] font-bold uppercase tracking-wider mb-2">SERVICIOS INCLUIDOS</p>
+                  <ul className="space-y-1.5 mb-6">
+                    {kit.services.slice(0, 4).map((item, i) => (
+                      <li key={i} className="flex items-start gap-2 text-xs text-gray-300">
+                        <Star className="w-3 h-3 text-orange-400 flex-shrink-0 mt-0.5" /><span>{item}</span>
+                      </li>
+                    ))}
+                    {kit.services.length > 4 && <li className="text-xs text-gray-500">+ {kit.services.length - 4} servicios mas...</li>}
+                  </ul>
+                  <div className="space-y-2">
+                    <button onClick={() => navigate('/contacto')}
+                      className={`w-full py-3.5 rounded-xl font-bold text-sm transition-all text-white ${kit.popular ? 'bg-gradient-to-r from-orange-500 to-red-500 hover:shadow-lg hover:shadow-orange-500/30' : 'bg-gray-800 hover:bg-gray-700'}`}
+                      data-testid={`cta-${kit.id}`}>
+                      Solicitar instalacion GRATIS
+                    </button>
+                    <Link to={kit.link} className="block w-full py-2.5 rounded-xl font-bold text-xs text-gray-400 hover:text-white text-center transition-colors">
+                      Ver detalles completos
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ═══ VS COMPETITION ═══ */}
+      <section className="py-20 bg-white" data-testid="competition-section">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6">
+          <div className="text-center mb-10">
+            <h2 className="text-3xl sm:text-4xl font-black text-gray-900 mb-3 tracking-tight">ManoProtect vs la competencia</h2>
+            <p className="text-gray-500 text-sm">Comparanos con Securitas Direct y Prosegur. Los datos hablan.</p>
+          </div>
+          <div className="grid lg:grid-cols-2 gap-8 items-center mb-10">
+            <div className="rounded-2xl overflow-hidden shadow-xl">
+              <img src={IMG.comparison} alt="ManoProtect vs competencia" className="w-full" loading="lazy" />
+            </div>
+            <div>
+              <h3 className="text-xl font-bold text-gray-900 mb-4">Por que somos la mejor opcion</h3>
               {[
-                { icon: Radio, val: '24/7', label: 'Centro control' },
-                { icon: Zap, val: '<60s', label: 'Respuesta' },
-                { icon: Lock, val: 'Grado 2', label: 'Certificado UE' },
-                { icon: Watch, val: 'Sentinel', label: 'SOS integrado' },
-              ].map((s, i) => (
-                <div key={i} className="flex items-center gap-2">
-                  <div className="w-9 h-9 bg-white/10 rounded-lg flex items-center justify-center">
-                    <s.icon className="w-4 h-4 text-orange-400" />
+                { icon: Award, text: 'SIN permanencia vs 24-36 meses de la competencia' },
+                { icon: Camera, text: '2 camaras IA incluidas vs 1 camara basica' },
+                { icon: Watch, text: 'Sentinel SOS incluido - unico en el mercado' },
+                { icon: Zap, text: 'Verificacion por video con IA - cero falsas alarmas' },
+                { icon: Globe, text: 'Funciona con el movil apagado gracias a E-SIM' },
+                { icon: Sparkles, text: 'Precio desde 24,99 EUR/mes vs 39,89 EUR competencia' },
+              ].map((a, i) => (
+                <div key={i} className="flex items-start gap-3 mb-3">
+                  <div className="w-8 h-8 bg-emerald-50 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <a.icon className="w-4 h-4 text-emerald-600" />
                   </div>
-                  <div>
-                    <p className="text-white text-xs font-bold">{s.val}</p>
-                    <p className="text-slate-400 text-[10px]">{s.label}</p>
-                  </div>
+                  <p className="text-sm text-gray-700 pt-1">{a.text}</p>
                 </div>
               ))}
             </div>
           </div>
-        </div>
-      </section>
-
-      {/* ═══ COMPONENTS GALLERY ═══ */}
-      <section className="py-16 bg-slate-50" data-testid="components-section">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6">
-          <div className="text-center mb-8">
-            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3">Componentes de nuestros kits</h2>
-            <p className="text-gray-500 text-sm max-w-2xl mx-auto">Equipamiento profesional de ultima generacion. Camaras, sensores, sirenas, centralitas, mandos y los relojes Sentinel con boton SOS.</p>
-          </div>
-
-          {/* Full-width components image */}
-          <div className="mb-8 rounded-2xl overflow-hidden shadow-lg">
-            <img src={IMG.componentsGrid} alt="Componentes del kit de alarma ManoProtect: centralita, camaras, sensores, sirena, mando, detector de humo" className="w-full object-cover" data-testid="components-hero-img" />
-          </div>
-
-          {/* Filter tabs */}
-          <div className="flex flex-wrap justify-center gap-2 mb-8">
-            {[
-              { id: 'todos', label: 'Todos' },
-              { id: 'camaras', label: 'Camaras' },
-              { id: 'sensores', label: 'Sensores' },
-              { id: 'control', label: 'Centralitas y Sirenas' },
-              { id: 'sentinel', label: 'Relojes Sentinel' },
-            ].map(tab => (
-              <button key={tab.id} onClick={() => setActiveTab(tab.id)}
-                className={`px-4 py-2 rounded-full text-xs font-bold transition-all ${activeTab === tab.id ? 'bg-blue-700 text-white shadow-md' : 'bg-white text-gray-600 hover:bg-gray-100 border border-gray-200'}`}
-                data-testid={`tab-${tab.id}`}>
-                {tab.label}
-              </button>
-            ))}
-          </div>
-
-          {/* Component cards grid */}
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            {filteredComponents.map((comp, i) => (
-              <div key={i} className="group bg-white rounded-2xl overflow-hidden border border-gray-100 hover:shadow-xl hover:border-blue-200 transition-all duration-300" data-testid={`component-card-${i}`}>
-                <div className="aspect-[4/3] overflow-hidden bg-gray-100">
-                  <img src={comp.img} alt={comp.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" />
-                </div>
-                <div className="p-5">
-                  <div className="flex items-center gap-2 mb-2">
-                    <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center">
-                      <comp.icon className="w-4 h-4 text-blue-700" />
-                    </div>
-                    <h3 className="font-bold text-gray-900 text-sm">{comp.name}</h3>
-                  </div>
-                  <p className="text-xs text-gray-500 leading-relaxed">{comp.desc}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ═══ FEATURES ═══ */}
-      <section className="py-16 bg-white">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6">
-          <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 text-center mb-10">Seguridad de nivel profesional</h2>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {FEATURES.map((f, i) => (
-              <div key={i} className="bg-slate-50 rounded-2xl p-5 hover:shadow-md transition-shadow border border-transparent hover:border-blue-100" data-testid={`feature-${i}`}>
-                <div className="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center mb-3">
-                  <f.icon className="w-5 h-5 text-blue-700" />
-                </div>
-                <h3 className="font-bold text-gray-900 text-sm mb-1">{f.title}</h3>
-                <p className="text-xs text-gray-500 leading-relaxed">{f.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ═══ KITS ═══ */}
-      <section id="kits" className="py-16 bg-slate-50" data-testid="kits-section">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6">
-          <div className="text-center mb-10">
-            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3">Elige tu kit de alarma</h2>
-            <p className="text-gray-500 text-sm">Equipo GRATIS + instalacion profesional incluida. Sin permanencia. Cancela cuando quieras.</p>
-          </div>
-          <div className="grid lg:grid-cols-3 gap-6">
-            {KITS.map((kit) => {
-              const colors = {
-                blue: { bg: 'bg-blue-100', text: 'text-blue-700', btn: 'bg-blue-700 hover:bg-blue-800', check: 'text-blue-600' },
-                orange: { bg: 'bg-orange-100', text: 'text-orange-600', btn: 'bg-orange-500 hover:bg-orange-600', check: 'text-orange-500' },
-                emerald: { bg: 'bg-emerald-100', text: 'text-emerald-600', btn: 'bg-emerald-600 hover:bg-emerald-700', check: 'text-emerald-500' },
-              }[kit.color];
-              return (
-                <div key={kit.id} className={`bg-white rounded-2xl border-2 ${kit.popular ? 'border-orange-400 shadow-xl shadow-orange-100/50' : 'border-gray-200 hover:border-gray-300'} overflow-hidden relative transition-all hover:shadow-lg`} data-testid={`kit-${kit.id}`}>
-                  {kit.popular && (
-                    <div className="bg-orange-500 text-white text-center py-1.5 text-xs font-bold tracking-wide">MAS POPULAR - RECOMENDADO</div>
-                  )}
-                  {/* Kit image */}
-                  <div className="aspect-[16/9] overflow-hidden bg-gray-100">
-                    <img src={kit.img} alt={kit.name} className="w-full h-full object-cover" loading="lazy" />
-                  </div>
-                  <div className="p-6">
-                    <div className={`w-12 h-12 ${colors.bg} rounded-xl flex items-center justify-center mb-3`}>
-                      <kit.icon className={`w-6 h-6 ${colors.text}`} />
-                    </div>
-                    <h3 className="text-xl font-bold text-gray-900">{kit.name}</h3>
-                    <p className="text-sm text-gray-500 mb-4">{kit.tagline}</p>
-                    <div className="mb-4">
-                      <div className="flex items-baseline gap-1">
-                        <span className="text-3xl font-bold text-gray-900">{kit.monthly}EUR</span>
-                        <span className="text-gray-500 text-sm">/mes</span>
-                      </div>
-                      <p className="text-xs text-emerald-600 font-semibold mt-1">Equipo e instalacion GRATIS</p>
-                    </div>
-                    <ul className="space-y-2 mb-6">
-                      {kit.items.map((item, i) => (
-                        <li key={i} className="flex items-start gap-2 text-xs text-gray-600">
-                          <Check className={`w-3.5 h-3.5 ${colors.check} flex-shrink-0 mt-0.5`} />
-                          <span className={item.bold ? 'font-semibold text-gray-800' : ''}>{item.text}</span>
-                        </li>
-                      ))}
-                    </ul>
-                    <button onClick={() => navigate('/contacto')}
-                      className={`w-full py-3 rounded-xl font-bold text-sm transition-all text-white ${colors.btn} hover:shadow-md`}
-                      data-testid={`cta-${kit.id}`}>
-                      Solicitar instalacion gratis
-                    </button>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* ═══ COMPARISON TABLE ═══ */}
-      <section className="py-16 bg-white" data-testid="comparison-section">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6">
-          <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 text-center mb-8">Comparativa de kits</h2>
+          {/* Table */}
           <div className="overflow-x-auto rounded-2xl border border-gray-200 shadow-sm">
             <table className="w-full text-sm">
               <thead>
-                <tr className="bg-slate-50 border-b border-gray-200">
-                  <th className="text-left p-4 text-xs font-bold text-gray-500 uppercase tracking-wide w-1/3">Caracteristica</th>
-                  <th className="text-center p-4 text-xs font-bold text-blue-700 uppercase tracking-wide">Hogar Basico<br/><span className="text-gray-500 font-normal">29,99EUR/mes</span></th>
-                  <th className="text-center p-4 text-xs font-bold text-orange-600 uppercase tracking-wide bg-orange-50/50">Hogar Premium<br/><span className="text-gray-500 font-normal">49,99EUR/mes</span></th>
-                  <th className="text-center p-4 text-xs font-bold text-emerald-700 uppercase tracking-wide">Empresa<br/><span className="text-gray-500 font-normal">89,99EUR/mes</span></th>
+                <tr className="bg-gray-50">
+                  <th className="text-left p-4 text-xs font-bold text-gray-500 uppercase w-1/4"></th>
+                  <th className="text-center p-4 text-xs font-bold text-blue-700 uppercase bg-blue-50">ManoProtect</th>
+                  <th className="text-center p-4 text-xs font-bold text-gray-500 uppercase">Securitas Direct</th>
+                  <th className="text-center p-4 text-xs font-bold text-gray-500 uppercase">Prosegur</th>
                 </tr>
               </thead>
               <tbody>
-                {COMPARISON_ROWS.map((row, i) => (
-                  <tr key={i} className={`border-b border-gray-100 ${i % 2 === 0 ? 'bg-white' : 'bg-slate-50/50'}`}>
-                    <td className="p-3 text-xs font-medium text-gray-700">{row.feature}</td>
-                    <td className="p-3 text-center"><ComparisonCell value={row.basico} /></td>
-                    <td className="p-3 text-center bg-orange-50/30"><ComparisonCell value={row.premium} /></td>
-                    <td className="p-3 text-center"><ComparisonCell value={row.empresa} /></td>
+                {COMPETITOR_TABLE.map((r, i) => (
+                  <tr key={i} className={`border-t border-gray-100 ${i % 2 ? 'bg-gray-50/50' : ''}`}>
+                    <td className="p-3 text-xs font-medium text-gray-700">{r.feat}</td>
+                    <td className="p-3 text-center bg-blue-50/30"><CVal v={r.mp} /></td>
+                    <td className="p-3 text-center"><CVal v={r.sd} /></td>
+                    <td className="p-3 text-center"><CVal v={r.pg} /></td>
                   </tr>
                 ))}
               </tbody>
@@ -442,184 +515,90 @@ const SeguridadViviendaEmpresa = () => {
         </div>
       </section>
 
-      {/* ═══ HOW IT WORKS ═══ */}
-      <section className="py-16 bg-slate-50">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6">
-          <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 text-center mb-10">Como funciona</h2>
-          <div className="grid sm:grid-cols-4 gap-6">
-            {[
-              { step: '1', title: 'Elige tu kit', desc: 'Selecciona el pack ideal para tu vivienda o empresa. Te asesoramos gratis.', icon: Package },
-              { step: '2', title: 'Instalacion gratis', desc: 'Un tecnico profesional instala todo en menos de 2 horas sin obras.', icon: Zap },
-              { step: '3', title: 'Centro de control', desc: 'Tu alarma queda conectada a nuestro centro 24h con operadores reales.', icon: Radio },
-              { step: '4', title: 'Proteccion total', desc: 'Controla todo desde la app. Tu Sentinel SOS tambien conectado.', icon: Shield },
-            ].map((s, i) => (
-              <div key={i} className="text-center group">
-                <div className="w-16 h-16 bg-blue-700 text-white rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform shadow-lg shadow-blue-200">
-                  <s.icon className="w-7 h-7" />
-                </div>
-                <div className="w-8 h-8 bg-orange-500 text-white rounded-full flex items-center justify-center mx-auto -mt-8 mb-2 text-xs font-bold border-2 border-white shadow-sm">{s.step}</div>
-                <h3 className="font-bold text-gray-900 text-sm mb-1">{s.title}</h3>
-                <p className="text-xs text-gray-500">{s.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ═══ SENTINEL SOS CONNECTION ═══ */}
-      <section className="py-16 bg-gradient-to-b from-slate-900 via-blue-950 to-slate-900 text-white overflow-hidden">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6">
+      {/* ═══ SENTINEL INTEGRATION ═══ */}
+      <section className="py-20 bg-gradient-to-b from-gray-950 to-blue-950 overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="grid lg:grid-cols-2 gap-10 items-center">
             <div>
-              <div className="inline-flex items-center gap-2 bg-orange-500/20 border border-orange-500/30 px-3 py-1 rounded-full mb-4">
-                <Watch className="w-3 h-3 text-orange-400" />
+              <div className="inline-flex items-center gap-2 bg-orange-500/15 border border-orange-400/30 px-3 py-1.5 rounded-full mb-5">
+                <Watch className="w-3.5 h-3.5 text-orange-400" />
                 <span className="text-[10px] font-bold text-orange-300 tracking-wider">EXCLUSIVO MANOPROTECT</span>
               </div>
-              <h2 className="text-2xl sm:text-3xl font-bold mb-4">Conectado con tus relojes Sentinel X, J y S</h2>
-              <p className="text-slate-300 text-sm mb-6 leading-relaxed">
-                Tu alarma de hogar o empresa se conecta con el mismo centro de control que tus relojes Sentinel. 
-                Si pulsas el boton SOS desde cualquier lugar del mundo, nuestro equipo responde al instante.
+              <h2 className="text-3xl sm:text-4xl font-black text-white mb-4 tracking-tight">Sentinel SOS incluido en cada kit</h2>
+              <p className="text-gray-300 text-sm mb-6 leading-relaxed">
+                Ningun competidor ofrece esto. Con cada kit de alarma, recibes relojes Sentinel con boton SOS 
+                conectados al mismo centro de control 24h. GPS, E-SIM integrada, sensor cardiaco.
               </p>
-              <div className="space-y-3 mb-6">
+              <div className="space-y-3 mb-8">
                 {[
-                  'GPS en tiempo real desde el reloj',
-                  'Boton SOS conectado al centro de control 24h',
+                  'Boton SOS conectado al centro 24h',
+                  'GPS en tiempo real',
                   'E-SIM integrada: funciona sin movil',
                   'Sensor cardiaco y alerta de caida',
                   'Funciona en segundo plano',
+                  'Arma/desarma la alarma desde la muneca',
                 ].map((item, i) => (
-                  <div key={i} className="flex items-center gap-2">
-                    <Check className="w-4 h-4 text-orange-400 flex-shrink-0" />
-                    <span className="text-sm text-slate-200">{item}</span>
+                  <div key={i} className="flex items-center gap-2.5">
+                    <Check className="w-4 h-4 text-emerald-400 flex-shrink-0" />
+                    <span className="text-sm text-gray-200">{item}</span>
                   </div>
                 ))}
               </div>
               <div className="flex flex-wrap gap-3">
-                <Link to="/productos" className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-2.5 rounded-full text-xs font-bold transition-colors flex items-center gap-2" data-testid="ver-sentinel-btn">
+                <Link to="/productos" className="bg-gradient-to-r from-orange-500 to-red-500 text-white px-6 py-3 rounded-full text-xs font-bold transition-all hover:shadow-lg hover:shadow-orange-500/30 flex items-center gap-2" data-testid="ver-sentinel-btn">
                   Ver relojes Sentinel <ArrowRight className="w-3 h-3" />
                 </Link>
-                <Link to="/servicios-sos" className="bg-white/10 hover:bg-white/20 text-white px-6 py-2.5 rounded-full text-xs font-bold transition-colors border border-white/20">
-                  Mas sobre SOS
-                </Link>
+                <p className="text-gray-500 text-xs self-center">Tambien puedes contratarlos sin la alarma</p>
               </div>
             </div>
             <div className="flex justify-center">
-              <div className="relative">
-                <img src={IMG.sentinelTrio} alt="Relojes Sentinel X, J y S con boton SOS" className="rounded-2xl shadow-2xl max-w-md w-full" data-testid="sentinel-trio-img" />
-                <div className="absolute -bottom-4 -right-4 bg-orange-500 text-white px-4 py-2 rounded-xl shadow-lg">
-                  <p className="text-xs font-bold">Incluido con Kit Premium</p>
-                </div>
-              </div>
+              <img src={IMG.sentinelTrio} alt="Relojes Sentinel X, J y S" className="rounded-3xl shadow-2xl max-w-lg w-full" data-testid="sentinel-trio-img" />
             </div>
           </div>
         </div>
       </section>
 
-      {/* ═══ SENTINEL WATCH + ALARM COMBO ═══ */}
-      <section className="py-16 bg-white">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6">
-          <div className="grid lg:grid-cols-2 gap-8 items-center">
-            <div className="order-2 lg:order-1">
-              <img src={IMG.sentinelWatch} alt="Reloj Sentinel mostrando estado de alarma del hogar y boton SOS" className="rounded-2xl shadow-xl max-w-sm w-full mx-auto" data-testid="sentinel-watch-img" />
-            </div>
-            <div className="order-1 lg:order-2">
-              <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-4">Controla tu alarma desde la muneca</h2>
-              <p className="text-gray-600 text-sm mb-6 leading-relaxed">
-                Con el reloj Sentinel, puedes armar y desarmar tu sistema de alarma, ver el estado en tiempo real 
-                y activar el boton SOS de emergencia, todo desde tu muneca. Incluso con el movil apagado.
-              </p>
-              <div className="grid grid-cols-2 gap-3">
-                {[
-                  { icon: Shield, text: 'Armar/Desarmar alarma' },
-                  { icon: Camera, text: 'Ver camaras en directo' },
-                  { icon: Bell, text: 'Alertas en tiempo real' },
-                  { icon: MapPin, text: 'GPS familiar' },
-                  { icon: AlertTriangle, text: 'SOS emergencia' },
-                  { icon: Smartphone, text: 'Sin necesidad de movil' },
-                ].map((f, i) => (
-                  <div key={i} className="flex items-center gap-2 bg-slate-50 rounded-lg p-3">
-                    <f.icon className="w-4 h-4 text-blue-700 flex-shrink-0" />
-                    <span className="text-xs text-gray-700 font-medium">{f.text}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ═══ BUSINESS SECURITY ═══ */}
-      <section className="py-16 bg-slate-50" data-testid="business-section">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6">
-          <div className="grid lg:grid-cols-2 gap-8 items-center">
-            <div>
-              <div className="inline-flex items-center gap-2 bg-emerald-100 px-3 py-1 rounded-full mb-4">
-                <Building2 className="w-3 h-3 text-emerald-700" />
-                <span className="text-[10px] font-bold text-emerald-700 tracking-wider">SEGURIDAD EMPRESARIAL</span>
-              </div>
-              <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-4">Proteccion integral para tu negocio</h2>
-              <p className="text-gray-600 text-sm mb-6 leading-relaxed">
-                Camaras PTZ 360 grados con IA, control de acceso biometrico, videoportero con reconocimiento facial,
-                sistema anti-inhibicion y centro de control con servicio de acuda. Todo lo que necesita tu empresa.
-              </p>
-              <div className="space-y-3 mb-6">
-                {[
-                  'Camaras 4K con deteccion inteligente de personas',
-                  'Camaras PTZ 360 grados con vision nocturna',
-                  'Control de acceso por huella dactilar + RFID',
-                  'Videoportero IP con reconocimiento facial',
-                  'Deteccion de humo, CO2 y fugas de gas',
-                  'Grabacion en la nube 90 dias',
-                  'Mantenimiento preventivo trimestral',
-                ].map((item, i) => (
-                  <div key={i} className="flex items-center gap-2">
-                    <Check className="w-4 h-4 text-emerald-500 flex-shrink-0" />
-                    <span className="text-sm text-gray-700">{item}</span>
-                  </div>
-                ))}
-              </div>
-              <button onClick={() => navigate('/contacto')} className="bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-3 rounded-full text-sm font-bold transition-all hover:shadow-lg" data-testid="business-cta">
-                Solicitar presupuesto empresa
-              </button>
-            </div>
-            <div>
-              <img src={IMG.businessSecurity} alt="Sistema de seguridad empresarial con camaras PTZ y control de acceso" className="rounded-2xl shadow-xl w-full" data-testid="business-img" loading="lazy" />
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ═══ TRUST BADGES ═══ */}
-      <section className="py-12 bg-white border-y border-gray-100">
+      {/* ═══ PLANS COMPARISON ═══ */}
+      <section className="py-20 bg-gray-50" data-testid="plans-comparison">
         <div className="max-w-5xl mx-auto px-4 sm:px-6">
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 text-center">
-            {[
-              { val: '+2.500', label: 'Hogares protegidos' },
-              { val: '+800', label: 'Empresas securizadas' },
-              { val: '<60s', label: 'Tiempo de respuesta' },
-              { val: '4.8/5', label: 'Valoracion clientes' },
-            ].map((s, i) => (
-              <div key={i}>
-                <p className="text-2xl sm:text-3xl font-bold text-blue-700">{s.val}</p>
-                <p className="text-xs text-gray-500 mt-1">{s.label}</p>
-              </div>
-            ))}
+          <h2 className="text-3xl font-black text-gray-900 text-center mb-10 tracking-tight">Comparativa de nuestros planes</h2>
+          <div className="overflow-x-auto rounded-2xl border border-gray-200 shadow-sm bg-white">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="bg-gray-50 border-b border-gray-200">
+                  <th className="text-left p-4 text-xs font-bold text-gray-500 uppercase w-[30%]">Caracteristica</th>
+                  <th className="text-center p-4 text-xs font-bold text-sky-700 uppercase">Essential<br/><span className="text-gray-500 font-normal">34,99 EUR</span></th>
+                  <th className="text-center p-4 text-xs font-bold text-orange-600 uppercase bg-orange-50/50">Premium<br/><span className="text-gray-500 font-normal">49,99 EUR</span></th>
+                  <th className="text-center p-4 text-xs font-bold text-emerald-700 uppercase">Business<br/><span className="text-gray-500 font-normal">69,99 EUR</span></th>
+                </tr>
+              </thead>
+              <tbody>
+                {COMP_ROWS.map((r, i) => (
+                  <tr key={i} className={`border-t border-gray-100 ${i % 2 ? 'bg-gray-50/50' : ''}`}>
+                    <td className="p-3 text-xs font-medium text-gray-700">{r.f}</td>
+                    <td className="p-3 text-center"><CVal v={r.e} /></td>
+                    <td className="p-3 text-center bg-orange-50/20"><CVal v={r.p} /></td>
+                    <td className="p-3 text-center"><CVal v={r.b} /></td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </div>
       </section>
 
       {/* ═══ FAQ ═══ */}
-      <section className="py-16 bg-slate-50">
+      <section className="py-20 bg-white">
         <div className="max-w-3xl mx-auto px-4 sm:px-6">
-          <h2 className="text-2xl font-bold text-gray-900 text-center mb-8">Preguntas frecuentes</h2>
+          <h2 className="text-3xl font-black text-gray-900 text-center mb-10 tracking-tight">Preguntas frecuentes</h2>
           <div className="space-y-2" data-testid="faq-section">
             {faqItems.map((item, i) => (
-              <div key={i} className="bg-white border border-gray-200 rounded-xl overflow-hidden">
-                <button onClick={() => setOpenFaq(openFaq === i ? null : i)} className="w-full flex items-center justify-between p-4 text-left hover:bg-slate-50 transition-colors">
-                  <span className="font-semibold text-gray-900 text-sm pr-4">{item.q}</span>
-                  <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform flex-shrink-0 ${openFaq === i ? 'rotate-180' : ''}`} />
+              <div key={i} className="bg-gray-50 border border-gray-200 rounded-2xl overflow-hidden">
+                <button onClick={() => setOpenFaq(openFaq === i ? null : i)} className="w-full flex items-center justify-between p-5 text-left hover:bg-gray-100 transition-colors">
+                  <span className="font-bold text-gray-900 text-sm pr-4">{item.q}</span>
+                  <ChevronDown className={`w-5 h-5 text-gray-400 transition-transform flex-shrink-0 ${openFaq === i ? 'rotate-180' : ''}`} />
                 </button>
-                {openFaq === i && <div className="px-4 pb-4 text-sm text-gray-600 leading-relaxed">{item.a}</div>}
+                {openFaq === i && <div className="px-5 pb-5 text-sm text-gray-600 leading-relaxed">{item.a}</div>}
               </div>
             ))}
           </div>
@@ -627,16 +606,16 @@ const SeguridadViviendaEmpresa = () => {
       </section>
 
       {/* ═══ CTA FINAL ═══ */}
-      <section className="py-14 bg-gradient-to-r from-blue-800 to-blue-900 text-white text-center">
+      <section className="py-16 bg-gradient-to-r from-orange-500 via-red-500 to-rose-600 text-white text-center">
         <div className="max-w-3xl mx-auto px-4">
-          <h2 className="text-xl sm:text-2xl font-bold mb-3">Protege tu hogar o negocio desde 29,99EUR/mes</h2>
-          <p className="text-blue-200 mb-6 text-sm">Equipo e instalacion gratis. Sin permanencia. Centro de control 24h incluido. Relojes Sentinel SOS compatibles.</p>
+          <h2 className="text-2xl sm:text-3xl font-black mb-3 tracking-tight">Protege tu hogar o negocio hoy</h2>
+          <p className="text-white/80 mb-6 text-sm">Desde 24,99 EUR/mes. SIN permanencia. Equipo GRATIS. Sentinel SOS incluido.</p>
           <div className="flex flex-wrap items-center justify-center gap-3">
-            <Link to="/contacto" className="bg-orange-500 hover:bg-orange-600 text-white px-8 py-3.5 rounded-full font-bold text-sm transition-all hover:scale-105 shadow-lg" data-testid="cta-bottom">
-              Solicitar presupuesto gratis
+            <Link to="/contacto" className="bg-white text-red-600 px-8 py-4 rounded-full font-bold text-sm hover:bg-gray-50 transition-all hover:shadow-xl" data-testid="cta-bottom">
+              Solicitar presupuesto GRATIS
             </Link>
-            <a href="tel:+34601510950" className="bg-white/15 hover:bg-white/25 text-white px-8 py-3.5 rounded-full font-bold text-sm transition-colors border border-white/20 flex items-center gap-2">
-              <Phone className="w-4 h-4" /> Llamar ahora
+            <a href="tel:+34601510950" className="bg-white/15 hover:bg-white/25 text-white px-8 py-4 rounded-full font-bold text-sm transition-colors border border-white/30 flex items-center gap-2">
+              <Phone className="w-4 h-4" /> 601 510 950
             </a>
           </div>
         </div>
