@@ -152,10 +152,11 @@ const LandingFooter = () => {
               <div>
                 <h4 className="font-semibold text-white mb-4 text-sm uppercase tracking-wider">Producto</h4>
                 <ul className="space-y-3">
-                  <li><Link to="/servicios-sos" className="text-slate-400 hover:text-emerald-400 transition-colors text-sm">Servicios SOS</Link></li>
+                  <li><Link to="/productos" className="text-slate-400 hover:text-emerald-400 transition-colors text-sm">Productos</Link></li>
+                  <li><Link to="/sentinel-x" className="text-slate-400 hover:text-emerald-400 transition-colors text-sm">Sentinel X</Link></li>
+                  <li><Link to="/sentinel-j" className="text-slate-400 hover:text-emerald-400 transition-colors text-sm">Sentinel J</Link></li>
+                  <li><Link to="/sentinel-s" className="text-slate-400 hover:text-emerald-400 transition-colors text-sm">Sentinel S</Link></li>
                   <li><Link to="/plans" className="text-slate-400 hover:text-emerald-400 transition-colors text-sm">Precios</Link></li>
-                  <li><Link to="/how-it-works" className="text-slate-400 hover:text-emerald-400 transition-colors text-sm">Cómo Funciona</Link></li>
-                  <li><Link to="/enterprise" className="text-slate-400 hover:text-emerald-400 transition-colors text-sm">Empresas</Link></li>
                 </ul>
               </div>
 
