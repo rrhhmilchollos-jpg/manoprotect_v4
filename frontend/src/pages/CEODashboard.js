@@ -411,44 +411,83 @@ const CEODashboard = () => {
 
           {/* ═══════ USERS ═══════ */}
           {section === 'users' && (
-            <div className="bg-white rounded-xl border border-gray-200 overflow-hidden" data-testid="users-section">
-              <div className="p-4 border-b flex items-center gap-3">
-                <div className="relative flex-1 max-w-sm">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                  <input value={search} onChange={e => setSearch(e.target.value)} onKeyDown={e => e.key === 'Enter' && loadSection('users')} placeholder="Buscar por email, nombre, ID..." className="w-full pl-9 pr-3 py-2 border rounded-lg text-sm focus:border-blue-500 outline-none" data-testid="search-users" />
+            <div className="space-y-4" data-testid="users-section">
+              <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+                <div className="p-4 border-b flex items-center gap-3">
+                  <div className="relative flex-1 max-w-sm">
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                    <input value={search} onChange={e => setSearch(e.target.value)} onKeyDown={e => e.key === 'Enter' && loadSection('users')} placeholder="Buscar por email, nombre, ID, IP..." className="w-full pl-9 pr-3 py-2 border rounded-lg text-sm focus:border-blue-500 outline-none" data-testid="search-users" />
+                  </div>
+                  <button onClick={() => loadSection('users')} className="px-3 py-2 bg-blue-600 text-white text-xs font-bold rounded-lg hover:bg-blue-700">Buscar</button>
+                  <a href={`${API}/api/ceo/export/users`} className="px-3 py-2 bg-slate-100 text-gray-700 text-xs font-bold rounded-lg hover:bg-slate-200 flex items-center gap-1"><Download className="w-3 h-3" /> CSV</a>
                 </div>
-                <button onClick={() => loadSection('users')} className="px-3 py-2 bg-blue-600 text-white text-xs font-bold rounded-lg hover:bg-blue-700">Buscar</button>
-                <a href={`${API}/api/ceo/export/users`} className="px-3 py-2 bg-slate-100 text-gray-700 text-xs font-bold rounded-lg hover:bg-slate-200 flex items-center gap-1"><Download className="w-3 h-3" /> CSV</a>
+                <div className="overflow-x-auto">
+                  <table className="w-full text-sm">
+                    <thead><tr className="bg-slate-50 text-left text-xs text-gray-500 font-medium">
+                      <th className="p-3">Nombre</th><th className="p-3">Email</th><th className="p-3">ID Suscriptor</th><th className="p-3">IP Registro</th><th className="p-3">Plan</th><th className="p-3">Estado</th><th className="p-3">Registro</th><th className="p-3">Acciones</th>
+                    </tr></thead>
+                    <tbody>
+                      {users.users.map((u, i) => (
+                        <tr key={i} className="border-t hover:bg-slate-50">
+                          <td className="p-3 font-medium text-gray-900">{u.name || u.full_name || '-'}</td>
+                          <td className="p-3">{u.email}</td>
+                          <td className="p-3 font-mono text-[11px] text-gray-400">{u.user_id?.slice(-8) || '-'}</td>
+                          <td className="p-3 font-mono text-[11px] text-gray-400">{u.registration_ip || u.last_ip || '—'}</td>
+                          <td className="p-3"><span className={`px-2 py-0.5 rounded text-xs font-semibold ${u.plan === 'enterprise' ? 'bg-blue-100 text-blue-700' : u.plan === 'free' || !u.plan ? 'bg-gray-100 text-gray-600' : 'bg-orange-100 text-orange-600'}`}>{u.plan || 'free'}</span></td>
+                          <td className="p-3">{u.is_active !== false ? <span className="text-green-600 text-xs font-semibold">Activa</span> : <span className="text-red-600 text-xs font-semibold">Suspendida</span>}</td>
+                          <td className="p-3 text-gray-400 text-xs">{u.created_at ? new Date(u.created_at).toLocaleDateString('es-ES') : '-'}</td>
+                          <td className="p-3">
+                            <div className="flex gap-1">
+                              <button onClick={() => {
+                                const plan = prompt('Nuevo plan (free, family-monthly, family-yearly, enterprise):', u.plan || 'free');
+                                if (!plan) return;
+                                const disc = prompt('% descuento (0 = sin descuento):', '0');
+                                fetch(`${API}/api/ceo/users/${u.user_id}/plan`, { method: 'PATCH', credentials: 'include', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ plan_type: plan, discount_pct: parseInt(disc || '0') }) }).then(r => r.json()).then(r => { if (r.success) loadSection('users'); });
+                              }} className="p-1.5 rounded text-blue-500 hover:bg-blue-50" title="Cambiar plan" data-testid={`change-plan-${i}`}>
+                                <CreditCard className="w-3.5 h-3.5" />
+                              </button>
+                              <button onClick={async () => {
+                                if (!window.confirm(u.is_active !== false ? '¿Suspender esta cuenta?' : '¿Activar esta cuenta?')) return;
+                                await fetch(`${API}/api/ceo/users/${u.user_id}/suspend`, { method: 'PATCH', credentials: 'include' });
+                                loadSection('users');
+                              }} className={`p-1.5 rounded ${u.is_active !== false ? 'text-red-500 hover:bg-red-50' : 'text-green-500 hover:bg-green-50'}`} title={u.is_active !== false ? 'Suspender' : 'Activar'} data-testid={`toggle-user-${i}`}>
+                                {u.is_active !== false ? <UserX className="w-3.5 h-3.5" /> : <UserCheck className="w-3.5 h-3.5" />}
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                      {users.users.length === 0 && <tr><td colSpan={8} className="p-8 text-center text-gray-400">Sin usuarios</td></tr>}
+                    </tbody>
+                  </table>
+                </div>
+                <Paginator data={users} onPage={p => loadSection('users', p)} />
               </div>
-              <div className="overflow-x-auto">
-                <table className="w-full text-sm">
-                  <thead><tr className="bg-slate-50 text-left text-xs text-gray-500 font-medium">
-                    <th className="p-3">Email</th><th className="p-3">Nombre</th><th className="p-3">ID</th><th className="p-3">Plan</th><th className="p-3">Estado</th><th className="p-3">Registro</th><th className="p-3">Acciones</th>
-                  </tr></thead>
-                  <tbody>
-                    {users.users.map((u, i) => (
-                      <tr key={i} className="border-t hover:bg-slate-50">
-                        <td className="p-3 font-medium text-gray-900">{u.email}</td>
-                        <td className="p-3">{u.name || u.full_name || '-'}</td>
-                        <td className="p-3 font-mono text-[11px] text-gray-400">{u.user_id?.slice(-8) || '-'}</td>
-                        <td className="p-3"><span className={`px-2 py-0.5 rounded text-xs font-semibold ${u.plan === 'enterprise' ? 'bg-blue-100 text-blue-700' : u.plan === 'free' ? 'bg-gray-100 text-gray-600' : 'bg-orange-100 text-orange-600'}`}>{u.plan || 'free'}</span></td>
-                        <td className="p-3">{u.is_active !== false ? <span className="text-green-600 text-xs font-semibold">Activa</span> : <span className="text-red-600 text-xs font-semibold">Suspendida</span>}</td>
-                        <td className="p-3 text-gray-400 text-xs">{u.created_at ? new Date(u.created_at).toLocaleDateString('es-ES') : '-'}</td>
-                        <td className="p-3">
-                          <div className="flex gap-1">
-                            <button onClick={async () => { await fetchJSON(`/api/ceo/users/${u.user_id}/suspend`).catch(() => fetch(`${API}/api/ceo/users/${u.user_id}/suspend`, { method: 'PATCH', credentials: 'include' }).then(r => r.json())); loadSection('users'); }}
-                              className={`p-1 rounded text-xs ${u.is_active !== false ? 'text-red-500 hover:bg-red-50' : 'text-green-500 hover:bg-green-50'}`} title={u.is_active !== false ? 'Suspender' : 'Activar'}>
-                              {u.is_active !== false ? <UserX className="w-3.5 h-3.5" /> : <UserCheck className="w-3.5 h-3.5" />}
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
-                    {users.users.length === 0 && <tr><td colSpan={7} className="p-8 text-center text-gray-400">Sin usuarios</td></tr>}
-                  </tbody>
-                </table>
+              {/* Panel de gestión de planes */}
+              <div className="bg-white rounded-xl border border-gray-200 p-4" data-testid="plan-management-panel">
+                <h3 className="font-bold text-gray-900 mb-3">Gestión de Planes de Suscripción</h3>
+                <div className="grid sm:grid-cols-4 gap-3">
+                  {[
+                    { plan: 'free', label: 'Free', price: '0€/mes', color: 'bg-gray-50 border-gray-200' },
+                    { plan: 'family-monthly', label: 'Mensual', price: '9,99€/mes', color: 'bg-blue-50 border-blue-200' },
+                    { plan: 'family-yearly', label: 'Anual', price: '99,99€/año', color: 'bg-orange-50 border-orange-200' },
+                    { plan: 'enterprise', label: 'Enterprise', price: 'Personalizado', color: 'bg-emerald-50 border-emerald-200' },
+                  ].map((p, i) => (
+                    <div key={i} className={`border rounded-xl p-3 ${p.color}`}>
+                      <p className="font-bold text-sm text-gray-900">{p.label}</p>
+                      <p className="text-xs text-gray-500 mb-2">{p.price}</p>
+                      <p className="text-lg font-bold text-gray-900">
+                        {users.users.filter(u => (u.plan || 'free') === p.plan || (!u.plan && p.plan === 'free')).length}
+                      </p>
+                      <p className="text-[10px] text-gray-400">suscriptores</p>
+                    </div>
+                  ))}
+                </div>
+                <div className="mt-3 flex items-center gap-2 text-xs text-amber-600 bg-amber-50 border border-amber-200 rounded-lg p-2">
+                  <AlertTriangle className="w-3.5 h-3.5 flex-shrink-0" />
+                  <span>Suscripciones próximas a vencer: <strong>{s.subscriptions?.expiring_soon || 0}</strong></span>
+                </div>
               </div>
-              <Paginator data={users} onPage={p => loadSection('users', p)} />
             </div>
           )}
 
