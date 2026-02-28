@@ -152,9 +152,18 @@ const ProductsPage = () => {
                     ))}
                   </div>
 
-                  <div className="flex items-center gap-2 mb-4">
-                    <span className="text-3xl font-extrabold text-emerald-500">{p.price}</span>
-                    <span className="text-sm text-gray-400 line-through">{p.originalPrice}</span>
+                  <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3">Precios</h3>
+                  <div className="bg-gray-50 rounded-xl p-3 mb-4 space-y-1.5">
+                    {p.pricing.map((pr, pi) => (
+                      <div key={pi} className="flex items-center justify-between text-sm">
+                        <span className="text-gray-500">{pr.tier}:</span>
+                        <div className="flex items-center gap-1.5">
+                          <span className={`font-bold ${pr.price === 'GRATIS*' ? 'text-emerald-500' : 'text-gray-900'}`}>{pr.price}</span>
+                          {pr.original && <span className="text-xs text-gray-400 line-through">{pr.original}</span>}
+                        </div>
+                      </div>
+                    ))}
+                    {p.pricing[0]?.note && <p className="text-[10px] text-gray-400 text-center pt-1">{p.pricing[0].note}</p>}
                   </div>
 
                   <Link to={p.slug} className={`block w-full text-center py-3.5 font-bold rounded-xl transition-colors ${
