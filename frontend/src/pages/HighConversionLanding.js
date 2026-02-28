@@ -10,7 +10,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import {
   Shield, MapPin, Phone, Bell, ChevronRight, ChevronDown,
   Check, Star, Lock, Users, AlertTriangle, Eye,
-  ArrowRight, Heart, X, Smartphone
+  ArrowRight, Heart, X, Smartphone, Watch, Gift
 } from 'lucide-react';
 import LandingFooter from '@/components/landing/LandingFooter';
 import PhoneDemo from '@/components/PhoneDemo';
