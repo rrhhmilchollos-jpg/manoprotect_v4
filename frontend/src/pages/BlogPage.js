@@ -44,7 +44,7 @@ El **Sentinel J** de ManoProtect cumple todos estos requisitos: GPS preciso, bot
     category: 'Cuidado de mayores',
     date: '10 Feb 2026',
     readTime: '7 min',
-    img: 'https://images.unsplash.com/photo-1447752875215-b2761acb3c5d?w=600&h=400&fit=crop',
+    img: 'https://static.prod-images.emergentagent.com/jobs/9da3b4c4-c09a-415b-8aa7-bb34b82ca31e/images/7ad5d961d432cd41064d5a0c5ad6a516bc92a9e6d960fca3881e0e8fc7f2b06a.png',
     content: `
 Cuidar a un familiar mayor puede ser un desafío diario. Los localizadores GPS diseñados para personas mayores ofrecen una solución discreta y eficaz.
 
