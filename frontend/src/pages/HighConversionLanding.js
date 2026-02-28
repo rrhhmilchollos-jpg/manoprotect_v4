@@ -190,6 +190,7 @@ const HighConversionLanding = () => {
         {mobileMenu && (
           <div className="md:hidden bg-white border-t border-gray-100 px-4 py-4 space-y-3" data-testid="mobile-menu">
             <a href="#como-funciona" onClick={() => setMobileMenu(false)} className="block text-sm text-gray-600 hover:text-emerald-600">{"C\u00f3mo funciona"}</a>
+            <a href="#dispositivos" onClick={() => setMobileMenu(false)} className="block text-sm text-gray-600 hover:text-emerald-600">Dispositivos</a>
             <a href="#precios" onClick={() => setMobileMenu(false)} className="block text-sm text-gray-600 hover:text-emerald-600">Precios</a>
             <a href="#seguridad" onClick={() => setMobileMenu(false)} className="block text-sm text-gray-600 hover:text-emerald-600">Seguridad</a>
             <a href="https://wa.me/34601510950" target="_blank" rel="noopener noreferrer" className="block text-sm text-gray-600 hover:text-emerald-600">Contacto</a>
