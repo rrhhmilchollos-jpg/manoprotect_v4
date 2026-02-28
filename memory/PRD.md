@@ -84,9 +84,17 @@ ManoProtect - plataforma de seguridad familiar. Productos: Sentinel X (adultos),
 
 ## Backlog
 ### P0: Stripe keys reales + webhooks (BLOQUEADO), Meta Pixel ID + Google SC (BLOQUEADO)
-### P1: iOS build (Mac + Xcode), Webhook Stripe invoice/subscription
-### P2: "Quiénes Somos" (esperando contenido), SEO Fase 3 backlinks outreach
-### P3: Refactorizar landing pages locales
+### P1: iOS build (Mac + Xcode), Webhook Stripe invoice/subscription, Implementar CRO Semanas 2-4 avanzadas (remarketing, Google Ads, A/B testing más test variants)
+### P2: "Quiénes Somos" (esperando contenido), SEO Fase 3 backlinks outreach, Activar tráfico real (Google Ads + Facebook Ads)
+### P3: Refactorizar landing pages locales, Cleanup legacy LandingPage.js
+
+## Archivos Clave CRO
+| Archivo | Función |
+|---------|---------|
+| frontend/src/pages/HighConversionLanding.js | Landing principal (ruta /) |
+| frontend/src/services/conversionTracking.js | Tracking de conversiones |
+| backend/routes/cro_routes.py | A/B testing + Email sequences + Funnel |
+| backend/services/cron_jobs.py | Procesamiento automático email sequences |
 
 ## Credenciales
 | Email | Password | Rol |
