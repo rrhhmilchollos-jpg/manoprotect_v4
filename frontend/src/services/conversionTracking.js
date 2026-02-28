@@ -34,11 +34,22 @@ export const trackConversion = async (eventType, metadata = {}) => {
       })
     });
 
-    // Also fire GA4 event
+    // GA4 event via gtag
     if (window.gtag) {
       window.gtag('event', eventType, { ...metadata, page_path: window.location.pathname });
     }
-    // Fire Meta Pixel event
+
+    // GTM dataLayer push for Google Ads conversions
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({
+      event: eventType,
+      ...metadata,
+      page_path: window.location.pathname,
+      conversion_value: metadata.amount || 0,
+      currency: 'EUR'
+    });
+
+    // Meta Pixel event
     if (window.fbq) {
       const pixelMap = {
         page_view: 'PageView',
