@@ -31,6 +31,7 @@ const CEODashboard = () => {
   const [orders, setOrders] = useState({ orders: [], total: 0, page: 1, pages: 1 });
   const [messages, setMessages] = useState({ messages: [], total: 0, page: 1, pages: 1 });
   const [refunds, setRefunds] = useState({ refunds: [], total: 0, page: 1, pages: 1 });
+  const [payments, setPayments] = useState([]);
   const [inventory, setInventory] = useState({ items: [], total: 0, page: 1, pages: 1 });
   const [securityLogs, setSecurityLogs] = useState({ logs: [], total: 0 });
   const [securityOverview, setSecurityOverview] = useState(null);
