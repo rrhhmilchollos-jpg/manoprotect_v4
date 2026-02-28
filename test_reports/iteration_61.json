@@ -1,0 +1,106 @@
+{
+  "summary": "Iteration 61: CEO Dashboard + Promotional Pricing + Health Check + Marketing Videos - ALL TESTS PASSED. Complete testing of CEO Dashboard login flow, tabs navigation, user search, health endpoints, promo-status API, and pricing page with live counters.",
+
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+
+  "passed_tests": [
+    "BACKEND: GET /api/heartbeat returns {alive:true, ts:...}",
+    "BACKEND: GET /api/health returns {status:healthy, database:healthy}",
+    "BACKEND: GET /api/ceo/promo-status returns {basic_stock_remaining:50, promo_200_remaining:200, discount_pct:20}",
+    "BACKEND: POST /api/auth/login with ceo@manoprotect.com/19862210Des returns user with role:admin",
+    "BACKEND: GET /api/ceo/stats returns dashboard stats (users, subscriptions, orders, refunds, promo, revenue, messages)",
+    "BACKEND: GET /api/ceo/users?search=ceo returns CEO user in results",
+    "BACKEND: GET /api/ceo/subscriptions returns paginated subscriptions list",
+    "BACKEND: GET /api/ceo/orders returns paginated orders list",
+    "BACKEND: GET /api/ceo/refunds returns paginated refunds list",
+    "BACKEND: GET /api/ceo/messages returns paginated messages list",
+    "BACKEND: GET /api/ceo/activity returns recent activity list",
+    "BACKEND: Unauthenticated requests to /api/ceo/stats return 401/403",
+    "FRONTEND: Landing page loads with hero section and navigation",
+    "FRONTEND: Marketing videos section has 4 video cards with data-testid='video-card-{0-3}'",
+    "FRONTEND: Login page accepts email/password and redirects to /dashboard",
+    "FRONTEND: /ceo route loads CEO Dashboard after authentication",
+    "FRONTEND: CEO Dashboard shows 'Backend LIVE' and 'Frontend LIVE' indicators",
+    "FRONTEND: CEO Dashboard displays 6 stat cards (Usuarios, Suscripciones, MRR, Pedidos, Reembolsos, Mensajes)",
+    "FRONTEND: CEO Dashboard shows Stock Sentinel X Basic GRATIS (50/50) card",
+    "FRONTEND: CEO Dashboard shows Promo 200 usuarios (-20%) (200/200) card",
+    "FRONTEND: CEO Dashboard Usuarios tab shows table with user data",
+    "FRONTEND: CEO Dashboard Suscripciones tab shows table",
+    "FRONTEND: CEO Dashboard Pedidos tab shows table",
+    "FRONTEND: CEO Dashboard Reembolsos tab shows table",
+    "FRONTEND: CEO Dashboard Mensajes tab shows table with 1 message",
+    "FRONTEND: CEO Dashboard user search for 'ceo' returns ceo@manoprotect.com user",
+    "FRONTEND: /plans page shows promo live counters (50/50 basic, 200/200 plazas)",
+    "FRONTEND: /plans page shows Plan Mensual 9,99€/mes and Plan Anual 99,99€/año"
+  ],
+
+  "test_report_links": [
+    "/app/backend/tests/test_ceo_dashboard.py",
+    "/app/test_reports/pytest/iteration_61_ceo_dashboard.xml"
+  ],
+
+  "action_items": [],
+
+  "critical_code_review_comments": [],
+
+  "updated_files": [
+    "/app/backend/tests/test_ceo_dashboard.py"
+  ],
+
+  "success_rate": {
+    "backend": "100% (15/15 pytest tests passed)",
+    "frontend": "100% (All UI features verified)"
+  },
+
+  "test_credentials": {
+    "ceo_login": "ceo@manoprotect.com / 19862210Des",
+    "role": "admin"
+  },
+
+  "seed_data_creation": "None",
+
+  "retest_needed": false,
+
+  "should_main_agent_self_test": false,
+
+  "context_for_next_testing_agent": "CEO Dashboard fully functional. Key routes: /ceo requires authentication with admin role. Health endpoints: /api/heartbeat (fast ping), /api/health (DB status). Promo status: /api/ceo/promo-status is PUBLIC (no auth). All other /api/ceo/* endpoints require admin auth via session cookies. Frontend uses session-based auth with cookies (not JWT). HealthCheckMonitor component polls /api/heartbeat every 5 seconds.",
+
+  "features_verified": {
+    "ceo_dashboard": {
+      "route": "/ceo",
+      "auth_required": "admin role",
+      "stats_displayed": ["users", "subscriptions", "MRR", "orders", "refunds", "messages"],
+      "promo_counters": ["Sentinel X Basic 50/50", "Promo -20% 200/200"],
+      "tabs": ["Resumen", "Usuarios", "Suscripciones", "Pedidos", "Reembolsos", "Mensajes"],
+      "user_search": "Working with search field"
+    },
+    "health_check": {
+      "heartbeat": "/api/heartbeat returns {alive:true}",
+      "health": "/api/health returns {status:healthy}",
+      "frontend_indicator": "Backend LIVE / Frontend LIVE shown in header"
+    },
+    "pricing_page": {
+      "route": "/plans",
+      "live_counters": "50/50 basic stock, 200/200 promo slots",
+      "plans": ["Plan Mensual 9,99€", "Plan Anual 99,99€"]
+    },
+    "marketing_videos": {
+      "section": "data-testid='marketing-videos'",
+      "video_cards": "4 cards with data-testid='video-card-{0-3}'"
+    }
+  },
+
+  "mocked_apis": {
+    "has_mocked_apis": false,
+    "note": "All data comes from real MongoDB queries"
+  }
+}
