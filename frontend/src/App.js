@@ -384,6 +384,10 @@ function AppRouter() {
           <Route path="/reloj-sos-ancianos" element={<RelojSOSAncianos />} />
           <Route path="/reloj-gps-mayores" element={<RelojGPSMayores />} />
           <Route path="/boton-sos-senior" element={<BotonSOSSenior />} />
+          <Route path="/proteccion-phishing" element={<ProteccionPhishing />} />
+          <Route path="/proteccion-fraude-online" element={<ProteccionFraudeOnline />} />
+          <Route path="/seguridad-digital-familiar" element={<SeguridadDigitalFamiliar />} />
+          <Route path="/seguridad-mayores" element={<SeguridadMayores />} />
           <Route path="/reloj-sos" element={<RelojSOSAncianos />} />
           
           {/* Strategic Blog Articles */}
