@@ -144,6 +144,7 @@ const BlogPostPage = lazy(() => import('@/pages/BlogPostPage'));
 const ContactPage = lazy(() => import('@/pages/ContactPage'));
 const TestimonialsPage = lazy(() => import('@/pages/TestimonialsPage'));
 const ProductsPage = lazy(() => import('@/pages/ProductsPage'));
+const CEODashboard = lazy(() => import('@/pages/CEODashboard'));
 const SecurePayments = lazy(() => import('@/pages/SecurePayments'));
 const SentinelXLanding = lazy(() => import('@/pages/SentinelXLanding'));
 const AdminOrders = lazy(() => import('@/pages/AdminOrders'));
