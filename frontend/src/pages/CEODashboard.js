@@ -48,10 +48,10 @@ const CEODashboard = () => {
   const [heartbeat, setHeartbeat] = useState({ backend: false, frontend: true });
 
   const fetchJSON = useCallback(async (url) => {
-    const res = await fetch(`${API}${url}`, { headers });
+    const res = await fetch(`${API}${url}`, { credentials: 'include' });
     if (!res.ok) throw new Error(`${res.status}`);
     return res.json();
-  }, [headers]);
+  }, []);
 
   const loadStats = useCallback(async () => {
     try {
