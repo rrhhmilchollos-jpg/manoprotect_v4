@@ -917,6 +917,7 @@ async def get_checkout_status(session_id: str, http_request: Request):
         )
         
         if status.payment_status == "paid" and existing_tx:
+            promo_applied = existing_tx.get("metadata", {}).get("promo_applied")
             await db.users.update_one(
                 {"user_id": existing_tx.get("user_id")},
                 {"$set": {
@@ -926,6 +927,18 @@ async def get_checkout_status(session_id: str, http_request: Request):
                 }},
                 upsert=True
             )
+            # Create subscription if not exists
+            existing_sub = await db.subscriptions.find_one({"user_id": existing_tx.get("user_id"), "plan_type": existing_tx.get("plan_type"), "status": "active"})
+            if not existing_sub:
+                await db.subscriptions.insert_one({
+                    "user_id": existing_tx.get("user_id"),
+                    "email": existing_tx.get("email"),
+                    "plan_type": existing_tx.get("plan_type"),
+                    "status": "active",
+                    "promo_200": bool(promo_applied and promo_applied != "none"),
+                    "amount_paid": existing_tx.get("amount"),
+                    "created_at": datetime.now(timezone.utc).isoformat()
+                })
         
         return {
             "status": status.status,
