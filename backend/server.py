@@ -2757,6 +2757,11 @@ api_router.include_router(legacy_vault_router)
 api_router.include_router(reviews_router)
 print("✅ Reviews routes loaded")
 
+# Location Lock & Documents (Parental Control + PDF)
+api_router.include_router(location_lock_router)
+print("✅ Location Lock & Documents routes loaded")
+
+
 # Export Reports
 api_router.include_router(export_router)
 print("✅ Export routes loaded")
