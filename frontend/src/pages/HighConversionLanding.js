@@ -75,6 +75,7 @@ const HighConversionLanding = () => {
 
   const ctaClick = (loc) => {
     track('cta_click', { location: loc, label: 'proteger_hijo' });
+    trackCTAClick(loc, 'proteger_hijo');
     navigate('/registro');
   };
 
