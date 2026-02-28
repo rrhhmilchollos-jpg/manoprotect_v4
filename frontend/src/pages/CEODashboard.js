@@ -458,6 +458,16 @@ const CEODashboard = () => {
                               }} className={`p-1.5 rounded ${u.is_active !== false ? 'text-red-500 hover:bg-red-50' : 'text-green-500 hover:bg-green-50'}`} title={u.is_active !== false ? 'Suspender' : 'Activar'} data-testid={`toggle-user-${i}`}>
                                 {u.is_active !== false ? <UserX className="w-3.5 h-3.5" /> : <UserCheck className="w-3.5 h-3.5" />}
                               </button>
+                              {(u.last_login_ip || u.registration_ip) && (
+                                <button onClick={() => {
+                                  const ip = u.last_login_ip || u.registration_ip;
+                                  if (window.confirm(`¿Bloquear IP ${ip}? Este usuario NO podrá acceder más a la web ni a la app desde esta IP.`)) {
+                                    fetch(`${API}/api/ceo/block-ip`, { method: 'POST', credentials: 'include', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ip, reason: `Bloqueado desde panel de usuarios - ${u.email}`, user_id: u.user_id }) }).then(r => r.json()).then(r => { if (r.success) alert(`IP ${ip} bloqueada correctamente`); });
+                                  }
+                                }} className="p-1.5 rounded text-red-600 hover:bg-red-50" title={`Bloquear IP: ${u.last_login_ip || u.registration_ip}`} data-testid={`block-ip-user-${i}`}>
+                                  <Lock className="w-3.5 h-3.5" />
+                                </button>
+                              )}
                             </div>
                           </td>
                         </tr>
