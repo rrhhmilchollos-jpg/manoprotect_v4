@@ -2767,6 +2767,11 @@ api_router.include_router(location_lock_router)
 print("✅ Location Lock & Documents routes loaded")
 
 
+# Emergency 112 + Trial Reminders + Analytics
+api_router.include_router(emergency_analytics_router)
+print("✅ Emergency 112 + Analytics routes loaded")
+
+
 # Export Reports
 api_router.include_router(export_router)
 print("✅ Export routes loaded")
