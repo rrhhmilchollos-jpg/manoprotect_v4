@@ -3011,7 +3011,7 @@ async def submit_contact_form(request: Request):
 # ── CEO Dashboard Routes ──
 try:
     from routes.ceo_dashboard import ceo_router, init_ceo_routes
-    init_ceo_routes(db)
+    init_ceo_routes(db, require_admin)
     api_router.include_router(ceo_router)
     print("\u2705 CEO Dashboard routes loaded")
 except Exception as e:
