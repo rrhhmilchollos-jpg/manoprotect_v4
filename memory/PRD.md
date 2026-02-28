@@ -1,6 +1,6 @@
 # ManoProtect - Product Requirements Document
 
-## Última Actualización: 28 Febrero 2026 (v10.2)
+## Última Actualización: 28 Febrero 2026 (v10.3)
 
 ## Descripción
 ManoProtect - plataforma de seguridad familiar. Productos: Sentinel X (adultos), Sentinel J (jóvenes 3-12), Sentinel S (niños 6-14).
@@ -68,6 +68,14 @@ ManoProtect - plataforma de seguridad familiar. Productos: Sentinel X (adultos),
   - Email 2 (48h): Caso real (Laura)
   - Email 3 (72h): Recordatorio prueba gratis
   - Cron job cada 2h para procesamiento
+### v10.3: Registro nuevo + Stripe real + SEO Fase 3 + Limpieza
+- **Registro nuevo**: Página completamente reescrita, tema emerald, solo 2 planes (9.99€/mes, 99.99€/año), Stripe 3D Secure, progress steps
+- **Stripe Products reales creados**: prod_U3vgOjNjLrG93Y, price_1T5nofRoJZ3B4mXEtYf1rMaE (monthly), price_1T5nofRoJZ3B4mXEyj94gkyo (yearly)
+- **SEO Fase 3**: sitemap.xml actualizado, robots.txt, FAQ structured data, Service schema con precios reales, breadcrumbs limpios
+- **GTM dataLayer**: Conversion tracking para Google Ads (page_view, cta_click, begin_checkout, purchase)
+- **Limpieza**: Eliminada barra naranja "OFERTA ESPECIAL", eliminado InterstitialAdManager y AIChatWidget, eliminado PushNotificationPrompt, JSON basura limpiado de index.html
+- **Marca emerald**: Loading screen, theme-color, tile-color, mask-icon todos actualizados
+
 ### v10.2: Sincronización precios + Arreglos generales
 - Precios sincronizados: Familiar 9,99€/mes | 99,99€/año (landing, registro, backend)
 - 2FA con fallback email (SendGrid) cuando SMS falla
