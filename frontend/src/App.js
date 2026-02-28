@@ -574,6 +574,9 @@ function AppRouter() {
           {/* SOS Services - Complete Page */}
           <Route path="/servicios-sos" element={<SOSServices />} />
           <Route path="/sos-services" element={<SOSServices />} />
+          <Route path="/seguridad-hogar-empresa" element={<SeguridadViviendaEmpresa />} />
+          <Route path="/alarmas" element={<SeguridadViviendaEmpresa />} />
+          <Route path="/kits-alarma" element={<SeguridadViviendaEmpresa />} />
           
           {/* Order Confirmation Page (After Stripe Payment) */}
           <Route path="/pedido-confirmado" element={<OrderConfirmation />} />
