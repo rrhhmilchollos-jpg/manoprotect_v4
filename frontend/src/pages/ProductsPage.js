@@ -72,14 +72,14 @@ const comparisonRows = [
   ['Botón SOS', true, true, true],
   ['Resistente al agua', true, true, true],
   ['Conectividad 4G', true, true, true],
-  ['Bluetooth 5.0', true, false, false],
-  ['SOS invisible', true, false, true],
-  ['Grabación en la nube', true, false, false],
-  ['Correas intercambiables', false, true, true],
-  ['Alerta anti-retirada', false, false, true],
-  ['Sirena 120dB', false, false, true],
-  ['Sin cámara ni internet', false, true, false],
-  ['Sensor cardíaco', true, false, false],
+  ['Bluetooth 5.0', true, true, true],
+  ['SOS invisible', true, true, true],
+  ['Grabación en la nube', true, true, true],
+  ['Correas intercambiables', true, true, true],
+  ['Alerta anti-retirada', true, true, true],
+  ['Sirena 120dB', true, true, true],
+  ['Sin cámara ni internet', true, true, true],
+  ['Sensor cardíaco', true, true, true],
 ];
 
 const ProductsPage = () => {
