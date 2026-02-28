@@ -356,22 +356,31 @@ const HighConversionLanding = () => {
               <thead>
                 <tr className="bg-gray-50">
                   <th className="p-4 text-left text-sm font-bold text-gray-900 border-b">Función</th>
-                  <th className="p-4 text-center text-sm font-bold text-emerald-600 border-b">Sentinel X-J</th>
-                  <th className="p-4 text-center text-sm font-bold text-[#8B7CB8] border-b">Sentinel S</th>
+                  <th className="p-4 text-center text-sm font-bold border-b"><span className="text-emerald-600">X</span><span className="text-gray-500 text-xs block">Sentinel X</span></th>
+                  <th className="p-4 text-center text-sm font-bold border-b"><span className="text-pink-500">J</span><span className="text-gray-500 text-xs block">Sentinel J</span></th>
+                  <th className="p-4 text-center text-sm font-bold border-b"><span className="text-[#8B7CB8]">S</span><span className="text-gray-500 text-xs block">Sentinel S</span></th>
                 </tr>
               </thead>
               <tbody className="text-sm">
                 {[
-                  ['GPS en tiempo real', true, true],
-                  ['Botón SOS', true, true],
-                  ['Batería extendida', true, true],
-                  ['Resistente al agua', true, true],
-                  ['Conectividad 4G', true, false],
+                  ['GPS en tiempo real', true, true, true],
+                  ['Botón SOS', true, true, true],
+                  ['Resistente al agua', true, true, true],
+                  ['Conectividad 4G', true, true, true],
+                  ['Bluetooth 5.0', true, true, true],
+                  ['SOS invisible', true, true, true],
+                  ['Grabación en la nube', true, true, true],
+                  ['Correas intercambiables', true, true, true],
+                  ['Alerta anti-retirada', true, true, true],
+                  ['Sirena 120dB', true, true, true],
+                  ['Sin cámara ni internet', true, true, true],
+                  ['Sensor cardíaco', true, true, true],
                 ].map((row, i) => (
                   <tr key={i} className={i % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
                     <td className="p-3 font-medium text-gray-900 border-b border-gray-100">{row[0]}</td>
                     <td className="p-3 text-center border-b border-gray-100">{row[1] ? <Check className="w-5 h-5 text-emerald-500 mx-auto" /> : <X className="w-5 h-5 text-gray-300 mx-auto" />}</td>
-                    <td className="p-3 text-center border-b border-gray-100">{row[2] ? <Check className="w-5 h-5 text-[#B4A7D6] mx-auto" /> : <X className="w-5 h-5 text-gray-300 mx-auto" />}</td>
+                    <td className="p-3 text-center border-b border-gray-100">{row[2] ? <Check className="w-5 h-5 text-pink-500 mx-auto" /> : <X className="w-5 h-5 text-gray-300 mx-auto" />}</td>
+                    <td className="p-3 text-center border-b border-gray-100">{row[3] ? <Check className="w-5 h-5 text-[#B4A7D6] mx-auto" /> : <X className="w-5 h-5 text-gray-300 mx-auto" />}</td>
                   </tr>
                 ))}
               </tbody>
