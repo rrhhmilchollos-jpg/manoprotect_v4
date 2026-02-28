@@ -377,7 +377,7 @@ const StockUrgencyPopup = () => {
             <span className="text-red-600 text-xl">!</span>
           </div>
           <h3 className="font-bold text-gray-900 text-lg mb-1">Stock limitado</h3>
-          <p className="text-sm text-gray-600 mb-4">Solo quedan <strong className="text-red-600">{promo.basic_stock_remaining}</strong> unidades de Sentinel X Basic <strong>GRATIS</strong> y <strong className="text-orange-600">{promo.promo_200_remaining}</strong> plazas con <strong>{promo.discount_pct}% descuento</strong></p>
+          <p className="text-sm text-gray-600 mb-4">Solo quedan <strong className="text-red-600">{promo.basic_stock_remaining}</strong> unidades de Sentinel X Basic <strong>GRATIS</strong> y <strong className="text-orange-600">{promo.promo_200_remaining}</strong> unidades con <strong>{promo.discount_pct}% descuento</strong></p>
           <button onClick={() => { setShow(false); navigate('/plans'); }} className="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-3 rounded-xl font-bold text-sm transition-colors" data-testid="urgency-cta">
             Ver ofertas antes de que se agoten
           </button>
