@@ -8,6 +8,56 @@ import { Shield, Phone, Mail, MapPin, Lock, CreditCard, Award, Smartphone, Truck
 
 const API = process.env.REACT_APP_BACKEND_URL;
 
+const NewsletterForm = () => {
+  const [email, setEmail] = useState('');
+  const [status, setStatus] = useState('idle'); // idle | loading | success | error
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!email.trim()) return;
+    setStatus('loading');
+    try {
+      const res = await fetch(`${API}/api/newsletter/subscribe`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      });
+      if (res.ok) {
+        setStatus('success');
+        setEmail('');
+      } else {
+        setStatus('error');
+      }
+    } catch {
+      setStatus('error');
+    }
+    setTimeout(() => setStatus('idle'), 4000);
+  };
+
+  return (
+    <div className="py-8 border-b border-slate-800">
+      <div className="max-w-md mx-auto text-center">
+        <h4 className="text-white font-bold text-base mb-2">Recibe alertas de seguridad</h4>
+        <p className="text-slate-400 text-xs mb-4">Consejos de proteccion, ofertas exclusivas y novedades. Sin spam.</p>
+        <form onSubmit={handleSubmit} className="flex gap-2" data-testid="newsletter-form">
+          <input type="email" value={email} onChange={(e) => setEmail(e.target.value)}
+            placeholder="tu@email.com" required
+            className="flex-1 bg-slate-800 border border-slate-700 rounded-lg px-3 py-2.5 text-sm text-white placeholder-slate-500 focus:ring-2 focus:ring-emerald-500 focus:border-transparent outline-none"
+            data-testid="newsletter-email" />
+          <button type="submit" disabled={status === 'loading'}
+            className="bg-emerald-500 hover:bg-emerald-600 text-white font-bold px-4 py-2.5 rounded-lg text-sm transition-colors flex items-center gap-1.5 disabled:opacity-50"
+            data-testid="newsletter-submit">
+            <Send className="w-3.5 h-3.5" />
+            {status === 'loading' ? '...' : 'Suscribir'}
+          </button>
+        </form>
+        {status === 'success' && <p className="text-emerald-400 text-xs mt-2" data-testid="newsletter-success">Suscripcion confirmada</p>}
+        {status === 'error' && <p className="text-red-400 text-xs mt-2">Error, intentalo de nuevo</p>}
+      </div>
+    </div>
+  );
+};
+
 const LOGO_URL = '/manoprotect_logo.webp';
 
 // Trustpilot Rating Component with animation
