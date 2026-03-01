@@ -192,6 +192,9 @@ const EnterprisePortal = lazy(() => import('@/pages/EnterprisePortal'));
 const EnterpriseLogin = lazy(() => import('@/pages/EnterpriseLogin'));
 const EmpleadoRecuperarPassword = lazy(() => import('@/pages/EmpleadoRecuperarPassword'));
 
+// Escudo Vecinal - Community Security Network
+const EscudoVecinal = lazy(() => import('@/pages/EscudoVecinal'));
+
 // Lazy load non-critical UI components to reduce main thread blocking
 const CookieConsent = lazy(() => import('@/components/CookieConsent'));
 const AIChatWidget = lazy(() => import('@/components/AIChatWidget'));
@@ -590,6 +593,11 @@ function AppRouter() {
           <Route path="/order-tracking" element={<OrderTracking />} />
           <Route path="/seguimiento-pedido" element={<OrderTracking />} />
           <Route path="/tracking" element={<OrderTracking />} />
+          
+          {/* Escudo Vecinal - Community Shield (EXCLUSIVE) */}
+          <Route path="/escudo-vecinal" element={<EscudoVecinal />} />
+          <Route path="/community-shield" element={<EscudoVecinal />} />
+          <Route path="/seguridad-barrio" element={<EscudoVecinal />} />
           
           {/* Enterprise B2B Landing */}
           <Route path="/enterprise" element={<EnterprisePortal />} />
