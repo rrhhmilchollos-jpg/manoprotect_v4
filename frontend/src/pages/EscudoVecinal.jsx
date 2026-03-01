@@ -32,32 +32,38 @@ const timeAgo = (dateStr) => {
 };
 
 function MapView({ incidents, userPos, onMapClick }) {
-  const mapRef = useRef(null);
+  const containerRef = useRef(null);
   const mapInstance = useRef(null);
   const markersRef = useRef([]);
-  const initRef = useRef(false);
+  const [mapReady, setMapReady] = useState(false);
 
   useEffect(() => {
-    if (!mapRef.current || initRef.current) return;
-    initRef.current = true;
+    if (!containerRef.current) return;
 
-    // Clean any previous map instance on this container
-    if (mapRef.current._leaflet_id) {
-      mapRef.current._leaflet_id = null;
-      mapRef.current.innerHTML = '';
-    }
+    let map = null;
 
-    import('leaflet').then((L) => {
-      const defaultCss = document.querySelector('link[href*="leaflet.css"]');
-      if (!defaultCss) {
+    const initMap = async () => {
+      const L = await import('leaflet');
+
+      if (!document.querySelector('link[href*="leaflet.css"]')) {
         const link = document.createElement('link');
         link.rel = 'stylesheet';
         link.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
         document.head.appendChild(link);
+        await new Promise(r => setTimeout(r, 200));
       }
 
+      // Create a fresh inner div for the map
+      const mapDiv = document.createElement('div');
+      mapDiv.style.width = '100%';
+      mapDiv.style.height = '100%';
+      mapDiv.style.minHeight = '400px';
+      mapDiv.style.borderRadius = '12px';
+      containerRef.current.innerHTML = '';
+      containerRef.current.appendChild(mapDiv);
+
       const center = userPos ? [userPos.lat, userPos.lng] : [39.4699, -0.3763];
-      const map = L.map(mapRef.current, { zoomControl: true }).setView(center, 14);
+      map = L.map(mapDiv).setView(center, 14);
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; OpenStreetMap',
         maxZoom: 19,
@@ -69,7 +75,7 @@ function MapView({ incidents, userPos, onMapClick }) {
         }).addTo(map);
         L.marker([userPos.lat, userPos.lng], {
           icon: L.divIcon({
-            className: 'custom-marker',
+            className: '',
             html: '<div style="width:16px;height:16px;background:#10B981;border:3px solid white;border-radius:50%;box-shadow:0 2px 8px rgba(0,0,0,0.3)"></div>',
             iconSize: [16, 16], iconAnchor: [8, 8],
           }),
@@ -81,17 +87,18 @@ function MapView({ incidents, userPos, onMapClick }) {
       });
 
       mapInstance.current = map;
+      setMapReady(true);
+      setTimeout(() => map.invalidateSize(), 300);
+    };
 
-      // Force a resize after mount
-      setTimeout(() => map.invalidateSize(), 200);
-    });
+    initMap();
 
     return () => {
-      if (mapInstance.current) {
-        try { mapInstance.current.remove(); } catch {}
-        mapInstance.current = null;
+      if (map) {
+        try { map.remove(); } catch {}
       }
-      initRef.current = false;
+      mapInstance.current = null;
+      setMapReady(false);
     };
   }, [userPos]);
 
