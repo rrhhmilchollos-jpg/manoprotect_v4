@@ -841,7 +841,8 @@ async def create_checkout_session(
         
         if promo_subscribers < PROMO_200_LIMIT and data.plan_type in (
             "family-monthly", "family-yearly", "family-quarterly",
-            "monthly", "yearly", "quarterly"
+            "monthly", "yearly", "quarterly",
+            "alarm-essential", "alarm-premium", "alarm-business"
         ):
             discount_factor = (100 - PROMO_DISCOUNT_PCT) / 100
             final_amount = round(package["amount"] * discount_factor, 2)
