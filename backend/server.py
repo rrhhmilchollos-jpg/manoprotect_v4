@@ -392,6 +392,10 @@ init_documents(db)
 init_emp_notifications(db)
 init_holidays(db)
 
+# Community Shield / Escudo Vecinal
+from routes.community_shield_routes import router as community_shield_router, init_community_shield
+init_community_shield(db)
+
 # Subscription Manager (Trial management, blocking system)
 from routes.subscription_manager import router as subscription_manager_router
 
