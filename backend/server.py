@@ -396,6 +396,10 @@ init_holidays(db)
 from routes.community_shield_routes import router as community_shield_router, init_community_shield
 init_community_shield(db)
 
+# Newsletter
+from routes.newsletter_routes import router as newsletter_router, init_newsletter
+init_newsletter(db)
+
 # Subscription Manager (Trial management, blocking system)
 from routes.subscription_manager import router as subscription_manager_router
 
