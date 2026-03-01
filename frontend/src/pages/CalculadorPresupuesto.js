@@ -32,7 +32,7 @@ const CalculadorPresupuesto = () => {
   const calculate = async () => {
     setLoading(true);
     try {
-      const res = await fetch(`${API}/api/payments/budget-calculator`, {
+      const res = await fetch(`${API}/api/budget-calculator`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(form),
