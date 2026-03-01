@@ -81,7 +81,7 @@ const EmployeePortalDashboard = () => {
       // Fetch stats
       const statsRes = await fetch(`${API}/api/enterprise/dashboard/stats`, {
         credentials: 'include',
-        headers: { 'X-Session-Token': localStorage.getItem('enterprise_session') }
+        headers: { 'X-Session-Token': localStorage.getItem('enterprise_session') || localStorage.getItem('enterprise_session_token') || '' }
       });
       if (statsRes.ok) {
         setStats(await statsRes.json());
@@ -91,7 +91,7 @@ const EmployeePortalDashboard = () => {
       if (['director', 'superadmin', 'super_admin', 'admin', 'ceo'].includes(employee.role)) {
         const empRes = await fetch(`${API}/api/enterprise/employees`, {
           credentials: 'include',
-          headers: { 'X-Session-Token': localStorage.getItem('enterprise_session') }
+          headers: { 'X-Session-Token': localStorage.getItem('enterprise_session') || localStorage.getItem('enterprise_session_token') || '' }
         });
         if (empRes.ok) {
           const data = await empRes.json();
@@ -101,7 +101,7 @@ const EmployeePortalDashboard = () => {
         // Fetch invites
         const invRes = await fetch(`${API}/api/enterprise/invites`, {
           credentials: 'include',
-          headers: { 'X-Session-Token': localStorage.getItem('enterprise_session') }
+          headers: { 'X-Session-Token': localStorage.getItem('enterprise_session') || localStorage.getItem('enterprise_session_token') || '' }
         });
         if (invRes.ok) {
           const data = await invRes.json();
