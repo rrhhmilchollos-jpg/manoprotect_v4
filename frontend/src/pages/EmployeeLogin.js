@@ -26,7 +26,7 @@ const EmployeeLogin = () => {
     setLoading(true);
 
     try {
-      const response = await fetch(`${API}/api/enterprise/auth/login`, {
+      const response = await fetch(`${API}/api/employee-portal/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
