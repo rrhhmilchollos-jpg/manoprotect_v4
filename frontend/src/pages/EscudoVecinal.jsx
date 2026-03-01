@@ -137,7 +137,7 @@ function MapView({ incidents, userPos, onMapClick }) {
     });
   }, [incidents]);
 
-  return <div ref={mapRef} className="w-full h-full rounded-xl" style={{ minHeight: '400px' }} />;
+  return <div ref={containerRef} className="w-full h-full rounded-xl" style={{ minHeight: '400px' }} />;
 }
 
 function ReportModal({ open, onClose, onSubmit, clickPos }) {
