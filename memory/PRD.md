@@ -1,4 +1,4 @@
-# ManoProtect - Product Requirements Document v2.2.0
+# ManoProtect - Product Requirements Document v2.3.0
 
 ## Core Product
 Plataforma lider en Espana de proteccion digital y fisica para familias con dispositivos Sentinel (X, J, S) y sistemas de alarma profesionales para viviendas y empresas.
@@ -6,66 +6,53 @@ Plataforma lider en Espana de proteccion digital y fisica para familias con disp
 ## Tech Stack
 Frontend: React + TailwindCSS + Shadcn/UI + Recharts | Backend: FastAPI + MongoDB | Payments: Stripe | Mobile: Capacitor (Android/iOS)
 
-## Implemented Features
+## Implemented Features (Feb 28 - Mar 1, 2026)
+
+### Alarmas Premium - 3 Paginas + Landing
+- `/seguridad-hogar-empresa` - Landing principal: 3 kits, vs competencia, Sentinel integrado
+- `/alarmas/vivienda` - Detalle vivienda: equipamiento, 2 planes (Essential + Premium)
+- `/alarmas/negocio` - Detalle negocio: tipos, equipamiento avanzado, Plan Business
+
+### Calculador Interactivo de Presupuesto (NEW)
+- Ruta: `/calculador`, `/presupuesto`
+- Wizard 4 pasos: tipo espacio -> detalles (m2, accesos, plantas, jardin) -> extras (camaras) -> resultado
+- Backend: `POST /api/budget-calculator` - recomienda plan basado en propiedades
+- Muestra ahorro vs Securitas Direct, equipo incluido, precio promo/regular
+- CTA a contacto y link a kits
+
+### Planes Alarma Stripe (NEW)
+- `GET /api/alarm-plans` - 3 planes con precios promo y regular
+- Essential: 24.99/34.99 EUR | Premium: 39.99/49.99 EUR | Business: 54.99/69.99 EUR
+- Integrados en SUBSCRIPTION_PACKAGES del backend
+
+### Quienes Somos - Rediseño Premium (NEW)
+- Rutas: `/about-us`, `/quienes-somos`, `/sobre-nosotros`
+- Hero con foto equipo, numeros (3.200+ hogares, 950+ empresas, 4.9/5)
+- Mision con historia real del fundador
+- 6 miembros del equipo con bios
+- Timeline 2023-2026
+- Productos (Sentinel, alarmas vivienda, alarmas negocio)
+- Oficina Valencia con direccion, telefono, email
 
 ### CEO Dashboard Enterprise (8 secciones)
 - Dashboard, Inventario, Usuarios, Membresias, Pagos, Seguridad, Mensajes, Reportes
 
-### Sistema de Alarmas - 3 Paginas Premium (Feb 28, 2026)
-**Main Landing** (`/seguridad-hogar-empresa`, `/alarmas`, `/kits-alarma`):
-- Hero con villa protegida + panel "Por que elegirnos" vs competencia
-- Cards "Que quieres proteger?" -> Vivienda / Negocio
-- Galeria componentes: centralita, camaras 4K, sirena, mandos premium (3 colores)
-- 3 kits: Essential (24.99-34.99), Premium (39.99-49.99), Business (54.99-69.99)
-- Tabla comparativa vs Securitas Direct y Prosegur (10 filas)
-- Seccion Sentinel SOS integrado
-- Tabla comparativa planes internos (14 filas)
-- FAQ 8 preguntas, CTAs a /contacto
-
-**Vivienda** (`/alarmas/vivienda`):
-- Hero "Tu hogar, blindado" - pisos, chalets, adosados
-- 8 componentes (4 imagen + 4 icono), imagen kit completo
-- 2 planes (Essential + Premium) con equipo + servicios detallados
-- 4 pasos instalacion, integracion Sentinel, FAQ 6 preguntas
-
-**Negocio** (`/alarmas/negocio`):
-- Hero "Tu negocio, protegido 24/7" - locales, naves, oficinas
-- 4 tipos negocio, equipamiento avanzado (warehouse image)
-- Plan Business TODO INCLUIDO detallado
-- Sentinel para equipos, FAQ 7 preguntas
-
-### Precios competitivos (vs competencia)
-| Plan | Promo 6 meses | Regular | Securitas Direct | Prosegur |
+### Precios vs Competencia
+| Plan | Promo 6m | Regular | Securitas Direct | Prosegur |
 |---|---|---|---|---|
-| Essential | 24,99 EUR | 34,99 EUR | 39,89 EUR | 44,90 EUR |
-| Premium | 39,99 EUR | 49,99 EUR | 48,90 EUR | 48,90 EUR |
-| Business | 54,99 EUR | 69,99 EUR | N/A | 48,90 EUR+ |
+| Essential | 24.99 | 34.99 | 39.89 | 44.90 |
+| Premium | 39.99 | 49.99 | 48.90 | 48.90 |
+| Business | 54.99 | 69.99 | N/A | 48.90+ |
 
-### Ventajas sobre competencia
-- SIN permanencia (Securitas: 24 meses, Prosegur: 24-36 meses)
-- Equipo GRATIS (Securitas: 149 EUR)
-- 2 camaras IA incluidas (competencia: 1 basica)
-- Sentinel SOS incluido (exclusivo ManoProtect)
-- IA en camaras (cero falsas alarmas)
-
-### Otras funciones implementadas
-- Boton SOS Flotante: ELIMINADO (per user request)
+### Correcciones aplicadas
+- FloatingSOSButton ELIMINADO
 - "Plazas" cambiado a "unidades" en popup urgencia
-- Sistema IP Blocking, Promotional Logic, SEO Phase 3
-- Background Mode, Video Marketing, Capacitor configs
-
-## Rutas clave
-- `/seguridad-hogar-empresa` - Landing alarmas principal
-- `/alarmas/vivienda` - Detalle vivienda
-- `/alarmas/negocio` - Detalle negocio
-- `/productos` - Relojes Sentinel (independientes de alarma)
-- `/servicios-sos` - Paginas SOS originales (funcionando)
+- Links calculador en header, hero y footer de alarmas
 
 ## Backlog
-- P1: Funcionalidad pago Stripe para kits alarma
-- P1: IDs Meta Pixel, Hotjar, Google SC (bloqueado usuario)
-- P2: Videos marketing (bloqueado credito Sora 2)
-- P2: Mejorar "Quienes Somos"
+- P1: Stripe checkout funcional para contratar kits alarma (formulario pago)
+- P1: IDs Meta Pixel, Hotjar, Google SC (bloqueado por usuario)
+- P2: Videos marketing (bloqueado credito Sora 2 - Profile->Universal Key->Add Balance)
 - P3: Integraciones 112, BigQuery
 - P3: App iOS Capacitor (requiere Mac+Xcode)
 
