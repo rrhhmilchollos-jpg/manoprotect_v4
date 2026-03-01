@@ -218,6 +218,8 @@ SUBSCRIPTION_PACKAGES = {
     "alarm-premium-regular": {"amount": 49.99, "name": "Alarma Premium", "period": "mes", "max_users": 1, "is_alarm": True},
     "alarm-business": {"amount": 54.99, "name": "Alarma Business", "period": "mes", "max_users": 3, "is_alarm": True},
     "alarm-business-regular": {"amount": 69.99, "name": "Alarma Business", "period": "mes", "max_users": 3, "is_alarm": True},
+    # PLAN VECINAL PREMIUM - EL MAS CARO - SOLO ANUAL - POR UNIDAD FAMILIAR
+    "vecinal-anual": {"amount": 499.99, "name": "Escudo Vecinal Premium", "period": "ano", "max_users": 10, "is_vecinal": True, "annual_only": True, "includes_alarm": True, "includes_community": True, "priority_alerts": True},
 }
 
 # Plan features - detailed by billing period for family plans
