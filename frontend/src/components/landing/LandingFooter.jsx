@@ -205,6 +205,9 @@ const LandingFooter = () => {
           </div>
         </div>
 
+        {/* Newsletter Section */}
+        <NewsletterForm />
+
         {/* Customer Trust Badges Section */}
         <div className="py-8 border-b border-slate-800">
           <div className="flex flex-wrap items-center justify-center gap-6 md:gap-10">
