@@ -564,6 +564,24 @@ export default function EscudoVecinal() {
       {/* Report Modal */}
       <ReportModal open={showReport} onClose={() => setShowReport(false)} onSubmit={handleReport} clickPos={clickPos} />
 
+      {/* Premium Panel CTA */}
+      <section className="bg-gradient-to-r from-amber-500/5 to-red-500/5 border-t border-amber-500/10 py-10">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 text-center">
+          <div className="inline-flex items-center gap-2 bg-amber-500/10 border border-amber-500/20 rounded-full px-4 py-1.5 mb-4">
+            <Crown className="w-4 h-4 text-amber-400" />
+            <span className="text-amber-400 text-xs font-bold">PREMIUM</span>
+          </div>
+          <h2 className="text-white font-bold text-2xl mb-3">Panel Vecinal Premium</h2>
+          <p className="text-slate-400 text-sm mb-6">
+            Alertas de <strong className="text-red-400">okupaciones</strong> y <strong className="text-red-400">robos</strong> en tiempo real.
+            Coordinacion vecinal avanzada. Dashboard exclusivo. Solo 499,99 EUR/ano por familia.
+          </p>
+          <Link to="/panel-vecinal" className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-500 to-red-500 hover:shadow-xl hover:shadow-amber-500/10 text-white font-black px-8 py-3 rounded-xl transition-all" data-testid="cta-panel-vecinal">
+            <Crown className="w-4 h-4" /> Ver Panel Vecinal Premium <ChevronRight className="w-4 h-4" />
+          </Link>
+        </div>
+      </section>
+
       {/* Bottom CTA */}
       <section className="bg-slate-900 border-t border-slate-800 py-12">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 text-center">
