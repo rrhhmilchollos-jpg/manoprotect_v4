@@ -140,6 +140,7 @@ const SeguridadViviendaEmpresa = lazy(() => import('@/pages/SeguridadViviendaEmp
 const AlarmasVivienda = lazy(() => import('@/pages/AlarmasVivienda'));
 const AlarmasNegocio = lazy(() => import('@/pages/AlarmasNegocio'));
 const CalculadorPresupuesto = lazy(() => import('@/pages/CalculadorPresupuesto'));
+const AlarmasSecuritasStyle = lazy(() => import('@/pages/AlarmasSecuritasStyle'));
 const OrderConfirmation = lazy(() => import('@/pages/OrderConfirmation'));
 const ThankYouPage = lazy(() => import('@/pages/ThankYouPage'));
 const BlogPage = lazy(() => import('@/pages/BlogPage'));
@@ -537,6 +538,8 @@ function AppRouter() {
           <Route path="/alarmas/negocio" element={<AlarmasNegocio />} />
           <Route path="/calculador" element={<CalculadorPresupuesto />} />
           <Route path="/presupuesto" element={<CalculadorPresupuesto />} />
+          <Route path="/alarmas-hogar" element={<AlarmasSecuritasStyle />} />
+          <Route path="/nuestra-alarma" element={<AlarmasSecuritasStyle />} />
           
           {/* Order Confirmation Page (After Stripe Payment) */}
           <Route path="/pedido-confirmado" element={<OrderConfirmation />} />
