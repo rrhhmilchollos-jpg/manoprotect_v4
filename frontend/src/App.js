@@ -298,32 +298,41 @@ const InterstitialAdManager = () => {
   );
 };
 
-// Global Health Check - Polling cada 5 segundos
+// Global Health Check - Polling cada 30 segundos
 const HealthCheckMonitor = () => {
   useEffect(() => {
     const API = process.env.REACT_APP_BACKEND_URL;
     let wasDown = false;
+    let failCount = 0;
     const check = async () => {
       try {
-        const r = await fetch(`${API}/api/heartbeat`, { signal: AbortSignal.timeout(4000) });
-        if (r.ok && wasDown) {
-          wasDown = false;
-          import('sonner').then(m => m.toast.success('Conexión restaurada', { description: 'El servidor vuelve a estar operativo.' }));
-        }
-        if (!r.ok && !wasDown) {
-          wasDown = true;
-          import('sonner').then(m => m.toast.error('Servidor no disponible', { description: 'Estamos trabajando para restaurar el servicio.' }));
+        const r = await fetch(`${API}/api/heartbeat`, { signal: AbortSignal.timeout(10000) });
+        if (r.ok) {
+          if (wasDown) {
+            wasDown = false;
+            failCount = 0;
+            import('sonner').then(m => m.toast.success('Conexion restaurada', { description: 'El servidor vuelve a estar operativo.' }));
+          }
+          failCount = 0;
+        } else {
+          failCount++;
+          if (failCount >= 3 && !wasDown) {
+            wasDown = true;
+            import('sonner').then(m => m.toast.error('Servidor no disponible', { description: 'Estamos trabajando para restaurar el servicio.' }));
+          }
         }
       } catch {
-        if (!wasDown) {
+        failCount++;
+        if (failCount >= 3 && !wasDown) {
           wasDown = true;
-          import('sonner').then(m => m.toast.error('Sin conexión al servidor', { description: 'Comprobando cada 5 segundos...' }));
+          import('sonner').then(m => m.toast.error('Sin conexion al servidor', { description: 'Reintentando...' }));
         }
       }
     };
-    check();
-    const iv = setInterval(check, 5000);
-    return () => clearInterval(iv);
+    // First check after 5s delay to let app fully load
+    const initTimer = setTimeout(check, 5000);
+    const iv = setInterval(check, 30000);
+    return () => { clearTimeout(initTimer); clearInterval(iv); };
   }, []);
   return null;
 };
