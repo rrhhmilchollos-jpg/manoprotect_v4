@@ -2871,6 +2871,10 @@ print("✅ WhatsApp alerts routes loaded")
 api_router.include_router(phishing_router)
 print("✅ Investor CRM routes loaded")
 
+# Community Shield / Escudo Vecinal
+api_router.include_router(community_shield_router)
+print("✅ Community Shield routes loaded")
+
 # Payment routes (Stripe)
 api_router.include_router(payments_router)
 print("✅ Payment routes loaded")
