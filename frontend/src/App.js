@@ -195,6 +195,9 @@ const EmpleadoRecuperarPassword = lazy(() => import('@/pages/EmpleadoRecuperarPa
 // Escudo Vecinal - Community Security Network
 const EscudoVecinal = lazy(() => import('@/pages/EscudoVecinal'));
 
+// Panel Vecinal Premium - Neighborhood Dashboard (PAID)
+const PanelVecinal = lazy(() => import('@/pages/PanelVecinal'));
+
 // Lazy load non-critical UI components to reduce main thread blocking
 const CookieConsent = lazy(() => import('@/components/CookieConsent'));
 const AIChatWidget = lazy(() => import('@/components/AIChatWidget'));
