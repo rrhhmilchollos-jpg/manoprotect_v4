@@ -1,105 +1,86 @@
-# ManoProtect - Product Requirements Document v2.5.0
+# ManoProtect - Product Requirements Document v2.6.0
 
 ## Core Product
-Plataforma lider en Espana de proteccion digital y fisica para familias con dispositivos Sentinel (X, J, S), sistemas de alarma profesionales para viviendas y empresas, y red de seguridad comunitaria Escudo Vecinal.
+Plataforma lider en Espana de proteccion digital y fisica para familias. Dispositivos Sentinel (X, J, S), sistemas de alarma profesionales, y red de seguridad comunitaria Escudo Vecinal.
 
 ## Tech Stack
-Frontend: React + TailwindCSS + Shadcn/UI + Recharts + Leaflet | Backend: FastAPI + MongoDB | Payments: Stripe | Mobile: Capacitor (Android/iOS)
+Frontend: React + TailwindCSS + Shadcn/UI + Leaflet | Backend: FastAPI + MongoDB | Payments: Stripe | Mobile: Capacitor
 
-## NUEVA FUNCIONALIDAD: Escudo Vecinal (Mar 1, 2026)
+## What's Implemented
 
-### Descripcion
-Primera red de seguridad comunitaria en tiempo real de Espana. Los vecinos de ManoProtect se alertan entre si sobre incidencias en su barrio. Ninguna empresa de alarmas ofrece esto.
+### Escudo Vecinal (Mar 1, 2026)
+- Red de seguridad comunitaria en tiempo real - EXCLUSIVO ManoProtect
+- Mapa interactivo con incidencias (Leaflet + OpenStreetMap)
+- 7 tipos de incidencia: robo, vandalismo, sospechoso, ruido, emergencia, accidente, otro
+- Sistema de confirmacion vecinal (3+ = confirmada)
+- 6 endpoints API: incidents CRUD, stats, heatmap
+- Frontend: /escudo-vecinal con 3 tabs (Mapa, Alertas, Como funciona)
 
-### Backend API Endpoints
-- `GET /api/community-shield/stats` - Estadisticas comunitarias (incidencias 7d/30d, por tipo, por severidad)
-- `GET /api/community-shield/incidents` - Lista incidencias activas (ultimas 24h)
-- `POST /api/community-shield/incidents` - Reportar incidencia (tipo, titulo, descripcion, lat/lng, severidad, anonimo)
-- `PATCH /api/community-shield/incidents/{id}/confirm` - Confirmar incidencia (3+ = confirmada)
-- `PATCH /api/community-shield/incidents/{id}/resolve` - Resolver incidencia
-- `GET /api/community-shield/heatmap` - Mapa de calor de incidencias (30 dias)
+### Alarmas Hogar y Empresa
+- /alarmas-hogar: Landing funnel profesional estilo Securitas Direct
+- /alarmas/vivienda y /alarmas/negocio: Paginas detalle
+- /calculador: Wizard 4 pasos con checkout Stripe integrado
+- 3 planes: Essential (24.99), Premium (39.99), Business (54.99)
+- Checkout Stripe FUNCIONAL para los 3 planes
 
-### Tipos de Incidencia
-| Tipo | Icono | Color |
-|---|---|---|
-| robo | Robo/Hurto | #EF4444 |
-| vandalismo | Vandalismo | #F97316 |
-| sospechoso | Persona sospechosa | #EAB308 |
-| ruido | Ruido/Molestias | #8B5CF6 |
-| emergencia | Emergencia | #DC2626 |
-| accidente | Accidente | #0EA5E9 |
-| otro | Otro | #6B7280 |
+### Newsletter (Mar 1, 2026)
+- POST /api/newsletter/subscribe - Suscripcion con deduplicacion
+- DELETE /api/newsletter/unsubscribe - Baja
+- GET /api/newsletter/stats - Estadisticas
+- Formulario en el footer de toda la web
 
-### Frontend Page: /escudo-vecinal
-- Hero con stats en tiempo real
-- Mapa interactivo Leaflet (centrado Valencia por defecto)
-- 3 tabs: Mapa en vivo, Alertas, Como funciona
-- Modal de reporte de incidencias
-- Feed de alertas vecinales con confirmacion
-- También accesible desde /community-shield y /seguridad-barrio
+### Portal Empleados (Mar 1, 2026)
+- Login funcional: admin@manoprotect.com / Admin2026!
+- Dashboard con estadisticas, gestion empleados, invitaciones
+- Roles: director, manager, soporte, analista_fraude, ventas, logistica, marketing, employee
+- Rutas enterprise con absences, payslips, documents, notifications, holidays
 
-### DB Collection: community_incidents
-```
-{
-  incident_id: str,
-  type: str, type_meta: {icon, color, label},
-  title: str, description: str,
-  location: {type: "Point", coordinates: [lng, lat]},
-  latitude: float, longitude: float,
-  severity: "baja"|"media"|"alta"|"critica",
-  reporter_id: str, reporter_name: str, anonymous: bool,
-  status: "active"|"confirmed"|"resolved",
-  confirmations: int, confirmed_by: [str],
-  created_at: str, expires_at: str
-}
-```
+### Navigation (Actualizada)
+Header: Home | Alarmas (rojo) | Escudo Vecinal (azul) | Productos | Precios | Testimonios | Blog | Contacto
 
-## Paginas de Alarmas Implementadas
+### Health Check Monitor
+- Polling cada 30s (antes 5s)
+- Timeout 10s (antes 4s)  
+- Requiere 3 fallos consecutivos antes de mostrar error
 
-### /alarmas-hogar (Estilo Securitas Direct)
-Pagina principal tipo funnel de ventas profesional con 12 secciones.
+## Key URLs
+| URL | Descripcion |
+|---|---|
+| / | Landing principal |
+| /alarmas-hogar | Alarmas (Securitas style) |
+| /escudo-vecinal | Red seguridad comunitaria |
+| /calculador | Calculadora presupuesto |
+| /empleados/login | Portal empleados |
+| /ceo-dashboard | Panel CEO |
 
-### /alarmas/vivienda - Detalle pisos, chalets, casas
-### /alarmas/negocio - Detalle locales, naves, oficinas
-### /calculador - Wizard 4 pasos (tipo -> m2/accesos -> extras -> resultado)
-
-## Navegacion Principal (Actualizada)
-Header de landing incluye:
-- Home | **Alarmas** (rojo) | **Escudo Vecinal** (azul) | Productos | Precios | Testimonios | Blog | Contacto
-
-## APIs Alarmas
-- GET /api/alarm-plans - 3 planes con precios promo/regular
-- POST /api/budget-calculator - Recomienda plan segun propiedades
-
-## Precios Competitivos
-| Plan | Promo 6m | Regular | Securitas | Prosegur |
-|---|---|---|---|---|
-| Essential | 24,99 | 34,99 | 39,89 | 44,90 |
-| Premium | 39,99 | 49,99 | 48,90 | 48,90 |
-| Business | 54,99 | 69,99 | N/A | 48,90+ |
-
-## URLs Principales
-- / (landing principal)
-- /alarmas-hogar (pagina principal alarmas)
-- /alarmas/vivienda, /alarmas/negocio (detalle)
-- /calculador (presupuesto personalizado)
-- /escudo-vecinal (red seguridad comunitaria) **NUEVO**
-- /empleados/portal (portal empleados)
-- /ceo-dashboard (panel CEO)
-
-## Backlog
-- P1: Stripe checkout funcional para kits alarma
-- P1: Sistema enterprise completo (empleados, ventas, gestion)
-- P1: IDs Meta Pixel, Hotjar, Google SC
-- P2: Videos marketing (credito Sora 2)
-- P3: Integraciones 112, BigQuery, iOS
+## Key API Endpoints
+- POST /api/create-checkout-session (plan_type: alarm-essential/premium/business/family-monthly/etc)
+- POST /api/newsletter/subscribe
+- GET /api/community-shield/stats, /incidents
+- POST /api/employee-portal/login
+- GET /api/alarm-plans, POST /api/budget-calculator
 
 ## Credentials
-| User | Password | Role |
+| User | Password | Portal |
 |---|---|---|
-| ceo@manoprotect.com | 19862210Des | admin |
-| padretest@gmail.com | secure_password_123 | family_tracking |
+| ceo@manoprotect.com | 19862210Des | Admin/CEO |
+| admin@manoprotect.com | Admin2026! | Empleados |
 
-## Testing Status
-- Escudo Vecinal: 100% tests passed (iteration 71) - Backend 11/11, Frontend all UI verified
-- Alarmas pages: tested (iterations 68-70)
+## Backlog
+- P1: Completar sistema enterprise central (gestion empresa)
+- P1: Herramientas comerciales (sales tools)
+- P2: Notificaciones push para Escudo Vecinal
+- P2: SEO/SEM (requiere IDs Meta/Hotjar/GSC)
+- P2: Videos marketing (credito Sora 2)
+- P3: Migrar password hashing de SHA-256 a bcrypt
+- P3: Integraciones produccion (Infobip, SendGrid, Twilio)
+- P3: App iOS (requiere Mac/Xcode)
+
+## Broken/Mocked
+- SMS (Infobip): API key invalida
+- Emails produccion (SendGrid): Sender no verificado
+- WhatsApp (Twilio): Solo sandbox
+
+## Testing
+- iteration_72: 100% backend + frontend pass (alarm checkout, newsletter, employee portal, navigation)
+- iteration_71: 100% community shield pass
