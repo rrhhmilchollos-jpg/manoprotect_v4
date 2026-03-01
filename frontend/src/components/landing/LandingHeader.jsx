@@ -43,12 +43,18 @@ const LandingHeader = () => {
 
       {/* Desktop Navigation */}
       <div className="hidden md:flex items-center gap-4">
-        {/* Blog Button */}
+        <Link 
+          to="/alarmas-hogar"
+          className="bg-red-600 text-white px-4 py-2 rounded-full font-bold text-sm hover:bg-red-700 transition-colors"
+          data-testid="header-alarmas-btn"
+        >
+          Alarmas
+        </Link>
         <Link 
           to="/blog"
           className="bg-[#4CAF50] text-white px-4 py-2 rounded-full font-bold text-sm hover:bg-[#45a049] transition-colors"
         >
-          Blog Seguridad
+          Blog
         </Link>
         
         <Link 
@@ -94,6 +100,14 @@ const LandingHeader = () => {
       {/* Mobile menu */}
       {mobileMenuOpen && (
         <div className="absolute top-full left-0 right-0 md:hidden bg-white border-t border-gray-200 px-6 py-4 space-y-3 shadow-lg z-50">
+          <Link
+            to="/alarmas-hogar"
+            className="block py-2 text-red-600 hover:text-red-700 font-bold"
+            onClick={() => setMobileMenuOpen(false)}
+            data-testid="mobile-alarmas-btn"
+          >
+            Alarmas Hogar y Empresa
+          </Link>
           <Link
             to="/dispositivo-sos"
             className="block py-2 text-gray-700 hover:text-[#4CAF50] font-medium"
