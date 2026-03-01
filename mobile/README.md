@@ -25,7 +25,7 @@ Todas las apps se conectan al mismo backend:
 
 | Entorno | URL |
 |---------|-----|
-| Preview | https://manoprotect-preview.preview.emergentagent.com |
+| Preview | https://mano-ops-workspace.preview.emergentagent.com |
 | Producción | [Tu dominio de producción] |
 
 ---
