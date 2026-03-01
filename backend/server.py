@@ -2879,6 +2879,10 @@ print("✅ Investor CRM routes loaded")
 api_router.include_router(community_shield_router)
 print("✅ Community Shield routes loaded")
 
+# Newsletter
+api_router.include_router(newsletter_router)
+print("✅ Newsletter routes loaded")
+
 # Payment routes (Stripe)
 api_router.include_router(payments_router)
 print("✅ Payment routes loaded")
