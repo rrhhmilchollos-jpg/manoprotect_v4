@@ -2821,6 +2821,10 @@ print("✅ Chat routes loaded")
 api_router.include_router(employee_portal_router)
 print("✅ Employee Portal routes loaded")
 
+# Enterprise Auth routes (Login, 2FA, Dashboard)
+api_router.include_router(enterprise_auth_router)
+print("✅ Enterprise Auth routes loaded")
+
 # Enterprise routes (Dashboard & Reports)
 api_router.include_router(enterprise_router)
 print("✅ Enterprise routes loaded")
