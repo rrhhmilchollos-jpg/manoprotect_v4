@@ -223,10 +223,34 @@ const CalculadorPresupuesto = () => {
                   <p className="text-emerald-700 text-sm font-bold">Ahorras {result.savings_vs_securitas} EUR/ano vs Securitas Direct</p>
                 </div>
               )}
+              <button onClick={async () => {
+                const planMap = { 'Essential': 'alarm-essential', 'Premium': 'alarm-premium', 'Business': 'alarm-business' };
+                const planType = planMap[result.recommended_plan] || 'alarm-essential';
+                try {
+                  const res = await fetch(`${API}/api/create-checkout-session`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    credentials: 'include',
+                    body: JSON.stringify({ plan_type: planType, origin_url: window.location.origin }),
+                  });
+                  const data = await res.json();
+                  if (data.checkout_url) {
+                    window.location.href = data.checkout_url;
+                  } else {
+                    navigate('/registro');
+                  }
+                } catch {
+                  navigate('/registro');
+                }
+              }}
+                className="w-full py-4 rounded-xl bg-gradient-to-r from-orange-500 to-red-500 text-white font-bold text-sm hover:shadow-xl transition-all flex items-center justify-center gap-2"
+                data-testid="cta-checkout">
+                <Zap className="w-4 h-4" /> Contratar ahora — {result.promo_price} EUR/mes
+              </button>
               <button onClick={() => navigate('/contacto')}
-                className="w-full py-4 rounded-xl bg-gradient-to-r from-orange-500 to-red-500 text-white font-bold text-sm hover:shadow-xl transition-all"
-                data-testid="cta-result">
-                Solicitar instalacion GRATIS
+                className="w-full py-3 mt-2 rounded-xl border border-gray-300 text-gray-600 font-medium text-sm hover:bg-gray-50 transition-all"
+                data-testid="cta-contact-instead">
+                Prefiero que me llamen
               </button>
             </div>
             <div className="flex gap-3">
