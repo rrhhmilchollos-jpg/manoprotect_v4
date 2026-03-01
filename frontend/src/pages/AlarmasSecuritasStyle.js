@@ -524,9 +524,22 @@ const AlarmasSecuritasStyle = () => {
                       </li>
                     ))}
                   </ul>
-                  <Link to="/calculador" className={`block w-full py-3.5 rounded-xl font-bold text-sm text-center transition-all text-white ${p.popular ? 'bg-gradient-to-r from-orange-500 to-red-500 hover:shadow-lg' : 'bg-gray-900 hover:bg-gray-800'}`}>
-                    Calcular mi precio
-                  </Link>
+                  <button onClick={async () => {
+                    const planMap = { 'Essential': 'alarm-essential', 'Premium': 'alarm-premium', 'Business': 'alarm-business' };
+                    try {
+                      const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/create-checkout-session`, {
+                        method: 'POST', headers: { 'Content-Type': 'application/json' }, credentials: 'include',
+                        body: JSON.stringify({ plan_type: planMap[p.name], origin_url: window.location.origin }),
+                      });
+                      const data = await res.json();
+                      if (data.checkout_url) window.location.href = data.checkout_url;
+                      else window.location.href = '/calculador';
+                    } catch { window.location.href = '/calculador'; }
+                  }}
+                    className={`block w-full py-3.5 rounded-xl font-bold text-sm text-center transition-all text-white ${p.popular ? 'bg-gradient-to-r from-orange-500 to-red-500 hover:shadow-lg' : 'bg-gray-900 hover:bg-gray-800'}`}
+                    data-testid={`checkout-${p.name.toLowerCase()}`}>
+                    Contratar ahora — {p.promo} EUR/mes
+                  </button>
                   <Link to={p.link} className="block text-center text-xs text-gray-400 hover:text-blue-600 font-bold mt-2">Ver detalles</Link>
                 </div>
               </div>
