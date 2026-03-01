@@ -89,6 +89,7 @@ const HighConversionLanding = () => {
 
           <nav className="hidden md:flex items-center gap-6 text-[13px] font-medium text-gray-500">
             <a href="#" onClick={e => { e.preventDefault(); window.scrollTo({top:0,behavior:'smooth'}); }} className="hover:text-emerald-600 transition-colors" data-testid="nav-home">Home</a>
+            <Link to="/alarmas-hogar" className="text-red-600 font-bold hover:text-red-700 transition-colors" data-testid="nav-alarmas">Alarmas</Link>
             <Link to="/productos" className="hover:text-emerald-600 transition-colors" data-testid="nav-productos">Productos</Link>
             <Link to="/plans" className="hover:text-emerald-600 transition-colors" data-testid="nav-precios">Precios</Link>
             <Link to="/testimonios" className="hover:text-emerald-600 transition-colors" data-testid="nav-testimonios">Testimonios</Link>
@@ -108,6 +109,7 @@ const HighConversionLanding = () => {
         </div>
         {mobileMenu && (
           <div className="md:hidden bg-white border-t border-gray-100 px-4 py-4 space-y-3" data-testid="mobile-menu">
+            <Link to="/alarmas-hogar" onClick={() => setMobileMenu(false)} className="block text-sm text-red-600 font-bold hover:text-red-700" data-testid="mobile-nav-alarmas">Alarmas Hogar y Empresa</Link>
             <Link to="/productos" onClick={() => setMobileMenu(false)} className="block text-sm text-gray-600 hover:text-emerald-600">Productos</Link>
             <Link to="/plans" onClick={() => setMobileMenu(false)} className="block text-sm text-gray-600 hover:text-emerald-600">Precios</Link>
             <Link to="/testimonios" onClick={() => setMobileMenu(false)} className="block text-sm text-gray-600 hover:text-emerald-600">Testimonios</Link>
