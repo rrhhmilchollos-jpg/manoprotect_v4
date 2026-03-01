@@ -1,4 +1,4 @@
-# ManoProtect - Product Requirements Document v2.3.0
+# ManoProtect - Product Requirements Document v2.4.0
 
 ## Core Product
 Plataforma lider en Espana de proteccion digital y fisica para familias con dispositivos Sentinel (X, J, S) y sistemas de alarma profesionales para viviendas y empresas.
@@ -6,55 +6,57 @@ Plataforma lider en Espana de proteccion digital y fisica para familias con disp
 ## Tech Stack
 Frontend: React + TailwindCSS + Shadcn/UI + Recharts | Backend: FastAPI + MongoDB | Payments: Stripe | Mobile: Capacitor (Android/iOS)
 
-## Implemented Features (Feb 28 - Mar 1, 2026)
+## Paginas de Alarmas Implementadas
 
-### Alarmas Premium - 3 Paginas + Landing
-- `/seguridad-hogar-empresa` - Landing principal: 3 kits, vs competencia, Sentinel integrado
-- `/alarmas/vivienda` - Detalle vivienda: equipamiento, 2 planes (Essential + Premium)
-- `/alarmas/negocio` - Detalle negocio: tipos, equipamiento avanzado, Plan Business
+### /alarmas-hogar (NUEVA - Estilo Securitas Direct) Mar 1, 2026
+Pagina principal tipo funnel de ventas profesional con 12 secciones:
+1. Hero con familia + mini calculadora inline (4 tipos propiedad con precios)
+2. Barra de confianza (+3.200 hogares, +950 empresas, 4.9/5)
+3. Nuestra Alarma: panel control + camaras IA + kit completo (4 tarjetas)
+4. Como Funciona: 4 pasos (deteccion -> verificacion video -> alerta -> respuesta <60s) + instalacion gratis
+5. Tipos de Vivienda: tabs interactivos (Piso 24,99 | Chalet 39,99 | Local 54,99 | Nave 54,99) con imagenes
+6. App ManoProtect con mockup y features
+7. Sentinel SOS exclusivo (enlace a /productos)
+8. Precios: 3 tarjetas (Essential, Premium, Business)
+9. VS Competencia: tabla 10 filas (ManoProtect vs Securitas Direct vs Prosegur)
+10. FAQ: 10 preguntas acordeon
+11. CTA final con calculador
+12. Header sticky con navegacion por anclas
 
-### Calculador Interactivo de Presupuesto (NEW)
-- Ruta: `/calculador`, `/presupuesto`
-- Wizard 4 pasos: tipo espacio -> detalles (m2, accesos, plantas, jardin) -> extras (camaras) -> resultado
-- Backend: `POST /api/budget-calculator` - recomienda plan basado en propiedades
-- Muestra ahorro vs Securitas Direct, equipo incluido, precio promo/regular
-- CTA a contacto y link a kits
+### /alarmas/vivienda - Detalle pisos, chalets, casas
+### /alarmas/negocio - Detalle locales, naves, oficinas
+### /seguridad-hogar-empresa - Landing alternativa con 3 kits
+### /calculador - Wizard 4 pasos (tipo -> m2/accesos -> extras -> resultado)
 
-### Planes Alarma Stripe (NEW)
-- `GET /api/alarm-plans` - 3 planes con precios promo y regular
-- Essential: 24.99/34.99 EUR | Premium: 39.99/49.99 EUR | Business: 54.99/69.99 EUR
-- Integrados en SUBSCRIPTION_PACKAGES del backend
+## Otras Paginas Implementadas
+- /about-us (Quienes Somos): equipo 6 miembros, timeline 2023-2026, oficina Valencia
+- CEO Dashboard Enterprise: 8 secciones completas
+- Sistema IP Blocking + Promotional Logic + SEO Phase 3
 
-### Quienes Somos - Rediseño Premium (NEW)
-- Rutas: `/about-us`, `/quienes-somos`, `/sobre-nosotros`
-- Hero con foto equipo, numeros (3.200+ hogares, 950+ empresas, 4.9/5)
-- Mision con historia real del fundador
-- 6 miembros del equipo con bios
-- Timeline 2023-2026
-- Productos (Sentinel, alarmas vivienda, alarmas negocio)
-- Oficina Valencia con direccion, telefono, email
+## APIs Alarmas
+- GET /api/alarm-plans - 3 planes con precios promo/regular
+- POST /api/budget-calculator - Recomienda plan segun propiedades
+- Alarm plans integrados en SUBSCRIPTION_PACKAGES de Stripe
 
-### CEO Dashboard Enterprise (8 secciones)
-- Dashboard, Inventario, Usuarios, Membresias, Pagos, Seguridad, Mensajes, Reportes
-
-### Precios vs Competencia
-| Plan | Promo 6m | Regular | Securitas Direct | Prosegur |
+## Precios Competitivos
+| Plan | Promo 6m | Regular | Securitas | Prosegur |
 |---|---|---|---|---|
-| Essential | 24.99 | 34.99 | 39.89 | 44.90 |
-| Premium | 39.99 | 49.99 | 48.90 | 48.90 |
-| Business | 54.99 | 69.99 | N/A | 48.90+ |
+| Essential | 24,99 | 34,99 | 39,89 | 44,90 |
+| Premium | 39,99 | 49,99 | 48,90 | 48,90 |
+| Business | 54,99 | 69,99 | N/A | 48,90+ |
 
-### Correcciones aplicadas
-- FloatingSOSButton ELIMINADO
-- "Plazas" cambiado a "unidades" en popup urgencia
-- Links calculador en header, hero y footer de alarmas
+## URLs Principales
+- /alarmas-hogar (pagina principal alarmas estilo Securitas Direct)
+- /alarmas/vivienda, /alarmas/negocio (detalle)
+- /calculador (presupuesto personalizado)
+- /empleados/portal (portal empleados)
+- /ceo-dashboard (panel CEO)
 
 ## Backlog
-- P1: Stripe checkout funcional para contratar kits alarma (formulario pago)
-- P1: IDs Meta Pixel, Hotjar, Google SC (bloqueado por usuario)
-- P2: Videos marketing (bloqueado credito Sora 2 - Profile->Universal Key->Add Balance)
-- P3: Integraciones 112, BigQuery
-- P3: App iOS Capacitor (requiere Mac+Xcode)
+- P1: Stripe checkout funcional para kits alarma
+- P1: IDs Meta Pixel, Hotjar, Google SC
+- P2: Videos marketing (credito Sora 2)
+- P3: Integraciones 112, BigQuery, iOS
 
 ## Credentials
 | User | Password | Role |
