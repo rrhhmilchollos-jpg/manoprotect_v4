@@ -35,9 +35,18 @@ function MapView({ incidents, userPos, onMapClick }) {
   const mapRef = useRef(null);
   const mapInstance = useRef(null);
   const markersRef = useRef([]);
+  const initRef = useRef(false);
 
   useEffect(() => {
-    if (!mapRef.current || mapInstance.current) return;
+    if (!mapRef.current || initRef.current) return;
+    initRef.current = true;
+
+    // Clean any previous map instance on this container
+    if (mapRef.current._leaflet_id) {
+      mapRef.current._leaflet_id = null;
+      mapRef.current.innerHTML = '';
+    }
+
     import('leaflet').then((L) => {
       const defaultCss = document.querySelector('link[href*="leaflet.css"]');
       if (!defaultCss) {
@@ -47,8 +56,8 @@ function MapView({ incidents, userPos, onMapClick }) {
         document.head.appendChild(link);
       }
 
-      const center = userPos ? [userPos.lat, userPos.lng] : [39.4699, -0.3763]; // Valencia default
-      const map = L.map(mapRef.current).setView(center, 14);
+      const center = userPos ? [userPos.lat, userPos.lng] : [39.4699, -0.3763];
+      const map = L.map(mapRef.current, { zoomControl: true }).setView(center, 14);
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; OpenStreetMap',
         maxZoom: 19,
@@ -56,19 +65,15 @@ function MapView({ incidents, userPos, onMapClick }) {
 
       if (userPos) {
         L.circle([userPos.lat, userPos.lng], {
-          radius: 50,
-          color: '#10B981',
-          fillColor: '#10B981',
-          fillOpacity: 0.3,
+          radius: 50, color: '#10B981', fillColor: '#10B981', fillOpacity: 0.3,
         }).addTo(map);
         L.marker([userPos.lat, userPos.lng], {
           icon: L.divIcon({
             className: 'custom-marker',
             html: '<div style="width:16px;height:16px;background:#10B981;border:3px solid white;border-radius:50%;box-shadow:0 2px 8px rgba(0,0,0,0.3)"></div>',
-            iconSize: [16, 16],
-            iconAnchor: [8, 8],
+            iconSize: [16, 16], iconAnchor: [8, 8],
           }),
-        }).addTo(map).bindPopup('<b>Tu ubicación</b>');
+        }).addTo(map).bindPopup('<b>Tu ubicacion</b>');
       }
 
       map.on('click', (e) => {
@@ -76,14 +81,19 @@ function MapView({ incidents, userPos, onMapClick }) {
       });
 
       mapInstance.current = map;
+
+      // Force a resize after mount
+      setTimeout(() => map.invalidateSize(), 200);
     });
+
     return () => {
       if (mapInstance.current) {
-        mapInstance.current.remove();
+        try { mapInstance.current.remove(); } catch {}
         mapInstance.current = null;
       }
+      initRef.current = false;
     };
-  }, []);
+  }, [userPos]);
 
   useEffect(() => {
     if (!mapInstance.current) return;
