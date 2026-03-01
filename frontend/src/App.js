@@ -611,6 +611,10 @@ function AppRouter() {
           <Route path="/community-shield" element={<EscudoVecinal />} />
           <Route path="/seguridad-barrio" element={<EscudoVecinal />} />
           
+          {/* Panel Vecinal Premium - PAID ONLY (annual, per family) */}
+          <Route path="/panel-vecinal" element={<PanelVecinal />} />
+          <Route path="/panel-vecinal-premium" element={<PanelVecinal />} />
+          
           {/* Enterprise B2B Landing */}
           <Route path="/enterprise" element={<EnterprisePortal />} />
           <Route path="/enterprise/login" element={<EnterpriseLogin />} />
