@@ -51,6 +51,13 @@ const LandingHeader = () => {
           Alarmas
         </Link>
         <Link 
+          to="/escudo-vecinal"
+          className="bg-blue-600 text-white px-4 py-2 rounded-full font-bold text-sm hover:bg-blue-700 transition-colors"
+          data-testid="header-escudo-btn"
+        >
+          Escudo Vecinal
+        </Link>
+        <Link 
           to="/blog"
           className="bg-[#4CAF50] text-white px-4 py-2 rounded-full font-bold text-sm hover:bg-[#45a049] transition-colors"
         >
@@ -107,6 +114,14 @@ const LandingHeader = () => {
             data-testid="mobile-alarmas-btn"
           >
             Alarmas Hogar y Empresa
+          </Link>
+          <Link
+            to="/escudo-vecinal"
+            className="block py-2 text-blue-500 hover:text-blue-600 font-bold"
+            onClick={() => setMobileMenuOpen(false)}
+            data-testid="mobile-escudo-btn"
+          >
+            Escudo Vecinal
           </Link>
           <Link
             to="/dispositivo-sos"
