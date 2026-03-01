@@ -315,7 +315,7 @@ from routes.chat_routes import router as chat_router, init_chat_routes
 init_chat_routes(db)
 
 # Employee Portal Routes (Messaging & Presence)
-from routes.employee_portal_routes import router as employee_portal_router, init_employee_routes
+from routes.employee_portal_routes import router as enterprise_auth_router, init_employee_routes
 init_employee_routes(db)
 
 # Enterprise Routes (Dashboard & Reports)
