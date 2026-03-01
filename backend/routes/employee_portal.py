@@ -413,12 +413,15 @@ async def employee_login(data: EmployeeLogin, response: Response):
     employee = await db.employees.find_one({"email": data.email})
     
     if not employee:
+        print(f"[LOGIN DEBUG] Employee not found: {data.email}, db={db is not None}")
         raise HTTPException(status_code=401, detail="Credenciales inválidas")
     
     if not employee.get("is_active"):
+        print(f"[LOGIN DEBUG] Employee not active: {data.email}")
         raise HTTPException(status_code=401, detail="Cuenta desactivada. Contacta al director.")
     
     if not verify_password(data.password, employee.get("password_hash", "")):
+        print(f"[LOGIN DEBUG] Password mismatch: stored={employee.get('password_hash','')[:20]}, computed={hash_password(data.password)[:20]}")
         raise HTTPException(status_code=401, detail="Credenciales inválidas")
     
     # Generate new session token
