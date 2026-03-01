@@ -1,0 +1,125 @@
+{
+  "summary": "Iteration 67: Tested new features - Budget Calculator (4-step wizard at /calculador), redesigned Sobre Nosotros page, alarm plan APIs, and 'plazas' to 'unidades' fix. ALL 12 backend tests passed. ALL frontend tests passed.",
+
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+
+  "passed_tests": [
+    "GET /api/alarm-plans returns 3 alarm plans (essential, premium, business)",
+    "Alarm plan Essential: 24.99 promo, 34.99 regular, 2 cameras, 1 sentinel",
+    "Alarm plan Premium: 39.99 promo, 49.99 regular, 6 cameras, 2 sentinels, popular=true",
+    "Alarm plan Business: 54.99 promo, 69.99 regular, 10 cameras, 3 sentinels",
+    "POST /api/budget-calculator with piso returns Essential plan",
+    "POST /api/budget-calculator with chalet returns Premium plan",
+    "POST /api/budget-calculator with local/oficina/nave returns Business plan",
+    "Budget calculator with has_garden=true adds extra cameras and sirens",
+    "Budget calculator with cameras_extra adds to total camera count",
+    "Budget Calculator page loads at /calculador with 4-step wizard",
+    "Budget Calculator Step 1: 6 space types (piso, chalet, adosado, local, oficina, nave)",
+    "Budget Calculator: Selecting space type advances to Step 2",
+    "Budget Calculator Step 2: sqm slider, accesses slider, floors slider, garden toggle",
+    "Budget Calculator Step 3: cameras extra slider, calculate button",
+    "Budget Calculator: Clicking calculate calls API and shows result (Step 4)",
+    "Budget Calculator result shows recommended plan (Essential/Premium/Business)",
+    "Budget Calculator result shows promo price, regular price, equipment details",
+    "Budget Calculator result shows 'Ahorras X EUR/ano vs Securitas Direct'",
+    "Budget Calculator result has CTA button to /contacto",
+    "Budget Calculator result has link to /seguridad-hogar-empresa",
+    "Sobre Nosotros page (/about-us, /quienes-somos, /sobre-nosotros) loads with hero section",
+    "Sobre Nosotros hero: Team photo background, 'Personas reales protegiendo a familias reales'",
+    "Sobre Nosotros numbers bar: +3.200 Hogares, +950 Empresas, 30+ Empleados, 4.9/5 Reviews, 2023 Founded",
+    "Sobre Nosotros mission section: 4 value cards (Proteccion real, Familias primero, Innovacion, Sin permanencia)",
+    "Sobre Nosotros team section: 6 team members with photos and bios",
+    "Sobre Nosotros timeline: 2023-2026 milestones",
+    "Sobre Nosotros products section: Sentinel watches, Alarmas viviendas, Alarmas negocios",
+    "Sobre Nosotros office section: Address, phone, email, coverage info",
+    "Sobre Nosotros CTA section with buttons to alarmas, productos, contacto",
+    "Main alarm page (/seguridad-hogar-empresa) header has 'Calcular precio' button linking to /calculador",
+    "Main alarm page hero has 'Calcular mi precio' button linking to /calculador",
+    "Footer has 'Calcular Presupuesto' link to /calculador in FAMILIA column",
+    "Urgency popup shows 'unidades' instead of 'plazas' (VERIFIED: 'Solo quedan 50 unidades...')",
+    "StockUrgencyPopup appears after ~8 seconds and can be dismissed"
+  ],
+
+  "test_report_links": [
+    "/app/backend/tests/test_iteration_67_alarm_features.py",
+    "/app/test_reports/pytest/iteration_67_alarm_features.xml"
+  ],
+
+  "action_items": [],
+
+  "critical_code_review_comments": [],
+
+  "updated_files": [
+    "/app/backend/tests/test_iteration_67_alarm_features.py"
+  ],
+
+  "success_rate": {
+    "backend": "100% (12/12 tests passed)",
+    "frontend": "100% (All UI features verified)"
+  },
+
+  "test_credentials": {},
+
+  "seed_data_creation": "",
+
+  "retest_needed": false,
+
+  "should_main_agent_self_test": false,
+
+  "context_for_next_testing_agent": "Iteration 67 verified all new features: 1) Budget Calculator at /calculador - 4-step wizard (space type -> details with sliders -> cameras extra -> result). API POST /api/budget-calculator works correctly recommending Essential for piso/apartamento, Premium for chalet/adosado, Business for local/oficina/nave. 2) GET /api/alarm-plans returns 3 plans with correct pricing. 3) Sobre Nosotros page completely redesigned with hero team photo, numbers bar, mission section, 6 team members, timeline, products section, office info. 4) Calculator links added: header 'Calcular precio' button, hero 'Calcular mi precio' button, footer 'Calcular Presupuesto' link. 5) Urgency popup now uses 'unidades' instead of 'plazas' (verified in screenshot). All backend and frontend tests passed.",
+
+  "features_verified": {
+    "budget_calculator": {
+      "route": "/calculador (also /presupuesto)",
+      "step1": "Space type selection (6 options: piso, chalet, adosado, local, oficina, nave)",
+      "step2": "Details with sliders (sqm 30-500, accesses 1-8, floors 1-5, garden toggle)",
+      "step3": "Extras (cameras_extra slider 0-6) + Calculate button",
+      "step4": "Result shows recommended plan, promo/regular price, equipment details, savings vs Securitas, CTA to /contacto, link to /seguridad-hogar-empresa"
+    },
+    "budget_calculator_api": {
+      "endpoint": "POST /api/budget-calculator",
+      "input": "{space_type, sqm, accesses, floors, cameras_extra, has_garden}",
+      "output": "{recommended_plan, plan_id, promo_price, regular_price, details, savings_vs_securitas}"
+    },
+    "alarm_plans_api": {
+      "endpoint": "GET /api/alarm-plans",
+      "returns": "3 plans (essential, premium, business) with promo/regular prices"
+    },
+    "sobre_nosotros_redesign": {
+      "routes": "/about-us, /quienes-somos, /sobre-nosotros",
+      "hero": "Team photo background with title 'Personas reales protegiendo a familias reales'",
+      "numbers_bar": "+3.200 Hogares, +950 Empresas, 30+ Empleados, 4.9/5 Reviews, 2023 Founded",
+      "mission": "4 value cards",
+      "team": "6 members (Daniel Escriva CEO, Maria Lopez, Carlos Ruiz CTO, Ana Garcia, Javier Martinez, Laura Fernandez)",
+      "timeline": "2023-2026 milestones",
+      "products": "Sentinel watches, Alarmas viviendas, Alarmas negocios",
+      "office": "Valencia address, phone, email",
+      "cta": "Buttons to alarmas, productos, contacto"
+    },
+    "calculator_links": {
+      "header": "'Calcular precio' button in /seguridad-hogar-empresa header -> /calculador",
+      "hero": "'Calcular mi precio' button in hero section -> /calculador",
+      "footer": "'Calcular Presupuesto' link in FAMILIA column -> /calculador"
+    },
+    "plazas_to_unidades": {
+      "component": "StockUrgencyPopup in App.js",
+      "old_text": "'plazas'",
+      "new_text": "'unidades'",
+      "verified": "Popup shows 'Solo quedan 50 unidades de Sentinel X Basic GRATIS y 200 unidades con 20% descuento'"
+    }
+  },
+
+  "mocked_apis": {
+    "has_mocked_apis": false,
+    "note": "All APIs are real and functional"
+  }
+}
