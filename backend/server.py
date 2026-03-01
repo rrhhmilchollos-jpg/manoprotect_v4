@@ -414,6 +414,10 @@ init_community_shield(db)
 from routes.newsletter_routes import router as newsletter_router, init_newsletter
 init_newsletter(db)
 
+# Panel Vecinal Premium
+from routes.panel_vecinal_routes import router as panel_vecinal_router, init_panel_vecinal
+init_panel_vecinal(db)
+
 # Subscription Manager (Trial management, blocking system)
 from routes.subscription_manager import router as subscription_manager_router
 
