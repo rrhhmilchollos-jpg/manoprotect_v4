@@ -2,8 +2,11 @@
  * ManoProtect - Premium Footer Component
  * Professional, organized footer with clear hierarchy
  */
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Shield, Phone, Mail, MapPin, Lock, CreditCard, Award, Smartphone, Truck, Star, CheckCircle, ExternalLink } from 'lucide-react';
+import { Shield, Phone, Mail, MapPin, Lock, CreditCard, Award, Smartphone, Truck, Star, CheckCircle, ExternalLink, Send } from 'lucide-react';
+
+const API = process.env.REACT_APP_BACKEND_URL;
 
 const LOGO_URL = '/manoprotect_logo.webp';
 
