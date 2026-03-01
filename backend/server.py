@@ -2906,6 +2906,10 @@ print("✅ Community Shield routes loaded")
 api_router.include_router(newsletter_router)
 print("✅ Newsletter routes loaded")
 
+# Panel Vecinal Premium
+api_router.include_router(panel_vecinal_router)
+print("✅ Panel Vecinal Premium routes loaded")
+
 # Payment routes (Stripe)
 api_router.include_router(payments_router)
 print("✅ Payment routes loaded")
