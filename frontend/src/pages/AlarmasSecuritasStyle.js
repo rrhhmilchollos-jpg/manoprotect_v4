@@ -625,7 +625,7 @@ const AlarmasSecuritasStyle = () => {
               <h2 className="text-2xl sm:text-3xl font-black mb-3 tracking-tight">Sentinel Lock: la cerradura que llama a la policia</h2>
               <p className="text-gray-400 text-sm mb-4">Anade la cerradura inteligente autonoma a tu sistema de alarma. Deteccion de intrusion por IA, comunicacion celular NB-IoT y aviso directo a la Central y Policia. <strong className="text-white">Sin WiFi. Sin corriente.</strong></p>
               <ul className="space-y-2 mb-6">
-                {['Autonoma al 100% — funciona sin WiFi ni electricidad', 'IA que diferencia accidentes de ataques reales', 'Compatible con todos los planes de alarma', 'Instalacion profesional GRATIS'].map((f, i) => (
+                {['Autonoma al 100% — funciona sin WiFi ni electricidad', 'IA que diferencia accidentes de ataques reales', 'Producto bajo pedido — pago anticipado obligatorio', 'Instalacion profesional GRATIS'].map((f, i) => (
                   <li key={i} className="flex items-center gap-2 text-xs text-gray-300"><Check className="w-3.5 h-3.5 text-emerald-400 flex-shrink-0" />{f}</li>
                 ))}
               </ul>
