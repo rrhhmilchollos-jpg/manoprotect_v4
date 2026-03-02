@@ -82,11 +82,13 @@ function VecinalPaywall({ planInfo }) {
           {/* Price card */}
           <div className="bg-gradient-to-br from-slate-800 to-slate-900 border-2 border-amber-500/30 rounded-3xl p-8 max-w-md mx-auto mb-8 relative overflow-hidden">
             <div className="absolute top-0 right-0 bg-amber-500 text-black text-xs font-black px-4 py-1 rounded-bl-xl">SOLO ANUAL</div>
-            <div className="mb-4">
-              <span className="text-5xl font-black text-white">{planInfo?.price || 499.99}</span>
+            <div className="absolute top-0 left-0 bg-emerald-500 text-white text-xs font-black px-4 py-1 rounded-br-xl">INDEPENDIENTE</div>
+            <div className="mb-2 mt-4">
+              <span className="text-5xl font-black text-white">{planInfo?.price || 299.99}</span>
               <span className="text-lg text-slate-400 ml-1">EUR/ano</span>
             </div>
-            <p className="text-emerald-400 text-sm font-bold mb-6">{planInfo?.price_monthly_equivalent || 41.67} EUR/mes equivalente</p>
+            <p className="text-emerald-400 text-sm font-bold mb-2">{planInfo?.price_monthly_equivalent || 25.00} EUR/mes equivalente</p>
+            <p className="text-amber-400/70 text-xs mb-6">Por unidad familiar — ilimitadas familias pueden unirse al barrio</p>
 
             <div className="space-y-2 text-left mb-6">
               {(planInfo?.features || [
