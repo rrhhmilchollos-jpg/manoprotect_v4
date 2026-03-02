@@ -1,59 +1,41 @@
-# ManoProtect - Product Requirements Document v2.8.0
+# ManoProtect - Product Requirements Document v3.0.0
 
 ## Core Product
-Plataforma lider en Espana de proteccion digital y fisica. Dispositivos Sentinel, alarmas, Escudo Vecinal gratuito, y Panel Vecinal Premium (independiente).
+Plataforma lider en Espana de proteccion digital y fisica. Dispositivos Sentinel, alarmas, Escudo Vecinal gratuito, Panel Vecinal Premium (independiente), Dashboard de Barrio publico, y Sistema Central de Empresa.
 
 ## Tech Stack
-Frontend: React + TailwindCSS + Shadcn/UI + Leaflet | Backend: FastAPI + MongoDB | Payments: Stripe
+Frontend: React + TailwindCSS + Shadcn/UI + Leaflet | Backend: FastAPI + MongoDB | Payments: Stripe | Push: pywebpush (Web Push API)
 
-## PLAN VECINAL PREMIUM (Actualizado Mar 2, 2026)
+## PLAN VECINAL PREMIUM
+- **INDEPENDIENTE y OPCIONAL** - No requiere ningun otro producto
+- Precio: 299.99 EUR/ano (solo anual, por family_id, ilimitadas familias)
+- Sistema de referidos: 1 mes gratis por vecino que contrate
+- Backend: /api/panel-vecinal/* (ver endpoints abajo)
+- Push notifications integradas en alertas criticas
 
-### Concepto
-Plan **INDEPENDIENTE y OPCIONAL**. No requiere ningun otro producto de ManoProtect. Cualquier grupo de vecinos puede contratarlo por family_id. Ilimitadas familias por barrio.
+## DASHBOARD DE BARRIO (NUEVO - Mar 2, 2026)
+- Pagina publica: /dashboard-barrio
+- Muestra estadisticas anonimizadas del barrio
+- Graficos de tipo de incidencia, mapa de calor, nivel de seguridad
+- CTA al Panel Vecinal Premium para conversion
+- Backend: /api/dashboard-barrio/public-stats, /api/dashboard-barrio/leaderboard
 
-### Precio: 299.99 EUR/ano (25 EUR/mes equivalente)
-- **SOLO ANUAL** - No opcion mensual
-- **POR FAMILIA** (family_id) - Un plan por unidad familiar
-- **ILIMITADO** - Sin limite de familias por barrio
-- **INDEPENDIENTE** - No requiere alarma ni otro producto
+## SISTEMA CENTRAL DE EMPRESA (NUEVO - Mar 2, 2026)
+- Pagina: /gestion-empresa
+- Dashboard central con metricas clave (usuarios, suscripciones, ingresos, empleados)
+- CRM de Ventas: CRUD de leads con pipeline (new > contacted > qualified > proposal > closed)
+- Gestion de Instalaciones: programar, iniciar, completar instalaciones
+- Backend: /api/enterprise-central/dashboard, /api/enterprise-central/leads, /api/enterprise-central/installations
 
-### Sistema de Referidos
-- Cada familia que trae un vecino nuevo = 1 mes gratis
-- Codigo referido unico por familia
-- URL compartible: manoprotect.com/panel-vecinal?ref=CODIGO
-
-### Backend API: /api/panel-vecinal/*
-| Endpoint | Auth | Descripcion |
-|---|---|---|
-| GET /plan-info | Public | Info plan, precio, features |
-| GET /check-access | Public | Verificar suscripcion |
-| POST /alerts | Premium | Enviar alerta vecinal |
-| GET /alerts | Premium | Alertas activas (48h) |
-| GET /dashboard | Premium | Stats completas |
-| PATCH /alerts/{id}/confirm | Premium | Confirmar alerta |
-| PATCH /alerts/{id}/resolve | Premium | Resolver alerta |
-| GET /neighbors | Premium | Familias vecinas |
-| POST /referrals/invite | Premium | Invitar vecino |
-| GET /referrals | Premium | Mis referidos |
-
-### Paywall
-- Sin suscripcion: Muestra landing con precio, features, badges INDEPENDIENTE/SOLO ANUAL, banner referidos
-- Con suscripcion activa: Dashboard completo con alertas en vivo
-
-## Todos los Plans Stripe (INDEPENDIENTES)
-| Plan | Precio | Periodo | Tipo |
-|---|---|---|---|
-| vecinal-anual | 299.99 | ano | Comunidad (INDEPENDIENTE) |
-| alarm-business | 54.99 | mes | Alarma |
-| alarm-premium | 39.99 | mes | Alarma |
-| alarm-essential | 24.99 | mes | Alarma |
-| enterprise | 199.99 | mes | Empresa |
-| family-yearly | 99.99 | ano | Familia |
-| family-monthly | 9.99 | mes | Familia |
+## NOTIFICACIONES PUSH (NUEVO - Mar 2, 2026)
+- Servicio: services/push_notification_service.py
+- Integrado con panel_vecinal_routes.py - se activan al enviar alertas criticas
+- Usa Web Push API con VAPID keys
+- Envia a todos los usuarios con push_subscriptions activas
 
 ## Escudo Vecinal (GRATUITO)
 - /escudo-vecinal: Mapa + alertas comunitarias
-- CTA al Panel Vecinal Premium al final
+- Links a /dashboard-barrio y /panel-vecinal
 
 ## Alarmas (Checkout Stripe funcional)
 - /alarmas-hogar + /alarmas/vivienda + /alarmas/negocio + /calculador
@@ -70,14 +52,27 @@ Plan **INDEPENDIENTE y OPCIONAL**. No requiere ningun otro producto de ManoProte
 | ceo@manoprotect.com | 19862210Des | Admin/CEO |
 | admin@manoprotect.com | Admin2026! | Empleados |
 
-## Backlog
-- P1: Sistema enterprise central (gestion empresa, herramientas comerciales)
-- P1: Notificaciones push para Panel Vecinal
-- P2: SEO/SEM (requiere IDs Meta/Hotjar/GSC)
-- P3: Videos marketing, integraciones produccion, App iOS
+## Todos los Plans Stripe
+| Plan | Precio | Periodo | Tipo |
+|---|---|---|---|
+| vecinal-anual | 299.99 | ano | Comunidad (INDEPENDIENTE) |
+| alarm-business | 54.99 | mes | Alarma |
+| alarm-premium | 39.99 | mes | Alarma |
+| alarm-essential | 24.99 | mes | Alarma |
+| enterprise | 199.99 | mes | Empresa |
+| family-yearly | 99.99 | ano | Familia |
+| family-monthly | 9.99 | mes | Familia |
+
+## Backlog (Priorizado)
+- P2: Logica completa del sistema de referidos (aplicar recompensa 1 mes gratis via Stripe)
+- P2: SEO/SEM (BLOQUEADO - requiere IDs Meta Pixel, Hotjar, Google Search Console)
+- P3: Videos marketing (Sora 2, sin credito)
+- P3: Migrar password hash de SHA256 a bcrypt
+- P3: Activar integraciones produccion (SMS Infobip, Email SendGrid, WhatsApp Twilio)
+- P3: Build iOS con Capacitor (requiere Mac/Xcode)
 
 ## Testing
-- iteration_74: 100% pass - Panel Vecinal UPDATED (backend 15/15, frontend 14/14)
-- iteration_73: 100% pass - Panel Vecinal original
+- iteration_75: 100% pass - Dashboard Barrio + Enterprise Central + Push Notifications (backend 28/28, frontend 100%)
+- iteration_74: 100% pass - Panel Vecinal
 - iteration_72: 100% pass - alarm checkout, newsletter, employee portal
 - iteration_71: 100% pass - community shield
