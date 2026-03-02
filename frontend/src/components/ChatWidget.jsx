@@ -164,7 +164,7 @@ export default function ChatWidget() {
       {/* Floating button */}
       {!open && (
         <button onClick={() => { setOpen(true); setPulse(false); }}
-          className={`fixed bottom-5 right-5 z-[60] w-14 h-14 bg-emerald-500 hover:bg-emerald-600 text-white rounded-full shadow-2xl flex items-center justify-center transition-all hover:scale-110 ${pulse ? 'animate-bounce' : ''}`}
+          className={`fixed bottom-5 right-5 z-[80] w-14 h-14 bg-emerald-500 hover:bg-emerald-600 text-white rounded-full shadow-2xl flex items-center justify-center transition-all hover:scale-110 ${pulse ? 'animate-bounce' : ''}`}
           data-testid="chat-open-btn" aria-label="Abrir chat de ayuda">
           <MessageCircle className="w-6 h-6" />
         </button>
@@ -172,7 +172,7 @@ export default function ChatWidget() {
 
       {/* Chat window */}
       {open && (
-        <div className="fixed bottom-5 right-5 z-[60] w-[340px] sm:w-[380px] max-h-[520px] bg-white rounded-2xl shadow-2xl border border-gray-200 flex flex-col overflow-hidden" data-testid="chat-window">
+        <div className="fixed bottom-5 right-5 z-[80] w-[340px] sm:w-[380px] max-h-[520px] bg-white rounded-2xl shadow-2xl border border-gray-200 flex flex-col overflow-hidden" data-testid="chat-window">
           {/* Header */}
           <div className="bg-emerald-500 px-4 py-3 flex items-center justify-between flex-shrink-0">
             <div className="flex items-center gap-2">
