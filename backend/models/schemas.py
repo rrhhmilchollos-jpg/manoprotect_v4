@@ -194,6 +194,7 @@ class FamilyMemberInvite(BaseModel):
 class CheckoutRequest(BaseModel):
     plan_type: str
     origin_url: str
+    referral_code: Optional[str] = None
 
 
 class PaymentTransaction(BaseModel):
