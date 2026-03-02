@@ -10,6 +10,7 @@ const AdminSubdomainRouter = lazy(() => import('@/components/AdminSubdomainRoute
 // Defer non-critical component loading
 const PushNotificationPrompt = lazy(() => import('@/components/PushNotificationPrompt'));
 const InterstitialAd = lazy(() => import('@/components/InterstitialAd').then(m => ({ default: m.InterstitialAd })));
+const ChatWidget = lazy(() => import('@/components/ChatWidget'));
 
 // Simplified useInterstitialAd that respects preview environment
 const useInterstitialAd = (user) => {
