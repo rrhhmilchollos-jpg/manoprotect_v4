@@ -262,6 +262,35 @@ const SentinelLockPage = () => {
               decoding="async"
             />
           </div>
+          {/* Galeria interior del fabricante */}
+          <div className="grid sm:grid-cols-2 gap-4 mb-12" data-testid="manufacturer-gallery">
+            <div className="relative rounded-2xl overflow-hidden border border-gray-800 group">
+              <img
+                src={IMG.interiorPCB}
+                alt="Sentinel Lock - PCB interna con circuitos y procesador IA"
+                className="w-full h-72 object-cover group-hover:scale-105 transition-transform duration-500"
+                loading="lazy"
+                decoding="async"
+              />
+              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4">
+                <p className="text-white text-xs font-bold">Electronica interna</p>
+                <p className="text-gray-400 text-[10px]">PCB con procesador IA, eSIM y sensores integrados</p>
+              </div>
+            </div>
+            <div className="relative rounded-2xl overflow-hidden border border-gray-800 group">
+              <img
+                src={IMG.mecanismo}
+                alt="Sentinel Lock - Mecanismo multipunto con LED indicador"
+                className="w-full h-72 object-cover group-hover:scale-105 transition-transform duration-500"
+                loading="lazy"
+                decoding="async"
+              />
+              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4">
+                <p className="text-white text-xs font-bold">Mecanismo multipunto</p>
+                <p className="text-gray-400 text-[10px]">Cilindro europeo con LED de estado y cerrojos reforzados</p>
+              </div>
+            </div>
+          </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4" data-testid="specs-section">
             {SPECS.map((s, i) => (
               <div key={i} className="bg-gray-900/60 border border-gray-800 hover:border-emerald-500/30 rounded-xl p-5 transition-all cursor-pointer group" onClick={() => setActiveSpec(activeSpec === i ? null : i)} data-testid={`spec-${i}`}>
