@@ -203,7 +203,7 @@ const AlarmasVivienda = () => {
         <div className="max-w-5xl mx-auto px-4 sm:px-6">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-black text-white mb-3 tracking-tight">Planes para viviendas</h2>
-            <p className="text-gray-400 text-sm">Equipo + instalacion GRATIS. SIN permanencia. Sentinel SOS incluido.</p>
+            <p className="text-gray-400 text-sm">Instalacion profesional GRATIS. SIN permanencia. Sentinel SOS incluido.</p>
           </div>
           <div className="grid md:grid-cols-2 gap-6">
             {PLANS.map((plan) => (
@@ -220,7 +220,7 @@ const AlarmasVivienda = () => {
                       <span className="text-gray-500 text-base mb-1">EUR/mes</span>
                     </div>
                     <p className="text-orange-400 text-xs font-bold mt-1">6 primeros meses (despues {plan.monthly} EUR/mes)</p>
-                    <p className="text-emerald-400 text-xs font-bold">Equipo e instalacion GRATIS</p>
+                    <p className="text-emerald-400 text-xs font-bold">Instalacion profesional GRATIS</p>
                   </div>
                   <p className="text-gray-500 text-[10px] font-bold uppercase tracking-wider mb-3">EQUIPO INCLUIDO</p>
                   <ul className="space-y-2 mb-5">
@@ -324,7 +324,7 @@ const AlarmasVivienda = () => {
       <section className="py-14 bg-gradient-to-r from-blue-700 to-cyan-600 text-white text-center">
         <div className="max-w-3xl mx-auto px-4">
           <h2 className="text-2xl font-black mb-3">Protege tu vivienda desde 24,99 EUR/mes</h2>
-          <p className="text-blue-100 mb-6 text-sm">Equipo GRATIS. SIN permanencia. Sentinel SOS de regalo.</p>
+          <p className="text-blue-100 mb-6 text-sm">Instalacion GRATIS. SIN permanencia. Sentinel SOS de regalo.</p>
           <div className="flex flex-wrap justify-center gap-3">
             <Link to="/contacto" className="bg-white text-blue-700 px-8 py-4 rounded-full font-bold text-sm hover:shadow-xl transition-all" data-testid="cta-bottom">
               Solicitar presupuesto GRATIS
