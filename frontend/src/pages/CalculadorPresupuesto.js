@@ -43,7 +43,7 @@ const CalculadorPresupuesto = () => {
     } catch {
       setResult({
         recommended_plan: form.space_type === 'piso' || form.space_type === 'apartamento' ? 'Essential' : form.space_type === 'chalet' || form.space_type === 'adosado' ? 'Premium' : 'Business',
-        promo_price: form.space_type === 'piso' ? 24.99 : form.space_type === 'chalet' || form.space_type === 'adosado' ? 39.99 : 54.99,
+        promo_price: form.space_type === 'piso' ? 33.90 : form.space_type === 'chalet' || form.space_type === 'adosado' ? 44.90 : 54.90,
         regular_price: form.space_type === 'piso' ? 34.99 : form.space_type === 'chalet' || form.space_type === 'adosado' ? 49.99 : 69.99,
         details: { sensors: form.accesses + form.floors, cameras: 2, sirens: 1, contacts: form.accesses, sentinel_included: 1 },
         savings_vs_securitas: 178.8,

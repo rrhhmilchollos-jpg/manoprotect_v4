@@ -63,7 +63,7 @@ const AlarmasSecuritasStyle = () => {
       title: 'Alarma para pisos y apartamentos',
       desc: 'Proteccion completa para tu piso con sensores en accesos principales, camaras interiores y conexion 24h. Anti-inhibicion incluida.',
       img: IMG.apartment,
-      price: '24,99',
+      price: '33,90',
       items: ['Panel tactil con sirena 110dB', '2 camaras Full HD con IA', '3 sensores PIR anti-mascotas', '2 contactos magneticos', 'Mando premium', 'Sentinel SOS de regalo'],
     },
     chalet: {
@@ -94,7 +94,7 @@ const AlarmasSecuritasStyle = () => {
   return (
     <div className="min-h-screen bg-white" data-testid="alarmas-securitas-style">
       <Helmet>
-        <title>Alarmas para Hogar y Negocio | ManoProtect 2026 - Desde 24,99 EUR/mes</title>
+        <title>Alarmas para Hogar y Negocio | ManoProtect 2026 - Desde 33,90 EUR/mes</title>
         <meta name="description" content="Alarma inteligente para casa y empresa. Camaras IA, centro 24h, aviso a Policia, anti-inhibicion. SIN permanencia. Instalacion GRATIS. Sentinel SOS incluido. Desde 33,90 EUR/mes." />
         <link rel="canonical" href="https://manoprotect.com/alarmas-hogar" />
       </Helmet>
@@ -192,7 +192,7 @@ const AlarmasSecuritasStyle = () => {
                 <div className="bg-white/5 rounded-xl p-4 mb-4 border border-white/10">
                   <p className="text-orange-400 text-xs font-bold mb-1">Tu precio desde</p>
                   <div className="flex items-end gap-1">
-                    <span className="text-3xl font-black text-white">{propertyTypes[miniCalcType]?.price || '24,99'}</span>
+                    <span className="text-3xl font-black text-white">{propertyTypes[miniCalcType]?.price || '33,90'}</span>
                     <span className="text-gray-400 text-sm mb-0.5">EUR/mes</span>
                   </div>
                   <p className="text-emerald-400 text-xs font-bold mt-1">Instalacion profesional GRATIS</p>
@@ -502,7 +502,7 @@ const AlarmasSecuritasStyle = () => {
           </div>
           <div className="grid md:grid-cols-3 gap-5">
             {[
-              { name: 'Essential', sub: 'Pisos', promo: '24,99', regular: '34,99', color: 'sky', link: '/alarmas/vivienda', items: ['2 camaras Full HD', '3 sensores PIR', '1 sirena exterior', '1 Sentinel SOS'] },
+              { name: 'Essential', sub: 'Pisos', promo: '33,90', regular: '44,90', color: 'sky', link: '/alarmas/vivienda', items: ['2 camaras Full HD', '3 sensores PIR', '1 sirena exterior', '1 Sentinel SOS'] },
               { name: 'Premium', sub: 'Chalets y casas', promo: '39,99', regular: '49,99', color: 'orange', popular: true, link: '/alarmas/vivienda', items: ['6 camaras 2K + PTZ', '6 sensores PIR', 'Sirena 120dB + interior', 'Servicio de Acuda', '2 Sentinel SOS'] },
               { name: 'Business', sub: 'Negocios', promo: '54,99', regular: '69,99', color: 'emerald', link: '/alarmas/negocio', items: ['10 camaras 4K + PTZ', 'Control acceso biometrico', 'Grabacion 90 dias', 'Acuda prioritario', '3 Sentinel SOS'] },
             ].map((p, i) => (
@@ -565,7 +565,7 @@ const AlarmasSecuritasStyle = () => {
               </thead>
               <tbody>
                 {[
-                  { f: 'Desde', mp: '24,99 EUR/mes', sd: '39,89 EUR/mes', pg: '44,90 EUR/mes' },
+                  { f: 'Desde', mp: '33,90 EUR/mes', sd: '39,89 EUR/mes', pg: '44,90 EUR/mes' },
                   { f: 'Permanencia', mp: 'SIN permanencia', sd: '24 meses', pg: '24-36 meses' },
                   { f: 'Instalacion', mp: 'GRATIS', sd: '149 EUR', pg: 'Incluido' },
                   { f: 'Camaras kit basico', mp: '2 Full HD IA', sd: '1 basica', pg: '1 basica' },
