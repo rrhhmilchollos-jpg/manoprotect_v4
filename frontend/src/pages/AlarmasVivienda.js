@@ -29,8 +29,8 @@ const PLANS = [
     id: 'essential',
     name: 'Essential',
     target: 'Pisos y apartamentos',
-    monthly: 34.99,
-    promo: 24.99,
+    monthly: 44.90,
+    promo: 33.90,
     color: 'sky',
     popular: false,
     equipment: [
@@ -50,14 +50,15 @@ const PLANS = [
       'Anti-inhibicion multi-frecuencia',
       'Aviso a policia y bomberos',
       '1 Sentinel X de REGALO',
+      'Refiere un vecino = 1 mes GRATIS',
     ],
   },
   {
     id: 'premium',
     name: 'Premium',
     target: 'Chalets, adosados y casas',
-    monthly: 49.99,
-    promo: 39.99,
+    monthly: 54.90,
+    promo: 44.90,
     color: 'orange',
     popular: true,
     equipment: [
@@ -82,6 +83,7 @@ const PLANS = [
       'Grabacion en la nube 30 dias',
       'Mantenimiento semestral',
       '2 Sentinel X de REGALO',
+      'Refiere un vecino = 1 mes GRATIS',
     ],
   },
 ];
