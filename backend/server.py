@@ -2912,6 +2912,18 @@ print("✅ Newsletter routes loaded")
 api_router.include_router(panel_vecinal_router)
 print("✅ Panel Vecinal Premium routes loaded")
 
+# Dashboard de Barrio (Public neighborhood stats)
+from routes.dashboard_barrio_routes import router as dashboard_barrio_router, init_dashboard_barrio
+init_dashboard_barrio(db)
+api_router.include_router(dashboard_barrio_router)
+print("✅ Dashboard Barrio routes loaded")
+
+# Enterprise Central System (Company management + Sales CRM)
+from routes.enterprise_central_routes import router as enterprise_central_router, init_enterprise_central
+init_enterprise_central(db)
+api_router.include_router(enterprise_central_router)
+print("✅ Enterprise Central routes loaded")
+
 # Payment routes (Stripe)
 api_router.include_router(payments_router)
 print("✅ Payment routes loaded")
