@@ -23,7 +23,8 @@ Frontend: React + TailwindCSS + Shadcn/UI + Leaflet | Backend: FastAPI + MongoDB
 - Cerradura inteligente autonoma con IA de deteccion de intrusion
 - NB-IoT/LTE-M, eSIM integrada, acelerometro, sensor continuidad, sensor presion cilindro
 - Flujo: Deteccion → IA → NB-IoT → CRA verifica → Policia
-- Compatible con todos los planes de alarma
+- **BAJO PEDIDO**: Fabricacion 15-20 dias laborables. Pago anticipado obligatorio.
+- Precio: 249 EUR + plan monitorizacion desde 9,99 EUR/mes
 - Instalacion profesional GRATIS
 
 ### Plataforma Central CRA (/plataforma-cra)
@@ -62,6 +63,8 @@ Frontend: React + TailwindCSS + Shadcn/UI + Leaflet | Backend: FastAPI + MongoDB
 - Navigation updated (header + footer links to all new products)
 - Sentinel Lock custom product images (cerradura cilindrica europea estilo DIN)
 - Interactive AI detection demo (6 estados: Normal → Vibracion → Intrusion → CRA → Policia → Resuelto)
+- Imagenes fabricante (PCB interna + mecanismo multipunto) + Video presentacion MP4
+- Sentinel Lock marcado como "bajo pedido" con pago anticipado obligatorio (249 EUR)
 
 ## Backlog
 - P1: SEO/SEM (requiere IDs Meta Pixel, Hotjar, Google Search Console)
@@ -72,6 +75,7 @@ Frontend: React + TailwindCSS + Shadcn/UI + Leaflet | Backend: FastAPI + MongoDB
 - P3: Migrar SHA256 a bcrypt
 
 ## Testing
+- iteration_82: 100% pass - Imagenes fabricante + Video MP4 + Bajo pedido/pago anticipado
 - iteration_81: 100% pass - Imagenes producto Sentinel Lock + Demo interactiva IA
 - iteration_80: 100% pass - Ecosistema nuevos productos (3 paginas + rutas + navegacion + cross-sell)
 - iteration_79: 100% pass - Chatbot lead capture
