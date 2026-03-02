@@ -194,7 +194,7 @@ const SentinelLockPage = () => {
               <p className="text-base sm:text-lg text-gray-400 max-w-lg mb-3">
                 Deteccion de intrusion por IA. Comunicacion celular directa. Sin WiFi. Sin corriente. Aviso inmediato a la Central y a las autoridades.
               </p>
-              <p className="text-emerald-400 text-sm font-bold mb-8">Compatible con todos los planes de alarma ManoProtect</p>
+              <p className="text-emerald-400 text-sm font-bold mb-8">Producto bajo pedido | Pago anticipado | Instalacion GRATIS</p>
               <div className="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start">
                 <Link to="/contacto" className="inline-flex items-center justify-center gap-2 bg-emerald-500 hover:bg-emerald-400 text-white font-bold px-8 py-4 rounded-xl transition-all text-sm" data-testid="lock-cta-contact">
                   Solicitar instalacion <ChevronRight className="w-4 h-4" />
