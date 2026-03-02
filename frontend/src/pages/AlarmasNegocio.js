@@ -178,10 +178,10 @@ const AlarmasNegocio = () => {
             <div className="p-8">
               <div className="text-center mb-8">
                 <div className="flex items-end justify-center gap-2">
-                  <span className="text-6xl font-black text-white">54,99</span>
+                  <span className="text-6xl font-black text-white">54,90</span>
                   <span className="text-gray-400 text-lg mb-2">EUR/mes</span>
                 </div>
-                <p className="text-orange-400 text-sm font-bold mt-1">6 primeros meses (despues 69,99 EUR/mes)</p>
+                <p className="text-orange-400 text-sm font-bold mt-1">6 primeros meses (despues 69,90 EUR/mes)</p>
                 <p className="text-emerald-400 text-xs font-bold mt-1">Equipo + instalacion profesional GRATIS</p>
                 <p className="text-red-400 text-xs font-bold mt-1">SIN permanencia. Cancela cuando quieras.</p>
               </div>
