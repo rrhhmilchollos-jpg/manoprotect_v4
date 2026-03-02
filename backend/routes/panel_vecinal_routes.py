@@ -276,6 +276,14 @@ async def send_vecinal_alert(data: VecinalAlert, request: Request, session_token
         "is_premium_alert": True,
     })
 
+    # Send push notifications asynchronously for critical alerts
+    try:
+        from services.push_notification_service import notify_vecinal_alert
+        import asyncio
+        asyncio.create_task(notify_vecinal_alert(data.type, data.title, data.description, data.urgency))
+    except Exception:
+        pass
+
     return {
         "alert_id": alert_id,
         "message": "Alerta enviada a todos los vecinos del barrio",
