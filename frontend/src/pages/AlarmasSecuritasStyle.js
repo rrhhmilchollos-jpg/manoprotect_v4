@@ -613,6 +613,36 @@ const AlarmasSecuritasStyle = () => {
         </div>
       </section>
 
+      {/* ═══ SENTINEL LOCK ═══ */}
+      <section className="py-16 bg-gray-950 text-white" data-testid="sentinel-lock-crosssell">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6">
+          <div className="bg-gradient-to-br from-gray-900 to-gray-950 border border-emerald-500/20 rounded-3xl p-8 sm:p-10 flex flex-col lg:flex-row gap-8 items-center">
+            <div className="flex-1">
+              <div className="inline-flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/20 rounded-full px-3 py-1 mb-4">
+                <Lock className="w-3.5 h-3.5 text-emerald-400" />
+                <span className="text-emerald-400 text-[10px] font-bold tracking-wider">NUEVO — COMPLEMENTO EXCLUSIVO</span>
+              </div>
+              <h2 className="text-2xl sm:text-3xl font-black mb-3 tracking-tight">Sentinel Lock: la cerradura que llama a la policia</h2>
+              <p className="text-gray-400 text-sm mb-4">Anade la cerradura inteligente autonoma a tu sistema de alarma. Deteccion de intrusion por IA, comunicacion celular NB-IoT y aviso directo a la Central y Policia. <strong className="text-white">Sin WiFi. Sin corriente.</strong></p>
+              <ul className="space-y-2 mb-6">
+                {['Autonoma al 100% — funciona sin WiFi ni electricidad', 'IA que diferencia accidentes de ataques reales', 'Compatible con todos los planes de alarma', 'Instalacion profesional GRATIS'].map((f, i) => (
+                  <li key={i} className="flex items-center gap-2 text-xs text-gray-300"><Check className="w-3.5 h-3.5 text-emerald-400 flex-shrink-0" />{f}</li>
+                ))}
+              </ul>
+              <div className="flex flex-wrap gap-3">
+                <Link to="/sentinel-lock" className="bg-emerald-500 hover:bg-emerald-400 text-white px-6 py-3 rounded-xl font-bold text-xs transition-colors flex items-center gap-2" data-testid="crosssell-sentinel-lock">
+                  Ver Sentinel Lock <ArrowRight className="w-3.5 h-3.5" />
+                </Link>
+                <span className="flex items-center text-lg font-black text-white">249 <span className="text-gray-400 text-sm font-normal ml-1">EUR</span></span>
+              </div>
+            </div>
+            <div className="w-40 h-40 bg-emerald-500/10 rounded-3xl flex items-center justify-center flex-shrink-0">
+              <Lock className="w-20 h-20 text-emerald-400/60" />
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* ═══ CTA FINAL ═══ */}
       <section className="py-16 bg-gradient-to-r from-orange-500 via-red-500 to-rose-600 text-white">
         <div className="max-w-4xl mx-auto px-4 text-center">
