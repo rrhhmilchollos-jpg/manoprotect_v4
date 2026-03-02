@@ -392,3 +392,113 @@ async def get_neighbor_families(request: Request, session_token: Optional[str] =
     ).limit(100).to_list(100)
 
     return {"families": families, "total": len(families)}
+
+
+# ============================================
+# REFERRAL REDEMPTION (called after successful payment)
+# ============================================
+
+class ReferralRedeem(BaseModel):
+    referral_code: str
+    new_subscriber_email: str = ""
+
+@router.post("/referrals/redeem")
+async def redeem_referral(data: ReferralRedeem, request: Request, session_token: Optional[str] = Cookie(None)):
+    """
+    Redeem a referral code after a new subscription is completed.
+    Extends the referrer's subscription by 30 days. Called from payment success flow.
+    """
+    from core.auth import get_current_user
+    user = await get_current_user(request, session_token)
+    if not user:
+        raise HTTPException(status_code=401, detail="Debes iniciar sesion")
+
+    code = data.referral_code.strip().upper()
+    if not code:
+        raise HTTPException(status_code=400, detail="Codigo de referido vacio")
+
+    # Find the referrer's subscription by referral_code
+    referrer_sub = await _db.subscriptions.find_one(
+        {"referral_code": code, "plan_type": PLAN_ID, "status": "active"},
+        {"_id": 0}
+    )
+    if not referrer_sub:
+        raise HTTPException(status_code=404, detail="Codigo de referido no valido o expirado")
+
+    # Prevent self-referral
+    if referrer_sub.get("user_id") == user.user_id:
+        raise HTTPException(status_code=400, detail="No puedes usar tu propio codigo de referido")
+
+    # Check if this user already redeemed a referral
+    already_redeemed = await _db.vecinal_referrals.find_one({
+        "redeemed_by": user.user_id, "status": "completed"
+    })
+    if already_redeemed:
+        raise HTTPException(status_code=400, detail="Ya has usado un codigo de referido anteriormente")
+
+    now = datetime.now(timezone.utc)
+
+    # Mark any pending referral for this email as completed
+    await _db.vecinal_referrals.update_many(
+        {"referral_code": code, "status": "pending"},
+        {"$set": {
+            "status": "completed",
+            "redeemed_by": user.user_id,
+            "redeemed_at": now.isoformat(),
+        }}
+    )
+
+    # Also insert a completed referral record if none matched
+    completed_count = await _db.vecinal_referrals.count_documents({"referral_code": code, "redeemed_by": user.user_id})
+    if completed_count == 0:
+        await _db.vecinal_referrals.insert_one({
+            "referral_id": f"ref_{uuid.uuid4().hex[:10]}",
+            "referrer_id": referrer_sub.get("user_id"),
+            "referrer_family_id": referrer_sub.get("family_id", referrer_sub.get("user_id")),
+            "referral_code": code,
+            "neighbor_email": data.new_subscriber_email or user.email,
+            "redeemed_by": user.user_id,
+            "status": "completed",
+            "created_at": now.isoformat(),
+            "redeemed_at": now.isoformat(),
+        })
+
+    # REWARD: Extend referrer's subscription by 30 days
+    current_expires = referrer_sub.get("expires_at")
+    if current_expires:
+        try:
+            base_date = datetime.fromisoformat(current_expires.replace("Z", "+00:00"))
+        except (ValueError, TypeError):
+            base_date = now
+    else:
+        base_date = now + timedelta(days=365)
+
+    new_expires = (base_date + timedelta(days=30)).isoformat()
+
+    await _db.subscriptions.update_one(
+        {"user_id": referrer_sub.get("user_id"), "plan_type": PLAN_ID, "status": "active"},
+        {"$set": {"expires_at": new_expires, "last_referral_bonus_at": now.isoformat()}}
+    )
+
+    total_referrals = await _db.vecinal_referrals.count_documents({
+        "referrer_id": referrer_sub.get("user_id"), "status": "completed"
+    })
+
+    return {
+        "success": True,
+        "message": "Codigo de referido aplicado. Tu vecino ha recibido 1 mes gratis.",
+        "referrer_bonus": "+30 dias",
+        "referrer_total_referrals": total_referrals,
+    }
+
+
+@router.get("/referrals/validate/{code}")
+async def validate_referral_code(code: str):
+    """Public endpoint to validate a referral code before checkout."""
+    sub = await _db.subscriptions.find_one(
+        {"referral_code": code.strip().upper(), "plan_type": PLAN_ID, "status": "active"},
+        {"_id": 0, "referral_code": 1, "user_id": 1}
+    )
+    if not sub:
+        return {"valid": False, "message": "Codigo no valido"}
+    return {"valid": True, "message": "Codigo valido. Al suscribirte, tu vecino recibira 1 mes gratis."}
