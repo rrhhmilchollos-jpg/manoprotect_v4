@@ -104,3 +104,97 @@ async def get_neighborhood_leaderboard():
         "leaderboard": stats,
         "message": "Barrios con mas actividad de proteccion vecinal",
     }
+
+
+@router.get("/ranking")
+async def get_gamified_ranking():
+    """
+    Gamified neighborhood ranking with badges.
+    Shows anonymized community engagement metrics with achievement badges.
+    """
+    now = datetime.now(timezone.utc)
+    month = (now - timedelta(days=30)).isoformat()
+    week = (now - timedelta(days=7)).isoformat()
+
+    # Gather stats
+    active_families = await _db.subscriptions.count_documents({"plan_type": "vecinal-anual", "status": "active"})
+    alerts_month = await _db.vecinal_alerts.count_documents({"created_at": {"$gte": month}})
+    resolved_month = await _db.vecinal_alerts.count_documents({"status": "resolved", "created_at": {"$gte": month}})
+    alerts_week = await _db.vecinal_alerts.count_documents({"created_at": {"$gte": week}})
+    community_incidents = await _db.community_incidents.count_documents({"created_at": {"$gte": month}})
+    total_referrals = await _db.vecinal_referrals.count_documents({"status": "completed"})
+
+    # Calculate scores
+    community_score = min(100, (active_families * 15) + (alerts_month * 2) + (resolved_month * 5) + (total_referrals * 10))
+    vigilance_score = min(100, (alerts_week * 8) + (community_incidents * 3))
+    response_score = min(100, (resolved_month / max(alerts_month, 1)) * 100) if alerts_month > 0 else 100
+
+    # Determine badges
+    badges = []
+    if active_families >= 5:
+        badges.append({"id": "comunidad_fuerte", "name": "Comunidad Fuerte", "description": f"{active_families} familias protegidas", "tier": "gold", "icon": "users"})
+    elif active_families >= 2:
+        badges.append({"id": "comunidad_activa", "name": "Comunidad Activa", "description": f"{active_families} familias protegidas", "tier": "silver", "icon": "users"})
+    elif active_families >= 1:
+        badges.append({"id": "primer_paso", "name": "Primer Paso", "description": "Primera familia protegida", "tier": "bronze", "icon": "users"})
+
+    if resolved_month >= 10:
+        badges.append({"id": "defensores_elite", "name": "Defensores Elite", "description": f"{resolved_month} alertas resueltas este mes", "tier": "gold", "icon": "shield"})
+    elif resolved_month >= 3:
+        badges.append({"id": "defensores_activos", "name": "Defensores Activos", "description": f"{resolved_month} alertas resueltas", "tier": "silver", "icon": "shield"})
+
+    if alerts_week == 0 and active_families >= 1:
+        badges.append({"id": "barrio_seguro", "name": "Barrio Seguro", "description": "0 alertas esta semana", "tier": "gold", "icon": "check"})
+
+    if total_referrals >= 5:
+        badges.append({"id": "embajador", "name": "Embajador Vecinal", "description": f"{total_referrals} vecinos referidos", "tier": "gold", "icon": "share"})
+    elif total_referrals >= 1:
+        badges.append({"id": "reclutador", "name": "Reclutador", "description": f"{total_referrals} vecino(s) referido(s)", "tier": "bronze", "icon": "share"})
+
+    if community_incidents >= 20:
+        badges.append({"id": "vigilantes", "name": "Red de Vigilantes", "description": f"{community_incidents} incidencias reportadas", "tier": "gold", "icon": "eye"})
+    elif community_incidents >= 5:
+        badges.append({"id": "observadores", "name": "Observadores Activos", "description": f"{community_incidents} incidencias", "tier": "silver", "icon": "eye"})
+
+    # Overall rank
+    total_score = round((community_score + vigilance_score + response_score) / 3)
+    if total_score >= 80:
+        overall_rank = {"rank": "Escudo de Oro", "tier": "gold"}
+    elif total_score >= 50:
+        overall_rank = {"rank": "Escudo de Plata", "tier": "silver"}
+    elif total_score >= 20:
+        overall_rank = {"rank": "Escudo de Bronce", "tier": "bronze"}
+    else:
+        overall_rank = {"rank": "Nuevo", "tier": "starter"}
+
+    return {
+        "scores": {
+            "community": community_score,
+            "vigilance": vigilance_score,
+            "response": response_score,
+            "total": total_score,
+        },
+        "overall_rank": overall_rank,
+        "badges": badges,
+        "stats": {
+            "active_families": active_families,
+            "alerts_month": alerts_month,
+            "resolved_month": resolved_month,
+            "community_incidents": community_incidents,
+            "total_referrals": total_referrals,
+        },
+        "next_milestone": _get_next_milestone(active_families, resolved_month, total_referrals),
+    }
+
+
+def _get_next_milestone(families, resolved, referrals):
+    """Determine the next achievable milestone."""
+    if families < 1:
+        return {"action": "Consigue tu primera familia premium", "reward": "Insignia 'Primer Paso'", "progress": 0}
+    if families < 5:
+        return {"action": f"Alcanza 5 familias protegidas ({families}/5)", "reward": "Insignia 'Comunidad Fuerte' (Oro)", "progress": round(families / 5 * 100)}
+    if referrals < 5:
+        return {"action": f"Refiere a 5 vecinos ({referrals}/5)", "reward": "Insignia 'Embajador Vecinal' (Oro)", "progress": round(referrals / 5 * 100)}
+    if resolved < 10:
+        return {"action": f"Resuelve 10 alertas este mes ({resolved}/10)", "reward": "Insignia 'Defensores Elite' (Oro)", "progress": round(resolved / 10 * 100)}
+    return {"action": "Mantened el barrio seguro!", "reward": "Leyenda del barrio", "progress": 100}
