@@ -4,7 +4,7 @@
  */
 import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
-import { Shield, Smartphone, Lock, Unlock, Camera, Bell, Users, Key, MapPin, Phone, CheckCircle, ChevronRight, AlertTriangle, Eye, Clock, Fingerprint, QrCode, Wifi } from 'lucide-react';
+import { Shield, Smartphone, Lock, Unlock, Camera, Bell, Users, Key, MapPin, Phone, CheckCircle, ChevronRight, AlertTriangle, Eye, Clock, Fingerprint, QrCode, Wifi, Monitor } from 'lucide-react';
 import LandingFooter from '@/components/landing/LandingFooter';
 
 const APP_FEATURES = [
