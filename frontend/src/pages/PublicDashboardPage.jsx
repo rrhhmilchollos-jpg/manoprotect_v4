@@ -113,17 +113,20 @@ function MiniMap({ heatmapPoints }) {
 export default function PublicDashboardPage() {
   const [stats, setStats] = useState(null);
   const [heatmap, setHeatmap] = useState([]);
+  const [ranking, setRanking] = useState(null);
   const [loading, setLoading] = useState(true);
 
   const fetchData = useCallback(async () => {
     try {
-      const [statsRes, heatRes] = await Promise.all([
+      const [statsRes, heatRes, rankRes] = await Promise.all([
         fetch(`${API}/api/dashboard-barrio/public-stats`),
         fetch(`${API}/api/community-shield/heatmap`),
+        fetch(`${API}/api/dashboard-barrio/ranking`),
       ]);
-      const [statsData, heatData] = await Promise.all([statsRes.json(), heatRes.json()]);
+      const [statsData, heatData, rankData] = await Promise.all([statsRes.json(), heatRes.json(), rankRes.json()]);
       setStats(statsData);
       setHeatmap(heatData.points || []);
+      setRanking(rankData);
     } catch (e) {
       console.error('Dashboard fetch error:', e);
     } finally {
