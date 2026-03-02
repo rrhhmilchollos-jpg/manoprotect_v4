@@ -25,7 +25,7 @@ Todas las apps se conectan al mismo backend:
 
 | Entorno | URL |
 |---------|-----|
-| Preview | https://escudo-preview.preview.emergentagent.com |
+| Preview | https://security-suite-6.preview.emergentagent.com |
 | Producción | [Tu dominio de producción] |
 
 ---

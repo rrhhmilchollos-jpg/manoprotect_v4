@@ -21,8 +21,8 @@ cors_origins = [
     # Production - API
     "https://api.manoprotect.com",
     # Emergent Previews
-    "https://escudo-preview.preview.emergentagent.com",
-    "https://escudo-preview.preview.emergentagent.com",
+    "https://security-suite-6.preview.emergentagent.com",
+    "https://security-suite-6.preview.emergentagent.com",
 ]
 
 # Create Socket.IO server with specific CORS origins

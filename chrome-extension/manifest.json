@@ -9,7 +9,7 @@
     "contextMenus"
   ],
   "host_permissions": [
-    "https://escudo-preview.preview.emergentagent.com/*",
+    "https://security-suite-6.preview.emergentagent.com/*",
     "https://www.manoprotect.com/*"
   ],
   "action": {
