@@ -95,9 +95,9 @@ function VecinalPaywall({ planInfo }) {
                 'Panel Vecinal en tiempo real 24/7',
                 'Alertas instantaneas a todos los vecinos',
                 'Alertas de okupacion y robos',
-                'Alarma completa incluida',
-                'Dispositivo Sentinel SOS incluido',
-                'Prioridad en alertas policiales',
+                'Red de vigilancia vecinal coordinada',
+                'Trae un vecino = 1 mes gratis',
+                'Sin permanencia — cancela cuando quieras',
               ]).slice(0, 8).map((f, i) => (
                 <div key={i} className="flex items-start gap-2">
                   <CheckCircle className="w-4 h-4 text-emerald-400 flex-shrink-0 mt-0.5" />
