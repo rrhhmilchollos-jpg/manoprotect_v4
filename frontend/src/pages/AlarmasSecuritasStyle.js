@@ -53,7 +53,7 @@ const AlarmasSecuritasStyle = () => {
     { q: 'Puedo controlar la alarma desde el movil?', a: 'Si. Con la app ManoProtect puedes armar/desarmar, ver camaras en directo, revisar grabaciones, recibir alertas push y gestionar usuarios. Tambien puedes controlarlo desde tu reloj Sentinel.' },
     { q: 'Funciona si se va la luz o internet?', a: 'Si. El panel tiene bateria de respaldo de 24h y conexion 4G independiente. Aunque se corte la electricidad e internet, tu alarma sigue conectada al centro de control.' },
     { q: 'Detecta los inhibidores de frecuencia?', a: 'Si. Nuestro sistema anti-inhibicion detecta intentos de bloquear la senal y activa una alerta silenciosa inmediata al centro de control. Triple redundancia: 4G + WiFi + Ethernet.' },
-    { q: 'Hay que pagar algo por el equipo?', a: 'No. Todo el equipo (panel, camaras, sensores, sirenas, mandos, detectores y reloj Sentinel) se instala GRATIS. Solo pagas la cuota mensual que incluye la monitorizacion 24h.' },
+    { q: 'Hay que pagar algo por el equipo?', a: 'El equipo se incluye con tu plan mensual. La instalacion profesional por un tecnico certificado es completamente GRATIS. Sin entrada ni permanencia.' },
     { q: 'Se puede anadir mas equipamiento despues?', a: 'Si. El sistema es modular. Puedes anadir camaras, sensores, sirenas o detectores en cualquier momento. Hasta 100 dispositivos conectados al mismo hub.' },
     { q: 'Tengo mascotas, saltara la alarma?', a: 'No. Los sensores PIR anti-mascotas ignoran animales de hasta 25 kg. Ademas, las camaras con IA distinguen personas de mascotas para evitar falsas alarmas.' },
   ];
@@ -195,7 +195,7 @@ const AlarmasSecuritasStyle = () => {
                     <span className="text-3xl font-black text-white">{propertyTypes[miniCalcType]?.price || '24,99'}</span>
                     <span className="text-gray-400 text-sm mb-0.5">EUR/mes</span>
                   </div>
-                  <p className="text-emerald-400 text-xs font-bold mt-1">Equipo + instalacion GRATIS</p>
+                  <p className="text-emerald-400 text-xs font-bold mt-1">Instalacion profesional GRATIS</p>
                 </div>
               )}
               <Link to="/calculador" className="block w-full py-3.5 bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-xl font-bold text-sm text-center hover:shadow-lg transition-all" data-testid="mini-calc-cta">
@@ -402,7 +402,7 @@ const AlarmasSecuritasStyle = () => {
                   <span className="text-4xl font-black text-gray-900">{currentProp.price}</span>
                   <span className="text-gray-500 text-sm mb-1">EUR/mes</span>
                 </div>
-                <p className="text-emerald-600 text-xs font-bold mt-0.5">Equipo + instalacion GRATIS</p>
+                <p className="text-emerald-600 text-xs font-bold mt-0.5">Instalacion profesional GRATIS</p>
                 <p className="text-orange-500 text-xs font-bold">SIN permanencia</p>
               </div>
               <p className="text-gray-400 text-[10px] font-bold uppercase tracking-wider mb-2">INCLUIDO EN TU KIT</p>
@@ -498,7 +498,7 @@ const AlarmasSecuritasStyle = () => {
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
           <div className="text-center mb-12">
             <h2 className="text-3xl sm:text-4xl font-black text-gray-900 mb-3 tracking-tight">Precios transparentes</h2>
-            <p className="text-gray-500 text-sm">Sin letra pequena. Sin sorpresas. Equipo e instalacion GRATIS.</p>
+            <p className="text-gray-500 text-sm">Sin letra pequena. Sin sorpresas. Instalacion profesional GRATIS.</p>
           </div>
           <div className="grid md:grid-cols-3 gap-5">
             {[
@@ -516,7 +516,7 @@ const AlarmasSecuritasStyle = () => {
                     <span className="text-gray-500 text-sm mb-1">EUR/mes</span>
                   </div>
                   <p className="text-orange-500 text-xs font-bold">6 primeros meses (despues {p.regular} EUR)</p>
-                  <p className="text-emerald-600 text-xs font-bold mb-4">Equipo + instalacion GRATIS</p>
+                  <p className="text-emerald-600 text-xs font-bold mb-4">Instalacion profesional GRATIS</p>
                   <ul className="space-y-2 mb-5">
                     {p.items.map((item, j) => (
                       <li key={j} className="flex items-center gap-2 text-xs text-gray-700">
@@ -567,7 +567,7 @@ const AlarmasSecuritasStyle = () => {
                 {[
                   { f: 'Desde', mp: '24,99 EUR/mes', sd: '39,89 EUR/mes', pg: '44,90 EUR/mes' },
                   { f: 'Permanencia', mp: 'SIN permanencia', sd: '24 meses', pg: '24-36 meses' },
-                  { f: 'Equipo', mp: 'GRATIS', sd: '149 EUR', pg: 'Incluido' },
+                  { f: 'Instalacion', mp: 'GRATIS', sd: '149 EUR', pg: 'Incluido' },
                   { f: 'Camaras kit basico', mp: '2 Full HD IA', sd: '1 basica', pg: '1 basica' },
                   { f: 'IA en camaras', mp: true, sd: false, pg: false },
                   { f: 'Reloj SOS incluido', mp: true, sd: false, pg: false },
@@ -617,7 +617,7 @@ const AlarmasSecuritasStyle = () => {
       <section className="py-16 bg-gradient-to-r from-orange-500 via-red-500 to-rose-600 text-white">
         <div className="max-w-4xl mx-auto px-4 text-center">
           <h2 className="text-3xl sm:text-4xl font-black mb-4 tracking-tight">Calcula tu alarma ahora</h2>
-          <p className="text-white/80 mb-8 text-sm max-w-xl mx-auto">Presupuesto personalizado en 30 segundos. Sin compromiso. Sin permanencia. Equipo e instalacion GRATIS.</p>
+          <p className="text-white/80 mb-8 text-sm max-w-xl mx-auto">Presupuesto personalizado en 30 segundos. Sin compromiso. Sin permanencia. Instalacion profesional GRATIS.</p>
           <div className="flex flex-wrap items-center justify-center gap-3">
             <Link to="/calculador" className="bg-white text-red-600 px-10 py-4 rounded-full font-bold text-sm hover:shadow-2xl transition-all hover:scale-105" data-testid="cta-final-calc">
               Calcular mi alarma GRATIS
