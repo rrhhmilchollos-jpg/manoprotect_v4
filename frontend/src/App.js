@@ -826,6 +826,9 @@ function App() {
           <Suspense fallback={<EmptyFallback />}>
             <CookieConsent />
           </Suspense>
+          <Suspense fallback={null}>
+            <ChatWidget />
+          </Suspense>
         </AuthProvider>
       </BrowserRouter>
     </div>
