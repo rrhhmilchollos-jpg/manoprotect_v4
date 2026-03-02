@@ -979,7 +979,8 @@ async def create_checkout_session(
         if promo_subscribers < PROMO_200_LIMIT and data.plan_type in (
             "family-monthly", "family-yearly", "family-quarterly",
             "monthly", "yearly", "quarterly",
-            "alarm-essential", "alarm-premium", "alarm-business",
+            "alarm-essential", "alarm-premium", "alarm-business", "alarm-enterprise",
+            "sentinel-basic", "sentinel-plus", "sentinel-pro",
             "vecinal-anual"
         ):
             discount_factor = (100 - PROMO_DISCOUNT_PCT) / 100
