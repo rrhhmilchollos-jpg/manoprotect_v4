@@ -306,6 +306,33 @@ const SentinelLockPage = () => {
       {/* Interactive Demo */}
       <InteractiveDemo />
 
+      {/* Video presentacion */}
+      <section className="py-20 bg-gray-950" data-testid="video-section">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6">
+          <div className="text-center mb-10">
+            <div className="inline-flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/20 rounded-full px-4 py-1.5 mb-4">
+              <Eye className="w-4 h-4 text-emerald-400" />
+              <span className="text-emerald-400 text-xs font-bold tracking-wider">VIDEO PRESENTACION</span>
+            </div>
+            <h2 className="text-2xl sm:text-3xl font-black text-white mb-2 tracking-tight">Sentinel Lock: El Bombin Inteligente Europeo</h2>
+            <p className="text-gray-400 text-sm">Descubre en 1 minuto como funciona la cerradura que llama a la policia por ti</p>
+          </div>
+          <div className="relative rounded-3xl overflow-hidden border-2 border-emerald-500/20 shadow-2xl shadow-emerald-500/5">
+            <video
+              controls
+              preload="metadata"
+              poster={IMG.hero}
+              className="w-full aspect-video bg-black"
+              data-testid="sentinel-video"
+            >
+              <source src={VIDEO_URL} type="video/mp4" />
+              Tu navegador no soporta video HTML5.
+            </video>
+          </div>
+          <p className="text-center text-gray-600 text-[10px] mt-3">Sentinel Lock — Producto bajo pedido. Fabricacion y envio en 15-20 dias laborables.</p>
+        </div>
+      </section>
+
       {/* How it works */}
       <section className="py-16 bg-gray-900/50" data-testid="alert-flow">
         <div className="max-w-4xl mx-auto px-4 sm:px-6">
