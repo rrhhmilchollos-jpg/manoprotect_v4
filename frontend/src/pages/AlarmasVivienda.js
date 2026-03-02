@@ -323,7 +323,7 @@ const AlarmasVivienda = () => {
       {/* CTA */}
       <section className="py-14 bg-gradient-to-r from-blue-700 to-cyan-600 text-white text-center">
         <div className="max-w-3xl mx-auto px-4">
-          <h2 className="text-2xl font-black mb-3">Protege tu vivienda desde 24,99 EUR/mes</h2>
+          <h2 className="text-2xl font-black mb-3">Protege tu vivienda desde 33,90 EUR/mes</h2>
           <p className="text-blue-100 mb-6 text-sm">Instalacion GRATIS. SIN permanencia. Sentinel SOS de regalo.</p>
           <div className="flex flex-wrap justify-center gap-3">
             <Link to="/contacto" className="bg-white text-blue-700 px-8 py-4 rounded-full font-bold text-sm hover:shadow-xl transition-all" data-testid="cta-bottom">

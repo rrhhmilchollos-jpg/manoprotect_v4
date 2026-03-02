@@ -71,7 +71,7 @@ const LandingPromo = () => {
     },
     {
       name: "Premium",
-      price: "24,99€",
+      price: "33,90€",
       period: "/mes",
       features: ["Usuarios ilimitados", "Todo de Familiar", "Vigilancia Dark Web", "Gestor personal"],
       popular: false
