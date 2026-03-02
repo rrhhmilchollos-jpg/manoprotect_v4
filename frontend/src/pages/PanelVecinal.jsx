@@ -71,9 +71,12 @@ function VecinalPaywall({ planInfo }) {
             Panel <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-red-500">Vecinal</span>
           </h1>
 
-          <p className="text-base sm:text-lg text-slate-400 max-w-xl mx-auto mb-8">
+          <p className="text-base sm:text-lg text-slate-400 max-w-xl mx-auto mb-4">
             El sistema de proteccion vecinal mas avanzado de Espana.
             Alertas de <strong className="text-red-400">okupaciones</strong>, <strong className="text-red-400">robos</strong> e <strong className="text-red-400">intrusiones</strong> en tiempo real entre todos los vecinos.
+          </p>
+          <p className="text-sm text-emerald-400 font-bold mb-8 flex items-center justify-center gap-2">
+            <CheckCircle className="w-4 h-4" /> Plan independiente — no necesitas ningun otro producto de ManoProtect
           </p>
 
           {/* Price card */}
