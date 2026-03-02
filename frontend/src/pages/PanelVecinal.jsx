@@ -140,9 +140,27 @@ function VecinalPaywall({ planInfo }) {
             <p className="text-slate-500 text-xs mt-3">Plan independiente por unidad familiar. No requiere otros productos.</p>
 
             {/* Referral banner */}
-            <div className="mt-4 bg-emerald-500/10 border border-emerald-500/20 rounded-xl p-3 text-center">
-              <p className="text-emerald-400 text-xs font-bold">Trae a tus vecinos y gana meses gratis</p>
-              <p className="text-slate-500 text-[10px]">Por cada vecino que contrate, 1 mes gratis para ti</p>
+            <div className="mt-4 bg-emerald-500/10 border border-emerald-500/20 rounded-xl p-3">
+              <p className="text-emerald-400 text-xs font-bold mb-2">Tienes un codigo de referido?</p>
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  value={refCode}
+                  onChange={e => { setRefCode(e.target.value.toUpperCase()); setRefValid(null); }}
+                  onBlur={() => validateRef(refCode)}
+                  placeholder="VEC-XXXXXX"
+                  className="flex-1 bg-slate-900 border border-slate-600 rounded-lg px-3 py-1.5 text-xs text-white placeholder-slate-500 focus:ring-2 focus:ring-emerald-500 outline-none"
+                  data-testid="referral-code-input"
+                />
+                <button type="button" onClick={() => validateRef(refCode)} disabled={checkingRef}
+                  className="bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-400 text-xs font-bold px-3 rounded-lg transition-colors disabled:opacity-50"
+                  data-testid="validate-ref-btn">
+                  {checkingRef ? '...' : 'Validar'}
+                </button>
+              </div>
+              {refValid === true && <p className="text-emerald-400 text-[10px] mt-1.5 flex items-center gap-1" data-testid="ref-valid"><CheckCircle className="w-3 h-3" /> Codigo valido! Tu vecino recibira 1 mes gratis.</p>}
+              {refValid === false && <p className="text-red-400 text-[10px] mt-1.5" data-testid="ref-invalid">Codigo no valido</p>}
+              <p className="text-slate-500 text-[10px] mt-1">Si un vecino te lo ha dado, ambos os beneficiais</p>
             </div>
           </div>
 
