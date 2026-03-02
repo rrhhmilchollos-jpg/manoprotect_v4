@@ -88,7 +88,13 @@ class SecurityHeadersMiddleware(BaseHTTPMiddleware):
         
         # Cache control for sensitive endpoints
         if "/api/" in str(request.url):
-            response.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, private"
+            # Allow caching for public read-only endpoints
+            cacheable_paths = ["/api/plans", "/api/dashboard-barrio/", "/api/community-shield/heatmap", "/api/referrals/validate/"]
+            is_cacheable = any(request.url.path.startswith(p) for p in cacheable_paths)
+            if is_cacheable:
+                response.headers["Cache-Control"] = "public, max-age=300, stale-while-revalidate=600"
+            else:
+                response.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, private"
             response.headers["Pragma"] = "no-cache"
         
         return response
