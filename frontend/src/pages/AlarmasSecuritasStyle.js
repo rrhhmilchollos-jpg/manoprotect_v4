@@ -70,7 +70,7 @@ const AlarmasSecuritasStyle = () => {
       title: 'Alarma para chalets y casas',
       desc: 'Cobertura total con camaras exteriores PTZ 360, sirena perimetral, sensores en todas las plantas y servicio de Acuda con vigilante.',
       img: IMG.villaHero,
-      price: '39,99',
+      price: '44,90',
       items: ['Panel Pro tactil 10"', '4 camaras 2K + 2 PTZ exteriores', '6 sensores PIR anti-mascotas', 'Sirena exterior 120dB + interior', 'Detectores humo/CO2/inundacion', '2 mandos premium', '2 Sentinel SOS de regalo'],
     },
     negocio: {
@@ -503,7 +503,7 @@ const AlarmasSecuritasStyle = () => {
           <div className="grid md:grid-cols-3 gap-5">
             {[
               { name: 'Essential', sub: 'Pisos', promo: '33,90', regular: '44,90', color: 'sky', link: '/alarmas/vivienda', items: ['2 camaras Full HD', '3 sensores PIR', '1 sirena exterior', '1 Sentinel SOS'] },
-              { name: 'Premium', sub: 'Chalets y casas', promo: '39,99', regular: '49,99', color: 'orange', popular: true, link: '/alarmas/vivienda', items: ['6 camaras 2K + PTZ', '6 sensores PIR', 'Sirena 120dB + interior', 'Servicio de Acuda', '2 Sentinel SOS'] },
+              { name: 'Premium', sub: 'Chalets y casas', promo: '44,90', regular: '54,90', color: 'orange', popular: true, link: '/alarmas/vivienda', items: ['6 camaras 2K + PTZ', '6 sensores PIR', 'Sirena 120dB + interior', 'Servicio de Acuda', '2 Sentinel SOS'] },
               { name: 'Business', sub: 'Negocios', promo: '54,99', regular: '69,99', color: 'emerald', link: '/alarmas/negocio', items: ['10 camaras 4K + PTZ', 'Control acceso biometrico', 'Grabacion 90 dias', 'Acuda prioritario', '3 Sentinel SOS'] },
             ].map((p, i) => (
               <div key={i} className={`bg-white rounded-3xl border-2 ${p.popular ? 'border-orange-400 shadow-xl' : 'border-gray-200'} overflow-hidden relative`} data-testid={`price-${p.name.toLowerCase()}`}>
