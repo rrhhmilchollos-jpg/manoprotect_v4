@@ -109,7 +109,13 @@ function VecinalPaywall({ planInfo }) {
             <button onClick={handleCheckout} className="w-full py-4 rounded-xl bg-gradient-to-r from-amber-500 to-red-500 text-white font-black text-base hover:shadow-xl hover:shadow-amber-500/20 transition-all flex items-center justify-center gap-2" data-testid="checkout-vecinal">
               <Crown className="w-5 h-5" /> Contratar Plan Vecinal Anual
             </button>
-            <p className="text-slate-500 text-xs mt-3">Solo disponible como plan anual por unidad familiar</p>
+            <p className="text-slate-500 text-xs mt-3">Plan independiente por unidad familiar. No requiere otros productos.</p>
+
+            {/* Referral banner */}
+            <div className="mt-4 bg-emerald-500/10 border border-emerald-500/20 rounded-xl p-3 text-center">
+              <p className="text-emerald-400 text-xs font-bold">Trae a tus vecinos y gana meses gratis</p>
+              <p className="text-slate-500 text-[10px]">Por cada vecino que contrate, 1 mes gratis para ti</p>
+            </div>
           </div>
 
           {/* Comparison */}
