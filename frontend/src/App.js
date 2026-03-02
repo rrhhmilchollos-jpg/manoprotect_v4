@@ -198,6 +198,12 @@ const EscudoVecinal = lazy(() => import('@/pages/EscudoVecinal'));
 // Panel Vecinal Premium - Neighborhood Dashboard (PAID)
 const PanelVecinal = lazy(() => import('@/pages/PanelVecinal'));
 
+// Dashboard de Barrio - Public Neighborhood Statistics
+const PublicDashboardPage = lazy(() => import('@/pages/PublicDashboardPage'));
+
+// Enterprise Central - Company Management System
+const EnterpriseCentralPage = lazy(() => import('@/pages/EnterpriseCentralPage'));
+
 // Lazy load non-critical UI components to reduce main thread blocking
 const CookieConsent = lazy(() => import('@/components/CookieConsent'));
 const AIChatWidget = lazy(() => import('@/components/AIChatWidget'));
@@ -614,6 +620,15 @@ function AppRouter() {
           {/* Panel Vecinal Premium - PAID ONLY (annual, per family) */}
           <Route path="/panel-vecinal" element={<PanelVecinal />} />
           <Route path="/panel-vecinal-premium" element={<PanelVecinal />} />
+          
+          {/* Dashboard de Barrio - Public neighborhood statistics */}
+          <Route path="/dashboard-barrio" element={<PublicDashboardPage />} />
+          <Route path="/barrio" element={<PublicDashboardPage />} />
+          <Route path="/estadisticas-barrio" element={<PublicDashboardPage />} />
+          
+          {/* Enterprise Central - Company management system */}
+          <Route path="/gestion-empresa" element={<EnterpriseCentralPage />} />
+          <Route path="/enterprise-central" element={<EnterpriseCentralPage />} />
           
           {/* Enterprise B2B Landing */}
           <Route path="/enterprise" element={<EnterprisePortal />} />
