@@ -95,7 +95,7 @@ const Pricing = () => {
             <div data-testid="alarmas-hogar-plans">
               <div className="text-center mb-10">
                 <h2 className="text-2xl font-bold text-gray-900 mb-2">Alarmas para viviendas</h2>
-                <p className="text-gray-500 text-sm">Pisos, chalets, adosados y casas. Equipo + instalacion GRATIS.</p>
+                <p className="text-gray-500 text-sm">Pisos, chalets, adosados y casas. Instalacion profesional GRATIS.</p>
               </div>
               <div className="grid md:grid-cols-2 gap-6">
                 {/* Essential */}
@@ -115,7 +115,7 @@ const Pricing = () => {
                   testId="plan-premium"
                 />
               </div>
-              <p className="text-center text-sm text-gray-400 mt-6">6 primeros meses precio promo. Equipo e instalacion GRATIS. SIN permanencia.</p>
+              <p className="text-center text-sm text-gray-400 mt-6">6 primeros meses precio promo. Instalacion profesional GRATIS. SIN permanencia.</p>
               <div className="text-center mt-4">
                 <Link to="/alarmas/vivienda" className="text-emerald-600 text-sm font-bold hover:underline">Ver detalle completo de equipamiento →</Link>
               </div>
@@ -127,7 +127,7 @@ const Pricing = () => {
             <div data-testid="alarmas-negocio-plans">
               <div className="text-center mb-10">
                 <h2 className="text-2xl font-bold text-gray-900 mb-2">Alarmas para negocios</h2>
-                <p className="text-gray-500 text-sm">Locales, naves, oficinas y franquicias. Equipo + instalacion GRATIS.</p>
+                <p className="text-gray-500 text-sm">Locales, naves, oficinas y franquicias. Instalacion profesional GRATIS.</p>
               </div>
               <div className="grid md:grid-cols-2 gap-6">
                 {/* Comercio */}
@@ -147,7 +147,7 @@ const Pricing = () => {
                   testId="plan-empresa"
                 />
               </div>
-              <p className="text-center text-sm text-gray-400 mt-6">6 primeros meses precio promo. Equipo e instalacion profesional GRATIS. SIN permanencia.</p>
+              <p className="text-center text-sm text-gray-400 mt-6">6 primeros meses precio promo. Instalacion profesional GRATIS. SIN permanencia.</p>
               <div className="text-center mt-4">
                 <Link to="/alarmas/negocio" className="text-emerald-600 text-sm font-bold hover:underline">Ver detalle completo de equipamiento →</Link>
               </div>
@@ -436,7 +436,7 @@ function PlanCard({ name, target, promo, regular, badge, popular, features, cta,
         <span className="text-gray-400 text-sm">/mes</span>
       </div>
       <p className="text-orange-500 text-xs font-bold mb-1">6 primeros meses (despues {regular.toFixed(2).replace('.', ',')} EUR/mes)</p>
-      <p className="text-emerald-600 text-xs font-bold mb-6">Equipo + instalacion GRATIS</p>
+      <p className="text-emerald-600 text-xs font-bold mb-6">Instalacion profesional GRATIS</p>
       <ul className="space-y-2.5 mb-8">
         {features.map((f, i) => (
           <li key={i} className="flex items-center gap-2 text-sm text-gray-600"><Check className={`w-4 h-4 flex-shrink-0 ${f.includes('GRATIS') || f.includes('Refiere') ? 'text-emerald-500' : 'text-emerald-400'}`} />{f.includes('Refiere') ? <span className="text-emerald-700 font-bold">{f}</span> : f}</li>
