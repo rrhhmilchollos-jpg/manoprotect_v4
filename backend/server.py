@@ -1017,7 +1017,8 @@ async def create_checkout_session(
                 "company_cif": COMPANY_INFO["cif"],
                 "billing_period": package["period"],
                 "promo_applied": promo_applied or "none",
-                "original_amount": str(package["amount"])
+                "original_amount": str(package["amount"]),
+                "referral_code": data.referral_code or ""
             }
         )
         
