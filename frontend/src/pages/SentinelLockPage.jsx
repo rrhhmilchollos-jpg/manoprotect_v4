@@ -206,7 +206,7 @@ const SentinelLockPage = () => {
                 className="rounded-3xl shadow-2xl shadow-emerald-500/10 max-w-md w-full"
                 width={768}
                 height={512}
-                fetchpriority="high"
+                fetchPriority="high"
               />
               <div className="absolute -bottom-3 -right-3 bg-emerald-500 text-white text-xs font-bold px-4 py-2 rounded-xl shadow-lg">
                 Cilindro europeo DIN
