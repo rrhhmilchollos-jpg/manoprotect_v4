@@ -51,6 +51,13 @@ const LandingHeader = () => {
           Alarmas
         </Link>
         <Link 
+          to="/sentinel-lock"
+          className="bg-gray-800 text-white px-4 py-2 rounded-full font-bold text-sm hover:bg-gray-700 transition-colors"
+          data-testid="header-sentinel-lock-btn"
+        >
+          Sentinel Lock
+        </Link>
+        <Link 
           to="/escudo-vecinal"
           className="bg-blue-600 text-white px-4 py-2 rounded-full font-bold text-sm hover:bg-blue-700 transition-colors"
           data-testid="header-escudo-btn"
@@ -121,6 +128,14 @@ const LandingHeader = () => {
             data-testid="mobile-alarmas-btn"
           >
             Alarmas Hogar y Empresa
+          </Link>
+          <Link
+            to="/sentinel-lock"
+            className="block py-2 text-gray-800 hover:text-gray-900 font-bold"
+            onClick={() => setMobileMenuOpen(false)}
+            data-testid="mobile-sentinel-lock-btn"
+          >
+            Sentinel Lock
           </Link>
           <Link
             to="/escudo-vecinal"
