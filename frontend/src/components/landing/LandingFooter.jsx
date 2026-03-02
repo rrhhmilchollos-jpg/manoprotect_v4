@@ -206,6 +206,9 @@ const LandingFooter = () => {
                 <h4 className="font-semibold text-white mb-4 text-sm uppercase tracking-wider">Producto</h4>
                 <ul className="space-y-3">
                   <li><Link to="/productos" className="text-slate-400 hover:text-emerald-400 transition-colors text-sm">Productos</Link></li>
+                  <li><Link to="/sentinel-lock" className="text-emerald-400 hover:text-emerald-300 transition-colors text-sm font-semibold">Sentinel Lock</Link></li>
+                  <li><Link to="/manoprotect-connect" className="text-slate-400 hover:text-emerald-400 transition-colors text-sm">App Connect</Link></li>
+                  <li><Link to="/plataforma-cra" className="text-slate-400 hover:text-emerald-400 transition-colors text-sm">Plataforma CRA</Link></li>
                   <li><Link to="/sentinel-x" className="text-slate-400 hover:text-emerald-400 transition-colors text-sm">Sentinel X</Link></li>
                   <li><Link to="/sentinel-j" className="text-slate-400 hover:text-emerald-400 transition-colors text-sm">Sentinel J</Link></li>
                   <li><Link to="/sentinel-s" className="text-slate-400 hover:text-emerald-400 transition-colors text-sm">Sentinel S</Link></li>
