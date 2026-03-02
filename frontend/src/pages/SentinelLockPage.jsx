@@ -13,7 +13,12 @@ const IMG = {
   exploded: 'https://static.prod-images.emergentagent.com/jobs/33b1d023-8b05-4946-8f90-203a20a655d6/images/96eb06330e61a96b0af3cc2627b0ee185761d5c9fcf015844cf4c8810ea93b74.png',
   installed: 'https://static.prod-images.emergentagent.com/jobs/33b1d023-8b05-4946-8f90-203a20a655d6/images/7cee4f876a4ee2d1cdc1fd28cd2b45644c7ab17ee2fed76abf8cb7ea4ca0b6ae.png',
   closeup: 'https://static.prod-images.emergentagent.com/jobs/33b1d023-8b05-4946-8f90-203a20a655d6/images/8c3ae3c8d5c793a1995dc5fa6d77771f48dd823ab100dfbc4051665b4625b980.png',
+  // Imagenes del fabricante — vista interior y mecanismo
+  interiorPCB: 'https://customer-assets.emergentagent.com/job_33b1d023-8b05-4946-8f90-203a20a655d6/artifacts/p1c1gqmj_Cerradura%20inteligente%20%281%29.png',
+  mecanismo: 'https://customer-assets.emergentagent.com/job_33b1d023-8b05-4946-8f90-203a20a655d6/artifacts/wcs7ov15_Cerradura%20inteligente.png',
 };
+
+const VIDEO_URL = 'https://customer-assets.emergentagent.com/job_33b1d023-8b05-4946-8f90-203a20a655d6/artifacts/ibvdpikl_Sentinel%20Lock_%20El%20Bomb%C3%ADn%20Inteligente%20Europeo_720p_caption.mp4';
 
 const SPECS = [
   { icon: WifiOff, title: 'Autonoma al 100%', desc: 'Funciona sin WiFi, sin internet, sin corriente electrica. Totalmente independiente de tu red domestica.' },
