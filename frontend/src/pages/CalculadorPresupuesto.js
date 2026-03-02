@@ -205,7 +205,7 @@ const CalculadorPresupuesto = () => {
               </div>
               <div className="space-y-2 mb-6">
                 {[
-                  'Equipo e instalacion GRATIS',
+                  'Instalacion profesional GRATIS',
                   'SIN permanencia',
                   'Centro de control 24h incluido',
                   `${result.details.sentinel_included} Sentinel SOS de REGALO`,
