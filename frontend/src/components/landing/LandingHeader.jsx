@@ -131,6 +131,14 @@ const LandingHeader = () => {
             Escudo Vecinal
           </Link>
           <Link
+            to="/dashboard-barrio"
+            className="block py-2 text-amber-500 hover:text-amber-600 font-bold"
+            onClick={() => setMobileMenuOpen(false)}
+            data-testid="mobile-dashboard-barrio-btn"
+          >
+            Dashboard Barrio
+          </Link>
+          <Link
             to="/dispositivo-sos"
             className="block py-2 text-gray-700 hover:text-[#4CAF50] font-medium"
             onClick={() => setMobileMenuOpen(false)}
