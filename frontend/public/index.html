@@ -150,13 +150,15 @@
         <!-- ============================================ -->
         <!-- PERFORMANCE: PRELOAD CRITICAL RESOURCES -->
         <!-- ============================================ -->
-        <!-- Preload logo for LCP -->
+        <!-- Preload hero image for LCP -->
         <link rel="preload" href="/manoprotect_logo.webp" as="image" type="image/webp" />
+        <link rel="preload" href="https://static.prod-images.emergentagent.com/jobs/9da3b4c4-c09a-415b-8aa7-bb34b82ca31e/images/87b9c67e566b3df4d280471b26a2215bd603777003e860a14633f20318652e92.png" as="image" fetchpriority="high" />
         
         <!-- Preconnect to critical origins -->
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
         <link rel="preconnect" href="https://static.prod-images.emergentagent.com" crossorigin />
+        <link rel="preconnect" href="https://customer-assets.emergentagent.com" crossorigin />
         
         <!-- DNS Prefetch for third-party resources -->
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
