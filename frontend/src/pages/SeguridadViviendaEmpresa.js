@@ -36,7 +36,7 @@ const KITS = [
     badge: 'MEJOR PRECIO',
     subtitle: 'Pisos y apartamentos',
     monthly: 34.99,
-    promoMonthly: 24.99,
+    promoMonthly: 33.90,
     promoLabel: '6 primeros meses',
     color: 'sky',
     gradient: 'from-sky-600 to-blue-700',
@@ -156,7 +156,7 @@ const COMP_ROWS = [
 ];
 
 const COMPETITOR_TABLE = [
-  { feat: 'Precio desde', mp: '24,99 EUR/mes', sd: '39,89 EUR/mes', pg: '44,90 EUR/mes' },
+  { feat: 'Precio desde', mp: '33,90 EUR/mes', sd: '39,89 EUR/mes', pg: '44,90 EUR/mes' },
   { feat: 'Permanencia', mp: 'SIN permanencia', sd: '24 meses', pg: '24-36 meses' },
   { feat: 'Instalacion', mp: 'GRATIS', sd: '149 EUR', pg: 'Incluido' },
   { feat: 'Camaras en kit basico', mp: '2 Full HD', sd: '1 camara', pg: '1 camara' },
@@ -236,7 +236,7 @@ const SeguridadViviendaEmpresa = () => {
             <div className="flex flex-wrap items-center gap-3 mb-8">
               <span className="bg-red-500/20 border border-red-400/30 text-red-300 px-3 py-1 rounded-full text-xs font-bold">SIN permanencia</span>
               <span className="bg-blue-500/20 border border-blue-400/30 text-blue-300 px-3 py-1 rounded-full text-xs font-bold">Instalacion GRATIS</span>
-              <span className="bg-orange-500/20 border border-orange-400/30 text-orange-300 px-3 py-1 rounded-full text-xs font-bold">Desde 24,99 EUR/mes</span>
+              <span className="bg-orange-500/20 border border-orange-400/30 text-orange-300 px-3 py-1 rounded-full text-xs font-bold">Desde 33,90 EUR/mes</span>
             </div>
             <div className="flex flex-wrap gap-3">
               <a href="#kits" className="group bg-gradient-to-r from-orange-500 to-red-500 text-white px-8 py-4 rounded-full font-bold text-sm transition-all hover:shadow-xl hover:shadow-orange-500/30 hover:scale-105 flex items-center gap-2" data-testid="ver-kits-btn">
@@ -479,7 +479,7 @@ const SeguridadViviendaEmpresa = () => {
                 { icon: Watch, text: 'Sentinel SOS incluido - unico en el mercado' },
                 { icon: Zap, text: 'Verificacion por video con IA - cero falsas alarmas' },
                 { icon: Globe, text: 'Funciona con el movil apagado gracias a E-SIM' },
-                { icon: Sparkles, text: 'Precio desde 24,99 EUR/mes vs 39,89 EUR competencia' },
+                { icon: Sparkles, text: 'Precio desde 33,90 EUR/mes vs 39,89 EUR competencia' },
               ].map((a, i) => (
                 <div key={i} className="flex items-start gap-3 mb-3">
                   <div className="w-8 h-8 bg-emerald-50 rounded-lg flex items-center justify-center flex-shrink-0">
