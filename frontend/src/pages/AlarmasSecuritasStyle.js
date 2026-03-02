@@ -47,7 +47,7 @@ const AlarmasSecuritasStyle = () => {
 
   const faqs = [
     { q: 'Avisais a la Policia?', a: 'Si. Ante una intrusion confirmada por video con IA, nuestro centro de control avisa directamente a Policia Nacional, Guardia Civil o Mossos en menos de 60 segundos. Tambien despachamos bomberos o ambulancia si es necesario.' },
-    { q: 'Cuanto cuesta la alarma de ManoProtect?', a: 'Desde 24,99 EUR/mes (precio promocional 6 meses). Equipo e instalacion GRATIS. Sin entrada. Sin permanencia. Cancela cuando quieras sin penalizacion.' },
+    { q: 'Cuanto cuesta la alarma de ManoProtect?', a: 'Desde 33,90 EUR/mes (precio promocional 6 meses). Instalacion profesional GRATIS. Sin entrada. Sin permanencia. Cancela cuando quieras sin penalizacion.' },
     { q: 'Que diferencia hay con Securitas Direct?', a: 'Sin permanencia (ellos exigen 24 meses), mas camaras incluidas (2 vs 1 en el kit basico), camaras con IA para evitar falsas alarmas, y un reloj Sentinel SOS incluido de REGALO que funciona sin movil.' },
     { q: 'La alarma es inalambrica?', a: 'Si. 100% inalambrica. Instalacion sin obras ni cables en menos de 2 horas. Comunicacion via 4G + WiFi + Ethernet.' },
     { q: 'Puedo controlar la alarma desde el movil?', a: 'Si. Con la app ManoProtect puedes armar/desarmar, ver camaras en directo, revisar grabaciones, recibir alertas push y gestionar usuarios. Tambien puedes controlarlo desde tu reloj Sentinel.' },
@@ -95,7 +95,7 @@ const AlarmasSecuritasStyle = () => {
     <div className="min-h-screen bg-white" data-testid="alarmas-securitas-style">
       <Helmet>
         <title>Alarmas para Hogar y Negocio | ManoProtect 2026 - Desde 24,99 EUR/mes</title>
-        <meta name="description" content="Alarma inteligente para casa y empresa. Camaras IA, centro 24h, aviso a Policia, anti-inhibicion. SIN permanencia. Equipo GRATIS. Sentinel SOS incluido. Desde 24,99 EUR/mes." />
+        <meta name="description" content="Alarma inteligente para casa y empresa. Camaras IA, centro 24h, aviso a Policia, anti-inhibicion. SIN permanencia. Instalacion GRATIS. Sentinel SOS incluido. Desde 33,90 EUR/mes." />
         <link rel="canonical" href="https://manoprotect.com/alarmas-hogar" />
       </Helmet>
 
