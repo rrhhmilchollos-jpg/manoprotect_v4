@@ -253,6 +253,81 @@ export default function PublicDashboardPage() {
         </div>
       </div>
 
+      {/* Gamified Ranking Section */}
+      {ranking && (
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 mb-10" data-testid="ranking-section">
+          <div className="bg-gradient-to-br from-slate-800/80 to-slate-900/80 border border-amber-500/10 rounded-2xl overflow-hidden">
+            <div className="p-6 border-b border-slate-700/50 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <Award className="w-6 h-6 text-amber-400" />
+                <div>
+                  <h3 className="text-white font-bold text-lg">Ranking del Barrio</h3>
+                  <p className="text-slate-500 text-xs">Nivel de proteccion comunitaria</p>
+                </div>
+              </div>
+              <div className={`px-4 py-1.5 rounded-full font-black text-sm ${ranking.overall_rank?.tier === 'gold' ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30' : ranking.overall_rank?.tier === 'silver' ? 'bg-slate-300/20 text-slate-300 border border-slate-300/30' : ranking.overall_rank?.tier === 'bronze' ? 'bg-orange-500/20 text-orange-400 border border-orange-500/30' : 'bg-slate-600/20 text-slate-400 border border-slate-600/30'}`} data-testid="overall-rank">
+                {ranking.overall_rank?.rank || 'Nuevo'}
+              </div>
+            </div>
+
+            <div className="p-6">
+              {/* Score Bars */}
+              <div className="grid sm:grid-cols-3 gap-4 mb-6">
+                {[
+                  { label: 'Comunidad', score: ranking.scores?.community || 0, color: 'bg-indigo-500', icon: Users },
+                  { label: 'Vigilancia', score: ranking.scores?.vigilance || 0, color: 'bg-amber-500', icon: Eye },
+                  { label: 'Respuesta', score: ranking.scores?.response || 0, color: 'bg-emerald-500', icon: Activity },
+                ].map(s => (
+                  <div key={s.label} className="bg-slate-900/60 rounded-xl p-4">
+                    <div className="flex items-center gap-2 mb-2">
+                      <s.icon className="w-4 h-4 text-slate-400" />
+                      <span className="text-slate-400 text-xs font-medium">{s.label}</span>
+                      <span className="text-white text-xs font-bold ml-auto">{s.score}/100</span>
+                    </div>
+                    <div className="bg-slate-700/50 rounded-full h-2.5 overflow-hidden">
+                      <div className={`h-full ${s.color} rounded-full transition-all duration-700`} style={{ width: `${s.score}%` }} />
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Badges */}
+              {ranking.badges && ranking.badges.length > 0 && (
+                <div className="mb-6">
+                  <h4 className="text-slate-400 text-xs font-bold mb-3 uppercase tracking-wider">Insignias conseguidas</h4>
+                  <div className="flex flex-wrap gap-2">
+                    {ranking.badges.map(badge => (
+                      <div key={badge.id} className={`flex items-center gap-2 px-3 py-2 rounded-xl border ${badge.tier === 'gold' ? 'bg-amber-500/5 border-amber-500/20' : badge.tier === 'silver' ? 'bg-slate-300/5 border-slate-300/20' : 'bg-orange-500/5 border-orange-500/20'}`} data-testid={`badge-${badge.id}`}>
+                        <Star className={`w-4 h-4 ${badge.tier === 'gold' ? 'text-amber-400' : badge.tier === 'silver' ? 'text-slate-300' : 'text-orange-400'}`} />
+                        <div>
+                          <span className="text-white text-xs font-bold block">{badge.name}</span>
+                          <span className="text-slate-500 text-[10px]">{badge.description}</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Next Milestone */}
+              {ranking.next_milestone && (
+                <div className="bg-indigo-500/5 border border-indigo-500/15 rounded-xl p-4" data-testid="next-milestone">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-indigo-400 text-xs font-bold">Siguiente objetivo</span>
+                    <span className="text-slate-500 text-[10px]">{ranking.next_milestone.progress}%</span>
+                  </div>
+                  <p className="text-white text-sm font-medium mb-1">{ranking.next_milestone.action}</p>
+                  <p className="text-indigo-400/70 text-[10px]">Recompensa: {ranking.next_milestone.reward}</p>
+                  <div className="bg-slate-700/50 rounded-full h-1.5 mt-2 overflow-hidden">
+                    <div className="h-full bg-indigo-500 rounded-full transition-all" style={{ width: `${ranking.next_milestone.progress}%` }} />
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Community Stats */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 mb-10">
         <div className="grid sm:grid-cols-3 gap-4">
