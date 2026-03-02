@@ -60,6 +60,8 @@ Frontend: React + TailwindCSS + Shadcn/UI + Leaflet | Backend: FastAPI + MongoDB
 - New Product Ecosystem: Sentinel Lock, CRA Platform, ManoProtect Connect pages
 - Cross-sell integration (Sentinel Lock on alarm pages + calculator)
 - Navigation updated (header + footer links to all new products)
+- Sentinel Lock custom product images (cerradura cilindrica europea estilo DIN)
+- Interactive AI detection demo (6 estados: Normal → Vibracion → Intrusion → CRA → Policia → Resuelto)
 
 ## Backlog
 - P1: SEO/SEM (requiere IDs Meta Pixel, Hotjar, Google Search Console)
@@ -70,6 +72,7 @@ Frontend: React + TailwindCSS + Shadcn/UI + Leaflet | Backend: FastAPI + MongoDB
 - P3: Migrar SHA256 a bcrypt
 
 ## Testing
+- iteration_81: 100% pass - Imagenes producto Sentinel Lock + Demo interactiva IA
 - iteration_80: 100% pass - Ecosistema nuevos productos (3 paginas + rutas + navegacion + cross-sell)
 - iteration_79: 100% pass - Chatbot lead capture
 - iteration_78: 100% pass - Precios actualizados + Performance
