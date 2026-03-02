@@ -2912,6 +2912,10 @@ print("✅ Newsletter routes loaded")
 api_router.include_router(panel_vecinal_router)
 print("✅ Panel Vecinal Premium routes loaded")
 
+# Push Notification Service (Vecinal Alerts)
+from services.push_notification_service import init_push_service
+init_push_service(db)
+
 # Dashboard de Barrio (Public neighborhood stats)
 from routes.dashboard_barrio_routes import router as dashboard_barrio_router, init_dashboard_barrio
 init_dashboard_barrio(db)
