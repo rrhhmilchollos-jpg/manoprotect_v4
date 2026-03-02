@@ -103,8 +103,8 @@ const HighConversionLanding = () => {
             <button onClick={() => cta('header')} className="bg-emerald-500 hover:bg-emerald-600 text-white text-[13px] font-bold px-4 py-2 rounded-lg transition-colors" data-testid="header-cta">
               Probar 7 días gratis
             </button>
-            <button onClick={() => setMobileMenu(!mobileMenu)} className="md:hidden text-gray-500 hover:text-emerald-600" data-testid="mobile-menu-toggle">
-              <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={mobileMenu ? 'M6 18L18 6M6 6l12 12' : 'M4 6h16M4 12h16M4 18h16'} /></svg>
+            <button onClick={() => setMobileMenu(!mobileMenu)} className="md:hidden text-gray-500 hover:text-emerald-600" data-testid="mobile-menu-toggle" aria-label="Menu de navegacion">
+              <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={mobileMenu ? 'M6 18L18 6M6 6l12 12' : 'M4 6h16M4 12h16M4 18h16'} /></svg>
             </button>
           </div>
         </div>
