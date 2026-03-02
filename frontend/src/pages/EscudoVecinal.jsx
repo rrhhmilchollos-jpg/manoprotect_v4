@@ -572,10 +572,11 @@ export default function EscudoVecinal() {
             <span className="text-amber-400 text-xs font-bold">PREMIUM</span>
           </div>
           <h2 className="text-white font-bold text-2xl mb-3">Panel Vecinal Premium</h2>
-          <p className="text-slate-400 text-sm mb-6">
+          <p className="text-slate-400 text-sm mb-2">
             Alertas de <strong className="text-red-400">okupaciones</strong> y <strong className="text-red-400">robos</strong> en tiempo real.
-            Coordinacion vecinal avanzada. Dashboard exclusivo. Solo 499,99 EUR/ano por familia.
+            Coordinacion vecinal avanzada. Dashboard exclusivo. Solo 299,99 EUR/ano por familia.
           </p>
+          <p className="text-emerald-400 text-xs font-bold mb-6">Plan independiente — no necesitas ningun otro producto. Trae vecinos = meses gratis.</p>
           <Link to="/panel-vecinal" className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-500 to-red-500 hover:shadow-xl hover:shadow-amber-500/10 text-white font-black px-8 py-3 rounded-xl transition-all" data-testid="cta-panel-vecinal">
             <Crown className="w-4 h-4" /> Ver Panel Vecinal Premium <ChevronRight className="w-4 h-4" />
           </Link>
