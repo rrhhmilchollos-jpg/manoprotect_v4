@@ -805,12 +805,135 @@ async def get_available_plans():
         }
     ]
     
+    # Planes Alarmas Hogar - Precios competitivos tipo Securitas Direct
+    alarm_plans = [
+        {
+            "id": "alarm-essential",
+            "name": "Alarma Essential",
+            "target": "Pisos y apartamentos",
+            "price": 33.90,
+            "regularPrice": 44.90,
+            "period": "mes",
+            "promoNote": "6 primeros meses",
+            "features": [
+                "Hub inteligente pantalla 7\"",
+                "2 camaras Full HD + vision nocturna",
+                "3 sensores PIR anti-mascotas",
+                "2 contactos magneticos",
+                "Sirena exterior 110dB",
+                "Centro control 24h (CRA)",
+                "App completa",
+                "1 Sentinel X de REGALO",
+                "Refiere = 1 mes GRATIS",
+            ],
+            "installation": "GRATIS",
+            "commitment": "SIN permanencia",
+        },
+        {
+            "id": "alarm-premium",
+            "name": "Alarma Premium",
+            "target": "Chalets, adosados y casas",
+            "price": 44.90,
+            "regularPrice": 54.90,
+            "period": "mes",
+            "popular": True,
+            "promoNote": "6 primeros meses",
+            "features": [
+                "Hub Pro pantalla 10\" HD",
+                "4 camaras 2K + 2 PTZ exterior 360",
+                "6 sensores PIR + 4 magneticos",
+                "Detector humo + CO2 + inundacion",
+                "2 sirenas 120dB + teclado RFID",
+                "CRA Premium + Servicio Acuda",
+                "Grabacion nube 30 dias",
+                "2 Sentinel X de REGALO",
+                "Refiere = 1 mes GRATIS",
+            ],
+            "installation": "GRATIS",
+            "commitment": "SIN permanencia",
+        },
+    ]
+
+    # Planes Alarmas Negocio
+    alarm_business_plans = [
+        {
+            "id": "alarm-business",
+            "name": "Alarma Comercio",
+            "target": "Tiendas, locales y restaurantes",
+            "price": 54.90,
+            "regularPrice": 69.90,
+            "period": "mes",
+            "promoNote": "6 primeros meses",
+            "features": [
+                "Hub Enterprise + 6 camaras 4K IA",
+                "Control acceso biometrico",
+                "CRA Enterprise + Acuda prioritario",
+                "App Business multi-sede",
+                "2 Sentinel X de REGALO",
+                "Refiere = 1 mes GRATIS",
+            ],
+            "installation": "GRATIS",
+            "commitment": "SIN permanencia",
+        },
+        {
+            "id": "alarm-enterprise",
+            "name": "Alarma Empresa",
+            "target": "Naves, oficinas y franquicias",
+            "price": 74.90,
+            "regularPrice": 89.90,
+            "period": "mes",
+            "popular": True,
+            "promoNote": "6 primeros meses",
+            "features": [
+                "Doble Hub redundante + 10 camaras 4K",
+                "Videoportero reconocimiento facial",
+                "Grabacion nube 90 dias",
+                "Custodia llaves + mantenimiento trimestral",
+                "3 Sentinel X REGALO",
+                "Gestion multi-sede completa",
+                "Refiere = 1 mes GRATIS",
+            ],
+            "installation": "GRATIS",
+            "commitment": "SIN permanencia",
+        },
+    ]
+
+    # Planes Sentinel SOS
+    sentinel_plans = [
+        {
+            "id": "sentinel-basic",
+            "name": "Sentinel Basic",
+            "price": 9.99,
+            "period": "mes",
+            "features": ["GPS tiempo real", "Alertas SOS", "App basica", "Hasta 2 contactos"],
+        },
+        {
+            "id": "sentinel-plus",
+            "name": "Sentinel Plus",
+            "price": 14.99,
+            "period": "mes",
+            "popular": True,
+            "features": ["Todo de Basic", "GPS 24/7 + historial", "Alertas familiares", "Deteccion caidas", "Hasta 5 contactos"],
+        },
+        {
+            "id": "sentinel-pro",
+            "name": "Sentinel Pro",
+            "price": 24.99,
+            "period": "mes",
+            "features": ["Todo de Plus", "Monitorizacion CRA 24/7", "Servicio Acuda", "Geovallas ilimitadas", "Soporte prioritario"],
+        },
+    ]
+
     return {
         "individual_plans": individual_plans,
         "family_plans": family_plans,
         "business_plans": business_plans,
+        "alarm_plans": alarm_plans,
+        "alarm_business_plans": alarm_business_plans,
+        "sentinel_plans": sentinel_plans,
         "currency": "EUR",
-        "billing_options": ["weekly", "monthly", "quarterly", "yearly"],
+        "referral_bonus": "1 mes gratis para ambos (referidor y referido)",
+        "billing_options": ["monthly", "quarterly", "yearly"],
         "discounts": {
             "quarterly": 17,
             "yearly": 31
