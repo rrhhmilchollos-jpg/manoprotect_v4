@@ -211,13 +211,20 @@ SUBSCRIPTION_PACKAGES = {
     # CRO Landing plans
     "cro-monthly": {"amount": 9.99, "name": "Plan Mensual", "period": "mes", "max_users": 5},
     "cro-yearly": {"amount": 99.99, "name": "Plan Anual", "period": "año", "max_users": 5},
-    # Planes Alarmas Hogar y Empresa
-    "alarm-essential": {"amount": 24.99, "name": "Alarma Essential", "period": "mes", "max_users": 1, "is_alarm": True},
-    "alarm-essential-regular": {"amount": 34.99, "name": "Alarma Essential", "period": "mes", "max_users": 1, "is_alarm": True},
-    "alarm-premium": {"amount": 39.99, "name": "Alarma Premium", "period": "mes", "max_users": 1, "is_alarm": True},
-    "alarm-premium-regular": {"amount": 49.99, "name": "Alarma Premium", "period": "mes", "max_users": 1, "is_alarm": True},
-    "alarm-business": {"amount": 54.99, "name": "Alarma Business", "period": "mes", "max_users": 3, "is_alarm": True},
-    "alarm-business-regular": {"amount": 69.99, "name": "Alarma Business", "period": "mes", "max_users": 3, "is_alarm": True},
+    # Planes Alarmas Hogar y Empresa - Precios competitivos Securitas Direct
+    # Instalacion GRATIS, kits incluidos, aparatos extra se cobran aparte
+    "alarm-essential": {"amount": 33.90, "name": "Alarma Essential", "period": "mes", "max_users": 1, "is_alarm": True},
+    "alarm-essential-regular": {"amount": 44.90, "name": "Alarma Essential", "period": "mes", "max_users": 1, "is_alarm": True},
+    "alarm-premium": {"amount": 44.90, "name": "Alarma Premium", "period": "mes", "max_users": 1, "is_alarm": True},
+    "alarm-premium-regular": {"amount": 54.90, "name": "Alarma Premium", "period": "mes", "max_users": 1, "is_alarm": True},
+    "alarm-business": {"amount": 54.90, "name": "Alarma Comercio", "period": "mes", "max_users": 3, "is_alarm": True},
+    "alarm-business-regular": {"amount": 69.90, "name": "Alarma Comercio", "period": "mes", "max_users": 3, "is_alarm": True},
+    "alarm-enterprise": {"amount": 74.90, "name": "Alarma Empresa", "period": "mes", "max_users": 10, "is_alarm": True},
+    "alarm-enterprise-regular": {"amount": 89.90, "name": "Alarma Empresa", "period": "mes", "max_users": 10, "is_alarm": True},
+    # Planes Sentinel - Suscripcion mensual por dispositivo
+    "sentinel-basic": {"amount": 9.99, "name": "Sentinel Basic", "period": "mes", "max_users": 1, "is_sentinel": True},
+    "sentinel-plus": {"amount": 14.99, "name": "Sentinel Plus", "period": "mes", "max_users": 1, "is_sentinel": True},
+    "sentinel-pro": {"amount": 24.99, "name": "Sentinel Pro", "period": "mes", "max_users": 1, "is_sentinel": True},
     # PLAN VECINAL PREMIUM - INDEPENDIENTE Y OPCIONAL - SOLO ANUAL - POR FAMILIA
     # No requiere ningún otro plan. Cualquier grupo de vecinos puede contratarlo.
     "vecinal-anual": {"amount": 299.99, "name": "Escudo Vecinal Premium", "period": "ano", "max_users": -1, "is_vecinal": True, "annual_only": True, "standalone": True, "per_family": True, "unlimited_families": True},
