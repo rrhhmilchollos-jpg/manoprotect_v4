@@ -15,7 +15,7 @@ El servidor actual es ARM64 y no puede compilar APKs nativos. Aquí tienes 3 opc
 
 1. **Descarga el proyecto Android:**
    ```
-   https://mano-ops-workspace.preview.emergentagent.com/ManoProtect-Android-Project.zip
+   https://escudo-preview.preview.emergentagent.com/ManoProtect-Android-Project.zip
    ```
 
 2. **Extrae el ZIP** en una carpeta

@@ -6,7 +6,7 @@
 // API Configuration
 export const API_CONFIG = {
   // Development/Preview URL (Emergent platform)
-  DEV_URL: 'https://mano-ops-workspace.preview.emergentagent.com/api',
+  DEV_URL: 'https://escudo-preview.preview.emergentagent.com/api',
   
   // Production URL (update when deploying to production)
   PROD_URL: 'https://mano-protect.com/api',

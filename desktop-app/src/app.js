@@ -1,6 +1,6 @@
 // ManoProtect Desktop App - Main JavaScript
 
-const API_BASE = 'https://mano-ops-workspace.preview.emergentagent.com';
+const API_BASE = 'https://escudo-preview.preview.emergentagent.com';
 
 // Navigation
 document.querySelectorAll('.nav-item').forEach(item => {

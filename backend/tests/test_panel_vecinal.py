@@ -115,7 +115,7 @@ class TestVecinalCheckout:
         """POST /api/create-checkout-session with plan_type='vecinal-anual' returns checkout URL"""
         r = requests.post(f"{BASE_URL}/api/create-checkout-session", json={
             "plan_type": "vecinal-anual",
-            "origin_url": "https://mano-ops-workspace.preview.emergentagent.com"
+            "origin_url": "https://escudo-preview.preview.emergentagent.com"
         })
         assert r.status_code == 200
         data = r.json()
@@ -135,7 +135,7 @@ class TestExistingAlarmCheckout:
         """POST /api/create-checkout-session with alarm-essential returns URL"""
         r = requests.post(f"{BASE_URL}/api/create-checkout-session", json={
             "plan_type": "alarm-essential",
-            "origin_url": "https://mano-ops-workspace.preview.emergentagent.com"
+            "origin_url": "https://escudo-preview.preview.emergentagent.com"
         })
         assert r.status_code == 200
         data = r.json()

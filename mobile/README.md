@@ -25,7 +25,7 @@ Todas las apps se conectan al mismo backend:
 
 | Entorno | URL |
 |---------|-----|
-| Preview | https://mano-ops-workspace.preview.emergentagent.com |
+| Preview | https://escudo-preview.preview.emergentagent.com |
 | Producción | [Tu dominio de producción] |
 
 ---
