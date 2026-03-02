@@ -1192,7 +1192,46 @@ async def stripe_webhook(request: Request):
                         "amount_paid": tx.get("amount"),
                         "created_at": datetime.now(timezone.utc).isoformat()
                     }
+                    # Generate referral code for new subscriber
+                    ref_code = f"MP-{tx.get('user_id', 'X')[:6].upper()}"
+                    sub_doc["referral_code"] = ref_code
                     await db.subscriptions.insert_one(sub_doc)
+
+                    # Process referral redemption if referral_code was used
+                    ref_code_used = tx.get("metadata", {}).get("referral_code", "")
+                    if ref_code_used:
+                        try:
+                            referrer_sub = await db.subscriptions.find_one(
+                                {"referral_code": ref_code_used.strip().upper(), "status": "active"},
+                                {"_id": 0}
+                            )
+                            if referrer_sub and referrer_sub.get("user_id") != tx.get("user_id"):
+                                now = datetime.now(timezone.utc)
+                                # Record the referral
+                                await db.referrals.insert_one({
+                                    "referrer_id": referrer_sub.get("user_id"),
+                                    "referred_id": tx.get("user_id"),
+                                    "referral_code": ref_code_used.strip().upper(),
+                                    "plan_type": tx.get("plan_type"),
+                                    "status": "completed",
+                                    "created_at": now.isoformat(),
+                                })
+                                # Extend referrer subscription by 30 days
+                                current_expires = referrer_sub.get("expires_at")
+                                if current_expires:
+                                    try:
+                                        base = datetime.fromisoformat(current_expires.replace("Z", "+00:00"))
+                                    except (ValueError, TypeError):
+                                        base = now
+                                else:
+                                    base = now + timedelta(days=365)
+                                new_exp = (base + timedelta(days=30)).isoformat()
+                                await db.subscriptions.update_one(
+                                    {"user_id": referrer_sub.get("user_id"), "status": "active"},
+                                    {"$set": {"expires_at": new_exp, "last_referral_bonus_at": now.isoformat()}}
+                                )
+                        except Exception as ref_err:
+                            logging.error(f"Referral processing error: {ref_err}")
         
         return {"status": "success", "event_type": webhook_response.event_type}
     
