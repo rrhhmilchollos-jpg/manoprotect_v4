@@ -422,21 +422,29 @@ const SentinelLockPage = () => {
             <div className="p-8 text-center">
               <Lock className="w-10 h-10 text-emerald-400 mx-auto mb-3" />
               <h3 className="text-2xl font-bold text-white mb-1">Sentinel Lock</h3>
-              <p className="text-gray-400 text-xs mb-4">Cerradura inteligente autonoma — Cilindro europeo DIN</p>
+              <p className="text-gray-400 text-xs mb-1">Cerradura inteligente autonoma — Cilindro europeo DIN</p>
+              <div className="inline-flex items-center gap-1.5 bg-amber-500/10 border border-amber-500/20 rounded-full px-3 py-1 mb-4">
+                <AlertTriangle className="w-3 h-3 text-amber-400" />
+                <span className="text-amber-400 text-[10px] font-bold">PRODUCTO BAJO PEDIDO — FABRICACION 15-20 DIAS</span>
+              </div>
               <div className="mb-2">
                 <span className="text-4xl font-black text-white">249</span>
                 <span className="text-gray-400 text-lg ml-1">EUR</span>
               </div>
               <p className="text-emerald-400 text-xs font-bold mb-1">+ Plan de monitorizacion desde 9,99 EUR/mes</p>
-              <p className="text-gray-500 text-[10px] mb-6">Instalacion profesional GRATIS. Compatible con todos los planes de alarma.</p>
+              <div className="bg-amber-500/5 border border-amber-500/15 rounded-xl p-3 mb-4">
+                <p className="text-amber-300 text-[11px] font-bold">Pago anticipado obligatorio</p>
+                <p className="text-gray-400 text-[10px]">Al tratarse de un producto fabricado bajo demanda, el importe total debe abonarse en el momento del pedido. La instalacion profesional es GRATIS.</p>
+              </div>
               <ul className="text-left space-y-2 mb-6">
-                {['Deteccion IA anti-intrusion', 'Comunicacion NB-IoT autonoma', 'eSIM de fabrica preconfigurada', 'Sensores vibracion + continuidad + presion', 'Geolocalizacion GPS + Cell-ID', 'Conexion directa con CRA 24h', 'Alarma sonora disuasoria', 'Instalacion profesional GRATIS', 'Refiere = 1 mes GRATIS de plan'].map((f, i) => (
+                {['Deteccion IA anti-intrusion', 'Comunicacion NB-IoT autonoma', 'eSIM de fabrica preconfigurada', 'Sensores vibracion + continuidad + presion', 'Geolocalizacion GPS + Cell-ID', 'Conexion directa con CRA 24h', 'Alarma sonora disuasoria', 'Instalacion profesional GRATIS', 'Fabricacion bajo pedido (15-20 dias)', 'Refiere = 1 mes GRATIS de plan'].map((f, i) => (
                   <li key={i} className="flex items-center gap-2 text-sm text-gray-300"><CheckCircle className="w-4 h-4 text-emerald-400 flex-shrink-0" />{f}</li>
                 ))}
               </ul>
-              <Link to="/contacto" className="block w-full py-4 bg-emerald-500 hover:bg-emerald-400 text-white font-bold rounded-xl text-sm transition-colors" data-testid="lock-cta-buy">
-                Solicitar Sentinel Lock
+              <Link to="/contacto" className="block w-full py-4 bg-emerald-500 hover:bg-emerald-400 text-white font-bold rounded-xl text-sm transition-colors mb-3" data-testid="lock-cta-buy">
+                Reservar Sentinel Lock — 249 EUR
               </Link>
+              <p className="text-gray-600 text-[10px]">Al confirmar, aceptas que el producto se fabrica bajo demanda y el pago se realiza por adelantado.</p>
             </div>
           </div>
         </div>
