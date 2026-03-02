@@ -35,7 +35,7 @@ const KITS = [
     name: 'ManoProtect Essential',
     badge: 'MEJOR PRECIO',
     subtitle: 'Pisos y apartamentos',
-    monthly: 34.99,
+    monthly: 44.90,
     promoMonthly: 33.90,
     promoLabel: '6 primeros meses',
     color: 'sky',
@@ -67,8 +67,8 @@ const KITS = [
     name: 'ManoProtect Premium',
     badge: 'MAS VENDIDO',
     subtitle: 'Chalets, adosados y casas',
-    monthly: 49.99,
-    promoMonthly: 39.99,
+    monthly: 54.90,
+    promoMonthly: 44.90,
     promoLabel: '6 primeros meses',
     color: 'orange',
     gradient: 'from-orange-500 to-red-600',
@@ -104,8 +104,8 @@ const KITS = [
     name: 'ManoProtect Business',
     badge: 'EMPRESAS',
     subtitle: 'Locales, naves y oficinas',
-    monthly: 69.99,
-    promoMonthly: 54.99,
+    monthly: 69.90,
+    promoMonthly: 54.90,
     promoLabel: '6 primeros meses',
     color: 'emerald',
     gradient: 'from-emerald-600 to-teal-700',
@@ -139,7 +139,7 @@ const KITS = [
 ];
 
 const COMP_ROWS = [
-  { f: 'Precio mensual', e: '34,99 EUR', p: '49,99 EUR', b: '69,99 EUR' },
+  { f: 'Precio mensual', e: '44,90 EUR', p: '54,90 EUR', b: '69,90 EUR' },
   { f: 'Permanencia', e: 'SIN permanencia', p: 'SIN permanencia', b: 'SIN permanencia' },
   { f: 'Instalacion profesional', e: 'GRATIS', p: 'GRATIS', b: 'GRATIS' },
   { f: 'Camaras incluidas', e: '2 Full HD', p: '4 x 2K + 2 PTZ', b: '6 x 4K + 4 PTZ' },
@@ -328,7 +328,7 @@ const SeguridadViviendaEmpresa = () => {
                   <span className="text-emerald-400 text-xs font-bold uppercase tracking-wider">Negocios</span>
                 </div>
                 <h3 className="text-white text-xl font-bold mb-1">Locales, naves y oficinas</h3>
-                <p className="text-gray-300 text-xs mb-3">Desde 54,99 EUR/mes. Control acceso + camaras 4K.</p>
+                <p className="text-gray-300 text-xs mb-3">Desde 54,90 EUR/mes. Control acceso + camaras 4K.</p>
                 <span className="inline-flex items-center gap-1 text-emerald-400 text-xs font-bold group-hover:gap-2 transition-all">
                   Ver detalles completos <ArrowRight className="w-3 h-3" />
                 </span>
@@ -568,9 +568,9 @@ const SeguridadViviendaEmpresa = () => {
               <thead>
                 <tr className="bg-gray-50 border-b border-gray-200">
                   <th className="text-left p-4 text-xs font-bold text-gray-500 uppercase w-[30%]">Caracteristica</th>
-                  <th className="text-center p-4 text-xs font-bold text-sky-700 uppercase">Essential<br/><span className="text-gray-500 font-normal">34,99 EUR</span></th>
-                  <th className="text-center p-4 text-xs font-bold text-orange-600 uppercase bg-orange-50/50">Premium<br/><span className="text-gray-500 font-normal">49,99 EUR</span></th>
-                  <th className="text-center p-4 text-xs font-bold text-emerald-700 uppercase">Business<br/><span className="text-gray-500 font-normal">69,99 EUR</span></th>
+                  <th className="text-center p-4 text-xs font-bold text-sky-700 uppercase">Essential<br/><span className="text-gray-500 font-normal">44,90 EUR</span></th>
+                  <th className="text-center p-4 text-xs font-bold text-orange-600 uppercase bg-orange-50/50">Premium<br/><span className="text-gray-500 font-normal">54,90 EUR</span></th>
+                  <th className="text-center p-4 text-xs font-bold text-emerald-700 uppercase">Comercio<br/><span className="text-gray-500 font-normal">69,90 EUR</span></th>
                 </tr>
               </thead>
               <tbody>
