@@ -47,7 +47,7 @@ const AlarmasNegocio = () => {
     <div className="min-h-screen bg-white" data-testid="alarmas-negocio">
       <Helmet>
         <title>Alarmas para Negocios | ManoProtect - Locales, Naves y Oficinas</title>
-        <meta name="description" content="Alarma profesional para tu negocio desde 54,99 EUR/mes. Camaras 4K con IA, control acceso biometrico, centro 24h, servicio Acuda. SIN permanencia." />
+        <meta name="description" content="Alarma profesional para tu negocio desde 54,90 EUR/mes. Camaras 4K con IA, control acceso biometrico, centro 24h, servicio Acuda. SIN permanencia." />
       </Helmet>
 
       {/* Header */}
