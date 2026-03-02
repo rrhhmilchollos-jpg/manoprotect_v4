@@ -182,7 +182,7 @@ const AlarmasNegocio = () => {
                   <span className="text-gray-400 text-lg mb-2">EUR/mes</span>
                 </div>
                 <p className="text-orange-400 text-sm font-bold mt-1">6 primeros meses (despues 69,90 EUR/mes)</p>
-                <p className="text-emerald-400 text-xs font-bold mt-1">Equipo + instalacion profesional GRATIS</p>
+                <p className="text-emerald-400 text-xs font-bold mt-1">Instalacion profesional GRATIS</p>
                 <p className="text-red-400 text-xs font-bold mt-1">SIN permanencia. Cancela cuando quieras.</p>
               </div>
               <div className="grid md:grid-cols-2 gap-6">
@@ -292,7 +292,7 @@ const AlarmasNegocio = () => {
       <section className="py-14 bg-gradient-to-r from-emerald-700 to-teal-700 text-white text-center">
         <div className="max-w-3xl mx-auto px-4">
           <h2 className="text-2xl font-black mb-3">Protege tu negocio desde 54,99 EUR/mes</h2>
-          <p className="text-emerald-100 mb-6 text-sm">Equipo GRATIS. SIN permanencia. 3 Sentinel SOS incluidos.</p>
+          <p className="text-emerald-100 mb-6 text-sm">Instalacion GRATIS. SIN permanencia. 3 Sentinel SOS incluidos.</p>
           <div className="flex flex-wrap justify-center gap-3">
             <Link to="/contacto" className="bg-white text-emerald-700 px-8 py-4 rounded-full font-bold text-sm hover:shadow-xl transition-all" data-testid="cta-bottom">
               Solicitar presupuesto GRATIS
