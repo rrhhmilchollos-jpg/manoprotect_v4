@@ -153,7 +153,7 @@ const HighConversionLanding = () => {
             {/* Hero: Familia española con Sentinel overlays */}
             <div className="relative flex justify-center">
               <div className="relative">
-                <img src={HERO_FAMILY} alt="Familia española protegida con relojes Sentinel" className="rounded-2xl shadow-2xl w-full max-w-lg object-cover aspect-[3/2]" loading="eager" data-testid="hero-family-image" />
+                <img src={HERO_FAMILY} alt="Familia española protegida con relojes Sentinel" className="rounded-2xl shadow-2xl w-full max-w-lg object-cover aspect-[3/2]" loading="eager" fetchpriority="high" width="600" height="400" data-testid="hero-family-image" />
                 <div className="absolute -bottom-4 -left-4 bg-white rounded-xl shadow-xl p-2 flex items-center gap-2 animate-pulse">
                   <img src={SENTINEL_X_IMG} alt="Sentinel X" className="w-10 h-10 object-contain" />
                   <div><p className="text-[10px] text-gray-500 font-medium">Sentinel X</p><p className="text-xs font-bold text-gray-900">Adultos</p></div>
