@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { Link } from 'react-router-dom';
-import { Shield, AlertTriangle, MapPin, Users, Clock, Lock, Eye, Bell, X, Send, Home, Store, Siren, CheckCircle, Zap, Crown, ChevronRight } from 'lucide-react';
+import { Link, useSearchParams } from 'react-router-dom';
+import { Shield, AlertTriangle, MapPin, Users, Clock, Lock, Eye, Bell, X, Send, Home, Store, Siren, CheckCircle, Zap, Crown, ChevronRight, Gift, Share2, Copy } from 'lucide-react';
 
 const API = process.env.REACT_APP_BACKEND_URL;
 
