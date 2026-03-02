@@ -252,6 +252,20 @@ const CalculadorPresupuesto = () => {
                 data-testid="cta-contact-instead">
                 Prefiero que me llamen
               </button>
+              {/* Sentinel Lock cross-sell */}
+              <div className="mt-4 bg-gray-900 rounded-xl p-4 border border-gray-800">
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="w-8 h-8 bg-emerald-500/20 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <Shield className="w-4 h-4 text-emerald-400" />
+                  </div>
+                  <div>
+                    <p className="text-white font-bold text-xs">Anade Sentinel Lock</p>
+                    <p className="text-gray-400 text-[10px]">Cerradura inteligente autonoma — 249 EUR</p>
+                  </div>
+                </div>
+                <p className="text-gray-500 text-[10px] mb-2">Deteccion de intrusion por IA, sin WiFi, aviso directo a Policia. Compatible con tu plan.</p>
+                <Link to="/sentinel-lock" className="text-emerald-400 text-xs font-bold hover:underline" data-testid="calc-sentinel-lock-link">Ver Sentinel Lock →</Link>
+              </div>
             </div>
             <div className="flex gap-3">
               <button onClick={() => { setStep(1); setResult(null); }}
