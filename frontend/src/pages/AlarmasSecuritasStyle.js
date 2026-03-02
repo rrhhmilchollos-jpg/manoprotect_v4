@@ -145,7 +145,7 @@ const AlarmasSecuritasStyle = () => {
               <p className="text-base sm:text-lg text-gray-300 mb-6 max-w-xl leading-relaxed">
                 Alarma inteligente con <strong className="text-white">camaras IA</strong>, centro de control 24h, 
                 anti-inhibicion y <strong className="text-white">reloj Sentinel SOS incluido</strong>. 
-                Sin permanencia. Equipo GRATIS.
+                Sin permanencia. Instalacion GRATIS.
               </p>
               <div className="flex flex-wrap items-center gap-4 mb-8">
                 {[
