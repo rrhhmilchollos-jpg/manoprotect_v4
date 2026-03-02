@@ -77,14 +77,14 @@ const AlarmasSecuritasStyle = () => {
       title: 'Alarma para negocios',
       desc: 'Seguridad empresarial con camaras 4K, control de acceso biometrico, videoportero facial y servicio Acuda prioritario en 10 minutos.',
       img: IMG.businessLobby,
-      price: '54,99',
+      price: '54,90',
       items: ['Hub Enterprise + hub backup', '6 camaras 4K IA + 4 PTZ exteriores', 'Control acceso huella + RFID', 'Videoportero reconocimiento facial', 'Grabacion nube 90 dias', '3 Sentinel SOS para propietarios'],
     },
     nave: {
       title: 'Alarma para naves y almacenes',
       desc: 'Proteccion industrial con camaras PTZ de largo alcance, sensores perimetrales, anti-sabotaje y monitorizacion remota multi-sede.',
       img: IMG.warehouse,
-      price: '54,99',
+      price: '74,90',
       items: ['Hub Enterprise redundante', '6 camaras 4K + 4 PTZ IP67', '10 sensores volumetricos', 'Sirenas 130dB exteriores', 'Detectores humo + gas + CO2', 'Anti-inhibicion Grado 3', '3 Sentinel SOS'],
     },
   };
@@ -504,7 +504,7 @@ const AlarmasSecuritasStyle = () => {
             {[
               { name: 'Essential', sub: 'Pisos', promo: '33,90', regular: '44,90', color: 'sky', link: '/alarmas/vivienda', items: ['2 camaras Full HD', '3 sensores PIR', '1 sirena exterior', '1 Sentinel SOS'] },
               { name: 'Premium', sub: 'Chalets y casas', promo: '44,90', regular: '54,90', color: 'orange', popular: true, link: '/alarmas/vivienda', items: ['6 camaras 2K + PTZ', '6 sensores PIR', 'Sirena 120dB + interior', 'Servicio de Acuda', '2 Sentinel SOS'] },
-              { name: 'Business', sub: 'Negocios', promo: '54,99', regular: '69,99', color: 'emerald', link: '/alarmas/negocio', items: ['10 camaras 4K + PTZ', 'Control acceso biometrico', 'Grabacion 90 dias', 'Acuda prioritario', '3 Sentinel SOS'] },
+              { name: 'Comercio', sub: 'Negocios', promo: '54,90', regular: '69,90', color: 'emerald', link: '/alarmas/negocio', items: ['10 camaras 4K + PTZ', 'Control acceso biometrico', 'Grabacion 90 dias', 'Acuda prioritario', '3 Sentinel SOS'] },
             ].map((p, i) => (
               <div key={i} className={`bg-white rounded-3xl border-2 ${p.popular ? 'border-orange-400 shadow-xl' : 'border-gray-200'} overflow-hidden relative`} data-testid={`price-${p.name.toLowerCase()}`}>
                 {p.popular && <div className="bg-gradient-to-r from-orange-500 to-red-500 text-white text-center py-2 text-xs font-bold tracking-wider">MAS VENDIDO</div>}
