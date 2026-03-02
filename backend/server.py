@@ -1239,6 +1239,19 @@ async def stripe_webhook(request: Request):
         logging.error(f"Stripe webhook error: {e}")
         raise HTTPException(status_code=400, detail=str(e))
 
+
+# Universal referral validation endpoint (for all products)
+@api_router.get("/referrals/validate/{code}")
+async def validate_referral_universal(code: str):
+    """Validate a referral code for any product."""
+    sub = await db.subscriptions.find_one(
+        {"referral_code": code.strip().upper(), "status": "active"},
+        {"_id": 0, "referral_code": 1, "plan_type": 1}
+    )
+    if not sub:
+        return {"valid": False, "message": "Codigo de referido no valido"}
+    return {"valid": True, "message": "Codigo valido. Al contratar, ambos recibis 1 mes gratis.", "plan": sub.get("plan_type")}
+
 # ============================================
 # ADMIN ROUTES
 # ============================================
