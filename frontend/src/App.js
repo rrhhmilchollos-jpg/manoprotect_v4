@@ -205,6 +205,11 @@ const PublicDashboardPage = lazy(() => import('@/pages/PublicDashboardPage'));
 // Enterprise Central - Company Management System
 const EnterpriseCentralPage = lazy(() => import('@/pages/EnterpriseCentralPage'));
 
+// New Product Ecosystem
+const SentinelLockPage = lazy(() => import('@/pages/SentinelLockPage'));
+const CRAPlatformPage = lazy(() => import('@/pages/CRAPlatformPage'));
+const ManoprotectConnectPage = lazy(() => import('@/pages/ManoprotectConnectPage'));
+
 // Lazy load non-critical UI components to reduce main thread blocking
 const CookieConsent = lazy(() => import('@/components/CookieConsent'));
 const AIChatWidget = lazy(() => import('@/components/AIChatWidget'));
@@ -630,6 +635,14 @@ function AppRouter() {
           {/* Enterprise Central - Company management system */}
           <Route path="/gestion-empresa" element={<EnterpriseCentralPage />} />
           <Route path="/enterprise-central" element={<EnterpriseCentralPage />} />
+          
+          {/* New Product Ecosystem */}
+          <Route path="/sentinel-lock" element={<SentinelLockPage />} />
+          <Route path="/cerradura-inteligente" element={<SentinelLockPage />} />
+          <Route path="/plataforma-cra" element={<CRAPlatformPage />} />
+          <Route path="/central-alarmas" element={<CRAPlatformPage />} />
+          <Route path="/manoprotect-connect" element={<ManoprotectConnectPage />} />
+          <Route path="/app-seguridad" element={<ManoprotectConnectPage />} />
           
           {/* Enterprise B2B Landing */}
           <Route path="/enterprise" element={<EnterprisePortal />} />
