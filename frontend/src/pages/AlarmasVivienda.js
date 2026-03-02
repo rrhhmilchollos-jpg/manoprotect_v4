@@ -105,7 +105,7 @@ const AlarmasVivienda = () => {
     <div className="min-h-screen bg-white" data-testid="alarmas-vivienda">
       <Helmet>
         <title>Alarmas para Viviendas | ManoProtect - Pisos, Chalets y Casas</title>
-        <meta name="description" content="Alarma para tu vivienda desde 24,99 EUR/mes. SIN permanencia. Camaras IA, centro 24h, Sentinel SOS incluido. Mejor que Securitas Direct." />
+        <meta name="description" content="Alarma para tu vivienda desde 33,90 EUR/mes. SIN permanencia. Camaras IA, centro 24h, Sentinel SOS incluido. Mejor que Securitas Direct." />
       </Helmet>
 
       {/* Header */}
