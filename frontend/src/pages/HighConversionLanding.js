@@ -216,7 +216,7 @@ const HighConversionLanding = () => {
                 <div className="relative text-center group" data-testid={`step-${i}`}>
                   {i < 2 && <div className="hidden md:block absolute top-24 left-[60%] w-[80%] h-[2px] bg-emerald-200" />}
                   <div className="relative mb-4 rounded-2xl overflow-hidden shadow-md">
-                    <img src={item.img} alt={item.title} className="w-full h-44 object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" />
+                    <img src={item.img} alt={item.title} className="w-full h-44 object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" decoding="async" width="400" height="176" />
                     <div className="absolute top-3 right-3 w-8 h-8 bg-emerald-500 rounded-full flex items-center justify-center text-white text-sm font-bold shadow-md">{item.step}</div>
                   </div>
                   <h3 className="font-bold text-gray-900 mb-2 text-lg">{item.title}</h3>
