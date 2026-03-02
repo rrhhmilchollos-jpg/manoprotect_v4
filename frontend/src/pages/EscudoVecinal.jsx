@@ -577,9 +577,14 @@ export default function EscudoVecinal() {
             Coordinacion vecinal avanzada. Dashboard exclusivo. Solo 299,99 EUR/ano por familia.
           </p>
           <p className="text-emerald-400 text-xs font-bold mb-6">Plan independiente — no necesitas ningun otro producto. Trae vecinos = meses gratis.</p>
-          <Link to="/panel-vecinal" className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-500 to-red-500 hover:shadow-xl hover:shadow-amber-500/10 text-white font-black px-8 py-3 rounded-xl transition-all" data-testid="cta-panel-vecinal">
-            <Crown className="w-4 h-4" /> Ver Panel Vecinal Premium <ChevronRight className="w-4 h-4" />
-          </Link>
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+            <Link to="/panel-vecinal" className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-500 to-red-500 hover:shadow-xl hover:shadow-amber-500/10 text-white font-black px-8 py-3 rounded-xl transition-all" data-testid="cta-panel-vecinal">
+              <Crown className="w-4 h-4" /> Ver Panel Vecinal Premium <ChevronRight className="w-4 h-4" />
+            </Link>
+            <Link to="/dashboard-barrio" className="inline-flex items-center gap-2 border border-slate-600 hover:border-slate-500 text-white font-bold px-6 py-3 rounded-xl transition-colors" data-testid="cta-dashboard-barrio">
+              Ver estadisticas del barrio <ChevronRight className="w-4 h-4" />
+            </Link>
+          </div>
         </div>
       </section>
 
