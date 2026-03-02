@@ -141,7 +141,7 @@ const KITS = [
 const COMP_ROWS = [
   { f: 'Precio mensual', e: '34,99 EUR', p: '49,99 EUR', b: '69,99 EUR' },
   { f: 'Permanencia', e: 'SIN permanencia', p: 'SIN permanencia', b: 'SIN permanencia' },
-  { f: 'Equipo + instalacion', e: 'GRATIS', p: 'GRATIS', b: 'GRATIS' },
+  { f: 'Instalacion profesional', e: 'GRATIS', p: 'GRATIS', b: 'GRATIS' },
   { f: 'Camaras incluidas', e: '2 Full HD', p: '4 x 2K + 2 PTZ', b: '6 x 4K + 4 PTZ' },
   { f: 'Sensores movimiento', e: '3 PIR', p: '6 PIR', b: '10 volumetricos' },
   { f: 'Sirena exterior', e: '110dB', p: '120dB', b: '130dB' },
@@ -158,7 +158,7 @@ const COMP_ROWS = [
 const COMPETITOR_TABLE = [
   { feat: 'Precio desde', mp: '24,99 EUR/mes', sd: '39,89 EUR/mes', pg: '44,90 EUR/mes' },
   { feat: 'Permanencia', mp: 'SIN permanencia', sd: '24 meses', pg: '24-36 meses' },
-  { feat: 'Equipo', mp: 'GRATIS', sd: '149 EUR', pg: 'Incluido' },
+  { feat: 'Instalacion', mp: 'GRATIS', sd: '149 EUR', pg: 'Incluido' },
   { feat: 'Camaras en kit basico', mp: '2 Full HD', sd: '1 camara', pg: '1 camara' },
   { feat: 'App gratuita', mp: true, sd: true, pg: true },
   { feat: 'Smartwatch SOS incluido', mp: true, sd: false, pg: false },
@@ -181,7 +181,7 @@ const SeguridadViviendaEmpresa = () => {
   const faqItems = [
     { q: 'Por que ManoProtect es mejor que Securitas Direct?', a: 'Ofrecemos la misma monitorizacion CRA 24h pero SIN permanencia (ellos exigen 24 meses), mas camaras en el kit basico (2 vs 1), inteligencia artificial en las camaras para evitar falsas alarmas, y algo unico: un reloj Sentinel con boton SOS incluido GRATIS que funciona incluso con el movil apagado.' },
     { q: 'Hay permanencia?', a: 'NO. A diferencia de Securitas Direct (24 meses) y Prosegur (24-36 meses), nosotros NO tenemos permanencia. Puedes cancelar cuando quieras sin penalizacion.' },
-    { q: 'El equipo es realmente gratis?', a: 'Si. Hub, camaras, sensores, sirenas, mandos, detectores y Sentinel SOS incluidos sin coste. Solo pagas la cuota mensual que incluye la monitorizacion 24h.' },
+    { q: 'La instalacion es realmente gratis?', a: 'Si. La instalacion profesional por un tecnico certificado es completamente gratuita. El equipo se incluye con tu plan mensual. Sin entrada ni permanencia.' },
     { q: 'Necesito obra para instalar?', a: 'No. Sistemas 100% inalambricos. Instalacion profesional en menos de 2 horas sin cables ni taladros. El tecnico configura todo y te ensena a usar la app.' },
     { q: 'Que pasa si se va la luz o internet?', a: 'El hub tiene bateria de respaldo de 24h y conexion 4G independiente. Si se corta la luz o el WiFi, el sistema sigue operativo y conectado al centro de control.' },
     { q: 'Puedo contratar solo los relojes Sentinel sin la alarma?', a: 'Por supuesto. Los relojes Sentinel X, J y S se pueden contratar de forma independiente con su propio plan de suscripcion. Van a /productos para verlos.' },
@@ -193,7 +193,7 @@ const SeguridadViviendaEmpresa = () => {
     <div className="min-h-screen bg-white" data-testid="seguridad-vivienda-empresa">
       <Helmet>
         <title>Alarmas para Casa y Negocio | ManoProtect - Mejor que Securitas Direct</title>
-        <meta name="description" content="Alarmas para viviendas y empresas desde 24,99 EUR/mes. SIN permanencia. Equipo GRATIS. Camaras IA, centro 24h, Sentinel SOS incluido. Supera a Securitas Direct y Prosegur." />
+        <meta name="description" content="Alarmas para viviendas y empresas desde 33,90 EUR/mes. SIN permanencia. Instalacion GRATIS. Camaras IA, centro 24h, Sentinel SOS incluido. Supera a Securitas Direct y Prosegur." />
         <link rel="canonical" href="https://manoprotect.com/seguridad-hogar-empresa" />
       </Helmet>
 
@@ -235,7 +235,7 @@ const SeguridadViviendaEmpresa = () => {
             </p>
             <div className="flex flex-wrap items-center gap-3 mb-8">
               <span className="bg-red-500/20 border border-red-400/30 text-red-300 px-3 py-1 rounded-full text-xs font-bold">SIN permanencia</span>
-              <span className="bg-blue-500/20 border border-blue-400/30 text-blue-300 px-3 py-1 rounded-full text-xs font-bold">Equipo GRATIS</span>
+              <span className="bg-blue-500/20 border border-blue-400/30 text-blue-300 px-3 py-1 rounded-full text-xs font-bold">Instalacion GRATIS</span>
               <span className="bg-orange-500/20 border border-orange-400/30 text-orange-300 px-3 py-1 rounded-full text-xs font-bold">Desde 24,99 EUR/mes</span>
             </div>
             <div className="flex flex-wrap gap-3">
@@ -310,7 +310,7 @@ const SeguridadViviendaEmpresa = () => {
                   <span className="text-blue-400 text-xs font-bold uppercase tracking-wider">Viviendas</span>
                 </div>
                 <h3 className="text-white text-xl font-bold mb-1">Pisos, chalets y casas</h3>
-                <p className="text-gray-300 text-xs mb-3">Desde 24,99 EUR/mes. Equipo + instalacion GRATIS.</p>
+                <p className="text-gray-300 text-xs mb-3">Desde 33,90 EUR/mes. Instalacion profesional GRATIS.</p>
                 <span className="inline-flex items-center gap-1 text-blue-400 text-xs font-bold group-hover:gap-2 transition-all">
                   Ver detalles completos <ArrowRight className="w-3 h-3" />
                 </span>
@@ -398,7 +398,7 @@ const SeguridadViviendaEmpresa = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="text-center mb-12">
             <h2 className="text-3xl sm:text-4xl font-black text-white mb-3 tracking-tight">Los 3 mejores kits de alarma del mercado</h2>
-            <p className="text-gray-400 text-sm">Equipo GRATIS + instalacion profesional. SIN permanencia. Sentinel SOS incluido.</p>
+            <p className="text-gray-400 text-sm">Instalacion profesional GRATIS. SIN permanencia. Sentinel SOS incluido.</p>
           </div>
           <div className="grid lg:grid-cols-3 gap-6">
             {KITS.map((kit) => (
@@ -421,7 +421,7 @@ const SeguridadViviendaEmpresa = () => {
                       <span className="text-gray-500 text-sm mb-1">EUR/mes</span>
                     </div>
                     <p className="text-orange-400 text-xs font-bold mt-1">{kit.promoLabel} (despues {kit.monthly} EUR/mes)</p>
-                    <p className="text-emerald-400 text-xs font-bold mt-0.5">Equipo e instalacion GRATIS</p>
+                    <p className="text-emerald-400 text-xs font-bold mt-0.5">Instalacion profesional GRATIS</p>
                   </div>
                   {/* Equipment */}
                   <p className="text-gray-500 text-[10px] font-bold uppercase tracking-wider mb-2">EQUIPO INCLUIDO</p>
@@ -610,7 +610,7 @@ const SeguridadViviendaEmpresa = () => {
       <section className="py-16 bg-gradient-to-r from-orange-500 via-red-500 to-rose-600 text-white text-center">
         <div className="max-w-3xl mx-auto px-4">
           <h2 className="text-2xl sm:text-3xl font-black mb-3 tracking-tight">Protege tu hogar o negocio hoy</h2>
-          <p className="text-white/80 mb-6 text-sm">Desde 24,99 EUR/mes. SIN permanencia. Equipo GRATIS. Sentinel SOS incluido.</p>
+          <p className="text-white/80 mb-6 text-sm">Desde 33,90 EUR/mes. SIN permanencia. Instalacion GRATIS. Sentinel SOS incluido.</p>
           <div className="flex flex-wrap items-center justify-center gap-3">
             <Link to="/contacto" className="bg-white text-red-600 px-8 py-4 rounded-full font-bold text-sm hover:bg-gray-50 transition-all hover:shadow-xl" data-testid="cta-bottom">
               Solicitar presupuesto GRATIS
