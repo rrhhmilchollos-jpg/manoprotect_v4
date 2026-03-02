@@ -1,4 +1,4 @@
-# ManoProtect - Product Requirements Document v4.0.0
+# ManoProtect - Product Requirements Document v4.1.0
 
 ## Core Product
 Plataforma lider en seguridad en Espana. Alarmas hogar/negocio, dispositivos Sentinel SOS, Escudo Vecinal comunitario, Panel Vecinal Premium, Dashboard de Barrio publico con ranking gamificado, Sistema Central de Empresa (CRM + Instalaciones), y sistema de referidos universal.
@@ -6,7 +6,14 @@ Plataforma lider en seguridad en Espana. Alarmas hogar/negocio, dispositivos Sen
 ## Tech Stack
 Frontend: React + TailwindCSS + Shadcn/UI + Leaflet | Backend: FastAPI + MongoDB | Payments: Stripe | Push: pywebpush
 
-## PRECIOS COMPETITIVOS (tipo Securitas Direct)
+## MODELO DE NEGOCIO
+- **Instalacion profesional: GRATIS** (el equipo se incluye en la cuota mensual)
+- **SIN permanencia** (cancela cuando quieras)
+- **SIN pruebas gratis** (info interna, no se muestra en la web)
+- **Sistema de referidos**: 1 mes gratis para ambos (referidor + referido)
+- **Pago anual**: 10 meses, llevate 12
+
+## PRECIOS ACTUALIZADOS (competitivos tipo Securitas Direct)
 
 ### Alarmas Hogar
 | Plan | Promo (6m) | Regular | Target |
@@ -34,42 +41,32 @@ Frontend: React + TailwindCSS + Shadcn/UI + Leaflet | Backend: FastAPI + MongoDB
 | Sentinel J (Junior) | 79 EUR |
 | Sentinel S (Senior) | 103 EUR |
 
-### Vecinal Premium
-- 299.99 EUR/ano (INDEPENDIENTE, SOLO ANUAL)
+### Vecinal Premium: 299.99 EUR/ano (INDEPENDIENTE, SOLO ANUAL)
 
 ### Extras (componentes individuales)
-- Cámara IP Full HD: 89 EUR, PTZ 4K: 149 EUR, Sensor PIR: 39 EUR, etc.
-
-## INSTALACION: GRATIS
-## SIN PERMANENCIA
-## SIN PRUEBAS GRATIS (info interna, no se muestra en web)
+Camara IP Full HD: 89 EUR | PTZ 4K: 149 EUR | Sensor PIR: 39 EUR | Contacto magnetico: 29 EUR | Sirena 120dB: 79 EUR | Detector humo+CO2: 59 EUR | Detector inundacion: 45 EUR | Mando extra: 35 EUR | Teclado RFID: 69 EUR | Control biometrico: 129 EUR
 
 ## SISTEMA DE REFERIDOS UNIVERSAL
-- "1 mes GRATIS para ambos" (referidor + referido)
-- Funciona con TODOS los productos (alarmas, Sentinel, vecinal)
-- Código único por suscriptor (formato MP-XXXXXX)
-- Validación: GET /api/referrals/validate/{code}
-- Procesamiento automático en webhook Stripe al completar pago
-- Referral_code se pasa en checkout y se almacena en metadata
-- Backend extiende suscripción del referidor +30 días
+- "1 mes GRATIS para ambos" en TODOS los productos
+- Codigo unico por suscriptor (MP-XXXXXX)
+- Validacion: GET /api/referrals/validate/{code}
+- Procesamiento automatico en webhook Stripe
+- +30 dias al referidor
 
-## RANKING GAMIFICADO (Dashboard de Barrio)
-- Puntuaciones: Comunidad/Vigilancia/Respuesta (0-100)
-- Insignias: oro/plata/bronce (Comunidad Fuerte, Defensores Elite, Barrio Seguro, Embajador, etc.)
-- Siguiente objetivo con barra de progreso
+## OPTIMIZACIONES RENDIMIENTO (Lighthouse)
+- Hero image: fetchpriority="high" + width/height explicitos
+- Imagenes below-fold: loading="lazy" + decoding="async"
+- Cache headers: 5min para endpoints publicos (plans, dashboard-barrio)
+- Preconnect a origenes criticos (fonts, images CDN)
+- Preload hero image para LCP
+- Structured data Product con precios correctos para Google Snippets
+- Accesibilidad: aria-label en botones, aria-hidden en iconos
 
 ## Paginas principales
-- / - Landing page
-- /plans - Pricing page con 5 tabs + tabla comparativa
-- /alarmas-hogar, /alarmas/vivienda, /alarmas/negocio
-- /productos - Sentinel devices
-- /sentinel-x, /sentinel-j, /sentinel-s
-- /escudo-vecinal - Mapa comunitario gratuito
-- /panel-vecinal - Premium paywall + referidos
-- /dashboard-barrio - Stats publicas + ranking gamificado
-- /gestion-empresa - Sistema central empresa (CRM + instalaciones)
-- /ceo - Dashboard CEO
-- /empleados - Portal empleados
+- / | /plans | /alarmas-hogar | /alarmas/vivienda | /alarmas/negocio
+- /productos | /sentinel-x | /sentinel-j | /sentinel-s
+- /escudo-vecinal | /panel-vecinal | /dashboard-barrio
+- /gestion-empresa | /ceo | /empleados
 
 ## Credentials
 | User | Password | Portal |
@@ -78,13 +75,14 @@ Frontend: React + TailwindCSS + Shadcn/UI + Leaflet | Backend: FastAPI + MongoDB
 | admin@manoprotect.com | Admin2026! | Empleados |
 
 ## Backlog
-- P2: SEO/SEM (BLOQUEADO - requiere IDs Meta Pixel, Hotjar, Google Search Console)
+- P2: SEO/SEM (requiere IDs Meta Pixel, Hotjar, Google Search Console)
 - P3: Videos marketing (Sora 2, sin credito)
 - P3: Migrar SHA256 a bcrypt
 - P3: Activar SMS/Email/WhatsApp produccion
 - P3: Build iOS con Capacitor
 
 ## Testing
-- iteration_77: 100% pass - Pricing completo + Referidos universales + Extras (backend 18/18, frontend 100%)
+- iteration_78: 100% pass - Precios actualizados + "Equipo GRATIS" eliminado + Performance
+- iteration_77: 100% pass - Pricing completo + Referidos universales + Extras
 - iteration_76: 100% pass - Full button audit + Ranking + Referidos vecinal
 - iteration_75: 100% pass - Dashboard Barrio + Enterprise Central + Push
