@@ -1,7 +1,7 @@
-# ManoProtect - Product Requirements Document v3.0.0
+# ManoProtect - Product Requirements Document v3.1.0
 
 ## Core Product
-Plataforma lider en Espana de proteccion digital y fisica. Dispositivos Sentinel, alarmas, Escudo Vecinal gratuito, Panel Vecinal Premium (independiente), Dashboard de Barrio publico, y Sistema Central de Empresa.
+Plataforma lider en Espana de proteccion digital y fisica. Dispositivos Sentinel, alarmas, Escudo Vecinal gratuito, Panel Vecinal Premium (independiente), Dashboard de Barrio publico con ranking gamificado, y Sistema Central de Empresa.
 
 ## Tech Stack
 Frontend: React + TailwindCSS + Shadcn/UI + Leaflet | Backend: FastAPI + MongoDB | Payments: Stripe | Push: pywebpush (Web Push API)
@@ -9,42 +9,44 @@ Frontend: React + TailwindCSS + Shadcn/UI + Leaflet | Backend: FastAPI + MongoDB
 ## PLAN VECINAL PREMIUM
 - **INDEPENDIENTE y OPCIONAL** - No requiere ningun otro producto
 - Precio: 299.99 EUR/ano (solo anual, por family_id, ilimitadas familias)
-- Sistema de referidos: 1 mes gratis por vecino que contrate
-- Backend: /api/panel-vecinal/* (ver endpoints abajo)
+- Sistema de referidos COMPLETO:
+  - Input de codigo en paywall + validacion
+  - Endpoint POST /referrals/redeem extiende suscripcion del referidor +30 dias
+  - GET /referrals/validate/{code} - validacion publica
+  - localStorage guarda codigo para post-checkout
 - Push notifications integradas en alertas criticas
 
-## DASHBOARD DE BARRIO (NUEVO - Mar 2, 2026)
+## DASHBOARD DE BARRIO (PUBLIC)
 - Pagina publica: /dashboard-barrio
-- Muestra estadisticas anonimizadas del barrio
-- Graficos de tipo de incidencia, mapa de calor, nivel de seguridad
-- CTA al Panel Vecinal Premium para conversion
-- Backend: /api/dashboard-barrio/public-stats, /api/dashboard-barrio/leaderboard
+- Estadisticas anonimizadas, graficos, mapa de calor
+- **Ranking Gamificado** con:
+  - Puntuaciones: Comunidad, Vigilancia, Respuesta (0-100)
+  - Insignias: Comunidad Fuerte, Defensores Elite, Barrio Seguro, Embajador, etc.
+  - Tiers: gold/silver/bronze/starter
+  - Siguiente objetivo con barra de progreso
+- Backend: /api/dashboard-barrio/public-stats, /api/dashboard-barrio/leaderboard, /api/dashboard-barrio/ranking
 
-## SISTEMA CENTRAL DE EMPRESA (NUEVO - Mar 2, 2026)
+## SISTEMA CENTRAL DE EMPRESA
 - Pagina: /gestion-empresa
-- Dashboard central con metricas clave (usuarios, suscripciones, ingresos, empleados)
-- CRM de Ventas: CRUD de leads con pipeline (new > contacted > qualified > proposal > closed)
-- Gestion de Instalaciones: programar, iniciar, completar instalaciones
-- Backend: /api/enterprise-central/dashboard, /api/enterprise-central/leads, /api/enterprise-central/installations
+- Dashboard central con metricas (usuarios, suscripciones, ingresos, empleados)
+- CRM de Ventas: CRUD leads con pipeline (new > contacted > qualified > proposal > closed)
+- Gestion de Instalaciones: programar, iniciar, completar
+- Backend: /api/enterprise-central/*
 
-## NOTIFICACIONES PUSH (NUEVO - Mar 2, 2026)
-- Servicio: services/push_notification_service.py
-- Integrado con panel_vecinal_routes.py - se activan al enviar alertas criticas
-- Usa Web Push API con VAPID keys
-- Envia a todos los usuarios con push_subscriptions activas
+## NOTIFICACIONES PUSH
+- services/push_notification_service.py
+- Integrado con alertas vecinales criticas
+- Web Push API con VAPID keys + pywebpush
 
 ## Escudo Vecinal (GRATUITO)
 - /escudo-vecinal: Mapa + alertas comunitarias
-- Links a /dashboard-barrio y /panel-vecinal
+- CTAs a /dashboard-barrio y /panel-vecinal
 
 ## Alarmas (Checkout Stripe funcional)
 - /alarmas-hogar + /alarmas/vivienda + /alarmas/negocio + /calculador
 
 ## Newsletter
 - POST /api/newsletter/subscribe + form en footer
-
-## Portal Empleados
-- Login: admin@manoprotect.com / Admin2026!
 
 ## Credentials
 | User | Password | Portal |
@@ -64,7 +66,6 @@ Frontend: React + TailwindCSS + Shadcn/UI + Leaflet | Backend: FastAPI + MongoDB
 | family-monthly | 9.99 | mes | Familia |
 
 ## Backlog (Priorizado)
-- P2: Logica completa del sistema de referidos (aplicar recompensa 1 mes gratis via Stripe)
 - P2: SEO/SEM (BLOQUEADO - requiere IDs Meta Pixel, Hotjar, Google Search Console)
 - P3: Videos marketing (Sora 2, sin credito)
 - P3: Migrar password hash de SHA256 a bcrypt
@@ -72,7 +73,7 @@ Frontend: React + TailwindCSS + Shadcn/UI + Leaflet | Backend: FastAPI + MongoDB
 - P3: Build iOS con Capacitor (requiere Mac/Xcode)
 
 ## Testing
+- iteration_76: 100% pass - FULL button/nav audit + Ranking gamificado + Referral system (backend 22/22, frontend 100%)
 - iteration_75: 100% pass - Dashboard Barrio + Enterprise Central + Push Notifications (backend 28/28, frontend 100%)
 - iteration_74: 100% pass - Panel Vecinal
 - iteration_72: 100% pass - alarm checkout, newsletter, employee portal
-- iteration_71: 100% pass - community shield
