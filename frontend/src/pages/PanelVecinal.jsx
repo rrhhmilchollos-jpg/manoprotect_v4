@@ -33,16 +33,44 @@ const timeAgo = (d) => {
    PAYWALL - No access
    ======================== */
 function VecinalPaywall({ planInfo }) {
+  const [searchParams] = useSearchParams();
+  const refFromUrl = searchParams.get('ref') || '';
+  const [refCode, setRefCode] = useState(refFromUrl);
+  const [refValid, setRefValid] = useState(null);
+  const [checkingRef, setCheckingRef] = useState(false);
+
+  useEffect(() => {
+    if (refFromUrl) {
+      validateRef(refFromUrl);
+    }
+  }, [refFromUrl]);
+
+  const validateRef = async (code) => {
+    if (!code || code.length < 3) { setRefValid(null); return; }
+    setCheckingRef(true);
+    try {
+      const res = await fetch(`${API}/api/panel-vecinal/referrals/validate/${code.trim()}`);
+      const data = await res.json();
+      setRefValid(data.valid);
+    } catch { setRefValid(false); }
+    setCheckingRef(false);
+  };
+
   const handleCheckout = async () => {
     try {
+      const body = { plan_type: 'vecinal-anual', origin_url: window.location.origin };
+      if (refCode && refValid) body.referral_code = refCode.trim().toUpperCase();
       const r = await fetch(`${API}/api/create-checkout-session`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
-        body: JSON.stringify({ plan_type: 'vecinal-anual', origin_url: window.location.origin }),
+        body: JSON.stringify(body),
       });
       const d = await r.json();
-      if (d.checkout_url) window.location.href = d.checkout_url;
+      if (d.checkout_url) {
+        if (refCode && refValid) localStorage.setItem('vecinal_ref_code', refCode.trim().toUpperCase());
+        window.location.href = d.checkout_url;
+      }
     } catch { /* ignore */ }
   };
 
