@@ -358,12 +358,12 @@ const FreeTrialBanner = () => {
   const navigate = useNavigate();
   const [dismissed, setDismissed] = useState(false);
   
-  // Hide on admin, login, register, ceo pages
-  if (dismissed || ['/ceo', '/login', '/register', '/empleados', '/investor'].some(p => location.pathname.startsWith(p))) return null;
-  if (location.pathname === '/plans' || location.pathname === '/registro') return null;
+  // Use CSS to hide instead of returning null — prevents React DOM conflicts during route transitions
+  const hidden = dismissed || ['/ceo', '/login', '/register', '/empleados', '/investor'].some(p => location.pathname.startsWith(p))
+    || location.pathname === '/plans' || location.pathname === '/registro';
   
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-40 bg-gradient-to-r from-blue-700 to-blue-800 text-white px-4 py-2.5 flex items-center justify-center gap-3 shadow-lg" data-testid="free-trial-banner">
+    <div className={`fixed bottom-0 left-0 right-0 z-40 bg-gradient-to-r from-blue-700 to-blue-800 text-white px-4 py-2.5 flex items-center justify-center gap-3 shadow-lg transition-transform duration-300 ${hidden ? 'translate-y-full pointer-events-none' : 'translate-y-0'}`} data-testid="free-trial-banner">
       <span className="text-xs sm:text-sm font-semibold">Prueba ManoProtect <strong>7 días GRATIS</strong> sin compromiso</span>
       <button onClick={() => navigate('/plans')} className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-1.5 rounded-full text-xs font-bold transition-colors whitespace-nowrap" data-testid="free-trial-btn">
         Probar gratis
@@ -395,13 +395,14 @@ const StockUrgencyPopup = () => {
     return () => clearTimeout(timer);
   }, []);
   
-  // Hide on admin pages
-  if (!show || !promo) return null;
-  if (['/ceo', '/login', '/empleados', '/investor'].some(p => location.pathname.startsWith(p))) return null;
+  // Use CSS to hide instead of conditional return
+  const hidden = !show || !promo || ['/ceo', '/login', '/empleados', '/investor'].some(p => location.pathname.startsWith(p));
+  
+  if (!promo) return null;
   
   return (
-    <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/40 backdrop-blur-sm" onClick={() => setShow(false)} data-testid="urgency-popup">
-      <div className="bg-white rounded-2xl shadow-2xl max-w-sm w-full mx-4 p-6 relative" onClick={e => e.stopPropagation()}>
+    <div className={`fixed inset-0 z-[60] flex items-center justify-center bg-black/40 backdrop-blur-sm transition-opacity duration-300 ${hidden ? 'opacity-0 pointer-events-none' : 'opacity-100'}`} onClick={() => setShow(false)} data-testid="urgency-popup">
+      <div className={`bg-white rounded-2xl shadow-2xl max-w-sm w-full mx-4 p-6 relative transition-transform duration-300 ${hidden ? 'scale-95' : 'scale-100'}`} onClick={e => e.stopPropagation()}>
         <button onClick={() => setShow(false)} className="absolute top-3 right-3 text-gray-400 hover:text-gray-600 text-xl">&times;</button>
         <div className="text-center">
           <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-3">

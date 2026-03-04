@@ -77,6 +77,7 @@ Frontend: React + TailwindCSS + Shadcn/UI + Leaflet | Backend: FastAPI + MongoDB
 ## Testing
 - iteration_82: 100% pass - Imagenes fabricante + Video MP4 + Bajo pedido/pago anticipado
 - iteration_81: 100% pass - Imagenes producto Sentinel Lock + Demo interactiva IA
+- BUG FIX: Login/Registro desde Home - "removeChild" DOM error. Causa: side effects en render + conditional null returns durante route transitions. Fix: useEffect + CSS hiding.
 - iteration_80: 100% pass - Ecosistema nuevos productos (3 paginas + rutas + navegacion + cross-sell)
 - iteration_79: 100% pass - Chatbot lead capture
 - iteration_78: 100% pass - Precios actualizados + Performance

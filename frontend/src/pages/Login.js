@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import { useI18n } from '@/i18n/I18nContext';
@@ -19,17 +19,22 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  // Show error from callback if present
-  const errorFromCallback = location.state?.error;
-  if (errorFromCallback) {
-    toast.error(errorFromCallback);
-  }
+  // Show error from callback — in useEffect, not during render
+  useEffect(() => {
+    const errorFromCallback = location.state?.error;
+    if (errorFromCallback) {
+      toast.error(errorFromCallback);
+      // Clear the state so it doesn't re-trigger
+      window.history.replaceState({}, document.title);
+    }
+  }, [location.state]);
 
-  // Redirect if already authenticated
-  if (isAuthenticated) {
-    navigate('/dashboard', { replace: true });
-    return null;
-  }
+  // Redirect if already authenticated — in useEffect, not during render
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/dashboard', { replace: true });
+    }
+  }, [isAuthenticated, navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
