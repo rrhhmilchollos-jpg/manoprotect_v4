@@ -75,7 +75,7 @@ class SecurityHeadersMiddleware(BaseHTTPMiddleware):
             "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; "
             "font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; "
             "img-src 'self' data: https: blob:; "
-            "connect-src 'self' https://*.emergentagent.com https://*.emergent.host https://*.manoprotect.com https://*.stripe.com https://api.stripe.com wss://*.emergentagent.com wss://*.emergent.host; "
+            "connect-src 'self' https://*.emergentagent.com https://*.emergent.host https://*.manoprotect.com https://*.stripe.com https://api.stripe.com wss://*.emergentagent.com wss://*.emergent.host wss://*.manoprotect.com; "
             "frame-src 'self' https://www.googletagmanager.com https://js.stripe.com https://widget.trustpilot.com; "
             "frame-ancestors 'none'; "
             "object-src 'none'; "
