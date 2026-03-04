@@ -144,7 +144,7 @@ async def create_device_order(
     if total_amount > 0 and STRIPE_API_KEY:
         try:
             # Use frontend URL for redirects
-            frontend_url = os.environ.get('FRONTEND_URL', 'https://security-suite-6.preview.emergentagent.com')
+            frontend_url = os.environ.get('FRONTEND_URL', 'https://manoprotect-desktop.preview.emergentagent.com')
             
             checkout_session = stripe.checkout.Session.create(
                 payment_method_types=['card'],

@@ -1,418 +1,504 @@
+/**
+ * ManoProtect — CRM de Ventas Profesional
+ * Pipeline completo, comisiones, calendario, stock, dashboard CEO
+ */
 import { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
-import { Shield, Users, TrendingUp, BarChart3, Package, Calendar, ChevronRight, Plus, Search, Filter, Building2, Phone, Mail, MapPin, Clock, DollarSign, FileText, X, Check, AlertCircle } from 'lucide-react';
+import {
+  Shield, Users, TrendingUp, BarChart3, Package, Calendar, ChevronRight, Plus,
+  Search, Filter, Building2, Phone, Mail, MapPin, Clock, DollarSign, FileText,
+  X, Check, AlertCircle, Target, Award, Eye, Lock, ArrowRight, Trash2, Edit
+} from 'lucide-react';
+import { toast } from 'sonner';
 
 const API = process.env.REACT_APP_BACKEND_URL;
 
 const LEAD_STAGES = ['new', 'contacted', 'qualified', 'proposal', 'negotiation', 'closed', 'lost'];
-const STAGE_LABELS = { new: 'Nuevo', contacted: 'Contactado', qualified: 'Cualificado', proposal: 'Propuesta', negotiation: 'Negociacion', closed: 'Cerrado', lost: 'Perdido' };
-const STAGE_COLORS = { new: 'bg-blue-500', contacted: 'bg-yellow-500', qualified: 'bg-indigo-500', proposal: 'bg-purple-500', negotiation: 'bg-orange-500', closed: 'bg-emerald-500', lost: 'bg-red-500' };
+const STAGE_LABELS = { new: 'Primer Contacto', contacted: 'Visita Realizada', qualified: 'Estudio Seguridad', proposal: 'Propuesta Enviada', negotiation: 'Negociacion', closed: 'Cierre Contrato', lost: 'Perdido' };
+const STAGE_COLORS = { new: 'bg-blue-500', contacted: 'bg-cyan-500', qualified: 'bg-indigo-500', proposal: 'bg-purple-500', negotiation: 'bg-orange-500', closed: 'bg-emerald-500', lost: 'bg-red-500' };
 
-function MetricCard({ icon: Icon, label, value, trend, color = 'text-white' }) {
+const SENTINEL_IMG = 'https://customer-assets.emergentagent.com/job_33b1d023-8b05-4946-8f90-203a20a655d6/artifacts/wcs7ov15_Cerradura%20inteligente.png';
+const PRODUCT_IMGS = {
+  sentinel_lock: 'https://customer-assets.emergentagent.com/job_33b1d023-8b05-4946-8f90-203a20a655d6/artifacts/p1c1gqmj_Cerradura%20inteligente%20%281%29.png',
+  panel: null, camera: null, sensor_pir: null, siren: null, keypad: null,
+};
+const PRODUCT_LABELS = { sentinel_lock: 'Sentinel Lock', panel: 'Panel Alarma', camera: 'Camara HD', sensor_pir: 'Sensor PIR', siren: 'Sirena', keypad: 'Teclado' };
+const STOCK_STATUS_COLORS = { available: 'bg-emerald-500', reserved: 'bg-amber-500', sold: 'bg-blue-500', installed: 'bg-indigo-500', defective: 'bg-red-500' };
+
+const EVENT_TYPE_LABELS = { visit: 'Visita', security_study: 'Estudio Seguridad', proposal: 'Propuesta', installation: 'Instalacion', follow_up: 'Seguimiento' };
+const EVENT_TYPE_COLORS = { visit: 'bg-blue-500', security_study: 'bg-indigo-500', proposal: 'bg-purple-500', installation: 'bg-emerald-500', follow_up: 'bg-amber-500' };
+
+/* ─── METRIC CARD ─── */
+function MetricCard({ icon: Icon, label, value, sub, color = 'text-white' }) {
   return (
-    <div className="bg-slate-800/60 border border-slate-700/50 rounded-xl p-4 hover:border-slate-600/50 transition-all" data-testid={`metric-${label.toLowerCase().replace(/\s/g, '-')}`}>
-      <div className="flex items-center gap-2 mb-2">
-        <Icon className="w-4 h-4 text-indigo-400" />
-        <span className="text-slate-400 text-xs font-medium">{label}</span>
-      </div>
+    <div className="bg-slate-800/60 border border-slate-700/50 rounded-xl p-4" data-testid={`metric-${label.toLowerCase().replace(/\s/g, '-')}`}>
+      <div className="flex items-center gap-2 mb-2"><Icon className="w-4 h-4 text-indigo-400" /><span className="text-slate-400 text-xs">{label}</span></div>
       <div className={`text-2xl font-black ${color}`}>{value}</div>
-      {trend && <div className="text-emerald-400 text-[10px] mt-1">{trend}</div>}
+      {sub && <div className="text-slate-500 text-[10px] mt-1">{sub}</div>}
     </div>
   );
 }
 
+/* ─── LEAD MODAL ─── */
 function LeadModal({ open, onClose, onSubmit }) {
-  const [form, setForm] = useState({ name: '', email: '', phone: '', source: 'web', interest: '', notes: '', neighborhood: '' });
+  const [form, setForm] = useState({ name: '', email: '', phone: '', source: 'web', interest: '', notes: '', neighborhood: '', assigned_to: '' });
   const [saving, setSaving] = useState(false);
-
   if (!open) return null;
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setSaving(true);
-    await onSubmit(form);
-    setSaving(false);
-    setForm({ name: '', email: '', phone: '', source: 'web', interest: '', notes: '', neighborhood: '' });
-    onClose();
-  };
-
+  const handleSubmit = async (e) => { e.preventDefault(); setSaving(true); await onSubmit(form); setSaving(false); setForm({ name: '', email: '', phone: '', source: 'web', interest: '', notes: '', neighborhood: '', assigned_to: '' }); onClose(); };
   return (
     <div className="fixed inset-0 z-[70] flex items-center justify-center bg-black/50 backdrop-blur-sm p-4" onClick={onClose}>
       <div className="bg-slate-800 border border-slate-700 rounded-2xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto" onClick={e => e.stopPropagation()} data-testid="lead-modal">
-        <div className="p-5 border-b border-slate-700 flex items-center justify-between">
-          <h3 className="text-white font-bold">Nuevo Lead</h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-white"><X className="w-5 h-5" /></button>
-        </div>
+        <div className="p-5 border-b border-slate-700 flex items-center justify-between"><h3 className="text-white font-bold">Nuevo Lead</h3><button onClick={onClose} className="text-slate-400 hover:text-white"><X className="w-5 h-5" /></button></div>
         <form onSubmit={handleSubmit} className="p-5 space-y-3">
-          <input type="text" placeholder="Nombre *" required value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))} className="w-full bg-slate-900 border border-slate-600 rounded-lg px-3 py-2 text-sm text-white placeholder-slate-500 focus:ring-2 focus:ring-indigo-500" data-testid="lead-name" />
-          <input type="email" placeholder="Email *" required value={form.email} onChange={e => setForm(f => ({ ...f, email: e.target.value }))} className="w-full bg-slate-900 border border-slate-600 rounded-lg px-3 py-2 text-sm text-white placeholder-slate-500 focus:ring-2 focus:ring-indigo-500" data-testid="lead-email" />
+          <input type="text" placeholder="Nombre *" required value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))} className="w-full bg-slate-900 border border-slate-600 rounded-lg px-3 py-2 text-sm text-white placeholder-slate-500" data-testid="lead-name" />
+          <input type="email" placeholder="Email *" required value={form.email} onChange={e => setForm(f => ({ ...f, email: e.target.value }))} className="w-full bg-slate-900 border border-slate-600 rounded-lg px-3 py-2 text-sm text-white placeholder-slate-500" data-testid="lead-email" />
           <input type="tel" placeholder="Telefono" value={form.phone} onChange={e => setForm(f => ({ ...f, phone: e.target.value }))} className="w-full bg-slate-900 border border-slate-600 rounded-lg px-3 py-2 text-sm text-white placeholder-slate-500" data-testid="lead-phone" />
-          <select value={form.source} onChange={e => setForm(f => ({ ...f, source: e.target.value }))} className="w-full bg-slate-900 border border-slate-600 rounded-lg px-3 py-2 text-sm text-white" data-testid="lead-source">
-            <option value="web">Web</option>
-            <option value="referido">Referido</option>
-            <option value="telefono">Telefono</option>
-            <option value="evento">Evento</option>
-            <option value="otro">Otro</option>
-          </select>
+          <div className="grid grid-cols-2 gap-2">
+            <select value={form.source} onChange={e => setForm(f => ({ ...f, source: e.target.value }))} className="bg-slate-900 border border-slate-600 rounded-lg px-3 py-2 text-sm text-white" data-testid="lead-source">
+              <option value="web">Web</option><option value="chatbot">Chatbot</option><option value="referido">Referido</option><option value="telefono">Telefono</option><option value="evento">Evento</option>
+            </select>
+            <select value={form.assigned_to} onChange={e => setForm(f => ({ ...f, assigned_to: e.target.value }))} className="bg-slate-900 border border-slate-600 rounded-lg px-3 py-2 text-sm text-white">
+              <option value="">Sin asignar</option><option value="com-001">Diego Fernandez</option><option value="com-002">Laura Sanchez</option>
+            </select>
+          </div>
           <input type="text" placeholder="Barrio / Zona" value={form.neighborhood} onChange={e => setForm(f => ({ ...f, neighborhood: e.target.value }))} className="w-full bg-slate-900 border border-slate-600 rounded-lg px-3 py-2 text-sm text-white placeholder-slate-500" data-testid="lead-neighborhood" />
-          <input type="text" placeholder="Interes (ej: alarma hogar, vecinal)" value={form.interest} onChange={e => setForm(f => ({ ...f, interest: e.target.value }))} className="w-full bg-slate-900 border border-slate-600 rounded-lg px-3 py-2 text-sm text-white placeholder-slate-500" data-testid="lead-interest" />
+          <input type="text" placeholder="Interes (alarma hogar, sentinel, vecinal...)" value={form.interest} onChange={e => setForm(f => ({ ...f, interest: e.target.value }))} className="w-full bg-slate-900 border border-slate-600 rounded-lg px-3 py-2 text-sm text-white placeholder-slate-500" data-testid="lead-interest" />
           <textarea placeholder="Notas" value={form.notes} onChange={e => setForm(f => ({ ...f, notes: e.target.value }))} rows={2} className="w-full bg-slate-900 border border-slate-600 rounded-lg px-3 py-2 text-sm text-white placeholder-slate-500 resize-none" data-testid="lead-notes" />
-          <button type="submit" disabled={saving} className="w-full bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2.5 rounded-xl text-sm disabled:opacity-50" data-testid="submit-lead">
-            {saving ? 'Guardando...' : 'Crear Lead'}
-          </button>
+          <button type="submit" disabled={saving} className="w-full bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2.5 rounded-xl text-sm disabled:opacity-50" data-testid="submit-lead">{saving ? 'Guardando...' : 'Crear Lead'}</button>
         </form>
       </div>
     </div>
   );
 }
 
-function InstallModal({ open, onClose, onSubmit }) {
-  const [form, setForm] = useState({ client_name: '', address: '', phone: '', plan_type: 'alarm-essential', scheduled_date: '', notes: '' });
+/* ─── CALENDAR EVENT MODAL ─── */
+function CalendarEventModal({ open, onClose, onSubmit }) {
+  const [form, setForm] = useState({ title: '', event_type: 'visit', date: '', time: '', assigned_to: '', address: '', notes: '', lead_id: '' });
   const [saving, setSaving] = useState(false);
-
   if (!open) return null;
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setSaving(true);
-    await onSubmit(form);
-    setSaving(false);
-    setForm({ client_name: '', address: '', phone: '', plan_type: 'alarm-essential', scheduled_date: '', notes: '' });
-    onClose();
-  };
-
+  const handleSubmit = async (e) => { e.preventDefault(); setSaving(true); await onSubmit(form); setSaving(false); setForm({ title: '', event_type: 'visit', date: '', time: '', assigned_to: '', address: '', notes: '', lead_id: '' }); onClose(); };
   return (
     <div className="fixed inset-0 z-[70] flex items-center justify-center bg-black/50 backdrop-blur-sm p-4" onClick={onClose}>
-      <div className="bg-slate-800 border border-slate-700 rounded-2xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto" onClick={e => e.stopPropagation()} data-testid="install-modal">
-        <div className="p-5 border-b border-slate-700 flex items-center justify-between">
-          <h3 className="text-white font-bold">Programar Instalacion</h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-white"><X className="w-5 h-5" /></button>
-        </div>
+      <div className="bg-slate-800 border border-slate-700 rounded-2xl shadow-2xl max-w-md w-full" onClick={e => e.stopPropagation()} data-testid="calendar-modal">
+        <div className="p-5 border-b border-slate-700 flex items-center justify-between"><h3 className="text-white font-bold">Nueva Cita</h3><button onClick={onClose} className="text-slate-400 hover:text-white"><X className="w-5 h-5" /></button></div>
         <form onSubmit={handleSubmit} className="p-5 space-y-3">
-          <input type="text" placeholder="Nombre cliente *" required value={form.client_name} onChange={e => setForm(f => ({ ...f, client_name: e.target.value }))} className="w-full bg-slate-900 border border-slate-600 rounded-lg px-3 py-2 text-sm text-white placeholder-slate-500" data-testid="install-name" />
-          <input type="text" placeholder="Direccion *" required value={form.address} onChange={e => setForm(f => ({ ...f, address: e.target.value }))} className="w-full bg-slate-900 border border-slate-600 rounded-lg px-3 py-2 text-sm text-white placeholder-slate-500" data-testid="install-address" />
-          <input type="tel" placeholder="Telefono *" required value={form.phone} onChange={e => setForm(f => ({ ...f, phone: e.target.value }))} className="w-full bg-slate-900 border border-slate-600 rounded-lg px-3 py-2 text-sm text-white placeholder-slate-500" data-testid="install-phone" />
-          <select value={form.plan_type} onChange={e => setForm(f => ({ ...f, plan_type: e.target.value }))} className="w-full bg-slate-900 border border-slate-600 rounded-lg px-3 py-2 text-sm text-white" data-testid="install-plan">
-            <option value="alarm-essential">Alarma Essential</option>
-            <option value="alarm-premium">Alarma Premium</option>
-            <option value="alarm-business">Alarma Business</option>
-            <option value="vecinal-anual">Vecinal Premium</option>
+          <input type="text" placeholder="Titulo *" required value={form.title} onChange={e => setForm(f => ({ ...f, title: e.target.value }))} className="w-full bg-slate-900 border border-slate-600 rounded-lg px-3 py-2 text-sm text-white placeholder-slate-500" data-testid="event-title" />
+          <select value={form.event_type} onChange={e => setForm(f => ({ ...f, event_type: e.target.value }))} className="w-full bg-slate-900 border border-slate-600 rounded-lg px-3 py-2 text-sm text-white" data-testid="event-type">
+            <option value="visit">Visita comercial</option><option value="security_study">Estudio de seguridad</option><option value="proposal">Entrega propuesta</option><option value="installation">Instalacion</option><option value="follow_up">Seguimiento</option>
           </select>
-          <input type="datetime-local" required value={form.scheduled_date} onChange={e => setForm(f => ({ ...f, scheduled_date: e.target.value }))} className="w-full bg-slate-900 border border-slate-600 rounded-lg px-3 py-2 text-sm text-white" data-testid="install-date" />
-          <textarea placeholder="Notas" value={form.notes} onChange={e => setForm(f => ({ ...f, notes: e.target.value }))} rows={2} className="w-full bg-slate-900 border border-slate-600 rounded-lg px-3 py-2 text-sm text-white placeholder-slate-500 resize-none" data-testid="install-notes" />
-          <button type="submit" disabled={saving} className="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-2.5 rounded-xl text-sm disabled:opacity-50" data-testid="submit-install">
-            {saving ? 'Guardando...' : 'Programar'}
-          </button>
+          <div className="grid grid-cols-2 gap-2">
+            <input type="date" required value={form.date} onChange={e => setForm(f => ({ ...f, date: e.target.value }))} className="bg-slate-900 border border-slate-600 rounded-lg px-3 py-2 text-sm text-white" data-testid="event-date" />
+            <input type="time" value={form.time} onChange={e => setForm(f => ({ ...f, time: e.target.value }))} className="bg-slate-900 border border-slate-600 rounded-lg px-3 py-2 text-sm text-white" data-testid="event-time" />
+          </div>
+          <select value={form.assigned_to} onChange={e => setForm(f => ({ ...f, assigned_to: e.target.value }))} className="w-full bg-slate-900 border border-slate-600 rounded-lg px-3 py-2 text-sm text-white">
+            <option value="">Sin asignar</option><option value="com-001">Diego Fernandez</option><option value="com-002">Laura Sanchez</option>
+          </select>
+          <input type="text" placeholder="Direccion" value={form.address} onChange={e => setForm(f => ({ ...f, address: e.target.value }))} className="w-full bg-slate-900 border border-slate-600 rounded-lg px-3 py-2 text-sm text-white placeholder-slate-500" />
+          <textarea placeholder="Notas" value={form.notes} onChange={e => setForm(f => ({ ...f, notes: e.target.value }))} rows={2} className="w-full bg-slate-900 border border-slate-600 rounded-lg px-3 py-2 text-sm text-white placeholder-slate-500 resize-none" />
+          <button type="submit" disabled={saving} className="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-2.5 rounded-xl text-sm disabled:opacity-50" data-testid="submit-event">{saving ? 'Guardando...' : 'Crear Cita'}</button>
         </form>
       </div>
     </div>
   );
 }
 
+/* ─── STOCK MODAL ─── */
+function StockModal({ open, onClose, onSubmit }) {
+  const [form, setForm] = useState({ product_type: 'sentinel_lock', model: 'Sentinel Lock DIN v1', serial_number: '', status: 'available', notes: '' });
+  const [saving, setSaving] = useState(false);
+  if (!open) return null;
+  const handleSubmit = async (e) => { e.preventDefault(); setSaving(true); await onSubmit(form); setSaving(false); setForm({ product_type: 'sentinel_lock', model: 'Sentinel Lock DIN v1', serial_number: '', status: 'available', notes: '' }); onClose(); };
+  return (
+    <div className="fixed inset-0 z-[70] flex items-center justify-center bg-black/50 backdrop-blur-sm p-4" onClick={onClose}>
+      <div className="bg-slate-800 border border-slate-700 rounded-2xl shadow-2xl max-w-md w-full" onClick={e => e.stopPropagation()} data-testid="stock-modal">
+        <div className="p-5 border-b border-slate-700 flex items-center justify-between"><h3 className="text-white font-bold">Nuevo Producto en Stock</h3><button onClick={onClose} className="text-slate-400 hover:text-white"><X className="w-5 h-5" /></button></div>
+        <form onSubmit={handleSubmit} className="p-5 space-y-3">
+          <select value={form.product_type} onChange={e => setForm(f => ({ ...f, product_type: e.target.value }))} className="w-full bg-slate-900 border border-slate-600 rounded-lg px-3 py-2 text-sm text-white" data-testid="stock-type">
+            <option value="sentinel_lock">Sentinel Lock</option><option value="panel">Panel Alarma</option><option value="camera">Camara HD</option><option value="sensor_pir">Sensor PIR</option><option value="siren">Sirena</option><option value="keypad">Teclado</option>
+          </select>
+          <input type="text" placeholder="Modelo" value={form.model} onChange={e => setForm(f => ({ ...f, model: e.target.value }))} className="w-full bg-slate-900 border border-slate-600 rounded-lg px-3 py-2 text-sm text-white placeholder-slate-500" />
+          <input type="text" placeholder="Numero de serie *" required value={form.serial_number} onChange={e => setForm(f => ({ ...f, serial_number: e.target.value }))} className="w-full bg-slate-900 border border-slate-600 rounded-lg px-3 py-2 text-sm text-white placeholder-slate-500" data-testid="stock-serial" />
+          <textarea placeholder="Notas" value={form.notes} onChange={e => setForm(f => ({ ...f, notes: e.target.value }))} rows={2} className="w-full bg-slate-900 border border-slate-600 rounded-lg px-3 py-2 text-sm text-white placeholder-slate-500 resize-none" />
+          <button type="submit" disabled={saving} className="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-2.5 rounded-xl text-sm disabled:opacity-50" data-testid="submit-stock">{saving ? 'Guardando...' : 'Anadir a Stock'}</button>
+        </form>
+      </div>
+    </div>
+  );
+}
+
+
+/* ═══════════════════════════════════════════
+   MAIN CRM PAGE
+   ═══════════════════════════════════════════ */
 export default function EnterpriseCentralPage() {
   const [dashboard, setDashboard] = useState(null);
   const [leads, setLeads] = useState([]);
   const [installations, setInstallations] = useState([]);
   const [pipeline, setPipeline] = useState(null);
+  const [calendarEvents, setCalendarEvents] = useState([]);
+  const [commercials, setCommercials] = useState([]);
+  const [stock, setStock] = useState({ items: [], summary: {} });
   const [activeTab, setActiveTab] = useState('dashboard');
   const [loading, setLoading] = useState(true);
   const [showLeadModal, setShowLeadModal] = useState(false);
-  const [showInstallModal, setShowInstallModal] = useState(false);
+  const [showCalendarModal, setShowCalendarModal] = useState(false);
+  const [showStockModal, setShowStockModal] = useState(false);
   const [statusFilter, setStatusFilter] = useState('');
 
   const fetchAll = useCallback(async () => {
     try {
-      const [dashRes, leadsRes, installRes, pipeRes] = await Promise.all([
+      const [dashRes, leadsRes, installRes, pipeRes, calRes, comRes, stockRes] = await Promise.all([
         fetch(`${API}/api/enterprise-central/dashboard`),
-        fetch(`${API}/api/enterprise-central/leads?limit=50`),
+        fetch(`${API}/api/enterprise-central/leads?limit=100`),
         fetch(`${API}/api/enterprise-central/installations?limit=50`),
         fetch(`${API}/api/enterprise-central/leads/pipeline`),
+        fetch(`${API}/api/enterprise-central/calendar`),
+        fetch(`${API}/api/enterprise-central/commercials`),
+        fetch(`${API}/api/enterprise-central/stock`),
       ]);
-      const [d, l, i, p] = await Promise.all([dashRes.json(), leadsRes.json(), installRes.json(), pipeRes.json()]);
+      const [d, l, i, p, cal, com, st] = await Promise.all([dashRes.json(), leadsRes.json(), installRes.json(), pipeRes.json(), calRes.json(), comRes.json(), stockRes.json()]);
       setDashboard(d);
       setLeads(l.leads || []);
       setInstallations(i.installations || []);
       setPipeline(p);
-    } catch (e) {
-      console.error('Enterprise fetch error:', e);
-    } finally {
-      setLoading(false);
-    }
+      setCalendarEvents(cal.events || []);
+      setCommercials(com.commercials || []);
+      setStock(st);
+    } catch (e) { console.error(e); }
+    setLoading(false);
   }, []);
 
   useEffect(() => { fetchAll(); }, [fetchAll]);
 
-  const createLead = async (data) => {
-    await fetch(`${API}/api/enterprise-central/leads`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
-    fetchAll();
-  };
+  const createLead = async (data) => { await fetch(`${API}/api/enterprise-central/leads`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) }); toast.success('Lead creado'); fetchAll(); };
+  const updateLeadStatus = async (leadId, status) => { await fetch(`${API}/api/enterprise-central/leads/${leadId}`, { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ status }) }); toast.success(`Lead ${STAGE_LABELS[status] || status}`); fetchAll(); };
+  const createCalendarEvent = async (data) => { await fetch(`${API}/api/enterprise-central/calendar`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) }); toast.success('Cita creada'); fetchAll(); };
+  const addStockItem = async (data) => { await fetch(`${API}/api/enterprise-central/stock`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) }); toast.success('Producto anadido'); fetchAll(); };
 
-  const updateLeadStatus = async (leadId, status) => {
-    await fetch(`${API}/api/enterprise-central/leads/${leadId}`, { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ status }) });
-    fetchAll();
-  };
-
-  const createInstallation = async (data) => {
-    await fetch(`${API}/api/enterprise-central/installations`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
-    fetchAll();
-  };
-
-  const updateInstallStatus = async (installId, status) => {
-    await fetch(`${API}/api/enterprise-central/installations/${installId}?status=${status}`, { method: 'PATCH' });
-    fetchAll();
-  };
-
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-slate-950 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-indigo-400" />
-      </div>
-    );
-  }
+  if (loading) return (<div className="min-h-screen bg-slate-950 flex items-center justify-center"><div className="animate-spin rounded-full h-10 w-10 border-b-2 border-indigo-400" /></div>);
 
   const tabs = [
-    { id: 'dashboard', label: 'Dashboard', icon: BarChart3 },
-    { id: 'leads', label: 'CRM Ventas', icon: Users },
-    { id: 'installations', label: 'Instalaciones', icon: Package },
+    { id: 'dashboard', label: 'Dashboard CEO', icon: BarChart3 },
+    { id: 'pipeline', label: 'Pipeline Ventas', icon: TrendingUp },
+    { id: 'leads', label: 'Leads', icon: Users },
+    { id: 'calendar', label: 'Calendario', icon: Calendar },
+    { id: 'commercials', label: 'Comerciales', icon: Award },
+    { id: 'stock', label: 'Stock', icon: Package },
+    { id: 'installations', label: 'Instalaciones', icon: Building2 },
   ];
 
   const filteredLeads = statusFilter ? leads.filter(l => l.status === statusFilter) : leads;
+  const pipeData = pipeline?.pipeline || {};
 
   return (
     <div className="min-h-screen bg-slate-950" data-testid="enterprise-central-page">
-      {/* Sidebar + Content Layout */}
       <div className="flex min-h-screen">
         {/* Sidebar */}
-        <aside className="w-56 bg-slate-900 border-r border-slate-800 p-4 hidden lg:flex flex-col">
-          <Link to="/" className="flex items-center gap-2 mb-8">
+        <aside className="w-56 bg-slate-900 border-r border-slate-800 p-4 hidden lg:flex flex-col flex-shrink-0">
+          <Link to="/" className="flex items-center gap-2 mb-6">
             <div className="w-8 h-8 bg-indigo-500 rounded-lg flex items-center justify-center"><Shield className="w-4 h-4 text-white" /></div>
-            <div>
-              <span className="text-white font-bold text-sm block">ManoProtect</span>
-              <span className="text-slate-500 text-[10px]">Enterprise</span>
-            </div>
+            <div><span className="text-white font-bold text-sm block">ManoProtect</span><span className="text-slate-500 text-[10px]">CRM Profesional</span></div>
           </Link>
           <nav className="space-y-1 flex-1">
             {tabs.map(tab => (
               <button key={tab.id} onClick={() => setActiveTab(tab.id)}
-                className={`w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm font-medium transition-all ${activeTab === tab.id ? 'bg-indigo-500/10 text-indigo-400 border border-indigo-500/20' : 'text-slate-400 hover:text-white hover:bg-slate-800'}`}
+                className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-medium transition-all ${activeTab === tab.id ? 'bg-indigo-500/10 text-indigo-400 border border-indigo-500/20' : 'text-slate-400 hover:text-white hover:bg-slate-800'}`}
                 data-testid={`nav-${tab.id}`}
-              >
-                <tab.icon className="w-4 h-4" />{tab.label}
-              </button>
+              ><tab.icon className="w-3.5 h-3.5" />{tab.label}</button>
             ))}
           </nav>
-          <div className="mt-auto pt-4 border-t border-slate-800">
-            <Link to="/ceo" className="text-slate-500 hover:text-white text-xs transition-colors flex items-center gap-1.5"><Building2 className="w-3 h-3" /> Panel CEO</Link>
+          <div className="border-t border-slate-800 pt-3 mt-3 space-y-1">
+            <Link to="/cra-operador" className="flex items-center gap-2 px-3 py-2 rounded-lg text-xs text-slate-400 hover:text-white hover:bg-slate-800"><Eye className="w-3.5 h-3.5" /> CRA Operador</Link>
+            <Link to="/mi-seguridad" className="flex items-center gap-2 px-3 py-2 rounded-lg text-xs text-slate-400 hover:text-white hover:bg-slate-800"><Lock className="w-3.5 h-3.5" /> App Cliente</Link>
           </div>
         </aside>
 
-        {/* Mobile top nav */}
-        <div className="lg:hidden fixed top-0 left-0 right-0 z-50 bg-slate-900/95 backdrop-blur border-b border-slate-800 px-4 py-2 flex items-center gap-2 overflow-x-auto">
-          <Link to="/" className="w-7 h-7 bg-indigo-500 rounded-lg flex items-center justify-center flex-shrink-0"><Shield className="w-3.5 h-3.5 text-white" /></Link>
-          {tabs.map(tab => (
-            <button key={tab.id} onClick={() => setActiveTab(tab.id)}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-all ${activeTab === tab.id ? 'bg-indigo-500/10 text-indigo-400' : 'text-slate-400'}`}
-              data-testid={`mobile-nav-${tab.id}`}
-            >
-              <tab.icon className="w-3 h-3" />{tab.label}
-            </button>
-          ))}
-        </div>
+        {/* Content */}
+        <main className="flex-1 p-4 sm:p-6 overflow-y-auto">
+          {/* Mobile tabs */}
+          <div className="flex gap-1.5 mb-4 overflow-x-auto pb-2 lg:hidden">
+            {tabs.map(t => (
+              <button key={t.id} onClick={() => setActiveTab(t.id)} className={`flex-shrink-0 px-3 py-1.5 rounded-lg text-[10px] font-bold ${activeTab === t.id ? 'bg-indigo-500 text-white' : 'bg-slate-800 text-slate-400'}`}>{t.label}</button>
+            ))}
+          </div>
 
-        {/* Main Content */}
-        <main className="flex-1 p-4 sm:p-6 lg:p-8 pt-16 lg:pt-8 overflow-y-auto">
-          {/* DASHBOARD TAB */}
+          {/* ═══ DASHBOARD CEO ═══ */}
           {activeTab === 'dashboard' && dashboard && (
-            <div className="space-y-6" data-testid="dashboard-content">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h1 className="text-white font-black text-2xl">Panel Central</h1>
-                  <p className="text-slate-500 text-xs mt-1">Vista general de la empresa</p>
-                </div>
-              </div>
-              
-              <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-                <MetricCard icon={Users} label="Usuarios totales" value={dashboard.overview?.total_users || 0} />
-                <MetricCard icon={TrendingUp} label="Suscripciones activas" value={dashboard.overview?.active_subscriptions || 0} color="text-emerald-400" />
-                <MetricCard icon={Building2} label="Empleados activos" value={dashboard.overview?.active_employees || 0} color="text-indigo-400" />
-                <MetricCard icon={Mail} label="Newsletter" value={dashboard.overview?.newsletter_subscribers || 0} />
+            <div data-testid="dashboard-ceo">
+              <h2 className="text-white text-xl font-black mb-4">Dashboard CEO</h2>
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 mb-6">
+                <MetricCard icon={Users} label="Leads este mes" value={dashboard.sales.leads_this_month} />
+                <MetricCard icon={TrendingUp} label="Conversion" value={`${dashboard.sales.conversion_rate}%`} color="text-emerald-400" />
+                <MetricCard icon={DollarSign} label="Ingresos est." value={`${dashboard.revenue.estimated_monthly} EUR`} color="text-emerald-400" />
+                <MetricCard icon={Package} label="Stock disponible" value={dashboard.stock.available} sub={`${dashboard.stock.reserved} reservados`} />
+                <MetricCard icon={Shield} label="Suscripciones" value={dashboard.overview.active_subscriptions} />
+                <MetricCard icon={Building2} label="Instalaciones pend." value={dashboard.operations.pending_installations} />
+                <MetricCard icon={Users} label="Empleados" value={dashboard.overview.active_employees} />
+                <MetricCard icon={Mail} label="Newsletter" value={dashboard.overview.newsletter_subscribers} />
               </div>
 
-              {/* Revenue */}
-              <div className="bg-slate-800/60 border border-slate-700/50 rounded-2xl p-6">
-                <h3 className="text-white font-bold text-lg mb-4">Ingresos estimados</h3>
-                <div className="grid sm:grid-cols-4 gap-4">
-                  <div className="text-center">
-                    <div className="text-2xl font-black text-emerald-400">{dashboard.revenue?.estimated_monthly || 0} EUR</div>
-                    <div className="text-slate-500 text-xs mt-1">MRR estimado</div>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-xl font-bold text-white">{dashboard.revenue?.vecinal_subscribers || 0}</div>
-                    <div className="text-slate-500 text-xs mt-1">Subs Vecinal</div>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-xl font-bold text-white">{dashboard.revenue?.alarm_subscribers || 0}</div>
-                    <div className="text-slate-500 text-xs mt-1">Subs Alarma</div>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-xl font-bold text-white">{dashboard.revenue?.family_subscribers || 0}</div>
-                    <div className="text-slate-500 text-xs mt-1">Subs Familiar</div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Sales Pipeline Mini */}
-              <div className="bg-slate-800/60 border border-slate-700/50 rounded-2xl p-6">
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-white font-bold text-lg">Pipeline de Ventas</h3>
-                  <span className="text-slate-500 text-xs">{dashboard.sales?.leads_this_month || 0} leads este mes</span>
-                </div>
+              {/* Pipeline visual */}
+              <div className="bg-slate-800/40 border border-slate-700/50 rounded-xl p-5 mb-6" data-testid="pipeline-visual">
+                <h3 className="text-white font-bold text-sm mb-4">Embudo de Ventas</h3>
                 <div className="flex gap-2 overflow-x-auto pb-2">
-                  {LEAD_STAGES.filter(s => s !== 'lost').map(stage => (
-                    <div key={stage} className="flex-1 min-w-[80px] bg-slate-900/60 rounded-xl p-3 text-center">
-                      <div className={`w-3 h-3 ${STAGE_COLORS[stage]} rounded-full mx-auto mb-2`} />
-                      <div className="text-white font-bold text-lg">{dashboard.sales?.pipeline?.[stage] || pipeline?.pipeline?.[stage] || 0}</div>
-                      <div className="text-slate-500 text-[10px]">{STAGE_LABELS[stage]}</div>
+                  {LEAD_STAGES.map(stage => {
+                    const count = pipeData[stage] || 0;
+                    return (
+                      <div key={stage} className="flex-1 min-w-[100px]">
+                        <div className={`${STAGE_COLORS[stage]} rounded-lg p-3 text-center mb-1`}>
+                          <p className="text-white text-lg font-black">{count}</p>
+                        </div>
+                        <p className="text-slate-400 text-[9px] text-center font-medium">{STAGE_LABELS[stage]}</p>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Commercials performance + Calendar */}
+              <div className="grid lg:grid-cols-2 gap-4">
+                <div className="bg-slate-800/40 border border-slate-700/50 rounded-xl p-5" data-testid="commercial-performance">
+                  <h3 className="text-white font-bold text-sm mb-3">Rendimiento Comerciales</h3>
+                  {commercials.length === 0 ? <p className="text-slate-500 text-xs">Sin objetivos configurados</p> :
+                    commercials.map((c, i) => (
+                      <div key={i} className="flex items-center gap-3 bg-slate-900/40 rounded-xl p-3 mb-2">
+                        <div className="w-9 h-9 bg-indigo-500/20 rounded-lg flex items-center justify-center"><Award className="w-4 h-4 text-indigo-400" /></div>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-white text-xs font-bold">{c.commercial_name}</p>
+                          <div className="flex items-center gap-2 mt-1">
+                            <div className="flex-1 bg-slate-800 rounded-full h-2">
+                              <div className={`h-2 rounded-full ${c.target_progress >= 100 ? 'bg-emerald-500' : c.target_progress >= 50 ? 'bg-amber-500' : 'bg-red-500'}`} style={{ width: `${Math.min(c.target_progress, 100)}%` }} />
+                            </div>
+                            <span className="text-slate-400 text-[10px]">{c.target_progress}%</span>
+                          </div>
+                          <p className="text-slate-500 text-[10px] mt-0.5">{c.actual_closed}/{c.target_closed} cierres | Comision: {c.commission_earned} EUR</p>
+                        </div>
+                      </div>
+                    ))
+                  }
+                </div>
+                <div className="bg-slate-800/40 border border-slate-700/50 rounded-xl p-5" data-testid="upcoming-events">
+                  <h3 className="text-white font-bold text-sm mb-3">Proximas Citas</h3>
+                  {(dashboard.upcoming_events || []).length === 0 ? <p className="text-slate-500 text-xs">Sin citas programadas</p> :
+                    (dashboard.upcoming_events || []).map((ev, i) => (
+                      <div key={i} className="flex items-center gap-3 bg-slate-900/40 rounded-xl p-3 mb-2">
+                        <div className={`w-2 h-8 rounded-full ${EVENT_TYPE_COLORS[ev.event_type] || 'bg-slate-500'}`} />
+                        <div className="flex-1">
+                          <p className="text-white text-xs font-bold">{ev.title}</p>
+                          <p className="text-slate-500 text-[10px]">{ev.date} {ev.time} — {ev.address}</p>
+                        </div>
+                      </div>
+                    ))
+                  }
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* ═══ PIPELINE VISUAL ═══ */}
+          {activeTab === 'pipeline' && (
+            <div data-testid="pipeline-tab">
+              <h2 className="text-white text-xl font-black mb-4">Pipeline de Ventas</h2>
+              <div className="flex gap-3 overflow-x-auto pb-4">
+                {LEAD_STAGES.map(stage => {
+                  const stageLeads = leads.filter(l => l.status === stage);
+                  return (
+                    <div key={stage} className="min-w-[220px] flex-1">
+                      <div className={`${STAGE_COLORS[stage]} rounded-t-xl px-3 py-2 flex items-center justify-between`}>
+                        <span className="text-white text-xs font-bold">{STAGE_LABELS[stage]}</span>
+                        <span className="text-white/70 text-xs bg-white/20 px-2 rounded-full">{stageLeads.length}</span>
+                      </div>
+                      <div className="bg-slate-900/50 border border-slate-800 rounded-b-xl p-2 space-y-2 min-h-[200px]">
+                        {stageLeads.map(lead => (
+                          <div key={lead.lead_id} className="bg-slate-800/60 border border-slate-700/50 rounded-lg p-3">
+                            <p className="text-white text-xs font-bold truncate">{lead.name}</p>
+                            <p className="text-slate-400 text-[10px] truncate">{lead.phone || lead.email}</p>
+                            <p className="text-slate-500 text-[10px]">{lead.interest || 'Sin especificar'}</p>
+                            {lead.assigned_to && <p className="text-indigo-400 text-[10px] mt-1">Asignado: {lead.assigned_to}</p>}
+                            {stage !== 'closed' && stage !== 'lost' && (
+                              <div className="flex gap-1 mt-2">
+                                {LEAD_STAGES.indexOf(stage) < LEAD_STAGES.length - 2 && (
+                                  <button onClick={() => updateLeadStatus(lead.lead_id, LEAD_STAGES[LEAD_STAGES.indexOf(stage) + 1])} className="text-[9px] bg-indigo-500/20 text-indigo-400 px-2 py-1 rounded font-bold hover:bg-indigo-500/30">Avanzar</button>
+                                )}
+                                <button onClick={() => updateLeadStatus(lead.lead_id, 'lost')} className="text-[9px] bg-red-500/20 text-red-400 px-2 py-1 rounded font-bold hover:bg-red-500/30">Perdido</button>
+                              </div>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
+          {/* ═══ LEADS LIST ═══ */}
+          {activeTab === 'leads' && (
+            <div data-testid="leads-tab">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-white text-xl font-black">Leads</h2>
+                <button onClick={() => setShowLeadModal(true)} className="bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-1" data-testid="add-lead-btn"><Plus className="w-3.5 h-3.5" /> Nuevo Lead</button>
+              </div>
+              <div className="flex gap-1.5 mb-4 overflow-x-auto pb-1">
+                <button onClick={() => setStatusFilter('')} className={`px-3 py-1 rounded-lg text-[10px] font-bold ${!statusFilter ? 'bg-indigo-500 text-white' : 'bg-slate-800 text-slate-400'}`}>Todos</button>
+                {LEAD_STAGES.map(s => (
+                  <button key={s} onClick={() => setStatusFilter(s)} className={`px-3 py-1 rounded-lg text-[10px] font-bold flex-shrink-0 ${statusFilter === s ? STAGE_COLORS[s] + ' text-white' : 'bg-slate-800 text-slate-400'}`}>{STAGE_LABELS[s]}</button>
+                ))}
+              </div>
+              <div className="space-y-2">
+                {filteredLeads.map(lead => {
+                  const sc = STAGE_COLORS[lead.status] || 'bg-slate-500';
+                  return (
+                    <div key={lead.lead_id} className="bg-slate-800/40 border border-slate-700/50 rounded-xl p-4 flex items-center gap-4" data-testid={`lead-${lead.lead_id}`}>
+                      <div className={`w-2 h-10 rounded-full ${sc}`} />
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 mb-0.5">
+                          <p className="text-white text-sm font-bold truncate">{lead.name}</p>
+                          <span className={`${sc} text-white text-[9px] px-2 py-0.5 rounded-full font-bold`}>{STAGE_LABELS[lead.status]}</span>
+                        </div>
+                        <p className="text-slate-400 text-xs">{lead.phone} | {lead.email}</p>
+                        <p className="text-slate-500 text-[10px]">{lead.interest} — {lead.neighborhood} | Fuente: {lead.source}</p>
+                      </div>
+                      <div className="flex gap-1 flex-shrink-0">
+                        {lead.status !== 'closed' && lead.status !== 'lost' && LEAD_STAGES.indexOf(lead.status) < 5 && (
+                          <button onClick={() => updateLeadStatus(lead.lead_id, LEAD_STAGES[LEAD_STAGES.indexOf(lead.status) + 1])} className="bg-indigo-500/20 text-indigo-400 px-3 py-1.5 rounded-lg text-[10px] font-bold hover:bg-indigo-500/30" data-testid={`advance-${lead.lead_id}`}>
+                            <ArrowRight className="w-3 h-3" />
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
+          {/* ═══ CALENDAR ═══ */}
+          {activeTab === 'calendar' && (
+            <div data-testid="calendar-tab">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-white text-xl font-black">Calendario de Citas</h2>
+                <button onClick={() => setShowCalendarModal(true)} className="bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-1" data-testid="add-event-btn"><Plus className="w-3.5 h-3.5" /> Nueva Cita</button>
+              </div>
+              <div className="space-y-2">
+                {calendarEvents.length === 0 ? <p className="text-slate-500 text-sm text-center py-10">Sin citas programadas</p> :
+                  calendarEvents.map(ev => (
+                    <div key={ev.id} className="bg-slate-800/40 border border-slate-700/50 rounded-xl p-4 flex items-center gap-4" data-testid={`event-${ev.id}`}>
+                      <div className={`w-10 h-10 ${EVENT_TYPE_COLORS[ev.event_type] || 'bg-slate-500'} rounded-xl flex items-center justify-center flex-shrink-0`}>
+                        <Calendar className="w-5 h-5 text-white" />
+                      </div>
+                      <div className="flex-1">
+                        <p className="text-white text-sm font-bold">{ev.title}</p>
+                        <p className="text-slate-400 text-xs">{ev.date} {ev.time} — {EVENT_TYPE_LABELS[ev.event_type] || ev.event_type}</p>
+                        <p className="text-slate-500 text-[10px]">{ev.address} {ev.assigned_to ? `| ${ev.assigned_to}` : ''}</p>
+                      </div>
+                      <span className={`text-[9px] px-2 py-1 rounded-full font-bold ${ev.status === 'completed' ? 'bg-emerald-500/20 text-emerald-400' : 'bg-blue-500/20 text-blue-400'}`}>{ev.status}</span>
+                    </div>
+                  ))
+                }
+              </div>
+            </div>
+          )}
+
+          {/* ═══ COMMERCIALS ═══ */}
+          {activeTab === 'commercials' && (
+            <div data-testid="commercials-tab">
+              <h2 className="text-white text-xl font-black mb-4">Comerciales — Comisiones y Objetivos</h2>
+              {commercials.length === 0 ? <p className="text-slate-500 text-sm text-center py-10">Sin comerciales configurados</p> :
+                <div className="grid sm:grid-cols-2 gap-4">
+                  {commercials.map((c, i) => (
+                    <div key={i} className="bg-slate-800/40 border border-slate-700/50 rounded-2xl p-5" data-testid={`commercial-${c.commercial_id}`}>
+                      <div className="flex items-center gap-3 mb-4">
+                        <div className="w-12 h-12 bg-indigo-500/20 rounded-xl flex items-center justify-center"><Award className="w-6 h-6 text-indigo-400" /></div>
+                        <div>
+                          <p className="text-white font-bold">{c.commercial_name}</p>
+                          <p className="text-slate-500 text-xs">ID: {c.commercial_id} | Mes: {c.month}</p>
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-3 gap-3 mb-4">
+                        <div className="text-center bg-slate-900/50 rounded-xl p-3"><p className="text-xl font-black text-white">{c.actual_leads || 0}</p><p className="text-[10px] text-slate-500">Leads / {c.target_leads}</p></div>
+                        <div className="text-center bg-slate-900/50 rounded-xl p-3"><p className="text-xl font-black text-emerald-400">{c.actual_closed || 0}</p><p className="text-[10px] text-slate-500">Cierres / {c.target_closed}</p></div>
+                        <div className="text-center bg-slate-900/50 rounded-xl p-3"><p className="text-xl font-black text-amber-400">{c.commission_earned || 0} EUR</p><p className="text-[10px] text-slate-500">Comision ({(c.commission_rate * 100)}%)</p></div>
+                      </div>
+                      <div>
+                        <div className="flex justify-between text-[10px] text-slate-400 mb-1"><span>Progreso objetivo</span><span>{c.target_progress}%</span></div>
+                        <div className="bg-slate-800 rounded-full h-3">
+                          <div className={`h-3 rounded-full transition-all ${c.target_progress >= 100 ? 'bg-emerald-500' : c.target_progress >= 50 ? 'bg-amber-500' : 'bg-red-500'}`} style={{ width: `${Math.min(c.target_progress, 100)}%` }} />
+                        </div>
+                      </div>
                     </div>
                   ))}
                 </div>
-              </div>
-
-              {/* Operations */}
-              <div className="bg-slate-800/60 border border-slate-700/50 rounded-2xl p-6">
-                <h3 className="text-white font-bold text-lg mb-2">Operaciones</h3>
-                <div className="flex items-center gap-3">
-                  <Package className="w-5 h-5 text-orange-400" />
-                  <span className="text-white font-semibold">{dashboard.operations?.pending_installations || 0}</span>
-                  <span className="text-slate-400 text-sm">instalaciones pendientes</span>
-                  <button onClick={() => setActiveTab('installations')} className="ml-auto text-indigo-400 text-xs hover:text-indigo-300">Ver todas</button>
-                </div>
-              </div>
+              }
             </div>
           )}
 
-          {/* LEADS TAB */}
-          {activeTab === 'leads' && (
-            <div className="space-y-4" data-testid="leads-content">
-              <div className="flex items-center justify-between flex-wrap gap-3">
-                <h1 className="text-white font-black text-xl">CRM de Ventas</h1>
-                <button onClick={() => setShowLeadModal(true)} className="bg-indigo-500 hover:bg-indigo-600 text-white text-xs font-bold px-4 py-2 rounded-lg flex items-center gap-1.5" data-testid="new-lead-btn">
-                  <Plus className="w-3.5 h-3.5" /> Nuevo Lead
-                </button>
+          {/* ═══ STOCK ═══ */}
+          {activeTab === 'stock' && (
+            <div data-testid="stock-tab">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-white text-xl font-black">Stock e Inventario</h2>
+                <button onClick={() => setShowStockModal(true)} className="bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-1" data-testid="add-stock-btn"><Plus className="w-3.5 h-3.5" /> Anadir Producto</button>
               </div>
-
-              {/* Filter pills */}
-              <div className="flex gap-1.5 flex-wrap">
-                <button onClick={() => setStatusFilter('')} className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${!statusFilter ? 'bg-indigo-500/20 text-indigo-400 border border-indigo-500/30' : 'text-slate-400 hover:text-white bg-slate-800'}`} data-testid="filter-all">Todos</button>
-                {LEAD_STAGES.map(s => (
-                  <button key={s} onClick={() => setStatusFilter(s)} className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${statusFilter === s ? 'bg-indigo-500/20 text-indigo-400 border border-indigo-500/30' : 'text-slate-400 hover:text-white bg-slate-800'}`} data-testid={`filter-${s}`}>
-                    {STAGE_LABELS[s]}
-                  </button>
-                ))}
-              </div>
-
-              {/* Leads Table */}
-              <div className="bg-slate-800/60 border border-slate-700/50 rounded-2xl overflow-hidden">
-                <div className="overflow-x-auto">
-                  <table className="w-full text-sm" data-testid="leads-table">
-                    <thead>
-                      <tr className="border-b border-slate-700/50 text-slate-400 text-xs">
-                        <th className="text-left p-3 font-medium">Nombre</th>
-                        <th className="text-left p-3 font-medium">Contacto</th>
-                        <th className="text-left p-3 font-medium">Interes</th>
-                        <th className="text-left p-3 font-medium">Estado</th>
-                        <th className="text-left p-3 font-medium">Acciones</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {filteredLeads.length === 0 ? (
-                        <tr><td colSpan={5} className="text-center py-12 text-slate-500">Sin leads{statusFilter ? ` en "${STAGE_LABELS[statusFilter]}"` : ''}. Crea el primero.</td></tr>
-                      ) : filteredLeads.map(lead => (
-                        <tr key={lead.lead_id} className="border-b border-slate-700/30 hover:bg-slate-700/20 transition-colors" data-testid={`lead-row-${lead.lead_id}`}>
-                          <td className="p-3">
-                            <div className="text-white font-semibold">{lead.name}</div>
-                            {lead.neighborhood && <div className="text-slate-500 text-[10px] flex items-center gap-1"><MapPin className="w-2.5 h-2.5" />{lead.neighborhood}</div>}
-                          </td>
-                          <td className="p-3">
-                            <div className="text-slate-300 text-xs flex items-center gap-1"><Mail className="w-3 h-3" />{lead.email}</div>
-                            {lead.phone && <div className="text-slate-400 text-xs flex items-center gap-1 mt-0.5"><Phone className="w-3 h-3" />{lead.phone}</div>}
-                          </td>
-                          <td className="p-3 text-slate-400 text-xs">{lead.interest || '-'}</td>
-                          <td className="p-3">
-                            <select value={lead.status} onChange={e => updateLeadStatus(lead.lead_id, e.target.value)}
-                              className="bg-slate-900 border border-slate-600 rounded px-2 py-1 text-xs text-white" data-testid={`status-select-${lead.lead_id}`}>
-                              {LEAD_STAGES.map(s => <option key={s} value={s}>{STAGE_LABELS[s]}</option>)}
-                            </select>
-                          </td>
-                          <td className="p-3">
-                            <div className="flex gap-1">
-                              {lead.status === 'new' && (
-                                <button onClick={() => updateLeadStatus(lead.lead_id, 'contacted')} className="text-emerald-400 hover:text-emerald-300 text-xs font-medium" data-testid={`contact-${lead.lead_id}`}>Contactar</button>
-                              )}
-                            </div>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* INSTALLATIONS TAB */}
-          {activeTab === 'installations' && (
-            <div className="space-y-4" data-testid="installations-content">
-              <div className="flex items-center justify-between flex-wrap gap-3">
-                <h1 className="text-white font-black text-xl">Instalaciones</h1>
-                <button onClick={() => setShowInstallModal(true)} className="bg-emerald-500 hover:bg-emerald-600 text-white text-xs font-bold px-4 py-2 rounded-lg flex items-center gap-1.5" data-testid="new-install-btn">
-                  <Plus className="w-3.5 h-3.5" /> Programar
-                </button>
-              </div>
-
-              <div className="space-y-3">
-                {installations.length === 0 ? (
-                  <div className="bg-slate-800/60 border border-slate-700/50 rounded-2xl p-12 text-center">
-                    <Package className="w-10 h-10 text-slate-600 mx-auto mb-3" />
-                    <p className="text-slate-400 text-sm">Sin instalaciones programadas</p>
+              {/* Sentinel Lock highlight */}
+              <div className="bg-gradient-to-r from-slate-800 to-slate-900 border border-emerald-500/20 rounded-2xl p-5 mb-6 flex items-center gap-5" data-testid="sentinel-stock-highlight">
+                <img src={SENTINEL_IMG} alt="Sentinel Lock" className="w-24 h-24 rounded-xl object-cover flex-shrink-0" />
+                <div className="flex-1">
+                  <h3 className="text-white font-bold text-lg mb-1">Sentinel Lock — Stock</h3>
+                  <div className="flex gap-3">
+                    <span className="text-emerald-400 text-sm font-bold">{stock.summary?.sentinel_lock?.available || 0} disponibles</span>
+                    <span className="text-amber-400 text-sm font-bold">{stock.summary?.sentinel_lock?.reserved || 0} reservados</span>
+                    <span className="text-blue-400 text-sm font-bold">{stock.summary?.sentinel_lock?.sold || 0} vendidos</span>
                   </div>
-                ) : installations.map(inst => (
-                  <div key={inst.install_id} className="bg-slate-800/60 border border-slate-700/50 rounded-xl p-4 hover:border-slate-600/50 transition-all" data-testid={`install-${inst.install_id}`}>
-                    <div className="flex items-start justify-between gap-3">
-                      <div className="flex-1">
-                        <div className="flex items-center gap-2 mb-1">
-                          <span className="text-white font-semibold text-sm">{inst.client_name}</span>
-                          <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold ${inst.status === 'pending' ? 'bg-yellow-500/10 text-yellow-400' : inst.status === 'completed' ? 'bg-emerald-500/10 text-emerald-400' : 'bg-slate-500/10 text-slate-400'}`}>{inst.status}</span>
-                        </div>
-                        <div className="flex items-center gap-3 text-xs text-slate-400">
-                          <span className="flex items-center gap-1"><MapPin className="w-3 h-3" />{inst.address}</span>
-                          <span className="flex items-center gap-1"><Calendar className="w-3 h-3" />{inst.scheduled_date}</span>
-                        </div>
-                        <div className="text-slate-500 text-xs mt-1">{inst.plan_type} | {inst.phone}</div>
-                      </div>
-                      <div className="flex gap-1.5">
-                        {inst.status === 'pending' && (
-                          <>
-                            <button onClick={() => updateInstallStatus(inst.install_id, 'in_progress')} className="text-indigo-400 hover:text-indigo-300 text-xs font-medium px-2 py-1 bg-indigo-500/10 rounded-lg" data-testid={`start-${inst.install_id}`}>Iniciar</button>
-                            <button onClick={() => updateInstallStatus(inst.install_id, 'completed')} className="text-emerald-400 hover:text-emerald-300 text-xs font-medium px-2 py-1 bg-emerald-500/10 rounded-lg" data-testid={`complete-${inst.install_id}`}>Completar</button>
-                          </>
-                        )}
-                        {inst.status === 'in_progress' && (
-                          <button onClick={() => updateInstallStatus(inst.install_id, 'completed')} className="text-emerald-400 hover:text-emerald-300 text-xs font-medium px-2 py-1 bg-emerald-500/10 rounded-lg">Completar</button>
-                        )}
-                      </div>
+                  <p className="text-slate-500 text-xs mt-1">Producto bajo pedido — Fabricacion 15-20 dias — 249 EUR/unidad</p>
+                </div>
+              </div>
+              {/* Stock items list */}
+              <div className="space-y-2">
+                {stock.items?.map(item => (
+                  <div key={item.id} className="bg-slate-800/40 border border-slate-700/50 rounded-xl p-4 flex items-center gap-4" data-testid={`stock-${item.id}`}>
+                    <div className="w-10 h-10 rounded-xl overflow-hidden bg-slate-900 flex items-center justify-center flex-shrink-0">
+                      {PRODUCT_IMGS[item.product_type] ? <img src={PRODUCT_IMGS[item.product_type]} alt={item.product_type} className="w-full h-full object-cover" /> : <Package className="w-5 h-5 text-slate-600" />}
                     </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-white text-sm font-bold">{PRODUCT_LABELS[item.product_type] || item.product_type}</p>
+                      <p className="text-slate-400 text-xs">S/N: {item.serial_number} | {item.model}</p>
+                      {item.reserved_for && <p className="text-amber-400 text-[10px]">Reservado: {item.reserved_for}</p>}
+                    </div>
+                    <span className={`${STOCK_STATUS_COLORS[item.status] || 'bg-slate-500'} text-white text-[9px] px-2.5 py-1 rounded-full font-bold`}>{item.status}</span>
                   </div>
                 ))}
+              </div>
+            </div>
+          )}
+
+          {/* ═══ INSTALLATIONS ═══ */}
+          {activeTab === 'installations' && (
+            <div data-testid="installations-tab">
+              <h2 className="text-white text-xl font-black mb-4">Instalaciones</h2>
+              <div className="space-y-2">
+                {installations.map(inst => (
+                  <div key={inst.install_id} className="bg-slate-800/40 border border-slate-700/50 rounded-xl p-4 flex items-center gap-4" data-testid={`install-${inst.install_id}`}>
+                    <Building2 className="w-5 h-5 text-indigo-400 flex-shrink-0" />
+                    <div className="flex-1 min-w-0">
+                      <p className="text-white text-sm font-bold">{inst.client_name}</p>
+                      <p className="text-slate-400 text-xs">{inst.address} | {inst.plan_type}</p>
+                      <p className="text-slate-500 text-[10px]">Fecha: {inst.scheduled_date}</p>
+                    </div>
+                    <span className={`text-[9px] px-2 py-1 rounded-full font-bold ${inst.status === 'completed' ? 'bg-emerald-500/20 text-emerald-400' : inst.status === 'pending' ? 'bg-amber-500/20 text-amber-400' : 'bg-blue-500/20 text-blue-400'}`}>{inst.status}</span>
+                  </div>
+                ))}
+                {installations.length === 0 && <p className="text-slate-500 text-sm text-center py-10">Sin instalaciones programadas</p>}
               </div>
             </div>
           )}
         </main>
       </div>
 
-      {/* Modals */}
       <LeadModal open={showLeadModal} onClose={() => setShowLeadModal(false)} onSubmit={createLead} />
-      <InstallModal open={showInstallModal} onClose={() => setShowInstallModal(false)} onSubmit={createInstallation} />
+      <CalendarEventModal open={showCalendarModal} onClose={() => setShowCalendarModal(false)} onSubmit={createCalendarEvent} />
+      <StockModal open={showStockModal} onClose={() => setShowStockModal(false)} onSubmit={addStockItem} />
     </div>
   );
 }

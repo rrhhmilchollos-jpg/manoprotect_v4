@@ -3397,7 +3397,7 @@ else:
         "https://admin.manoprotect.com",
         "https://www.admin.manoprotect.com",
         "https://api.manoprotect.com",
-        "https://security-suite-6.preview.emergentagent.com",
+        "https://manoprotect-desktop.preview.emergentagent.com",
         "https://digital-guard-1.emergent.host",
         "file://",
         "null",

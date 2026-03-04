@@ -12,7 +12,7 @@ import pytest
 import requests
 import os
 
-BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', 'https://security-suite-6.preview.emergentagent.com').rstrip('/')
+BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', 'https://manoprotect-desktop.preview.emergentagent.com').rstrip('/')
 
 
 class TestPlansAPI:
@@ -144,7 +144,7 @@ class TestCheckoutSession:
         """POST /api/create-checkout-session should accept referral_code field"""
         payload = {
             "plan_type": "family-monthly",
-            "origin_url": "https://security-suite-6.preview.emergentagent.com",
+            "origin_url": "https://manoprotect-desktop.preview.emergentagent.com",
             "referral_code": "TEST123"
         }
         response = requests.post(f"{BASE_URL}/api/create-checkout-session", json=payload, timeout=15)

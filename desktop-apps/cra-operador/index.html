@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ManoProtect CRA — Central Receptora de Alarmas</title>
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+<style>
+  :root { --bg: #0f172a; --card: #1e293b; --border: #334155; --text: #e2e8f0; --muted: #94a3b8; --accent: #6366f1; }
+  body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; margin: 0; min-height: 100vh; }
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; }
+  .badge { font-size: 10px; padding: 2px 8px; border-radius: 99px; font-weight: 700; display: inline-flex; align-items: center; gap: 4px; }
+  .pulse { animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.5; } }
+  .btn { padding: 8px 16px; border-radius: 10px; font-size: 12px; font-weight: 700; cursor: pointer; border: none; transition: all 0.2s; }
+  .btn:hover { filter: brightness(1.1); }
+  .btn-primary { background: #6366f1; color: white; }
+  .btn-danger { background: #ef4444; color: white; }
+  .btn-success { background: #10b981; color: white; }
+  .btn-warn { background: #f59e0b; color: white; }
+  .btn-blue { background: #3b82f6; color: white; }
+  .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--muted); }
+  .severity-critical { background: rgba(239,68,68,0.15); border-color: rgba(239,68,68,0.3); }
+  .severity-high { background: rgba(249,115,22,0.15); border-color: rgba(249,115,22,0.3); }
+  .severity-medium { background: rgba(245,158,11,0.15); border-color: rgba(245,158,11,0.3); }
+  .severity-low { background: rgba(59,130,246,0.15); border-color: rgba(59,130,246,0.3); }
+  .status-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+  .tab { padding: 8px 16px; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; border: none; background: transparent; color: var(--muted); transition: all 0.2s; }
+  .tab.active { background: rgba(99,102,241,0.15); color: #818cf8; }
+  .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; z-index: 100; }
+  .modal { background: var(--card); border: 1px solid var(--border); border-radius: 16px; max-width: 600px; width: 90%; max-height: 85vh; overflow-y: auto; padding: 24px; }
+  input, textarea, select { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 8px 12px; color: var(--text); font-size: 13px; width: 100%; box-sizing: border-box; }
+  textarea { resize: none; }
+  .live-indicator { display: flex; align-items: center; gap: 6px; font-size: 10px; color: #10b981; font-weight: 700; }
+  .live-indicator::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: #10b981; animation: pulse 1.5s infinite; }
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+const API_BASE = 'https://security-suite-6.emergent.host';
+const API = API_BASE + '/api';
+const REFRESH_MS = 10000;
+
+const SEVERITY_BADGES = {
+  critical: { bg: '#dc2626', label: 'CRITICO' },
+  high: { bg: '#ea580c', label: 'ALTO' },
+  medium: { bg: '#d97706', label: 'MEDIO' },
+  low: { bg: '#2563eb', label: 'BAJO' },
+};
+const EVENT_LABELS = { intrusion: 'INTRUSION', panic: 'PANICO', sabotage: 'SABOTAJE', fire: 'INCENDIO', medical: 'MEDICO', test: 'TEST', arm_total: 'ARMADO', arm_partial: 'ARMADO PARCIAL', arm_disarmed: 'DESARMADO' };
+const STATUS_LABELS = { pending: 'Pendiente', in_progress: 'En curso', police_dispatched: 'Policia', acuda_dispatched: 'Acuda', resolved: 'Resuelto' };
+const STATUS_COLORS = { pending: '#ef4444', in_progress: '#f59e0b', police_dispatched: '#3b82f6', acuda_dispatched: '#6366f1', resolved: '#10b981' };
+
+let state = { tab: 'dashboard', stats: null, alarms: [], installations: [], protocols: [], selectedAlarm: null, selectedProtocol: null, lastUpdate: null };
+
+async function fetchJSON(url) { try { const r = await fetch(url); return await r.json(); } catch(e) { console.error(e); return null; } }
+async function postJSON(url, data) { try { const r = await fetch(url, { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(data) }); return await r.json(); } catch(e) { console.error(e); return null; } }
+async function patchJSON(url, data) { try { const r = await fetch(url, { method: 'PATCH', headers: {'Content-Type':'application/json'}, body: JSON.stringify(data) }); return await r.json(); } catch(e) { console.error(e); return null; } }
+
+async function refreshData() {
+  const [d, a, i, p] = await Promise.all([
+    fetchJSON(`${API}/cra/dashboard`),
+    fetchJSON(`${API}/cra/alarms?limit=50`),
+    fetchJSON(`${API}/cra/installations`),
+    fetchJSON(`${API}/cra/protocols`),
+  ]);
+  if(d) state.stats = d;
+  if(a) state.alarms = a.alarms || [];
+  if(i) state.installations = i.installations || [];
+  if(p) state.protocols = p.protocols || [];
+  state.lastUpdate = new Date().toLocaleTimeString('es-ES');
+  render();
+}
+
+async function assignAlarm(id) { await patchJSON(`${API}/cra/alarms/${id}/assign`, { operator_id: 'operador-desktop' }); refreshData(); }
+async function alarmAction(id, action, notes) { await postJSON(`${API}/cra/alarms/${id}/action`, { action, notes: notes || '' }); state.selectedAlarm = null; refreshData(); }
+
+function setTab(t) { state.tab = t; render(); }
+function selectAlarm(a) { state.selectedAlarm = a; render(); }
+function selectProtocol(p) { state.selectedProtocol = p; render(); }
+function closeModal() { state.selectedAlarm = null; state.selectedProtocol = null; render(); }
+
+function render() {
+  const s = state.stats;
+  const pending = state.alarms.filter(a => a.status === 'pending');
+  const active = state.alarms.filter(a => !['resolved','pending'].includes(a.status));
+
+  let html = `
+  <header style="background:#1e293b;border-bottom:1px solid #334155;padding:12px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;">
+    <div style="display:flex;align-items:center;gap:12px;">
+      <div style="width:36px;height:36px;background:#6366f1;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;">&#128737;</div>
+      <div><div style="color:white;font-weight:800;font-size:14px;">Central Receptora de Alarmas</div><div style="color:#64748b;font-size:10px;">ManoProtect CRA — Software de Escritorio</div></div>
+    </div>
+    <div style="display:flex;align-items:center;gap:16px;">
+      ${pending.length > 0 ? `<div class="pulse" style="background:rgba(239,68,68,0.15);border:1px solid rgba(239,68,68,0.3);border-radius:99px;padding:4px 12px;display:flex;align-items:center;gap:6px;"><span style="color:#ef4444;font-size:11px;font-weight:700;">${pending.length} ALARMA${pending.length>1?'S':''} PENDIENTE${pending.length>1?'S':''}</span></div>` : ''}
+      <div class="live-indicator">EN VIVO</div>
+      <span style="color:#64748b;font-size:10px;">${state.lastUpdate || '--'}</span>
+    </div>
+  </header>
+
+  <div style="display:flex;gap:8px;padding:12px 20px;border-bottom:1px solid #1e293b;">
+    ${['dashboard','alarms','installations','protocols'].map(t => `<button class="tab ${state.tab===t?'active':''}" onclick="setTab('${t}')">${{dashboard:'Dashboard',alarms:'Alarmas',installations:'Instalaciones',protocols:'Protocolos'}[t]}</button>`).join('')}
+  </div>
+
+  <main style="padding:20px;max-width:1200px;margin:0 auto;">`;
+
+  // DASHBOARD
+  if(state.tab === 'dashboard' && s) {
+    html += `
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:20px;">
+      ${[
+        {l:'Instalaciones',v:s.total_installations,c:'#10b981'},
+        {l:'Dispositivos',v:s.total_devices,c:'#3b82f6'},
+        {l:'Pendientes',v:s.pending_alarms,c:'#ef4444'},
+        {l:'En curso',v:s.in_progress,c:'#f59e0b'},
+        {l:'Eventos hoy',v:s.today_events,c:'#6366f1'},
+        {l:'Resueltos hoy',v:s.resolved_today,c:'#10b981'},
+      ].map(m => `<div class="card"><div style="color:${m.c};font-size:24px;font-weight:900;">${m.v}</div><div style="color:#64748b;font-size:10px;margin-top:4px;">${m.l}</div></div>`).join('')}
+    </div>
+    <h3 style="color:white;font-weight:700;font-size:14px;margin-bottom:12px;">Ultimas alarmas</h3>
+    <div style="display:flex;flex-direction:column;gap:8px;">
+      ${(s.recent_alarms||[]).map(a => renderAlarmRow(a)).join('') || '<div style="color:#64748b;text-align:center;padding:40px;">Sin alarmas recientes</div>'}
+    </div>`;
+  }
+
+  // ALARMS
+  if(state.tab === 'alarms') {
+    html += `<div style="display:flex;flex-direction:column;gap:8px;">
+      ${state.alarms.length === 0 ? '<div style="color:#64748b;text-align:center;padding:60px;font-size:14px;">&#9989; Sin alarmas activas — Sistema operativo</div>' :
+        state.alarms.map(a => renderAlarmRow(a)).join('')}
+    </div>`;
+  }
+
+  // INSTALLATIONS
+  if(state.tab === 'installations') {
+    html += `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px;">
+      ${state.installations.length === 0 ? '<div style="color:#64748b;text-align:center;padding:60px;grid-column:1/-1;">Sin instalaciones registradas</div>' :
+        state.installations.map(inst => `
+        <div class="card">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+            <span class="status-dot" style="background:${inst.armed_status==='disarmed'?'#64748b':inst.armed_status==='partial'?'#f59e0b':'#10b981'}"></span>
+            <strong style="color:white;font-size:13px;">${inst.client_name}</strong>
+          </div>
+          <div style="color:#94a3b8;font-size:11px;">&#128205; ${inst.address}${inst.city?', '+inst.city:''}</div>
+          <div style="color:#64748b;font-size:10px;margin-top:4px;">Plan: ${inst.plan_type} | Estado: ${inst.armed_status} | Tel: ${inst.client_phone||'-'}</div>
+        </div>`).join('')}
+    </div>`;
+  }
+
+  // PROTOCOLS
+  if(state.tab === 'protocols') {
+    html += `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;">
+      ${state.protocols.map(p => `
+      <div class="card" style="cursor:pointer;" onclick='selectProtocol(${JSON.stringify(p).replace(/'/g,"\\'")})'>
+        <div style="font-size:18px;margin-bottom:8px;">&#128196;</div>
+        <strong style="color:white;font-size:13px;">${p.name}</strong>
+        <div style="color:#64748b;font-size:11px;margin-top:4px;">${p.steps.length} pasos — Click para ver protocolo</div>
+      </div>`).join('')}
+    </div>`;
+  }
+
+  html += '</main>';
+
+  // ALARM DETAIL MODAL
+  if(state.selectedAlarm) {
+    const a = state.selectedAlarm;
+    const sev = SEVERITY_BADGES[a.severity] || SEVERITY_BADGES.medium;
+    const st = STATUS_LABELS[a.status] || a.status;
+    html += `
+    <div class="modal-overlay" onclick="closeModal()">
+      <div class="modal" onclick="event.stopPropagation()">
+        <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:16px;">
+          <div>
+            <h3 style="color:white;font-weight:800;font-size:16px;margin:0 0 4px;">${EVENT_LABELS[a.event_type]||a.event_type} — ${a.zone}</h3>
+            <div style="color:#94a3b8;font-size:12px;">${a.client_name||''} | ${a.address||''}</div>
+          </div>
+          <button onclick="closeModal()" style="background:none;border:none;color:#64748b;font-size:20px;cursor:pointer;">&#10005;</button>
+        </div>
+        <div style="display:flex;gap:6px;margin-bottom:12px;">
+          <span class="badge" style="background:${sev.bg};color:white;">${sev.label}</span>
+          <span class="badge" style="background:${STATUS_COLORS[a.status]||'#64748b'};color:white;">${st}</span>
+          <span style="color:#64748b;font-size:10px;margin-left:auto;">${new Date(a.created_at).toLocaleString('es-ES')}</span>
+        </div>
+        <div style="background:var(--bg);border-radius:10px;padding:12px;margin-bottom:16px;color:#cbd5e1;font-size:13px;">${a.description}</div>
+        ${(a.action_log||[]).length > 0 ? `
+          <div style="margin-bottom:16px;">
+            <div style="color:#64748b;font-size:10px;font-weight:700;margin-bottom:6px;">REGISTRO DE ACCIONES</div>
+            ${a.action_log.map(l => `<div style="display:flex;gap:8px;padding:6px 10px;background:rgba(30,41,59,0.5);border-radius:8px;margin-bottom:4px;">
+              <span style="color:#10b981;font-size:11px;">&#10003;</span>
+              <span style="color:#cbd5e1;font-size:11px;font-weight:600;">${l.action}</span>
+              ${l.notes ? `<span style="color:#64748b;font-size:11px;">— ${l.notes}</span>` : ''}
+              <span style="color:#475569;font-size:10px;margin-left:auto;">${new Date(l.timestamp).toLocaleTimeString('es-ES')}</span>
+            </div>`).join('')}
+          </div>` : ''}
+        ${a.status !== 'resolved' ? `
+          <textarea id="action-notes" placeholder="Notas del operador..." rows="2" style="margin-bottom:12px;"></textarea>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;">
+            <button class="btn btn-blue" onclick="alarmAction('${a.id}','verify_video',document.getElementById('action-notes').value)">&#128247; Video-verificar</button>
+            <button class="btn btn-warn" onclick="alarmAction('${a.id}','call_client',document.getElementById('action-notes').value)">&#128222; Llamar titular</button>
+            <button class="btn btn-danger" onclick="alarmAction('${a.id}','call_police',document.getElementById('action-notes').value)">&#128680; Avisar Policia</button>
+            <button class="btn btn-primary" onclick="alarmAction('${a.id}','dispatch_acuda',document.getElementById('action-notes').value)">&#128205; Despachar Acuda</button>
+            <button class="btn btn-outline" onclick="alarmAction('${a.id}','false_alarm',document.getElementById('action-notes').value)">&#10005; Falsa alarma</button>
+            <button class="btn btn-success" onclick="alarmAction('${a.id}','resolved',document.getElementById('action-notes').value)">&#10003; Resuelto</button>
+          </div>` : ''}
+      </div>
+    </div>`;
+  }
+
+  // PROTOCOL MODAL
+  if(state.selectedProtocol) {
+    const p = state.selectedProtocol;
+    html += `
+    <div class="modal-overlay" onclick="closeModal()">
+      <div class="modal" onclick="event.stopPropagation()">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+          <h3 style="color:white;font-weight:800;font-size:16px;margin:0;">${p.name}</h3>
+          <button onclick="closeModal()" style="background:none;border:none;color:#64748b;font-size:20px;cursor:pointer;">&#10005;</button>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          ${p.steps.map(s => `
+          <div style="display:flex;gap:12px;background:var(--bg);border-radius:10px;padding:12px;">
+            <div style="width:32px;height:32px;background:rgba(99,102,241,0.2);border-radius:8px;display:flex;align-items:center;justify-content:center;color:#818cf8;font-weight:800;font-size:13px;flex-shrink:0;">${s.num}</div>
+            <div><div style="color:white;font-weight:700;font-size:12px;">${s.action}</div><div style="color:#94a3b8;font-size:11px;margin-top:2px;">${s.desc}</div></div>
+          </div>`).join('')}
+        </div>
+      </div>
+    </div>`;
+  }
+
+  document.getElementById('app').innerHTML = html;
+}
+
+function renderAlarmRow(a) {
+  const sev = SEVERITY_BADGES[a.severity] || SEVERITY_BADGES.medium;
+  const st = STATUS_LABELS[a.status] || a.status;
+  return `
+  <div class="card severity-${a.severity}" style="cursor:pointer;display:flex;align-items:center;gap:12px;" onclick='selectAlarm(${JSON.stringify(a).replace(/'/g,"\\'")})'>
+    <div style="width:40px;height:40px;background:${sev.bg};border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+      <span style="color:white;font-size:16px;">${{intrusion:'&#9888;',panic:'&#128276;',sabotage:'&#128274;',fire:'&#128293;',medical:'&#9829;'}[a.event_type]||'&#9888;'}</span>
+    </div>
+    <div style="flex:1;min-width:0;">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:2px;">
+        <strong style="color:white;font-size:13px;">${EVENT_LABELS[a.event_type]||a.event_type}</strong>
+        <span class="badge" style="background:${STATUS_COLORS[a.status]||'#64748b'};color:white;">${st}</span>
+      </div>
+      <div style="color:#94a3b8;font-size:11px;">${a.client_name||'—'} — ${a.address||a.zone||''}</div>
+      <div style="color:#64748b;font-size:10px;">${a.description||''}</div>
+    </div>
+    <div style="text-align:right;flex-shrink:0;">
+      <div style="color:#64748b;font-size:10px;">${new Date(a.created_at).toLocaleTimeString('es-ES')}</div>
+      ${a.status==='pending' ? `<button class="btn btn-primary" style="margin-top:4px;padding:4px 10px;font-size:10px;" onclick="event.stopPropagation();assignAlarm('${a.id}')">Asignar</button>` : ''}
+    </div>
+  </div>`;
+}
+
+// BOOT
+refreshData();
+setInterval(refreshData, REFRESH_MS);
+</script>
+</body>
+</html>
