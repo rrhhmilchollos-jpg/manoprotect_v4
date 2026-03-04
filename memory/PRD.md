@@ -65,6 +65,10 @@ Frontend: React + TailwindCSS + Shadcn/UI + Leaflet | Backend: FastAPI + MongoDB
 - Interactive AI detection demo (6 estados: Normal → Vibracion → Intrusion → CRA → Policia → Resuelto)
 - Imagenes fabricante (PCB interna + mecanismo multipunto) + Video presentacion MP4
 - Sentinel Lock marcado como "bajo pedido" con pago anticipado obligatorio (249 EUR)
+- **CRA Operator Dashboard** (/cra-operador): Monitoreo alarmas en tiempo real, video-verificacion, protocolos actuacion, gestion dispositivos, asignacion operadores
+- **Client Security Dashboard** (/mi-seguridad): Armado/Desarmado, camaras, historial eventos, gestion usuarios/claves
+- **Integracion CRM → CRA → App**: Auto-provisioning al cerrar lead como "Cerrado"
+- Bug fix: Login/Registro desde Home (DOM error, side effects en render)
 
 ## Backlog
 - P1: SEO/SEM (requiere IDs Meta Pixel, Hotjar, Google Search Console)
@@ -75,6 +79,7 @@ Frontend: React + TailwindCSS + Shadcn/UI + Leaflet | Backend: FastAPI + MongoDB
 - P3: Migrar SHA256 a bcrypt
 
 ## Testing
+- iteration_83: 100% pass - 3 modulos operativos CRA + Client App + CRM integracion (16/16 backend, frontend 100%)
 - iteration_82: 100% pass - Imagenes fabricante + Video MP4 + Bajo pedido/pago anticipado
 - iteration_81: 100% pass - Imagenes producto Sentinel Lock + Demo interactiva IA
 - BUG FIX: Login/Registro desde Home - "removeChild" DOM error. Causa: side effects en render + conditional null returns durante route transitions. Fix: useEffect + CSS hiding.
