@@ -169,6 +169,7 @@ export default function EnterpriseCentralPage() {
   }, []);
 
   useEffect(() => { fetchAll(); }, [fetchAll]);
+  useEffect(() => { const handler = () => fetchAll(); window.addEventListener('manoprotect-refresh', handler); return () => window.removeEventListener('manoprotect-refresh', handler); }, [fetchAll]);
 
   const createLead = async (data) => { await fetch(`${API}/api/enterprise-central/leads`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) }); toast.success('Lead creado'); fetchAll(); };
   const updateLeadStatus = async (leadId, status) => { await fetch(`${API}/api/enterprise-central/leads/${leadId}`, { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ status }) }); toast.success(`Lead ${STAGE_LABELS[status] || status}`); fetchAll(); };

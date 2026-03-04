@@ -181,6 +181,7 @@ const CRAOperatorDashboard = () => {
   }, []);
 
   useEffect(() => { fetchData(); const iv = setInterval(fetchData, 15000); return () => clearInterval(iv); }, [fetchData]);
+  useEffect(() => { const handler = () => fetchData(); window.addEventListener('manoprotect-refresh', handler); return () => window.removeEventListener('manoprotect-refresh', handler); }, [fetchData]);
 
   const handleAlarmAction = async (alarmId, action, notes) => {
     try {

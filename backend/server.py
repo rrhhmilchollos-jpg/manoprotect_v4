@@ -2586,7 +2586,10 @@ async def download_package(package_name: str, key: str = ""):
         "mobile": "/app/downloads/MANO_Mobile_App.zip",
         "backend": "/app/downloads/MANO_Backend_Server.zip",
         "docs": "/app/downloads/MANO_Documentos_Inversores.zip",
-        "todo": "/app/downloads/MANO_Completo_Todo.zip"
+        "todo": "/app/downloads/MANO_Completo_Todo.zip",
+        "desktop-crm": "/app/backend/uploads/downloads/ManoProtect-CRM-Desktop.zip",
+        "desktop-cra": "/app/backend/uploads/downloads/ManoProtect-CRA-Desktop.zip",
+        "desktop-completo": "/app/backend/uploads/downloads/ManoProtect-Desktop-Apps-COMPLETO.zip"
     }
     
     if package_name not in packages:
@@ -2601,7 +2604,10 @@ async def download_package(package_name: str, key: str = ""):
         "mobile": "MANO_Mobile_App_PlayStore.zip",
         "backend": "MANO_Backend_Server.zip",
         "docs": "MANO_Documentos_Inversores.zip",
-        "todo": "MANO_Completo_Todo.zip"
+        "todo": "MANO_Completo_Todo.zip",
+        "desktop-crm": "ManoProtect-CRM-Desktop.zip",
+        "desktop-cra": "ManoProtect-CRA-Desktop.zip",
+        "desktop-completo": "ManoProtect-Desktop-Apps-COMPLETO.zip"
     }
     
     return FileResponse(
