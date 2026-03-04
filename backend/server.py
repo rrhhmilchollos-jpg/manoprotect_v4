@@ -3529,6 +3529,44 @@ async def initialize_superadmins():
         print(f"  ❌ Error initializing CEO: {e}")
     
     print("👔 Enterprise CEO initialization complete!")
+    
+    # Generate desktop app ZIP files for download
+    import zipfile
+    downloads_dir = "/app/backend/uploads/downloads"
+    desktop_dir = "/app/desktop-apps"
+    os.makedirs(downloads_dir, exist_ok=True)
+    
+    zip_configs = [
+        ("ManoProtect-CRM-Desktop.zip", ["crm-ventas", "README.md"]),
+        ("ManoProtect-CRA-Desktop.zip", ["cra-operador", "README.md"]),
+        ("ManoProtect-Desktop-Apps-COMPLETO.zip", ["crm-ventas", "cra-operador", "README.md"]),
+    ]
+    
+    for zip_name, folders in zip_configs:
+        zip_path = os.path.join(downloads_dir, zip_name)
+        if not os.path.exists(zip_path):
+            try:
+                with zipfile.ZipFile(zip_path, 'w', zipfile.ZIP_DEFLATED) as zf:
+                    for folder in folders:
+                        src = os.path.join(desktop_dir, folder)
+                        if os.path.isfile(src):
+                            zf.write(src, folder)
+                        elif os.path.isdir(src):
+                            for root, dirs, files in os.walk(src):
+                                dirs[:] = [d for d in dirs if d not in ('node_modules', 'dist', '.git')]
+                                for f in files:
+                                    if f == 'yarn.lock':
+                                        continue
+                                    fpath = os.path.join(root, f)
+                                    arcname = os.path.relpath(fpath, desktop_dir)
+                                    zf.write(fpath, arcname)
+                print(f"  ✅ Generated: {zip_name}")
+            except Exception as e:
+                print(f"  ❌ Error generating {zip_name}: {e}")
+        else:
+            print(f"  ✓ Already exists: {zip_name}")
+    
+    print("📦 Desktop app ZIPs ready!")
 
 
 @app.on_event("shutdown")
