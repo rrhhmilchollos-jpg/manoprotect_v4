@@ -3346,6 +3346,24 @@ try:
 except Exception as e:
     print(f"\u26a0\ufe0f CEO Dashboard routes not loaded: {e}")
 
+# ── CRA Operations Routes ──
+try:
+    from routes.cra_operations_routes import router as cra_ops_router, init_cra
+    init_cra(db)
+    api_router.include_router(cra_ops_router)
+    print("\u2705 CRA Operations routes loaded")
+except Exception as e:
+    print(f"\u26a0\ufe0f CRA Operations routes not loaded: {e}")
+
+# ── Client App Routes ──
+try:
+    from routes.client_app_routes import router as client_app_router, init_client_app
+    init_client_app(db)
+    api_router.include_router(client_app_router)
+    print("\u2705 Client App routes loaded")
+except Exception as e:
+    print(f"\u26a0\ufe0f Client App routes not loaded: {e}")
+
 app.include_router(api_router)
 app.include_router(public_router)
 

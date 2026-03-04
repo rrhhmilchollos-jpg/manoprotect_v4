@@ -169,6 +169,25 @@ async def update_lead(lead_id: str, data: SalesUpdate):
     if result.matched_count == 0:
         raise HTTPException(status_code=404, detail="Lead no encontrado")
 
+    # AUTO-PROVISION: When lead is closed, create CRA installation + client app access
+    if data.status == "closed":
+        lead = await _db.sales_leads.find_one({"lead_id": lead_id}, {"_id": 0})
+        if lead:
+            import httpx
+            try:
+                import os
+                api_base = os.environ.get("REACT_APP_BACKEND_URL", "http://localhost:8001")
+                async with httpx.AsyncClient() as client:
+                    await client.post(f"http://localhost:8001/api/cra/provision-from-crm", json={
+                        "client_name": lead.get("name", ""),
+                        "client_email": lead.get("email", ""),
+                        "client_phone": lead.get("phone", ""),
+                        "address": lead.get("neighborhood", ""),
+                        "plan_type": lead.get("interest", ""),
+                    }, timeout=10)
+            except Exception as e:
+                print(f"CRA auto-provision failed: {e}")
+
     return {"message": "Lead actualizado", "lead_id": lead_id}
 
 

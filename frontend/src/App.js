@@ -205,6 +205,12 @@ const PublicDashboardPage = lazy(() => import('@/pages/PublicDashboardPage'));
 // Enterprise Central - Company Management System
 const EnterpriseCentralPage = lazy(() => import('@/pages/EnterpriseCentralPage'));
 
+// CRA Operator Dashboard
+const CRAOperatorDashboard = lazy(() => import('@/pages/CRAOperatorDashboard'));
+
+// Client Security Dashboard (ManoProtect Connect functional)
+const ClientSecurityDashboard = lazy(() => import('@/pages/ClientSecurityDashboard'));
+
 // New Product Ecosystem
 const SentinelLockPage = lazy(() => import('@/pages/SentinelLockPage'));
 const CRAPlatformPage = lazy(() => import('@/pages/CRAPlatformPage'));
@@ -637,6 +643,14 @@ function AppRouter() {
           <Route path="/gestion-empresa" element={<EnterpriseCentralPage />} />
           <Route path="/enterprise-central" element={<EnterpriseCentralPage />} />
           
+          {/* CRA Operator Dashboard */}
+          <Route path="/cra-operador" element={<CRAOperatorDashboard />} />
+          <Route path="/cra-operator" element={<CRAOperatorDashboard />} />
+          
+          {/* Client Security Dashboard */}
+          <Route path="/mi-seguridad" element={<ClientSecurityDashboard />} />
+          <Route path="/my-security" element={<ClientSecurityDashboard />} />
+
           {/* New Product Ecosystem */}
           <Route path="/sentinel-lock" element={<SentinelLockPage />} />
           <Route path="/cerradura-inteligente" element={<SentinelLockPage />} />
