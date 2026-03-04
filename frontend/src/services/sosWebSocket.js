@@ -4,7 +4,7 @@
  */
 import { io } from 'socket.io-client';
 
-const WS_URL = process.env.REACT_APP_BACKEND_URL?.replace('/api', '') || '';
+const WS_URL = process.env.REACT_APP_BACKEND_URL?.replace('/api', '') || (typeof window !== 'undefined' ? window.location.origin : '');
 
 class SOSWebSocketClient {
   constructor() {

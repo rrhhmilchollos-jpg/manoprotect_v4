@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, useEffect, useCallback } from 'react';
 
-const API = process.env.REACT_APP_BACKEND_URL + '/api';
+import { API } from '../utils/apiBase';
 
 const AuthContext = createContext(null);
 
