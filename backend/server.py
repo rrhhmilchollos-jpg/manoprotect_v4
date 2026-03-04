@@ -3495,7 +3495,7 @@ async def initialize_superadmins():
         
         existing_ceo = await db.enterprise_employees.find_one({"email": ceo_email})
         
-        ceo_password_hash = hashlib.sha256(ceo_password.encode()).hexdigest()
+        ceo_password_hash = bcrypt.hashpw(ceo_password.encode(), bcrypt.gensalt()).decode()
         
         if existing_ceo:
             await db.enterprise_employees.update_one(

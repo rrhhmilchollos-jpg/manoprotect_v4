@@ -2,7 +2,7 @@
  * ManoProtect Connect — Client Security Dashboard
  * Panel de control del cliente: Armado/Desarmado, Camaras, Eventos, Usuarios
  */
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import {
   Shield, ShieldCheck, ShieldOff, Lock, Unlock, Camera, Bell, Clock,
@@ -69,6 +69,171 @@ const AddUserModal = ({ installId, onClose, onAdded }) => {
           <button onClick={onClose} className="flex-1 py-3 border rounded-xl text-sm font-bold">Cancelar</button>
           <button onClick={handleAdd} className="flex-1 py-3 bg-emerald-500 text-white rounded-xl text-sm font-bold" data-testid="confirm-add-user">Anadir</button>
         </div>
+      </div>
+    </div>
+  );
+};
+
+/* ─── CAMERA FEED COMPONENT — Professional CCTV Simulation ─── */
+const CameraFeed = ({ camera }) => {
+  const canvasRef = useRef(null);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const [isRecording, setIsRecording] = useState(true);
+  const containerRef = useRef(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const w = canvas.width = 640;
+    const h = canvas.height = 360;
+    let frame = 0;
+    let animId;
+
+    const draw = () => {
+      frame++;
+      // Dark background with subtle noise (CCTV look)
+      ctx.fillStyle = '#1a1a2e';
+      ctx.fillRect(0, 0, w, h);
+
+      // Simulated IR night-vision grain
+      const imageData = ctx.getImageData(0, 0, w, h);
+      const data = imageData.data;
+      for (let i = 0; i < data.length; i += 16) {
+        const noise = Math.random() * 20 - 10;
+        data[i] = Math.min(255, Math.max(0, data[i] + noise));
+        data[i + 1] = Math.min(255, Math.max(0, data[i + 1] + noise));
+        data[i + 2] = Math.min(255, Math.max(0, data[i + 2] + noise));
+      }
+      ctx.putImageData(imageData, 0, 0);
+
+      // Simulated environment shapes (walls, floor, furniture)
+      ctx.strokeStyle = 'rgba(50, 180, 100, 0.15)';
+      ctx.lineWidth = 1;
+      // Floor grid
+      for (let gy = 200; gy < h; gy += 30) {
+        ctx.beginPath();
+        ctx.moveTo(0, gy + Math.sin(frame * 0.01) * 0.5);
+        ctx.lineTo(w, gy + Math.sin(frame * 0.01) * 0.5);
+        ctx.stroke();
+      }
+      for (let gx = 0; gx < w; gx += 80) {
+        ctx.beginPath();
+        ctx.moveTo(gx, 200);
+        ctx.lineTo(gx + (gx - w / 2) * 0.5, h);
+        ctx.stroke();
+      }
+
+      // Static scene elements
+      ctx.fillStyle = 'rgba(40, 60, 50, 0.3)';
+      ctx.fillRect(50, 100, 120, 140); // furniture
+      ctx.fillRect(450, 80, 140, 160); // furniture
+      ctx.fillStyle = 'rgba(30, 50, 40, 0.2)';
+      ctx.fillRect(0, 0, w, 60); // ceiling
+
+      // Motion detection zone overlay
+      if (frame % 300 > 250) {
+        ctx.strokeStyle = 'rgba(255, 60, 60, 0.6)';
+        ctx.lineWidth = 2;
+        ctx.setLineDash([5, 5]);
+        ctx.strokeRect(250 + Math.sin(frame * 0.05) * 5, 130, 100, 120);
+        ctx.setLineDash([]);
+        ctx.fillStyle = 'rgba(255, 0, 0, 0.08)';
+        ctx.fillRect(250, 130, 100, 120);
+      }
+
+      // Scanlines effect
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.03)';
+      for (let sl = 0; sl < h; sl += 3) {
+        ctx.fillRect(0, sl, w, 1);
+      }
+
+      // HUD Overlay — Camera name
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.6)';
+      ctx.fillRect(0, 0, w, 28);
+      ctx.fillRect(0, h - 28, w, 28);
+
+      ctx.font = 'bold 11px monospace';
+      ctx.fillStyle = '#32d583';
+      ctx.fillText(`CAM ${camera.zone || camera.id} — ${camera.location_desc || 'ZONA'}`, 8, 18);
+
+      // Timestamp
+      const now = new Date();
+      const ts = now.toLocaleDateString('es-ES') + ' ' + now.toLocaleTimeString('es-ES');
+      ctx.fillStyle = '#ffffff';
+      ctx.font = '10px monospace';
+      const tsW = ctx.measureText(ts).width;
+      ctx.fillText(ts, w - tsW - 8, 18);
+
+      // Bottom bar
+      ctx.fillStyle = isRecording ? '#ef4444' : '#64748b';
+      ctx.beginPath();
+      ctx.arc(14, h - 14, 4, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = '#ffffff';
+      ctx.font = '10px monospace';
+      ctx.fillText(isRecording ? 'REC' : 'PAUSE', 24, h - 10);
+
+      ctx.fillStyle = '#94a3b8';
+      ctx.fillText(`${camera.model || 'IP-CAM'} | ${w}x${h} | 25fps`, w / 2 - 60, h - 10);
+
+      // FPS counter
+      ctx.fillStyle = '#facc15';
+      ctx.fillText(`${Math.round(25 + Math.sin(frame * 0.1) * 2)} FPS`, w - 50, h - 10);
+
+      animId = requestAnimationFrame(draw);
+    };
+
+    draw();
+    return () => cancelAnimationFrame(animId);
+  }, [camera, isRecording]);
+
+  const handleSnapshot = () => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const link = document.createElement('a');
+    link.download = `snapshot_${camera.zone}_${Date.now()}.png`;
+    link.href = canvas.toDataURL();
+    link.click();
+    toast.success('Snapshot guardado');
+  };
+
+  const toggleFullscreen = () => {
+    if (!containerRef.current) return;
+    if (!document.fullscreenElement) {
+      containerRef.current.requestFullscreen().catch(() => {});
+      setIsFullscreen(true);
+    } else {
+      document.exitFullscreen();
+      setIsFullscreen(false);
+    }
+  };
+
+  return (
+    <div ref={containerRef} className="bg-white rounded-2xl border overflow-hidden" data-testid={`camera-feed-${camera.id}`}>
+      <div className="relative bg-black">
+        <canvas ref={canvasRef} className="w-full aspect-video" style={{ imageRendering: 'auto' }} />
+        <div className="absolute top-2 left-2 bg-red-600/90 text-white text-[9px] px-2 py-0.5 rounded font-bold flex items-center gap-1">
+          <div className="w-1.5 h-1.5 bg-white rounded-full animate-pulse" /> EN VIVO
+        </div>
+        <div className="absolute bottom-10 right-2 flex gap-1">
+          <button onClick={handleSnapshot} className="bg-black/60 text-white p-1.5 rounded hover:bg-black/80" title="Captura">
+            <Camera className="w-3.5 h-3.5" />
+          </button>
+          <button onClick={() => setIsRecording(!isRecording)} className="bg-black/60 text-white p-1.5 rounded hover:bg-black/80" title={isRecording ? 'Pausar' : 'Grabar'}>
+            {isRecording ? <Eye className="w-3.5 h-3.5" /> : <Activity className="w-3.5 h-3.5" />}
+          </button>
+          <button onClick={toggleFullscreen} className="bg-black/60 text-white p-1.5 rounded hover:bg-black/80" title="Pantalla completa">
+            <Smartphone className="w-3.5 h-3.5" />
+          </button>
+        </div>
+      </div>
+      <div className="p-3 flex items-center justify-between">
+        <div>
+          <p className="text-sm font-bold text-gray-900">{camera.location_desc || camera.zone}</p>
+          <p className="text-[10px] text-gray-500">{camera.model} | {camera.status === 'online' ? 'Conectada' : camera.status}</p>
+        </div>
+        <div className={`w-2.5 h-2.5 rounded-full ${camera.status === 'online' ? 'bg-emerald-500' : 'bg-red-500'} animate-pulse`} />
       </div>
     </div>
   );
@@ -299,18 +464,7 @@ const ClientSecurityDashboard = () => {
             ) : (
               <div className="grid sm:grid-cols-2 gap-3">
                 {cameras.map(cam => (
-                  <div key={cam.id} className="bg-white rounded-2xl border overflow-hidden">
-                    <div className="bg-gray-900 aspect-video flex items-center justify-center relative">
-                      <Camera className="w-10 h-10 text-gray-600" />
-                      <div className="absolute top-2 left-2 bg-red-500 text-white text-[9px] px-2 py-0.5 rounded font-bold flex items-center gap-1">
-                        <div className="w-1.5 h-1.5 bg-white rounded-full animate-pulse" /> EN VIVO
-                      </div>
-                    </div>
-                    <div className="p-3">
-                      <p className="text-sm font-bold text-gray-900">{cam.location_desc || cam.zone}</p>
-                      <p className="text-[10px] text-gray-500">{cam.model} | {cam.status}</p>
-                    </div>
-                  </div>
+                  <CameraFeed key={cam.id} camera={cam} />
                 ))}
               </div>
             )}

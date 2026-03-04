@@ -10,7 +10,7 @@
         <!-- PRIMARY META TAGS - SEO OPTIMIZED -->
         <!-- ============================================ -->
         <title>ManoProtect - Localiza a tu familia en segundos en caso de emergencia</title>
-        <meta name="description" content="ManoProtect: localiza a tu hijo en segundos y recibe alertas SOS en caso de emergencia. GPS en segundo plano 24/7. Prueba GRATIS 7 d\u00edas. Protecci\u00f3n familiar desde 9,99\u20ac/mes." />
+        <meta name="description" content="ManoProtect: Tu seguridad, nuestra prioridad. Alarmas para hogar y negocio, Sentinel Lock, CRA profesional, app movil. Instalacion GRATIS, sin permanencia. Proteccion 24/7 desde 33,90 EUR/mes." />
         <meta name="keywords" content="digital security, fraud prevention, online payment protection, secure online payments, protección digital, seguridad online, antifraude, estafas digitales, phishing, protección familiar, monitorización amenazas, seguridad digital familiar, fraude online España, protección identidad digital" />
         
         <!-- ============================================ -->
@@ -35,8 +35,8 @@
         <!-- ============================================ -->
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://manoprotect.com/" />
-        <meta property="og:title" content="ManoProtect - Localiza a tu familia en segundos en caso de emergencia" />
-        <meta property="og:description" content="Localiza a tu hijo en segundos y recibe alertas SOS. GPS en segundo plano 24/7. Protecci\u00f3n familiar desde 9,99\u20ac/mes. Prueba GRATIS 7 d\u00edas." />
+        <meta property="og:title" content="ManoProtect - Seguridad Integral para Hogar y Negocio" />
+        <meta property="og:description" content="Alarmas profesionales, Sentinel Lock, Central CRA 24/7. Instalacion GRATIS, sin permanencia. Desde 33,90 EUR/mes." />
         <meta property="og:image" content="https://manoprotect.com/og-image.png" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
@@ -51,7 +51,7 @@
         <meta name="twitter:site" content="@manoprotect" />
         <meta name="twitter:creator" content="@manoprotect" />
         <meta name="twitter:title" content="ManoProtect - Localiza a tu familia en segundos" />
-        <meta name="twitter:description" content="Protecci\u00f3n familiar 24/7. GPS en segundo plano + Alertas SOS. Prueba GRATIS 7 d\u00edas." />
+        <meta name="twitter:description" content="Alarmas profesionales 24/7. Sentinel Lock, CRA, App movil. Instalacion GRATIS. Desde 33,90 EUR/mes." />
         <meta name="twitter:image" content="https://manoprotect.com/og-image.png" />
         <meta name="twitter:image:alt" content="ManoProtect Digital Security" />
         
@@ -85,7 +85,7 @@
         <!-- ============================================ -->
         <!-- GOOGLE SEARCH CONSOLE VERIFICATION -->
         <!-- ============================================ -->
-        <meta name="google-site-verification" content="YOUR_GOOGLE_VERIFICATION_CODE" />
+        <meta name="google-site-verification" content="%REACT_APP_GOOGLE_VERIFICATION%" />
         <meta name="msvalidate.01" content="YOUR_BING_VERIFICATION_CODE" />
         <meta name="yandex-verification" content="YOUR_YANDEX_VERIFICATION_CODE" />
         
@@ -1101,8 +1101,8 @@
         t.src=v;s=b.getElementsByTagName(e)[0];
         s.parentNode.insertBefore(t,s)}(window, document,'script',
         'https://connect.facebook.net/en_US/fbevents.js');
-        var _mpPixelId = 'META_PIXEL_ID';
-        if (_mpPixelId && _mpPixelId !== 'META_PIXEL_ID') {
+        var _mpPixelId = '%REACT_APP_META_PIXEL_ID%';
+        if (_mpPixelId && _mpPixelId !== '' && !_mpPixelId.includes('REACT_APP')) {
             fbq('init', _mpPixelId);
             fbq('track', 'PageView');
         }
@@ -1113,8 +1113,8 @@
         <!-- ============================================ -->
         <!-- Hotjar: Replace HOTJAR_SITE_ID with your actual Site ID from https://insights.hotjar.com -->
         <script>
-        var _hjSiteId = 'HOTJAR_SITE_ID';
-        if (_hjSiteId && _hjSiteId !== 'HOTJAR_SITE_ID') {
+        var _hjSiteId = '%REACT_APP_HOTJAR_ID%';
+        if (_hjSiteId && _hjSiteId !== '' && !_hjSiteId.includes('REACT_APP')) {
             (function(h,o,t,j,a,r){
                 h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
                 h._hjSettings={hjid:_hjSiteId,hjsv:6};
@@ -1123,6 +1123,70 @@
                 r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
                 a.appendChild(r);
             })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
+        }
+        </script>
+
+        <!-- GA4 Analytics -->
+        <script>
+        var _ga4Id = '%REACT_APP_GA4_ID%';
+        if (_ga4Id && _ga4Id !== '' && !_ga4Id.includes('REACT_APP')) {
+            var s = document.createElement('script');
+            s.async = true;
+            s.src = 'https://www.googletagmanager.com/gtag/js?id=' + _ga4Id;
+            document.head.appendChild(s);
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', _ga4Id);
+        }
+        </script>
+
+        <!-- Local Business Structured Data (JSON-LD) -->
+        <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "SecurityCompany",
+            "name": "ManoProtect",
+            "alternateName": "STARTBOOKING SL",
+            "url": "https://manoprotect.com",
+            "logo": "https://manoprotect.com/logo192.png",
+            "description": "Empresa de seguridad integral para hogar y negocio. Alarmas profesionales, Sentinel Lock, Central Receptora de Alarmas 24/7, app movil ManoProtect Connect.",
+            "address": {
+                "@type": "PostalAddress",
+                "addressCountry": "ES",
+                "addressLocality": "Valencia",
+                "addressRegion": "Comunidad Valenciana"
+            },
+            "contactPoint": {
+                "@type": "ContactPoint",
+                "telephone": "+34-900-000-000",
+                "contactType": "customer service",
+                "availableLanguage": ["Spanish"],
+                "areaServed": "ES"
+            },
+            "sameAs": [],
+            "priceRange": "33.90 EUR - 89.90 EUR/mes",
+            "openingHours": "Mo-Su 00:00-23:59",
+            "hasOfferCatalog": {
+                "@type": "OfferCatalog",
+                "name": "Planes de Seguridad ManoProtect",
+                "itemListElement": [
+                    {
+                        "@type": "Offer",
+                        "name": "Alarma Hogar Essential",
+                        "price": "33.90",
+                        "priceCurrency": "EUR",
+                        "description": "Alarma profesional para hogar con instalacion gratuita"
+                    },
+                    {
+                        "@type": "Offer",
+                        "name": "Sentinel Lock",
+                        "price": "249.00",
+                        "priceCurrency": "EUR",
+                        "description": "Cerradura inteligente con IA de deteccion de intrusion"
+                    }
+                ]
+            }
         }
         </script>
     </body>

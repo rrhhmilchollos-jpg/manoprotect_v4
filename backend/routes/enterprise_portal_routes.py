@@ -7,7 +7,7 @@ from pydantic import BaseModel, EmailStr, Field
 from typing import Optional, List, Dict, Any
 from datetime import datetime, timezone, timedelta
 import uuid
-import hashlib
+import bcrypt
 import json
 import os
 import stripe
@@ -43,7 +43,14 @@ def set_database(database):
 # ============================================
 
 def hash_password(password: str) -> str:
-    return hashlib.sha256(password.encode()).hexdigest()
+    return bcrypt.hashpw(password.encode(), bcrypt.gensalt()).decode()
+
+def verify_enterprise_password(password: str, hashed: str) -> bool:
+    """Verify password - supports both bcrypt and legacy sha256"""
+    import hashlib
+    if hashed.startswith('$2b$') or hashed.startswith('$2a$'):
+        return bcrypt.checkpw(password.encode(), hashed.encode())
+    return hashlib.sha256(password.encode()).hexdigest() == hashed
 
 def generate_id(prefix: str = "") -> str:
     return f"{prefix}{uuid.uuid4().hex[:12]}"
@@ -131,8 +138,16 @@ async def enterprise_login(data: LoginRequest, response: Response, request: Requ
     if employee.get("status") != "active":
         raise HTTPException(status_code=403, detail="Cuenta suspendida o inactiva")
     
-    if hash_password(data.password) != employee.get("password_hash"):
+    if not verify_enterprise_password(data.password, employee.get("password_hash", "")):
         raise HTTPException(status_code=401, detail="Credenciales incorrectas")
+    
+    # Auto-migrate sha256 to bcrypt on successful login
+    if not employee.get("password_hash", "").startswith('$2b$'):
+        new_hash = hash_password(data.password)
+        await db.enterprise_employees.update_one(
+            {"employee_id": employee["employee_id"]},
+            {"$set": {"password_hash": new_hash}}
+        )
     
     # Check if 2FA is enabled
     if employee.get("two_factor_enabled", False):
@@ -248,7 +263,7 @@ async def enterprise_login_with_2fa(data: Login2FARequest, response: Response, r
     if employee.get("status") != "active":
         raise HTTPException(status_code=403, detail="Cuenta suspendida o inactiva")
     
-    if hash_password(data.password) != employee.get("password_hash"):
+    if not verify_enterprise_password(data.password, employee.get("password_hash", "")):
         raise HTTPException(status_code=401, detail="Credenciales incorrectas")
     
     if not employee.get("two_factor_enabled"):
