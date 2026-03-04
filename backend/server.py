@@ -75,7 +75,7 @@ class SecurityHeadersMiddleware(BaseHTTPMiddleware):
             "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; "
             "font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; "
             "img-src 'self' data: https: blob:; "
-            "connect-src 'self' https://*.emergentagent.com https://*.manoprotect.com https://*.stripe.com https://api.stripe.com wss://*.emergentagent.com; "
+            "connect-src 'self' https://*.emergentagent.com https://*.emergent.host https://*.manoprotect.com https://*.stripe.com https://api.stripe.com wss://*.emergentagent.com wss://*.emergent.host; "
             "frame-src 'self' https://www.googletagmanager.com https://js.stripe.com https://widget.trustpilot.com; "
             "frame-ancestors 'none'; "
             "object-src 'none'; "
@@ -3370,58 +3370,16 @@ app.include_router(public_router)
 # Note: Socket.IO is mounted earlier in the file (after WebSocket manager init)
 
 # Configure CORS - read from environment for deployment flexibility
-cors_origins_env = os.environ.get('CORS_ORIGINS', '')
-app_url = os.environ.get('APP_URL', '')
-
-# Check if wildcard mode (no credentials support needed)
-use_wildcard_cors = cors_origins_env.strip() == '*'
-
-if use_wildcard_cors:
-    app.add_middleware(
-        CORSMiddleware,
-        allow_credentials=False,
-        allow_origins=["*"],
-        allow_methods=["*"],
-        allow_headers=["*"],
-        expose_headers=["*"],
-    )
-else:
-    # Define allowed origins explicitly (wildcard '*' not compatible with credentials)
-    allowed_origins = [
-        "http://localhost:3000",
-        "http://localhost:3001",
-        "http://localhost:8001",
-        "http://localhost:8002",
-        "https://manoprotect.com",
-        "https://www.manoprotect.com",
-        "https://admin.manoprotect.com",
-        "https://www.admin.manoprotect.com",
-        "https://api.manoprotect.com",
-        "https://manoprotect-desktop.preview.emergentagent.com",
-        "https://digital-guard-1.emergent.host",
-        "file://",
-        "null",
-    ]
-
-    # Add APP_URL from deployment environment
-    if app_url and app_url not in allowed_origins:
-        allowed_origins.append(app_url)
-
-    # Add any additional origins from environment
-    if cors_origins_env:
-        for origin in cors_origins_env.split(','):
-            origin = origin.strip()
-            if origin and origin != '*' and origin not in allowed_origins:
-                allowed_origins.append(origin)
-
-    app.add_middleware(
-        CORSMiddleware,
-        allow_credentials=True,
-        allow_origins=allowed_origins,
-        allow_methods=["*"],
-        allow_headers=["*"],
-        expose_headers=["*"],
-    )
+# Use allow_origin_regex to support credentials with any origin
+# This echoes back the specific Origin header (not wildcard *) which is CORS-compliant with credentials
+app.add_middleware(
+    CORSMiddleware,
+    allow_credentials=True,
+    allow_origin_regex=r".*",
+    allow_methods=["*"],
+    allow_headers=["*"],
+    expose_headers=["*"],
+)
 
 logging.basicConfig(
     level=logging.INFO,
