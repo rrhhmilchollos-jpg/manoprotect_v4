@@ -7,7 +7,8 @@ import { Link } from 'react-router-dom';
 import {
   Shield, Users, TrendingUp, BarChart3, Package, Calendar, ChevronRight, Plus,
   Search, Filter, Building2, Phone, Mail, MapPin, Clock, DollarSign, FileText,
-  X, Check, AlertCircle, Target, Award, Eye, Lock, ArrowRight, Trash2, Edit
+  X, Check, AlertCircle, Target, Award, Eye, Lock, ArrowRight, Trash2, Edit,
+  BookOpen, Newspaper, Download, Maximize2, ChevronDown, ChevronUp, Zap, Star
 } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -27,6 +28,66 @@ const STOCK_STATUS_COLORS = { available: 'bg-emerald-500', reserved: 'bg-amber-5
 
 const EVENT_TYPE_LABELS = { visit: 'Visita', security_study: 'Estudio Seguridad', proposal: 'Propuesta', installation: 'Instalacion', follow_up: 'Seguimiento' };
 const EVENT_TYPE_COLORS = { visit: 'bg-blue-500', security_study: 'bg-indigo-500', proposal: 'bg-purple-500', installation: 'bg-emerald-500', follow_up: 'bg-amber-500' };
+
+/* ─── PRODUCT CARD (Catalog) ─── */
+function ProductCard({ product }) {
+  const [expanded, setExpanded] = useState(false);
+  return (
+    <div className="bg-slate-800/60 border border-slate-700/50 rounded-xl overflow-hidden" data-testid={`product-${product.id}`}>
+      <button onClick={() => setExpanded(!expanded)} className="w-full flex items-center gap-4 p-4 text-left hover:bg-slate-800 transition">
+        <span className="text-3xl">{product.img}</span>
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2 mb-0.5">
+            <h3 className="text-white font-bold text-sm">{product.name}</h3>
+            <span className="text-indigo-400 text-[9px] bg-indigo-500/10 px-2 py-0.5 rounded-full border border-indigo-500/20">{product.category}</span>
+          </div>
+          <p className="text-slate-400 text-[11px] line-clamp-1">{product.desc}</p>
+        </div>
+        <div className="text-right flex-shrink-0">
+          <p className="text-white font-black text-lg">{product.price} EUR</p>
+          <p className="text-slate-500 text-[9px]">{product.priceType}</p>
+        </div>
+        {expanded ? <ChevronUp className="w-4 h-4 text-slate-500 flex-shrink-0" /> : <ChevronDown className="w-4 h-4 text-slate-500 flex-shrink-0" />}
+      </button>
+      {expanded && (
+        <div className="px-4 pb-4 border-t border-slate-700/50 pt-3">
+          <p className="text-slate-300 text-xs mb-3">{product.desc}</p>
+          <h4 className="text-indigo-400 text-[10px] font-bold mb-2 flex items-center gap-1"><Zap className="w-3 h-3" /> CARACTERISTICAS</h4>
+          <div className="grid grid-cols-2 gap-1.5">
+            {product.features.map((f, i) => (
+              <div key={i} className="flex items-start gap-1.5 text-[10px] text-slate-400">
+                <Check className="w-3 h-3 text-emerald-400 flex-shrink-0 mt-0.5" /> {f}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ─── MAGAZINE SECTION ─── */
+function MagazineSection({ title, subtitle, color, items }) {
+  const colors = { indigo: 'border-indigo-500/30 bg-indigo-500/5', emerald: 'border-emerald-500/30 bg-emerald-500/5', amber: 'border-amber-500/30 bg-amber-500/5', purple: 'border-purple-500/30 bg-purple-500/5' };
+  const titleColors = { indigo: 'text-indigo-400', emerald: 'text-emerald-400', amber: 'text-amber-400', purple: 'text-purple-400' };
+  return (
+    <div className={`border rounded-xl p-4 ${colors[color]}`}>
+      <h3 className={`font-bold text-sm ${titleColors[color]} mb-0.5`}>{title}</h3>
+      <p className="text-slate-500 text-[10px] mb-3">{subtitle}</p>
+      <div className="space-y-3">
+        {items.map((item, i) => (
+          <div key={i} className="flex items-start gap-2">
+            <Star className={`w-3.5 h-3.5 ${titleColors[color]} flex-shrink-0 mt-0.5`} />
+            <div>
+              <p className="text-white text-xs font-bold">{item.title}</p>
+              <p className="text-slate-400 text-[11px] mt-0.5 leading-relaxed">{item.desc}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
 
 /* ─── METRIC CARD ─── */
 function MetricCard({ icon: Icon, label, value, sub, color = 'text-white' }) {
@@ -186,6 +247,8 @@ export default function EnterpriseCentralPage() {
     { id: 'commercials', label: 'Comerciales', icon: Award },
     { id: 'stock', label: 'Stock', icon: Package },
     { id: 'installations', label: 'Instalaciones', icon: Building2 },
+    { id: 'catalog', label: 'Catalogo Productos', icon: BookOpen },
+    { id: 'magazine', label: 'Manoprotect Vision', icon: Newspaper },
   ];
 
   const filteredLeads = statusFilter ? leads.filter(l => l.status === statusFilter) : leads;
@@ -494,6 +557,63 @@ export default function EnterpriseCentralPage() {
               </div>
             </div>
           )}
+
+          {/* ════ CATALOGO TECNICO ════ */}
+          {activeTab === 'catalog' && (
+            <div className="space-y-4" data-testid="tab-catalog">
+              <div className="flex items-center justify-between">
+                <h2 className="text-white font-bold text-lg flex items-center gap-2"><BookOpen className="w-5 h-5 text-indigo-400" /> Catalogo de Productos</h2>
+                <span className="text-slate-500 text-xs">Fichas tecnicas para comerciales</span>
+              </div>
+              {[
+                { id: 'alarm_home', name: 'Kit Alarma Hogar', category: 'Alarmas', price: '33.90', priceType: '/mes', img: '🏠', desc: 'Kit completo de alarma para hogar con panel central, 2 sensores PIR, 2 contactos magneticos, 1 sirena interior. Conexion 4G + WiFi.', features: ['Panel Sentinel X con pantalla tactil', 'Sensor PIR anti-mascotas (hasta 25kg)', 'Contacto magnetico puertas/ventanas', 'Sirena interior 110dB', 'Bateria backup 48h', 'Videovigilancia opcional'] },
+                { id: 'alarm_biz', name: 'Kit Alarma Negocio', category: 'Alarmas', price: '54.90', priceType: '/mes', img: '🏢', desc: 'Solucion profesional para comercios y empresas. Incluye panel avanzado, sensores PIR de cortina, detectores de vibration, y modulo anti-inhibicion.', features: ['Panel Sentinel X Pro dual SIM', 'Sensor PIR cortina comercial', 'Detector vibracion anti-butrón', 'Modulo anti-inhibicion GSM/WiFi', 'Nebulizador de seguridad (opcional)', 'Boton de panico silencioso'] },
+                { id: 'sentinel_lock', name: 'Sentinel Lock', category: 'Cerraduras', price: '249.00', priceType: ' (dispositivo)', img: '🔐', desc: 'Cerradura inteligente con IA de deteccion de intrusos. Apertura via app, huella, tarjeta NFC, o codigo PIN. Motor ultra-silencioso.', features: ['IA deteccion de intentos de intrusion', 'Apertura via App, Huella, NFC, PIN', 'Motor ultra-silencioso patentado', 'Bateria recargable 6 meses', 'Registro digital de accesos', 'Compatible con ManoConnect'] },
+                { id: 'cam_4k', name: 'Camara MPC-4K Pro', category: 'Videovigilancia', price: '199.00', priceType: '', img: '📹', desc: 'Camara de videovigilancia 4K con vision nocturna a color, deteccion de personas IA, audio bidireccional y almacenamiento cloud.', features: ['Resolucion 4K Ultra HD', 'Vision nocturna a color 30m', 'Deteccion de personas con IA', 'Audio bidireccional', 'IP67 resistente exterior', 'Cloud storage incluido'] },
+                { id: 'sentinel_sos', name: 'Sentinel SOS', category: 'SOS Personal', price: '9.99', priceType: '/mes', img: '🆘', desc: 'Dispositivo SOS personal con GPS, boton de panico, y comunicacion directa con la CRA. Ideal para personas mayores y profesionales.', features: ['Boton SOS con GPS integrado', 'Comunicacion directa con CRA 24/7', 'Deteccion de caidas automatica', 'Geolocalizacion en tiempo real', 'Autonomia 7 dias', 'Resistente al agua IP65'] },
+                { id: 'sensor_pir', name: 'Sensor PIR-360', category: 'Sensores', price: '79.00', priceType: '', img: '📡', desc: 'Sensor de movimiento infrarrojo de 360 grados, anti-mascotas, con doble tecnologia PIR+Microondas para minimos falsos positivos.', features: ['Deteccion 360 grados', 'Anti-mascotas hasta 25kg', 'Doble tecnologia PIR + Microondas', 'Alcance 12 metros', 'Montaje techo/pared', 'Bateria 3 anos'] },
+              ].map(product => (
+                <ProductCard key={product.id} product={product} />
+              ))}
+            </div>
+          )}
+
+          {/* ════ REVISTA MANOPROTECT VISION ════ */}
+          {activeTab === 'magazine' && (
+            <div className="space-y-4" data-testid="tab-magazine">
+              <div className="flex items-center justify-between">
+                <h2 className="text-white font-bold text-lg flex items-center gap-2"><Newspaper className="w-5 h-5 text-amber-400" /> ManoProtect Vision</h2>
+                <span className="bg-amber-500/10 text-amber-400 px-3 py-1 rounded-full text-[10px] font-bold border border-amber-500/20">Revista Digital Premium</span>
+              </div>
+              <p className="text-slate-400 text-xs">Herramienta comercial exclusiva para presentaciones en tablet con clientes potenciales.</p>
+
+              <MagazineSection title="Por que ManoProtect" subtitle="Nuestra ventaja competitiva" color="indigo" items={[
+                { title: 'Instalacion GRATIS', desc: 'A diferencia de Securitas Direct, no cobramos instalacion. El equipo se incluye sin coste adicional.' },
+                { title: 'SIN Permanencia', desc: 'Contrato mensual sin penalizaciones. El cliente puede cancelar cuando quiera.' },
+                { title: 'Precio Imbatible', desc: 'Desde 33,90 EUR/mes con tecnologia de ultima generacion. Mejor relacion calidad-precio del mercado.' },
+                { title: 'CRA Propia 24/7', desc: 'Central Receptora de Alarmas propia en Valencia. Tiempo de respuesta medio: 15 segundos.' },
+              ]} />
+
+              <MagazineSection title="Comparativa vs Competencia" subtitle="Datos reales del mercado" color="emerald" items={[
+                { title: 'vs Securitas Direct', desc: 'Securitas cobra 49,90 EUR/mes + 99 EUR instalacion + permanencia 36 meses. ManoProtect: desde 33,90 EUR/mes, instalacion GRATIS, sin permanencia.' },
+                { title: 'vs ADT/Tyco', desc: 'ADT cobra 39,90 EUR/mes + 149 EUR instalacion. No incluye camaras. ManoProtect incluye videovigilancia HD desde el plan Essential.' },
+                { title: 'vs Prosegur', desc: 'Prosegur desde 44,90 EUR/mes con permanencia 24 meses y equipo no incluido. ManoProtect: todo incluido sin sorpresas.' },
+              ]} />
+
+              <MagazineSection title="Casos de Exito" subtitle="Testimonios reales" color="amber" items={[
+                { title: 'Restaurante El Faro — Valencia', desc: '"Desde que contratamos ManoProtect, tenemos vigilancia 24/7 con camaras HD. La nebulizadora nos salvo de un robo nocturno." — Antonio M., Propietario' },
+                { title: 'Comunidad Villa Esmeralda — Paterna', desc: '"El Escudo Vecinal ha reducido los incidentes en un 78%. Los vecinos se sienten mucho mas seguros." — Junta de Propietarios' },
+                { title: 'Clinica Dental Smile — Alicante', desc: '"La atencion del equipo tecnico es excepcional. Instalacion rapida y profesional. Lo recomiendo." — Dra. Martinez' },
+              ]} />
+
+              <MagazineSection title="Argumentario Comercial" subtitle="Claves para cerrar la venta" color="purple" items={[
+                { title: 'Objecion: Es muy caro', desc: 'Respuesta: "Somos un 30% mas baratos que Securitas Direct y no hay permanencia. Si no le convence, puede cancelar manana sin coste."' },
+                { title: 'Objecion: Ya tengo alarma', desc: 'Respuesta: "Que cuota paga actualmente? Con ManoProtect puede ahorrar hasta 200 EUR al ano con mejor tecnologia y sin permanencia."' },
+                { title: 'Objecion: No me fio de marcas nuevas', desc: 'Respuesta: "Somos empresa espanola registrada con CRA propia homologada. Nuestros operadores estan en Valencia, no en un call center externo."' },
+              ]} />
+            </div>
+          )}
+
         </main>
       </div>
 
