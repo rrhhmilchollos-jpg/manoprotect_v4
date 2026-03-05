@@ -3370,6 +3370,15 @@ try:
 except Exception as e:
     print(f"\u26a0\ufe0f Client App routes not loaded: {e}")
 
+# Sistema de Gestión CRA (Comerciales, Instaladores, Admin)
+try:
+    from routes.gestion_routes import router as gestion_router, init_gestion
+    init_gestion(db)
+    api_router.include_router(gestion_router)
+    print("\u2705 Gestion CRA routes loaded")
+except Exception as e:
+    print(f"\u26a0\ufe0f Gestion CRA routes not loaded: {e}")
+
 app.include_router(api_router)
 app.include_router(public_router)
 

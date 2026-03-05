@@ -212,6 +212,12 @@ const CRAOperatorDashboard = lazy(() => import('@/pages/CRAOperatorDashboard'));
 const ManoConnectApp = lazy(() => import('@/pages/ManoConnectApp'));
 const ClientSecurityDashboard = lazy(() => import('@/pages/ClientSecurityDashboard'));
 
+// Sistema de Gestión CRA (Comerciales, Instaladores, Admin)
+const GestionLogin = lazy(() => import('@/pages/GestionLogin'));
+const GestionComerciales = lazy(() => import('@/pages/GestionComerciales'));
+const GestionInstaladores = lazy(() => import('@/pages/GestionInstaladores'));
+const GestionAdmin = lazy(() => import('@/pages/GestionAdmin'));
+
 // New Product Ecosystem
 const SentinelLockPage = lazy(() => import('@/pages/SentinelLockPage'));
 const CRAPlatformPage = lazy(() => import('@/pages/CRAPlatformPage'));
@@ -643,6 +649,12 @@ function AppRouter() {
           {/* Enterprise Central - Company management system */}
           <Route path="/gestion-empresa" element={<EnterpriseCentralPage />} />
           <Route path="/enterprise-central" element={<EnterpriseCentralPage />} />
+          
+          {/* Sistema de Gestión CRA - Comerciales, Instaladores, Admin */}
+          <Route path="/gestion/login" element={<GestionLogin />} />
+          <Route path="/gestion/comerciales" element={<GestionComerciales />} />
+          <Route path="/gestion/instaladores" element={<GestionInstaladores />} />
+          <Route path="/gestion/admin" element={<GestionAdmin />} />
           
           {/* CRA Operator Dashboard */}
           <Route path="/cra-operador" element={<CRAOperatorDashboard />} />

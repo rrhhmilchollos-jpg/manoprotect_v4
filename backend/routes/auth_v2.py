@@ -1,14 +1,17 @@
 """
 MANO - Authentication Routes (Modular Version)
-Handles user registration, login, logout, and session management
+Handles user registration, login, logout, session management, 
+password recovery, and familia_id grouping
 """
 from fastapi import APIRouter, HTTPException, Request, Response, Cookie
 from pydantic import BaseModel, EmailStr, field_validator
 from typing import Optional
 from datetime import datetime, timezone, timedelta
 import httpx
-import hashlib
+import bcrypt
 import uuid
+import random
+import string
 
 # Create router
 router = APIRouter(tags=["Authentication"])
@@ -22,18 +25,37 @@ class UserRegister(BaseModel):
     email: EmailStr
     name: str
     password: str
+    phone: Optional[str] = None
+    familia_id: Optional[str] = None  # Join existing family
     
     @field_validator('password')
     @classmethod
     def validate_password(cls, v):
         if len(v) < 8:
-            raise ValueError('La contraseña debe tener al menos 8 caracteres')
+            raise ValueError('La contrasena debe tener al menos 8 caracteres')
         return v
 
 
 class UserLogin(BaseModel):
     email: EmailStr
     password: str
+
+
+class PasswordRecoveryRequest(BaseModel):
+    email: EmailStr
+
+
+class PasswordReset(BaseModel):
+    email: EmailStr
+    code: str
+    new_password: str
+    
+    @field_validator('new_password')
+    @classmethod
+    def validate_password(cls, v):
+        if len(v) < 8:
+            raise ValueError('La contrasena debe tener al menos 8 caracteres')
+        return v
 
 
 class GoogleSessionRequest(BaseModel):
@@ -45,18 +67,26 @@ class GoogleSessionRequest(BaseModel):
 # ============================================
 
 def hash_password(password: str) -> str:
-    """Hash password using SHA-256"""
-    return hashlib.sha256(password.encode()).hexdigest()
+    """Hash password using bcrypt"""
+    return bcrypt.hashpw(password.encode(), bcrypt.gensalt()).decode()
 
 
 def verify_password(password: str, hashed: str) -> bool:
-    """Verify password against hash"""
-    return hash_password(password) == hashed
+    """Verify password - supports bcrypt and legacy sha256"""
+    import hashlib
+    if hashed.startswith('$2b$') or hashed.startswith('$2a$'):
+        return bcrypt.checkpw(password.encode(), hashed.encode())
+    return hashlib.sha256(password.encode()).hexdigest() == hashed
 
 
 def generate_session_token() -> str:
     """Generate a secure session token"""
     return f"session_{uuid.uuid4().hex}"
+
+
+def generate_recovery_code() -> str:
+    """Generate a 6-digit recovery code"""
+    return ''.join(random.choices(string.digits, k=6))
 
 
 # ============================================
@@ -68,10 +98,31 @@ def create_auth_routes(db, User, SessionData):
     
     @router.post("/auth/register")
     async def register_user(data: UserRegister, response: Response):
-        """Register new user with email/password"""
+        """Register new user with email/password + familia_id"""
         existing = await db.users.find_one({"email": data.email}, {"_id": 0})
         if existing:
-            raise HTTPException(status_code=400, detail="El email ya está registrado")
+            raise HTTPException(status_code=400, detail="El email ya esta registrado")
+        
+        # Create or join familia
+        familia_id = data.familia_id
+        familia_role = "member"
+        
+        if familia_id:
+            # Joining existing family
+            familia = await db.families.find_one({"familia_id": familia_id}, {"_id": 0})
+            if not familia:
+                raise HTTPException(status_code=404, detail="Familia no encontrada")
+        else:
+            # Create new family - registrant is titular
+            familia_id = f"fam_{uuid.uuid4().hex[:10]}"
+            familia_role = "titular"
+            await db.families.insert_one({
+                "familia_id": familia_id,
+                "titular_email": data.email,
+                "titular_name": data.name,
+                "members": [],
+                "created_at": datetime.now(timezone.utc).isoformat(),
+            })
         
         user = User(
             email=data.email,
@@ -82,7 +133,17 @@ def create_auth_routes(db, User, SessionData):
         
         user_doc = user.model_dump()
         user_doc['created_at'] = user_doc['created_at'].isoformat()
+        user_doc['familia_id'] = familia_id
+        user_doc['familia_role'] = familia_role
+        user_doc['phone'] = data.phone or ""
         await db.users.insert_one(user_doc)
+        
+        # Add to family members list if joining
+        if familia_role == "member":
+            await db.families.update_one(
+                {"familia_id": familia_id},
+                {"$push": {"members": {"email": data.email, "name": data.name, "role": "member", "added_at": datetime.now(timezone.utc).isoformat()}}}
+            )
         
         # Create session
         session_token = generate_session_token()
@@ -112,7 +173,9 @@ def create_auth_routes(db, User, SessionData):
             "email": user.email,
             "name": user.name,
             "role": user.role,
-            "plan": user.plan
+            "plan": user.plan,
+            "familia_id": familia_id,
+            "familia_role": familia_role,
         }
 
     @router.post("/auth/login")
@@ -121,10 +184,15 @@ def create_auth_routes(db, User, SessionData):
         user = await db.users.find_one({"email": data.email}, {"_id": 0})
         
         if not user or not user.get("password_hash"):
-            raise HTTPException(status_code=401, detail="Credenciales inválidas")
+            raise HTTPException(status_code=401, detail="Credenciales invalidas")
         
         if not verify_password(data.password, user["password_hash"]):
-            raise HTTPException(status_code=401, detail="Credenciales inválidas")
+            raise HTTPException(status_code=401, detail="Credenciales invalidas")
+        
+        # Auto-migrate sha256 to bcrypt on successful login
+        if not user["password_hash"].startswith('$2b$'):
+            new_hash = hash_password(data.password)
+            await db.users.update_one({"user_id": user["user_id"]}, {"$set": {"password_hash": new_hash}})
         
         # Check if user is active
         if user.get("is_active") == False:
