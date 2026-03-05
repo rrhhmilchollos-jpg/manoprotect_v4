@@ -1,39 +1,38 @@
 {
-  "appId": "com.manoprotect.app",
-  "appName": "ManoProtect",
+  "appId": "com.manoprotect.connect",
+  "appName": "ManoConnect",
   "webDir": "build",
+  "bundledWebRuntime": false,
   "server": {
-    "androidScheme": "https",
-    "hostname": "manoprotect.com"
+    "hostname": "manoprotect.com",
+    "androidScheme": "https"
   },
   "plugins": {
     "SplashScreen": {
       "launchShowDuration": 2000,
       "launchAutoHide": true,
-      "backgroundColor": "#10b981",
-      "androidSplashResourceName": "splash",
-      "androidScaleType": "CENTER_CROP",
-      "showSpinner": false,
-      "splashFullScreen": true,
-      "splashImmersive": true
+      "backgroundColor": "#020617",
+      "showSpinner": false
     },
     "StatusBar": {
-      "style": "LIGHT",
-      "backgroundColor": "#10b981"
+      "style": "DARK",
+      "backgroundColor": "#0f172a"
     },
-    "BackgroundGeolocation": {
-      "distanceFilter": 10
+    "PushNotifications": {
+      "presentationOptions": ["badge", "sound", "alert"]
+    },
+    "LocalNotifications": {
+      "smallIcon": "ic_stat_shield",
+      "iconColor": "#10b981"
     }
   },
   "android": {
     "allowMixedContent": false,
-    "captureInput": true,
-    "webContentsDebuggingEnabled": false
+    "backgroundColor": "#020617"
   },
   "ios": {
     "contentInset": "automatic",
     "allowsLinkPreview": true,
-    "scrollEnabled": true,
-    "backgroundColor": "#ffffff"
+    "backgroundColor": "#020617"
   }
 }

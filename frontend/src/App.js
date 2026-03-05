@@ -209,6 +209,7 @@ const EnterpriseCentralPage = lazy(() => import('@/pages/EnterpriseCentralPage')
 const CRAOperatorDashboard = lazy(() => import('@/pages/CRAOperatorDashboard'));
 
 // Client Security Dashboard (ManoProtect Connect functional)
+const ManoConnectApp = lazy(() => import('@/pages/ManoConnectApp'));
 const ClientSecurityDashboard = lazy(() => import('@/pages/ClientSecurityDashboard'));
 
 // New Product Ecosystem
@@ -648,8 +649,9 @@ function AppRouter() {
           <Route path="/cra-operator" element={<CRAOperatorDashboard />} />
           
           {/* Client Security Dashboard */}
-          <Route path="/mi-seguridad" element={<ClientSecurityDashboard />} />
-          <Route path="/my-security" element={<ClientSecurityDashboard />} />
+          <Route path="/mi-seguridad" element={<ManoConnectApp />} />
+          <Route path="/manoconnect" element={<ManoConnectApp />} />
+          <Route path="/my-security" element={<ManoConnectApp />} />
 
           {/* New Product Ecosystem */}
           <Route path="/sentinel-lock" element={<SentinelLockPage />} />

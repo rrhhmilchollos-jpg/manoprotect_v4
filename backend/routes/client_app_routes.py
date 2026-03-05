@@ -16,6 +16,25 @@ def init_client_app(db):
     global _db
     _db = db
 
+async def get_client_email(request: Request) -> str:
+    """Extract user email from x-user-email header or session cookie"""
+    email = request.headers.get("x-user-email", "")
+    if email:
+        return email
+    # Fallback: try session cookie
+    session_token = request.cookies.get("session_token")
+    if session_token and _db is not None:
+        session = await _db.user_sessions.find_one(
+            {"session_token": session_token, "is_active": True}, {"_id": 0, "user_id": 1}
+        )
+        if session:
+            user = await _db.users.find_one(
+                {"user_id": session["user_id"]}, {"_id": 0, "email": 1}
+            )
+            if user:
+                return user.get("email", "")
+    return ""
+
 
 # ============================================
 # MODELS
@@ -43,7 +62,7 @@ class CameraRequest(BaseModel):
 @router.get("/my-installations")
 async def my_installations(request: Request):
     """Get all installations for the authenticated user"""
-    email = request.headers.get("x-user-email", "")
+    email = await get_client_email(request)
     if not email:
         raise HTTPException(401, "No autenticado")
 
@@ -65,7 +84,7 @@ async def my_installations(request: Request):
 
 @router.get("/installation/{install_id}")
 async def get_my_installation(install_id: str, request: Request):
-    email = request.headers.get("x-user-email", "")
+    email = await get_client_email(request)
     if not email:
         raise HTTPException(401, "No autenticado")
 
@@ -97,7 +116,7 @@ async def get_my_installation(install_id: str, request: Request):
 
 @router.post("/installation/{install_id}/arm")
 async def client_arm(install_id: str, request: Request):
-    email = request.headers.get("x-user-email", "")
+    email = await get_client_email(request)
     body = await request.json()
     mode = body.get("mode", "total")
     code = body.get("code", "")
@@ -146,7 +165,7 @@ async def client_arm(install_id: str, request: Request):
 
 @router.get("/installation/{install_id}/events")
 async def get_events(install_id: str, request: Request, limit: int = 50):
-    email = request.headers.get("x-user-email", "")
+    email = await get_client_email(request)
     access = await _db.client_app_access.find_one(
         {"user_email": email, "installation_id": install_id}, {"_id": 0}
     )
@@ -167,7 +186,7 @@ async def get_events(install_id: str, request: Request, limit: int = 50):
 
 @router.get("/installation/{install_id}/cameras")
 async def get_cameras(install_id: str, request: Request):
-    email = request.headers.get("x-user-email", "")
+    email = await get_client_email(request)
     access = await _db.client_app_access.find_one(
         {"user_email": email, "installation_id": install_id}, {"_id": 0}
     )
@@ -188,12 +207,47 @@ async def get_cameras(install_id: str, request: Request):
 
 
 # ============================================
+# SOS PANIC BUTTON
+# ============================================
+
+@router.post("/installation/{install_id}/sos")
+async def client_sos(install_id: str, request: Request):
+    email = await get_client_email(request)
+    body = await request.json()
+    sos_type = body.get("type", "panic")
+
+    access = await _db.client_app_access.find_one(
+        {"user_email": email, "installation_id": install_id}, {"_id": 0}
+    )
+    if not access:
+        raise HTTPException(403, "Sin acceso")
+
+    # Create high-priority alarm event
+    event_id = str(uuid.uuid4())
+    await _db.cra_alarm_events.insert_one({
+        "id": event_id,
+        "installation_id": install_id,
+        "event_type": "panic",
+        "zone": "SOS",
+        "severity": "critical",
+        "description": f"ALERTA SOS activada por {email} — Tipo: {sos_type}",
+        "status": "pending",
+        "operator_id": None,
+        "action_log": [],
+        "created_at": datetime.now(timezone.utc).isoformat(),
+    })
+
+    return {"status": "ok", "event_id": event_id, "message": "Alerta SOS enviada a la CRA"}
+
+
+
+# ============================================
 # ACCESS CODES & USERS MANAGEMENT
 # ============================================
 
 @router.post("/installation/{install_id}/change-code")
 async def change_access_code(install_id: str, data: AccessCodeUpdate, request: Request):
-    email = request.headers.get("x-user-email", "")
+    email = await get_client_email(request)
     access = await _db.client_app_access.find_one(
         {"user_email": email, "installation_id": install_id, "role": {"$in": ["owner", "admin"]}},
         {"_id": 0}
@@ -213,7 +267,7 @@ async def change_access_code(install_id: str, data: AccessCodeUpdate, request: R
 
 @router.get("/installation/{install_id}/users")
 async def list_users(install_id: str, request: Request):
-    email = request.headers.get("x-user-email", "")
+    email = await get_client_email(request)
     access = await _db.client_app_access.find_one(
         {"user_email": email, "installation_id": install_id, "role": {"$in": ["owner", "admin"]}},
         {"_id": 0}
@@ -229,7 +283,7 @@ async def list_users(install_id: str, request: Request):
 
 @router.post("/installation/{install_id}/users")
 async def add_user(install_id: str, data: UserAccessCreate, request: Request):
-    email = request.headers.get("x-user-email", "")
+    email = await get_client_email(request)
     access = await _db.client_app_access.find_one(
         {"user_email": email, "installation_id": install_id, "role": {"$in": ["owner", "admin"]}},
         {"_id": 0}
@@ -251,7 +305,7 @@ async def add_user(install_id: str, data: UserAccessCreate, request: Request):
 
 @router.delete("/installation/{install_id}/users/{user_id}")
 async def remove_user(install_id: str, user_id: str, request: Request):
-    email = request.headers.get("x-user-email", "")
+    email = await get_client_email(request)
     access = await _db.client_app_access.find_one(
         {"user_email": email, "installation_id": install_id, "role": "owner"},
         {"_id": 0}
