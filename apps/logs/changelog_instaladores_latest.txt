@@ -1,0 +1,12 @@
+# Changelog - ManoProtect Instaladores v2.1.0 (Build 4)
+Fecha: 06/03/2026
+
+## Novedades en esta versión
+- Notificaciones push de nuevas instalaciones asignadas
+- Actualización de estado en tiempo real
+- Acceso a manuales de instalación completos
+- Campana de notificaciones con alertas automáticas
+- Flujo mejorado: asignado -> en_progreso -> completado
+- Detección automática de actualizaciones
+- Interfaz optimizada para móviles y tablets
+- Correcciones de seguridad y rendimiento

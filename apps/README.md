@@ -1,105 +1,100 @@
-# ManoProtect - Sistema de Apps Android para Google Play Store
+# ManoProtect - Apps Android para Google Play Store v2.1.0
 
-## Arquitectura
+## Apps disponibles
+
+| App | Package ID | Versión | Descripción |
+|-----|-----------|---------|-------------|
+| **Comerciales** | com.manoprotect.comerciales | 2.1.0 (Build 4) | Para el equipo comercial: stock, pedidos, clientes |
+| **Instaladores** | com.manoprotect.instaladores | 2.1.0 (Build 4) | Para instaladores: órdenes, confirmación, manuales |
+| **Clientes** | com.manoprotect.clientes | 2.1.0 (Build 4) | Para usuarios/familias: alarma, cámaras, SOS |
+
+## Estructura
 
 ```
 /apps
-├── comerciales/           # App Comerciales (Android)
-│   ├── build.gradle       # Configuración de build
-│   ├── version.properties # Control de versión automático
-│   ├── google-services.json
-│   ├── src/               # Código fuente
-│   └── README.md
-├── instaladores/          # App Instaladores (Android)
+├── comerciales/           → App Comerciales
 │   ├── build.gradle
-│   ├── version.properties
+│   ├── version.properties (2.1.0, build 4)
 │   ├── google-services.json
-│   ├── src/
-│   └── README.md
-├── admin/                 # App Administración (Android)
+│   ├── release.keystore
+│   └── src/main/java/.../MainActivity.java
+├── instaladores/          → App Instaladores
 │   ├── build.gradle
-│   ├── version.properties
+│   ├── version.properties (2.1.0, build 4)
 │   ├── google-services.json
-│   ├── src/
-│   └── README.md
-├── scripts/               # Scripts de automatización
-│   ├── build.sh           # Build automático APK/AAB
-│   ├── deploy_playstore.sh # Deploy a Play Store
-│   ├── rollback.sh        # Rollback a versión anterior
-│   └── changelog_generator.sh # Genera changelog automático
-├── ci/                    # CI/CD
-│   └── main.yml           # GitHub Actions pipeline
-├── logs/                  # Logs de builds, deploys, rollbacks
-└── README.md              # Este archivo
+│   ├── release.keystore
+│   └── src/main/java/.../MainActivity.java
+├── clientes/              → App Clientes (Familias)
+│   ├── build.gradle
+│   ├── version.properties (2.1.0, build 4)
+│   ├── google-services.json
+│   ├── release.keystore
+│   └── src/main/java/.../MainActivity.java
+├── admin/                 → App Administración
+├── scripts/               → Scripts de automatización
+│   ├── build.sh
+│   ├── deploy_playstore.sh
+│   ├── rollback.sh
+│   └── changelog_generator.sh
+├── ci/main.yml            → GitHub Actions CI/CD
+└── logs/                  → Changelogs y logs de builds
 ```
 
-## Credenciales por Rol
+## Novedades v2.1.0
 
-| Rol | Email | Password | App |
-|-----|-------|----------|-----|
-| Admin | admin@manoprotect.com | ManoAdmin2025! | /gestion/admin |
-| Comercial | comercial@manoprotect.com | Comercial2025! | /gestion/comerciales |
-| Instalador | instalador@manoprotect.com | Instalador2025! | /gestion/instaladores |
+### Comerciales
+- Notificaciones en tiempo real (stock bajo, pedidos urgentes)
+- Consulta de stock con alertas visuales
+- Creación de presupuestos mejorada
 
-## Flujo Completo
+### Instaladores
+- Notificaciones push de nuevas asignaciones
+- Actualización de estado en tiempo real
+- Manuales de instalación integrados
 
-### 1. Registro de nuevo empleado (Admin)
+### Clientes
+- Nuevo sistema de login con ID de Familia
+- Recuperación de contraseña por email real (Brevo)
+- Panel de seguridad ManoConnect
+- Botón SOS de emergencia
+
+## Credenciales
+
+| Rol | Email | Contraseña |
+|-----|-------|------------|
+| Admin | admin@manoprotect.com | ManoAdmin2025! |
+| Comercial | comercial@manoprotect.com | Comercial2025! |
+| Instalador | instalador@manoprotect.com | Instalador2025! |
+| Clientes | Registro en /familia | ID Familia + email |
+
+## Compilar APKs
+
+### Requisitos
+- Android Studio o Gradle CLI
+- JDK 17+
+- Android SDK 34
+
+### Pasos
 ```bash
-# Login como admin
-curl -X POST https://manoprotect.com/api/gestion/auth/login \
-  -H "Content-Type: application/json" \
-  -d '{"email":"admin@manoprotect.com","password":"ManoAdmin2025!"}'
+# Compilar una app específica
+cd apps/comerciales
+gradle assembleRelease
 
-# Crear nuevo comercial
-curl -X POST https://manoprotect.com/api/gestion/usuarios \
-  -H "Authorization: Bearer <TOKEN>" \
-  -H "Content-Type: application/json" \
-  -d '{"nombre":"Juan Pérez","email":"juan@manoprotect.com","password":"JuanPass2025!","rol":"comercial"}'
-```
-
-### 2. Login del comercial
-```bash
-curl -X POST https://manoprotect.com/api/gestion/auth/login \
-  -H "Content-Type: application/json" \
-  -d '{"email":"juan@manoprotect.com","password":"JuanPass2025!"}'
-```
-
-### 3. Crear pedido
-```bash
-curl -X POST https://manoprotect.com/api/gestion/pedidos \
-  -H "Authorization: Bearer <TOKEN>" \
-  -H "Content-Type: application/json" \
-  -d '{"cliente_nombre":"María García","cliente_telefono":"+34612345678","productos":[{"producto_id":"xxx","cantidad":2}]}'
-```
-
-### 4. Actualizar stock (Admin)
-```bash
-curl -X PUT https://manoprotect.com/api/gestion/stock/<PRODUCTO_ID> \
-  -H "Authorization: Bearer <TOKEN>" \
-  -H "Content-Type: application/json" \
-  -d '{"cantidad_disponible":50}'
-```
-
-### 5. Completar instalación (Instalador)
-```bash
-curl -X PUT https://manoprotect.com/api/gestion/instalaciones/<ID> \
-  -H "Authorization: Bearer <TOKEN>" \
-  -H "Content-Type: application/json" \
-  -d '{"estado":"completado"}'
-```
-
-## Scripts
-
-### Build
-```bash
-# Build una app
+# O usar el script
 ./scripts/build.sh comerciales release
-
-# Build todas las apps
-./scripts/build.sh all
+./scripts/build.sh instaladores release
+./scripts/build.sh clientes release
 ```
 
-### Deploy a Play Store
+### Ubicación de APKs generados
+```
+apps/comerciales/build/outputs/apk/release/app-release.apk
+apps/instaladores/build/outputs/apk/release/app-release.apk
+apps/clientes/build/outputs/apk/release/app-release.apk
+```
+
+## Subir a Play Store
+
 ```bash
 # Deploy a internal testing
 ./scripts/deploy_playstore.sh comerciales internal
@@ -108,64 +103,32 @@ curl -X PUT https://manoprotect.com/api/gestion/instalaciones/<ID> \
 ./scripts/deploy_playstore.sh all production
 ```
 
-### Rollback
-```bash
-# Rollback a versión anterior
-./scripts/rollback.sh comerciales
-```
-
-### Changelog
-```bash
-# Generar changelog
-./scripts/changelog_generator.sh all
-```
-
-## CI/CD (GitHub Actions)
-
-El pipeline se activa automáticamente al:
-- Push a `main` o `develop` con cambios en `/apps`
-- Crear un tag `v*`
-- Ejecución manual desde GitHub
-
-### Configurar Secrets en GitHub:
-1. `KEYSTORE_BASE64`: Keystore codificado en base64
-2. `KEYSTORE_PASSWORD`: Contraseña del keystore
-3. `KEY_PASSWORD`: Contraseña de la clave
-4. `GOOGLE_PLAY_SERVICE_ACCOUNT_JSON`: JSON de cuenta de servicio
-5. `MANOPROTECT_ADMIN_TOKEN`: Token JWT de admin para notificar backend
-
-### Pipeline:
-1. **Validate**: Verifica archivos y dependencias
-2. **Build**: Compila AAB para cada app
-3. **Deploy**: Sube a Play Store (solo en main/tags)
-4. **Rollback**: Se ejecuta automáticamente si deploy falla
-5. **Report**: Genera reporte de estado
+## Keystore
+- Archivo: `release.keystore` (manoprotect-2025.keystore)
+- Alias: `manoprotect`
+- Incluido en cada carpeta de app
 
 ## API Endpoints
 
-| Método | Endpoint | Descripción | Rol |
-|--------|----------|-------------|-----|
-| POST | /api/gestion/auth/login | Login | Todos |
-| GET | /api/gestion/auth/me | Usuario actual | Todos |
-| GET | /api/gestion/dashboard/stats | Estadísticas | Todos |
-| GET | /api/gestion/stock | Listar stock | Todos |
-| POST | /api/gestion/stock | Crear producto | Admin |
-| PUT | /api/gestion/stock/:id | Actualizar stock | Admin |
-| DELETE | /api/gestion/stock/:id | Eliminar producto | Admin |
-| GET | /api/gestion/pedidos | Listar pedidos | Filtrado |
-| POST | /api/gestion/pedidos | Crear pedido | Comercial/Admin |
-| PUT | /api/gestion/pedidos/:id | Actualizar pedido | Todos |
-| GET | /api/gestion/instalaciones | Listar instalaciones | Filtrado |
-| POST | /api/gestion/instalaciones | Crear instalación | Comercial/Admin |
-| PUT | /api/gestion/instalaciones/:id | Actualizar estado | Todos |
-| PUT | /api/gestion/instalaciones/:id/asignar | Asignar instalador | Admin |
-| GET | /api/gestion/usuarios | Listar usuarios | Admin |
-| POST | /api/gestion/usuarios | Crear usuario | Admin |
-| PUT | /api/gestion/usuarios/:id | Actualizar usuario | Admin |
-| DELETE | /api/gestion/usuarios/:id | Desactivar usuario | Admin |
-| GET | /api/gestion/logs | Logs de auditoría | Admin |
-| GET | /api/gestion/notificaciones | Notificaciones | Todos |
-| PUT | /api/gestion/notificaciones/leer | Marcar leídas | Todos |
-| GET | /api/gestion/app-versions | Versiones apps | Todos |
-| POST | /api/gestion/app-versions/check | Check actualización | Público |
-| PUT | /api/gestion/app-versions/:app | Actualizar versión | Admin |
+Base URL: `https://www.manoprotect.com/api`
+
+### Autenticación Gestión
+- POST `/gestion/auth/login` → Login JWT
+- GET `/gestion/auth/me` → Usuario actual
+- POST `/gestion/auth/refresh` → Renovar token
+
+### Autenticación Familias (Clientes)
+- POST `/auth/familia/register` → Registro familiar
+- POST `/auth/familia/login` → Login con familia_id
+- POST `/auth/familia/request-password-reset` → Solicitar reset (envía email real)
+- POST `/auth/familia/reset-password` → Cambiar contraseña
+
+### Gestión
+- GET/POST/PUT/DELETE `/gestion/stock` → Inventario
+- GET/POST/PUT `/gestion/pedidos` → Pedidos
+- GET/POST/PUT `/gestion/instalaciones` → Instalaciones
+- GET/POST/PUT/DELETE `/gestion/usuarios` → Usuarios (admin)
+- GET `/gestion/logs` → Auditoría (admin)
+- GET `/gestion/notificaciones` → Notificaciones
+- GET/PUT `/gestion/app-versions` → Versiones de apps
+- POST `/gestion/app-versions/check` → Check actualización (público)

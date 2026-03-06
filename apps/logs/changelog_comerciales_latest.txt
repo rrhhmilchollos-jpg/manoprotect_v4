@@ -1,0 +1,12 @@
+# Changelog - ManoProtect Comerciales v2.1.0 (Build 4)
+Fecha: 06/03/2026
+
+## Novedades en esta versión
+- Sistema de notificaciones en tiempo real (stock bajo, pedidos urgentes)
+- Consulta de stock actualizado con alertas visuales
+- Creación de presupuestos y pedidos mejorada
+- Campana de notificaciones con contador de no leídas
+- Historial de clientes y pedidos actualizado
+- Detección automática de actualizaciones disponibles
+- Interfaz profesional optimizada para móviles
+- Correcciones de seguridad y rendimiento

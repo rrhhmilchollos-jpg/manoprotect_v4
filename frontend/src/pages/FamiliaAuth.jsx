@@ -71,8 +71,7 @@ export default function FamiliaAuth() {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.detail || 'Error');
-      toast.success('Instrucciones enviadas');
-      if (data.debug_token) setResetToken(data.debug_token);
+      toast.success('Instrucciones enviadas a tu email');
       setResetMode(true);
     } catch (err) {
       toast.error(err.message);

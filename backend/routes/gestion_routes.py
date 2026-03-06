@@ -691,9 +691,10 @@ async def get_app_versions(request: Request):
     versions = await _db.gestion_app_versions.find({}, {"_id": 0}).to_list(10)
     if not versions:
         defaults = [
-            {"app_name": "comerciales", "version_name": "1.0.0", "version_code": 1, "release_notes": "Lanzamiento inicial", "min_version": "1.0.0", "force_update": False, "download_url": "", "updated_at": datetime.now(timezone.utc).isoformat()},
-            {"app_name": "instaladores", "version_name": "1.0.0", "version_code": 1, "release_notes": "Lanzamiento inicial", "min_version": "1.0.0", "force_update": False, "download_url": "", "updated_at": datetime.now(timezone.utc).isoformat()},
-            {"app_name": "admin", "version_name": "1.0.0", "version_code": 1, "release_notes": "Lanzamiento inicial", "min_version": "1.0.0", "force_update": False, "download_url": "", "updated_at": datetime.now(timezone.utc).isoformat()},
+            {"app_name": "comerciales", "version_name": "2.1.0", "version_code": 4, "release_notes": "Notificaciones en tiempo real, consulta de stock mejorada", "min_version": "2.0.0", "force_update": False, "download_url": "", "updated_at": datetime.now(timezone.utc).isoformat()},
+            {"app_name": "instaladores", "version_name": "2.1.0", "version_code": 4, "release_notes": "Notificaciones de asignaciones, manuales actualizados", "min_version": "2.0.0", "force_update": False, "download_url": "", "updated_at": datetime.now(timezone.utc).isoformat()},
+            {"app_name": "clientes", "version_name": "2.1.0", "version_code": 4, "release_notes": "Nuevo sistema de login familiar, panel de seguridad mejorado", "min_version": "2.0.0", "force_update": False, "download_url": "", "updated_at": datetime.now(timezone.utc).isoformat()},
+            {"app_name": "admin", "version_name": "2.1.0", "version_code": 4, "release_notes": "Dashboard completo, gestión de usuarios y stock", "min_version": "2.0.0", "force_update": False, "download_url": "", "updated_at": datetime.now(timezone.utc).isoformat()},
         ]
         for d in defaults:
             await _db.gestion_app_versions.insert_one(d)

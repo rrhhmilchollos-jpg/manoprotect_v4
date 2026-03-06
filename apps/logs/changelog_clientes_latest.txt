@@ -1,0 +1,13 @@
+# Changelog - ManoProtect Clientes v2.1.0 (Build 4)
+Fecha: 06/03/2026
+
+## Novedades en esta versión
+- Nuevo sistema de login con ID de Familia
+- Registro de cuenta familiar completo
+- Recuperación de contraseña por email real (Brevo)
+- Panel de seguridad ManoConnect mejorado
+- Visualización de cámaras CCTV
+- Botón SOS de emergencia (mantener 3 segundos)
+- Historial de eventos y alertas
+- Detección automática de actualizaciones
+- Correcciones de seguridad y rendimiento

@@ -8,7 +8,7 @@ def getVersionCode = { ->
         props.load(new FileInputStream(versionFile))
         return props['VERSION_CODE'].toInteger()
     }
-    return 1
+    return 4
 }
 
 def getVersionName = { ->
@@ -18,15 +18,15 @@ def getVersionName = { ->
         props.load(new FileInputStream(versionFile))
         return props['VERSION_NAME']
     }
-    return "1.0.0"
+    return "2.1.0"
 }
 
 android {
-    namespace 'com.manoprotect.admin'
+    namespace 'com.manoprotect.clientes'
     compileSdk 34
 
     defaultConfig {
-        applicationId "com.manoprotect.admin"
+        applicationId "com.manoprotect.clientes"
         minSdk 24
         targetSdk 34
         versionCode getVersionCode()
@@ -34,7 +34,7 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         buildConfigField "String", "API_BASE_URL", "\"https://www.manoprotect.com/api\""
-        buildConfigField "String", "APP_ROLE", "\"admin\""
+        buildConfigField "String", "APP_ROLE", "\"cliente\""
     }
 
     signingConfigs {
@@ -51,10 +51,6 @@ android {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
-        }
-        debug {
-            applicationIdSuffix ".debug"
-            debuggable true
         }
     }
 
@@ -73,5 +69,4 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics:22.0.0'
     implementation 'com.squareup.okhttp3:okhttp:4.12.0'
     implementation 'com.google.code.gson:gson:2.10.1'
-    testImplementation 'junit:junit:4.13.2'
 }

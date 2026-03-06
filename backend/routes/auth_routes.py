@@ -401,11 +401,9 @@ async def send_2fa_code(request: Request):
     )
     
     return {
-        "message": "C\u00f3digo enviado" + (" por email" if email_sent and not sms_sent else ""),
+        "message": "Código enviado" + (" por email" if email_sent and not sms_sent else ""),
         "expires_in_minutes": otp_data["expires_in_minutes"],
-        "method": "sms" if sms_sent else ("email" if email_sent else "debug"),
-        # Only for testing - remove in production
-        "debug_code": otp_data["otp_code"] if not sms_sent and not email_sent else None
+        "method": "sms" if sms_sent else ("email" if email_sent else "backup")
     }
 
 
@@ -649,14 +647,19 @@ async def request_account_deletion(data: DeleteAccountRequest, request: Request)
         user_agent
     )
     
-    # TODO: Send email with recovery link
-    # For now, return the token for testing
-    recovery_link = f"https://manoprotect.es/recuperar-password?token={recovery_token}"
+    # Enviar email real de recuperación vía Brevo
+    try:
+        from services.brevo_email import send_password_reset_email
+        send_password_reset_email(
+            to_email=email,
+            to_name=user.get("name", email),
+            reset_token=recovery_token
+        )
+    except Exception as e:
+        print(f"[BREVO ERROR] No se pudo enviar email a {email}: {e}")
     
     return {
-        "message": "Si el email existe, recibirás instrucciones para recuperar tu contraseña",
-        "debug_link": recovery_link,  # Remove in production
-        "debug_token": recovery_token  # Remove in production
+        "message": "Si el email existe, recibirás instrucciones para recuperar tu contraseña"
     }
 
 
@@ -954,6 +957,13 @@ async def familia_register(data: FamiliaRegister, request: Request, response: Re
 
     await _db.users.insert_one(user_doc)
 
+    # Enviar email de bienvenida real vía Brevo
+    try:
+        from services.brevo_email import send_welcome_email
+        send_welcome_email(to_email=email, to_name=data.nombre, familia_id=familia_id)
+    except Exception as e:
+        print(f"[BREVO ERROR] No se pudo enviar email de bienvenida a {email}: {e}")
+
     session = await create_secure_session(user.user_id, ip_address, user_agent)
 
     is_production = "manoprotect.com" in str(request.base_url) if hasattr(request, 'base_url') else False
@@ -1030,13 +1040,12 @@ async def familia_login(data: FamiliaLogin, request: Request, response: Response
 
 @router.post("/auth/familia/request-password-reset")
 async def familia_request_reset(data: FamiliaPasswordResetRequest):
-    """Request password reset for familia account"""
+    """Request password reset for familia account - envía email real vía Brevo"""
     import secrets
     familia_id = data.familia_id.strip().upper()
     email = data.email.lower().strip()
 
     user = await _db.users.find_one({"email": email, "familia_id": familia_id}, {"_id": 0})
-    # Always return success to prevent email enumeration
     if not user:
         return {"message": "Si la cuenta existe, recibirás instrucciones por email."}
 
@@ -1051,11 +1060,19 @@ async def familia_request_reset(data: FamiliaPasswordResetRequest):
         }}
     )
 
-    # TODO: Send email with reset link when SendGrid is configured
-    # For now, log the token for testing
-    print(f"[RESET TOKEN] User: {email}, Token: {reset_token}")
+    # Enviar email real vía Brevo
+    try:
+        from services.brevo_email import send_password_reset_email
+        send_password_reset_email(
+            to_email=email,
+            to_name=user.get("name", email),
+            reset_token=reset_token,
+            familia_id=familia_id
+        )
+    except Exception as e:
+        print(f"[BREVO ERROR] No se pudo enviar email a {email}: {e}")
 
-    return {"message": "Si la cuenta existe, recibirás instrucciones por email.", "debug_token": reset_token}
+    return {"message": "Si la cuenta existe, recibirás instrucciones por email."}
 
 
 @router.post("/auth/familia/reset-password")
