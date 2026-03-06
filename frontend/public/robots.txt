@@ -11,6 +11,7 @@ Allow: /sentinel-x
 Allow: /sentinel-j
 Allow: /sentinel-s
 Allow: /sobre-nosotros
+Allow: /opiniones-clientes
 Allow: /reloj-sos-ancianos
 Allow: /reloj-gps-mayores
 Allow: /boton-sos-senior
@@ -19,6 +20,14 @@ Allow: /proteccion-fraude-online
 Allow: /seguridad-digital-familiar
 Allow: /seguridad-mayores
 Allow: /familia
+Allow: /proteccion-familiar
+Allow: /alerta-sos-familiar
+Allow: /proteccion-estafas-online
+Allow: /seguridad-digital-familias
+Allow: /me-han-hackeado-la-cuenta
+Allow: /me-han-estafado-online
+Allow: /que-hacer-si-recibes-phishing
+Allow: /como-recuperar-cuenta-robada
 
 Disallow: /api/
 Disallow: /ceo

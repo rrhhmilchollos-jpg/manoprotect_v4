@@ -224,6 +224,9 @@ const LandingFooter = () => {
                   <li><Link to="/proteccion-fraude-online" className="text-slate-400 hover:text-emerald-400 transition-colors text-sm">Fraud Prevention</Link></li>
                   <li><Link to="/estafas-bancarias" className="text-slate-400 hover:text-emerald-400 transition-colors text-sm">Estafas Bancarias</Link></li>
                   <li><Link to="/proteccion-identidad-digital" className="text-slate-400 hover:text-emerald-400 transition-colors text-sm">Identidad Digital</Link></li>
+                  <li><Link to="/proteccion-estafas-online" className="text-slate-400 hover:text-emerald-400 transition-colors text-sm">Protección Estafas Online</Link></li>
+                  <li><Link to="/me-han-hackeado-la-cuenta" className="text-slate-400 hover:text-emerald-400 transition-colors text-sm">Me han hackeado</Link></li>
+                  <li><Link to="/me-han-estafado-online" className="text-slate-400 hover:text-emerald-400 transition-colors text-sm">Me han estafado</Link></li>
                 </ul>
               </div>
 
@@ -249,9 +252,11 @@ const LandingFooter = () => {
                 <ul className="space-y-3">
                   <li><Link to="/faq" className="text-slate-400 hover:text-emerald-400 transition-colors text-sm">FAQ</Link></li>
                   <li><Link to="/contacto" className="text-slate-400 hover:text-emerald-400 transition-colors text-sm">Contacto</Link></li>
-                  <li><Link to="/testimonios" className="text-slate-400 hover:text-emerald-400 transition-colors text-sm">Testimonios</Link></li>
+                  <li><Link to="/opiniones-clientes" className="text-slate-400 hover:text-emerald-400 transition-colors text-sm">Opiniones Clientes</Link></li>
                   <li><Link to="/blog" className="text-slate-400 hover:text-emerald-400 transition-colors text-sm">Blog</Link></li>
-                  <li><Link to="/about-us" className="text-slate-400 hover:text-emerald-400 transition-colors text-sm">Quiénes Somos</Link></li>
+                  <li><Link to="/sobre-nosotros" className="text-slate-400 hover:text-emerald-400 transition-colors text-sm">Sobre nosotros</Link></li>
+                  <li><Link to="/proteccion-familiar" className="text-slate-400 hover:text-emerald-400 transition-colors text-sm">Protección Familiar</Link></li>
+                  <li><Link to="/alerta-sos-familiar" className="text-slate-400 hover:text-emerald-400 transition-colors text-sm">Alerta SOS Familiar</Link></li>
                 </ul>
               </div>
             </div>

@@ -109,9 +109,31 @@ const HighConversionLanding = () => {
   return (
     <div className="min-h-screen bg-white" data-testid="high-conversion-landing">
       <Helmet>
-        <title>ManoProtect – Protege a tu familia donde quiera que estén | Sentinel X, J y S</title>
-        <meta name="description" content="Localización en tiempo real y alertas SOS con Sentinel X, J y S. Protege a niños, adolescentes y mayores. Prueba 7 días gratis sin compromiso." />
+        <title>Protección digital y alerta SOS familiar | ManoProtect</title>
+        <meta name="description" content="ManoProtect protege a tu familia frente a emergencias y fraudes digitales. Activa alertas SOS, monitoreo GPS y asistencia inmediata. Prueba 7 días gratis." />
         <link rel="canonical" href="https://manoprotect.com/" />
+        <script type="application/ld+json">{JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          "mainEntity": [
+            {"@type": "Question", "name": "¿Qué hace ManoProtect?", "acceptedAnswer": {"@type": "Answer", "text": "ManoProtect es un sistema de protección familiar digital con alertas SOS, localización GPS en tiempo real y protección contra estafas digitales. Protege a niños, adultos y mayores con los dispositivos Sentinel X, J y S."}},
+            {"@type": "Question", "name": "¿Cómo funciona la alerta SOS?", "acceptedAnswer": {"@type": "Answer", "text": "Al pulsar el botón SOS del dispositivo Sentinel durante 3 segundos, se envía una alerta inmediata con localización GPS a todos los contactos de emergencia configurados. También se activa una llamada directa al contacto principal."}},
+            {"@type": "Question", "name": "¿Protege contra estafas online?", "acceptedAnswer": {"@type": "Answer", "text": "Sí. ManoProtect detecta amenazas digitales como phishing, smishing y fraudes bancarios, y alerta al usuario y su familia en tiempo real. Ofrece protección contra las estafas online más comunes en España."}},
+            {"@type": "Question", "name": "¿Cómo funciona el seguimiento GPS?", "acceptedAnswer": {"@type": "Answer", "text": "ManoProtect utiliza GPS optimizado que funciona incluso con la app cerrada y el móvil bloqueado. Consume menos del 3% de batería al día y ofrece localización en tiempo real."}},
+            {"@type": "Question", "name": "¿Los datos son privados?", "acceptedAnswer": {"@type": "Answer", "text": "Sí. Todos los datos están cifrados con AES-256. Cumplimos con el RGPD. Solo tú y tus contactos autorizados pueden ver las ubicaciones."}}
+          ]
+        })}</script>
+        <script type="application/ld+json">{JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Organization",
+          "name": "ManoProtect",
+          "url": "https://manoprotect.com",
+          "logo": "https://manoprotect.com/manoprotect_logo.png",
+          "description": "Sistema integral de protección familiar digital con alertas SOS, localización GPS y protección contra estafas online.",
+          "address": {"@type": "PostalAddress", "addressCountry": "ES"},
+          "sameAs": ["https://www.tiktok.com/@manoprotect"],
+          "contactPoint": {"@type": "ContactPoint", "contactType": "customer service", "availableLanguage": "Spanish"}
+        })}</script>
       </Helmet>
 
       {/* ═══════ HEADER ═══════ */}
@@ -165,14 +187,14 @@ const HighConversionLanding = () => {
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="text-center lg:text-left">
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white leading-[1.08] tracking-tight mb-5" data-testid="hero-title">
-                Protege a tu familia donde quiera que estén
+                Protección inmediata para tu familia frente a emergencias y estafas digitales
               </h1>
               <p className="text-lg sm:text-xl text-gray-300 mb-6 max-w-xl mx-auto lg:mx-0 leading-relaxed" data-testid="hero-subtitle">
-                Localización en tiempo real y alertas SOS con <strong className="text-emerald-400">Sentinel X, J y S</strong>
+                Activa alertas SOS, monitoreo de seguridad y asistencia cuando más lo necesitas con <strong className="text-emerald-400">Sentinel X, J y S</strong>
               </p>
               <div className="flex flex-wrap gap-4 justify-center lg:justify-start mb-6">
                 <button onClick={() => cta('hero')} className="inline-flex items-center gap-2 bg-emerald-500 text-white font-bold px-8 py-4 rounded-xl hover:bg-emerald-400 transition-all text-base shadow-xl shadow-emerald-500/25 hover:-translate-y-0.5 active:translate-y-0" data-testid="hero-cta-main">
-                  <Shield className="w-5 h-5" /> Probar 7 días gratis
+                  <Shield className="w-5 h-5" /> Activar protección ahora
                 </button>
                 <Link to="/productos" className="inline-flex items-center gap-2 border-2 border-white/20 text-white font-semibold px-6 py-4 rounded-xl hover:border-emerald-400 hover:text-emerald-400 transition-all text-base" data-testid="hero-cta-secondary">
                   Ver productos <ArrowRight className="w-4 h-4" />
@@ -607,6 +629,9 @@ const HighConversionLanding = () => {
         <div className="max-w-3xl mx-auto px-4 sm:px-6">
           <h2 className="text-2xl sm:text-3xl font-bold text-center text-gray-900 mb-10">Preguntas frecuentes</h2>
           {[
+            { q: '¿Qué hace ManoProtect?', a: 'ManoProtect es un sistema de protección familiar digital con alertas SOS, localización GPS en tiempo real y protección contra estafas digitales. Protege a niños, adultos y mayores con los dispositivos Sentinel X, J y S.' },
+            { q: '¿Cómo funciona la alerta SOS?', a: 'Al pulsar el botón SOS del dispositivo Sentinel durante 3 segundos, se envía una alerta inmediata con localización GPS a todos los contactos de emergencia configurados. También se activa una llamada directa al contacto principal.' },
+            { q: '¿Protege contra estafas online?', a: 'Sí. ManoProtect detecta amenazas digitales como phishing, smishing y fraudes bancarios, y alerta al usuario y su familia en tiempo real.' },
             { q: '¿Cómo funciona el seguimiento en segundo plano?', a: 'ManoProtect utiliza GPS optimizado que funciona incluso con la app cerrada y el móvil bloqueado. Consume menos del 3% de batería al día.' },
             { q: '¿Qué pasa si la batería se agota?', a: 'Antes de agotarse, el reloj envía la última ubicación conocida y una alerta a los contactos configurados. La batería dura entre 3 y 5 días según el modelo.' },
             { q: '¿Los datos son privados?', a: 'Sí. Todos los datos están cifrados con AES-256. Cumplimos con RGPD. Solo tú y tus contactos autorizados pueden ver las ubicaciones.' },

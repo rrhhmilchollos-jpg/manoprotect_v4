@@ -9,6 +9,60 @@ import LandingFooter from '@/components/landing/LandingFooter';
 
 const blogPosts = [
   {
+    slug: 'como-detectar-phishing',
+    title: 'Cómo detectar phishing: Guía completa para protegerte en 2026',
+    excerpt: 'Aprende a identificar correos de phishing, SMS fraudulentos y enlaces maliciosos. Protege tus cuentas y datos personales.',
+    category: 'Ciberseguridad',
+    date: '6 Mar 2026',
+    readTime: '8 min',
+    isExternalPage: true
+  },
+  {
+    slug: 'estafas-por-sms-en-espana',
+    title: 'Estafas por SMS en España: Las más peligrosas de 2026',
+    excerpt: 'Las estafas por SMS más comunes: falsos paquetes de Correos, Hacienda, bancos. Aprende a identificar el smishing.',
+    category: 'Ciberseguridad',
+    date: '6 Mar 2026',
+    readTime: '7 min',
+    isExternalPage: true
+  },
+  {
+    slug: 'que-hacer-si-roban-cuenta-banco',
+    title: 'Qué hacer si te roban la cuenta del banco: Guía paso a paso',
+    excerpt: 'Pasos urgentes si te roban la cuenta bancaria. Cómo recuperar el dinero, denuncias y prevención.',
+    category: 'Finanzas seguras',
+    date: '6 Mar 2026',
+    readTime: '9 min',
+    isExternalPage: true
+  },
+  {
+    slug: 'proteger-familia-online',
+    title: 'Cómo proteger a tu familia online: Guía completa',
+    excerpt: 'Guía integral para proteger a niños, adolescentes y mayores en internet.',
+    category: 'Seguridad familiar',
+    date: '6 Mar 2026',
+    readTime: '10 min',
+    isExternalPage: true
+  },
+  {
+    slug: 'estafas-whatsapp',
+    title: 'Estafas por WhatsApp: Las 8 más peligrosas y cómo evitarlas',
+    excerpt: 'Suplantación de familiares, códigos de verificación, ofertas falsas. Identifícalas y protégete.',
+    category: 'Ciberseguridad',
+    date: '6 Mar 2026',
+    readTime: '8 min',
+    isExternalPage: true
+  },
+  {
+    slug: 'como-evitar-phishing',
+    title: 'Cómo evitar el phishing: 10 consejos de expertos',
+    excerpt: 'Los 10 mejores consejos de expertos para evitar phishing y proteger tus datos.',
+    category: 'Ciberseguridad',
+    date: '6 Mar 2026',
+    readTime: '7 min',
+    isExternalPage: true
+  },
+  {
     slug: 'proteger-hijos-tecnologia-gps',
     title: 'Cómo proteger a tus hijos con tecnología GPS',
     excerpt: 'Descubre cómo los localizadores GPS como Sentinel J y S pueden darte tranquilidad sobre la seguridad de tus hijos en el colegio, el parque y las excursiones.',
@@ -119,7 +173,8 @@ const BlogPage = () => (
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
         {blogPosts.map((post, i) => (
           <article key={i} className="bg-white rounded-2xl overflow-hidden border border-gray-200 hover:shadow-lg transition-shadow group" data-testid={`blog-post-${i}`}>
-            <img src={post.img} alt={post.title} className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy" />
+            {post.img && <img src={post.img} alt={post.title} className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy" />}
+            {!post.img && <div className="w-full h-48 bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center"><Shield className="w-16 h-16 text-white/30" /></div>}
             <div className="p-6">
               <div className="flex items-center gap-3 text-xs text-gray-400 mb-3">
                 <span className="bg-emerald-50 text-emerald-600 font-semibold px-2 py-0.5 rounded">{post.category}</span>

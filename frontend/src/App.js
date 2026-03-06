@@ -172,6 +172,25 @@ const SeguridadPersonalAdultos = lazy(() => import('@/pages/blog/SeguridadPerson
 const CuidadoMayoresTeleasistencia = lazy(() => import('@/pages/blog/CuidadoMayoresTeleasistencia'));
 const ComoElegirBotonSOSEdad = lazy(() => import('@/pages/blog/ComoElegirBotonSOSEdad'));
 
+// New SEO Blog Articles
+const ComoDetectarPhishing = lazy(() => import('@/pages/blog/ComoDetectarPhishing'));
+const EstafasSMSEspana = lazy(() => import('@/pages/blog/EstafasSMSEspana'));
+const QueHacerRobanCuentaBanco = lazy(() => import('@/pages/blog/QueHacerRobanCuentaBanco'));
+const ProtegerFamiliaOnline = lazy(() => import('@/pages/blog/ProtegerFamiliaOnline'));
+const EstafasWhatsApp = lazy(() => import('@/pages/blog/EstafasWhatsApp'));
+const ComoEvitarPhishing = lazy(() => import('@/pages/blog/ComoEvitarPhishing'));
+
+// SEO Problem-Solution & Keyword Pages
+const MeHanHackeadoCuenta = lazy(() => import('@/pages/seo/MeHanHackeadoCuenta'));
+const MeHanEstafadoOnline = lazy(() => import('@/pages/seo/MeHanEstafadoOnline'));
+const QueHacerRecibesPhishing = lazy(() => import('@/pages/seo/QueHacerRecibesPhishing'));
+const ComoRecuperarCuentaRobada = lazy(() => import('@/pages/seo/ComoRecuperarCuentaRobada'));
+const ProteccionFamiliar = lazy(() => import('@/pages/seo/ProteccionFamiliar'));
+const AlertaSOSFamiliar = lazy(() => import('@/pages/seo/AlertaSOSFamiliar'));
+const ProteccionEstafasOnline = lazy(() => import('@/pages/seo/ProteccionEstafasOnline'));
+const SeguridadDigitalFamilias = lazy(() => import('@/pages/seo/SeguridadDigitalFamilias'));
+const OpinionesClientes = lazy(() => import('@/pages/OpinionesClientes'));
+
 // Age-Segmented Product Pages
 const SentinelXNinos = lazy(() => import('@/pages/SentinelXNinos'));
 const SentinelXAdultos = lazy(() => import('@/pages/SentinelXAdultos'));
@@ -509,6 +528,29 @@ function AppRouter() {
           <Route path="/blog/seguridad-personal-adultos" element={<SeguridadPersonalAdultos />} />
           <Route path="/blog/cuidado-mayores-teleasistencia" element={<CuidadoMayoresTeleasistencia />} />
           <Route path="/blog/como-elegir-boton-sos-edad" element={<ComoElegirBotonSOSEdad />} />
+          
+          {/* New SEO Blog Articles */}
+          <Route path="/blog/como-detectar-phishing" element={<ComoDetectarPhishing />} />
+          <Route path="/blog/estafas-por-sms-en-espana" element={<EstafasSMSEspana />} />
+          <Route path="/blog/que-hacer-si-roban-cuenta-banco" element={<QueHacerRobanCuentaBanco />} />
+          <Route path="/blog/proteger-familia-online" element={<ProtegerFamiliaOnline />} />
+          <Route path="/blog/estafas-whatsapp" element={<EstafasWhatsApp />} />
+          <Route path="/blog/como-evitar-phishing" element={<ComoEvitarPhishing />} />
+          
+          {/* SEO Problem-Solution Pages */}
+          <Route path="/me-han-hackeado-la-cuenta" element={<MeHanHackeadoCuenta />} />
+          <Route path="/me-han-estafado-online" element={<MeHanEstafadoOnline />} />
+          <Route path="/que-hacer-si-recibes-phishing" element={<QueHacerRecibesPhishing />} />
+          <Route path="/como-recuperar-cuenta-robada" element={<ComoRecuperarCuentaRobada />} />
+          
+          {/* SEO Keyword Landing Pages */}
+          <Route path="/proteccion-familiar" element={<ProteccionFamiliar />} />
+          <Route path="/alerta-sos-familiar" element={<AlertaSOSFamiliar />} />
+          <Route path="/proteccion-estafas-online" element={<ProteccionEstafasOnline />} />
+          <Route path="/seguridad-digital-familias" element={<SeguridadDigitalFamilias />} />
+          
+          {/* Opiniones */}
+          <Route path="/opiniones-clientes" element={<OpinionesClientes />} />
           
           {/* Age-Segmented Product Pages */}
           <Route path="/sentinel-x-ninos" element={<SentinelXNinos />} />
