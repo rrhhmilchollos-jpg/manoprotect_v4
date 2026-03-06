@@ -5,7 +5,7 @@ import { toast } from 'sonner';
 import {
   LayoutDashboard, Users, Package, ShoppingCart, Wrench, ScrollText,
   Plus, LogOut, RefreshCw, Loader2, X, Pencil, Trash2, UserPlus,
-  ChevronDown, BarChart3, AlertTriangle, CheckCircle2, Clock, Eye, UsersRound
+  ChevronDown, BarChart3, AlertTriangle, CheckCircle2, Clock, Eye, UsersRound, Gift, Truck
 } from 'lucide-react';
 import NotificationBell from '@/components/gestion/NotificationBell';
 
@@ -48,6 +48,9 @@ export default function GestionAdmin() {
   const [instalaciones, setInstalaciones] = useState([]);
   const [logs, setLogs] = useState([]);
   const [equipos, setEquipos] = useState([]);
+  const [promoOrders, setPromoOrders] = useState([]);
+  const [promoStats, setPromoStats] = useState(null);
+  const [trackingModal, setTrackingModal] = useState(null);
   const [modal, setModal] = useState(null); // { type: 'new_user' | 'new_stock' | 'edit_stock' | 'assign_installer', data: ... }
 
   useEffect(() => {
@@ -65,6 +68,11 @@ export default function GestionAdmin() {
       ]);
       setStats(st); setUsuarios(us.usuarios || []); setStock(sk.stock || []);
       setPedidos(pe.pedidos || []); setInstalaciones(ins.instalaciones || []); setLogs(lo.logs || []); setEquipos(eq.equipos || []);
+      // Load promo data
+      try {
+        const pr = await fetch(`${API}/api/promo/sentinel-s/admin/orders`).then(r => r.json());
+        setPromoOrders(pr.orders || []); setPromoStats(pr.stats || null);
+      } catch {}
     } catch (e) { toast.error(e.message); }
     setLoading(false);
   }, []);
@@ -158,6 +166,7 @@ export default function GestionAdmin() {
     { id: 'equipos', label: 'Equipos', icon: UsersRound },
     { id: 'stock', label: 'Stock', icon: Package },
     { id: 'pedidos', label: 'Pedidos', icon: ShoppingCart },
+    { id: 'promo', label: 'Promo TikTok', icon: Gift },
     { id: 'instalaciones', label: 'Instalaciones', icon: Wrench },
     { id: 'logs', label: 'Auditoría', icon: ScrollText },
   ];
@@ -381,6 +390,76 @@ export default function GestionAdmin() {
                 {pedidos.length === 0 && <p className="text-center text-slate-500 text-sm py-10">No hay pedidos</p>}
               </div>
             </div>
+          ) : section === 'promo' ? (
+            /* PROMO TIKTOK - SENTINEL S */
+            <div data-testid="promo-admin-section">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-lg font-bold text-white flex items-center gap-2"><Gift className="w-5 h-5 text-orange-400" /> Promo TikTok — Sentinel S</h2>
+                <button onClick={loadAll} className="text-xs text-slate-400 hover:text-white flex items-center gap-1"><RefreshCw className="w-3 h-3" /> Actualizar</button>
+              </div>
+
+              {/* Stats */}
+              {promoStats && (
+                <div className="grid grid-cols-2 md:grid-cols-5 gap-3 mb-6">
+                  {[
+                    { label: 'Total pedidos', val: promoStats.total_orders, color: 'text-blue-400' },
+                    { label: 'Pagados', val: promoStats.paid, color: 'text-emerald-400' },
+                    { label: 'Pendientes envío', val: promoStats.pending_shipping, color: 'text-amber-400' },
+                    { label: 'Enviados', val: promoStats.shipped, color: 'text-indigo-400' },
+                    { label: 'Restantes', val: promoStats.remaining, color: 'text-red-400' },
+                  ].map((s, i) => (
+                    <div key={i} className="bg-slate-900 border border-slate-800 rounded-xl p-3 text-center">
+                      <p className={`text-2xl font-bold ${s.color}`}>{s.val}</p>
+                      <p className="text-[10px] text-slate-500">{s.label}</p>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {/* Orders list */}
+              <div className="space-y-2">
+                {promoOrders.map(o => (
+                  <div key={o.order_id} className="bg-slate-900 border border-slate-800 rounded-xl p-4" data-testid={`promo-order-${o.order_id}`}>
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-xs font-mono text-orange-400">{o.order_id}</span>
+                      <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold ${
+                        o.status === 'paid' ? 'bg-emerald-500/20 text-emerald-400' :
+                        o.status === 'pending_shipping' ? 'bg-amber-500/20 text-amber-400' :
+                        o.status === 'shipped' ? 'bg-blue-500/20 text-blue-400' :
+                        o.status === 'delivered' ? 'bg-green-500/20 text-green-400' :
+                        'bg-slate-700 text-slate-400'
+                      }`}>{o.status}</span>
+                    </div>
+                    <p className="text-sm text-white">{o.email} <span className="text-slate-500">— {o.plan_name}</span></p>
+                    <p className="text-xs text-slate-600">Código: <span className="text-orange-300 font-mono">{o.gift_code}</span> · {o.amount}€</p>
+
+                    {o.shipping && (
+                      <div className="mt-2 p-2 bg-slate-800/50 rounded-lg text-xs text-slate-400 space-y-0.5">
+                        <p className="text-white font-medium">{o.shipping.nombre_completo}</p>
+                        <p>{o.shipping.direccion}, {o.shipping.codigo_postal} {o.shipping.ciudad}</p>
+                        <p>{o.shipping.provincia} · Tel: {o.shipping.telefono}</p>
+                      </div>
+                    )}
+
+                    {o.tracking && (
+                      <div className="mt-2 text-xs text-blue-400">
+                        <Truck className="w-3 h-3 inline mr-1" />
+                        {o.tracking.carrier}: {o.tracking.tracking_number} ({o.tracking.status})
+                      </div>
+                    )}
+
+                    {o.shipping && !o.tracking && (
+                      <button onClick={() => setTrackingModal(o.order_id)} className="mt-2 text-xs bg-indigo-600/20 text-indigo-400 px-3 py-1.5 rounded-lg border border-indigo-500/30 hover:bg-indigo-600/30 flex items-center gap-1">
+                        <Truck className="w-3 h-3" /> Añadir tracking
+                      </button>
+                    )}
+
+                    <p className="text-[10px] text-slate-600 mt-1">{new Date(o.created_at).toLocaleString('es-ES')}</p>
+                  </div>
+                ))}
+                {promoOrders.length === 0 && <p className="text-center text-slate-500 text-sm py-10">No hay pedidos de la promo aún</p>}
+              </div>
+            </div>
           ) : section === 'instalaciones' ? (
             /* INSTALACIONES */
             <div>
@@ -560,6 +639,11 @@ export default function GestionAdmin() {
           </div>
         </div>
       )}
+
+      {/* Tracking Modal */}
+      {trackingModal && (
+        <TrackingForm orderId={trackingModal} onDone={() => { setTrackingModal(null); loadAll(); }} onClose={() => setTrackingModal(null)} />
+      )}
     </div>
   );
 }
@@ -606,5 +690,55 @@ function EditEquipoForm({ equipo, instaladores, onSave }) {
       </div>
       <button onClick={() => onSave(equipo.equipo_id, miembros)} className="w-full bg-cyan-600 hover:bg-cyan-500 text-white font-medium py-2.5 rounded-lg text-sm">Guardar ({miembros.length} miembros)</button>
     </>
+  );
+}
+
+
+function TrackingForm({ orderId, onDone, onClose }) {
+  const [form, setForm] = useState({ tracking_number: '', carrier: 'Correos', status: 'enviado' });
+  const [submitting, setSubmitting] = useState(false);
+  const submit = async () => {
+    if (!form.tracking_number) { toast.error('Introduce el número de tracking'); return; }
+    setSubmitting(true);
+    try {
+      const res = await fetch(`${API}/api/promo/sentinel-s/admin/orders/${orderId}/tracking`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form)
+      });
+      if (res.ok) { toast.success('Tracking actualizado'); onDone(); }
+      else { const d = await res.json(); toast.error(d.detail || 'Error'); }
+    } catch { toast.error('Error de conexión'); }
+    finally { setSubmitting(false); }
+  };
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70" onClick={onClose}>
+      <div className="bg-slate-900 border border-slate-700 rounded-2xl p-6 w-full max-w-md space-y-3" onClick={e => e.stopPropagation()}>
+        <h3 className="text-white font-bold flex items-center gap-2"><Truck className="w-4 h-4 text-indigo-400" /> Tracking para {orderId}</h3>
+        <input placeholder="Número de seguimiento" value={form.tracking_number} onChange={e => setForm({ ...form, tracking_number: e.target.value })}
+          className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white outline-none" />
+        <select value={form.carrier} onChange={e => setForm({ ...form, carrier: e.target.value })}
+          className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white outline-none">
+          <option value="Correos">Correos</option>
+          <option value="SEUR">SEUR</option>
+          <option value="MRW">MRW</option>
+          <option value="GLS">GLS</option>
+          <option value="DHL">DHL</option>
+          <option value="Otro">Otro</option>
+        </select>
+        <select value={form.status} onChange={e => setForm({ ...form, status: e.target.value })}
+          className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white outline-none">
+          <option value="enviado">Enviado</option>
+          <option value="en_transito">En tránsito</option>
+          <option value="entregado">Entregado</option>
+        </select>
+        <div className="flex gap-2">
+          <button onClick={onClose} className="flex-1 bg-slate-800 text-slate-400 py-2.5 rounded-lg text-sm">Cancelar</button>
+          <button onClick={submit} disabled={submitting} className="flex-1 bg-indigo-600 hover:bg-indigo-500 text-white font-medium py-2.5 rounded-lg text-sm disabled:opacity-50">
+            {submitting ? 'Guardando...' : 'Guardar tracking'}
+          </button>
+        </div>
+      </div>
+    </div>
   );
 }

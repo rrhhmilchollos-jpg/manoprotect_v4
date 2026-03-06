@@ -145,6 +145,7 @@ const CalculadorPresupuesto = lazy(() => import('@/pages/CalculadorPresupuesto')
 const AlarmasSecuritasStyle = lazy(() => import('@/pages/AlarmasSecuritasStyle'));
 const OrderConfirmation = lazy(() => import('@/pages/OrderConfirmation'));
 const ThankYouPage = lazy(() => import('@/pages/ThankYouPage'));
+const PromoSentinelGracias = lazy(() => import('@/pages/PromoSentinelGracias'));
 const BlogPage = lazy(() => import('@/pages/BlogPage'));
 const BlogPostDetail = lazy(() => import('@/pages/BlogPage').then(m => ({ default: m.BlogPostDetail })));
 const BlogPostPage = lazy(() => import('@/pages/BlogPostPage'));
@@ -592,6 +593,7 @@ function AppRouter() {
           <Route path="/gracias" element={<ThankYouPage />} />
           <Route path="/thank-you" element={<ThankYouPage />} />
           <Route path="/compra-exitosa" element={<ThankYouPage />} />
+          <Route path="/promo/sentinel-s/gracias" element={<PromoSentinelGracias />} />
           
           {/* SENTINEL X Smartwatch Landing */}
           <Route path="/sentinel-x" element={<SentinelXLanding />} />

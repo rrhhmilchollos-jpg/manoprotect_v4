@@ -6,7 +6,7 @@
 import { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { Check, Star, ChevronRight, MapPin, Lock, Phone, Shield, Users, Search, ShoppingCart, X, Plus, Minus, Trash2, CreditCard, Loader2, AlertTriangle, Zap, Eye, Bell, Clock, ArrowRight, Heart } from 'lucide-react';
+import { Check, Star, ChevronRight, MapPin, Lock, Phone, Shield, Users, Search, ShoppingCart, X, Plus, Minus, Trash2, CreditCard, Loader2, AlertTriangle, Zap, Eye, Bell, Clock, ArrowRight, Heart, Gift, Watch } from 'lucide-react';
 import { toast } from 'sonner';
 import LandingFooter from '@/components/landing/LandingFooter';
 
@@ -44,6 +44,34 @@ const LandingPage = () => {
   const [showExitPopup, setShowExitPopup] = useState(false);
   const [exitPopupShown, setExitPopupShown] = useState(false);
   const [activeUsers] = useState(() => 1847 + Math.floor(Math.random() * 200));
+  const [promoData, setPromoData] = useState(null);
+  const [promoLoading, setPromoLoading] = useState(false);
+
+  // Load promo status
+  useEffect(() => {
+    fetch(`${API}/api/promo/sentinel-s/status`)
+      .then(r => r.json())
+      .then(d => setPromoData(d))
+      .catch(() => {});
+  }, []);
+
+  const handlePromoCheckout = async (planType) => {
+    setPromoLoading(true);
+    try {
+      const res = await fetch(`${API}/api/promo/sentinel-s/checkout`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ plan_type: planType, origin_url: window.location.origin })
+      });
+      const data = await res.json();
+      if (res.ok && data.checkout_url) {
+        window.location.href = data.checkout_url;
+      } else {
+        toast.error(data.detail || 'Error al procesar');
+      }
+    } catch { toast.error('Error de conexión'); }
+    finally { setPromoLoading(false); }
+  };
 
   // Social proof
   useEffect(() => {
@@ -283,6 +311,105 @@ const LandingPage = () => {
           </div>
         </div>
       </section>
+
+      {/* ============ PROMO SENTINEL S — TIKTOK CAMPAIGN ============ */}
+      {promoData && promoData.active && (
+        <section className="relative overflow-hidden" id="promo-sentinel" data-testid="promo-sentinel-section">
+          {/* Animated background */}
+          <div className="absolute inset-0 bg-gradient-to-r from-red-600 via-orange-500 to-yellow-500" />
+          <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'repeating-linear-gradient(45deg, transparent, transparent 20px, rgba(255,255,255,0.1) 20px, rgba(255,255,255,0.1) 40px)' }} />
+          
+          <div className="relative z-10 max-w-6xl mx-auto px-6 py-10 md:py-14">
+            <div className="grid lg:grid-cols-2 gap-8 items-center">
+              {/* Left: Text */}
+              <div className="text-center lg:text-left">
+                {/* Urgency badge */}
+                <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-white/20 backdrop-blur-sm border border-white/30 rounded-full text-white text-sm font-bold mb-4 animate-pulse">
+                  <Gift className="w-4 h-4" />
+                  OFERTA LIMITADA — Solo {promoData.remaining} de {promoData.total} disponibles
+                </div>
+                
+                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white leading-tight mb-4" data-testid="promo-title">
+                  Sentinel S
+                  <span className="block text-yellow-200">GRATIS</span>
+                  <span className="block text-xl sm:text-2xl font-bold mt-1 text-white/90">con tu suscripción</span>
+                </h2>
+                
+                <p className="text-white/80 text-base mb-6 max-w-md mx-auto lg:mx-0">
+                  Suscríbete a ManoProtect y llévate un <strong className="text-white">reloj Sentinel S valorado en 149€</strong> completamente gratis. Campaña exclusiva TikTok.
+                </p>
+
+                {/* Counter bar */}
+                <div className="bg-black/30 backdrop-blur-sm rounded-xl p-4 mb-6 max-w-md mx-auto lg:mx-0" data-testid="promo-counter">
+                  <div className="flex items-center justify-between text-sm mb-2">
+                    <span className="text-white/70">Unidades reclamadas</span>
+                    <span className="text-yellow-300 font-bold">{promoData.claimed}/{promoData.total}</span>
+                  </div>
+                  <div className="w-full h-3 bg-black/40 rounded-full overflow-hidden">
+                    <div className="h-full bg-gradient-to-r from-yellow-400 to-red-500 rounded-full transition-all duration-1000" style={{ width: `${Math.max(5, (promoData.claimed / promoData.total) * 100)}%` }} />
+                  </div>
+                  <p className="text-xs text-white/60 mt-2 flex items-center gap-1">
+                    <Clock className="w-3 h-3" /> Envío máx. 60 días a los 100 primeros suscriptores
+                  </p>
+                </div>
+
+                {/* CTA Buttons */}
+                <div className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto lg:mx-0">
+                  <button
+                    onClick={() => handlePromoCheckout('sentinel-promo-monthly')}
+                    disabled={promoLoading}
+                    className="flex-1 bg-white text-red-600 font-extrabold py-4 px-6 rounded-xl hover:bg-yellow-50 transition-all hover:scale-[1.02] shadow-xl text-center disabled:opacity-50"
+                    data-testid="promo-cta-monthly"
+                  >
+                    {promoLoading ? 'Procesando...' : <>9,99€/mes<br /><span className="text-xs font-semibold text-red-400">+ Sentinel S GRATIS</span></>}
+                  </button>
+                  <button
+                    onClick={() => handlePromoCheckout('sentinel-promo-yearly')}
+                    disabled={promoLoading}
+                    className="flex-1 bg-yellow-400 text-black font-extrabold py-4 px-6 rounded-xl hover:bg-yellow-300 transition-all hover:scale-[1.02] shadow-xl text-center relative disabled:opacity-50"
+                    data-testid="promo-cta-yearly"
+                  >
+                    <span className="absolute -top-2.5 right-3 bg-red-600 text-white text-[10px] px-2 py-0.5 rounded-full font-bold">AHORRA 20€</span>
+                    {promoLoading ? 'Procesando...' : <>99,99€/año<br /><span className="text-xs font-semibold text-black/60">+ Sentinel S GRATIS</span></>}
+                  </button>
+                </div>
+
+                <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 mt-4 text-xs text-white/70">
+                  <span className="flex items-center gap-1"><Check className="w-3 h-3" /> 1 por usuario</span>
+                  <span className="flex items-center gap-1"><Check className="w-3 h-3" /> Sin permanencia</span>
+                  <span className="flex items-center gap-1"><Check className="w-3 h-3" /> Pago seguro Stripe</span>
+                </div>
+              </div>
+
+              {/* Right: Product showcase */}
+              <div className="flex justify-center order-first lg:order-last">
+                <div className="relative">
+                  <div className="absolute inset-0 bg-yellow-400/20 blur-3xl rounded-full scale-75" />
+                  <div className="relative bg-white/10 backdrop-blur-md border border-white/20 rounded-3xl p-8 text-center">
+                    <div className="absolute -top-4 -right-4 bg-red-500 text-white font-black text-sm px-4 py-2 rounded-xl rotate-6 shadow-lg">
+                      GRATIS
+                    </div>
+                    <Watch className="w-32 h-32 text-white/90 mx-auto mb-4 drop-shadow-2xl" />
+                    <h3 className="text-white font-bold text-xl mb-1">SENTINEL S</h3>
+                    <p className="text-white/60 text-sm mb-3">Reloj GPS + SOS para mayores</p>
+                    <div className="flex items-center justify-center gap-2">
+                      <span className="text-3xl font-black text-yellow-300">0€</span>
+                      <span className="text-white/40 line-through text-lg">149€</span>
+                    </div>
+                    <div className="mt-3 space-y-1 text-xs text-white/70 text-left">
+                      <div className="flex items-center gap-2"><Check className="w-3 h-3 text-yellow-300 flex-shrink-0" /> GPS en tiempo real</div>
+                      <div className="flex items-center gap-2"><Check className="w-3 h-3 text-yellow-300 flex-shrink-0" /> Botón SOS de emergencia</div>
+                      <div className="flex items-center gap-2"><Check className="w-3 h-3 text-yellow-300 flex-shrink-0" /> Detector de caídas</div>
+                      <div className="flex items-center gap-2"><Check className="w-3 h-3 text-yellow-300 flex-shrink-0" /> Llamada directa</div>
+                      <div className="flex items-center gap-2"><Check className="w-3 h-3 text-yellow-300 flex-shrink-0" /> Resistente al agua</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* ============ TRUST BAR ============ */}
       <section className="bg-white py-4 border-y border-gray-100" data-testid="trust-bar">

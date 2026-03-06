@@ -375,6 +375,9 @@ from routes.legacy_vault import router as legacy_vault_router
 # Phishing Simulation (B2B Enterprise)
 from routes.phishing_simulation import router as phishing_router
 
+# Promo Sentinel S TikTok
+from routes.promo_sentinel_routes import router as promo_sentinel_router
+
 # User Reviews/Ratings System
 from routes.reviews_routes import router as reviews_router, set_database as init_reviews
 init_reviews(db)
@@ -3095,6 +3098,10 @@ print("✅ WhatsApp alerts routes loaded")
 # Phishing Simulation (B2B Enterprise)
 api_router.include_router(phishing_router)
 print("✅ Investor CRM routes loaded")
+
+# Promo Sentinel S TikTok
+api_router.include_router(promo_sentinel_router)
+print("✅ Promo Sentinel S routes loaded")
 
 # Community Shield / Escudo Vecinal
 api_router.include_router(community_shield_router)
