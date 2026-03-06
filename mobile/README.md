@@ -25,7 +25,7 @@ Todas las apps se conectan al mismo backend:
 
 | Entorno | URL |
 |---------|-----|
-| Preview | https://crm-dashboard-213.preview.emergentagent.com |
+| Preview | https://auth-hardened-test.preview.emergentagent.com |
 | Producción | [Tu dominio de producción] |
 
 ---

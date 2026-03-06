@@ -18,7 +18,7 @@ import uuid
 from datetime import datetime
 
 # API Base URL from environment
-BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', 'https://crm-dashboard-213.preview.emergentagent.com').rstrip('/')
+BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', 'https://auth-hardened-test.preview.emergentagent.com').rstrip('/')
 
 # Test credentials
 CEO_CREDS = {"email": "ceo@manoprotect.com", "password": "19862210Des"}

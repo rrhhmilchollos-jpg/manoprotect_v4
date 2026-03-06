@@ -1,5 +1,5 @@
 // ManoProtect Shield - Background Service Worker
-const API_BASE = 'https://crm-dashboard-213.preview.emergentagent.com/api';
+const API_BASE = 'https://auth-hardened-test.preview.emergentagent.com/api';
 
 // Check URL against ManoProtect threat intelligence
 async function checkUrl(url) {

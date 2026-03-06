@@ -19,7 +19,7 @@ ManoProtect es una aplicación de seguridad familiar con:
 ## 🚀 Demo
 
 - **Web**: [manoprotect.com](https://manoprotect.com)
-- **Preview**: [safety-alert-app-1.preview.emergentagent.com](https://crm-dashboard-213.preview.emergentagent.com)
+- **Preview**: [safety-alert-app-1.preview.emergentagent.com](https://auth-hardened-test.preview.emergentagent.com)
 
 ## 📱 Características
 

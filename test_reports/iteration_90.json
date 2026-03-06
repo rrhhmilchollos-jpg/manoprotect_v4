@@ -94,7 +94,7 @@
     "gestion_comercial": "comercial@manoprotect.com / Comercial2025!",
     "gestion_instalador": "instalador@manoprotect.com / Instalador2025!",
     "ceo": "ceo@manoprotect.com / 19862210Des",
-    "api_url": "https://crm-dashboard-213.preview.emergentagent.com"
+    "api_url": "https://auth-hardened-test.preview.emergentagent.com"
   },
   "seed_data_creation": "seed-admin endpoint creates/updates: admin@manoprotect.com, comercial@manoprotect.com, instalador@manoprotect.com",
   "retest_needed": false,

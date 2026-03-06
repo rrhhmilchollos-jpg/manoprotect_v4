@@ -73,7 +73,7 @@
     "gestion_comercial": "comercial@manoprotect.com / Comercial2025!",
     "gestion_instalador": "instalador@manoprotect.com / Instalador2025!",
     "ceo": "ceo@manoprotect.com / 19862210Des (note: CEO may not be in users collection)",
-    "api_url": "https://crm-dashboard-213.preview.emergentagent.com"
+    "api_url": "https://auth-hardened-test.preview.emergentagent.com"
   },
   "seed_data_creation": "Tests created TEST_ prefixed users for familia registration tests",
   "retest_needed": false,

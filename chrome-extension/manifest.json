@@ -9,7 +9,7 @@
     "contextMenus"
   ],
   "host_permissions": [
-    "https://crm-dashboard-213.preview.emergentagent.com/*",
+    "https://auth-hardened-test.preview.emergentagent.com/*",
     "https://www.manoprotect.com/*"
   ],
   "action": {

@@ -74,7 +74,7 @@
     "gestion_admin": "admin@manoprotect.com / ManoAdmin2025!",
     "gestion_comercial": "comercial@manoprotect.com / Comercial2025!",
     "gestion_instalador": "instalador@manoprotect.com / Instalador2025!",
-    "api_url": "https://crm-dashboard-213.preview.emergentagent.com"
+    "api_url": "https://auth-hardened-test.preview.emergentagent.com"
   },
   "seed_data_creation": "Created TEST_Equipo Madrid Centro and TEST_Equipo_To_Delete for testing",
   "retest_needed": false,

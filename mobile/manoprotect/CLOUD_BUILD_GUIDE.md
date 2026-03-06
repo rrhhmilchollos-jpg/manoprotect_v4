@@ -94,7 +94,7 @@ keytool -genkey -v -keystore manoprotect.keystore -alias manoprotect -keyalg RSA
 
 La app se conecta a:
 ```
-https://crm-dashboard-213.preview.emergentagent.com
+https://auth-hardened-test.preview.emergentagent.com
 ```
 
 Cuando despliegues a producción, actualizar en `capacitor.config.json`:

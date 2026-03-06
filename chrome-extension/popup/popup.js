@@ -1,5 +1,5 @@
 // ManoProtect Shield - Popup Script
-const API_BASE = 'https://crm-dashboard-213.preview.emergentagent.com/api';
+const API_BASE = 'https://auth-hardened-test.preview.emergentagent.com/api';
 
 // DOM Elements
 const currentUrlEl = document.getElementById('current-url');

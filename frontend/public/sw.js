@@ -1,8 +1,8 @@
 // ManoProtect - Progressive Web App Service Worker
-// Version 4.0 - PWABuilder Optimized
+// Version 5.0 - SPA App Shell Pattern
 // Cumple con todos los requisitos de PWABuilder para stores
 
-const CACHE_VERSION = 'v4';
+const CACHE_VERSION = 'v5';
 const CACHE_NAME = `manoprotect-${CACHE_VERSION}`;
 const OFFLINE_URL = '/offline.html';
 const OFFLINE_IMAGE = '/icons/offline-image.svg';
@@ -16,11 +16,14 @@ const CACHES = {
 };
 
 // Assets críticos para precache (offline first)
+// El app shell (index.html) es el más importante para una SPA
 const PRECACHE_ASSETS = [
   '/',
   '/index.html',
   '/offline.html',
   '/manifest.json',
+  '/manifest-comerciales.json',
+  '/manifest-instaladores.json',
   '/manoprotect_logo.png',
   '/favicon.ico',
   '/icons/icon-192x192.png',
@@ -39,7 +42,7 @@ const OFFLINE_ROUTES = [
 // INSTALL EVENT - Precache critical assets
 // ============================================
 self.addEventListener('install', (event) => {
-  console.log('[SW] Installing ManoProtect Service Worker v4...');
+  console.log('[SW] Installing ManoProtect Service Worker v5...');
   
   event.waitUntil(
     (async () => {
@@ -68,7 +71,7 @@ self.addEventListener('install', (event) => {
 // ACTIVATE EVENT - Clean old caches
 // ============================================
 self.addEventListener('activate', (event) => {
-  console.log('[SW] Activating ManoProtect Service Worker v4...');
+  console.log('[SW] Activating ManoProtect Service Worker v5...');
   
   event.waitUntil(
     (async () => {
@@ -124,7 +127,7 @@ self.addEventListener('fetch', (event) => {
 });
 
 // ============================================
-// NAVIGATION HANDLER - Network first, offline fallback
+// NAVIGATION HANDLER - Network first, app shell fallback (SPA pattern)
 // ============================================
 async function handleNavigationRequest(request) {
   try {
@@ -139,21 +142,29 @@ async function handleNavigationRequest(request) {
     
     return networkResponse;
   } catch (error) {
-    console.log('[SW] Navigation offline, checking cache...');
+    console.log('[SW] Navigation offline, serving app shell...');
     
-    // Buscar en cache
+    // 1. Buscar en cache la URL exacta
     const cachedResponse = await caches.match(request);
     if (cachedResponse) {
       return cachedResponse;
     }
     
-    // Devolver página offline
+    // 2. SPA fallback: servir el app shell (index.html) cacheado
+    //    React Router manejará el routing del lado del cliente
+    const appShell = await caches.match('/index.html') || await caches.match('/');
+    if (appShell) {
+      console.log('[SW] Serving cached app shell for:', request.url);
+      return appShell;
+    }
+    
+    // 3. Solo si no hay app shell cacheado, mostrar página offline
     const offlinePage = await caches.match(OFFLINE_URL);
     if (offlinePage) {
       return offlinePage;
     }
     
-    // Fallback HTML básico
+    // 4. Fallback HTML básico de último recurso
     return new Response(
       `<!DOCTYPE html>
       <html lang="es">
@@ -169,7 +180,7 @@ async function handleNavigationRequest(request) {
         </style>
       </head>
       <body>
-        <h1>📱 ManoProtect</h1>
+        <h1>ManoProtect</h1>
         <p>No hay conexión a internet.</p>
         <p>Verifica tu conexión e intenta de nuevo.</p>
         <button onclick="location.reload()">Reintentar</button>
@@ -296,6 +307,7 @@ async function handleFontRequest(request) {
 
 // ============================================
 // STATIC HANDLER - Stale while revalidate
+// Cachea JS/CSS bundles para que el app shell funcione offline
 // ============================================
 async function handleStaticRequest(request) {
   const cache = await caches.open(CACHES.static);
@@ -310,7 +322,10 @@ async function handleStaticRequest(request) {
       }
       return networkResponse;
     })
-    .catch(() => cachedResponse);
+    .catch(() => {
+      // Red no disponible, devolver cached si existe
+      return cachedResponse || new Response('', { status: 408 });
+    });
   
   // Devolver cached inmediatamente o esperar fetch
   return cachedResponse || fetchPromise;
@@ -571,5 +586,5 @@ async function clearAllCaches() {
 // ============================================
 // INITIALIZATION LOG
 // ============================================
-console.log('[SW] ManoProtect Service Worker v4 loaded');
+console.log('[SW] ManoProtect Service Worker v5 loaded');
 console.log('[SW] Caches:', Object.keys(CACHES));
