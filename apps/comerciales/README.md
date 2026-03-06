@@ -26,4 +26,4 @@ App móvil profesional para el equipo comercial de ManoProtect. Permite consulta
 
 ## API Base
 - Producción: `https://www.manoprotect.com/api/gestion`
-- Preview: `https://secure-gateway-33.preview.emergentagent.com/api/gestion`
+- Preview: `https://crm-dashboard-213.preview.emergentagent.com/api/gestion`

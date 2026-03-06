@@ -18,7 +18,7 @@ from datetime import datetime
 
 BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', '').rstrip('/')
 if not BASE_URL:
-    BASE_URL = "https://secure-gateway-33.preview.emergentagent.com"
+    BASE_URL = "https://crm-dashboard-213.preview.emergentagent.com"
 
 # Test credentials from review request
 CEO_EMAIL = "ceo@manoprotect.com"

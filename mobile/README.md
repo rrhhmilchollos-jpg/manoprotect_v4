@@ -25,7 +25,7 @@ Todas las apps se conectan al mismo backend:
 
 | Entorno | URL |
 |---------|-----|
-| Preview | https://secure-gateway-33.preview.emergentagent.com |
+| Preview | https://crm-dashboard-213.preview.emergentagent.com |
 | Producción | [Tu dominio de producción] |
 
 ---

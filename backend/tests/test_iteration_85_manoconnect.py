@@ -17,7 +17,7 @@ import os
 
 BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', '').rstrip('/')
 if not BASE_URL:
-    BASE_URL = "https://secure-gateway-33.preview.emergentagent.com"
+    BASE_URL = "https://crm-dashboard-213.preview.emergentagent.com"
 
 # Test credentials
 CEO_EMAIL = "ceo@manoprotect.com"
@@ -209,7 +209,7 @@ class TestCORS:
         # Note: OPTIONS preflight may not include credentials header
         # Test with actual POST request with Origin header
         headers = {
-            "Origin": "https://secure-gateway-33.preview.emergentagent.com",
+            "Origin": "https://crm-dashboard-213.preview.emergentagent.com",
             "Content-Type": "application/json"
         }
         response = requests.post(
@@ -226,7 +226,7 @@ class TestCORS:
     def test_cors_with_origin_header(self):
         """Regular request with Origin header should include credentials header"""
         headers = {
-            "Origin": "https://secure-gateway-33.preview.emergentagent.com",
+            "Origin": "https://crm-dashboard-213.preview.emergentagent.com",
             "Content-Type": "application/json"
         }
         response = requests.post(

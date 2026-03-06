@@ -3379,6 +3379,16 @@ try:
 except Exception as e:
     print(f"\u26a0\ufe0f Gestion CRA routes not loaded: {e}")
 
+# Endpoint descarga catálogo comercial PDF
+from fastapi.responses import FileResponse as FR2
+@api_router.get("/catalogo/comercial")
+async def descargar_catalogo():
+    pdf_path = "/app/backend/uploads/downloads/ManoProtect_Catalogo_Comercial_2025.pdf"
+    if not os.path.exists(pdf_path):
+        from scripts.generar_revista import RevistaManoProtect
+        RevistaManoProtect().generar(pdf_path)
+    return FR2(pdf_path, filename="ManoProtect_Catalogo_Comercial_2025.pdf", media_type="application/pdf")
+
 app.include_router(api_router)
 app.include_router(public_router)
 
