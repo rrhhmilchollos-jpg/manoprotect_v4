@@ -1,42 +1,42 @@
-# ManoProtect - PRD v10.4.0 (Producción)
+# ManoProtect - PRD v10.5.0
 
-## Sistema
-Plataforma de seguridad profesional. Apps: Comerciales, Instaladores, Clientes (familias), Admin.
-Tech: React + FastAPI + MongoDB + Brevo + Stripe + bcrypt
+## Completado Mar 6, 2026
+
+### Performance (Lighthouse)
+- Imágenes WebP: 9,584KB -> 420KB (95.6% reducción)
+- Scripts analytics diferidos 3s post-load
+- Hero image preloaded, preconnects optimizados
+- width/height explícitos en todas las imágenes (CLS fix)
+
+### Google Discover
+- max-image-preview:large + max-video-preview:-1
+- Hero HD 1200px+ para Discover
+- FAQPage schema (4 preguntas)
+- ItemList schema (artículos blog)
+- RSS Feed /api/rss/feed.xml (6 artículos)
+- 40+ schema types
+- Keywords alineadas con negocio real
+
+### Auth (bcrypt)
+- Migración SHA256->bcrypt con auto-upgrade
+- Auto-seed en startup
+- Mensajes de error específicos
+
+### Equipos de Instalación
+- CRUD equipos, asignación a instalaciones
+- Notificaciones automáticas
 
 ## Credenciales
 | Rol | Email | Password |
 |-----|-------|----------|
-| CEO/Admin | ceo@manoprotect.com | 19862210Des |
-| Gestión Admin | admin@manoprotect.com | ManoAdmin2025! |
+| CEO | ceo@manoprotect.com | 19862210Des |
+| Admin CRA | admin@manoprotect.com | ManoAdmin2025! |
 | Comercial | comercial@manoprotect.com | Comercial2025! |
 | Instalador | instalador@manoprotect.com | Instalador2025! |
 
-## Completado
-
-### Mar 6, 2026 - Performance + Auth + SEO
-- Auth migrado a bcrypt (SHA256 -> bcrypt con auto-upgrade)
-- Auto-seed en startup (usuarios gestión siempre disponibles)
-- Mensajes error específicos ("Contraseña incorrecta", "Usuario no encontrado")
-- Scripts analytics diferidos 3s post-load (GTM, GA4, FB Pixel, Hotjar)
-- Hero image preloaded (LCP optimization)
-- Preconnects innecesarios eliminados (Stripe, Google Analytics)
-- width/height explícitos en TODAS las imágenes (CLS fix)
-- decoding="async" en imágenes lazy
-- Keywords/descriptions alineadas con negocio real
-- robots.txt y sitemap.xml actualizados
-- Digital Asset Links para TWA
-
-### Mar 6, 2026 - Equipos de Instalación
-- CRUD equipos (1-N miembros), asignación a instalaciones
-- Notificaciones automáticas, dashboard con conteo
-
-### Testing: iteration 90 (95% backend, 100% frontend)
-
 ## Backlog
-- P0: Deploy a producción
-- P0: Generar APKs con PWABuilder
-- P2: Meta Pixel ID + Hotjar ID + Google Search Console
-- P1: Streaming RTSP
+- P0: Deploy + generar APKs PWABuilder
+- P1: Streaming RTSP cámaras
+- P2: Meta Pixel ID, Hotjar ID, Google Search Console
 - P2: iOS Capacitor
 - P3: 112, BigQuery, Sora 2

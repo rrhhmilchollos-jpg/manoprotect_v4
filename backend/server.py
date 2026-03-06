@@ -3390,6 +3390,61 @@ except Exception as e:
 
 # Endpoint descarga catálogo comercial PDF
 from fastapi.responses import FileResponse as FR2
+@api_router.get("/rss/feed.xml")
+async def rss_feed():
+    """RSS feed for Google Discover and news aggregators"""
+    base = "https://manoprotect.com"
+    articles = [
+        {"title": "Mejores Relojes GPS con SOS para Mayores 2026", "slug": "blog/mejores-relojes-sos-2026",
+         "desc": "Comparativa completa de relojes inteligentes con boton SOS y GPS para personas mayores. Sentinel X, Sentinel S y mas.",
+         "img": f"{base}/images/optimized/hero-family-hd.webp", "date": "2026-03-06"},
+        {"title": "Como Funciona un Reloj SOS: Guia Completa", "slug": "blog/como-funciona-reloj-sos",
+         "desc": "Todo sobre relojes de emergencia SOS: deteccion de caidas, GPS, alertas automaticas y Central Receptora de Alarmas 24/7.",
+         "img": f"{base}/images/optimized/step-elderly.webp", "date": "2026-03-01"},
+        {"title": "Reloj GPS para Personas con Alzheimer", "slug": "blog/reloj-para-alzheimer",
+         "desc": "Como un reloj GPS puede ayudar a cuidar personas con demencia y Alzheimer. Geocercas, alertas y monitorizacion.",
+         "img": f"{base}/images/optimized/sentinel-s.webp", "date": "2026-02-20"},
+        {"title": "Seguridad para Hijos: Boton SOS Infantil", "slug": "blog/seguridad-hijos-boton-sos",
+         "desc": "Guia para padres sobre dispositivos de seguridad GPS y SOS para ninos. Sentinel J analizado.",
+         "img": f"{base}/images/optimized/step-child.webp", "date": "2026-02-15"},
+        {"title": "Alarmas para Hogar sin Permanencia 2026", "slug": "blog/seguridad-familiar-digital-2026",
+         "desc": "Las mejores alarmas para hogar y negocio sin permanencia ni cuotas ocultas. Instalacion gratuita.",
+         "img": f"{base}/images/optimized/gallery-garcia.webp", "date": "2026-02-10"},
+        {"title": "Proteccion contra Phishing y Estafas Online", "slug": "proteccion-phishing",
+         "desc": "Como proteger a tu familia de phishing, fraudes online y estafas digitales. Herramientas y consejos practicos.",
+         "img": f"{base}/images/optimized/step-teenager.webp", "date": "2026-01-25"},
+    ]
+    items_xml = ""
+    for a in articles:
+        items_xml += f"""    <item>
+      <title>{a['title']}</title>
+      <link>{base}/{a['slug']}</link>
+      <description>{a['desc']}</description>
+      <pubDate>{a['date']}T10:00:00+01:00</pubDate>
+      <guid isPermaLink="true">{base}/{a['slug']}</guid>
+      <enclosure url="{a['img']}" type="image/webp" length="50000" />
+    </item>
+"""
+    rss = f"""<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/">
+  <channel>
+    <title>ManoProtect Blog - Seguridad Familiar</title>
+    <link>{base}/blog</link>
+    <description>Noticias y guias sobre seguridad familiar, alarmas profesionales, relojes GPS con SOS y proteccion digital.</description>
+    <language>es</language>
+    <lastBuildDate>2026-03-06T10:00:00+01:00</lastBuildDate>
+    <atom:link href="{base}/api/rss/feed.xml" rel="self" type="application/rss+xml" />
+    <image>
+      <url>{base}/images/optimized/hero-family-hd.webp</url>
+      <title>ManoProtect</title>
+      <link>{base}</link>
+    </image>
+{items_xml}  </channel>
+</rss>"""
+    from fastapi.responses import Response
+    return Response(content=rss, media_type="application/xml")
+
+
 @api_router.get("/catalogo/comercial")
 async def descargar_catalogo():
     pdf_path = "/app/backend/uploads/downloads/ManoProtect_Catalogo_Comercial_2025.pdf"

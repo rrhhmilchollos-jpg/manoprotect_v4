@@ -15,14 +15,14 @@ import {
 import LandingFooter from '@/components/landing/LandingFooter';
 import { trackPageView, trackCTAClick } from '@/services/conversionTracking';
 
-/* ── Images ── */
-const HERO_FAMILY = "https://static.prod-images.emergentagent.com/jobs/9da3b4c4-c09a-415b-8aa7-bb34b82ca31e/images/87b9c67e566b3df4d280471b26a2215bd603777003e860a14633f20318652e92.png";
-const IMG_CHILD_SCHOOL = "https://static.prod-images.emergentagent.com/jobs/9da3b4c4-c09a-415b-8aa7-bb34b82ca31e/images/910a9c2ec4bd34474c8f1f73a4011a40e480c1a6c2227fd17299b6a14e326ad7.png";
-const IMG_ELDERLY = "https://static.prod-images.emergentagent.com/jobs/9da3b4c4-c09a-415b-8aa7-bb34b82ca31e/images/7ad5d961d432cd41064d5a0c5ad6a516bc92a9e6d960fca3881e0e8fc7f2b06a.png";
-const IMG_TEENAGER = "https://static.prod-images.emergentagent.com/jobs/9da3b4c4-c09a-415b-8aa7-bb34b82ca31e/images/b49eca79b0e4d85e473edb0b4a8e4e645f3d8e9df5d387da0cb1466ec672cf39.png";
-const SENTINEL_X_IMG = "https://customer-assets.emergentagent.com/job_8161c713-bb69-4bfd-84d2-fde54657d491/artifacts/acz8j630_Reloj%20inteligente%20ManoProtect%20SENTINEL%20X.png";
-const SENTINEL_J_IMG = "https://static.prod-images.emergentagent.com/jobs/d9b76ada-9994-4215-9ba1-31b4da8dc333/images/691c09d64cba84d0a069b7937e6f2e651449be714b394f349f7e64ace5198a3a.png";
-const SENTINEL_S_IMG = "https://static.prod-images.emergentagent.com/jobs/70b9cc4e-5cf4-48c1-b710-585bbf769faa/images/e4d94aa4babe28ec14a789ee54b85cfc6b5cafb807d95c003d7a26f35491fa3d.png";
+/* ── Images (WebP optimized, local) ── */
+const HERO_FAMILY = "/images/optimized/hero-family.webp";
+const IMG_CHILD_SCHOOL = "/images/optimized/step-child.webp";
+const IMG_ELDERLY = "/images/optimized/step-elderly.webp";
+const IMG_TEENAGER = "/images/optimized/step-teenager.webp";
+const SENTINEL_X_IMG = "/images/optimized/sentinel-x.webp";
+const SENTINEL_J_IMG = "/images/optimized/sentinel-j.webp";
+const SENTINEL_S_IMG = "/images/optimized/sentinel-s.webp";
 
 const track = (n, p = {}) => {
   if (window.gtag) window.gtag('event', n, p);
@@ -516,10 +516,10 @@ const HighConversionLanding = () => {
           </Reveal>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {[
-              { img: "https://static.prod-images.emergentagent.com/jobs/63935a0b-bb4d-4d95-9b2d-4d6c8716632f/images/005c4ebfc6e6209f037eb0f7b6c4020ffd9c71d1ac1503b33f84ec57d2f2b7af.png", title: "La familia García", desc: "Toda la familia protegida con Sentinel X" },
-              { img: "https://static.prod-images.emergentagent.com/jobs/63935a0b-bb4d-4d95-9b2d-4d6c8716632f/images/ef3c915bb5fc20b488ac852ce95dbeaa2637a80b9212aac7439b64e9b67b31da.png", title: "Vuelta al cole segura", desc: "Sentinel J: tranquilidad para los padres" },
-              { video: "/videos/sentinel_s_senior.mp4", img: "https://static.prod-images.emergentagent.com/jobs/63935a0b-bb4d-4d95-9b2d-4d6c8716632f/images/401d940e753b9c06870dd8ef5ab10a7aff295491bb65f59d9eaabec3f78318dc.png", title: "Independencia senior", desc: "Sentinel S: seguridad para nuestros mayores" },
-              { img: "https://static.prod-images.emergentagent.com/jobs/63935a0b-bb4d-4d95-9b2d-4d6c8716632f/images/18fdfbb5fc59491f7de0c3a02cc006e5eed62ae47f50742b9f625f06c74548f0.png", title: "Aventura sin miedo", desc: "Adolescentes protegidos en cada excursión" },
+              { img: "/images/optimized/gallery-garcia.webp", title: "La familia García", desc: "Toda la familia protegida con Sentinel X" },
+              { img: "/images/optimized/gallery-school.webp", title: "Vuelta al cole segura", desc: "Sentinel J: tranquilidad para los padres" },
+              { video: "/videos/sentinel_s_senior.mp4", img: "/images/optimized/gallery-senior.webp", title: "Independencia senior", desc: "Sentinel S: seguridad para nuestros mayores" },
+              { img: "/images/optimized/gallery-adventure.webp", title: "Aventura sin miedo", desc: "Adolescentes protegidos en cada excursión" },
             ].map((v, i) => (
               <Reveal key={i} delay={i * 100}>
                 <div className="group relative rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all cursor-pointer" data-testid={`video-card-${i}`}

@@ -37,10 +37,11 @@
         <meta property="og:url" content="https://manoprotect.com/" />
         <meta property="og:title" content="ManoProtect - Seguridad Integral para Hogar y Negocio" />
         <meta property="og:description" content="Alarmas profesionales para hogar y negocio con Central Receptora 24/7. Sentinel Lock, app movil, GPS familiar. Instalacion GRATIS, sin permanencia. Desde 33,90 EUR/mes." />
-        <meta property="og:image" content="https://manoprotect.com/og-image.png" />
+        <meta property="og:image" content="https://manoprotect.com/images/optimized/hero-family-hd.webp" />
         <meta property="og:image:width" content="1200" />
-        <meta property="og:image:height" content="630" />
-        <meta property="og:image:alt" content="ManoProtect - Digital Security Platform" />
+        <meta property="og:image:height" content="840" />
+        <meta property="og:image:alt" content="ManoProtect - Alarmas Profesionales y Seguridad Familiar" />
+        <meta property="og:image:type" content="image/webp" />
         <meta property="og:locale" content="es_ES" />
         <meta property="og:site_name" content="ManoProtect" />
         
@@ -149,18 +150,17 @@
         <!-- ============================================ -->
         <!-- PERFORMANCE: PRELOAD CRITICAL RESOURCES -->
         <!-- ============================================ -->
-        <!-- Preload hero image for LCP -->
         <link rel="preload" href="/manoprotect_logo.webp" as="image" type="image/webp" />
-        <link rel="preload" href="https://static.prod-images.emergentagent.com/jobs/9da3b4c4-c09a-415b-8aa7-bb34b82ca31e/images/87b9c67e566b3df4d280471b26a2215bd603777003e860a14633f20318652e92.png" as="image" fetchpriority="high" />
+        
+        <!-- RSS Feed for Google Discover -->
+        <link rel="alternate" type="application/rss+xml" title="ManoProtect Blog" href="https://manoprotect.com/api/rss/feed.xml" />
         
         <!-- Preconnect to critical origins ONLY -->
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-        <link rel="preconnect" href="https://static.prod-images.emergentagent.com" crossorigin />
-        <link rel="preconnect" href="https://customer-assets.emergentagent.com" crossorigin />
         
-        <!-- Preload LCP hero image -->
-        <link rel="preload" as="image" href="https://static.prod-images.emergentagent.com/jobs/9da3b4c4-c09a-415b-8aa7-bb34b82ca31e/images/87b9c67e566b3df4d280471b26a2215bd603777003e860a14633f20318652e92.png" fetchpriority="high" />
+        <!-- Preload LCP hero image (local WebP optimized) -->
+        <link rel="preload" as="image" href="/images/optimized/hero-family.webp" fetchpriority="high" type="image/webp" />
         
         <!-- DNS Prefetch for deferred third-party resources -->
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
@@ -275,7 +275,7 @@
             "name": "ManoProtect",
             "alternateName": "ManoProtect - Digital Security",
             "url": "https://manoprotect.com",
-            "description": "Plataforma líder en digital security, fraud prevention y online payment protection",
+            "description": "Plataforma lider en alarmas profesionales para hogar y negocio con Central Receptora 24/7",
             "publisher": {"@id": "https://manoprotect.com/#organization"},
             "inLanguage": "es-ES",
             "potentialAction": {
@@ -464,14 +464,14 @@
             "provider": {"@id": "https://manoprotect.com/#organization"},
             "screenshot": "https://manoprotect.com/screenshots/dashboard.png",
             "featureList": [
-                "Fraud Prevention con IA",
-                "Protección contra Phishing",
-                "Online Payment Protection",
-                "Alertas SOS con GPS en tiempo real",
-                "Monitorización de Amenazas 24/7",
-                "Protección Familiar hasta 5 miembros",
-                "Análisis ilimitados con Inteligencia Artificial",
-                "Bloqueo automático de amenazas"
+                "Central Receptora de Alarmas CRA 24/7",
+                "Boton SOS con GPS en tiempo real",
+                "Deteccion de caidas automatica",
+                "Alertas SOS a contactos de emergencia",
+                "Geocercas y zonas seguras",
+                "App movil para toda la familia",
+                "Instalacion profesional gratuita",
+                "Sin permanencia ni cuotas ocultas"
             ]
         }
         </script>
@@ -977,6 +977,37 @@
                     }
                 }]
             }
+        }
+        </script>
+        
+        <!-- ============================================ -->
+        <!-- STRUCTURED DATA: ARTICLE LIST (GOOGLE DISCOVER) -->
+        <!-- ============================================ -->
+        <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "ItemList",
+            "itemListElement": [
+                {"@type": "ListItem", "position": 1, "url": "https://manoprotect.com/blog/mejores-relojes-sos-2026", "name": "Mejores Relojes GPS con SOS para Mayores 2026"},
+                {"@type": "ListItem", "position": 2, "url": "https://manoprotect.com/blog/como-funciona-reloj-sos", "name": "Como Funciona un Reloj SOS: Guia Completa"},
+                {"@type": "ListItem", "position": 3, "url": "https://manoprotect.com/blog/seguridad-familiar-digital-2026", "name": "Alarmas para Hogar sin Permanencia 2026"}
+            ]
+        }
+        </script>
+
+        <!-- ============================================ -->
+        <!-- STRUCTURED DATA: FAQ (GOOGLE DISCOVER) -->
+        <!-- ============================================ -->
+        <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [
+                {"@type": "Question", "name": "Como funciona el boton SOS del reloj ManoProtect?", "acceptedAnswer": {"@type": "Answer", "text": "Al pulsar el boton SOS durante 3 segundos, el reloj envia automaticamente tu ubicacion GPS a la Central Receptora de Alarmas 24/7 y a tus contactos de emergencia. La CRA contacta con el 112 si es necesario."}},
+                {"@type": "Question", "name": "Cuanto cuesta la alarma ManoProtect sin permanencia?", "acceptedAnswer": {"@type": "Answer", "text": "ManoProtect ofrece alarmas profesionales desde 33,90 euros al mes sin permanencia ni cuotas ocultas. La instalacion es totalmente gratuita."}},
+                {"@type": "Question", "name": "Que diferencia hay entre Sentinel X, Sentinel J y Sentinel S?", "acceptedAnswer": {"@type": "Answer", "text": "Sentinel X es el reloj premium para adultos con 4G LTE y SOS invisible. Sentinel J para jovenes con GPS. Sentinel S para mayores con deteccion de caidas automatica."}},
+                {"@type": "Question", "name": "ManoProtect tiene Central Receptora de Alarmas?", "acceptedAnswer": {"@type": "Answer", "text": "Si, ManoProtect cuenta con una CRA profesional operativa 24/7, homologada y conectada con los servicios de emergencia 112."}}
+            ]
         }
         </script>
         
