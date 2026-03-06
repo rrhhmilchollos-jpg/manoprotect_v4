@@ -412,7 +412,7 @@ const StockUrgencyPopup = () => {
   }, []);
   
   // Use CSS to hide instead of conditional return
-  const hidden = !show || !promo || ['/ceo', '/login', '/empleados', '/investor'].some(p => location.pathname.startsWith(p));
+  const hidden = !show || !promo || ['/ceo', '/login', '/empleados', '/investor', '/gestion', '/familia'].some(p => location.pathname.startsWith(p));
   
   if (!promo) return null;
   
