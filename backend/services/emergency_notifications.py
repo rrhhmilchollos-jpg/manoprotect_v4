@@ -27,21 +27,29 @@ def init_firebase():
         return True
     
     try:
-        cred_path = os.path.join(os.path.dirname(__file__), '..', 'firebase-admin-sdk.json')
-        if os.path.exists(cred_path):
-            cred = credentials.Certificate(cred_path)
+        fb_project = os.environ.get('FIREBASE_PROJECT_ID')
+        fb_email = os.environ.get('FIREBASE_CLIENT_EMAIL')
+        fb_key = os.environ.get('FIREBASE_PRIVATE_KEY')
+        if fb_project and fb_email and fb_key:
+            cred = credentials.Certificate({
+                "type": "service_account",
+                "project_id": fb_project,
+                "client_email": fb_email,
+                "private_key": fb_key.replace('\\n', '\n'),
+                "token_uri": "https://oauth2.googleapis.com/token"
+            })
             firebase_admin.initialize_app(cred)
             _firebase_initialized = True
-            print("✅ Firebase Admin SDK initialized")
+            print("Firebase Admin SDK initialized from env vars")
             return True
         else:
-            print("❌ Firebase Admin SDK JSON not found")
+            print("Firebase credentials not configured in .env")
             return False
     except Exception as e:
         if "already exists" in str(e):
             _firebase_initialized = True
             return True
-        print(f"❌ Firebase init error: {e}")
+        print(f"Firebase init error: {e}")
         return False
 
 # Initialize on module load

@@ -1640,29 +1640,35 @@ async def get_services_status(request: Request, session_token: Optional[str] = C
     else:
         services["infobip"]["message"] = "Credenciales no configuradas en .env (INFOBIP_API_KEY, INFOBIP_BASE_URL)"
     
-    # Check Firebase
-    firebase_cred_path = os.path.join(os.path.dirname(__file__), 'firebase-admin-sdk.json')
-    if os.path.exists(firebase_cred_path):
+    # Check Firebase - use env vars instead of JSON file
+    fb_project = os.environ.get('FIREBASE_PROJECT_ID')
+    fb_email = os.environ.get('FIREBASE_CLIENT_EMAIL')
+    fb_key = os.environ.get('FIREBASE_PRIVATE_KEY')
+    if fb_project and fb_email and fb_key:
         services["firebase"]["configured"] = True
         try:
             import firebase_admin
             from firebase_admin import credentials
-            # Check if already initialized
             try:
                 firebase_admin.get_app()
                 services["firebase"]["status"] = "ok"
                 services["firebase"]["message"] = "Firebase Admin SDK inicializado"
             except ValueError:
-                # Not initialized, try to initialize
-                cred = credentials.Certificate(firebase_cred_path)
+                cred = credentials.Certificate({
+                    "type": "service_account",
+                    "project_id": fb_project,
+                    "client_email": fb_email,
+                    "private_key": fb_key.replace('\\n', '\n'),
+                    "token_uri": "https://oauth2.googleapis.com/token"
+                })
                 firebase_admin.initialize_app(cred)
                 services["firebase"]["status"] = "ok"
-                services["firebase"]["message"] = "Firebase Admin SDK inicializado correctamente"
+                services["firebase"]["message"] = "Firebase Admin SDK inicializado desde env vars"
         except Exception as e:
             services["firebase"]["status"] = "error"
             services["firebase"]["message"] = f"Error: {str(e)}"
     else:
-        services["firebase"]["message"] = "Archivo firebase-admin-sdk.json no encontrado"
+        services["firebase"]["message"] = "Credenciales Firebase no configuradas en .env"
     
     # Check Stripe
     stripe_key = os.environ.get('STRIPE_API_KEY')

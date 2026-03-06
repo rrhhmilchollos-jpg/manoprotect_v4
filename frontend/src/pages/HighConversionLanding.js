@@ -72,6 +72,16 @@ const HighConversionLanding = () => {
     fetch(`${API}/api/promo/sentinel-s/status`).then(r => r.json()).then(d => setPromoData(d)).catch(() => {});
   }, [API]);
 
+  // Auto-scroll to #promo-sentinel when coming from TikTok link
+  useEffect(() => {
+    if (window.location.hash === '#promo-sentinel') {
+      setTimeout(() => {
+        const el = document.getElementById('promo-sentinel');
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 800);
+    }
+  }, []);
+
   const handlePromoCheckout = async (planType) => {
     setPromoLoading(true);
     try {
