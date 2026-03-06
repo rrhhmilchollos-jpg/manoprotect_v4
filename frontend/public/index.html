@@ -159,6 +159,10 @@
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
         
+        <!-- Google Fonts: Non-blocking load with font-display:optional (prevents CLS from font swap) -->
+        <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=optional" />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=optional" media="print" onload="this.media='all'" />
+        
         <!-- Preload LCP hero image (local WebP optimized) -->
         <link rel="preload" as="image" href="/images/optimized/hero-family.webp" fetchpriority="high" type="image/webp" />
         
@@ -1080,6 +1084,18 @@
             }]
         }
         </script>
+        
+        <!-- Critical CSS: Inline for instant FCP -->
+        <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;-webkit-font-smoothing:antialiased}
+        #root{min-height:100vh}
+        .app-loading{background:#fff}
+        header{position:fixed;top:0;left:0;right:0;z-index:50;background:#fff;height:64px}
+        [data-testid="hero-section"]{min-height:600px;background:linear-gradient(135deg,#0f172a,#1e293b,#064e3b)}
+        [data-testid="hero-family-image"]{aspect-ratio:3/2;width:100%;max-width:32rem}
+        img{content-visibility:auto}
+        </style>
         
         <!-- React App Root with Loading State -->
         <div id="root" class="app-loading"></div>

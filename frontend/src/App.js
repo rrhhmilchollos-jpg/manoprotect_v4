@@ -67,7 +67,8 @@ const logAnalyticsEvent = (...args) => {
 const AnalyticsEvents = {};
 
 // ALL pages lazy loaded for better initial bundle
-const HighConversionLanding = lazy(() => import('@/pages/HighConversionLanding'));
+// Landing page loaded eagerly (not lazy) for zero CLS
+import HighConversionLanding from '@/pages/HighConversionLanding';
 const LandingPage = lazy(() => import('@/pages/LandingPage'));
 const Login = lazy(() => import('@/pages/Login'));
 const Register = lazy(() => import('@/pages/Register'));

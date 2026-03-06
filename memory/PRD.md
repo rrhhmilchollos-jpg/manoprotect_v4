@@ -1,30 +1,37 @@
-# ManoProtect - PRD v10.5.0
+# ManoProtect - PRD v10.6.0
 
-## Completado Mar 6, 2026
+## Performance Optimizations (Mar 6, 2026)
 
-### Performance (Lighthouse)
-- Imágenes WebP: 9,584KB -> 420KB (95.6% reducción)
-- Scripts analytics diferidos 3s post-load
-- Hero image preloaded, preconnects optimizados
-- width/height explícitos en todas las imágenes (CLS fix)
+### FCP 2.9s -> Target <1.5s
+- Font @import eliminado del CSS (era render-blocking chain: CSS→GoogleFonts CSS→woff2)
+- Fonts cargadas vía `<link media="print" onload="this.media='all'">` (non-blocking)
+- CSS crítico inline en index.html (instant first paint)
+- Preconnects reducidos a solo fonts (2 en vez de 4+)
 
-### Google Discover
-- max-image-preview:large + max-video-preview:-1
-- Hero HD 1200px+ para Discover
-- FAQPage schema (4 preguntas)
-- ItemList schema (artículos blog)
-- RSS Feed /api/rss/feed.xml (6 artículos)
-- 40+ schema types
-- Keywords alineadas con negocio real
+### LCP 6.0s -> Target <2.5s
+- Imágenes WebP: 9,584KB → 420KB (95.6% reducción)
+- Hero image preloaded con `fetchpriority="high"`
+- Imágenes locales (no CDN externo = eliminado round trip)
+- `loading="eager"` en hero, `loading="lazy"` en todo lo demás
 
-### Auth (bcrypt)
-- Migración SHA256->bcrypt con auto-upgrade
-- Auto-seed en startup
-- Mensajes de error específicos
+### CLS 0.206 -> Target <0.1
+- `font-display: optional` (no font swap = no text reflow)
+- Landing page carga EAGER (no lazy) — eliminado el CLS de Suspense fallback→real content
+- `min-height: 600px` en hero section
+- `aspect-ratio` inline en hero image y step images
+- `width/height` explícitos en TODAS las imágenes (11 imágenes)
+- `content-visibility: auto` en secciones below-fold
+- `containIntrinsicSize` en secciones para reservar espacio
 
-### Equipos de Instalación
-- CRUD equipos, asignación a instalaciones
-- Notificaciones automáticas
+### TBT 190ms -> Target <200ms
+- Scripts analytics (GTM, GA4, FB Pixel, Hotjar) diferidos 3s post-load
+- `content-visibility: auto` reduce rendering work below-fold
+- `decoding="async"` en imágenes lazy
+
+### Speed Index 4.1s -> Target <3.3s
+- Combinación de todas las mejoras anteriores
+- CSS crítico inline = primer paint visible inmediato
+- Hero image preloaded = contenido principal visible rápido
 
 ## Credenciales
 | Rol | Email | Password |
@@ -35,8 +42,8 @@
 | Instalador | instalador@manoprotect.com | Instalador2025! |
 
 ## Backlog
-- P0: Deploy + generar APKs PWABuilder
+- P0: Deploy a producción + verificar Lighthouse scores
+- P0: Generar APKs PWABuilder
 - P1: Streaming RTSP cámaras
-- P2: Meta Pixel ID, Hotjar ID, Google Search Console
 - P2: iOS Capacitor
 - P3: 112, BigQuery, Sora 2

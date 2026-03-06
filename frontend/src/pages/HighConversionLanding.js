@@ -124,7 +124,7 @@ const HighConversionLanding = () => {
       <div className="h-14" />
 
       {/* ═══════ HERO ═══════ */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-slate-900 via-slate-800 to-emerald-900" data-testid="hero-section">
+      <section className="relative overflow-hidden bg-gradient-to-br from-slate-900 via-slate-800 to-emerald-900 min-h-[600px]" data-testid="hero-section">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-emerald-500/10 via-transparent to-transparent" />
         <div className="relative max-w-6xl mx-auto px-4 sm:px-6 py-16 md:py-24">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
@@ -153,7 +153,7 @@ const HighConversionLanding = () => {
             {/* Hero: Familia española con Sentinel overlays */}
             <div className="relative flex justify-center">
               <div className="relative">
-                <img src={HERO_FAMILY} alt="Familia española protegida con relojes Sentinel" className="rounded-2xl shadow-2xl w-full max-w-lg object-cover aspect-[3/2]" loading="eager" fetchpriority="high" width="600" height="400" data-testid="hero-family-image" />
+                <img src={HERO_FAMILY} alt="Familia española protegida con relojes Sentinel" className="rounded-2xl shadow-2xl w-full max-w-lg object-cover" style={{ aspectRatio: '3/2' }} loading="eager" fetchpriority="high" width="600" height="400" data-testid="hero-family-image" />
                 <div className="absolute -bottom-4 -left-4 bg-white rounded-xl shadow-xl p-2 flex items-center gap-2 animate-pulse">
                   <img src={SENTINEL_X_IMG} alt="Sentinel X" className="w-10 h-10 object-contain" width="40" height="40" />
                   <div><p className="text-[10px] text-gray-500 font-medium">Sentinel X</p><p className="text-xs font-bold text-gray-900">Adultos</p></div>
@@ -200,7 +200,7 @@ const HighConversionLanding = () => {
       </section>
 
       {/* ═══════ CÓMO FUNCIONA ═══════ */}
-      <section className="py-16 sm:py-20 bg-slate-50" id="como-funciona" data-testid="how-section">
+      <section className="py-16 sm:py-20 bg-slate-50" id="como-funciona" data-testid="how-section" style={{ contentVisibility: 'auto', containIntrinsicSize: '0 800px' }}>
         <div className="max-w-5xl mx-auto px-4 sm:px-6">
           <div className="text-center mb-12">
             <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3">Cómo funciona</h2>
@@ -215,8 +215,8 @@ const HighConversionLanding = () => {
               <Reveal key={i} delay={i * 150}>
                 <div className="relative text-center group" data-testid={`step-${i}`}>
                   {i < 2 && <div className="hidden md:block absolute top-24 left-[60%] w-[80%] h-[2px] bg-emerald-200" />}
-                  <div className="relative mb-4 rounded-2xl overflow-hidden shadow-md">
-                    <img src={item.img} alt={item.title} className="w-full h-44 object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" decoding="async" width="400" height="176" />
+                  <div className="relative mb-4 rounded-2xl overflow-hidden shadow-md" style={{ aspectRatio: '16/7' }}>
+                    <img src={item.img} alt={item.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" decoding="async" width="400" height="176" />
                     <div className="absolute top-3 right-3 w-8 h-8 bg-emerald-500 rounded-full flex items-center justify-center text-white text-sm font-bold shadow-md">{item.step}</div>
                   </div>
                   <h3 className="font-bold text-gray-900 mb-2 text-lg">{item.title}</h3>
@@ -234,7 +234,7 @@ const HighConversionLanding = () => {
       </section>
 
       {/* ═══════ PRODUCTOS DESTACADOS ═══════ */}
-      <section className="py-16 sm:py-20 bg-white" id="productos" data-testid="products-section">
+      <section className="py-16 sm:py-20 bg-white" id="productos" data-testid="products-section" style={{ contentVisibility: 'auto', containIntrinsicSize: '0 900px' }}>
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
           <div className="text-center mb-4">
             <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3">Productos destacados</h2>
@@ -463,7 +463,7 @@ const HighConversionLanding = () => {
       </section>
 
       {/* ═══════ CTA URGENCIA ═══════ */}
-      <section className="py-16 sm:py-20 bg-gradient-to-r from-emerald-600 to-emerald-500" data-testid="urgency-section">
+      <section className="py-16 sm:py-20 bg-gradient-to-r from-emerald-600 to-emerald-500" data-testid="urgency-section" style={{ contentVisibility: 'auto', containIntrinsicSize: '0 400px' }}>
         <div className="max-w-3xl mx-auto px-4 sm:px-6 text-center">
           <Gift className="w-12 h-12 text-white/80 mx-auto mb-4" />
           <h2 className="text-2xl sm:text-3xl font-bold text-white mb-3" data-testid="urgency-title">
@@ -477,7 +477,7 @@ const HighConversionLanding = () => {
       </section>
 
       {/* ═══════ FAQ RÁPIDO ═══════ */}
-      <section className="py-16 sm:py-20 bg-white" id="faq" data-testid="faq-section">
+      <section className="py-16 sm:py-20 bg-white" id="faq" data-testid="faq-section" style={{ contentVisibility: 'auto', containIntrinsicSize: '0 500px' }}>
         <div className="max-w-3xl mx-auto px-4 sm:px-6">
           <h2 className="text-2xl sm:text-3xl font-bold text-center text-gray-900 mb-10">Preguntas frecuentes</h2>
           {[
@@ -527,7 +527,7 @@ const HighConversionLanding = () => {
                   {v.video ? (
                     <video id={`vid-${i}`} src={v.video} poster={v.img} className="w-full aspect-video object-cover" muted loop playsInline preload="metadata" data-testid={`real-video-${i}`} />
                   ) : (
-                    <img src={v.img} alt={v.title} className="w-full aspect-video object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" decoding="async" width="640" height="360" />
+                    <img src={v.img} alt={v.title} className="w-full object-cover group-hover:scale-105 transition-transform duration-500" style={{ aspectRatio: '16/9' }} loading="lazy" decoding="async" width="640" height="360" />
                   )}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent flex flex-col justify-end p-4">
                     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 bg-white/90 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform shadow-lg">
