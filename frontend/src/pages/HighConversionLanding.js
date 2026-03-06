@@ -159,11 +159,11 @@ const HighConversionLanding = () => {
                   <div><p className="text-[10px] text-gray-500 font-medium">Sentinel X</p><p className="text-xs font-bold text-gray-900">Adultos</p></div>
                 </div>
                 <div className="absolute -top-3 -right-3 bg-white rounded-xl shadow-xl p-2 flex items-center gap-2 animate-pulse" style={{ animationDelay: '500ms' }}>
-                  <img src={SENTINEL_J_IMG} alt="Sentinel J" className="w-10 h-10 object-contain" />
+                  <img src={SENTINEL_J_IMG} alt="Sentinel J" className="w-10 h-10 object-contain" width="40" height="40" />
                   <div><p className="text-[10px] text-gray-500 font-medium">Sentinel J</p><p className="text-xs font-bold text-gray-900">Niños</p></div>
                 </div>
                 <div className="absolute -bottom-4 -right-4 bg-white rounded-xl shadow-xl p-2 flex items-center gap-2 animate-pulse" style={{ animationDelay: '1000ms' }}>
-                  <img src={SENTINEL_S_IMG} alt="Sentinel S" className="w-10 h-10 object-contain" />
+                  <img src={SENTINEL_S_IMG} alt="Sentinel S" className="w-10 h-10 object-contain" width="40" height="40" />
                   <div><p className="text-[10px] text-gray-500 font-medium">Sentinel S</p><p className="text-xs font-bold text-gray-900">Mayores</p></div>
                 </div>
               </div>
@@ -252,7 +252,7 @@ const HighConversionLanding = () => {
                 <div className="absolute top-0 left-0 right-0 bg-gradient-to-r from-red-500 to-orange-500 text-white text-center py-1 text-[11px] font-bold">SOLO 50 UNIDADES BASIC GRATIS</div>
                 <div className="p-6 pt-10 text-center">
                   <span className="inline-block text-xs font-bold bg-emerald-500/20 text-emerald-400 px-3 py-1 rounded-full mb-4">ADULTOS Y ADOLESCENTES</span>
-                  <img src={SENTINEL_X_IMG} alt="Sentinel X" className="w-40 h-40 object-contain mx-auto mb-4 group-hover:scale-105 transition-transform" loading="lazy" />
+                  <img src={SENTINEL_X_IMG} alt="Sentinel X" className="w-40 h-40 object-contain mx-auto mb-4 group-hover:scale-105 transition-transform" loading="lazy" decoding="async" width="160" height="160" />
                   <h3 className="text-2xl font-bold text-white mb-2">Sentinel X</h3>
                   <p className="text-sm text-gray-400 mb-4">GPS, SOS, batería larga, resistente al agua</p>
                   <ul className="text-left space-y-2 text-sm text-gray-300 mb-4">
@@ -289,7 +289,7 @@ const HighConversionLanding = () => {
                 <div className="absolute top-0 left-0 right-0 bg-gradient-to-r from-pink-500 to-violet-500 text-white text-center py-1 text-xs font-bold">PARA NIÑOS – 8 COLORES</div>
                 <div className="p-6 pt-10 text-center">
                   <span className="inline-block text-xs font-bold bg-pink-100 text-pink-600 px-3 py-1 rounded-full mb-4">3-12 AÑOS</span>
-                  <img src={SENTINEL_J_IMG} alt="Sentinel J" className="w-40 h-40 object-contain mx-auto mb-4 group-hover:scale-105 transition-transform" loading="lazy" />
+                  <img src={SENTINEL_J_IMG} alt="Sentinel J" className="w-40 h-40 object-contain mx-auto mb-4 group-hover:scale-105 transition-transform" loading="lazy" decoding="async" width="160" height="160" />
                   <h3 className="text-2xl font-bold text-gray-900 mb-2">Sentinel J</h3>
                   <p className="text-sm text-gray-500 mb-4">GPS, SOS, batería larga, resistente al agua</p>
                   <ul className="text-left space-y-2 text-sm text-gray-600 mb-4">
@@ -318,7 +318,7 @@ const HighConversionLanding = () => {
               <div className="bg-gradient-to-b from-[#FAFAF8] to-white rounded-2xl overflow-hidden border-2 border-[#B4A7D6]/30 hover:border-[#B4A7D6] transition-all duration-300 hover:shadow-xl group" data-testid="product-sentinel-s">
                 <div className="p-6 text-center">
                   <span className="inline-block text-xs font-bold bg-[#B4A7D6]/20 text-[#8B7CB8] px-3 py-1 rounded-full mb-4">ADULTOS Y MAYORES</span>
-                  <img src={SENTINEL_S_IMG} alt="Sentinel S" className="w-40 h-40 object-contain mx-auto mb-4 group-hover:scale-105 transition-transform" loading="lazy" />
+                  <img src={SENTINEL_S_IMG} alt="Sentinel S" className="w-40 h-40 object-contain mx-auto mb-4 group-hover:scale-105 transition-transform" loading="lazy" decoding="async" width="160" height="160" />
                   <h3 className="text-2xl font-bold text-gray-900 mb-2">Sentinel S</h3>
                   <p className="text-sm text-gray-500 mb-4">GPS, SOS, monitoreo discreto, batería extendida</p>
                   <ul className="text-left space-y-2 text-sm text-gray-600 mb-4">
@@ -527,7 +527,7 @@ const HighConversionLanding = () => {
                   {v.video ? (
                     <video id={`vid-${i}`} src={v.video} poster={v.img} className="w-full aspect-video object-cover" muted loop playsInline preload="metadata" data-testid={`real-video-${i}`} />
                   ) : (
-                    <img src={v.img} alt={v.title} className="w-full aspect-video object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" />
+                    <img src={v.img} alt={v.title} className="w-full aspect-video object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" decoding="async" width="640" height="360" />
                   )}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent flex flex-col justify-end p-4">
                     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 bg-white/90 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform shadow-lg">

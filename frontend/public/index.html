@@ -153,17 +153,18 @@
         <link rel="preload" href="/manoprotect_logo.webp" as="image" type="image/webp" />
         <link rel="preload" href="https://static.prod-images.emergentagent.com/jobs/9da3b4c4-c09a-415b-8aa7-bb34b82ca31e/images/87b9c67e566b3df4d280471b26a2215bd603777003e860a14633f20318652e92.png" as="image" fetchpriority="high" />
         
-        <!-- Preconnect to critical origins -->
+        <!-- Preconnect to critical origins ONLY -->
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
         <link rel="preconnect" href="https://static.prod-images.emergentagent.com" crossorigin />
         <link rel="preconnect" href="https://customer-assets.emergentagent.com" crossorigin />
         
-        <!-- DNS Prefetch for third-party resources -->
+        <!-- Preload LCP hero image -->
+        <link rel="preload" as="image" href="https://static.prod-images.emergentagent.com/jobs/9da3b4c4-c09a-415b-8aa7-bb34b82ca31e/images/87b9c67e566b3df4d280471b26a2215bd603777003e860a14633f20318652e92.png" fetchpriority="high" />
+        
+        <!-- DNS Prefetch for deferred third-party resources -->
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
-        <link rel="dns-prefetch" href="https://www.google-analytics.com" />
-        <link rel="dns-prefetch" href="https://js.stripe.com" />
-        <link rel="dns-prefetch" href="https://api.stripe.com" />
+        <link rel="dns-prefetch" href="https://connect.facebook.net" />
         
         <!-- ============================================ -->
         <!-- PWA MANIFEST & ICONS -->
@@ -1087,57 +1088,50 @@
         </script>
 
         <!-- ============================================ -->
-        <!-- META (FACEBOOK) PIXEL -->
+        <!-- DEFERRED: META PIXEL + HOTJAR + GA4 (after page load) -->
         <!-- ============================================ -->
-        <!-- Meta Pixel: Replace META_PIXEL_ID with your actual Pixel ID from Meta Business Manager -->
-        <!-- https://business.facebook.com/events_manager -->
         <script>
-        !function(f,b,e,v,n,t,s)
-        {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-        n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-        if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-        n.queue=[];t=b.createElement(e);t.async=!0;
-        t.src=v;s=b.getElementsByTagName(e)[0];
-        s.parentNode.insertBefore(t,s)}(window, document,'script',
-        'https://connect.facebook.net/en_US/fbevents.js');
-        var _mpPixelId = '%REACT_APP_META_PIXEL_ID%';
-        if (_mpPixelId && _mpPixelId !== '' && !_mpPixelId.includes('REACT_APP')) {
-            fbq('init', _mpPixelId);
-            fbq('track', 'PageView');
-        }
-        </script>
-
-        <!-- ============================================ -->
-        <!-- HOTJAR ANALYTICS -->
-        <!-- ============================================ -->
-        <!-- Hotjar: Replace HOTJAR_SITE_ID with your actual Site ID from https://insights.hotjar.com -->
-        <script>
-        var _hjSiteId = '%REACT_APP_HOTJAR_ID%';
-        if (_hjSiteId && _hjSiteId !== '' && !_hjSiteId.includes('REACT_APP')) {
-            (function(h,o,t,j,a,r){
-                h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
-                h._hjSettings={hjid:_hjSiteId,hjsv:6};
-                a=o.getElementsByTagName('head')[0];
-                r=o.createElement('script');r.async=1;
-                r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
-                a.appendChild(r);
-            })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
-        }
-        </script>
-
-        <!-- GA4 Analytics -->
-        <script>
-        var _ga4Id = '%REACT_APP_GA4_ID%';
-        if (_ga4Id && _ga4Id !== '' && !_ga4Id.includes('REACT_APP')) {
-            var s = document.createElement('script');
-            s.async = true;
-            s.src = 'https://www.googletagmanager.com/gtag/js?id=' + _ga4Id;
-            document.head.appendChild(s);
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', _ga4Id);
-        }
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                /* Facebook/Meta Pixel */
+                var _mpPixelId = '%REACT_APP_META_PIXEL_ID%';
+                if (_mpPixelId && _mpPixelId !== '' && !_mpPixelId.includes('REACT_APP')) {
+                    !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+                    n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+                    n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+                    t.src=v;s=b.getElementsByTagName(e)[0];
+                    s.parentNode.insertBefore(t,s)}(window,document,'script',
+                    'https://connect.facebook.net/en_US/fbevents.js');
+                    fbq('init', _mpPixelId);
+                    fbq('track', 'PageView');
+                }
+                /* Hotjar */
+                var _hjSiteId = '%REACT_APP_HOTJAR_ID%';
+                if (_hjSiteId && _hjSiteId !== '' && !_hjSiteId.includes('REACT_APP')) {
+                    (function(h,o,t,j,a,r){
+                        h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
+                        h._hjSettings={hjid:_hjSiteId,hjsv:6};
+                        a=o.getElementsByTagName('head')[0];
+                        r=o.createElement('script');r.async=1;
+                        r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
+                        a.appendChild(r);
+                    })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
+                }
+                /* GA4 */
+                var _ga4Id = '%REACT_APP_GA4_ID%';
+                if (_ga4Id && _ga4Id !== '' && !_ga4Id.includes('REACT_APP')) {
+                    var s = document.createElement('script');
+                    s.async = true;
+                    s.src = 'https://www.googletagmanager.com/gtag/js?id=' + _ga4Id;
+                    document.head.appendChild(s);
+                    window.dataLayer = window.dataLayer || [];
+                    function gtag(){dataLayer.push(arguments);}
+                    window.gtag = gtag;
+                    gtag('js', new Date());
+                    gtag('config', _ga4Id);
+                }
+            }, 3000);
+        });
         </script>
 
         <!-- Local Business Structured Data (JSON-LD) -->
