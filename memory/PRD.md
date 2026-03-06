@@ -1,37 +1,16 @@
-# ManoProtect - PRD v10.6.0
+# ManoProtect - PRD v10.7.0
 
-## Performance Optimizations (Mar 6, 2026)
+## Problema Original
+Construir una aplicación de seguridad empresarial "ManoProtect" completa y escalable con gestión de roles (Admin, Comercial, Instalador, CEO), sistema de alarmas, gestión de equipos de instaladores, y aplicaciones PWA para Android.
 
-### FCP 2.9s -> Target <1.5s
-- Font @import eliminado del CSS (era render-blocking chain: CSS→GoogleFonts CSS→woff2)
-- Fonts cargadas vía `<link media="print" onload="this.media='all'">` (non-blocking)
-- CSS crítico inline en index.html (instant first paint)
-- Preconnects reducidos a solo fonts (2 en vez de 4+)
-
-### LCP 6.0s -> Target <2.5s
-- Imágenes WebP: 9,584KB → 420KB (95.6% reducción)
-- Hero image preloaded con `fetchpriority="high"`
-- Imágenes locales (no CDN externo = eliminado round trip)
-- `loading="eager"` en hero, `loading="lazy"` en todo lo demás
-
-### CLS 0.206 -> Target <0.1
-- `font-display: optional` (no font swap = no text reflow)
-- Landing page carga EAGER (no lazy) — eliminado el CLS de Suspense fallback→real content
-- `min-height: 600px` en hero section
-- `aspect-ratio` inline en hero image y step images
-- `width/height` explícitos en TODAS las imágenes (11 imágenes)
-- `content-visibility: auto` en secciones below-fold
-- `containIntrinsicSize` en secciones para reservar espacio
-
-### TBT 190ms -> Target <200ms
-- Scripts analytics (GTM, GA4, FB Pixel, Hotjar) diferidos 3s post-load
-- `content-visibility: auto` reduce rendering work below-fold
-- `decoding="async"` en imágenes lazy
-
-### Speed Index 4.1s -> Target <3.3s
-- Combinación de todas las mejoras anteriores
-- CSS crítico inline = primer paint visible inmediato
-- Hero image preloaded = contenido principal visible rápido
+## Arquitectura
+- **Frontend**: React (CRA) + Tailwind CSS + Shadcn/UI
+- **Backend**: FastAPI + MongoDB
+- **Auth**: JWT + bcrypt (gestión), Firebase (clientes)
+- **Email**: Brevo (producción)
+- **Pagos**: Stripe
+- **Analytics**: GA4 + GTM
+- **PWA**: Service Worker v5 (SPA app-shell pattern)
 
 ## Credenciales
 | Rol | Email | Password |
@@ -41,9 +20,45 @@
 | Comercial | comercial@manoprotect.com | Comercial2025! |
 | Instalador | instalador@manoprotect.com | Instalador2025! |
 
-## Backlog
-- P0: Deploy a producción + verificar Lighthouse scores
-- P0: Generar APKs PWABuilder
-- P1: Streaming RTSP cámaras
-- P2: iOS Capacitor
-- P3: 112, BigQuery, Sora 2
+## Completado
+
+### Service Worker v5 - SPA App Shell Pattern (Mar 6, 2026)
+- Corregido problema donde las apps PWA de escritorio (CRA/CRM/Comerciales) mostraban offline.html en vez del app
+- Causa raíz: el SW usaba fallback directo a offline.html cuando la red fallaba, sin intentar servir el app shell (index.html) cacheado
+- Fix: handleNavigationRequest ahora sigue el patrón: red → caché URL exacta → app shell cacheado (/index.html) → offline.html
+- Incrementada versión de caché a v5 para forzar actualización en clientes existentes
+- Añadidos manifests de comerciales e instaladores al precache
+- Tests: 100% backend + 100% frontend
+
+### Autenticación Gestión con bcrypt (Mar 6, 2026)
+- Migrado de SHA256 a bcrypt para contraseñas de empleados
+- Auto-seed de usuarios por defecto al iniciar el servidor
+- Mensajes de error específicos ("Contraseña incorrecta", etc.)
+
+### Optimización de Rendimiento Lighthouse
+- Imágenes WebP: 9,584KB → 420KB (95.6% reducción)
+- CSS crítico inline, fonts non-blocking
+- CLS eliminado con aspect-ratio/min-height
+- Scripts analytics diferidos 3s
+
+### SEO & Google Discover
+- sitemap.xml dinámico, RSS feed, Schema.org
+- Open Graph images, Article/FAQPage/ItemList schemas
+
+### Gestión de Equipos de Instaladores
+- CRUD completo para equipos de 2 personas
+- Asignación de equipos a instalaciones
+
+### PWA-to-APK Preparation
+- Manifests separados (clientes, comerciales, instaladores)
+- Guía completa (GUIA_PWABUILDER_APK.md)
+
+## Backlog Priorizado
+- **P0**: Deploy a producción + verificar login en prod (issue recurrente)
+- **P0**: Generar APKs con PWABuilder
+- **P1**: Configurar CI/CD secrets para Play Store (requiere acción del usuario: KEYSTORE_BASE64, GOOGLE_PLAY_SERVICE_ACCOUNT_JSON)
+- **P1**: Streaming RTSP de cámaras en tiempo real
+- **P1**: Finalizar SEO/SEM/Ads (requiere Meta Pixel ID, Hotjar ID, GSC verification)
+- **P2**: App iOS con Capacitor (requiere Mac del usuario)
+- **P2**: Activar integraciones simuladas (112, BigQuery)
+- **P3**: Videos marketing con Sora 2
