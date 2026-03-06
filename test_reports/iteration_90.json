@@ -1,0 +1,124 @@
+{
+  "summary": "Iteration 90: Auth migration (SHA256->bcrypt), auto-seed, error messages, and SEO tests completed. Backend: 19/20 tests passed (95%). All CRITICAL auth tests PASSED. One minor SEO meta tag inconsistency detected.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [
+      {
+        "screen": "index.html meta tags",
+        "issues": ["og:description and twitter:description have different content - MINOR SEO issue (source file looks correct, may be caching)"]
+      },
+      {
+        "screen": "All pages",
+        "issues": ["Cookie consent banner blocks bottom of page until dismissed - minor UX issue (same as iteration 89)"]
+      }
+    ]
+  },
+  "test_results": {
+    "gestion_auth_login": {
+      "POST /api/gestion/auth/login admin": "PASSED - Returns token with rol=admin",
+      "POST /api/gestion/auth/login comercial": "PASSED - Returns token with rol=comercial",
+      "POST /api/gestion/auth/login instalador": "PASSED - Returns token with rol=instalador"
+    },
+    "ceo_auth": {
+      "POST /api/auth/login ceo": "PASSED - Returns user data for ceo@manoprotect.com"
+    },
+    "auth_error_messages": {
+      "wrong_password": "PASSED - Returns 401 'Contraseña incorrecta'",
+      "nonexistent_email": "PASSED - Returns 401 'Usuario no encontrado'"
+    },
+    "auto_seed": {
+      "POST /api/gestion/seed-admin": "PASSED - Updates/creates users, returns credentials"
+    },
+    "bcrypt_hashing": {
+      "login_after_seed": "PASSED - Login works with bcrypt hashed passwords"
+    },
+    "rbac_gestion": {
+      "admin_access_usuarios": "PASSED - Admin can access GET /api/gestion/usuarios",
+      "comercial_denied_usuarios": "PASSED - Comercial gets 403 for GET /api/gestion/usuarios"
+    },
+    "seo_robots_txt": {
+      "accessible": "PASSED - GET /robots.txt returns 200",
+      "disallow_gestion": "PASSED - Contains 'Disallow: /gestion/'",
+      "allow_familia": "PASSED - Contains 'Allow: /familia'"
+    },
+    "seo_sitemap": {
+      "accessible": "PASSED - GET /sitemap.xml returns 200",
+      "contains_familia": "PASSED - Contains /familia page entry"
+    },
+    "seo_assetlinks": {
+      "accessible": "PASSED - GET /.well-known/assetlinks.json returns valid JSON"
+    },
+    "seo_meta_tags": {
+      "ga4_id": "PASSED - HTML contains GTM-MK53XZ8Q",
+      "gtm_id": "PASSED - HTML contains GA4 tracking",
+      "meta_descriptions_consistent": "FAILED - og:description and twitter:description differ (minor)"
+    },
+    "frontend_gestion_login": {
+      "page_loads": "PASSED - /gestion/login page loads with email/password fields",
+      "admin_login": "PASSED - Admin login redirects to /gestion/admin dashboard",
+      "welcome_message": "PASSED - Shows 'Bienvenido, Administrador ManoProtect'"
+    },
+    "health_check": {
+      "GET /api/health": "PASSED"
+    }
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_iteration_90_auth_bcrypt_seo.py",
+    "/app/test_reports/pytest/iteration_90_auth_bcrypt_seo.xml"
+  ],
+  "action_items": [
+    "MINOR: Sync og:description and twitter:description meta tags in index.html (may require frontend rebuild)"
+  ],
+  "critical_code_review_comments": [
+    "bcrypt migration working correctly - _verify_hash supports both bcrypt and SHA256 fallback",
+    "Auto-upgrade mechanism in login works - SHA256 hashes are upgraded to bcrypt on successful login",
+    "seed-admin endpoint correctly creates/updates 3 default users with bcrypt hashes",
+    "Error messages are specific: 'Contraseña incorrecta' vs 'Usuario no encontrado' vs 'Usuario desactivado'",
+    "RBAC correctly enforces admin-only access to /api/gestion/usuarios",
+    "SEO files (robots.txt, sitemap.xml) properly configured with /gestion/ disallow and /familia allow"
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_iteration_90_auth_bcrypt_seo.py"
+  ],
+  "success_rate": {
+    "backend": "95% (19/20 tests passed)",
+    "frontend": "100% (gestion login flow verified)"
+  },
+  "test_credentials": {
+    "gestion_admin": "admin@manoprotect.com / ManoAdmin2025!",
+    "gestion_comercial": "comercial@manoprotect.com / Comercial2025!",
+    "gestion_instalador": "instalador@manoprotect.com / Instalador2025!",
+    "ceo": "ceo@manoprotect.com / 19862210Des",
+    "api_url": "https://crm-dashboard-213.preview.emergentagent.com"
+  },
+  "seed_data_creation": "seed-admin endpoint creates/updates: admin@manoprotect.com, comercial@manoprotect.com, instalador@manoprotect.com",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Iteration 90 tested auth migration from SHA256 to bcrypt. All 3 gestion users (admin, comercial, instalador) login correctly. CEO auth works. Error messages are specific. Auto-seed working. RBAC enforced. SEO files configured correctly. Minor meta tag inconsistency detected (og vs twitter description).",
+  "mocked_apis": {
+    "has_mocked_apis": false,
+    "mocked_apis_list": []
+  },
+  "features_verified": [
+    "CRITICAL: Gestion Admin login POST /api/gestion/auth/login with admin@manoprotect.com / ManoAdmin2025! returns token",
+    "CRITICAL: Gestion Comercial login with comercial@manoprotect.com / Comercial2025! returns token with rol=comercial",
+    "CRITICAL: Gestion Instalador login with instalador@manoprotect.com / Instalador2025! returns token with rol=instalador",
+    "CRITICAL: CEO login POST /api/auth/login with ceo@manoprotect.com / 19862210Des returns user data",
+    "AUTH ERROR: Wrong password returns 401 with detail 'Contraseña incorrecta'",
+    "AUTH ERROR: Non-existent email returns 401 with detail 'Usuario no encontrado'",
+    "AUTO-SEED: POST /api/gestion/seed-admin updates existing users and creates missing ones",
+    "BCRYPT: Passwords are hashed with bcrypt (login works after seed)",
+    "RBAC: Admin token can access GET /api/gestion/usuarios",
+    "RBAC: Comercial token CANNOT access GET /api/gestion/usuarios (403)",
+    "SEO: GET /robots.txt contains Disallow /gestion/ and Allow /familia",
+    "SEO: GET /sitemap.xml contains /familia page entry",
+    "SEO: GET /.well-known/assetlinks.json returns valid JSON",
+    "SEO: HTML page contains GA4 ID G-8KECMQS45X and GTM GTM-MK53XZ8Q",
+    "Frontend: /gestion/login page loads and accepts credentials"
+  ]
+}

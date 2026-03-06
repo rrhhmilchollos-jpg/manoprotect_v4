@@ -3372,10 +3372,19 @@ except Exception as e:
 
 # Sistema de Gestión CRA (Comerciales, Instaladores, Admin)
 try:
-    from routes.gestion_routes import router as gestion_router, init_gestion
+    from routes.gestion_routes import router as gestion_router, init_gestion, _seed_gestion_users as seed_gestion
     init_gestion(db)
     api_router.include_router(gestion_router)
     print("\u2705 Gestion CRA routes loaded")
+    
+    # Auto-seed gestion users on startup
+    @app.on_event("startup")
+    async def auto_seed_gestion():
+        try:
+            result = await seed_gestion()
+            print(f"\U0001f464 Gestion auto-seed: {result.get('results', [])}")
+        except Exception as e:
+            print(f"\u26a0\ufe0f Gestion auto-seed error: {e}")
 except Exception as e:
     print(f"\u26a0\ufe0f Gestion CRA routes not loaded: {e}")
 

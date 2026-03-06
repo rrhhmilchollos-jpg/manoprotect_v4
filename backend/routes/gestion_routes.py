@@ -99,7 +99,19 @@ class EquipoUpdate(BaseModel):
 # ============================================
 
 def _hash(password: str) -> str:
-    return hashlib.sha256(password.encode()).hexdigest()
+    import bcrypt
+    return bcrypt.hashpw(password.encode(), bcrypt.gensalt()).decode()
+
+def _verify_hash(password: str, stored_hash: str) -> bool:
+    import bcrypt
+    # Try bcrypt first
+    try:
+        return bcrypt.checkpw(password.encode(), stored_hash.encode())
+    except (ValueError, AttributeError):
+        pass
+    # Fallback: SHA256 for legacy compatibility
+    legacy = hashlib.sha256(password.encode()).hexdigest()
+    return legacy == stored_hash
 
 def _create_token(user_id: str, rol: str, nombre: str) -> str:
     payload = {
@@ -166,9 +178,18 @@ async def _log_action(user_id: str, nombre: str, accion: str, detalle: str = "")
 @router.post("/auth/login")
 async def gestion_login(data: GestionLogin):
     """Login para el sistema de gestión"""
-    user = await _db.gestion_usuarios.find_one({"email": data.email.lower().strip(), "activo": True}, {"_id": 0})
-    if not user or user["password_hash"] != _hash(data.password):
-        raise HTTPException(status_code=401, detail="Credenciales inválidas")
+    email = data.email.lower().strip()
+    user = await _db.gestion_usuarios.find_one({"email": email}, {"_id": 0})
+    if not user:
+        raise HTTPException(status_code=401, detail="Usuario no encontrado")
+    if not user.get("activo", False):
+        raise HTTPException(status_code=401, detail="Usuario desactivado. Contacte al administrador")
+    if not _verify_hash(data.password, user.get("password_hash", "")):
+        raise HTTPException(status_code=401, detail="Contraseña incorrecta")
+    # Auto-upgrade SHA256 hash to bcrypt if needed
+    if not user["password_hash"].startswith("$2"):
+        new_hash = _hash(data.password)
+        await _db.gestion_usuarios.update_one({"user_id": user["user_id"]}, {"$set": {"password_hash": new_hash}})
     token = _create_token(user["user_id"], user["rol"], user["nombre"])
     await _log_action(user["user_id"], user["nombre"], "login", f"Inicio de sesión desde {user['rol']}")
     return {
@@ -705,74 +726,70 @@ async def dashboard_stats(request: Request):
 
 @router.post("/seed-admin")
 async def seed_admin():
-    """Crear admin por defecto si no existe (solo una vez)"""
-    existing = await _db.gestion_usuarios.find_one({"email": "admin@manoprotect.com"})
-    if existing:
-        return {"message": "Admin ya existe", "seeded": False}
-    admin_id = str(uuid.uuid4())
-    await _db.gestion_usuarios.insert_one({
-        "user_id": admin_id,
-        "nombre": "Administrador ManoProtect",
-        "email": "admin@manoprotect.com",
-        "password_hash": _hash("ManoAdmin2025!"),
-        "rol": "admin",
-        "activo": True,
-        "created_at": datetime.now(timezone.utc).isoformat(),
-        "created_by": "system"
-    })
-    # Seed demo comercial
-    com_id = str(uuid.uuid4())
-    await _db.gestion_usuarios.insert_one({
-        "user_id": com_id,
-        "nombre": "Carlos Comercial",
-        "email": "comercial@manoprotect.com",
-        "password_hash": _hash("Comercial2025!"),
-        "rol": "comercial",
-        "activo": True,
-        "created_at": datetime.now(timezone.utc).isoformat(),
-        "created_by": admin_id
-    })
-    # Seed demo instalador
-    ins_id = str(uuid.uuid4())
-    await _db.gestion_usuarios.insert_one({
-        "user_id": ins_id,
-        "nombre": "Miguel Instalador",
-        "email": "instalador@manoprotect.com",
-        "password_hash": _hash("Instalador2025!"),
-        "rol": "instalador",
-        "activo": True,
-        "created_at": datetime.now(timezone.utc).isoformat(),
-        "created_by": admin_id
-    })
-    # Seed demo stock
-    stock_items = [
-        {"nombre": "Panel Central ManoProtect", "producto_tipo": "panel", "cantidad_disponible": 25, "ubicacion": "Almacén Madrid", "precio_unitario": 199.99},
-        {"nombre": "Sensor PIR Movimiento", "producto_tipo": "sensor_pir", "cantidad_disponible": 120, "ubicacion": "Almacén Madrid", "precio_unitario": 29.99},
-        {"nombre": "Cámara IP Interior HD", "producto_tipo": "camera", "cantidad_disponible": 45, "ubicacion": "Almacén Madrid", "precio_unitario": 89.99},
-        {"nombre": "Cámara IP Exterior 4K", "producto_tipo": "camera", "cantidad_disponible": 30, "ubicacion": "Almacén Madrid", "precio_unitario": 149.99},
-        {"nombre": "Sirena Interior 110dB", "producto_tipo": "siren", "cantidad_disponible": 60, "ubicacion": "Almacén Madrid", "precio_unitario": 39.99},
-        {"nombre": "Teclado Panel Alarma", "producto_tipo": "keypad", "cantidad_disponible": 35, "ubicacion": "Almacén Madrid", "precio_unitario": 49.99},
-        {"nombre": "Sentinel Lock Pro", "producto_tipo": "sentinel_lock", "cantidad_disponible": 15, "ubicacion": "Almacén Barcelona", "precio_unitario": 299.99},
-        {"nombre": "Sensor Puerta/Ventana", "producto_tipo": "sensor_magnetico", "cantidad_disponible": 200, "ubicacion": "Almacén Madrid", "precio_unitario": 19.99},
-        {"nombre": "Detector de Humo", "producto_tipo": "detector_humo", "cantidad_disponible": 80, "ubicacion": "Almacén Valencia", "precio_unitario": 24.99},
-        {"nombre": "Mando a Distancia", "producto_tipo": "mando", "cantidad_disponible": 3, "ubicacion": "Almacén Madrid", "precio_unitario": 14.99},
+    """Crear o actualizar usuarios por defecto del sistema de gestión"""
+    return await _seed_gestion_users()
+
+async def _seed_gestion_users():
+    """Crear o actualizar usuarios iniciales del sistema de gestión"""
+    default_users = [
+        {"nombre": "Administrador ManoProtect", "email": "admin@manoprotect.com", "password": "ManoAdmin2025!", "rol": "admin"},
+        {"nombre": "Carlos Comercial", "email": "comercial@manoprotect.com", "password": "Comercial2025!", "rol": "comercial"},
+        {"nombre": "Miguel Instalador", "email": "instalador@manoprotect.com", "password": "Instalador2025!", "rol": "instalador"},
     ]
-    for item in stock_items:
-        await _db.gestion_stock.insert_one({
-            "producto_id": str(uuid.uuid4()),
-            "nombre": item["nombre"],
-            "producto_tipo": item["producto_tipo"],
-            "cantidad_disponible": item["cantidad_disponible"],
-            "ubicacion": item["ubicacion"],
-            "precio_unitario": item["precio_unitario"],
-            "descripcion": "",
-            "created_at": datetime.now(timezone.utc).isoformat(),
-            "ultimo_update": datetime.now(timezone.utc).isoformat()
-        })
-    await _log_action(admin_id, "System", "seed", "Sistema inicializado con admin, comercial, instalador y stock demo")
+    results = []
+    for u in default_users:
+        existing = await _db.gestion_usuarios.find_one({"email": u["email"]})
+        if existing:
+            # Force update password hash to bcrypt
+            new_hash = _hash(u["password"])
+            await _db.gestion_usuarios.update_one(
+                {"email": u["email"]},
+                {"$set": {"password_hash": new_hash, "activo": True, "rol": u["rol"]}}
+            )
+            results.append(f"Actualizado: {u['email']} ({u['rol']})")
+        else:
+            user_id = str(uuid.uuid4())
+            await _db.gestion_usuarios.insert_one({
+                "user_id": user_id,
+                "nombre": u["nombre"],
+                "email": u["email"],
+                "password_hash": _hash(u["password"]),
+                "rol": u["rol"],
+                "activo": True,
+                "created_at": datetime.now(timezone.utc).isoformat(),
+                "created_by": "system"
+            })
+            results.append(f"Creado: {u['email']} ({u['rol']})")
+
+    # Seed stock if empty
+    stock_count = await _db.gestion_stock.count_documents({})
+    if stock_count == 0:
+        stock_items = [
+            {"nombre": "Panel Central ManoProtect", "producto_tipo": "panel", "cantidad_disponible": 25, "ubicacion": "Almacén Madrid", "precio_unitario": 199.99},
+            {"nombre": "Sensor PIR Movimiento", "producto_tipo": "sensor_pir", "cantidad_disponible": 120, "ubicacion": "Almacén Madrid", "precio_unitario": 29.99},
+            {"nombre": "Cámara IP Interior HD", "producto_tipo": "camera", "cantidad_disponible": 45, "ubicacion": "Almacén Madrid", "precio_unitario": 89.99},
+            {"nombre": "Cámara IP Exterior 4K", "producto_tipo": "camera", "cantidad_disponible": 30, "ubicacion": "Almacén Madrid", "precio_unitario": 149.99},
+            {"nombre": "Sirena Interior 110dB", "producto_tipo": "siren", "cantidad_disponible": 60, "ubicacion": "Almacén Madrid", "precio_unitario": 39.99},
+            {"nombre": "Teclado Panel Alarma", "producto_tipo": "keypad", "cantidad_disponible": 35, "ubicacion": "Almacén Madrid", "precio_unitario": 49.99},
+            {"nombre": "Sentinel Lock Pro", "producto_tipo": "sentinel_lock", "cantidad_disponible": 15, "ubicacion": "Almacén Barcelona", "precio_unitario": 299.99},
+            {"nombre": "Sensor Puerta/Ventana", "producto_tipo": "sensor_magnetico", "cantidad_disponible": 200, "ubicacion": "Almacén Madrid", "precio_unitario": 19.99},
+            {"nombre": "Detector de Humo", "producto_tipo": "detector_humo", "cantidad_disponible": 80, "ubicacion": "Almacén Valencia", "precio_unitario": 24.99},
+            {"nombre": "Mando a Distancia", "producto_tipo": "mando", "cantidad_disponible": 3, "ubicacion": "Almacén Madrid", "precio_unitario": 14.99},
+        ]
+        for item in stock_items:
+            await _db.gestion_stock.insert_one({
+                "producto_id": str(uuid.uuid4()),
+                **item,
+                "descripcion": "",
+                "created_at": datetime.now(timezone.utc).isoformat(),
+                "ultimo_update": datetime.now(timezone.utc).isoformat()
+            })
+        results.append("Stock inicial creado (10 productos)")
+
     return {
-        "message": "Sistema inicializado",
+        "message": "Sistema de gestión inicializado",
         "seeded": True,
+        "results": results,
         "credenciales": {
             "admin": {"email": "admin@manoprotect.com", "password": "ManoAdmin2025!"},
             "comercial": {"email": "comercial@manoprotect.com", "password": "Comercial2025!"},
