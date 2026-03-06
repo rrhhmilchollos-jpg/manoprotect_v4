@@ -1,16 +1,8 @@
-# ManoProtect - PRD v10.3.0 (Producción)
+# ManoProtect - PRD v10.4.0 (Producción)
 
 ## Sistema
 Plataforma de seguridad profesional. Apps: Comerciales, Instaladores, Clientes (familias), Admin.
-Tech: React + FastAPI + MongoDB + Brevo (email) + Stripe (pagos) + bcrypt auth
-
-## URLs Producción
-- Landing: https://www.manoprotect.com/
-- Login Familia: https://www.manoprotect.com/familia
-- Gestión Login: https://www.manoprotect.com/gestion/login
-- Admin Panel: https://www.manoprotect.com/gestion/admin
-- Comerciales Panel: https://www.manoprotect.com/gestion/comerciales
-- Instaladores Panel: https://www.manoprotect.com/gestion/instaladores
+Tech: React + FastAPI + MongoDB + Brevo + Stripe + bcrypt
 
 ## Credenciales
 | Rol | Email | Password |
@@ -20,36 +12,31 @@ Tech: React + FastAPI + MongoDB + Brevo (email) + Stripe (pagos) + bcrypt auth
 | Comercial | comercial@manoprotect.com | Comercial2025! |
 | Instalador | instalador@manoprotect.com | Instalador2025! |
 
-## Funcionalidades Completadas
+## Completado
 
-### Mar 6, 2026 - Auth Fix + SEO Optimization
-- Migración auth gestión: SHA256 -> bcrypt (seguridad)
-- Compatibilidad retroactiva: soporta SHA256 legacy + auto-upgrade a bcrypt
-- Auto-seed en startup: usuarios gestión se crean/actualizan automáticamente
-- Mensajes de error específicos: "Contraseña incorrecta", "Usuario no encontrado", "Usuario desactivado"
-- GA4 activado (G-8KECMQS45X)
-- GTM activo (GTM-MK53XZ8Q)
-- Meta descriptions consistentes (og, twitter, main)
-- robots.txt: /gestion/ bloqueado, /familia permitida
-- sitemap.xml: 25 URLs con schema image
-- Digital Asset Links para TWA (assetlinks.json)
-- Teléfono Schema.org corregido formato E.164
-- DC.coverage enfocado a España
-- Keywords alineadas con servicio real (alarmas, CRA, no "fraud prevention")
+### Mar 6, 2026 - Performance + Auth + SEO
+- Auth migrado a bcrypt (SHA256 -> bcrypt con auto-upgrade)
+- Auto-seed en startup (usuarios gestión siempre disponibles)
+- Mensajes error específicos ("Contraseña incorrecta", "Usuario no encontrado")
+- Scripts analytics diferidos 3s post-load (GTM, GA4, FB Pixel, Hotjar)
+- Hero image preloaded (LCP optimization)
+- Preconnects innecesarios eliminados (Stripe, Google Analytics)
+- width/height explícitos en TODAS las imágenes (CLS fix)
+- decoding="async" en imágenes lazy
+- Keywords/descriptions alineadas con negocio real
+- robots.txt y sitemap.xml actualizados
+- Digital Asset Links para TWA
 
-### Mar 6, 2026 - Equipos de Instalación + PWA
+### Mar 6, 2026 - Equipos de Instalación
 - CRUD equipos (1-N miembros), asignación a instalaciones
-- Notificaciones a miembros, dashboard con conteo
-- PWA manifests con IDs estables para 3 apps
+- Notificaciones automáticas, dashboard con conteo
 
-### Testing
-- Iteration 90: 95% backend + 100% frontend
-- Iteration 89: 100% backend + 100% frontend
+### Testing: iteration 90 (95% backend, 100% frontend)
 
 ## Backlog
 - P0: Deploy a producción
 - P0: Generar APKs con PWABuilder
-- P1: Streaming RTSP cámaras reales
-- P2: Meta Pixel ID + Hotjar ID + Google Search Console verification
-- P2: iOS con Capacitor
-- P3: Integraciones 112, BigQuery, Sora 2
+- P2: Meta Pixel ID + Hotjar ID + Google Search Console
+- P1: Streaming RTSP
+- P2: iOS Capacitor
+- P3: 112, BigQuery, Sora 2
