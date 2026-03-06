@@ -4,7 +4,7 @@ import { API } from '@/utils/apiBase';
 import { toast } from 'sonner';
 import {
   Wrench, Clock, CheckCircle2, MapPin, Phone, User, LogOut,
-  ChevronRight, Loader2, RefreshCw, FileText, AlertTriangle, Play
+  ChevronRight, Loader2, RefreshCw, FileText, AlertTriangle, Play, UsersRound
 } from 'lucide-react';
 import NotificationBell from '@/components/gestion/NotificationBell';
 import UpdateChecker from '@/components/gestion/UpdateChecker';
@@ -102,6 +102,15 @@ export default function GestionInstaladores() {
         <p className="text-xs text-slate-600 mt-1 flex items-center gap-1"><Clock className="w-3 h-3" />Programada: {inst.fecha_programada}</p>
       )}
       {inst.notas && <p className="text-xs text-slate-600 mt-1 italic">"{inst.notas}"</p>}
+      {/* Team info */}
+      {inst.equipo_nombre && (
+        <div className="mt-2 bg-cyan-600/10 border border-cyan-500/20 rounded-lg px-2.5 py-1.5">
+          <p className="text-xs text-cyan-400 font-medium flex items-center gap-1"><UsersRound className="w-3 h-3" />Tu equipo: {inst.equipo_nombre}</p>
+          {inst.equipo_miembros_nombres && inst.equipo_miembros_nombres.length > 0 && (
+            <p className="text-[10px] text-slate-400 mt-0.5">Miembros: {inst.equipo_miembros_nombres.join(', ')}</p>
+          )}
+        </div>
+      )}
       {/* Action buttons */}
       <div className="flex gap-2 mt-3">
         {inst.estado === 'asignado' && (

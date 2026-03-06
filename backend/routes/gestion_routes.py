@@ -82,6 +82,17 @@ class InstalacionUpdate(BaseModel):
     notas: Optional[str] = None
     fecha_completado: Optional[str] = None
 
+class EquipoCreate(BaseModel):
+    nombre: str
+    zona: str = ""
+    miembros: List[str] = []  # list of user_ids (instaladores)
+
+class EquipoUpdate(BaseModel):
+    nombre: Optional[str] = None
+    zona: Optional[str] = None
+    miembros: Optional[List[str]] = None
+    activo: Optional[bool] = None
+
 
 # ============================================
 # AUTH HELPERS
@@ -497,6 +508,143 @@ async def asignar_instalador(instalacion_id: str, request: Request):
 
 
 # ============================================
+# EQUIPOS DE INSTALACIÓN
+# ============================================
+
+@router.get("/equipos")
+async def list_equipos(request: Request):
+    """Listar equipos de instalación"""
+    await _get_current_gestion_user(request)
+    equipos = await _db.gestion_equipos.find({}, {"_id": 0}).sort("created_at", -1).to_list(100)
+    # Enrich with member details
+    for eq in equipos:
+        members = []
+        for uid in eq.get("miembros", []):
+            u = await _db.gestion_usuarios.find_one({"user_id": uid, "activo": True}, {"_id": 0, "user_id": 1, "nombre": 1, "email": 1})
+            if u:
+                members.append(u)
+        eq["miembros_detalle"] = members
+    return {"equipos": equipos, "total": len(equipos)}
+
+@router.get("/equipos/{equipo_id}")
+async def get_equipo(equipo_id: str, request: Request):
+    """Detalle de un equipo"""
+    await _get_current_gestion_user(request)
+    eq = await _db.gestion_equipos.find_one({"equipo_id": equipo_id}, {"_id": 0})
+    if not eq:
+        raise HTTPException(status_code=404, detail="Equipo no encontrado")
+    members = []
+    for uid in eq.get("miembros", []):
+        u = await _db.gestion_usuarios.find_one({"user_id": uid, "activo": True}, {"_id": 0, "user_id": 1, "nombre": 1, "email": 1})
+        if u:
+            members.append(u)
+    eq["miembros_detalle"] = members
+    return eq
+
+@router.post("/equipos")
+async def create_equipo(data: EquipoCreate, request: Request):
+    """Crear equipo de instalación (solo admin)"""
+    admin = await _require_admin(request)
+    equipo_id = f"EQ-{uuid.uuid4().hex[:6].upper()}"
+    # Validate all members are instaladores
+    miembros_valid = []
+    for uid in data.miembros:
+        u = await _db.gestion_usuarios.find_one({"user_id": uid, "rol": "instalador", "activo": True})
+        if u:
+            miembros_valid.append(uid)
+    doc = {
+        "equipo_id": equipo_id,
+        "nombre": data.nombre,
+        "zona": data.zona,
+        "miembros": miembros_valid,
+        "activo": True,
+        "created_at": datetime.now(timezone.utc).isoformat(),
+        "created_by": admin["user_id"]
+    }
+    await _db.gestion_equipos.insert_one(doc)
+    await _log_action(admin["user_id"], admin["nombre"], "crear_equipo", f"Equipo {equipo_id} - {data.nombre} ({len(miembros_valid)} miembros)")
+    return {"message": "Equipo creado", "equipo_id": equipo_id}
+
+@router.put("/equipos/{equipo_id}")
+async def update_equipo(equipo_id: str, data: EquipoUpdate, request: Request):
+    """Actualizar equipo (solo admin)"""
+    admin = await _require_admin(request)
+    update = {}
+    if data.nombre is not None:
+        update["nombre"] = data.nombre
+    if data.zona is not None:
+        update["zona"] = data.zona
+    if data.miembros is not None:
+        miembros_valid = []
+        for uid in data.miembros:
+            u = await _db.gestion_usuarios.find_one({"user_id": uid, "rol": "instalador", "activo": True})
+            if u:
+                miembros_valid.append(uid)
+        update["miembros"] = miembros_valid
+    if data.activo is not None:
+        update["activo"] = data.activo
+    if not update:
+        raise HTTPException(status_code=400, detail="Nada que actualizar")
+    result = await _db.gestion_equipos.update_one({"equipo_id": equipo_id}, {"$set": update})
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Equipo no encontrado")
+    await _log_action(admin["user_id"], admin["nombre"], "actualizar_equipo", f"Equipo {equipo_id}")
+    return {"message": "Equipo actualizado"}
+
+@router.delete("/equipos/{equipo_id}")
+async def delete_equipo(equipo_id: str, request: Request):
+    """Eliminar equipo (solo admin)"""
+    admin = await _require_admin(request)
+    result = await _db.gestion_equipos.update_one({"equipo_id": equipo_id}, {"$set": {"activo": False}})
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Equipo no encontrado")
+    await _log_action(admin["user_id"], admin["nombre"], "eliminar_equipo", f"Equipo {equipo_id} desactivado")
+    return {"message": "Equipo desactivado"}
+
+@router.put("/instalaciones/{instalacion_id}/asignar-equipo")
+async def asignar_equipo(instalacion_id: str, request: Request):
+    """Asignar un equipo completo a una instalación (admin)"""
+    admin = await _require_admin(request)
+    body = await request.json()
+    equipo_id = body.get("equipo_id", "")
+    if not equipo_id:
+        raise HTTPException(status_code=400, detail="equipo_id requerido")
+    equipo = await _db.gestion_equipos.find_one({"equipo_id": equipo_id, "activo": True}, {"_id": 0})
+    if not equipo:
+        raise HTTPException(status_code=404, detail="Equipo no encontrado")
+    # Get member names
+    miembros_nombres = []
+    for uid in equipo.get("miembros", []):
+        u = await _db.gestion_usuarios.find_one({"user_id": uid}, {"_id": 0, "nombre": 1})
+        if u:
+            miembros_nombres.append(u["nombre"])
+    result = await _db.gestion_instalaciones.update_one(
+        {"instalacion_id": instalacion_id},
+        {"$set": {
+            "equipo_id": equipo_id,
+            "equipo_nombre": equipo["nombre"],
+            "equipo_miembros": equipo.get("miembros", []),
+            "equipo_miembros_nombres": miembros_nombres,
+            "estado": "asignado"
+        }}
+    )
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Instalación no encontrada")
+    await _log_action(admin["user_id"], admin["nombre"], "asignar_equipo", f"Equipo {equipo['nombre']} asignado a instalación {instalacion_id}")
+    # Notify each team member
+    inst = await _db.gestion_instalaciones.find_one({"instalacion_id": instalacion_id}, {"_id": 0})
+    for uid in equipo.get("miembros", []):
+        await _send_notification(
+            destinatario_id=uid,
+            tipo="nueva_instalacion",
+            titulo="Nueva instalación asignada a tu equipo",
+            mensaje=f"Instalación {instalacion_id} - {inst.get('cliente_nombre', '')} en {inst.get('direccion', '')}. Equipo: {equipo['nombre']}",
+            datos={"instalacion_id": instalacion_id, "equipo_id": equipo_id}
+        )
+    return {"message": f"Equipo {equipo['nombre']} asignado", "miembros": miembros_nombres}
+
+
+# ============================================
 # LOGS (AUDIT - ADMIN ONLY)
 # ============================================
 
@@ -529,6 +677,7 @@ async def dashboard_stats(request: Request):
     total_instalaciones = await _db.gestion_instalaciones.count_documents({})
     inst_pendientes = await _db.gestion_instalaciones.count_documents({"estado": {"$in": ["pendiente", "asignado"]}})
     inst_completadas = await _db.gestion_instalaciones.count_documents({"estado": "completado"})
+    total_equipos = await _db.gestion_equipos.count_documents({"activo": True})
 
     # Stock bajo (menos de 5 unidades)
     low_stock = await _db.gestion_stock.find({"cantidad_disponible": {"$lt": 5}}, {"_id": 0}).to_list(50)
@@ -544,6 +693,7 @@ async def dashboard_stats(request: Request):
         "total_instalaciones": total_instalaciones,
         "instalaciones_pendientes": inst_pendientes,
         "instalaciones_completadas": inst_completadas,
+        "total_equipos": total_equipos,
         "stock_bajo": low_stock,
         "user_rol": user["rol"]
     }

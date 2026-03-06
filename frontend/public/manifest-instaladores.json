@@ -1,0 +1,20 @@
+{
+  "name": "ManoProtect Instaladores",
+  "short_name": "MP Instaladores",
+  "description": "App profesional para instaladores de ManoProtect. Órdenes de trabajo, confirmaciones y manuales técnicos.",
+  "start_url": "/gestion/login?app=instaladores",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0f172a",
+  "theme_color": "#f59e0b",
+  "lang": "es",
+  "scope": "/",
+  "categories": ["business", "productivity"],
+  "icons": [
+    {"src": "/icons/icon-192x192.png", "sizes": "192x192", "type": "image/png", "purpose": "any"},
+    {"src": "/icons/icon-512x512.png", "sizes": "512x512", "type": "image/png", "purpose": "any"},
+    {"src": "/icons/icon-192x192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable"},
+    {"src": "/icons/icon-512x512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"}
+  ],
+  "prefer_related_applications": false
+}

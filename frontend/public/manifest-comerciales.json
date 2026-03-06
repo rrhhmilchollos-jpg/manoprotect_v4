@@ -1,0 +1,20 @@
+{
+  "name": "ManoProtect Comerciales",
+  "short_name": "MP Comerciales",
+  "description": "App profesional para comerciales de ManoProtect. Gestión de stock, pedidos y clientes.",
+  "start_url": "/gestion/login?app=comerciales",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0f172a",
+  "theme_color": "#10b981",
+  "lang": "es",
+  "scope": "/",
+  "categories": ["business", "productivity"],
+  "icons": [
+    {"src": "/icons/icon-192x192.png", "sizes": "192x192", "type": "image/png", "purpose": "any"},
+    {"src": "/icons/icon-512x512.png", "sizes": "512x512", "type": "image/png", "purpose": "any"},
+    {"src": "/icons/icon-192x192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable"},
+    {"src": "/icons/icon-512x512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"}
+  ],
+  "prefer_related_applications": false
+}

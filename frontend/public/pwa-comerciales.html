@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ManoProtect Comerciales</title>
+  <link rel="manifest" href="/manifest-comerciales.json">
+  <meta name="theme-color" content="#10b981">
+  <link rel="icon" href="/favicon.ico">
+  <link rel="apple-touch-icon" href="/icons/icon-192x192.png">
+  <style>
+    body { margin: 0; background: #0f172a; display: flex; align-items: center; justify-content: center; height: 100vh; font-family: system-ui; }
+    .loader { text-align: center; color: #10b981; }
+    .loader h1 { font-size: 1.5rem; margin-bottom: 0.5rem; }
+    .loader p { color: #64748b; font-size: 0.875rem; }
+  </style>
+  <script>
+    if ('serviceWorker' in navigator) { navigator.serviceWorker.register('/sw.js'); }
+    setTimeout(() => { window.location.href = '/gestion/login?app=comerciales'; }, 500);
+  </script>
+</head>
+<body>
+  <div class="loader">
+    <h1>ManoProtect Comerciales</h1>
+    <p>Cargando...</p>
+  </div>
+</body>
+</html>
