@@ -1,13 +1,16 @@
-# ManoProtect - PRD v10.2.0 (Producción)
+# ManoProtect - PRD v10.3.0 (Producción)
 
 ## Sistema
 Plataforma de seguridad profesional. Apps: Comerciales, Instaladores, Clientes (familias), Admin.
-Tech: React + FastAPI + MongoDB + Brevo (email) + Stripe (pagos) + WebView Android/TWA
+Tech: React + FastAPI + MongoDB + Brevo (email) + Stripe (pagos) + bcrypt auth
 
-## URLs
-- Producción: https://www.manoprotect.com
-- Preview: https://crm-dashboard-213.preview.emergentagent.com
-- DB: manoprotect_db
+## URLs Producción
+- Landing: https://www.manoprotect.com/
+- Login Familia: https://www.manoprotect.com/familia
+- Gestión Login: https://www.manoprotect.com/gestion/login
+- Admin Panel: https://www.manoprotect.com/gestion/admin
+- Comerciales Panel: https://www.manoprotect.com/gestion/comerciales
+- Instaladores Panel: https://www.manoprotect.com/gestion/instaladores
 
 ## Credenciales
 | Rol | Email | Password |
@@ -17,61 +20,36 @@ Tech: React + FastAPI + MongoDB + Brevo (email) + Stripe (pagos) + WebView Andro
 | Comercial | comercial@manoprotect.com | Comercial2025! |
 | Instalador | instalador@manoprotect.com | Instalador2025! |
 
-## API Endpoints Clave
-| Grupo | Path | Descripción |
-|-------|------|-------------|
-| Health | GET /api/health | Estado del servicio |
-| Auth CEO | POST /api/auth/login | Login principal |
-| Gestión Auth | POST /api/gestion/auth/login | Login sistema gestión |
-| Gestión Stock | GET/POST /api/gestion/stock | CRUD inventario |
-| Gestión Pedidos | GET/POST /api/gestion/pedidos | CRUD pedidos |
-| Gestión Instalaciones | GET/POST /api/gestion/instalaciones | CRUD instalaciones |
-| Gestión Equipos | GET/POST /api/gestion/equipos | CRUD equipos de instalación |
-| Asignar Equipo | PUT /api/gestion/instalaciones/{id}/asignar-equipo | Asignar equipo a instalación |
-| Gestión Dashboard | GET /api/gestion/dashboard/stats | Estadísticas (incl. equipos) |
-| Gestión Usuarios | GET/POST /api/gestion/usuarios | Admin usuarios |
-| Familia Auth | POST /api/auth/familia/register | Registro familia |
-| Familia Auth | POST /api/auth/familia/login | Login familia |
-| Catálogo | GET /api/catalogo/comercial | Descarga PDF catálogo |
-
-## Apps Play Store (v2.1.0, Build 4)
-| App | Package | URL PWABuilder |
-|-----|---------|----------------|
-| Clientes | com.manoprotect.clientes | https://www.manoprotect.com/ |
-| Comerciales | com.manoprotect.comerciales | https://www.manoprotect.com/pwa-comerciales.html |
-| Instaladores | com.manoprotect.instaladores | https://www.manoprotect.com/pwa-instaladores.html |
-
 ## Funcionalidades Completadas
 
-### Mar 6, 2026 - Equipos de Instalación + PWA
-- Sistema de Equipos de Instalación (CRUD completo)
-- Equipos de 1-N miembros (variable) asignables a instalaciones
-- Panel de seguimiento: qué equipo realiza cada instalación
-- Notificaciones a cada miembro del equipo al asignar
-- Info del equipo visible en GestionAdmin y GestionInstaladores
-- Dashboard actualizado con conteo de equipos
-- PWA manifests y entry pages para 3 apps (Clientes, Comerciales, Instaladores)
-- Guía completa para generar APKs con PWABuilder
+### Mar 6, 2026 - Auth Fix + SEO Optimization
+- Migración auth gestión: SHA256 -> bcrypt (seguridad)
+- Compatibilidad retroactiva: soporta SHA256 legacy + auto-upgrade a bcrypt
+- Auto-seed en startup: usuarios gestión se crean/actualizan automáticamente
+- Mensajes de error específicos: "Contraseña incorrecta", "Usuario no encontrado", "Usuario desactivado"
+- GA4 activado (G-8KECMQS45X)
+- GTM activo (GTM-MK53XZ8Q)
+- Meta descriptions consistentes (og, twitter, main)
+- robots.txt: /gestion/ bloqueado, /familia permitida
+- sitemap.xml: 25 URLs con schema image
+- Digital Asset Links para TWA (assetlinks.json)
+- Teléfono Schema.org corregido formato E.164
+- DC.coverage enfocado a España
+- Keywords alineadas con servicio real (alarmas, CRA, no "fraud prevention")
 
-### Anteriores
-- Email real vía Brevo (recuperación de contraseña, bienvenida)
-- Notificaciones en tiempo real (stock bajo, pedidos, asignaciones)
-- Login familiar con familia_id
-- 30+ endpoints API bajo /api/gestion/*
-- Catálogo profesional PDF descargable
-- Sistema de gestión CRA con roles (admin/comercial/instalador)
+### Mar 6, 2026 - Equipos de Instalación + PWA
+- CRUD equipos (1-N miembros), asignación a instalaciones
+- Notificaciones a miembros, dashboard con conteo
+- PWA manifests con IDs estables para 3 apps
 
 ### Testing
-- Iteration 89: 100% backend (19/19) + 100% frontend
-- RBAC verificado (solo admin puede gestionar equipos)
-- Sin debug tokens en producción
+- Iteration 90: 95% backend + 100% frontend
+- Iteration 89: 100% backend + 100% frontend
 
 ## Backlog
-- P0: Deploy a producción (manoprotect.com)
-- P0: Generar APKs con PWABuilder (guía en /app/GUIA_PWABUILDER_APK.md)
-- P1: Configurar CI/CD secrets en GitHub
-- P1: Conectar streaming RTSP cámaras reales
-- P2: GA4/Meta Pixel/Hotjar
-- P2: iOS build (requiere Mac)
-- P3: Integraciones (112 emergencias, BigQuery)
-- P3: Videos marketing (Sora 2)
+- P0: Deploy a producción
+- P0: Generar APKs con PWABuilder
+- P1: Streaming RTSP cámaras reales
+- P2: Meta Pixel ID + Hotjar ID + Google Search Console verification
+- P2: iOS con Capacitor
+- P3: Integraciones 112, BigQuery, Sora 2
