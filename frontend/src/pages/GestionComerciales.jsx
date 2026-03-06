@@ -6,6 +6,8 @@ import {
   Package, Search, ShoppingCart, Plus, Clock, User, LogOut, Phone,
   Mail, MapPin, ChevronRight, AlertTriangle, FileText, Loader2, X, RefreshCw
 } from 'lucide-react';
+import NotificationBell from '@/components/gestion/NotificationBell';
+import UpdateChecker from '@/components/gestion/UpdateChecker';
 
 const gFetch = async (path, opts = {}) => {
   const token = localStorage.getItem('gestion_token');
@@ -104,9 +106,12 @@ export default function GestionComerciales() {
         </div>
         <div className="flex items-center gap-2">
           <button onClick={loadData} className="p-2 text-slate-400 hover:text-white"><RefreshCw className="w-4 h-4" /></button>
+          <NotificationBell />
           <button data-testid="gestion-logout" onClick={() => { localStorage.removeItem('gestion_token'); localStorage.removeItem('gestion_user'); navigate('/gestion/login'); }} className="p-2 text-slate-400 hover:text-red-400"><LogOut className="w-4 h-4" /></button>
         </div>
       </header>
+
+      <UpdateChecker appName="comerciales" />
 
       {/* Stats strip */}
       {stats && (

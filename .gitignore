@@ -114,3 +114,5 @@ desktop-apps/cra-operador/node_modules/electron/dist/electron
 # Environment files
 *.env
 *.env.*
+frontend/node_modules/.cache/default-development/5.pack
+frontend/node_modules/.cache/default-development/5.pack

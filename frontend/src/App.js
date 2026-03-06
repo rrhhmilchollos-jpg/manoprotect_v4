@@ -218,6 +218,9 @@ const GestionComerciales = lazy(() => import('@/pages/GestionComerciales'));
 const GestionInstaladores = lazy(() => import('@/pages/GestionInstaladores'));
 const GestionAdmin = lazy(() => import('@/pages/GestionAdmin'));
 
+// Family ID Authentication
+const FamiliaAuth = lazy(() => import('@/pages/FamiliaAuth'));
+
 // New Product Ecosystem
 const SentinelLockPage = lazy(() => import('@/pages/SentinelLockPage'));
 const CRAPlatformPage = lazy(() => import('@/pages/CRAPlatformPage'));
@@ -655,6 +658,10 @@ function AppRouter() {
           <Route path="/gestion/comerciales" element={<GestionComerciales />} />
           <Route path="/gestion/instaladores" element={<GestionInstaladores />} />
           <Route path="/gestion/admin" element={<GestionAdmin />} />
+          
+          {/* Family ID Authentication */}
+          <Route path="/familia" element={<FamiliaAuth />} />
+          <Route path="/familia/login" element={<FamiliaAuth />} />
           
           {/* CRA Operator Dashboard */}
           <Route path="/cra-operador" element={<CRAOperatorDashboard />} />

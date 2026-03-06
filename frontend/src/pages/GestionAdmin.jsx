@@ -7,6 +7,7 @@ import {
   Plus, LogOut, RefreshCw, Loader2, X, Pencil, Trash2, UserPlus,
   ChevronDown, BarChart3, AlertTriangle, CheckCircle2, Clock, Eye
 } from 'lucide-react';
+import NotificationBell from '@/components/gestion/NotificationBell';
 
 const gFetch = async (path, opts = {}) => {
   const token = localStorage.getItem('gestion_token');
@@ -172,6 +173,7 @@ export default function GestionAdmin() {
           </div>
           <div className="flex items-center gap-1">
             <button onClick={loadAll} className="p-2 text-slate-400"><RefreshCw className="w-4 h-4" /></button>
+            <NotificationBell />
             <button onClick={() => { localStorage.removeItem('gestion_token'); localStorage.removeItem('gestion_user'); navigate('/gestion/login'); }} className="p-2 text-slate-400"><LogOut className="w-4 h-4" /></button>
           </div>
         </header>

@@ -890,3 +890,193 @@ async def logout(request: Request, response: Response, session_token: Optional[s
     
     response.delete_cookie(key="session_token", path="/")
     return {"message": "Sesión cerrada correctamente"}
+
+
+# ============================================
+# FAMILY ID AUTHENTICATION SYSTEM
+# ============================================
+
+class FamiliaRegister(BaseModel):
+    familia_id: str
+    nombre: str
+    email: str
+    password: str
+    telefono: str = ""
+
+class FamiliaLogin(BaseModel):
+    familia_id: str
+    email: str
+    password: str
+
+class FamiliaPasswordResetRequest(BaseModel):
+    familia_id: str
+    email: str
+
+class FamiliaPasswordReset(BaseModel):
+    token: str
+    new_password: str
+
+@router.post("/auth/familia/register")
+async def familia_register(data: FamiliaRegister, request: Request, response: Response):
+    """Register new family member with familia_id"""
+    ip_address, user_agent = get_client_info(request)
+
+    familia_id = data.familia_id.strip().upper()
+    email = data.email.lower().strip()
+
+    if len(familia_id) < 3:
+        raise HTTPException(status_code=400, detail="El ID de familia debe tener al menos 3 caracteres")
+
+    password_check = validate_password_strength(data.password)
+    if not password_check.is_valid:
+        raise HTTPException(status_code=400, detail={
+            "message": "La contraseña no cumple los requisitos de seguridad",
+            "feedback": password_check.feedback
+        })
+
+    existing = await _db.users.find_one({"email": email}, {"_id": 0})
+    if existing:
+        raise HTTPException(status_code=400, detail="El email ya está registrado")
+
+    user = User(
+        email=email,
+        name=data.nombre,
+        auth_provider="familia",
+        password_hash=hash_password_secure(data.password)
+    )
+
+    user_doc = user.model_dump()
+    user_doc['created_at'] = user_doc['created_at'].isoformat()
+    user_doc['familia_id'] = familia_id
+    user_doc['telefono'] = data.telefono
+    user_doc['registration_ip'] = ip_address
+    user_doc['auth_method'] = 'familia'
+
+    await _db.users.insert_one(user_doc)
+
+    session = await create_secure_session(user.user_id, ip_address, user_agent)
+
+    is_production = "manoprotect.com" in str(request.base_url) if hasattr(request, 'base_url') else False
+    response.set_cookie(
+        key="session_token", value=session["session_token"],
+        httponly=True, secure=True, samesite="none", path="/",
+        max_age=24 * 60 * 60,
+        domain=".manoprotect.com" if is_production else None
+    )
+
+    return {
+        "user_id": user.user_id,
+        "email": user.email,
+        "name": user.name,
+        "familia_id": familia_id,
+        "role": user.role,
+        "plan": user.plan
+    }
+
+
+@router.post("/auth/familia/login")
+async def familia_login(data: FamiliaLogin, request: Request, response: Response):
+    """Login with familia_id + email + password"""
+    ip_address, user_agent = get_client_info(request)
+    familia_id = data.familia_id.strip().upper()
+    email = data.email.lower().strip()
+
+    is_locked, minutes_remaining = await is_account_locked(email)
+    if is_locked:
+        raise HTTPException(status_code=429, detail=f"Cuenta bloqueada. Intente en {minutes_remaining} minutos.")
+
+    user = await _db.users.find_one({"email": email, "familia_id": familia_id}, {"_id": 0})
+
+    if not user or not user.get("password_hash"):
+        await record_login_attempt(email, ip_address, user_agent, False, "familia_user_not_found")
+        failed_count = await get_failed_attempts(email)
+        remaining = MAX_LOGIN_ATTEMPTS - failed_count
+        raise HTTPException(status_code=401, detail=f"Credenciales inválidas. {max(0, remaining)} intentos restantes.")
+
+    password_valid = verify_password_secure(data.password, user["password_hash"])
+    if not password_valid:
+        await record_login_attempt(email, ip_address, user_agent, False, "wrong_password")
+        failed_count = await get_failed_attempts(email)
+        remaining = MAX_LOGIN_ATTEMPTS - failed_count
+        raise HTTPException(status_code=401, detail=f"Credenciales inválidas. {max(0, remaining)} intentos restantes.")
+
+    await clear_failed_attempts(email)
+    await record_login_attempt(email, ip_address, user_agent, True)
+
+    await _db.users.update_one(
+        {"user_id": user["user_id"]},
+        {"$set": {"last_login_ip": ip_address, "last_login_at": datetime.now(timezone.utc).isoformat()}}
+    )
+
+    session = await create_secure_session(user["user_id"], ip_address, user_agent)
+
+    is_production = "manoprotect.com" in str(request.base_url) if hasattr(request, 'base_url') else False
+    response.set_cookie(
+        key="session_token", value=session["session_token"],
+        httponly=True, secure=True, samesite="none", path="/",
+        max_age=24 * 60 * 60,
+        domain=".manoprotect.com" if is_production else None
+    )
+
+    return {
+        "user_id": user["user_id"],
+        "email": user["email"],
+        "name": user["name"],
+        "familia_id": user.get("familia_id", ""),
+        "role": user.get("role", "user"),
+        "plan": user.get("plan", "free")
+    }
+
+
+@router.post("/auth/familia/request-password-reset")
+async def familia_request_reset(data: FamiliaPasswordResetRequest):
+    """Request password reset for familia account"""
+    import secrets
+    familia_id = data.familia_id.strip().upper()
+    email = data.email.lower().strip()
+
+    user = await _db.users.find_one({"email": email, "familia_id": familia_id}, {"_id": 0})
+    # Always return success to prevent email enumeration
+    if not user:
+        return {"message": "Si la cuenta existe, recibirás instrucciones por email."}
+
+    reset_token = secrets.token_urlsafe(32)
+    expires = datetime.now(timezone.utc) + timedelta(hours=1)
+
+    await _db.users.update_one(
+        {"user_id": user["user_id"]},
+        {"$set": {
+            "password_reset_token": reset_token,
+            "reset_token_expires": expires.isoformat()
+        }}
+    )
+
+    # TODO: Send email with reset link when SendGrid is configured
+    # For now, log the token for testing
+    print(f"[RESET TOKEN] User: {email}, Token: {reset_token}")
+
+    return {"message": "Si la cuenta existe, recibirás instrucciones por email.", "debug_token": reset_token}
+
+
+@router.post("/auth/familia/reset-password")
+async def familia_reset_password(data: FamiliaPasswordReset):
+    """Reset password using token"""
+    user = await _db.users.find_one({"password_reset_token": data.token}, {"_id": 0})
+    if not user:
+        raise HTTPException(status_code=400, detail="Token inválido o expirado")
+
+    expires = user.get("reset_token_expires", "")
+    if expires and datetime.fromisoformat(expires) < datetime.now(timezone.utc):
+        raise HTTPException(status_code=400, detail="Token expirado. Solicita uno nuevo.")
+
+    password_check = validate_password_strength(data.new_password)
+    if not password_check.is_valid:
+        raise HTTPException(status_code=400, detail="La contraseña no cumple los requisitos de seguridad")
+
+    new_hash = hash_password_secure(data.new_password)
+    await _db.users.update_one(
+        {"user_id": user["user_id"]},
+        {"$set": {"password_hash": new_hash}, "$unset": {"password_reset_token": "", "reset_token_expires": ""}}
+    )
+
+    return {"message": "Contraseña actualizada correctamente"}

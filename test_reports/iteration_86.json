@@ -1,0 +1,107 @@
+{
+  "summary": "Iteration 86: Complete testing of NEW CRA features - Notifications System, App Version Control, and Family ID Authentication. Backend: 23/23 tests passed (100%). Frontend: All pages verified with correct components.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [
+      {"screen": "All gestion pages", "issues": ["Urgency popup (Stock limitado) appears on all pages and blocks interactions - this is an existing global popup that may need a close button or should not appear on gestion pages"]}
+    ]
+  },
+  "test_results": {
+    "gestion_auth": {
+      "login_comercial": "PASSED - JWT token returned, rol=comercial",
+      "login_admin": "PASSED - JWT token returned, rol=admin",
+      "login_instalador": "PASSED - JWT token returned, rol=instalador",
+      "invalid_credentials": "PASSED - 401 correctly returned"
+    },
+    "notifications_system": {
+      "get_notifications": "PASSED - Returns notificaciones array and no_leidas count",
+      "mark_all_read": "PASSED - PUT /api/gestion/notificaciones/leer works",
+      "pedido_creates_notification": "PASSED - New pedido creates notification for admin role",
+      "low_stock_notification": "PASSED - Stock update <5 qty creates notification for comerciales",
+      "installer_assignment_notification": "PASSED - Assigning installer creates notification for that specific installer"
+    },
+    "app_version_control": {
+      "get_app_versions": "PASSED - Returns versions for all apps",
+      "check_version_no_update": "PASSED - Same version returns update_available=false",
+      "check_version_update": "PASSED - Old version returns update_available=true",
+      "update_version_admin": "PASSED - Admin can update app version",
+      "update_version_comercial_denied": "PASSED - 403 for non-admin"
+    },
+    "familia_id_auth": {
+      "register_success": "PASSED - Creates user with familia_id",
+      "register_weak_password": "PASSED - 400 for weak password",
+      "login_success": "PASSED - Login with familia_id + email + password",
+      "login_wrong_familia_id": "PASSED - 401 for wrong familia_id",
+      "password_reset_flow": "PASSED - Full flow: request reset -> get token -> reset -> login with new password",
+      "reset_invalid_token": "PASSED - 400 for invalid token"
+    },
+    "role_access_control": {
+      "comercial_cannot_usuarios": "PASSED - 403 for /usuarios",
+      "instalador_cannot_pedidos": "PASSED - 403 for creating pedidos",
+      "instalador_cannot_logs": "PASSED - 403 for /logs"
+    },
+    "frontend_pages": {
+      "familia_page": "PASSED - Login/Register/Forgot tabs render correctly",
+      "comerciales_notification_bell": "PASSED - NotificationBell visible with notification count badge",
+      "comerciales_update_checker": "PASSED - Shows 'Nueva versión disponible: v1.1.0' banner",
+      "instaladores_notification_bell": "PASSED - NotificationBell visible in header",
+      "admin_notification_bell": "PASSED - NotificationBell in mobile header (hidden on desktop due to sidebar layout)"
+    }
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_iteration_86_new_features.py",
+    "/app/test_reports/pytest/iteration_86_new_features.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "Email delivery for password reset is logged to console only (MOCKED) - SendGrid not configured for familia password reset emails",
+    "The urgency popup (Stock limitado) appears globally and may need to be excluded from /gestion/* routes"
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_iteration_86_new_features.py"
+  ],
+  "success_rate": {
+    "backend": "100% (23/23 tests passed)",
+    "frontend": "100% (all components verified)"
+  },
+  "test_credentials": {
+    "admin": "admin@manoprotect.com / ManoAdmin2025!",
+    "comercial": "comercial@manoprotect.com / Comercial2025!",
+    "instalador": "instalador@manoprotect.com / Instalador2025!",
+    "familia_test_user": "Use strong password like X7mK#pQ9vL$2w for registration"
+  },
+  "seed_data_creation": "Backend tests created TEST_ prefixed data (pedidos, instalaciones, familia users) during testing",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "All NEW features for CRA management tested and working: 1) Notifications system auto-generates alerts for new pedidos (to admin), low stock (to comerciales), and installer assignments (to specific installer). 2) App version control allows admin to set version, and /app-versions/check returns update_available correctly. UpdateChecker component shows banner when update available. 3) Family ID auth system allows registration, login, and password reset with strong password validation. Email delivery is MOCKED (console log).",
+  "mocked_apis": {
+    "has_mocked_apis": true,
+    "mocked_apis_list": ["Email delivery for familia password reset - logs to console instead of sending email via SendGrid"]
+  },
+  "features_verified": [
+    "POST /api/gestion/auth/login - works for comercial, admin, instalador",
+    "GET /api/gestion/notificaciones - returns notifications filtered by user role/id",
+    "PUT /api/gestion/notificaciones/leer - marks all as read",
+    "PUT /api/gestion/notificaciones/{id}/leer - marks single as read",
+    "Auto-notification: new pedido -> admin notification",
+    "Auto-notification: low stock (<5) -> comercial notification",
+    "Auto-notification: installer assignment -> specific installer notification",
+    "GET /api/gestion/app-versions - returns all app versions",
+    "POST /api/gestion/app-versions/check - returns update_available, force_update, latest_version",
+    "PUT /api/gestion/app-versions/{app} - admin can update version (creates notification for role)",
+    "POST /api/auth/familia/register - register with familia_id + strong password",
+    "POST /api/auth/familia/login - login with familia_id + email + password",
+    "POST /api/auth/familia/request-password-reset - returns debug_token for testing",
+    "POST /api/auth/familia/reset-password - reset with token",
+    "Role access: comercial denied /usuarios (403)",
+    "Role access: instalador denied creating pedidos (403)",
+    "Frontend: /familia page with 3 tabs",
+    "Frontend: NotificationBell on comerciales/instaladores/admin pages",
+    "Frontend: UpdateChecker shows update banner when available"
+  ]
+}

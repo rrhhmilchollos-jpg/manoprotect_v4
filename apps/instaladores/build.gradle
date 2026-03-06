@@ -1,0 +1,77 @@
+apply plugin: 'com.android.application'
+apply plugin: 'com.google.gms.google-services'
+
+def getVersionCode = { ->
+    def versionFile = file('version.properties')
+    if (versionFile.exists()) {
+        def props = new Properties()
+        props.load(new FileInputStream(versionFile))
+        return props['VERSION_CODE'].toInteger()
+    }
+    return 1
+}
+
+def getVersionName = { ->
+    def versionFile = file('version.properties')
+    if (versionFile.exists()) {
+        def props = new Properties()
+        props.load(new FileInputStream(versionFile))
+        return props['VERSION_NAME']
+    }
+    return "1.0.0"
+}
+
+android {
+    namespace 'com.manoprotect.instaladores'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId "com.manoprotect.instaladores"
+        minSdk 24
+        targetSdk 34
+        versionCode getVersionCode()
+        versionName getVersionName()
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField "String", "API_BASE_URL", "\"https://www.manoprotect.com/api\""
+        buildConfigField "String", "APP_ROLE", "\"instalador\""
+    }
+
+    signingConfigs {
+        release {
+            storeFile file(System.getenv("KEYSTORE_PATH") ?: "release.keystore")
+            storePassword System.getenv("KEYSTORE_PASSWORD") ?: ""
+            keyAlias System.getenv("KEY_ALIAS") ?: "manoprotect-instaladores"
+            keyPassword System.getenv("KEY_PASSWORD") ?: ""
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+        debug {
+            applicationIdSuffix ".debug"
+            debuggable true
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+}
+
+dependencies {
+    implementation 'androidx.core:core-ktx:1.12.0'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'com.google.android.material:material:1.11.0'
+    implementation 'androidx.webkit:webkit:1.10.0'
+    implementation 'com.google.firebase:firebase-messaging:24.0.0'
+    implementation 'com.google.firebase:firebase-analytics:22.0.0'
+    implementation 'com.squareup.okhttp3:okhttp:4.12.0'
+    implementation 'com.google.code.gson:gson:2.10.1'
+    testImplementation 'junit:junit:4.13.2'
+}

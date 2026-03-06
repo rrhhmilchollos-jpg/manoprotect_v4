@@ -318,6 +318,10 @@ async def update_stock(producto_id: str, data: StockUpdate, request: Request):
     if result.matched_count == 0:
         raise HTTPException(status_code=404, detail="Producto no encontrado")
     await _log_action(admin["user_id"], admin["nombre"], "actualizar_stock", f"Actualizó producto {producto_id}")
+    # Auto-notify comerciales if stock is low
+    if data.cantidad_disponible is not None and data.cantidad_disponible < 5:
+        item = await _db.gestion_stock.find_one({"producto_id": producto_id}, {"_id": 0})
+        await _send_notification(destinatario_rol="comercial", tipo="stock_bajo", titulo="Stock bajo", mensaje=f"{item['nombre'] if item else producto_id}: solo {data.cantidad_disponible} uds disponibles")
     return {"message": "Stock actualizado"}
 
 @router.delete("/stock/{producto_id}")
@@ -377,6 +381,8 @@ async def create_pedido(data: PedidoCreate, request: Request):
     }
     await _db.gestion_pedidos.insert_one(doc)
     await _log_action(user["user_id"], user["nombre"], "crear_pedido", f"Pedido {pedido_id} para {data.cliente_nombre}")
+    # Notify admin about new order
+    await _send_notification(destinatario_rol="admin", tipo="nuevo_pedido", titulo="Nuevo pedido creado", mensaje=f"{pedido_id} por {user['nombre']} - Cliente: {data.cliente_nombre}")
     return {"message": "Pedido creado", "pedido_id": pedido_id}
 
 @router.put("/pedidos/{pedido_id}")
@@ -484,6 +490,9 @@ async def asignar_instalador(instalacion_id: str, request: Request):
     if result.matched_count == 0:
         raise HTTPException(status_code=404, detail="Instalación no encontrada")
     await _log_action(admin["user_id"], admin["nombre"], "asignar_instalador", f"Asignó {instalador['nombre']} a instalación {instalacion_id}")
+    # Notify the installer about new assignment
+    inst = await _db.gestion_instalaciones.find_one({"instalacion_id": instalacion_id}, {"_id": 0})
+    await _send_notification(destinatario_id=instalador_id, tipo="nueva_instalacion", titulo="Nueva instalación asignada", mensaje=f"Instalación {instalacion_id} - {inst.get('cliente_nombre', '')} en {inst.get('direccion', '')}")
     return {"message": f"Instalador {instalador['nombre']} asignado"}
 
 
@@ -620,3 +629,115 @@ async def seed_admin():
             "instalador": {"email": "instalador@manoprotect.com", "password": "Instalador2025!"}
         }
     }
+
+
+
+# ============================================
+# NOTIFICATIONS SYSTEM
+# ============================================
+
+@router.get("/notificaciones")
+async def list_notificaciones(request: Request, limit: int = 30):
+    """Obtener notificaciones del usuario actual"""
+    user = await _get_current_gestion_user(request)
+    query = {"$or": [{"destinatario_id": user["user_id"]}, {"destinatario_rol": user["rol"]}, {"destinatario_rol": "todos"}]}
+    notifs = await _db.gestion_notificaciones.find(query, {"_id": 0}).sort("timestamp", -1).to_list(limit)
+    unread = await _db.gestion_notificaciones.count_documents({**query, "leida": False})
+    return {"notificaciones": notifs, "no_leidas": unread}
+
+@router.put("/notificaciones/leer")
+async def mark_all_read(request: Request):
+    """Marcar todas las notificaciones como leídas"""
+    user = await _get_current_gestion_user(request)
+    query = {"$or": [{"destinatario_id": user["user_id"]}, {"destinatario_rol": user["rol"]}, {"destinatario_rol": "todos"}]}
+    await _db.gestion_notificaciones.update_many(query, {"$set": {"leida": True}})
+    return {"message": "Notificaciones marcadas como leídas"}
+
+@router.put("/notificaciones/{notif_id}/leer")
+async def mark_one_read(notif_id: str, request: Request):
+    """Marcar una notificación como leída"""
+    await _get_current_gestion_user(request)
+    await _db.gestion_notificaciones.update_one({"notif_id": notif_id}, {"$set": {"leida": True}})
+    return {"message": "Notificación leída"}
+
+async def _send_notification(destinatario_id: str = "", destinatario_rol: str = "", tipo: str = "info", titulo: str = "", mensaje: str = "", datos: dict = None):
+    """Enviar notificación interna"""
+    await _db.gestion_notificaciones.insert_one({
+        "notif_id": str(uuid.uuid4()),
+        "destinatario_id": destinatario_id,
+        "destinatario_rol": destinatario_rol,
+        "tipo": tipo,
+        "titulo": titulo,
+        "mensaje": mensaje,
+        "datos": datos or {},
+        "leida": False,
+        "timestamp": datetime.now(timezone.utc).isoformat()
+    })
+
+
+# ============================================
+# APP VERSION CONTROL & AUTO-UPDATE
+# ============================================
+
+class AppVersionCheck(BaseModel):
+    app_name: str  # comerciales | instaladores | admin
+    current_version: str  # e.g. "1.0.0"
+    current_build: int = 1
+
+@router.get("/app-versions")
+async def get_app_versions(request: Request):
+    """Obtener versiones actuales de todas las apps"""
+    await _get_current_gestion_user(request)
+    versions = await _db.gestion_app_versions.find({}, {"_id": 0}).to_list(10)
+    if not versions:
+        defaults = [
+            {"app_name": "comerciales", "version_name": "1.0.0", "version_code": 1, "release_notes": "Lanzamiento inicial", "min_version": "1.0.0", "force_update": False, "download_url": "", "updated_at": datetime.now(timezone.utc).isoformat()},
+            {"app_name": "instaladores", "version_name": "1.0.0", "version_code": 1, "release_notes": "Lanzamiento inicial", "min_version": "1.0.0", "force_update": False, "download_url": "", "updated_at": datetime.now(timezone.utc).isoformat()},
+            {"app_name": "admin", "version_name": "1.0.0", "version_code": 1, "release_notes": "Lanzamiento inicial", "min_version": "1.0.0", "force_update": False, "download_url": "", "updated_at": datetime.now(timezone.utc).isoformat()},
+        ]
+        for d in defaults:
+            await _db.gestion_app_versions.insert_one(d)
+        versions = defaults
+    return {"versions": versions}
+
+@router.post("/app-versions/check")
+async def check_app_version(data: AppVersionCheck):
+    """Verificar si hay actualización disponible (público, desde la app)"""
+    ver = await _db.gestion_app_versions.find_one({"app_name": data.app_name}, {"_id": 0})
+    if not ver:
+        return {"update_available": False, "force_update": False}
+    server_parts = [int(x) for x in ver["version_name"].split(".")]
+    client_parts = [int(x) for x in data.current_version.split(".")]
+    update_available = server_parts > client_parts or ver["version_code"] > data.current_build
+    min_parts = [int(x) for x in ver.get("min_version", "1.0.0").split(".")]
+    force = client_parts < min_parts or ver.get("force_update", False)
+    return {
+        "update_available": update_available,
+        "force_update": force and update_available,
+        "latest_version": ver["version_name"],
+        "latest_build": ver["version_code"],
+        "release_notes": ver.get("release_notes", ""),
+        "download_url": ver.get("download_url", "")
+    }
+
+@router.put("/app-versions/{app_name}")
+async def update_app_version(app_name: str, request: Request):
+    """Actualizar versión de una app (solo admin)"""
+    admin = await _require_admin(request)
+    body = await request.json()
+    update = {"updated_at": datetime.now(timezone.utc).isoformat()}
+    for k in ["version_name", "version_code", "release_notes", "min_version", "force_update", "download_url"]:
+        if k in body:
+            update[k] = body[k]
+    await _db.gestion_app_versions.update_one({"app_name": app_name}, {"$set": update}, upsert=True)
+    # Notify all users of that role about the update
+    rol = "comercial" if app_name == "comerciales" else ("instalador" if app_name == "instaladores" else "admin")
+    await _send_notification(
+        destinatario_rol=rol,
+        tipo="update",
+        titulo=f"Nueva versión disponible: {body.get('version_name', '')}",
+        mensaje=body.get("release_notes", "Actualización disponible"),
+        datos={"app_name": app_name, "version": body.get("version_name", "")}
+    )
+    await _log_action(admin["user_id"], admin["nombre"], "actualizar_version", f"App {app_name} -> {body.get('version_name', '')}")
+    return {"message": "Versión actualizada"}
