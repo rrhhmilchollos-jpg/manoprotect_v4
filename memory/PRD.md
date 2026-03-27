@@ -28,27 +28,23 @@ Sistema de seguridad empresarial completo estilo Securitas Direct con CRA, Back 
 | CRA Dashboard | /cra-operador |
 | Admin Gestion | /gestion |
 
+## Desktop Apps
+- CRM Ventas: apunta a manoprotectt.com/gestion con reconexion automatica
+- CRA Operador: apunta a manoprotectt.com/cra-operador con reconexion automatica
+- Ambas apps tienen:
+  - Multi-URL fallback (www.manoprotectt.com → manoprotectt.com)
+  - Reconexion automatica cada 5s con visual de servidores
+  - Auto-refresh cada 10s
+  - Menu de navegacion entre modulos
+  - CRA: notificaciones de escritorio para nuevas alertas
+
 ## Funcionalidades Implementadas
-
-### Emails Automaticos Brevo (NUEVO)
-- **Alta empleado**: Email con credenciales temporales al crear comercial/instalador
-- **Activacion cliente**: Email con credenciales app al activar desde pipeline
-- **Avance pipeline**: Notificacion al cliente en cada etapa (contacto, estudio, propuesta, contrato, instalacion, activacion)
-- Templates HTML profesionales con branding ManoProtect
-
-### Back Office — Administracion Central
-- Alta usuarios con contrasena temporal + email automatico
-- Pipeline CRM 8 etapas + emails automaticos
-- Auditoria completa
-
-### Apps Conectadas a Backend Real
-- App Cliente, Comerciales, Instaladores — datos reales MongoDB
+- Back Office + Pipeline CRM Securitas Direct (8 etapas)
+- Emails automaticos Brevo (alta empleado, activacion cliente, avance pipeline)
+- Apps conectadas a backend real (Cliente, Comerciales, Instaladores)
 - CRA Dashboard con Socket.IO real-time
+- Desktop apps con reconexion inteligente
 
-## Pendiente
-- P1: Firebase Push Notifications
-- P1: CI/CD Play Store
-- P1: SEM/Ads Config
-- P2: RTSP Camera Streaming
-- P2: iOS App Capacitor
-- P3: Videos marketing Sora 2
+## Estado
+- **Blocker**: Apps desktop offline porque manoprotectt.com no esta desplegado. Solucion: desplegar la aplicacion
+- **Pendiente**: Firebase Push Notifications, CI/CD Play Store, SEM/Ads, RTSP Cameras, iOS App
