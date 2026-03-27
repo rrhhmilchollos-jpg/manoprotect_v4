@@ -28,19 +28,46 @@ Sistema de seguridad empresarial completo estilo Securitas Direct con CRA, Back 
 - Referidos: Codigo unico por usuario, +3 dias trial para ambos
 - Anti-abuso: Fingerprint + IP scoring, threshold 80
 
+## AppCliente - Funcionalidades de Seguridad (COMPLETADO)
+### Sistema de Alarma
+- Armado total / parcial / desarmado con verificacion PIN
+- Teclado numerico modal para introducir PIN
+- Estado visual con escudo animado (colores por modo)
+
+### Zonas de Seguridad
+- 6 zonas por defecto: Entrada, Salon, Cocina, Dormitorio, Garaje, Jardin
+- Tipos: sensor_door, sensor_pir, smoke_detector, camera
+- Indicadores de bateria y estado (OK / Alerta)
+
+### Camaras
+- 3 camaras por defecto: Entrada, Jardin, Garaje
+- Estado online/offline con indicador visual
+
+### Eventos
+- Historial completo de eventos del sistema
+- Tipos: arm, disarm, sos, intrusion, fire, tamper, low_battery
+- Colores y badges por severidad (critico, alto, medio, bajo)
+
+### SOS con Geolocalizacion
+- Boton de emergencia con confirmacion
+- Captura automatica de ubicacion GPS
+- Notifica a CRA y contactos de emergencia
+- Envia link de Google Maps con ubicacion
+
+### Contactos de Emergencia
+- CRUD completo: crear, listar, eliminar
+- Campos: nombre, telefono, relacion
+- Notificados automaticamente en SOS
+
+### Ajustes
+- Cambio de PIN de seguridad (4 digitos)
+- Zonas modo noche configurables
+
 ## Firebase Push Notifications
 - Service Account: /app/backend/firebase-service-account.json
 - Service Worker: /app/frontend/public/firebase-messaging-sw.js
 - Firebase Config: /app/frontend/src/lib/firebase.js
 - Backend Routes: /app/backend/routes/notification_routes.py
-- Endpoints:
-  - POST /api/notifications/register-token
-  - DELETE /api/notifications/unregister-token
-  - POST /api/notifications/send
-  - GET /api/notifications/status
-- Alarm alert function: send_alarm_alert(user_id, alert_type, message)
-- Alert types: intrusion, fire, panic, tamper, low_battery, arm, disarm
-- Critical alerts (intrusion, fire, panic): high priority, vibration pattern, require interaction
 
 ## Paginas Legales
 - Politica de privacidad: /api/privacy-policy
@@ -48,16 +75,17 @@ Sistema de seguridad empresarial completo estilo Securitas Direct con CRA, Back 
 
 ## Estado Actual
 ### Completado
-- APKs compilados para Play Store (API 35, versionCode 3)
+- APKs compilados para Play Store (Comerciales + Instaladores)
 - Sistema Trial + Anti-Abuso + Stripe + Referidos
 - Firebase Push Notifications (Admin SDK + FCM + Service Worker)
+- AppCliente completo con funcionalidades avanzadas de seguridad
 - Back Office + Pipeline CRM
 - Emails automaticos Brevo
 - Socket.IO CRA real-time
-- Desktop apps con reconexion
 - SEO + Performance optimizado
 
 ### Pendiente
+- P1: Compilar APK/AAB para AppCliente (twa-clientes)
 - P1: CI/CD Play Store (pendiente secrets GitHub)
 - P1: SEM/Ads (Meta Pixel, Hotjar, Search Console)
 - P1: RTSP Camera Streaming
