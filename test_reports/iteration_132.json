@@ -1,0 +1,84 @@
+{
+  "summary": "Tested Sentinel S TikTok promo update (49.99 EUR/month), Escudo Vecinal 20% discount offer, and domain migration verification. All tests passed.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/test_reports/iteration_132.json"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [],
+  "updated_files": [],
+  "success_rate": {
+    "backend": "100%",
+    "frontend": "100%"
+  },
+  "test_credentials": {
+    "admin": {
+      "email": "admin@manoprotectt.com",
+      "password": "ManoAdmin2025!",
+      "role": "admin"
+    }
+  },
+  "seed_data_creation": "",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Promo Sentinel S TikTok campaign updated to 49.99/499.99 EUR. Escudo Vecinal has new 20% discount offer for first 50 subscribers with 10 neighbors included. All management logins work with @manoprotectt.com domain.",
+  "tests_passed": {
+    "backend_tests": [
+      "GET /api/health - returns healthy status - PASSED",
+      "GET /api/promo/sentinel-s/status - returns {total: 100, claimed: 7, remaining: 93, active: true} - PASSED"
+    ],
+    "promo_sentinel_s_tests": [
+      "Promo Sentinel S section visible on landing page (data-testid=promo-sentinel-section) - PASSED",
+      "EXCLUSIVO TIKTOK badge displayed - PASSED",
+      "Correct price 49,99 EUR/mes shown (not old 9,99) - PASSED",
+      "Yearly price 499,99 EUR/ano shown - PASSED",
+      "Promo counter shows 93/100 restantes (data-testid=promo-counter) - PASSED",
+      "'Lo que recibes' checklist showing subscription + Sentinel S GRATIS - PASSED",
+      "Monthly CTA button 'Suscribirme y recibir mi Sentinel S' (data-testid=promo-cta-monthly) - PASSED",
+      "Yearly CTA button with 499,99 EUR/ano (data-testid=promo-cta-yearly) - PASSED"
+    ],
+    "escudo_vecinal_tests": [
+      "Escudo Vecinal page loads at /escudo-vecinal - PASSED",
+      "20% discount offer section visible (data-testid=escudo-vecinal-oferta) - PASSED",
+      "'Hasta 10 vecinos incluidos' text displayed - PASSED",
+      "Price 239,99 EUR/ano with -20% badge shown - PASSED",
+      "Counter 43/50 restantes displayed - PASSED",
+      "CTA 'Suscribirme con 20% descuento' (data-testid=escudo-oferta-cta) - PASSED"
+    ],
+    "domain_migration_tests": [
+      "Admin login with admin@manoprotectt.com works - PASSED",
+      "Redirects to /gestion/admin dashboard after login - PASSED"
+    ],
+    "landing_page_tests": [
+      "Hero section loads correctly - PASSED"
+    ]
+  },
+  "mocked_data": {
+    "escudo_vecinal_counter": "43/50 counter is static (MOCKED)",
+    "google_play_rating": "4.8/5 stars is mock value"
+  },
+  "verified_features": {
+    "promo_sentinel_s": {
+      "monthly_price": "49,99 EUR/mes",
+      "yearly_price": "499,99 EUR/ano",
+      "remaining_units": "93/100",
+      "badge": "EXCLUSIVO TIKTOK",
+      "includes": ["Suscripcion ManoProtect: 49,99 EUR/mes", "Sentinel S GRATIS (valor 149 EUR)", "Acceso completo a todos los beneficios ManoProtect"]
+    },
+    "escudo_vecinal_offer": {
+      "discount": "20%",
+      "original_price": "299,99 EUR/ano",
+      "discounted_price": "239,99 EUR/ano",
+      "remaining_slots": "43/50",
+      "includes": ["Hasta 10 vecinos incluidos", "Dashboard exclusivo con mapa de incidencias del barrio"]
+    }
+  }
+}

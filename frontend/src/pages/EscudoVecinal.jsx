@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { Shield, AlertTriangle, MapPin, Users, Clock, ChevronRight, Plus, Check, Eye, Bell, X, Send, Lock, Crown } from 'lucide-react';
+import { Shield, AlertTriangle, MapPin, Users, Clock, ChevronRight, Plus, Check, Eye, Bell, X, Send, Lock, Crown, Gift } from 'lucide-react';
 
 const API = process.env.REACT_APP_BACKEND_URL;
 
@@ -563,6 +563,77 @@ export default function EscudoVecinal() {
 
       {/* Report Modal */}
       <ReportModal open={showReport} onClose={() => setShowReport(false)} onSubmit={handleReport} clickPos={clickPos} />
+
+      {/* OFERTA NUEVOS SUSCRIPTORES */}
+      <section className="relative overflow-hidden py-12 border-t border-emerald-500/20" data-testid="escudo-vecinal-oferta">
+        <div className="absolute inset-0 bg-gradient-to-br from-emerald-600/10 via-transparent to-blue-600/10" />
+        <div className="relative max-w-4xl mx-auto px-4 sm:px-6">
+          <div className="bg-slate-900/80 backdrop-blur-md border border-emerald-500/30 rounded-2xl p-6 sm:p-8">
+            <div className="flex flex-col md:flex-row gap-6 items-center">
+              <div className="flex-1 text-center md:text-left">
+                <div className="inline-flex items-center gap-2 bg-emerald-500/20 border border-emerald-500/30 rounded-full px-4 py-1.5 mb-3">
+                  <Gift className="w-4 h-4 text-emerald-400" />
+                  <span className="text-emerald-400 text-xs font-bold">OFERTA NUEVOS SUSCRIPTORES</span>
+                </div>
+                <h2 className="text-white font-black text-2xl sm:text-3xl mb-3">
+                  <span className="text-emerald-400">20% de descuento</span> en Escudo Vecinal
+                </h2>
+                <p className="text-slate-300 text-sm mb-4 leading-relaxed">
+                  Para los <strong className="text-white">primeros 50 suscriptores</strong>. Protege tu barrio con vigilancia vecinal avanzada, alertas en tiempo real de okupaciones, robos y actividad sospechosa.
+                </p>
+                <div className="space-y-2 mb-5">
+                  <div className="flex items-center gap-2 text-sm text-slate-300">
+                    <Check className="w-4 h-4 text-emerald-400 flex-shrink-0" />
+                    <span><strong className="text-white">Hasta 10 vecinos incluidos</strong> por suscripcion</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-sm text-slate-300">
+                    <Users className="w-4 h-4 text-blue-400 flex-shrink-0" />
+                    <span>Ampliable a mas vecinos solicitandolo (coste extra por vecino adicional)</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-sm text-slate-300">
+                    <MapPin className="w-4 h-4 text-red-400 flex-shrink-0" />
+                    <span>Un solo barrio/zona por suscripcion</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-sm text-slate-300">
+                    <Shield className="w-4 h-4 text-amber-400 flex-shrink-0" />
+                    <span>Dashboard exclusivo con mapa de incidencias del barrio</span>
+                  </div>
+                </div>
+
+                <div className="bg-black/30 rounded-xl p-3 mb-5 max-w-sm mx-auto md:mx-0">
+                  <div className="flex items-center justify-between text-sm mb-1.5">
+                    <span className="text-slate-400">Plazas con descuento</span>
+                    <span className="text-emerald-400 font-bold">43/50 restantes</span>
+                  </div>
+                  <div className="w-full h-2 bg-black/40 rounded-full overflow-hidden">
+                    <div className="h-full bg-gradient-to-r from-emerald-400 to-blue-500 rounded-full" style={{ width: '14%' }} />
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-3 justify-center md:justify-start mb-4">
+                  <div className="text-center">
+                    <p className="text-slate-500 text-xs line-through">299,99 EUR/ano</p>
+                    <p className="text-white font-black text-2xl">239,99 <span className="text-sm font-bold text-slate-400">EUR/ano</span></p>
+                  </div>
+                  <div className="bg-red-500 text-white font-black text-sm px-3 py-1.5 rounded-lg -rotate-2">
+                    -20%
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex flex-col sm:flex-row gap-3 justify-center mt-2">
+              <Link to="/panel-vecinal" className="inline-flex items-center justify-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white font-black px-8 py-3.5 rounded-xl transition-all hover:scale-[1.02] shadow-lg shadow-emerald-500/20" data-testid="escudo-oferta-cta">
+                <Shield className="w-5 h-5" /> Suscribirme con 20% descuento
+              </Link>
+              <Link to="/dashboard-barrio" className="inline-flex items-center justify-center gap-2 border border-slate-600 hover:border-slate-500 text-white font-bold px-6 py-3.5 rounded-xl transition-colors" data-testid="escudo-ver-barrio">
+                Ver estadisticas del barrio <ChevronRight className="w-4 h-4" />
+              </Link>
+            </div>
+            <p className="text-center text-xs text-slate-500 mt-3">Sin permanencia. Cancela cuando quieras. Oferta valida hasta agotar las 50 plazas.</p>
+          </div>
+        </div>
+      </section>
 
       {/* Premium Panel CTA */}
       <section className="bg-gradient-to-r from-amber-500/5 to-red-500/5 border-t border-amber-500/10 py-10">

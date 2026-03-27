@@ -273,45 +273,59 @@ const HighConversionLanding = () => {
           <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 py-10 md:py-14">
             <div className="grid lg:grid-cols-2 gap-8 items-center">
               <div className="text-center lg:text-left">
-                <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-white/20 backdrop-blur-sm border border-white/30 rounded-full text-white text-sm font-bold mb-4 animate-pulse">
+                <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-black/30 backdrop-blur-sm border border-white/30 rounded-full text-white text-xs font-bold mb-2">
+                  <span className="w-2 h-2 bg-red-400 rounded-full animate-pulse" /> EXCLUSIVO TIKTOK
+                </div>
+                <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-white/20 backdrop-blur-sm border border-white/30 rounded-full text-white text-sm font-bold mb-4 animate-pulse ml-2">
                   <Gift className="w-4 h-4" />
-                  OFERTA LIMITADA — Solo {promoData.remaining} de {promoData.total}
+                  OFERTA LIMITADA — Solo {promoData.remaining} unidades
                 </div>
                 
                 <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white leading-tight mb-4" data-testid="promo-title">
                   Sentinel S
                   <span className="block text-yellow-200">GRATIS</span>
-                  <span className="block text-xl sm:text-2xl font-bold mt-1 text-white/90">con tu suscripción</span>
+                  <span className="block text-xl sm:text-2xl font-bold mt-1 text-white/90">con tu suscripcion ManoProtect</span>
                 </h2>
                 
                 <p className="text-white/80 text-base mb-6 max-w-md mx-auto lg:mx-0">
-                  Suscríbete a ManoProtect y llévate un <strong className="text-white">reloj Sentinel S valorado en 149€</strong> gratis. Campaña exclusiva TikTok.
+                  Suscribete a ManoProtect por <strong className="text-yellow-200">49,99 EUR/mes</strong> y llevate un <strong className="text-white">Sentinel S valorado en 149 EUR</strong> completamente gratis. Solo para los primeros 100 suscriptores de TikTok.
                 </p>
 
                 <div className="bg-black/30 backdrop-blur-sm rounded-xl p-4 mb-6 max-w-md mx-auto lg:mx-0" data-testid="promo-counter">
                   <div className="flex items-center justify-between text-sm mb-2">
-                    <span className="text-white/70">Unidades reclamadas</span>
-                    <span className="text-yellow-300 font-bold">{promoData.claimed}/{promoData.total}</span>
+                    <span className="text-white/70">Unidades restantes</span>
+                    <span className="text-yellow-300 font-bold">{promoData.remaining}/{promoData.total}</span>
                   </div>
                   <div className="w-full h-3 bg-black/40 rounded-full overflow-hidden">
                     <div className="h-full bg-gradient-to-r from-yellow-400 to-red-500 rounded-full transition-all duration-1000" style={{ width: `${Math.max(5, (promoData.claimed / promoData.total) * 100)}%` }} />
                   </div>
                   <p className="text-xs text-white/60 mt-2 flex items-center gap-1">
-                    <Clock className="w-3 h-3" /> Envío máx. 60 días a los primeros 100 suscriptores
+                    <Truck className="w-3 h-3" /> Envio garantizado a los primeros 100 suscriptores
                   </p>
+                </div>
+
+                <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl p-4 mb-6 max-w-md mx-auto lg:mx-0">
+                  <p className="text-white font-bold text-sm mb-2 flex items-center gap-2"><Check className="w-4 h-4 text-yellow-300" /> Lo que recibes:</p>
+                  <ul className="text-white/80 text-sm space-y-1.5">
+                    <li className="flex items-center gap-2"><Check className="w-3.5 h-3.5 text-emerald-400 flex-shrink-0" /> Suscripcion ManoProtect: 49,99 EUR/mes</li>
+                    <li className="flex items-center gap-2"><Gift className="w-3.5 h-3.5 text-yellow-400 flex-shrink-0" /> Sentinel S GRATIS (valor 149 EUR) — solo primeros 100</li>
+                    <li className="flex items-center gap-2"><Shield className="w-3.5 h-3.5 text-blue-400 flex-shrink-0" /> Acceso completo a todos los beneficios ManoProtect</li>
+                  </ul>
                 </div>
 
                 <div className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto lg:mx-0">
                   <button onClick={() => handlePromoCheckout('sentinel-promo-monthly')} disabled={promoLoading}
                     className="flex-1 bg-white text-red-600 font-extrabold py-4 px-6 rounded-xl hover:bg-yellow-50 transition-all hover:scale-[1.02] shadow-xl text-center disabled:opacity-50"
                     data-testid="promo-cta-monthly">
-                    {promoLoading ? 'Procesando...' : <><span className="text-lg">9,99€/mes</span><br /><span className="text-xs font-semibold text-red-400">+ Sentinel S GRATIS</span></>}
+                    {promoLoading ? 'Procesando...' : <><span className="text-lg">Suscribirme y recibir mi Sentinel S</span><br /><span className="text-xs font-semibold text-red-400">49,99 EUR/mes + Sentinel S GRATIS</span></>}
                   </button>
+                </div>
+                <div className="mt-3 max-w-md mx-auto lg:mx-0">
                   <button onClick={() => handlePromoCheckout('sentinel-promo-yearly')} disabled={promoLoading}
-                    className="flex-1 bg-yellow-400 text-black font-extrabold py-4 px-6 rounded-xl hover:bg-yellow-300 transition-all hover:scale-[1.02] shadow-xl text-center relative disabled:opacity-50"
+                    className="w-full bg-yellow-400 text-black font-extrabold py-3 px-6 rounded-xl hover:bg-yellow-300 transition-all hover:scale-[1.02] shadow-xl text-center relative disabled:opacity-50"
                     data-testid="promo-cta-yearly">
-                    <span className="absolute -top-2.5 right-3 bg-red-600 text-white text-[10px] px-2 py-0.5 rounded-full font-bold">AHORRA 20€</span>
-                    {promoLoading ? 'Procesando...' : <><span className="text-lg">99,99€/año</span><br /><span className="text-xs font-semibold text-black/60">+ Sentinel S GRATIS</span></>}
+                    <span className="absolute -top-2.5 right-3 bg-red-600 text-white text-[10px] px-2 py-0.5 rounded-full font-bold">AHORRA 100 EUR</span>
+                    {promoLoading ? 'Procesando...' : <><span className="text-sm">O paga anual: 499,99 EUR/ano + Sentinel S GRATIS</span></>}
                   </button>
                 </div>
 
@@ -319,6 +333,7 @@ const HighConversionLanding = () => {
                   <span className="flex items-center gap-1"><Check className="w-3 h-3" /> 1 por usuario</span>
                   <span className="flex items-center gap-1"><Check className="w-3 h-3" /> Sin permanencia</span>
                   <span className="flex items-center gap-1"><Lock className="w-3 h-3" /> Pago seguro Stripe</span>
+                  <span className="flex items-center gap-1"><Clock className="w-3 h-3" /> Se agotan rapido</span>
                 </div>
               </div>
 

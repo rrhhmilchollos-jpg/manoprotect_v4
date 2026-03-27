@@ -26,12 +26,12 @@ logger = logging.getLogger(__name__)
 PROMO_TOTAL = 100
 PROMO_PLANS = {
     "sentinel-promo-monthly": {
-        "amount": 9.99,
+        "amount": 49.99,
         "name": "Plan Familiar Mensual + Sentinel S GRATIS",
         "period": "mes"
     },
     "sentinel-promo-yearly": {
-        "amount": 99.99,
+        "amount": 499.99,
         "name": "Plan Familiar Anual + Sentinel S GRATIS",
         "period": "año"
     }
