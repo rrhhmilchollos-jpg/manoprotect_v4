@@ -457,7 +457,7 @@ async def get_alarm_status(request: Request):
     if not status:
         status = {"user_id": user["user_id"], "mode": "disarmed", "updated_at": datetime.now(timezone.utc).isoformat()}
         await _db.alarm_status.insert_one(status)
-        del status["_id"] if "_id" in status else None
+        status.pop("_id", None)
     return status
 
 @router.post("/alarm-status")
@@ -627,7 +627,7 @@ async def get_settings(request: Request):
     if not s:
         s = {"user_id": user["user_id"], "pin": "1234", "auto_arm_time": None, "night_mode_zones": ["z1", "z5"]}
         await _db.client_settings.insert_one(s)
-        del s["_id"] if "_id" in s else None
+        s.pop("_id", None)
     return s
 
 @router.put("/settings")
