@@ -446,3 +446,224 @@ async def check_device_abuse(req: FingerprintData, request: Request):
         "allowed": score < ABUSE_SCORE_THRESHOLD,
         "score": score,
     }
+
+
+# ============ ALARM SYSTEM ============
+
+@router.get("/alarm-status")
+async def get_alarm_status(request: Request):
+    user = await _get_user_from_token(request)
+    status = await _db.alarm_status.find_one({"user_id": user["user_id"]}, {"_id": 0})
+    if not status:
+        status = {"user_id": user["user_id"], "mode": "disarmed", "updated_at": datetime.now(timezone.utc).isoformat()}
+        await _db.alarm_status.insert_one(status)
+        del status["_id"] if "_id" in status else None
+    return status
+
+@router.post("/alarm-status")
+async def set_alarm_status(request: Request):
+    user = await _get_user_from_token(request)
+    body = await request.json()
+    mode = body.get("mode", "disarmed")
+    pin = body.get("pin", "")
+
+    # Verify PIN for disarming
+    stored = await _db.client_settings.find_one({"user_id": user["user_id"]}, {"_id": 0})
+    stored_pin = (stored or {}).get("pin", "1234")
+    if mode == "disarmed" and pin != stored_pin:
+        raise HTTPException(403, "PIN incorrecto")
+
+    now = datetime.now(timezone.utc).isoformat()
+    await _db.alarm_status.update_one(
+        {"user_id": user["user_id"]},
+        {"$set": {"mode": mode, "updated_at": now, "changed_by": "app"}},
+        upsert=True,
+    )
+
+    # Log event
+    await _db.client_events.insert_one({
+        "user_id": user["user_id"],
+        "type": "arm" if mode != "disarmed" else "disarm",
+        "detail": f"Sistema {'armado' if mode != 'disarmed' else 'desarmado'}: modo {mode}",
+        "source": "app",
+        "timestamp": now,
+    })
+
+    # Push notification
+    try:
+        from routes.notification_routes import send_alarm_alert
+        msg = {"total": "Sistema armado en modo total", "partial": "Sistema armado parcial (modo noche)", "disarmed": "Sistema desarmado"}
+        await send_alarm_alert(user["user_id"], "arm" if mode != "disarmed" else "disarm", msg.get(mode, ""), _db)
+    except Exception:
+        pass
+
+    return {"mode": mode, "updated_at": now}
+
+
+# ============ SECURITY ZONES ============
+
+@router.get("/zones")
+async def get_zones(request: Request):
+    user = await _get_user_from_token(request)
+    zones = []
+    cursor = _db.client_zones.find({"user_id": user["user_id"]}, {"_id": 0})
+    async for z in cursor:
+        zones.append(z)
+    if not zones:
+        defaults = [
+            {"zone_id": "z1", "name": "Entrada Principal", "type": "sensor_door", "status": "ok", "battery": 92},
+            {"zone_id": "z2", "name": "Salon", "type": "sensor_pir", "status": "ok", "battery": 87},
+            {"zone_id": "z3", "name": "Cocina", "type": "smoke_detector", "status": "ok", "battery": 95},
+            {"zone_id": "z4", "name": "Dormitorio", "type": "sensor_pir", "status": "ok", "battery": 78},
+            {"zone_id": "z5", "name": "Garaje", "type": "sensor_door", "status": "ok", "battery": 84},
+            {"zone_id": "z6", "name": "Jardin", "type": "camera", "status": "ok", "battery": 100},
+        ]
+        for d in defaults:
+            d["user_id"] = user["user_id"]
+            await _db.client_zones.insert_one(d)
+            del d["_id"]
+        zones = defaults
+    return zones
+
+
+# ============ EVENTS LOG ============
+
+@router.get("/events")
+async def get_events(request: Request):
+    user = await _get_user_from_token(request)
+    events = []
+    cursor = _db.client_events.find({"user_id": user["user_id"]}, {"_id": 0}).sort("timestamp", -1).limit(50)
+    async for e in cursor:
+        events.append(e)
+    return events
+
+
+# ============ SOS WITH GEOLOCATION ============
+
+@router.post("/sos")
+async def activate_sos(request: Request):
+    user = await _get_user_from_token(request)
+    body = await request.json()
+    lat = body.get("lat")
+    lng = body.get("lng")
+    now = datetime.now(timezone.utc).isoformat()
+
+    sos = {
+        "user_id": user["user_id"],
+        "email": user["email"],
+        "nombre": user.get("nombre", ""),
+        "lat": lat, "lng": lng,
+        "status": "active",
+        "timestamp": now,
+    }
+    await _db.sos_alerts.insert_one(sos)
+
+    # Log event
+    await _db.client_events.insert_one({
+        "user_id": user["user_id"],
+        "type": "sos",
+        "detail": f"SOS activado. Ubicacion: {lat},{lng}" if lat else "SOS activado",
+        "source": "app", "severity": "critical",
+        "timestamp": now,
+    })
+
+    # Push to emergency contacts
+    contacts = []
+    cursor = _db.emergency_contacts.find({"user_id": user["user_id"]}, {"_id": 0})
+    async for c in cursor:
+        contacts.append(c)
+
+    try:
+        from routes.notification_routes import send_alarm_alert
+        nombre = user.get("nombre", user["email"])
+        location_str = f" Ubicacion: https://maps.google.com/?q={lat},{lng}" if lat and lng else ""
+        await send_alarm_alert(user["user_id"], "panic", f"SOS de {nombre}.{location_str}", _db)
+    except Exception:
+        pass
+
+    return {"status": "active", "timestamp": now, "contacts_notified": len(contacts)}
+
+
+# ============ EMERGENCY CONTACTS ============
+
+@router.get("/emergency-contacts")
+async def get_emergency_contacts(request: Request):
+    user = await _get_user_from_token(request)
+    contacts = []
+    cursor = _db.emergency_contacts.find({"user_id": user["user_id"]}, {"_id": 0})
+    async for c in cursor:
+        contacts.append(c)
+    return contacts
+
+@router.post("/emergency-contacts")
+async def add_emergency_contact(request: Request):
+    user = await _get_user_from_token(request)
+    body = await request.json()
+    contact = {
+        "contact_id": str(uuid.uuid4())[:8],
+        "user_id": user["user_id"],
+        "name": body.get("name", ""),
+        "phone": body.get("phone", ""),
+        "relation": body.get("relation", ""),
+        "created_at": datetime.now(timezone.utc).isoformat(),
+    }
+    await _db.emergency_contacts.insert_one(contact)
+    del contact["_id"]
+    return contact
+
+@router.delete("/emergency-contacts/{contact_id}")
+async def delete_emergency_contact(contact_id: str, request: Request):
+    user = await _get_user_from_token(request)
+    await _db.emergency_contacts.delete_one({"contact_id": contact_id, "user_id": user["user_id"]})
+    return {"status": "deleted"}
+
+
+# ============ SETTINGS (PIN, etc.) ============
+
+@router.get("/settings")
+async def get_settings(request: Request):
+    user = await _get_user_from_token(request)
+    s = await _db.client_settings.find_one({"user_id": user["user_id"]}, {"_id": 0})
+    if not s:
+        s = {"user_id": user["user_id"], "pin": "1234", "auto_arm_time": None, "night_mode_zones": ["z1", "z5"]}
+        await _db.client_settings.insert_one(s)
+        del s["_id"] if "_id" in s else None
+    return s
+
+@router.put("/settings")
+async def update_settings(request: Request):
+    user = await _get_user_from_token(request)
+    body = await request.json()
+    allowed = {"pin", "auto_arm_time", "night_mode_zones"}
+    updates = {k: v for k, v in body.items() if k in allowed}
+    if not updates:
+        raise HTTPException(400, "Nada que actualizar")
+    await _db.client_settings.update_one(
+        {"user_id": user["user_id"]},
+        {"$set": updates},
+        upsert=True,
+    )
+    return {"status": "updated"}
+
+
+# ============ CAMERAS ============
+
+@router.get("/cameras")
+async def get_cameras(request: Request):
+    user = await _get_user_from_token(request)
+    cams = []
+    cursor = _db.client_cameras.find({"user_id": user["user_id"]}, {"_id": 0})
+    async for c in cursor:
+        cams.append(c)
+    if not cams:
+        defaults = [
+            {"cam_id": "c1", "name": "Entrada", "location": "Puerta principal", "status": "online", "type": "exterior"},
+            {"cam_id": "c2", "name": "Jardin", "location": "Jardin trasero", "status": "online", "type": "exterior"},
+            {"cam_id": "c3", "name": "Garaje", "location": "Interior garaje", "status": "online", "type": "interior"},
+        ]
+        for d in defaults:
+            d["user_id"] = user["user_id"]
+            await _db.client_cameras.insert_one(d)
+            del d["_id"]
+        cams = defaults
+    return cams
