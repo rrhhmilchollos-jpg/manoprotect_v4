@@ -2,13 +2,13 @@
 ## Dominio: manoprotectt.com
 
 ## Descripcion
-Sistema de seguridad empresarial completo estilo Securitas Direct con CRA, Back Office, Pipeline CRM, emails automaticos Brevo, apps para clientes, comerciales e instaladores.
+Sistema de seguridad empresarial completo estilo Securitas Direct con CRA, Back Office, Pipeline CRM, emails automaticos Brevo, apps para clientes, comerciales e instaladores. Sistema completo de trial, anti-abuso y suscripciones Stripe.
 
 ## Arquitectura
-- **Backend**: FastAPI + MongoDB + Socket.IO + Brevo Email
+- **Backend**: FastAPI + MongoDB + Socket.IO + Brevo Email + Stripe
 - **Frontend**: React + TailwindCSS + Shadcn/UI
 - **Dominio**: manoprotectt.com (con dos 't')
-- **Android APKs**: TWA (Trusted Web Activity) compilados con Gradle + QEMU x86_64 emulation
+- **Android APKs**: TWA (Trusted Web Activity) compilados con Gradle
 
 ## Usuarios y Roles
 | Rol | Email | Password |
@@ -17,7 +17,7 @@ Sistema de seguridad empresarial completo estilo Securitas Direct con CRA, Back 
 | Admin CRA | admin@manoprotectt.com | ManoAdmin2025! |
 | Comercial | comercial@manoprotectt.com | Comercial2025! |
 | Instalador | instalador@manoprotectt.com | Instalador2025! |
-| Cliente Demo | cliente@demo.manoprotectt.com | Cliente2025! |
+| Cliente (trial) | Registro libre via /app-cliente | 7 dias trial gratis |
 
 ## Apps y Rutas
 | App | Ruta |
@@ -29,33 +29,47 @@ Sistema de seguridad empresarial completo estilo Securitas Direct con CRA, Back 
 | CRA Dashboard | /cra-operador |
 | Admin Gestion | /gestion |
 
+## Sistema Trial + Suscripciones (AppCliente)
+- **Registro**: Email + password, trial 7 dias automatico
+- **Trial**: Todas las funciones desbloqueadas, aviso 2 dias antes de expirar
+- **Paywall**: Bloqueo total al expirar (solo login visible)
+- **Suscripcion**: Stripe 9.99 EUR/mes
+- **Referidos**: Codigo unico por usuario, +3 dias trial para ambos
+- **Anti-abuso**: Fingerprint + IP scoring, threshold 80
+
+### Endpoints Trial
+- POST /api/client-trial/register
+- POST /api/client-trial/login
+- GET /api/client-trial/status
+- POST /api/client-trial/checkout (Stripe)
+- GET /api/client-trial/checkout/status/{session_id}
+- POST /api/client-trial/referral/apply
+- POST /api/client-trial/check-abuse
+
 ## Android APKs (Play Store)
 | App | Package ID | URL Target |
 |-----|-----------|------------|
 | MP Comerciales | com.manoprotect.comerciales | manoprotectt.com/app-comerciales |
 | MP Instaladores | com.manoprotect.instaladores | manoprotectt.com/app-instaladores |
 
-Archivos generados:
-- APKs: /app/backend/uploads/downloads/ManoProtect-Comerciales.apk, ManoProtect-Instaladores.apk
-- AABs: /app/backend/uploads/downloads/ManoProtect-Comerciales.aab, ManoProtect-Instaladores.aab
-- Para Play Store: usar AABs
-- Keystore: /app/manoprotect-twa/app/manoprotect-2025.keystore (pass: 19862210Des, alias: manoprotect)
-
-## Desktop Apps
-- CRM Ventas: apunta a manoprotectt.com/gestion con reconexion automatica
-- CRA Operador: apunta a manoprotectt.com/cra-operador con reconexion automatica
-
-## Funcionalidades Implementadas
-- Back Office + Pipeline CRM Securitas Direct (8 etapas)
-- Emails automaticos Brevo (alta empleado, activacion cliente, avance pipeline)
-- Apps conectadas a backend real (Cliente, Comerciales, Instaladores)
-- CRA Dashboard con Socket.IO real-time
-- Desktop apps con reconexion inteligente
-- Android APKs (Comerciales + Instaladores) compilados y listos para Play Store
-
-## Endpoints de Descarga
-- /api/descargas/{filename} - Soporta .zip, .apk, .aab
+## Paginas Legales
+- Politica de privacidad: /api/privacy-policy
+- Eliminacion de datos: /api/data-deletion
 
 ## Estado Actual
-- **Completado**: APKs compilados para Play Store (Comerciales + Instaladores)
-- **Pendiente**: Firebase Push Notifications, CI/CD Play Store, SEM/Ads, RTSP Cameras, iOS App
+### Completado
+- APKs compilados para Play Store (Comerciales + Instaladores) con API 35
+- Sistema completo Trial + Anti-Abuso + Stripe + Referidos para AppCliente
+- Back Office + Pipeline CRM
+- Emails automaticos Brevo
+- Socket.IO CRA real-time
+- Desktop apps con reconexion
+- SEO + Performance optimizado
+
+### Pendiente
+- P0: Firebase Push Notifications
+- P1: CI/CD Play Store
+- P1: SEM/Ads (Meta Pixel, Hotjar, Search Console)
+- P1: RTSP Camera Streaming
+- P2: iOS App con Capacitor
+- P3: Videos marketing (Sora 2)
