@@ -4,7 +4,7 @@
 
 | App | Package ID | Versión | Descripción |
 |-----|-----------|---------|-------------|
-| **Comerciales** | com.manoprotectt.comerciales | 2.1.0 (Build 4) | Para el equipo comercial: stock, pedidos, clientes |
+| **Comerciales** | com.manoprotect.comerciales | 2.1.0 (Build 4) | Para el equipo comercial: stock, pedidos, clientes |
 | **Instaladores** | com.manoprotect.instaladores | 2.1.0 (Build 4) | Para instaladores: órdenes, confirmación, manuales |
 | **Clientes** | com.manoprotect.clientes | 2.1.0 (Build 4) | Para usuarios/familias: alarma, cámaras, SOS |
 

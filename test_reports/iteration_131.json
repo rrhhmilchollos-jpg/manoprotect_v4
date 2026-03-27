@@ -1,0 +1,97 @@
+{
+  "summary": "Domain change verification from manoprotect.com to manoprotectt.com - All tests passed. Backend health check, management logins with new domain emails, assetlinks.json, sitemap.xml, robots.txt, and frontend UI all verified successfully.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/test_reports/iteration_131.json"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [],
+  "updated_files": [],
+  "success_rate": {
+    "backend": "100%",
+    "frontend": "100%"
+  },
+  "test_credentials": {
+    "admin": {
+      "email": "admin@manoprotectt.com",
+      "password": "ManoAdmin2025!",
+      "role": "admin"
+    },
+    "comercial": {
+      "email": "comercial@manoprotectt.com",
+      "password": "Comercial2025!",
+      "role": "comercial"
+    },
+    "instalador": {
+      "email": "instalador@manoprotectt.com",
+      "password": "Instalador2025!",
+      "role": "instalador"
+    }
+  },
+  "seed_data_creation": "",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Domain change from manoprotect.com to manoprotectt.com fully verified. All SEO files use new domain. Desktop apps (CRA/CRM) point to manoprotectt.com. Management login works with new domain emails. Admin dashboard at /gestion/admin fully functional.",
+  "tests_passed": {
+    "backend_tests": [
+      "GET /api/health - returns healthy status - PASSED",
+      "POST /api/gestion/auth/login with admin@manoprotectt.com - PASSED (returns JWT token)",
+      "POST /api/gestion/auth/login with comercial@manoprotectt.com - PASSED (returns JWT token)",
+      "POST /api/gestion/auth/login with instalador@manoprotectt.com - PASSED (returns JWT token)",
+      "GET /.well-known/assetlinks.json - PASSED (contains com.manoprotect.www.twa, com.manoprotect.clientes, com.manoprotect.comerciales, com.manoprotect.instaladores)"
+    ],
+    "file_verification": [
+      "sitemap.xml - All URLs use manoprotectt.com domain - PASSED",
+      "robots.txt - Sitemap reference uses manoprotectt.com - PASSED",
+      "index.html - Canonical URL is https://manoprotectt.com - PASSED",
+      "index.html - OG URL is https://manoprotectt.com/ - PASSED",
+      "index.html - Schema.org URLs use manoprotectt.com - PASSED",
+      "CRA main.js - PRODUCTION_URL = 'https://manoprotectt.com' - PASSED",
+      "CRM main.js - PRODUCTION_URL = 'https://manoprotectt.com' - PASSED"
+    ],
+    "frontend_ui_tests": [
+      "Landing page loads with hero section - PASSED",
+      "Google Play badge (4.8 rating) visible in hero - PASSED",
+      "Gestion login page loads at /gestion/login with proper styling - PASSED",
+      "Admin login with admin@manoprotectt.com redirects to /gestion/admin - PASSED",
+      "Admin dashboard displays correctly with stats (8 users, 3 comerciales, 3 instaladores, etc.) - PASSED"
+    ]
+  },
+  "verified_domain_changes": {
+    "index_html": {
+      "canonical_url": "https://manoprotectt.com",
+      "og_url": "https://manoprotectt.com/",
+      "schema_org_urls": "https://manoprotectt.com"
+    },
+    "sitemap_xml": {
+      "all_urls_use": "manoprotectt.com"
+    },
+    "robots_txt": {
+      "sitemap_reference": "https://manoprotectt.com/sitemap.xml"
+    },
+    "assetlinks_json": {
+      "package_names": [
+        "com.manoprotect.www.twa",
+        "com.manoprotect.clientes",
+        "com.manoprotect.comerciales",
+        "com.manoprotect.instaladores"
+      ],
+      "note": "Package names correctly use single 't' (com.manoprotect) as they are Android package IDs, not domains"
+    },
+    "desktop_apps": {
+      "cra_operador_main_js": "PRODUCTION_URL = 'https://manoprotectt.com'",
+      "crm_ventas_main_js": "PRODUCTION_URL = 'https://manoprotectt.com'"
+    }
+  },
+  "mocked_data": {
+    "google_play_rating": "4.8/5 stars is an aspirational/mock value displayed visually on the landing page"
+  }
+}
