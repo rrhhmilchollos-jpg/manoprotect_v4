@@ -1,0 +1,59 @@
+apply plugin: "com.android.application"
+
+android {
+    namespace "com.manoprotect.comerciales"
+    compileSdk 34
+
+    defaultConfig {
+        applicationId "com.manoprotect.comerciales"
+        minSdk 24
+        targetSdk 34
+        versionCode 1
+        versionName "1.0.0"
+
+        manifestPlaceholders = [
+            hostName: "www.manoprotectt.com",
+            defaultUrl: "https://www.manoprotectt.com/app-comerciales",
+            launcherName: "MP Comerciales",
+            assetStatements: '[{ "relation": ["delegate_permission/common.handle_all_urls"], "target": { "namespace": "web", "site": "https://www.manoprotectt.com" } }]'
+        ]
+    }
+
+    signingConfigs {
+        debug {
+            storeFile file("manoprotect-2025.keystore")
+            storePassword "19862210Des"
+            keyAlias "manoprotect"
+            keyPassword "19862210Des"
+        }
+        release {
+            storeFile file("manoprotect-2025.keystore")
+            storePassword "19862210Des"
+            keyAlias "manoprotect"
+            keyPassword "19862210Des"
+        }
+    }
+
+    buildTypes {
+        debug {
+            signingConfig signingConfigs.debug
+        }
+        release {
+            signingConfig signingConfigs.release
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+}
+
+dependencies {
+    implementation "androidx.browser:browser:1.8.0"
+    implementation "androidx.appcompat:appcompat:1.6.1"
+    implementation "com.google.androidbrowserhelper:androidbrowserhelper:2.5.0"
+}

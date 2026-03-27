@@ -1,0 +1,8 @@
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "com.manoprotect.www.twa",
+    "sha256_cert_fingerprints": ["DD:45:D9:49:3A:1D:8A:43:B9:3F:F5:FD:A3:09:97:FA:7D:D9:D2:9C:2F:4A:49:AF:D2:A3:60:9E:F3:5F:C5:DF"]
+  }
+}]

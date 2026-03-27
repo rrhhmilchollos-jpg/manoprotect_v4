@@ -50,13 +50,18 @@ api_router = APIRouter(prefix="/api")
 
 # Direct download endpoint (under /api so Kubernetes routes it to backend)
 @api_router.get("/descargas/{filename}")
-async def descargar_zip_directo(filename: str):
-    """Descarga directa de ZIPs"""
+async def descargar_archivo_directo(filename: str):
+    """Descarga directa de ZIPs, APKs y AABs"""
     safe = filename.replace("..", "").replace("/", "")
+    media_types = {
+        ".zip": "application/zip",
+        ".apk": "application/vnd.android.package-archive",
+        ".aab": "application/x-authorware-bin",
+    }
     for d in ["/app/downloads", "/app/backend/uploads/downloads"]:
         fp = Path(d) / safe
-        if fp.exists() and fp.suffix == ".zip":
-            return FileResponse(path=str(fp), media_type="application/zip", filename=safe)
+        if fp.exists() and fp.suffix in media_types:
+            return FileResponse(path=str(fp), media_type=media_types[fp.suffix], filename=safe)
     raise HTTPException(status_code=404, detail="Archivo no encontrado")
 
 

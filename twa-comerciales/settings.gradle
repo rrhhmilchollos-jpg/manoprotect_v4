@@ -1,0 +1,2 @@
+rootProject.name = 'MPComerciales'
+include ':app'

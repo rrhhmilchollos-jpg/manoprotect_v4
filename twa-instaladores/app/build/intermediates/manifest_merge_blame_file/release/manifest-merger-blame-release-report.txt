@@ -1,0 +1,245 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="com.manoprotect.instaladores"
+4    android:versionCode="1"
+5    android:versionName="1.0.0" >
+6
+7    <uses-sdk
+8        android:minSdkVersion="24"
+9        android:targetSdkVersion="34" />
+10
+11    <uses-permission android:name="android.permission.INTERNET" />
+11-->/app/twa-instaladores/app/src/main/AndroidManifest.xml:5:5-67
+11-->/app/twa-instaladores/app/src/main/AndroidManifest.xml:5:22-64
+12    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+12-->/app/twa-instaladores/app/src/main/AndroidManifest.xml:6:5-79
+12-->/app/twa-instaladores/app/src/main/AndroidManifest.xml:6:22-76
+13    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+13-->/app/twa-instaladores/app/src/main/AndroidManifest.xml:7:5-77
+13-->/app/twa-instaladores/app/src/main/AndroidManifest.xml:7:22-74
+14    <uses-permission android:name="android.permission.VIBRATE" />
+14-->/app/twa-instaladores/app/src/main/AndroidManifest.xml:8:5-66
+14-->/app/twa-instaladores/app/src/main/AndroidManifest.xml:8:22-63
+15    <uses-permission android:name="android.permission.CAMERA" />
+15-->/app/twa-instaladores/app/src/main/AndroidManifest.xml:9:5-65
+15-->/app/twa-instaladores/app/src/main/AndroidManifest.xml:9:22-62
+16    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+16-->/app/twa-instaladores/app/src/main/AndroidManifest.xml:10:5-79
+16-->/app/twa-instaladores/app/src/main/AndroidManifest.xml:10:22-76
+17    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+17-->/app/twa-instaladores/app/src/main/AndroidManifest.xml:11:5-81
+17-->/app/twa-instaladores/app/src/main/AndroidManifest.xml:11:22-78
+18
+19    <uses-feature
+19-->/app/twa-instaladores/app/src/main/AndroidManifest.xml:13:5-85
+20        android:name="android.hardware.camera"
+20-->/app/twa-instaladores/app/src/main/AndroidManifest.xml:13:19-57
+21        android:required="false" />
+21-->/app/twa-instaladores/app/src/main/AndroidManifest.xml:13:58-82
+22    <uses-feature
+22-->/app/twa-instaladores/app/src/main/AndroidManifest.xml:14:5-91
+23        android:name="android.hardware.location.gps"
+23-->/app/twa-instaladores/app/src/main/AndroidManifest.xml:14:19-63
+24        android:required="false" />
+24-->/app/twa-instaladores/app/src/main/AndroidManifest.xml:14:64-88
+25
+26    <queries>
+26-->[com.google.androidbrowserhelper:androidbrowserhelper:2.5.0] /root/.gradle/caches/transforms-3/10dbf3d2e5efdcb6246fee0ba007c5e1/transformed/androidbrowserhelper-2.5.0/AndroidManifest.xml:26:5-34:15
+27        <intent>
+27-->[com.google.androidbrowserhelper:androidbrowserhelper:2.5.0] /root/.gradle/caches/transforms-3/10dbf3d2e5efdcb6246fee0ba007c5e1/transformed/androidbrowserhelper-2.5.0/AndroidManifest.xml:27:9-33:18
+28            <action android:name="android.intent.action.VIEW" />
+28-->/app/twa-instaladores/app/src/main/AndroidManifest.xml:72:17-69
+28-->/app/twa-instaladores/app/src/main/AndroidManifest.xml:72:25-66
+29
+30            <category android:name="android.intent.category.BROWSABLE" />
+30-->/app/twa-instaladores/app/src/main/AndroidManifest.xml:74:17-78
+30-->/app/twa-instaladores/app/src/main/AndroidManifest.xml:74:27-75
+31
+32            <data android:scheme="https" />
+32-->/app/twa-instaladores/app/src/main/AndroidManifest.xml:75:23-45
+33        </intent>
+34    </queries>
+35
+36    <permission
+36-->[androidx.core:core:1.9.0] /root/.gradle/caches/transforms-3/0cb2ff1893a1a1d8519155ec8724748d/transformed/core-1.9.0/AndroidManifest.xml:22:5-24:47
+37        android:name="com.manoprotect.instaladores.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+37-->[androidx.core:core:1.9.0] /root/.gradle/caches/transforms-3/0cb2ff1893a1a1d8519155ec8724748d/transformed/core-1.9.0/AndroidManifest.xml:23:9-81
+38        android:protectionLevel="signature" />
+38-->[androidx.core:core:1.9.0] /root/.gradle/caches/transforms-3/0cb2ff1893a1a1d8519155ec8724748d/transformed/core-1.9.0/AndroidManifest.xml:24:9-44
+39
+40    <uses-permission android:name="com.manoprotect.instaladores.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
+40-->[androidx.core:core:1.9.0] /root/.gradle/caches/transforms-3/0cb2ff1893a1a1d8519155ec8724748d/transformed/core-1.9.0/AndroidManifest.xml:26:5-97
+40-->[androidx.core:core:1.9.0] /root/.gradle/caches/transforms-3/0cb2ff1893a1a1d8519155ec8724748d/transformed/core-1.9.0/AndroidManifest.xml:26:22-94
+41
+42    <application
+42-->/app/twa-instaladores/app/src/main/AndroidManifest.xml:16:5-101:19
+43        android:name="android.app.Application"
+43-->/app/twa-instaladores/app/src/main/AndroidManifest.xml:17:9-47
+44        android:allowBackup="false"
+44-->/app/twa-instaladores/app/src/main/AndroidManifest.xml:21:9-36
+45        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+45-->[androidx.core:core:1.9.0] /root/.gradle/caches/transforms-3/0cb2ff1893a1a1d8519155ec8724748d/transformed/core-1.9.0/AndroidManifest.xml:28:18-86
+46        android:extractNativeLibs="false"
+47        android:icon="@mipmap/ic_launcher"
+47-->/app/twa-instaladores/app/src/main/AndroidManifest.xml:19:9-43
+48        android:label="@string/app_name"
+48-->/app/twa-instaladores/app/src/main/AndroidManifest.xml:18:9-41
+49        android:roundIcon="@mipmap/ic_launcher_round"
+49-->/app/twa-instaladores/app/src/main/AndroidManifest.xml:20:9-54
+50        android:supportsRtl="true"
+50-->/app/twa-instaladores/app/src/main/AndroidManifest.xml:23:9-35
+51        android:theme="@style/AppTheme" >
+51-->/app/twa-instaladores/app/src/main/AndroidManifest.xml:22:9-40
+52        <meta-data
+53            android:name="asset_statements"
+53-->/app/twa-instaladores/app/src/main/AndroidManifest.xml:27:13-44
+54            android:value="[{ &quot;relation&quot;: [&quot;delegate_permission/common.handle_all_urls&quot;], &quot;target&quot;: { &quot;namespace&quot;: &quot;web&quot;, &quot;site&quot;: &quot;https://www.manoprotectt.com&quot; } }]" />
+54-->/app/twa-instaladores/app/src/main/AndroidManifest.xml:28:13-47
+55
+56        <!-- TWA Main Activity -->
+57        <activity
+58            android:name="com.manoprotect.instaladores.LauncherActivity"
+58-->/app/twa-instaladores/app/src/main/AndroidManifest.xml:32:13-73
+59            android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|screenSize|smallestScreenSize|uiMode|density"
+59-->/app/twa-instaladores/app/src/main/AndroidManifest.xml:36:13-130
+60            android:exported="true"
+60-->/app/twa-instaladores/app/src/main/AndroidManifest.xml:34:13-36
+61            android:label="MP Instaladores"
+61-->/app/twa-instaladores/app/src/main/AndroidManifest.xml:33:13-44
+62            android:resizeableActivity="true" >
+62-->/app/twa-instaladores/app/src/main/AndroidManifest.xml:35:13-46
+63            <meta-data
+64                android:name="android.support.customtabs.trusted.DEFAULT_URL"
+64-->/app/twa-instaladores/app/src/main/AndroidManifest.xml:39:17-78
+65                android:value="https://www.manoprotectt.com/app-instaladores" />
+65-->/app/twa-instaladores/app/src/main/AndroidManifest.xml:40:17-46
+66            <meta-data
+66-->/app/twa-instaladores/app/src/main/AndroidManifest.xml:42:13-44:53
+67                android:name="android.support.customtabs.trusted.STATUS_BAR_COLOR"
+67-->/app/twa-instaladores/app/src/main/AndroidManifest.xml:43:17-83
+68                android:resource="@color/primary" />
+68-->/app/twa-instaladores/app/src/main/AndroidManifest.xml:44:17-50
+69            <meta-data
+69-->/app/twa-instaladores/app/src/main/AndroidManifest.xml:46:13-48:58
+70                android:name="android.support.customtabs.trusted.NAVIGATION_BAR_COLOR"
+70-->/app/twa-instaladores/app/src/main/AndroidManifest.xml:47:17-87
+71                android:resource="@color/primary_dark" />
+71-->/app/twa-instaladores/app/src/main/AndroidManifest.xml:48:17-55
+72            <meta-data
+72-->/app/twa-instaladores/app/src/main/AndroidManifest.xml:50:13-52:55
+73                android:name="android.support.customtabs.trusted.SPLASH_IMAGE_DRAWABLE"
+73-->/app/twa-instaladores/app/src/main/AndroidManifest.xml:51:17-88
+74                android:resource="@drawable/splash" />
+74-->/app/twa-instaladores/app/src/main/AndroidManifest.xml:52:17-52
+75            <meta-data
+75-->/app/twa-instaladores/app/src/main/AndroidManifest.xml:54:13-56:63
+76                android:name="android.support.customtabs.trusted.SPLASH_SCREEN_BACKGROUND_COLOR"
+76-->/app/twa-instaladores/app/src/main/AndroidManifest.xml:55:17-97
+77                android:resource="@color/splash_background" />
+77-->/app/twa-instaladores/app/src/main/AndroidManifest.xml:56:17-60
+78            <meta-data
+78-->/app/twa-instaladores/app/src/main/AndroidManifest.xml:58:13-60:39
+79                android:name="android.support.customtabs.trusted.SPLASH_SCREEN_FADE_OUT_DURATION"
+79-->/app/twa-instaladores/app/src/main/AndroidManifest.xml:59:17-98
+80                android:value="300" />
+80-->/app/twa-instaladores/app/src/main/AndroidManifest.xml:60:17-36
+81            <meta-data
+82                android:name="android.support.customtabs.trusted.FILE_PROVIDER_AUTHORITY"
+82-->/app/twa-instaladores/app/src/main/AndroidManifest.xml:63:17-90
+83                android:value="com.manoprotect.instaladores.fileprovider" />
+83-->/app/twa-instaladores/app/src/main/AndroidManifest.xml:64:17-62
+84
+85            <intent-filter>
+85-->/app/twa-instaladores/app/src/main/AndroidManifest.xml:66:13-69:29
+86                <action android:name="android.intent.action.MAIN" />
+86-->/app/twa-instaladores/app/src/main/AndroidManifest.xml:67:17-69
+86-->/app/twa-instaladores/app/src/main/AndroidManifest.xml:67:25-66
+87
+88                <category android:name="android.intent.category.LAUNCHER" />
+88-->/app/twa-instaladores/app/src/main/AndroidManifest.xml:68:17-77
+88-->/app/twa-instaladores/app/src/main/AndroidManifest.xml:68:27-74
+89            </intent-filter>
+90            <intent-filter android:autoVerify="true" >
+90-->/app/twa-instaladores/app/src/main/AndroidManifest.xml:71:13-76:29
+90-->/app/twa-instaladores/app/src/main/AndroidManifest.xml:71:28-53
+91                <action android:name="android.intent.action.VIEW" />
+91-->/app/twa-instaladores/app/src/main/AndroidManifest.xml:72:17-69
+91-->/app/twa-instaladores/app/src/main/AndroidManifest.xml:72:25-66
+92
+93                <category android:name="android.intent.category.DEFAULT" />
+93-->/app/twa-instaladores/app/src/main/AndroidManifest.xml:86:17-76
+93-->/app/twa-instaladores/app/src/main/AndroidManifest.xml:86:27-73
+94                <category android:name="android.intent.category.BROWSABLE" />
+94-->/app/twa-instaladores/app/src/main/AndroidManifest.xml:74:17-78
+94-->/app/twa-instaladores/app/src/main/AndroidManifest.xml:74:27-75
+95
+96                <data
+97                    android:host="www.manoprotectt.com"
+97-->/app/twa-instaladores/app/src/main/AndroidManifest.xml:75:46-72
+98                    android:scheme="https" />
+98-->/app/twa-instaladores/app/src/main/AndroidManifest.xml:75:23-45
+99            </intent-filter>
+100        </activity>
+101
+102        <!-- TWA Service for custom tabs -->
+103        <service
+103-->/app/twa-instaladores/app/src/main/AndroidManifest.xml:80:9-88:19
+104            android:name="com.google.androidbrowserhelper.trusted.DelegationService"
+104-->/app/twa-instaladores/app/src/main/AndroidManifest.xml:81:13-85
+105            android:enabled="true"
+105-->/app/twa-instaladores/app/src/main/AndroidManifest.xml:82:13-35
+106            android:exported="true" >
+106-->/app/twa-instaladores/app/src/main/AndroidManifest.xml:83:13-36
+107            <intent-filter>
+107-->/app/twa-instaladores/app/src/main/AndroidManifest.xml:84:13-87:29
+108                <action android:name="android.support.customtabs.trusted.TRUSTED_WEB_ACTIVITY_SERVICE" />
+108-->/app/twa-instaladores/app/src/main/AndroidManifest.xml:85:17-106
+108-->/app/twa-instaladores/app/src/main/AndroidManifest.xml:85:25-103
+109
+110                <category android:name="android.intent.category.DEFAULT" />
+110-->/app/twa-instaladores/app/src/main/AndroidManifest.xml:86:17-76
+110-->/app/twa-instaladores/app/src/main/AndroidManifest.xml:86:27-73
+111            </intent-filter>
+112        </service>
+113
+114        <!-- File Provider for sharing -->
+115        <provider
+116            android:name="androidx.core.content.FileProvider"
+116-->/app/twa-instaladores/app/src/main/AndroidManifest.xml:92:13-62
+117            android:authorities="com.manoprotect.instaladores.fileprovider"
+117-->/app/twa-instaladores/app/src/main/AndroidManifest.xml:93:13-64
+118            android:exported="false"
+118-->/app/twa-instaladores/app/src/main/AndroidManifest.xml:94:13-37
+119            android:grantUriPermissions="true" >
+119-->/app/twa-instaladores/app/src/main/AndroidManifest.xml:95:13-47
+120            <meta-data
+120-->/app/twa-instaladores/app/src/main/AndroidManifest.xml:96:13-98:53
+121                android:name="android.support.FILE_PROVIDER_PATHS"
+121-->/app/twa-instaladores/app/src/main/AndroidManifest.xml:97:17-67
+122                android:resource="@xml/filepaths" />
+122-->/app/twa-instaladores/app/src/main/AndroidManifest.xml:98:17-50
+123        </provider>
+124        <provider
+124-->[androidx.emoji2:emoji2:1.2.0] /root/.gradle/caches/transforms-3/d7e1843a25d55078bdb9e7ab74999575/transformed/emoji2-1.2.0/AndroidManifest.xml:24:9-32:20
+125            android:name="androidx.startup.InitializationProvider"
+125-->[androidx.emoji2:emoji2:1.2.0] /root/.gradle/caches/transforms-3/d7e1843a25d55078bdb9e7ab74999575/transformed/emoji2-1.2.0/AndroidManifest.xml:25:13-67
+126            android:authorities="com.manoprotect.instaladores.androidx-startup"
+126-->[androidx.emoji2:emoji2:1.2.0] /root/.gradle/caches/transforms-3/d7e1843a25d55078bdb9e7ab74999575/transformed/emoji2-1.2.0/AndroidManifest.xml:26:13-68
+127            android:exported="false" >
+127-->[androidx.emoji2:emoji2:1.2.0] /root/.gradle/caches/transforms-3/d7e1843a25d55078bdb9e7ab74999575/transformed/emoji2-1.2.0/AndroidManifest.xml:27:13-37
+128            <meta-data
+128-->[androidx.emoji2:emoji2:1.2.0] /root/.gradle/caches/transforms-3/d7e1843a25d55078bdb9e7ab74999575/transformed/emoji2-1.2.0/AndroidManifest.xml:29:13-31:52
+129                android:name="androidx.emoji2.text.EmojiCompatInitializer"
+129-->[androidx.emoji2:emoji2:1.2.0] /root/.gradle/caches/transforms-3/d7e1843a25d55078bdb9e7ab74999575/transformed/emoji2-1.2.0/AndroidManifest.xml:30:17-75
+130                android:value="androidx.startup" />
+130-->[androidx.emoji2:emoji2:1.2.0] /root/.gradle/caches/transforms-3/d7e1843a25d55078bdb9e7ab74999575/transformed/emoji2-1.2.0/AndroidManifest.xml:31:17-49
+131            <meta-data
+131-->[androidx.lifecycle:lifecycle-process:2.4.1] /root/.gradle/caches/transforms-3/f9f1adeda5709789a33ef7610d65e45a/transformed/lifecycle-process-2.4.1/AndroidManifest.xml:31:13-33:52
+132                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
+132-->[androidx.lifecycle:lifecycle-process:2.4.1] /root/.gradle/caches/transforms-3/f9f1adeda5709789a33ef7610d65e45a/transformed/lifecycle-process-2.4.1/AndroidManifest.xml:32:17-78
+133                android:value="androidx.startup" />
+133-->[androidx.lifecycle:lifecycle-process:2.4.1] /root/.gradle/caches/transforms-3/f9f1adeda5709789a33ef7610d65e45a/transformed/lifecycle-process-2.4.1/AndroidManifest.xml:33:17-49
+134        </provider>
+135    </application>
+136
+137</manifest>
