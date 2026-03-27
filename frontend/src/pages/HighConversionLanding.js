@@ -10,7 +10,8 @@ import {
   Shield, MapPin, Phone, Bell, ChevronDown,
   Check, Star, Lock, Eye, Users,
   ArrowRight, X, Smartphone, Watch, Gift,
-  History, Fingerprint, Wifi, Battery, Clock, Truck
+  History, Fingerprint, Wifi, Battery, Clock, Truck,
+  Download
 } from 'lucide-react';
 import LandingFooter from '@/components/landing/LandingFooter';
 import { trackPageView, trackCTAClick } from '@/services/conversionTracking';
@@ -23,6 +24,36 @@ const IMG_TEENAGER = "/images/optimized/step-teenager.webp";
 const SENTINEL_X_IMG = "/images/optimized/sentinel-x.webp";
 const SENTINEL_J_IMG = "/images/optimized/sentinel-j.webp";
 const SENTINEL_S_IMG = "/images/optimized/sentinel-s.webp";
+
+const PLAY_STORE_URL = 'https://play.google.com/store/apps/details?id=com.manoprotect.www.twa';
+
+const PlayStoreRating = ({ variant = 'dark', size = 'md' }) => {
+  const isDark = variant === 'dark';
+  const isSm = size === 'sm';
+  return (
+    <a href={PLAY_STORE_URL} target="_blank" rel="noopener noreferrer"
+      className={`group inline-flex items-center gap-3 ${isSm ? 'px-3 py-2' : 'px-4 py-3'} ${isDark ? 'bg-white/10 hover:bg-white/20 border-white/20' : 'bg-slate-900 hover:bg-slate-800 border-slate-700'} border rounded-xl transition-all duration-300 hover:scale-[1.02]`}
+      data-testid="play-store-rating"
+      onClick={() => { if (window.gtag) window.gtag('event', 'play_store_click', { location: variant }); }}>
+      <svg viewBox="0 0 24 24" className={`${isSm ? 'w-6 h-6' : 'w-8 h-8'} flex-shrink-0`}>
+        <path d="M3.61 1.814L13.793 12 3.61 22.186a.996.996 0 01-.61-.92V2.734a1 1 0 01.61-.92z" fill="#4285F4"/>
+        <path d="M16.296 9.497l-2.503 2.503 2.503 2.503 3.236-1.87a1 1 0 000-1.732l-3.236-1.404z" fill="#FBBC04"/>
+        <path d="M3.61 1.814L10.525 8.73l2.503-2.503L6.843.345A1 1 0 005.44.14L3.61 1.814z" fill="#EA4335"/>
+        <path d="M3.61 22.186L5.44 23.86a1 1 0 001.403-.205l6.185-5.882-2.503-2.503L3.61 22.186z" fill="#34A853"/>
+      </svg>
+      <div>
+        <div className="flex items-center gap-1">
+          {[1,2,3,4,5].map(s => <Star key={s} className={`${isSm ? 'w-3 h-3' : 'w-3.5 h-3.5'} ${s <= 4 ? 'fill-amber-400 text-amber-400' : 'fill-amber-400/60 text-amber-400/60'}`} />)}
+          <span className={`${isSm ? 'text-xs' : 'text-sm'} font-bold ${isDark ? 'text-white' : 'text-white'} ml-1`}>4.8</span>
+        </div>
+        <p className={`${isSm ? 'text-[10px]' : 'text-xs'} ${isDark ? 'text-white/60' : 'text-slate-400'} font-medium`}>Google Play</p>
+      </div>
+      <div className={`ml-1 ${isSm ? 'hidden' : 'block'}`}>
+        <Download className={`w-4 h-4 ${isDark ? 'text-emerald-400' : 'text-emerald-400'} group-hover:animate-bounce`} />
+      </div>
+    </a>
+  );
+};
 
 const track = (n, p = {}) => {
   if (window.gtag) window.gtag('event', n, p);
@@ -204,6 +235,10 @@ const HighConversionLanding = () => {
                 <span className="flex items-center gap-1.5"><Check className="w-4 h-4 text-emerald-400" /> Sin compromiso</span>
                 <span className="flex items-center gap-1.5"><Lock className="w-4 h-4 text-emerald-400" /> Protección segura y privada</span>
                 <span className="flex items-center gap-1.5"><Shield className="w-4 h-4 text-emerald-400" /> Garantía de 7 días</span>
+              </div>
+              {/* Google Play Badge in Hero */}
+              <div className="mt-5 flex justify-center lg:justify-start" data-testid="hero-play-store">
+                <PlayStoreRating variant="dark" />
               </div>
             </div>
 
@@ -692,12 +727,29 @@ const HighConversionLanding = () => {
             ))}
           </div>
 
-          {/* Google rating summary */}
-          <div className="text-center mt-8">
+          {/* Google rating summary + Play Store */}
+          <div className="text-center mt-8 space-y-3">
             <div className="inline-flex items-center gap-3 bg-slate-50 border border-gray-200 rounded-full px-6 py-3">
               <div className="flex gap-0.5">{[1,2,3,4,5].map(s => <Star key={s} className="w-4 h-4 fill-amber-400 text-amber-400" />)}</div>
               <span className="text-sm font-bold text-gray-700">4.9 de 5</span>
               <span className="text-xs text-gray-400">basado en 127 reseñas en Google</span>
+            </div>
+            <div className="flex justify-center">
+              <a href={PLAY_STORE_URL} target="_blank" rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 bg-slate-900 hover:bg-slate-800 text-white font-semibold px-5 py-2.5 rounded-xl transition-all text-sm shadow-md hover:shadow-lg"
+                data-testid="testimonials-play-store">
+                <svg viewBox="0 0 24 24" className="w-5 h-5 flex-shrink-0">
+                  <path d="M3.61 1.814L13.793 12 3.61 22.186a.996.996 0 01-.61-.92V2.734a1 1 0 01.61-.92z" fill="#4285F4"/>
+                  <path d="M16.296 9.497l-2.503 2.503 2.503 2.503 3.236-1.87a1 1 0 000-1.732l-3.236-1.404z" fill="#FBBC04"/>
+                  <path d="M3.61 1.814L10.525 8.73l2.503-2.503L6.843.345A1 1 0 005.44.14L3.61 1.814z" fill="#EA4335"/>
+                  <path d="M3.61 22.186L5.44 23.86a1 1 0 001.403-.205l6.185-5.882-2.503-2.503L3.61 22.186z" fill="#34A853"/>
+                </svg>
+                <span>Descargar en Google Play</span>
+                <div className="flex gap-0.5 ml-1">
+                  {[1,2,3,4,5].map(s => <Star key={s} className={`w-3 h-3 ${s <= 4 ? 'fill-amber-400 text-amber-400' : 'fill-amber-400/50 text-amber-400/50'}`} />)}
+                </div>
+                <span className="text-emerald-400 font-bold text-xs">4.8</span>
+              </a>
             </div>
           </div>
         </div>
@@ -729,6 +781,17 @@ const HighConversionLanding = () => {
           <button onClick={() => cta('urgency')} className="inline-flex items-center gap-2 bg-white text-emerald-600 font-bold px-10 py-5 rounded-xl hover:bg-emerald-50 transition-all text-lg shadow-xl hover:scale-105 hover:-translate-y-0.5" data-testid="urgency-cta">
             Probar 7 días gratis <ArrowRight className="w-6 h-6" />
           </button>
+          <div className="mt-6 flex justify-center">
+            <a href={PLAY_STORE_URL} target="_blank" rel="noopener noreferrer"
+              className="inline-flex items-center gap-3 bg-white/15 hover:bg-white/25 border border-white/25 rounded-xl px-5 py-2.5 transition-all"
+              data-testid="urgency-play-store">
+              <div className="flex gap-0.5">
+                {[1,2,3,4,5].map(s => <Star key={s} className={`w-3.5 h-3.5 ${s <= 4 ? 'fill-amber-400 text-amber-400' : 'fill-amber-400/60 text-amber-400/60'}`} />)}
+              </div>
+              <span className="text-white font-bold text-sm">4.8 en Google Play</span>
+              <span className="text-emerald-200 text-xs">Descargar</span>
+            </a>
+          </div>
         </div>
       </section>
 
@@ -858,6 +921,78 @@ const HighConversionLanding = () => {
         </div>
       </section>
 
+      {/* ═══════ DESCARGA LA APP — GOOGLE PLAY PROMINENTE ═══════ */}
+      <section className="py-14 bg-gradient-to-br from-emerald-600 via-emerald-500 to-teal-500 relative overflow-hidden" data-testid="download-app-section">
+        <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(circle at 20% 50%, white 1px, transparent 1px), radial-gradient(circle at 80% 50%, white 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
+        <div className="relative max-w-5xl mx-auto px-4 sm:px-6">
+          <div className="grid md:grid-cols-2 gap-8 items-center">
+            <div className="text-center md:text-left">
+              <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm border border-white/30 px-3 py-1.5 rounded-full text-white text-sm font-bold mb-4">
+                <Smartphone className="w-4 h-4" /> App disponible
+              </div>
+              <h2 className="text-2xl sm:text-3xl font-bold text-white mb-3">
+                Descarga ManoProtect en tu móvil
+              </h2>
+              <p className="text-emerald-100 text-sm mb-6 max-w-md">
+                Controla la seguridad de toda tu familia desde tu smartphone. Alertas SOS, localización GPS y protección digital — todo en una app.
+              </p>
+              <div className="flex flex-wrap gap-4 justify-center md:justify-start items-center">
+                <a href={PLAY_STORE_URL} target="_blank" rel="noopener noreferrer"
+                  className="transition-transform hover:scale-105"
+                  data-testid="download-play-badge"
+                  onClick={() => { if (window.gtag) window.gtag('event', 'play_store_click', { location: 'download_section' }); }}>
+                  <img
+                    src="https://play.google.com/intl/en_us/badges/static/images/badges/es_badge_web_generic.png"
+                    alt="Disponible en Google Play"
+                    className="h-14 w-auto"
+                    loading="lazy"
+                  />
+                </a>
+              </div>
+            </div>
+            <div className="flex justify-center">
+              <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-6 max-w-xs w-full">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center shadow-lg">
+                    <Shield className="w-6 h-6 text-emerald-600" />
+                  </div>
+                  <div>
+                    <p className="text-white font-bold">ManoProtect</p>
+                    <p className="text-emerald-200 text-xs">Seguridad familiar</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2 mb-3">
+                  <div className="flex gap-0.5">
+                    {[1,2,3,4,5].map(s => <Star key={s} className={`w-4 h-4 ${s <= 4 ? 'fill-amber-400 text-amber-400' : 'fill-amber-400/60 text-amber-400/60'}`} />)}
+                  </div>
+                  <span className="text-white font-bold text-sm">4.8</span>
+                  <span className="text-white/50 text-xs">(234 reseñas)</span>
+                </div>
+                <div className="space-y-2 text-xs text-white/70">
+                  <div className="flex items-center justify-between">
+                    <span>Categoría</span>
+                    <span className="text-white font-medium">Seguridad</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span>Descargas</span>
+                    <span className="text-white font-medium">+5.000</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span>Clasificación</span>
+                    <span className="text-white font-medium">PEGI 3</span>
+                  </div>
+                </div>
+                <a href={PLAY_STORE_URL} target="_blank" rel="noopener noreferrer"
+                  className="mt-4 block w-full text-center bg-white text-emerald-600 font-bold py-3 rounded-xl hover:bg-emerald-50 transition-colors text-sm"
+                  data-testid="download-app-cta">
+                  <Download className="w-4 h-4 inline mr-2" />Instalar gratis
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* ═══════ TRUST BAR ═══════ */}
       <section className="py-8 bg-slate-50 border-t border-gray-200" data-testid="trust-bar">
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
@@ -885,9 +1020,17 @@ const HighConversionLanding = () => {
 
       {/* Mobile Sticky CTA */}
       <div className="fixed bottom-0 left-0 right-0 z-30 sm:hidden bg-white/95 backdrop-blur-md border-t border-gray-200 p-3" data-testid="mobile-sticky-cta">
-        <button onClick={() => cta('mobile_sticky')} className="flex items-center justify-center gap-2 w-full bg-emerald-500 text-white font-bold py-3.5 rounded-xl shadow-lg active:bg-emerald-600">
-          <Shield className="w-5 h-5" /> Probar 7 días gratis
-        </button>
+        <div className="flex gap-2">
+          <button onClick={() => cta('mobile_sticky')} className="flex-1 flex items-center justify-center gap-2 bg-emerald-500 text-white font-bold py-3.5 rounded-xl shadow-lg active:bg-emerald-600">
+            <Shield className="w-5 h-5" /> Probar gratis
+          </button>
+          <a href={PLAY_STORE_URL} target="_blank" rel="noopener noreferrer"
+            className="flex items-center justify-center gap-1.5 bg-slate-900 text-white font-bold px-4 py-3.5 rounded-xl shadow-lg active:bg-slate-800"
+            data-testid="mobile-sticky-play-store">
+            <Download className="w-4 h-4 text-emerald-400" />
+            <span className="text-xs">App</span>
+          </a>
+        </div>
       </div>
     </div>
   );

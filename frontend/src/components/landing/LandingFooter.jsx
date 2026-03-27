@@ -168,32 +168,41 @@ const LandingFooter = () => {
                 <Smartphone className="w-4 h-4" />
                 Descarga la App
               </p>
-              <div className="flex flex-wrap gap-3">
-                <a 
-                  href={PLAY_STORE_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="transition-transform hover:scale-105"
-                >
-                  <img 
-                    src="https://play.google.com/intl/en_us/badges/static/images/badges/es_badge_web_generic.png" 
-                    alt="Disponible en Google Play"
-                    className="h-12 w-auto"
-                  />
-                </a>
-                <a 
-                  href={APP_STORE_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="transition-transform hover:scale-105"
-                >
-                  <img 
-                    src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" 
-                    alt="Descargar en App Store"
-                    className="h-12 w-auto rounded"
-                  />
-                </a>
-              </div>
+              <a 
+                href={PLAY_STORE_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group flex items-center gap-3 bg-slate-800/80 hover:bg-slate-700 border border-slate-700 hover:border-emerald-500/50 rounded-xl p-3 transition-all duration-300 mb-3"
+                data-testid="footer-play-store-badge"
+              >
+                <img 
+                  src="https://play.google.com/intl/en_us/badges/static/images/badges/es_badge_web_generic.png" 
+                  alt="Disponible en Google Play"
+                  className="h-10 w-auto"
+                />
+                <div className="flex-1">
+                  <div className="flex items-center gap-1">
+                    {[1,2,3,4,5].map(s => (
+                      <Star key={s} className={`w-3 h-3 ${s <= 4 ? 'fill-amber-400 text-amber-400' : 'fill-amber-400/50 text-amber-400/50'}`} />
+                    ))}
+                    <span className="text-white font-bold text-xs ml-1">4.8</span>
+                  </div>
+                  <p className="text-slate-400 text-[10px]">+5.000 descargas</p>
+                </div>
+              </a>
+              <a 
+                href={APP_STORE_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="transition-transform hover:scale-105 inline-block"
+              >
+                <img 
+                  src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" 
+                  alt="Descargar en App Store"
+                  className="h-10 w-auto rounded opacity-50"
+                />
+                <p className="text-slate-600 text-[10px] mt-1">Próximamente</p>
+              </a>
             </div>
           </div>
 
