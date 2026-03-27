@@ -1,4 +1,0 @@
-#Fri Mar 27 19:00:47 UTC 2026
-base.0=/app/twa-comerciales/app/build/intermediates/dex/release/minifyReleaseWithR8/classes.dex
-renamed.0=classes.dex
-path.0=classes.dex
