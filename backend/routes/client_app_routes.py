@@ -7,21 +7,50 @@ from pydantic import BaseModel
 from typing import Optional, List
 from datetime import datetime, timezone, timedelta
 import uuid
+import jwt
+import os
+import hashlib
 
 router = APIRouter(prefix="/client-app", tags=["Client App"])
 
 _db = None
+_JWT_SECRET = None
 
 def init_client_app(db):
-    global _db
+    global _db, _JWT_SECRET
     _db = db
+    _JWT_SECRET = os.environ.get("JWT_SECRET")
+
+
+def _hash_client_pw(password: str) -> str:
+    import bcrypt
+    return bcrypt.hashpw(password.encode(), bcrypt.gensalt()).decode()
+
+def _verify_client_pw(password: str, stored_hash: str) -> bool:
+    import bcrypt
+    try:
+        return bcrypt.checkpw(password.encode(), stored_hash.encode())
+    except (ValueError, AttributeError):
+        pass
+    return hashlib.sha256(password.encode()).hexdigest() == stored_hash
+
 
 async def get_client_email(request: Request) -> str:
-    """Extract user email from x-user-email header or session cookie"""
+    """Extract user email from Bearer JWT, x-user-email header, or session cookie"""
+    # 1. Try Bearer token (JWT from client-app login)
+    auth_header = request.headers.get("Authorization", "")
+    if auth_header.startswith("Bearer "):
+        try:
+            payload = jwt.decode(auth_header.split(" ")[1], _JWT_SECRET, algorithms=["HS256"])
+            if payload.get("type") == "client_app":
+                return payload.get("sub", "")
+        except (jwt.ExpiredSignatureError, jwt.InvalidTokenError):
+            pass
+    # 2. Try x-user-email header
     email = request.headers.get("x-user-email", "")
     if email:
         return email
-    # Fallback: try session cookie
+    # 3. Fallback: try session cookie
     session_token = request.cookies.get("session_token")
     if session_token and _db is not None:
         session = await _db.user_sessions.find_one(
@@ -34,6 +63,152 @@ async def get_client_email(request: Request) -> str:
             if user:
                 return user.get("email", "")
     return ""
+
+
+# ============================================
+# CLIENT LOGIN
+# ============================================
+
+@router.post("/login")
+async def client_app_login(request: Request):
+    """Login para la app de clientes — devuelve JWT + datos instalacion"""
+    body = await request.json()
+    email = body.get("email", "").lower().strip()
+    password = body.get("password", "")
+    if not email or not password:
+        raise HTTPException(400, "Email y contraseña requeridos")
+
+    # Find client account
+    client = await _db.client_app_users.find_one({"email": email}, {"_id": 0})
+    if not client:
+        raise HTTPException(401, "Cliente no encontrado. Contacte con su instalador.")
+    if not client.get("activo", True):
+        raise HTTPException(401, "Cuenta desactivada")
+    if not _verify_client_pw(password, client.get("password_hash", "")):
+        raise HTTPException(401, "Contraseña incorrecta")
+
+    # Find their installation access
+    access = await _db.client_app_access.find_one({"user_email": email}, {"_id": 0})
+    installation_id = access.get("installation_id") if access else None
+
+    token = jwt.encode({
+        "sub": email,
+        "type": "client_app",
+        "installation_id": installation_id or "",
+        "exp": datetime.now(timezone.utc) + timedelta(hours=24),
+        "iat": datetime.now(timezone.utc),
+    }, _JWT_SECRET, algorithm="HS256")
+
+    return {
+        "token": token,
+        "user": {
+            "email": email,
+            "nombre": client.get("nombre", ""),
+            "telefono": client.get("telefono", ""),
+            "installation_id": installation_id,
+        }
+    }
+
+
+async def seed_client_demo():
+    """Seed demo client + installation for testing"""
+    demo_email = "cliente@demo.manoprotectt.com"
+    existing = await _db.client_app_users.find_one({"email": demo_email})
+    if existing:
+        return
+
+    # Create demo client user
+    await _db.client_app_users.insert_one({
+        "email": demo_email,
+        "nombre": "Juan Garcia Martinez",
+        "telefono": "612 345 678",
+        "password_hash": _hash_client_pw("Cliente2025!"),
+        "activo": True,
+        "created_at": datetime.now(timezone.utc).isoformat(),
+    })
+
+    # Create demo installation
+    install_id = "demo-install-001"
+    existing_inst = await _db.cra_installations.find_one({"id": install_id})
+    if not existing_inst:
+        await _db.cra_installations.insert_one({
+            "id": install_id,
+            "client_name": "Juan Garcia Martinez",
+            "client_email": demo_email,
+            "client_phone": "612 345 678",
+            "address": "Calle Mayor 15, 3A",
+            "city": "Madrid",
+            "postal_code": "28013",
+            "plan_type": "alarm-premium",
+            "access_code": "1234",
+            "duress_code": "9999",
+            "emergency_contacts": [
+                {"name": "Maria Garcia", "phone": "634 567 890", "relation": "Pareja"},
+                {"name": "Pedro Garcia", "phone": "656 789 012", "relation": "Padre"},
+            ],
+            "notes": "Piso 3, ascensor disponible",
+            "status": "active",
+            "armed_status": "disarmed",
+            "created_at": datetime.now(timezone.utc).isoformat(),
+            "last_event_at": None,
+        })
+
+    # Create client access
+    existing_access = await _db.client_app_access.find_one({"user_email": demo_email, "installation_id": install_id})
+    if not existing_access:
+        await _db.client_app_access.insert_one({
+            "id": str(uuid.uuid4()),
+            "user_email": demo_email,
+            "installation_id": install_id,
+            "access_code": "1234",
+            "role": "owner",
+            "created_at": datetime.now(timezone.utc).isoformat(),
+        })
+
+    # Create demo devices
+    existing_devices = await _db.cra_devices.count_documents({"installation_id": install_id})
+    if existing_devices == 0:
+        demo_devices = [
+            {"device_type": "panel", "model": "ManoProtect Hub Pro 10\"", "zone": "Entrada", "location_desc": "Recibidor principal", "battery_level": 100},
+            {"device_type": "sensor_door", "model": "Sensor Magnetico v3", "zone": "Entrada principal", "location_desc": "Puerta entrada", "battery_level": 95},
+            {"device_type": "sensor_pir", "model": "PIR Anti-mascotas", "zone": "Salon", "location_desc": "Esquina salon-comedor", "battery_level": 88},
+            {"device_type": "smoke_detector", "model": "Detector Humo Pro", "zone": "Cocina", "location_desc": "Techo cocina", "battery_level": 72},
+            {"device_type": "sensor_door", "model": "Sensor Magnetico v3", "zone": "Dormitorio", "location_desc": "Ventana dormitorio", "battery_level": 91},
+            {"device_type": "sensor_pir", "model": "PIR Anti-mascotas", "zone": "Garaje", "location_desc": "Acceso garaje", "battery_level": 65},
+            {"device_type": "camera", "model": "Cam Exterior 4K", "zone": "Jardin", "location_desc": "Fachada principal", "battery_level": 100},
+            {"device_type": "camera", "model": "Cam Interior HD", "zone": "Salon", "location_desc": "Rincon TV", "battery_level": 100},
+            {"device_type": "siren", "model": "Sirena Exterior 120dB", "zone": "Exterior", "location_desc": "Fachada lateral", "battery_level": 100},
+            {"device_type": "keypad", "model": "Teclado RFID Pro", "zone": "Entrada", "location_desc": "Junto a puerta", "battery_level": 100},
+        ]
+        for d in demo_devices:
+            await _db.cra_devices.insert_one({
+                "id": str(uuid.uuid4()),
+                "installation_id": install_id,
+                "serial_number": f"MP-{uuid.uuid4().hex[:8].upper()}",
+                "status": "online",
+                "last_check": datetime.now(timezone.utc).isoformat(),
+                "created_at": datetime.now(timezone.utc).isoformat(),
+                **d,
+            })
+
+    # Seed a few alarm events
+    existing_events = await _db.cra_alarm_events.count_documents({"installation_id": install_id})
+    if existing_events == 0:
+        now = datetime.now(timezone.utc)
+        events = [
+            {"event_type": "arm_total", "zone": "", "severity": "low", "description": "Sistema armado total via app", "status": "resolved", "resolved_at": (now - timedelta(hours=12)).isoformat()},
+            {"event_type": "arm_disarmed", "zone": "", "severity": "low", "description": "Sistema desarmado via app", "status": "resolved", "resolved_at": (now - timedelta(hours=8)).isoformat()},
+            {"event_type": "test", "zone": "Todas", "severity": "low", "description": "Test periodico completado — OK", "status": "resolved", "resolved_at": (now - timedelta(days=1)).isoformat()},
+        ]
+        for i, ev in enumerate(events):
+            await _db.cra_alarm_events.insert_one({
+                "id": str(uuid.uuid4()),
+                "installation_id": install_id,
+                "operator_id": None,
+                "action_log": [],
+                "created_at": (now - timedelta(hours=12-i*4)).isoformat(),
+                **ev,
+            })
 
 
 # ============================================
@@ -224,7 +399,7 @@ async def client_sos(install_id: str, request: Request):
 
     # Create high-priority alarm event
     event_id = str(uuid.uuid4())
-    await _db.cra_alarm_events.insert_one({
+    event_data = {
         "id": event_id,
         "installation_id": install_id,
         "event_type": "panic",
@@ -235,7 +410,21 @@ async def client_sos(install_id: str, request: Request):
         "operator_id": None,
         "action_log": [],
         "created_at": datetime.now(timezone.utc).isoformat(),
-    })
+    }
+    await _db.cra_alarm_events.insert_one(event_data)
+
+    # Emit real-time to CRA operators
+    try:
+        from services.websocket_manager import sio
+        inst = await _db.cra_installations.find_one({"id": install_id}, {"_id": 0, "client_name": 1, "address": 1})
+        emit = {**event_data}
+        emit.pop("_id", None)
+        if inst:
+            emit["client_name"] = inst.get("client_name", "")
+            emit["address"] = inst.get("address", "")
+        await sio.emit('cra_alarm_event', emit)
+    except Exception:
+        pass
 
     return {"status": "ok", "event_id": event_id, "message": "Alerta SOS enviada a la CRA"}
 

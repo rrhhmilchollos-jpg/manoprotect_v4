@@ -11,10 +11,24 @@ import uuid
 router = APIRouter(prefix="/cra", tags=["CRA Operations"])
 
 _db = None
+_sio = None
 
 def init_cra(db):
-    global _db
+    global _db, _sio
     _db = db
+    try:
+        from services.websocket_manager import sio
+        _sio = sio
+    except ImportError:
+        pass
+
+async def _emit_cra_event(event_data: dict):
+    """Emit alarm event to all CRA operators via Socket.IO"""
+    if _sio:
+        try:
+            await _sio.emit('cra_alarm_event', event_data)
+        except Exception:
+            pass
 
 
 # ============================================
@@ -147,6 +161,13 @@ async def create_alarm(data: AlarmEvent):
         {"id": data.installation_id},
         {"$set": {"last_event_at": event["created_at"]}}
     )
+    # Emit real-time event to CRA operators
+    inst = await _db.cra_installations.find_one({"id": data.installation_id}, {"_id": 0, "client_name": 1, "address": 1, "city": 1})
+    emit_data = {**event}
+    if inst:
+        emit_data["client_name"] = inst.get("client_name", "")
+        emit_data["address"] = inst.get("address", "")
+    await _emit_cra_event(emit_data)
     return event
 
 @router.patch("/alarms/{alarm_id}/assign")
@@ -346,6 +367,9 @@ async def arm_installation(install_id: str, request: Request):
         "resolved_at": datetime.now(timezone.utc).isoformat(),
     }
     await _db.cra_alarm_events.insert_one(event)
+
+    # Emit real-time event to CRA operators
+    await _emit_cra_event({**event, "client_name": inst.get("client_name", ""), "address": inst.get("address", "")})
 
     return {"status": "ok", "armed_status": mode}
 

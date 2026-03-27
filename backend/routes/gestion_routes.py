@@ -666,6 +666,165 @@ async def asignar_equipo(instalacion_id: str, request: Request):
 
 
 # ============================================
+# CHECKLIST DE INSTALACIÓN (Instaladores)
+# ============================================
+
+@router.get("/instalaciones/{instalacion_id}/checklist")
+async def get_checklist(instalacion_id: str, request: Request):
+    """Obtener checklist de una instalación"""
+    await _get_current_gestion_user(request)
+    checklist = await _db.gestion_checklists.find_one({"instalacion_id": instalacion_id}, {"_id": 0})
+    if not checklist:
+        return {"instalacion_id": instalacion_id, "items": {}, "completado": False}
+    return checklist
+
+@router.put("/instalaciones/{instalacion_id}/checklist")
+async def update_checklist(instalacion_id: str, request: Request):
+    """Actualizar checklist de una instalación (instalador o admin)"""
+    user = await _require_instalador_or_admin(request)
+    body = await request.json()
+    items = body.get("items", {})
+    total_items = 14
+    completed = sum(1 for v in items.values() if v)
+    completado = completed >= total_items
+
+    await _db.gestion_checklists.update_one(
+        {"instalacion_id": instalacion_id},
+        {"$set": {
+            "instalacion_id": instalacion_id,
+            "items": items,
+            "completed_count": completed,
+            "total_items": total_items,
+            "completado": completado,
+            "updated_by": user["user_id"],
+            "updated_at": datetime.now(timezone.utc).isoformat(),
+        }},
+        upsert=True
+    )
+
+    # If fully completed, update installation status
+    if completado:
+        await _db.gestion_instalaciones.update_one(
+            {"instalacion_id": instalacion_id},
+            {"$set": {"estado": "completado", "fecha_completado": datetime.now(timezone.utc).isoformat()}}
+        )
+        await _log_action(user["user_id"], user["nombre"], "completar_instalacion", f"Instalación {instalacion_id} completada")
+
+    return {"message": "Checklist actualizado", "completed": completed, "total": total_items, "completado": completado}
+
+
+@router.put("/instalaciones/{instalacion_id}/estado")
+async def update_instalacion_estado(instalacion_id: str, request: Request):
+    """Actualizar el estado de una instalación"""
+    user = await _require_instalador_or_admin(request)
+    body = await request.json()
+    nuevo_estado = body.get("estado", "")
+    valid = ["pendiente", "asignado", "en_progreso", "completado", "cancelado"]
+    if nuevo_estado not in valid:
+        raise HTTPException(status_code=400, detail=f"Estado inválido. Válidos: {valid}")
+    update_fields = {"estado": nuevo_estado}
+    if nuevo_estado == "completado":
+        update_fields["fecha_completado"] = datetime.now(timezone.utc).isoformat()
+    if nuevo_estado == "en_progreso":
+        update_fields["fecha_inicio"] = datetime.now(timezone.utc).isoformat()
+    result = await _db.gestion_instalaciones.update_one(
+        {"instalacion_id": instalacion_id}, {"$set": update_fields}
+    )
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Instalación no encontrada")
+    await _log_action(user["user_id"], user["nombre"], "actualizar_estado_instalacion", f"Instalación {instalacion_id} -> {nuevo_estado}")
+    return {"message": f"Estado actualizado a {nuevo_estado}"}
+
+
+
+# ============================================
+# STATS COMERCIAL (personal dashboard)
+# ============================================
+
+@router.get("/comercial/mis-stats")
+async def comercial_personal_stats(request: Request):
+    """Estadísticas personales del comercial"""
+    user = await _require_comercial_or_admin(request)
+    uid = user["user_id"]
+
+    total_pedidos = await _db.gestion_pedidos.count_documents({"comercial_id": uid})
+    cerrados = await _db.gestion_pedidos.count_documents({"comercial_id": uid, "estado": "instalado"})
+    pendientes = await _db.gestion_pedidos.count_documents({"comercial_id": uid, "estado": "pendiente"})
+    confirmados = await _db.gestion_pedidos.count_documents({"comercial_id": uid, "estado": "confirmado"})
+    cancelados = await _db.gestion_pedidos.count_documents({"comercial_id": uid, "estado": "cancelado"})
+
+    conversion = round((cerrados / total_pedidos * 100), 1) if total_pedidos > 0 else 0
+    comision_por_venta = 250  # EUR
+    comisiones = cerrados * comision_por_venta
+
+    # Recent leads
+    recent = await _db.gestion_pedidos.find(
+        {"comercial_id": uid}, {"_id": 0}
+    ).sort("fecha_creacion", -1).to_list(20)
+
+    return {
+        "total": total_pedidos,
+        "cerrados": cerrados,
+        "pendientes": pendientes,
+        "confirmados": confirmados,
+        "cancelados": cancelados,
+        "conversion": conversion,
+        "comisiones": comisiones,
+        "comision_por_venta": comision_por_venta,
+        "recent_pedidos": recent,
+    }
+
+
+# ============================================
+# INSTALADOR: Mi agenda
+# ============================================
+
+@router.get("/instalador/mi-agenda")
+async def instalador_mi_agenda(request: Request):
+    """Obtener agenda del instalador actual"""
+    user = await _require_instalador_or_admin(request)
+    uid = user["user_id"]
+
+    # Direct assignments
+    query = {"$or": [
+        {"instalador_id": uid},
+        {"equipo_miembros": uid},
+    ]}
+    instalaciones = await _db.gestion_instalaciones.find(query, {"_id": 0}).sort("fecha_programada", -1).to_list(100)
+
+    # Get my team info
+    equipo = await _db.gestion_equipos.find_one({"miembros": uid, "activo": True}, {"_id": 0})
+    equipo_info = None
+    if equipo:
+        members = []
+        for mid in equipo.get("miembros", []):
+            m = await _db.gestion_usuarios.find_one({"user_id": mid, "activo": True}, {"_id": 0, "user_id": 1, "nombre": 1, "email": 1})
+            if m:
+                members.append(m)
+        equipo_info = {
+            "equipo_id": equipo.get("equipo_id"),
+            "nombre": equipo.get("nombre"),
+            "zona": equipo.get("zona"),
+            "miembros": members,
+        }
+
+    # Stock in vehicle (linked to team or user)
+    vehiculo_stock = await _db.gestion_vehiculo_stock.find(
+        {"$or": [{"usuario_id": uid}, {"equipo_id": equipo.get("equipo_id") if equipo else ""}]},
+        {"_id": 0}
+    ).to_list(100)
+
+    return {
+        "instalaciones": instalaciones,
+        "equipo": equipo_info,
+        "vehiculo_stock": vehiculo_stock,
+        "total_programadas": sum(1 for i in instalaciones if i.get("estado") in ("asignado", "pendiente")),
+        "total_en_curso": sum(1 for i in instalaciones if i.get("estado") == "en_progreso"),
+        "total_completadas": sum(1 for i in instalaciones if i.get("estado") == "completado"),
+    }
+
+
+# ============================================
 # LOGS (AUDIT - ADMIN ONLY)
 # ============================================
 
@@ -785,6 +944,58 @@ async def _seed_gestion_users():
                 "ultimo_update": datetime.now(timezone.utc).isoformat()
             })
         results.append("Stock inicial creado (10 productos)")
+
+    # Seed demo pedidos if empty
+    pedidos_count = await _db.gestion_pedidos.count_documents({})
+    if pedidos_count == 0:
+        # Get comercial user_id
+        comercial = await _db.gestion_usuarios.find_one({"email": "comercial@manoprotectt.com"}, {"_id": 0})
+        instalador = await _db.gestion_usuarios.find_one({"email": "instalador@manoprotectt.com"}, {"_id": 0})
+        cid = comercial["user_id"] if comercial else "system"
+        iid = instalador["user_id"] if instalador else ""
+        iname = instalador["nombre"] if instalador else ""
+        now = datetime.now(timezone.utc)
+        demo_pedidos = [
+            {"cliente_nombre": "Garcia Martinez, Juan", "cliente_telefono": "612 345 678", "cliente_email": "juan@example.com", "cliente_direccion": "Calle Mayor 15, 3A, Madrid", "estado": "instalado", "fecha_creacion": (now - timedelta(days=5)).isoformat()},
+            {"cliente_nombre": "Lopez Fernandez, Maria", "cliente_telefono": "634 567 890", "cliente_email": "maria@example.com", "cliente_direccion": "Av. Libertad 42, Valencia", "estado": "confirmado", "fecha_creacion": (now - timedelta(days=3)).isoformat()},
+            {"cliente_nombre": "Rodriguez Perez, Carlos", "cliente_telefono": "656 789 012", "cliente_email": "carlos@example.com", "cliente_direccion": "Paseo Castellana 100, Madrid", "estado": "pendiente", "fecha_creacion": (now - timedelta(days=1)).isoformat()},
+            {"cliente_nombre": "Sanchez Gil, Ana", "cliente_telefono": "678 901 234", "cliente_email": "ana@example.com", "cliente_direccion": "Calle Sol 8, 1B, Barcelona", "estado": "instalado", "fecha_creacion": (now - timedelta(days=10)).isoformat()},
+            {"cliente_nombre": "Moreno Ruiz, Pablo", "cliente_telefono": "690 123 456", "cliente_email": "pablo@example.com", "cliente_direccion": "Ronda Sur 22, Sevilla", "estado": "confirmado", "fecha_creacion": (now - timedelta(days=2)).isoformat()},
+            {"cliente_nombre": "Fernandez Torres, Laura", "cliente_telefono": "611 222 333", "cliente_email": "laura@example.com", "cliente_direccion": "Calle Goya 35, Madrid", "estado": "pendiente", "fecha_creacion": now.isoformat()},
+        ]
+        for p in demo_pedidos:
+            pid = f"PED-{uuid.uuid4().hex[:8].upper()}"
+            await _db.gestion_pedidos.insert_one({
+                "pedido_id": pid,
+                "comercial_id": cid,
+                "comercial_nombre": comercial["nombre"] if comercial else "Carlos Comercial",
+                "productos": [{"producto_id": "kit-plus", "cantidad": 1}],
+                "notas": "",
+                "fecha_actualizacion": p["fecha_creacion"],
+                **p,
+            })
+        results.append("Pedidos demo creados (6)")
+
+        # Seed demo instalaciones
+        pedidos = await _db.gestion_pedidos.find({"estado": {"$in": ["confirmado", "instalado"]}}, {"_id": 0}).to_list(10)
+        for p in pedidos:
+            ins_id = f"INS-{uuid.uuid4().hex[:8].upper()}"
+            estado = "completado" if p["estado"] == "instalado" else "asignado"
+            await _db.gestion_instalaciones.insert_one({
+                "instalacion_id": ins_id,
+                "pedido_id": p["pedido_id"],
+                "instalador_id": iid,
+                "instalador_nombre": iname,
+                "direccion": p["cliente_direccion"],
+                "cliente_nombre": p["cliente_nombre"],
+                "cliente_telefono": p["cliente_telefono"],
+                "estado": estado,
+                "fecha_programada": (now + timedelta(days=1)).strftime("%d/%m/%Y"),
+                "notas": "",
+                "fecha_asignacion": p["fecha_creacion"],
+                "fecha_completado": p["fecha_creacion"] if estado == "completado" else "",
+            })
+        results.append("Instalaciones demo creadas")
 
     return {
         "message": "Sistema de gestión inicializado",

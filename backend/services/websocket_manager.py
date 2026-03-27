@@ -74,6 +74,7 @@ async def register(sid, data):
     """Register user for real-time updates"""
     user_id = data.get('user_id')
     user_name = data.get('user_name', 'Usuario')
+    user_type = data.get('type', 'user')  # 'user', 'cra_operator', 'client_app'
     
     if not user_id:
         await sio.emit('error', {'message': 'user_id required'}, to=sid)
@@ -87,20 +88,40 @@ async def register(sid, data):
     connection_info[sid] = {
         'user_id': user_id,
         'user_name': user_name,
+        'type': user_type,
         'connected_at': datetime.now(timezone.utc).isoformat()
     }
     
-    print(f"[WS] User registered: {user_id} ({user_name})")
+    print(f"[WS] User registered: {user_id} ({user_name}) type={user_type}")
     
     # Send confirmation
     await sio.emit('registered', {
         'status': 'connected',
         'user_id': user_id,
+        'type': user_type,
         'timestamp': datetime.now(timezone.utc).isoformat()
     }, to=sid)
     
+    # If CRA operator, send recent pending alarms
+    if user_type == 'cra_operator' and _db:
+        try:
+            pending = await _db.cra_alarm_events.find(
+                {"status": {"$in": ["pending", "in_progress"]}}, {"_id": 0}
+            ).sort("created_at", -1).to_list(20)
+            for ev in pending:
+                inst = await _db.cra_installations.find_one(
+                    {"id": ev.get("installation_id")}, {"_id": 0, "client_name": 1, "address": 1}
+                )
+                if inst:
+                    ev["client_name"] = inst.get("client_name", "")
+                    ev["address"] = inst.get("address", "")
+                await sio.emit('cra_alarm_event', ev, to=sid)
+        except Exception as e:
+            print(f"[WS] Error sending pending alarms: {e}")
+    
     # Check for active SOS alerts for this user's family
-    await check_family_alerts(sid, user_id)
+    if user_type == 'user':
+        await check_family_alerts(sid, user_id)
 
 @sio.event
 async def register_enterprise(sid, data):

@@ -2,8 +2,9 @@
  * CRA Operator Dashboard — Central Receptora de Alarmas
  * Panel operativo en tiempo real para monitoreo de alarmas
  */
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { Link } from 'react-router-dom';
+import { io } from 'socket.io-client';
 import {
   Shield, AlertTriangle, Bell, Eye, Phone, MapPin, CheckCircle, Clock,
   Radio, Cpu, Users, Lock, Activity, Monitor, ChevronRight, RefreshCw,
@@ -160,6 +161,20 @@ const CRAOperatorDashboard = () => {
   const [selectedProtocol, setSelectedProtocol] = useState(null);
   const [selectedInstallation, setSelectedInstallation] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [socketConnected, setSocketConnected] = useState(false);
+  const socketRef = useRef(null);
+  const audioRef = useRef(null);
+
+  const playAlarmSound = () => {
+    try {
+      const ctx = new (window.AudioContext || window.webkitAudioContext)();
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain); gain.connect(ctx.destination);
+      osc.frequency.value = 880; osc.type = 'square'; gain.gain.value = 0.1;
+      osc.start(); osc.stop(ctx.currentTime + 0.3);
+    } catch (e) {}
+  };
 
   const fetchData = useCallback(async () => {
     try {
@@ -181,6 +196,31 @@ const CRAOperatorDashboard = () => {
   }, []);
 
   useEffect(() => { fetchData(); const iv = setInterval(fetchData, 15000); return () => clearInterval(iv); }, [fetchData]);
+
+  // Socket.IO real-time connection
+  useEffect(() => {
+    const socket = io(API, {
+      path: '/api/socket.io',
+      transports: ['websocket', 'polling'],
+      reconnection: true,
+    });
+    socketRef.current = socket;
+
+    socket.on('connect', () => {
+      setSocketConnected(true);
+      socket.emit('register', { user_id: 'cra-operator-1', user_name: 'Operador CRA', type: 'cra_operator' });
+    });
+    socket.on('disconnect', () => setSocketConnected(false));
+    socket.on('cra_alarm_event', (data) => {
+      if (data.severity === 'critical' || data.severity === 'high' || data.event_type === 'panic') {
+        playAlarmSound();
+      }
+      fetchData();
+    });
+
+    return () => { socket.disconnect(); };
+  }, [fetchData]);
+
   useEffect(() => { const handler = () => fetchData(); window.addEventListener('manoprotect-refresh', handler); return () => window.removeEventListener('manoprotect-refresh', handler); }, [fetchData]);
 
   const handleAlarmAction = async (alarmId, action, notes) => {
@@ -235,7 +275,10 @@ const CRAOperatorDashboard = () => {
               </div>
             )}
             <button onClick={fetchData} className="text-slate-400 hover:text-white"><RefreshCw className="w-4 h-4" /></button>
-            <div className="w-2 h-2 bg-emerald-500 rounded-full" title="Sistema operativo" />
+            <div className="flex items-center gap-1.5" title={socketConnected ? 'Socket.IO conectado en tiempo real' : 'Modo polling (15s)'}>
+              <div className={`w-2 h-2 rounded-full ${socketConnected ? 'bg-emerald-500' : 'bg-amber-500 animate-pulse'}`} />
+              <span className="text-[10px] text-slate-500 hidden sm:inline">{socketConnected ? 'LIVE' : 'POLL'}</span>
+            </div>
             <Link to="/" className="text-slate-500 text-xs hover:text-slate-300">Salir</Link>
           </div>
         </div>

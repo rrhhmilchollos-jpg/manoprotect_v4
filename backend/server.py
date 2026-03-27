@@ -3406,6 +3406,16 @@ try:
             print(f"\U0001f464 Gestion auto-seed: {result.get('results', [])}")
         except Exception as e:
             print(f"\u26a0\ufe0f Gestion auto-seed error: {e}")
+
+    # Auto-seed client demo data on startup
+    @app.on_event("startup")
+    async def auto_seed_client_demo():
+        try:
+            from routes.client_app_routes import seed_client_demo
+            await seed_client_demo()
+            print("\U0001f464 Client demo data seeded")
+        except Exception as e:
+            print(f"\u26a0\ufe0f Client demo seed error: {e}")
 except Exception as e:
     print(f"\u26a0\ufe0f Gestion CRA routes not loaded: {e}")
 

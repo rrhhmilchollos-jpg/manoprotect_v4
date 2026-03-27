@@ -1,0 +1,157 @@
+{
+  "summary": "Iteration 135: Tested all 3 PWA apps (AppCliente, AppComerciales, AppInstaladores) and CRA Dashboard with real backend data. All apps successfully connect to MongoDB via FastAPI. 21/21 backend tests passed. Frontend UI tests confirmed all apps load correctly with real data.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [
+      {"screen": "All apps", "issues": ["Cookie consent banner blocks bottom navigation - users need to dismiss it first"]}
+    ]
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_iteration_135_real_data.py",
+    "/app/test_reports/pytest/iteration_135_real_data.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [],
+  "updated_files": [
+    "/app/backend/tests/test_iteration_135_real_data.py"
+  ],
+  "success_rate": {
+    "backend": "100% (21/21 tests passed)",
+    "frontend": "100%"
+  },
+  "test_credentials": {
+    "client_app": {
+      "email": "cliente@demo.manoprotectt.com",
+      "password": "Cliente2025!",
+      "endpoint": "/api/client-app/login"
+    },
+    "comercial_app": {
+      "email": "comercial@manoprotectt.com",
+      "password": "Comercial2025!",
+      "endpoint": "/api/gestion/auth/login"
+    },
+    "instalador_app": {
+      "email": "instalador@manoprotectt.com",
+      "password": "Instalador2025!",
+      "endpoint": "/api/gestion/auth/login"
+    }
+  },
+  "seed_data_creation": "Demo client user and installation seeded on startup via seed_client_demo() in client_app_routes.py",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "All 3 PWA apps now use real MongoDB data instead of mock data. Client App uses /api/client-app/login for auth. Comercial and Instalador apps use /api/gestion/auth/login. CRA Dashboard loads real data from /api/cra/dashboard, /api/cra/alarms, /api/cra/installations. Socket.IO attempts WebSocket connection but falls back to polling in preview environment (403 on WSS). Demo installation has 10 devices and generates arm/disarm events.",
+  "tests_passed": {
+    "backend_tests": [
+      "GET /api/health - PASSED",
+      "POST /api/client-app/login with cliente@demo.manoprotectt.com - PASSED",
+      "POST /api/client-app/login with wrong password - returns 401 - PASSED",
+      "GET /api/client-app/installation/{id} - returns devices, armed_status, address - PASSED",
+      "GET /api/client-app/installation/{id}/events - returns events - PASSED",
+      "POST /api/cra/installations/{id}/arm (total) - PASSED",
+      "POST /api/cra/installations/{id}/arm (disarmed) - PASSED",
+      "POST /api/client-app/installation/{id}/sos - creates panic event - PASSED",
+      "POST /api/gestion/auth/login with comercial@manoprotectt.com - PASSED",
+      "POST /api/gestion/auth/login with wrong password - returns 401 - PASSED",
+      "GET /api/gestion/comercial/mis-stats - returns total, cerrados, pendientes, comisiones - PASSED",
+      "POST /api/gestion/pedidos - creates new lead - PASSED",
+      "POST /api/gestion/auth/login with instalador@manoprotectt.com - PASSED",
+      "GET /api/gestion/instalador/mi-agenda - returns instalaciones - PASSED",
+      "GET /api/gestion/instalaciones/{id}/checklist - PASSED",
+      "PUT /api/gestion/instalaciones/{id}/checklist - PASSED",
+      "PUT /api/gestion/instalaciones/{id}/estado - PASSED",
+      "GET /api/cra/dashboard - returns stats - PASSED",
+      "GET /api/cra/alarms - returns alarms list - PASSED",
+      "GET /api/cra/installations - returns installations list - PASSED",
+      "GET /api/cra/protocols - returns protocols - PASSED"
+    ],
+    "frontend_tests": [
+      "AppCliente login page loads at /app-cliente - PASSED",
+      "AppCliente login with demo credentials shows dashboard - PASSED",
+      "AppCliente shows 10 devices from real data - PASSED",
+      "AppCliente shows security status (DESARMADO) - PASSED",
+      "AppCliente arm controls (TOTAL, PARCIAL, DESARMAR) visible - PASSED",
+      "AppCliente SOS EMERGENCIA button visible - PASSED",
+      "AppComerciales login page loads at /app-comerciales - PASSED",
+      "AppComerciales login shows dashboard with KPIs - PASSED",
+      "AppComerciales shows commission card (0 EUR, 250 EUR per sale) - PASSED",
+      "AppInstaladores login page loads at /app-instaladores - PASSED",
+      "AppInstaladores login shows agenda with stats - PASSED",
+      "CRA Dashboard loads at /cra-operador - PASSED",
+      "CRA Dashboard shows stats (2 installations, 18 devices, 3 pending) - PASSED",
+      "CRA Dashboard shows 12 alarms with real data - PASSED",
+      "CRA Dashboard shows 2 installations (Juan Garcia Martinez, Oficina Central) - PASSED",
+      "CRA Dashboard shows 4 protocols (Intrusion, Panico/SOS, Sabotaje, Incendio) - PASSED",
+      "CRA Dashboard Socket.IO attempts connection (falls back to POLL mode) - PASSED"
+    ]
+  },
+  "verified_features": {
+    "app_cliente": {
+      "route": "/app-cliente",
+      "auth_endpoint": "/api/client-app/login",
+      "features_verified": [
+        "Login with JWT token",
+        "Installation data loading (devices, armed_status, address)",
+        "Arm/Disarm via /api/cra/installations/{id}/arm",
+        "SOS panic button via /api/client-app/installation/{id}/sos",
+        "Events history via /api/client-app/installation/{id}/events"
+      ],
+      "demo_data": {
+        "user": "Juan Garcia Martinez",
+        "installation_id": "demo-install-001",
+        "devices": 10,
+        "address": "Calle Mayor 15, 3A, Madrid"
+      }
+    },
+    "app_comerciales": {
+      "route": "/app-comerciales",
+      "auth_endpoint": "/api/gestion/auth/login",
+      "features_verified": [
+        "Login with JWT token (rol=comercial)",
+        "Personal stats via /api/gestion/comercial/mis-stats",
+        "Create lead via POST /api/gestion/pedidos"
+      ]
+    },
+    "app_instaladores": {
+      "route": "/app-instaladores",
+      "auth_endpoint": "/api/gestion/auth/login",
+      "features_verified": [
+        "Login with JWT token (rol=instalador)",
+        "Agenda via /api/gestion/instalador/mi-agenda",
+        "Checklist GET/PUT via /api/gestion/instalaciones/{id}/checklist",
+        "Estado update via PUT /api/gestion/instalaciones/{id}/estado"
+      ]
+    },
+    "cra_dashboard": {
+      "route": "/cra-operador",
+      "features_verified": [
+        "Dashboard stats via /api/cra/dashboard",
+        "Alarms list via /api/cra/alarms",
+        "Installations list via /api/cra/installations",
+        "Protocols via /api/cra/protocols",
+        "Socket.IO connection attempt (falls back to polling)"
+      ],
+      "real_data_displayed": {
+        "installations": 2,
+        "devices": 18,
+        "pending_alarms": 3,
+        "events_today": 6,
+        "resolved_today": 4,
+        "protocols": 4
+      }
+    }
+  },
+  "mocked_data": {
+    "has_mocked_apis": false,
+    "mocked_apis_list": []
+  },
+  "socket_io_status": {
+    "websocket_connection": "Failed with 403 (expected in preview environment)",
+    "fallback": "Polling mode (15s refresh)",
+    "note": "Socket.IO WebSocket fails due to Kubernetes ingress configuration, but polling fallback works correctly"
+  }
+}

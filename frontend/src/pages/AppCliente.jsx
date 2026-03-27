@@ -1,257 +1,387 @@
-import { useState, useEffect, useCallback } from 'react';
-import { Helmet } from 'react-helmet-async';
-import { Shield, Bell, MapPin, Phone, Power, Settings, LogOut, AlertTriangle, Check, Clock, Users, ChevronRight, Wifi, Battery, Lock, Eye } from 'lucide-react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 
 const API = process.env.REACT_APP_BACKEND_URL;
 
+const DEVICE_ICONS = {
+  panel: 'fa-tablet-screen-button',
+  sensor_door: 'fa-door-open',
+  sensor_pir: 'fa-eye',
+  smoke_detector: 'fa-cloud',
+  camera: 'fa-video',
+  siren: 'fa-bell',
+  keypad: 'fa-keyboard',
+};
+
+const SEVERITY_COLORS = {
+  critical: '#ef4444',
+  high: '#f97316',
+  medium: '#eab308',
+  low: '#22c55e',
+};
+
 export default function AppCliente() {
+  const [screen, setScreen] = useState('login');
+  const [token, setToken] = useState(localStorage.getItem('mp_client_token') || '');
   const [user, setUser] = useState(null);
-  const [token, setToken] = useState(localStorage.getItem('cliente_token'));
-  const [tab, setTab] = useState('panel');
-  const [alarm, setAlarm] = useState({ armed: false, mode: 'desarmada', zones: [] });
-  const [alerts, setAlerts] = useState([]);
-  const [family, setFamily] = useState([]);
-  const [loginForm, setLoginForm] = useState({ email: '', password: '' });
-  const [loginError, setLoginError] = useState('');
+  const [installData, setInstallData] = useState(null);
+  const [events, setEvents] = useState([]);
+  const [activeTab, setActiveTab] = useState('home');
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [loginForm, setLoginForm] = useState({ email: '', password: '' });
+  const [arming, setArming] = useState(false);
+  const pollRef = useRef(null);
+
+  const headers = useCallback(() => ({
+    'Content-Type': 'application/json',
+    'Authorization': `Bearer ${token}`,
+  }), [token]);
+
+  // Auto-login if token exists
+  useEffect(() => {
+    if (token) {
+      fetchInstallation();
+    }
+  }, []);
+
+  const fetchInstallation = useCallback(async () => {
+    try {
+      setLoading(true);
+      const stored = JSON.parse(localStorage.getItem('mp_client_user') || '{}');
+      const instId = stored.installation_id;
+      if (!instId) { logout(); return; }
+      setUser(stored);
+      const res = await fetch(`${API}/api/client-app/installation/${instId}`, { headers: headers() });
+      if (!res.ok) { logout(); return; }
+      const data = await res.json();
+      setInstallData(data);
+      setScreen('app');
+      // Fetch events
+      const evRes = await fetch(`${API}/api/client-app/installation/${instId}/events`, { headers: headers() });
+      if (evRes.ok) {
+        const evData = await evRes.json();
+        setEvents(evData.events || []);
+      }
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setLoading(false);
+    }
+  }, [token, headers]);
+
+  // Poll for updates every 10s
+  useEffect(() => {
+    if (screen === 'app' && user?.installation_id) {
+      pollRef.current = setInterval(() => {
+        fetchInstallation();
+      }, 10000);
+      return () => clearInterval(pollRef.current);
+    }
+  }, [screen, user]);
 
   const login = async (e) => {
     e.preventDefault();
+    setError('');
     setLoading(true);
-    setLoginError('');
     try {
-      const r = await fetch(`${API}/api/auth/login`, {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(loginForm)
+      const res = await fetch(`${API}/api/client-app/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(loginForm),
       });
-      const d = await r.json();
-      if (r.ok && d.token) {
-        localStorage.setItem('cliente_token', d.token);
-        setToken(d.token);
-        setUser(d.user || { email: loginForm.email });
-      } else {
-        setLoginError(d.detail || 'Credenciales incorrectas');
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.detail || 'Error de autenticacion');
+      localStorage.setItem('mp_client_token', data.token);
+      localStorage.setItem('mp_client_user', JSON.stringify(data.user));
+      setToken(data.token);
+      setUser(data.user);
+      await fetchInstallationWithToken(data.token, data.user.installation_id);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchInstallationWithToken = async (tk, instId) => {
+    if (!instId) return;
+    const res = await fetch(`${API}/api/client-app/installation/${instId}`, {
+      headers: { 'Authorization': `Bearer ${tk}`, 'Content-Type': 'application/json' },
+    });
+    if (res.ok) {
+      const data = await res.json();
+      setInstallData(data);
+      setScreen('app');
+    }
+  };
+
+  const logout = () => {
+    localStorage.removeItem('mp_client_token');
+    localStorage.removeItem('mp_client_user');
+    setToken('');
+    setUser(null);
+    setInstallData(null);
+    setScreen('login');
+    clearInterval(pollRef.current);
+  };
+
+  const armSystem = async (mode) => {
+    if (!installData || arming) return;
+    setArming(true);
+    try {
+      const res = await fetch(`${API}/api/cra/installations/${installData.id}/arm`, {
+        method: 'POST',
+        headers: headers(),
+        body: JSON.stringify({ mode, code: installData.access_code || '1234' }),
+      });
+      if (res.ok) {
+        await fetchInstallation();
       }
-    } catch { setLoginError('Error de conexion'); }
-    setLoading(false);
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setArming(false);
+    }
   };
 
-  const logout = () => { localStorage.removeItem('cliente_token'); setToken(null); setUser(null); };
-
-  const fetchData = useCallback(async () => {
-    if (!token) return;
+  const triggerSOS = async (type = 'panic') => {
+    if (!user?.installation_id) return;
     try {
-      const h = { Authorization: `Bearer ${token}` };
-      const [alertsR, familyR] = await Promise.allSettled([
-        fetch(`${API}/api/family/alerts`, { headers: h }),
-        fetch(`${API}/api/family/members`, { headers: h })
-      ]);
-      if (alertsR.status === 'fulfilled' && alertsR.value.ok) setAlerts(await alertsR.value.json() || []);
-      if (familyR.status === 'fulfilled' && familyR.value.ok) setFamily(await familyR.value.json() || []);
-    } catch {}
-  }, [token]);
-
-  useEffect(() => { fetchData(); }, [fetchData]);
-
-  const toggleAlarm = () => {
-    const modes = ['desarmada', 'armada_total', 'armada_parcial'];
-    const next = modes[(modes.indexOf(alarm.mode) + 1) % modes.length];
-    setAlarm(p => ({ ...p, mode: next, armed: next !== 'desarmada' }));
-  };
-
-  const sendSOS = async () => {
-    if (!confirm('Enviar alerta SOS de emergencia?')) return;
-    try {
-      await fetch(`${API}/api/sos/trigger`, {
-        method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-        body: JSON.stringify({ type: 'manual', location: null })
+      await fetch(`${API}/api/client-app/installation/${user.installation_id}/sos`, {
+        method: 'POST',
+        headers: headers(),
+        body: JSON.stringify({ sos_type: type }),
       });
-      alert('Alerta SOS enviada. La CRA ha sido notificada.');
-    } catch { alert('Alerta SOS enviada (modo offline).'); }
+      alert('ALERTA SOS ENVIADA A LA CRA. Mantengase seguro.');
+      await fetchInstallation();
+    } catch (e) {
+      console.error(e);
+    }
   };
 
-  const modeColors = { desarmada: 'from-gray-600 to-gray-700', armada_total: 'from-emerald-600 to-emerald-700', armada_parcial: 'from-amber-600 to-amber-700' };
-  const modeLabels = { desarmada: 'DESARMADA', armada_total: 'ARMADA TOTAL', armada_parcial: 'ARMADA PARCIAL' };
-  const modeIcons = { desarmada: <Lock className="w-8 h-8" />, armada_total: <Shield className="w-8 h-8" />, armada_parcial: <Eye className="w-8 h-8" /> };
+  const armed = installData?.armed_status || 'disarmed';
+  const isArmed = armed !== 'disarmed';
 
-  const zones = [
-    { id: 1, name: 'Entrada principal', type: 'sensor_magnetico', status: 'ok', battery: 95 },
-    { id: 2, name: 'Salon', type: 'sensor_pir', status: 'ok', battery: 88 },
-    { id: 3, name: 'Cocina', type: 'detector_humo', status: 'ok', battery: 72 },
-    { id: 4, name: 'Dormitorio', type: 'sensor_magnetico', status: 'ok', battery: 91 },
-    { id: 5, name: 'Garaje', type: 'sensor_pir', status: 'ok', battery: 65 },
-    { id: 6, name: 'Jardin', type: 'camera', status: 'ok', battery: 100 },
-  ];
-
-  if (!token) return (
-    <div className="min-h-screen bg-slate-950 flex items-center justify-center p-4">
-      <Helmet><title>ManoProtect - App Cliente</title></Helmet>
-      <div className="w-full max-w-sm">
-        <div className="text-center mb-8">
-          <div className="w-16 h-16 bg-emerald-500 rounded-2xl flex items-center justify-center mx-auto mb-4"><Shield className="w-8 h-8 text-white" /></div>
-          <h1 className="text-2xl font-black text-white">ManoProtect</h1>
-          <p className="text-slate-400 text-sm">Central Receptora de Alarmas</p>
+  // ==================== LOGIN ====================
+  if (screen === 'login') {
+    return (
+      <div data-testid="client-login" style={{ minHeight: '100vh', background: 'linear-gradient(135deg, #0a0e1a 0%, #1a1f36 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: "'Inter', sans-serif" }}>
+        <div style={{ width: '100%', maxWidth: 400, padding: 32, background: 'rgba(255,255,255,0.04)', borderRadius: 20, border: '1px solid rgba(255,255,255,0.08)', backdropFilter: 'blur(20px)' }}>
+          <div style={{ textAlign: 'center', marginBottom: 32 }}>
+            <div style={{ width: 64, height: 64, borderRadius: '50%', background: 'linear-gradient(135deg, #3b82f6, #1d4ed8)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px', fontSize: 28 }}>
+              <i className="fa-solid fa-shield-halved" style={{ color: '#fff' }}></i>
+            </div>
+            <h1 style={{ color: '#fff', fontSize: 22, fontWeight: 700, margin: 0 }}>ManoProtect</h1>
+            <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 13, marginTop: 4 }}>App Cliente — Seguridad Inteligente</p>
+          </div>
+          <form onSubmit={login}>
+            <input data-testid="client-email" type="email" placeholder="Email" value={loginForm.email} onChange={e => setLoginForm(p => ({...p, email: e.target.value}))}
+              style={{ width: '100%', padding: '14px 16px', borderRadius: 12, border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.05)', color: '#fff', fontSize: 15, marginBottom: 12, boxSizing: 'border-box', outline: 'none' }} />
+            <input data-testid="client-password" type="password" placeholder="Contrasena" value={loginForm.password} onChange={e => setLoginForm(p => ({...p, password: e.target.value}))}
+              style={{ width: '100%', padding: '14px 16px', borderRadius: 12, border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.05)', color: '#fff', fontSize: 15, marginBottom: 16, boxSizing: 'border-box', outline: 'none' }} />
+            {error && <p data-testid="client-login-error" style={{ color: '#ef4444', fontSize: 13, marginBottom: 12, textAlign: 'center' }}>{error}</p>}
+            <button data-testid="client-login-btn" type="submit" disabled={loading}
+              style={{ width: '100%', padding: '14px', borderRadius: 12, border: 'none', background: 'linear-gradient(135deg, #3b82f6, #1d4ed8)', color: '#fff', fontSize: 16, fontWeight: 600, cursor: 'pointer', opacity: loading ? 0.7 : 1 }}>
+              {loading ? 'Conectando...' : 'Acceder'}
+            </button>
+          </form>
+          <p style={{ color: 'rgba(255,255,255,0.3)', fontSize: 11, textAlign: 'center', marginTop: 20 }}>Demo: cliente@demo.manoprotectt.com / Cliente2025!</p>
         </div>
-        <form onSubmit={login} className="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4" data-testid="client-login-form">
-          <input type="email" placeholder="Email" value={loginForm.email} onChange={e => setLoginForm(p => ({...p, email: e.target.value}))} className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500" required data-testid="client-email" />
-          <input type="password" placeholder="Contrasena" value={loginForm.password} onChange={e => setLoginForm(p => ({...p, password: e.target.value}))} className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500" required data-testid="client-password" />
-          {loginError && <p className="text-red-400 text-sm" data-testid="client-login-error">{loginError}</p>}
-          <button type="submit" disabled={loading} className="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-3 rounded-xl transition-colors disabled:opacity-50" data-testid="client-login-btn">{loading ? 'Accediendo...' : 'Acceder'}</button>
-        </form>
-        <p className="text-center text-slate-600 text-xs mt-6">manoprotectt.com | CRA Profesional</p>
       </div>
-    </div>
-  );
+    );
+  }
+
+  // ==================== APP ====================
+  const devices = installData?.devices || [];
+  const cameras = devices.filter(d => d.device_type === 'camera');
 
   return (
-    <div className="min-h-screen bg-slate-950 text-white pb-20">
-      <Helmet><title>ManoProtect - Mi Alarma</title></Helmet>
-      
-      {/* Header */}
-      <header className="bg-slate-900 border-b border-slate-800 px-4 py-3 flex items-center justify-between" data-testid="client-header">
-        <div className="flex items-center gap-2">
-          <Shield className="w-6 h-6 text-emerald-400" />
-          <span className="font-bold text-sm">ManoProtect</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <span className="text-xs text-slate-400">{user?.email}</span>
-          <button onClick={logout} className="text-slate-500 hover:text-red-400"><LogOut className="w-4 h-4" /></button>
-        </div>
-      </header>
+    <div data-testid="client-app" style={{ minHeight: '100vh', background: '#0a0e1a', fontFamily: "'Inter', sans-serif", paddingBottom: 80 }}>
 
-      {/* Content */}
-      <div className="max-w-lg mx-auto px-4 py-4">
-        {tab === 'panel' && (
-          <div className="space-y-4" data-testid="client-panel">
-            {/* Alarm Status */}
-            <div className={`bg-gradient-to-br ${modeColors[alarm.mode]} rounded-2xl p-6 text-center relative overflow-hidden`} data-testid="alarm-status">
-              <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(circle, white 1px, transparent 1px)', backgroundSize: '20px 20px' }} />
-              <div className="relative">
-                <div className="w-20 h-20 mx-auto bg-white/20 rounded-full flex items-center justify-center mb-3">{modeIcons[alarm.mode]}</div>
-                <h2 className="text-2xl font-black mb-1">{modeLabels[alarm.mode]}</h2>
-                <p className="text-white/70 text-sm mb-4">Sistema de alarma</p>
-                <button onClick={toggleAlarm} className="bg-white/20 hover:bg-white/30 backdrop-blur-sm border border-white/30 font-bold px-8 py-3 rounded-xl transition-all" data-testid="alarm-toggle">
-                  <Power className="w-5 h-5 inline mr-2" />
-                  {alarm.mode === 'desarmada' ? 'Armar total' : alarm.mode === 'armada_total' ? 'Armar parcial' : 'Desarmar'}
-                </button>
-              </div>
+      {/* ===== HOME ===== */}
+      {activeTab === 'home' && (
+        <div style={{ padding: '20px 16px' }}>
+          {/* Header */}
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
+            <div>
+              <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 13, margin: 0 }}>Bienvenido</p>
+              <h2 style={{ color: '#fff', fontSize: 20, fontWeight: 700, margin: 0 }}>{user?.nombre || 'Cliente'}</h2>
             </div>
-
-            {/* SOS Button */}
-            <button onClick={sendSOS} className="w-full bg-red-600 hover:bg-red-700 text-white font-black py-5 rounded-2xl text-lg flex items-center justify-center gap-3 shadow-lg shadow-red-600/30 active:scale-95 transition-all" data-testid="sos-button">
-              <AlertTriangle className="w-6 h-6" /> BOTON SOS EMERGENCIA
+            <button data-testid="client-logout-btn" onClick={logout} style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 10, color: 'rgba(255,255,255,0.6)', padding: '8px 12px', fontSize: 12, cursor: 'pointer' }}>
+              <i className="fa-solid fa-right-from-bracket"></i>
             </button>
+          </div>
 
-            {/* Quick Stats */}
-            <div className="grid grid-cols-3 gap-3">
-              <div className="bg-slate-900 border border-slate-800 rounded-xl p-3 text-center">
-                <Wifi className="w-5 h-5 text-emerald-400 mx-auto mb-1" />
-                <p className="text-xs text-slate-400">Conexion</p>
-                <p className="text-sm font-bold text-emerald-400">Online</p>
-              </div>
-              <div className="bg-slate-900 border border-slate-800 rounded-xl p-3 text-center">
-                <Shield className="w-5 h-5 text-emerald-400 mx-auto mb-1" />
-                <p className="text-xs text-slate-400">Zonas</p>
-                <p className="text-sm font-bold">{zones.length} activas</p>
-              </div>
-              <div className="bg-slate-900 border border-slate-800 rounded-xl p-3 text-center">
-                <Bell className="w-5 h-5 text-amber-400 mx-auto mb-1" />
-                <p className="text-xs text-slate-400">Alertas</p>
-                <p className="text-sm font-bold">{alerts.length || 0}</p>
-              </div>
+          {/* Security Status Card */}
+          <div data-testid="security-status" style={{
+            background: isArmed ? 'linear-gradient(135deg, #059669, #047857)' : 'linear-gradient(135deg, #334155, #1e293b)',
+            borderRadius: 20, padding: 28, marginBottom: 20, textAlign: 'center',
+            border: isArmed ? '1px solid rgba(16,185,129,0.3)' : '1px solid rgba(255,255,255,0.08)',
+          }}>
+            <div style={{ width: 80, height: 80, borderRadius: '50%', background: isArmed ? 'rgba(255,255,255,0.15)' : 'rgba(255,255,255,0.05)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px', fontSize: 36 }}>
+              <i className={`fa-solid ${isArmed ? 'fa-lock' : 'fa-lock-open'}`} style={{ color: '#fff' }}></i>
             </div>
+            <h3 style={{ color: '#fff', fontSize: 22, fontWeight: 700, margin: '0 0 4px' }}>
+              {armed === 'total' ? 'ARMADO TOTAL' : armed === 'partial' ? 'ARMADO PARCIAL' : 'DESARMADO'}
+            </h3>
+            <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: 13, margin: 0 }}>{installData?.address || ''}, {installData?.city || ''}</p>
+          </div>
 
-            {/* Zones */}
-            <div className="bg-slate-900 border border-slate-800 rounded-2xl p-4" data-testid="zones-list">
-              <h3 className="font-bold text-sm mb-3 flex items-center gap-2"><Shield className="w-4 h-4 text-emerald-400" /> Zonas de seguridad</h3>
-              <div className="space-y-2">
-                {zones.map(z => (
-                  <div key={z.id} className="flex items-center justify-between bg-slate-800/50 rounded-xl px-3 py-2.5">
-                    <div className="flex items-center gap-3">
-                      <div className="w-2 h-2 bg-emerald-400 rounded-full" />
-                      <div>
-                        <p className="text-sm font-medium">{z.name}</p>
-                        <p className="text-[10px] text-slate-500">{z.type}</p>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-2 text-xs">
-                      <Battery className={`w-3.5 h-3.5 ${z.battery > 50 ? 'text-emerald-400' : 'text-amber-400'}`} />
-                      <span className="text-slate-400">{z.battery}%</span>
-                    </div>
+          {/* Arm/Disarm buttons */}
+          <div data-testid="arm-controls" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 10, marginBottom: 20 }}>
+            <button data-testid="arm-total-btn" onClick={() => armSystem('total')} disabled={arming}
+              style={{ padding: '16px 8px', borderRadius: 14, border: armed === 'total' ? '2px solid #10b981' : '1px solid rgba(255,255,255,0.1)', background: armed === 'total' ? 'rgba(16,185,129,0.15)' : 'rgba(255,255,255,0.03)', color: armed === 'total' ? '#10b981' : '#fff', cursor: 'pointer', textAlign: 'center' }}>
+              <i className="fa-solid fa-shield" style={{ display: 'block', fontSize: 22, marginBottom: 6 }}></i>
+              <span style={{ fontSize: 11, fontWeight: 600 }}>TOTAL</span>
+            </button>
+            <button data-testid="arm-partial-btn" onClick={() => armSystem('partial')} disabled={arming}
+              style={{ padding: '16px 8px', borderRadius: 14, border: armed === 'partial' ? '2px solid #f59e0b' : '1px solid rgba(255,255,255,0.1)', background: armed === 'partial' ? 'rgba(245,158,11,0.15)' : 'rgba(255,255,255,0.03)', color: armed === 'partial' ? '#f59e0b' : '#fff', cursor: 'pointer', textAlign: 'center' }}>
+              <i className="fa-solid fa-shield-halved" style={{ display: 'block', fontSize: 22, marginBottom: 6 }}></i>
+              <span style={{ fontSize: 11, fontWeight: 600 }}>PARCIAL</span>
+            </button>
+            <button data-testid="disarm-btn" onClick={() => armSystem('disarmed')} disabled={arming}
+              style={{ padding: '16px 8px', borderRadius: 14, border: armed === 'disarmed' ? '2px solid #3b82f6' : '1px solid rgba(255,255,255,0.1)', background: armed === 'disarmed' ? 'rgba(59,130,246,0.15)' : 'rgba(255,255,255,0.03)', color: armed === 'disarmed' ? '#3b82f6' : '#fff', cursor: 'pointer', textAlign: 'center' }}>
+              <i className="fa-solid fa-lock-open" style={{ display: 'block', fontSize: 22, marginBottom: 6 }}></i>
+              <span style={{ fontSize: 11, fontWeight: 600 }}>DESARMAR</span>
+            </button>
+          </div>
+
+          {/* SOS Button */}
+          <button data-testid="sos-btn" onClick={() => { if (window.confirm('¿Activar ALERTA SOS? Se notificara a la CRA inmediatamente.')) triggerSOS('panic'); }}
+            style={{ width: '100%', padding: '18px', borderRadius: 14, border: '2px solid #ef4444', background: 'rgba(239,68,68,0.1)', color: '#ef4444', fontSize: 18, fontWeight: 800, cursor: 'pointer', letterSpacing: 2, marginBottom: 20 }}>
+            <i className="fa-solid fa-triangle-exclamation" style={{ marginRight: 10 }}></i> SOS EMERGENCIA
+          </button>
+
+          {/* Devices Grid */}
+          <h3 style={{ color: '#fff', fontSize: 16, fontWeight: 600, marginBottom: 12 }}>Mis dispositivos ({devices.length})</h3>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+            {devices.map((d, i) => (
+              <div key={i} data-testid={`device-${i}`} style={{ background: 'rgba(255,255,255,0.03)', borderRadius: 14, padding: '14px 12px', border: '1px solid rgba(255,255,255,0.06)' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 8 }}>
+                  <i className={`fa-solid ${DEVICE_ICONS[d.device_type] || 'fa-microchip'}`} style={{ color: d.status === 'online' ? '#10b981' : '#ef4444', fontSize: 18 }}></i>
+                  <span style={{ color: '#fff', fontSize: 12, fontWeight: 600 }}>{d.zone}</span>
+                </div>
+                <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 11, margin: 0 }}>{d.model}</p>
+                {d.battery_level != null && (
+                  <div style={{ marginTop: 6, display: 'flex', alignItems: 'center', gap: 6 }}>
+                    <i className="fa-solid fa-battery-three-quarters" style={{ color: d.battery_level > 20 ? '#10b981' : '#ef4444', fontSize: 11 }}></i>
+                    <span style={{ color: 'rgba(255,255,255,0.4)', fontSize: 10 }}>{d.battery_level}%</span>
                   </div>
-                ))}
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* ===== CAMERAS ===== */}
+      {activeTab === 'cameras' && (
+        <div style={{ padding: '20px 16px' }}>
+          <h2 style={{ color: '#fff', fontSize: 20, fontWeight: 700, marginBottom: 16 }}>Camaras</h2>
+          {cameras.length === 0 ? (
+            <div style={{ textAlign: 'center', padding: 40, color: 'rgba(255,255,255,0.4)' }}>
+              <i className="fa-solid fa-video-slash" style={{ fontSize: 40, marginBottom: 12, display: 'block' }}></i>
+              <p>No hay camaras configuradas</p>
+            </div>
+          ) : cameras.map((c, i) => (
+            <div key={i} data-testid={`camera-${i}`} style={{ background: 'rgba(255,255,255,0.03)', borderRadius: 16, overflow: 'hidden', marginBottom: 12, border: '1px solid rgba(255,255,255,0.06)' }}>
+              <div style={{ height: 180, background: '#111827', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <div style={{ textAlign: 'center' }}>
+                  <i className="fa-solid fa-video" style={{ fontSize: 32, color: 'rgba(255,255,255,0.2)', display: 'block', marginBottom: 8 }}></i>
+                  <span style={{ color: 'rgba(255,255,255,0.3)', fontSize: 12 }}>Stream RTSP pendiente</span>
+                </div>
+              </div>
+              <div style={{ padding: '12px 14px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <div>
+                  <p style={{ color: '#fff', fontSize: 14, fontWeight: 600, margin: 0 }}>{c.zone}</p>
+                  <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 11, margin: 0 }}>{c.model}</p>
+                </div>
+                <span style={{ width: 8, height: 8, borderRadius: '50%', background: c.status === 'online' ? '#10b981' : '#ef4444' }}></span>
               </div>
             </div>
-          </div>
-        )}
+          ))}
+        </div>
+      )}
 
-        {tab === 'alertas' && (
-          <div className="space-y-3" data-testid="client-alerts">
-            <h2 className="font-bold text-lg">Historial de alertas</h2>
+      {/* ===== EVENTS ===== */}
+      {activeTab === 'events' && (
+        <div style={{ padding: '20px 16px' }}>
+          <h2 style={{ color: '#fff', fontSize: 20, fontWeight: 700, marginBottom: 16 }}>Historial de Eventos</h2>
+          {events.length === 0 ? (
+            <div style={{ textAlign: 'center', padding: 40, color: 'rgba(255,255,255,0.4)' }}>
+              <i className="fa-solid fa-clock-rotate-left" style={{ fontSize: 40, marginBottom: 12, display: 'block' }}></i>
+              <p>Sin eventos recientes</p>
+            </div>
+          ) : events.map((ev, i) => (
+            <div key={i} data-testid={`event-${i}`} style={{ background: 'rgba(255,255,255,0.03)', borderRadius: 14, padding: '14px 16px', marginBottom: 8, borderLeft: `3px solid ${SEVERITY_COLORS[ev.severity] || '#64748b'}`, border: '1px solid rgba(255,255,255,0.06)' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 }}>
+                <span style={{ color: SEVERITY_COLORS[ev.severity] || '#64748b', fontSize: 12, fontWeight: 700, textTransform: 'uppercase' }}>{ev.event_type?.replace('_', ' ')}</span>
+                <span style={{ color: 'rgba(255,255,255,0.3)', fontSize: 10 }}>{new Date(ev.created_at).toLocaleString('es-ES')}</span>
+              </div>
+              <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: 13, margin: 0 }}>{ev.description}</p>
+              {ev.zone && <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 11, margin: '4px 0 0' }}>Zona: {ev.zone}</p>}
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* ===== PROFILE ===== */}
+      {activeTab === 'profile' && (
+        <div style={{ padding: '20px 16px' }}>
+          <h2 style={{ color: '#fff', fontSize: 20, fontWeight: 700, marginBottom: 20 }}>Mi Perfil</h2>
+          <div style={{ background: 'rgba(255,255,255,0.03)', borderRadius: 16, padding: 20, border: '1px solid rgba(255,255,255,0.06)', marginBottom: 16 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 20 }}>
+              <div style={{ width: 56, height: 56, borderRadius: '50%', background: 'linear-gradient(135deg, #3b82f6, #1d4ed8)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 22, color: '#fff', fontWeight: 700 }}>
+                {(user?.nombre || 'C')[0]}
+              </div>
+              <div>
+                <h3 style={{ color: '#fff', fontSize: 16, fontWeight: 600, margin: 0 }}>{user?.nombre}</h3>
+                <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 13, margin: 0 }}>{user?.email}</p>
+              </div>
+            </div>
             {[
-              { id: 1, type: 'info', msg: 'Sistema armado por app', time: 'Hoy 08:30' },
-              { id: 2, type: 'info', msg: 'Sistema desarmado por app', time: 'Hoy 07:15' },
-              { id: 3, type: 'warn', msg: 'Bateria baja: Garaje (65%)', time: 'Ayer 14:20' },
-              { id: 4, type: 'info', msg: 'Test periodico completado', time: 'Lun 10:00' },
-            ].map(a => (
-              <div key={a.id} className={`bg-slate-900 border ${a.type === 'warn' ? 'border-amber-500/30' : 'border-slate-800'} rounded-xl p-3 flex items-center gap-3`}>
-                <div className={`w-8 h-8 rounded-full flex items-center justify-center ${a.type === 'warn' ? 'bg-amber-500/20' : 'bg-slate-800'}`}>
-                  {a.type === 'warn' ? <AlertTriangle className="w-4 h-4 text-amber-400" /> : <Check className="w-4 h-4 text-emerald-400" />}
-                </div>
-                <div className="flex-1">
-                  <p className="text-sm">{a.msg}</p>
-                  <p className="text-xs text-slate-500">{a.time}</p>
-                </div>
+              ['Telefono', user?.telefono || '-'],
+              ['Instalacion', installData?.id || '-'],
+              ['Plan', installData?.plan_type || '-'],
+              ['Direccion', `${installData?.address || ''}, ${installData?.city || ''}`],
+              ['Dispositivos', `${devices.length} activos`],
+            ].map(([label, val], i) => (
+              <div key={i} style={{ display: 'flex', justifyContent: 'space-between', padding: '10px 0', borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
+                <span style={{ color: 'rgba(255,255,255,0.4)', fontSize: 13 }}>{label}</span>
+                <span style={{ color: '#fff', fontSize: 13, fontWeight: 500 }}>{val}</span>
               </div>
             ))}
           </div>
-        )}
-
-        {tab === 'familia' && (
-          <div className="space-y-3" data-testid="client-family">
-            <h2 className="font-bold text-lg">Mi familia</h2>
-            {[
-              { name: 'Tu', status: 'En casa', icon: '👤' },
-              { name: 'Pareja', status: 'Trabajo', icon: '👩' },
-              { name: 'Hijo/a', status: 'Colegio', icon: '👦' },
-            ].map((m, i) => (
-              <div key={i} className="bg-slate-900 border border-slate-800 rounded-xl p-4 flex items-center gap-3">
-                <div className="w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center text-lg">{m.icon}</div>
-                <div className="flex-1">
-                  <p className="font-medium">{m.name}</p>
-                  <p className="text-xs text-slate-400 flex items-center gap-1"><MapPin className="w-3 h-3" /> {m.status}</p>
-                </div>
-                <Phone className="w-4 h-4 text-emerald-400" />
+          {/* Emergency contacts */}
+          <h3 style={{ color: '#fff', fontSize: 15, fontWeight: 600, marginBottom: 10 }}>Contactos de Emergencia</h3>
+          {(installData?.emergency_contacts || []).map((c, i) => (
+            <div key={i} style={{ background: 'rgba(255,255,255,0.03)', borderRadius: 12, padding: '12px 14px', marginBottom: 8, display: 'flex', justifyContent: 'space-between', alignItems: 'center', border: '1px solid rgba(255,255,255,0.06)' }}>
+              <div>
+                <p style={{ color: '#fff', fontSize: 13, fontWeight: 500, margin: 0 }}>{c.name}</p>
+                <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 11, margin: 0 }}>{c.relation}</p>
               </div>
-            ))}
-          </div>
-        )}
+              <a href={`tel:${c.phone}`} style={{ color: '#3b82f6', fontSize: 13 }}>{c.phone}</a>
+            </div>
+          ))}
+          <button data-testid="logout-profile-btn" onClick={logout}
+            style={{ width: '100%', marginTop: 20, padding: '14px', borderRadius: 12, border: '1px solid rgba(239,68,68,0.3)', background: 'rgba(239,68,68,0.08)', color: '#ef4444', fontSize: 15, fontWeight: 600, cursor: 'pointer' }}>
+            Cerrar Sesion
+          </button>
+        </div>
+      )}
 
-        {tab === 'config' && (
-          <div className="space-y-3" data-testid="client-config">
-            <h2 className="font-bold text-lg">Configuracion</h2>
-            {['Notificaciones push', 'Alerta silenciosa', 'Modo vacaciones', 'Compartir ubicacion', 'Contactos emergencia'].map((s, i) => (
-              <div key={i} className="bg-slate-900 border border-slate-800 rounded-xl p-4 flex items-center justify-between">
-                <span className="text-sm">{s}</span>
-                <ChevronRight className="w-4 h-4 text-slate-600" />
-              </div>
-            ))}
-            <button onClick={logout} className="w-full bg-red-600/10 border border-red-600/30 text-red-400 py-3 rounded-xl font-bold mt-4">Cerrar sesion</button>
-          </div>
-        )}
-      </div>
-
-      {/* Bottom Nav */}
-      <nav className="fixed bottom-0 left-0 right-0 bg-slate-900 border-t border-slate-800 flex" data-testid="client-nav">
+      {/* ===== BOTTOM NAV ===== */}
+      <nav data-testid="client-nav" style={{ position: 'fixed', bottom: 0, left: 0, right: 0, background: 'rgba(10,14,26,0.95)', backdropFilter: 'blur(20px)', borderTop: '1px solid rgba(255,255,255,0.06)', display: 'flex', justifyContent: 'space-around', padding: '10px 0 18px', zIndex: 100 }}>
         {[
-          { id: 'panel', icon: <Shield className="w-5 h-5" />, label: 'Panel' },
-          { id: 'alertas', icon: <Bell className="w-5 h-5" />, label: 'Alertas' },
-          { id: 'familia', icon: <Users className="w-5 h-5" />, label: 'Familia' },
-          { id: 'config', icon: <Settings className="w-5 h-5" />, label: 'Config' },
+          { id: 'home', icon: 'fa-house', label: 'Inicio' },
+          { id: 'cameras', icon: 'fa-video', label: 'Camaras' },
+          { id: 'events', icon: 'fa-clock-rotate-left', label: 'Eventos' },
+          { id: 'profile', icon: 'fa-user', label: 'Perfil' },
         ].map(t => (
-          <button key={t.id} onClick={() => setTab(t.id)} className={`flex-1 py-3 flex flex-col items-center gap-1 ${tab === t.id ? 'text-emerald-400' : 'text-slate-600'}`}>
-            {t.icon}
-            <span className="text-[10px]">{t.label}</span>
+          <button key={t.id} data-testid={`nav-${t.id}`} onClick={() => setActiveTab(t.id)}
+            style={{ background: 'none', border: 'none', color: activeTab === t.id ? '#3b82f6' : 'rgba(255,255,255,0.35)', cursor: 'pointer', textAlign: 'center', padding: '4px 12px' }}>
+            <i className={`fa-solid ${t.icon}`} style={{ fontSize: 20, display: 'block', marginBottom: 4 }}></i>
+            <span style={{ fontSize: 10, fontWeight: activeTab === t.id ? 600 : 400 }}>{t.label}</span>
           </button>
         ))}
       </nav>
