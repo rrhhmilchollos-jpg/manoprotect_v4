@@ -112,6 +112,9 @@ async def descargar_archivo_directo(filename: str):
         ".zip": "application/zip",
         ".apk": "application/vnd.android.package-archive",
         ".aab": "application/x-authorware-bin",
+        ".png": "image/png",
+        ".jpg": "image/jpeg",
+        ".jpeg": "image/jpeg",
     }
     for d in ["/app/downloads", "/app/backend/uploads/downloads"]:
         fp = Path(d) / safe
