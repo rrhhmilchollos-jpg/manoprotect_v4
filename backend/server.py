@@ -1,5 +1,5 @@
 from fastapi import FastAPI, APIRouter, HTTPException, Request, Response, Cookie, Depends
-from fastapi.responses import JSONResponse, FileResponse
+from fastapi.responses import JSONResponse, FileResponse, HTMLResponse
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
 from starlette.middleware.base import BaseHTTPMiddleware
@@ -46,6 +46,29 @@ db = client[os.environ['DB_NAME']]
 
 app = FastAPI()
 api_router = APIRouter(prefix="/api")
+
+
+# Privacy Policy endpoint for Google Play Store
+@api_router.get("/privacy-policy", response_class=HTMLResponse)
+async def privacy_policy():
+    return """<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Politica de Privacidad - ManoProtect</title><style>body{font-family:system-ui,sans-serif;max-width:800px;margin:0 auto;padding:20px;color:#333;line-height:1.6}h1{color:#1a1a2e}h2{color:#10B981;margin-top:24px}</style></head><body>
+<h1>Politica de Privacidad de ManoProtect</h1>
+<p><strong>Ultima actualizacion:</strong> 27 de marzo de 2025</p>
+<p>ManoProtect ("nosotros") opera las aplicaciones MP Comerciales y MP Instaladores. Esta politica describe como recopilamos y usamos la informacion.</p>
+<h2>1. Informacion que recopilamos</h2>
+<p>Recopilamos la informacion que nos proporcionas al registrarte: nombre, correo electronico y datos profesionales. La app puede solicitar acceso a la camara (para documentar instalaciones), ubicacion (para asignar rutas) y notificaciones (para alertas en tiempo real).</p>
+<h2>2. Uso de la informacion</h2>
+<p>Usamos tu informacion exclusivamente para: gestionar tu cuenta profesional, asignar y coordinar trabajos de instalacion y ventas, enviar notificaciones operativas y mejorar nuestros servicios.</p>
+<h2>3. Camara y ubicacion</h2>
+<p>El permiso de camara se usa unicamente para documentar instalaciones y verificaciones tecnicas. El permiso de ubicacion se usa para optimizar rutas de trabajo. Estos datos no se comparten con terceros.</p>
+<h2>4. Comparticion de datos</h2>
+<p>No vendemos ni compartimos tu informacion personal con terceros, excepto cuando sea necesario para operar el servicio (por ejemplo, con tu empleador ManoProtect).</p>
+<h2>5. Seguridad</h2>
+<p>Protegemos tu informacion con cifrado en transito (HTTPS/TLS) y almacenamiento seguro con contrasenas hasheadas (bcrypt).</p>
+<h2>6. Contacto</h2>
+<p>Para cualquier consulta sobre privacidad: <strong>info@manoprotectt.com</strong></p>
+</body></html>"""
+
 
 
 # Direct download endpoint (under /api so Kubernetes routes it to backend)
