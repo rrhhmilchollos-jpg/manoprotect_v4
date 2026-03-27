@@ -422,7 +422,7 @@ const StockUrgencyPopup = () => {
   const [promo, setPromo] = useState(null);
   
   useEffect(() => {
-    if (sessionStorage.getItem('urgency_shown')) return;
+    if (localStorage.getItem('mp_urgency_dismissed')) return;
     const timer = setTimeout(async () => {
       try {
         const API = process.env.REACT_APP_BACKEND_URL;
@@ -430,28 +430,32 @@ const StockUrgencyPopup = () => {
         const data = await r.json();
         setPromo(data);
         setShow(true);
-        sessionStorage.setItem('urgency_shown', '1');
       } catch {}
     }, 8000);
     return () => clearTimeout(timer);
   }, []);
   
+  const dismissBanner = () => {
+    setShow(false);
+    localStorage.setItem('mp_urgency_dismissed', '1');
+  };
+  
   // Use CSS to hide instead of conditional return
-  const hidden = !show || !promo || ['/ceo', '/login', '/empleados', '/investor', '/gestion', '/familia'].some(p => location.pathname.startsWith(p));
+  const hidden = !show || !promo || ['/ceo', '/login', '/empleados', '/investor', '/gestion', '/familia', '/app-', '/backoffice', '/cra-'].some(p => location.pathname.startsWith(p));
   
   if (!promo) return null;
   
   return (
-    <div className={`fixed inset-0 z-[60] flex items-center justify-center bg-black/40 backdrop-blur-sm transition-opacity duration-300 ${hidden ? 'opacity-0 pointer-events-none' : 'opacity-100'}`} onClick={() => setShow(false)} data-testid="urgency-popup">
+    <div className={`fixed inset-0 z-[60] flex items-center justify-center bg-black/40 backdrop-blur-sm transition-opacity duration-300 ${hidden ? 'opacity-0 pointer-events-none' : 'opacity-100'}`} onClick={dismissBanner} data-testid="urgency-popup">
       <div className={`bg-white rounded-2xl shadow-2xl max-w-sm w-full mx-4 p-6 relative transition-transform duration-300 ${hidden ? 'scale-95' : 'scale-100'}`} onClick={e => e.stopPropagation()}>
-        <button onClick={() => setShow(false)} className="absolute top-3 right-3 text-gray-400 hover:text-gray-600 text-xl">&times;</button>
+        <button onClick={dismissBanner} className="absolute top-3 right-3 text-gray-400 hover:text-gray-600 text-xl">&times;</button>
         <div className="text-center">
           <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-3">
             <span className="text-red-600 text-xl">!</span>
           </div>
           <h3 className="font-bold text-gray-900 text-lg mb-1">Stock limitado</h3>
           <p className="text-sm text-gray-600 mb-4">Solo quedan <strong className="text-red-600">{promo.basic_stock_remaining}</strong> unidades de Sentinel X Basic <strong>GRATIS</strong> y <strong className="text-orange-600">{promo.promo_200_remaining}</strong> unidades con <strong>{promo.discount_pct}% descuento</strong></p>
-          <button onClick={() => { setShow(false); navigate('/plans'); }} className="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-3 rounded-xl font-bold text-sm transition-colors" data-testid="urgency-cta">
+          <button onClick={() => { dismissBanner(); navigate('/plans'); }} className="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-3 rounded-xl font-bold text-sm transition-colors" data-testid="urgency-cta">
             Ver ofertas antes de que se agoten
           </button>
           <p className="text-[10px] text-gray-400 mt-2">Oferta por tiempo limitado</p>
