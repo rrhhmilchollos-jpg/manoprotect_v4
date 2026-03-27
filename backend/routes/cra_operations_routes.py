@@ -12,13 +12,19 @@ router = APIRouter(prefix="/cra", tags=["CRA Operations"])
 
 _db = None
 _sio = None
+_send_push = None
 
 def init_cra(db):
-    global _db, _sio
+    global _db, _sio, _send_push
     _db = db
     try:
         from services.websocket_manager import sio
         _sio = sio
+    except ImportError:
+        pass
+    try:
+        from routes.notification_routes import send_alarm_alert
+        _send_push = send_alarm_alert
     except ImportError:
         pass
 
@@ -168,6 +174,23 @@ async def create_alarm(data: AlarmEvent):
         emit_data["client_name"] = inst.get("client_name", "")
         emit_data["address"] = inst.get("address", "")
     await _emit_cra_event(emit_data)
+
+    # Send push notification to client
+    if _send_push and inst:
+        client_email = inst.get("client_email", "")
+        if client_email:
+            trial_user = await _db.trial_users.find_one({"email": client_email}, {"_id": 0, "user_id": 1})
+            if trial_user:
+                severity_msgs = {
+                    "intrusion": f"Intrusion detectada en {data.zone or 'tu propiedad'}",
+                    "panic": "Boton de panico activado. Asistencia en camino.",
+                    "fire": f"Detector de humo activado en {data.zone or 'tu propiedad'}",
+                    "sabotage": f"Manipulacion detectada en sensor {data.zone}",
+                    "medical": "Alerta medica activada. Contactando servicios.",
+                }
+                msg = severity_msgs.get(data.event_type, data.description or f"Evento de alarma: {data.event_type}")
+                await _send_push(trial_user["user_id"], data.event_type, msg, _db)
+
     return event
 
 @router.patch("/alarms/{alarm_id}/assign")
@@ -201,6 +224,28 @@ async def log_alarm_action(alarm_id: str, data: AlarmActionLog):
     result = await _db.cra_alarm_events.update_one({"id": alarm_id}, update)
     if result.modified_count == 0:
         raise HTTPException(404, "Alarma no encontrada")
+
+    # Send push notification to client about CRA action
+    if _send_push:
+        alarm = await _db.cra_alarm_events.find_one({"id": alarm_id}, {"_id": 0})
+        if alarm:
+            inst = await _db.cra_installations.find_one({"id": alarm.get("installation_id")}, {"_id": 0, "client_email": 1})
+            if inst and inst.get("client_email"):
+                trial_user = await _db.trial_users.find_one({"email": inst["client_email"]}, {"_id": 0, "user_id": 1})
+                if trial_user:
+                    action_msgs = {
+                        "call_police": "Policia contactada. En camino a tu domicilio.",
+                        "call_fire": "Bomberos contactados. En camino.",
+                        "dispatch_acuda": "Vigilante ACUDA enviado a tu domicilio.",
+                        "false_alarm": "Alarma verificada como falsa alarma. Sin peligro.",
+                        "resolved": "Incidencia resuelta por la CRA.",
+                        "verify_video": "Operador CRA verificando camaras.",
+                        "call_client": "Operador CRA intentando contactarte.",
+                    }
+                    msg = action_msgs.get(data.action, f"Accion CRA: {data.action}")
+                    alert_type = "panic" if data.action in ("call_police", "call_fire", "dispatch_acuda") else "arm"
+                    await _send_push(trial_user["user_id"], alert_type, msg, _db)
+
     return {"status": "action_logged", "action": data.action}
 
 

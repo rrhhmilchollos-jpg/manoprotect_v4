@@ -223,6 +223,13 @@ async def sos_activate(sid, data):
     
     # Notify all family members in real-time
     await notify_family_sos(user_id, alert_data)
+
+    # Send push notification to family members
+    try:
+        from routes.notification_routes import send_alarm_alert
+        await send_alarm_alert(user_id, "panic", f"SOS de {user_name}: {message}", _db)
+    except Exception as e:
+        print(f"[WS] Push notification error: {e}")
     
     # Confirm to sender
     await sio.emit('sos_confirmed', {
