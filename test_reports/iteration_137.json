@@ -1,0 +1,147 @@
+{
+  "summary": "Iteration 137: Tested ManoProtect AppCliente Trial, Anti-Abuse & Subscription System. All 21 backend tests passed (100%). Frontend UI tests confirmed auth screen, registration, login, dashboard, profile, referral system, and navigation all working correctly.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [
+      {"screen": "Auth screen", "issues": ["Cookie consent banner covers bottom of screen - can be dismissed"]}
+    ]
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_iteration_137_client_trial.py",
+    "/app/test_reports/pytest/iteration_137_client_trial.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [],
+  "updated_files": [
+    "/app/backend/tests/test_iteration_137_client_trial.py"
+  ],
+  "success_rate": {
+    "backend": "100% (21/21 tests passed)",
+    "frontend": "100%"
+  },
+  "test_credentials": {
+    "client_trial": {
+      "test_email": "testing.agent@test.com",
+      "test_password": "TestPass123",
+      "endpoint": "/api/client-trial/register and /api/client-trial/login"
+    }
+  },
+  "seed_data_creation": "Test users created during testing with unique UUIDs for identification",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "AppCliente at /app-cliente is fully functional. Client trial APIs are at /api/client-trial/*. Registration creates 7-day trial. Referral system adds +3 days to both users. Stripe checkout creates Stripe-hosted checkout page. Anti-abuse scoring checks IP and fingerprint reuse.",
+  "tests_passed": {
+    "backend_tests": [
+      "POST /api/client-trial/register - creates user with 7-day trial - PASSED",
+      "POST /api/client-trial/register - duplicate email returns 409 - PASSED",
+      "POST /api/client-trial/register - short password returns 400 - PASSED",
+      "POST /api/client-trial/register - empty email returns 400 - PASSED",
+      "POST /api/client-trial/login - valid credentials returns token and trial status - PASSED",
+      "POST /api/client-trial/login - wrong password returns 401 - PASSED",
+      "POST /api/client-trial/login - nonexistent user returns 401 - PASSED",
+      "POST /api/client-trial/login - with fingerprint stores device - PASSED",
+      "GET /api/client-trial/status - authenticated returns subscription status - PASSED",
+      "GET /api/client-trial/status - no token returns 401 - PASSED",
+      "GET /api/client-trial/status - invalid token returns 401 - PASSED",
+      "POST /api/client-trial/checkout - creates Stripe checkout session with URL - PASSED",
+      "POST /api/client-trial/checkout - without origin_url returns 400 - PASSED",
+      "POST /api/client-trial/checkout - no auth returns 401 - PASSED",
+      "POST /api/client-trial/referral/apply - valid code gives +3 days - PASSED",
+      "POST /api/client-trial/referral/apply - invalid code returns 404 - PASSED",
+      "POST /api/client-trial/referral/apply - own code returns 400 - PASSED",
+      "POST /api/client-trial/referral/apply - second use returns 400 - PASSED",
+      "POST /api/client-trial/check-abuse - new fingerprint returns low score - PASSED",
+      "POST /api/client-trial/check-abuse - empty fingerprint works - PASSED",
+      "GET /api/client-trial/checkout/status/{session_id} - returns payment status - PASSED"
+    ],
+    "frontend_tests": [
+      "Auth screen loads at /app-cliente - PASSED",
+      "Login/Register tabs toggle correctly - PASSED",
+      "Registration form with name field visible - PASSED",
+      "Registration creates user and redirects to dashboard - PASSED",
+      "Dashboard shows trial badge with days remaining - PASSED",
+      "Security status card visible - PASSED",
+      "Quick action buttons (Armar Total, Armar Parcial, Desarmar, SOS) visible - PASSED",
+      "Navigation tabs (Inicio, Camaras, Eventos, Perfil) work - PASSED",
+      "Profile shows user info and trial status - PASSED",
+      "Referral code displayed in profile - PASSED",
+      "Referral input and apply button work - PASSED",
+      "Referral bonus (+3 days) applied successfully - PASSED",
+      "Upgrade to Premium button visible - PASSED",
+      "Logout button works - PASSED",
+      "Login error handling shows correct message - PASSED"
+    ]
+  },
+  "verified_features": {
+    "client_trial_auth": {
+      "route": "/app-cliente",
+      "auth_endpoints": [
+        "POST /api/client-trial/register - Email+password registration with 7-day trial",
+        "POST /api/client-trial/login - Login with device fingerprinting"
+      ],
+      "features_verified": [
+        "Email+password registration creates 7-day free trial",
+        "Login with device fingerprinting",
+        "JWT token authentication",
+        "Password validation (min 6 chars)",
+        "Duplicate email prevention"
+      ]
+    },
+    "trial_status": {
+      "endpoint": "GET /api/client-trial/status",
+      "features_verified": [
+        "Returns subscription_status (trial/active/expired)",
+        "Returns trial_days_left",
+        "Returns show_expiry_warning (true when <=2 days)",
+        "Returns price_monthly (9.99 EUR)"
+      ]
+    },
+    "stripe_subscription": {
+      "endpoints": [
+        "POST /api/client-trial/checkout - Creates Stripe checkout session",
+        "GET /api/client-trial/checkout/status/{session_id} - Checks payment status"
+      ],
+      "features_verified": [
+        "Creates Stripe-hosted checkout page URL",
+        "Returns session_id for tracking",
+        "Activates subscription on successful payment"
+      ]
+    },
+    "referral_system": {
+      "endpoint": "POST /api/client-trial/referral/apply",
+      "features_verified": [
+        "Applies referral code for +3 days to both users",
+        "Prevents using own referral code",
+        "Prevents using referral code twice",
+        "Validates referral code exists"
+      ]
+    },
+    "anti_abuse": {
+      "endpoint": "POST /api/client-trial/check-abuse",
+      "features_verified": [
+        "Returns abuse score based on IP and fingerprint",
+        "Returns allowed boolean (true if score < 80)",
+        "Logs abuse checks for monitoring"
+      ]
+    },
+    "frontend_ui": {
+      "features_verified": [
+        "Auth screen with login/register tabs",
+        "Trial badge showing days remaining",
+        "Dashboard with security status and quick actions",
+        "Profile with referral code display and apply",
+        "Upgrade to Premium button",
+        "Bottom navigation (Inicio, Camaras, Eventos, Perfil)"
+      ]
+    }
+  },
+  "mocked_data": {
+    "has_mocked_apis": false,
+    "mocked_apis_list": []
+  }
+}

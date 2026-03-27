@@ -1263,6 +1263,18 @@ async def stripe_webhook(request: Request):
                     {"_id": 0}
                 )
                 if tx:
+                    # Handle trial subscription activation
+                    if tx.get("metadata", {}).get("type") == "manoprotect_subscription" or tx.get("email", "").endswith("@"):
+                        trial_user_id = tx.get("user_id") or tx.get("metadata", {}).get("user_id")
+                        if trial_user_id:
+                            await db.trial_users.update_one(
+                                {"user_id": trial_user_id},
+                                {"$set": {
+                                    "subscription_status": "active",
+                                    "subscription_started": datetime.now(timezone.utc).isoformat(),
+                                }}
+                            )
+
                     promo_applied = tx.get("metadata", {}).get("promo_applied")
                     update_fields = {
                         "plan": tx.get("plan_type"),
@@ -3476,6 +3488,16 @@ try:
     print("\u2705 Client App routes loaded")
 except Exception as e:
     print(f"\u26a0\ufe0f Client App routes not loaded: {e}")
+
+# Trial, Anti-Abuse & Subscription System
+try:
+    from routes.client_trial_routes import router as trial_router, init_client_trial
+    init_client_trial(db)
+    api_router.include_router(trial_router)
+    print("\u2705 Client Trial & Subscription routes loaded")
+except Exception as e:
+    print(f"\u26a0\ufe0f Client Trial routes not loaded: {e}")
+
 
 # Sistema de Gestión CRA (Comerciales, Instaladores, Admin)
 try:

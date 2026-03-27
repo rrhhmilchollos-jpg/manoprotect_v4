@@ -3,205 +3,301 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 const API = process.env.REACT_APP_BACKEND_URL;
 
 const DEVICE_ICONS = {
-  panel: 'fa-tablet-screen-button',
-  sensor_door: 'fa-door-open',
-  sensor_pir: 'fa-eye',
-  smoke_detector: 'fa-cloud',
-  camera: 'fa-video',
-  siren: 'fa-bell',
-  keypad: 'fa-keyboard',
+  panel: 'fa-tablet-screen-button', sensor_door: 'fa-door-open', sensor_pir: 'fa-eye',
+  smoke_detector: 'fa-cloud', camera: 'fa-video', siren: 'fa-bell', keypad: 'fa-keyboard',
 };
+const SEVERITY_COLORS = { critical: '#ef4444', high: '#f97316', medium: '#eab308', low: '#22c55e' };
 
-const SEVERITY_COLORS = {
-  critical: '#ef4444',
-  high: '#f97316',
-  medium: '#eab308',
-  low: '#22c55e',
-};
+// Device fingerprint
+function getFingerprint() {
+  const d = [navigator.userAgent, navigator.language, `${screen.width}x${screen.height}`, Intl.DateTimeFormat().resolvedOptions().timeZone].join('|');
+  let h = 0; for (let i = 0; i < d.length; i++) { h = ((h << 5) - h) + d.charCodeAt(i); h |= 0; }
+  return Math.abs(h).toString(36);
+}
 
 export default function AppCliente() {
-  const [screen, setScreen] = useState('login');
-  const [token, setToken] = useState(localStorage.getItem('mp_client_token') || '');
+  const [screen, setScreen] = useState('loading');
+  const [authMode, setAuthMode] = useState('login');
+  const [token, setToken] = useState(localStorage.getItem('mp_trial_token') || '');
   const [user, setUser] = useState(null);
+  const [trialStatus, setTrialStatus] = useState(null);
   const [installData, setInstallData] = useState(null);
   const [events, setEvents] = useState([]);
   const [activeTab, setActiveTab] = useState('home');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [loginForm, setLoginForm] = useState({ email: '', password: '' });
+  const [form, setForm] = useState({ email: '', password: '', nombre: '' });
+  const [referralCode, setReferralCode] = useState('');
+  const [referralMsg, setReferralMsg] = useState('');
   const [arming, setArming] = useState(false);
   const pollRef = useRef(null);
 
-  const headers = useCallback(() => ({
-    'Content-Type': 'application/json',
-    'Authorization': `Bearer ${token}`,
-  }), [token]);
+  const headers = useCallback(() => ({ 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }), [token]);
 
-  // Auto-login if token exists
+  // Check session on mount
   useEffect(() => {
-    if (token) {
-      fetchInstallation();
+    // Check for Stripe return
+    const params = new URLSearchParams(window.location.search);
+    const sessionId = params.get('session_id');
+    if (sessionId && token) {
+      pollPaymentStatus(sessionId);
+      window.history.replaceState({}, '', window.location.pathname);
+      return;
     }
+    if (token) { checkTrialStatus(); }
+    else { setScreen('auth'); }
   }, []);
 
-  const fetchInstallation = useCallback(async () => {
+  const checkTrialStatus = async () => {
     try {
-      setLoading(true);
-      const stored = JSON.parse(localStorage.getItem('mp_client_user') || '{}');
-      const instId = stored.installation_id;
-      if (!instId) { logout(); return; }
-      setUser(stored);
-      const res = await fetch(`${API}/api/client-app/installation/${instId}`, { headers: headers() });
+      const res = await fetch(`${API}/api/client-trial/status`, { headers: headers() });
       if (!res.ok) { logout(); return; }
       const data = await res.json();
-      setInstallData(data);
-      setScreen('app');
-      // Fetch events
-      const evRes = await fetch(`${API}/api/client-app/installation/${instId}/events`, { headers: headers() });
-      if (evRes.ok) {
-        const evData = await evRes.json();
-        setEvents(evData.events || []);
-      }
-    } catch (e) {
-      console.error(e);
-    } finally {
-      setLoading(false);
-    }
-  }, [token, headers]);
+      setTrialStatus(data);
+      const stored = JSON.parse(localStorage.getItem('mp_trial_user') || '{}');
+      setUser(stored);
+      if (data.subscription_status === 'expired') { setScreen('paywall'); }
+      else { setScreen('app'); fetchInstallation(); }
+    } catch { logout(); }
+  };
 
-  // Poll for updates every 10s
-  useEffect(() => {
-    if (screen === 'app' && user?.installation_id) {
-      pollRef.current = setInterval(() => {
-        fetchInstallation();
-      }, 10000);
-      return () => clearInterval(pollRef.current);
-    }
-  }, [screen, user]);
+  const register = async (e) => {
+    e.preventDefault(); setError(''); setLoading(true);
+    try {
+      const res = await fetch(`${API}/api/client-trial/register`, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: form.email, password: form.password, nombre: form.nombre }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.detail || 'Error de registro');
+      localStorage.setItem('mp_trial_token', data.token);
+      localStorage.setItem('mp_trial_user', JSON.stringify(data.user));
+      setToken(data.token); setUser(data.user);
+      setTrialStatus({ subscription_status: 'trial', trial_days_left: data.user.trial_days_left, show_expiry_warning: false, price_monthly: 9.99 });
+      setScreen('app');
+    } catch (err) { setError(err.message); } finally { setLoading(false); }
+  };
 
   const login = async (e) => {
-    e.preventDefault();
-    setError('');
-    setLoading(true);
+    e.preventDefault(); setError(''); setLoading(true);
     try {
-      const res = await fetch(`${API}/api/client-app/login`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(loginForm),
+      const fp = getFingerprint();
+      const res = await fetch(`${API}/api/client-trial/login`, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: form.email, password: form.password, fingerprint: fp }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.detail || 'Error de autenticacion');
-      localStorage.setItem('mp_client_token', data.token);
-      localStorage.setItem('mp_client_user', JSON.stringify(data.user));
-      setToken(data.token);
-      setUser(data.user);
-      await fetchInstallationWithToken(data.token, data.user.installation_id);
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const fetchInstallationWithToken = async (tk, instId) => {
-    if (!instId) return;
-    const res = await fetch(`${API}/api/client-app/installation/${instId}`, {
-      headers: { 'Authorization': `Bearer ${tk}`, 'Content-Type': 'application/json' },
-    });
-    if (res.ok) {
-      const data = await res.json();
-      setInstallData(data);
-      setScreen('app');
-    }
+      localStorage.setItem('mp_trial_token', data.token);
+      localStorage.setItem('mp_trial_user', JSON.stringify(data.user));
+      setToken(data.token); setUser(data.user);
+      if (data.user.subscription_status === 'expired') {
+        setTrialStatus({ subscription_status: 'expired', trial_days_left: 0, price_monthly: 9.99 });
+        setScreen('paywall');
+      } else {
+        setTrialStatus({ subscription_status: data.user.subscription_status, trial_days_left: data.user.trial_days_left, show_expiry_warning: data.user.trial_days_left <= 2, price_monthly: 9.99 });
+        setScreen('app');
+      }
+    } catch (err) { setError(err.message); } finally { setLoading(false); }
   };
 
   const logout = () => {
-    localStorage.removeItem('mp_client_token');
-    localStorage.removeItem('mp_client_user');
-    setToken('');
-    setUser(null);
-    setInstallData(null);
-    setScreen('login');
-    clearInterval(pollRef.current);
+    localStorage.removeItem('mp_trial_token'); localStorage.removeItem('mp_trial_user');
+    setToken(''); setUser(null); setInstallData(null); setTrialStatus(null);
+    setScreen('auth'); clearInterval(pollRef.current);
+  };
+
+  const fetchInstallation = async () => {
+    try {
+      const stored = JSON.parse(localStorage.getItem('mp_trial_user') || '{}');
+      setUser(stored);
+    } catch {}
+  };
+
+  const startSubscription = async () => {
+    setLoading(true);
+    try {
+      const origin = window.location.origin;
+      const res = await fetch(`${API}/api/client-trial/checkout`, {
+        method: 'POST', headers: headers(),
+        body: JSON.stringify({ origin_url: origin }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.detail || 'Error al crear pago');
+      window.location.href = data.url;
+    } catch (err) { setError(err.message); } finally { setLoading(false); }
+  };
+
+  const pollPaymentStatus = async (sessionId, attempt = 0) => {
+    if (attempt >= 5) return;
+    try {
+      const res = await fetch(`${API}/api/client-trial/checkout/status/${sessionId}`, { headers: headers() });
+      if (res.ok) {
+        const data = await res.json();
+        if (data.payment_status === 'paid') {
+          const stored = JSON.parse(localStorage.getItem('mp_trial_user') || '{}');
+          stored.subscription_status = 'active';
+          localStorage.setItem('mp_trial_user', JSON.stringify(stored));
+          setUser(stored);
+          setTrialStatus(prev => ({ ...prev, subscription_status: 'active' }));
+          setScreen('app');
+          return;
+        }
+      }
+      setTimeout(() => pollPaymentStatus(sessionId, attempt + 1), 2000);
+    } catch {}
+  };
+
+  const applyReferral = async () => {
+    if (!referralCode.trim()) return;
+    try {
+      const res = await fetch(`${API}/api/client-trial/referral/apply`, {
+        method: 'POST', headers: headers(),
+        body: JSON.stringify({ code: referralCode }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.detail || 'Error');
+      setReferralMsg(data.message);
+      checkTrialStatus();
+    } catch (err) { setReferralMsg(err.message); }
   };
 
   const armSystem = async (mode) => {
-    if (!installData || arming) return;
-    setArming(true);
+    if (arming) return; setArming(true);
     try {
-      const res = await fetch(`${API}/api/cra/installations/${installData.id}/arm`, {
-        method: 'POST',
-        headers: headers(),
-        body: JSON.stringify({ mode, code: installData.access_code || '1234' }),
-      });
-      if (res.ok) {
-        await fetchInstallation();
+      const stored = JSON.parse(localStorage.getItem('mp_trial_user') || '{}');
+      if (stored.installation_id) {
+        await fetch(`${API}/api/cra/installations/${stored.installation_id}/arm`, {
+          method: 'POST', headers: headers(),
+          body: JSON.stringify({ mode, code: '1234' }),
+        });
       }
-    } catch (e) {
-      console.error(e);
-    } finally {
-      setArming(false);
-    }
+    } catch {} finally { setArming(false); }
   };
 
-  const triggerSOS = async (type = 'panic') => {
-    if (!user?.installation_id) return;
-    try {
-      await fetch(`${API}/api/client-app/installation/${user.installation_id}/sos`, {
-        method: 'POST',
-        headers: headers(),
-        body: JSON.stringify({ sos_type: type }),
-      });
-      alert('ALERTA SOS ENVIADA A LA CRA. Mantengase seguro.');
-      await fetchInstallation();
-    } catch (e) {
-      console.error(e);
-    }
-  };
-
-  const armed = installData?.armed_status || 'disarmed';
-  const isArmed = armed !== 'disarmed';
-
-  // ==================== LOGIN ====================
-  if (screen === 'login') {
+  // ==================== LOADING ====================
+  if (screen === 'loading') {
     return (
-      <div data-testid="client-login" style={{ minHeight: '100vh', background: 'linear-gradient(135deg, #0a0e1a 0%, #1a1f36 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: "'Inter', sans-serif" }}>
-        <div style={{ width: '100%', maxWidth: 400, padding: 32, background: 'rgba(255,255,255,0.04)', borderRadius: 20, border: '1px solid rgba(255,255,255,0.08)', backdropFilter: 'blur(20px)' }}>
-          <div style={{ textAlign: 'center', marginBottom: 32 }}>
-            <div style={{ width: 64, height: 64, borderRadius: '50%', background: 'linear-gradient(135deg, #3b82f6, #1d4ed8)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px', fontSize: 28 }}>
-              <i className="fa-solid fa-shield-halved" style={{ color: '#fff' }}></i>
-            </div>
-            <h1 style={{ color: '#fff', fontSize: 22, fontWeight: 700, margin: 0 }}>ManoProtect</h1>
-            <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 13, marginTop: 4 }}>App Cliente — Seguridad Inteligente</p>
-          </div>
-          <form onSubmit={login}>
-            <input data-testid="client-email" type="email" placeholder="Email" value={loginForm.email} onChange={e => setLoginForm(p => ({...p, email: e.target.value}))}
-              style={{ width: '100%', padding: '14px 16px', borderRadius: 12, border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.05)', color: '#fff', fontSize: 15, marginBottom: 12, boxSizing: 'border-box', outline: 'none' }} />
-            <input data-testid="client-password" type="password" placeholder="Contrasena" value={loginForm.password} onChange={e => setLoginForm(p => ({...p, password: e.target.value}))}
-              style={{ width: '100%', padding: '14px 16px', borderRadius: 12, border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.05)', color: '#fff', fontSize: 15, marginBottom: 16, boxSizing: 'border-box', outline: 'none' }} />
-            {error && <p data-testid="client-login-error" style={{ color: '#ef4444', fontSize: 13, marginBottom: 12, textAlign: 'center' }}>{error}</p>}
-            <button data-testid="client-login-btn" type="submit" disabled={loading}
-              style={{ width: '100%', padding: '14px', borderRadius: 12, border: 'none', background: 'linear-gradient(135deg, #3b82f6, #1d4ed8)', color: '#fff', fontSize: 16, fontWeight: 600, cursor: 'pointer', opacity: loading ? 0.7 : 1 }}>
-              {loading ? 'Conectando...' : 'Acceder'}
-            </button>
-          </form>
-          <p style={{ color: 'rgba(255,255,255,0.3)', fontSize: 11, textAlign: 'center', marginTop: 20 }}>Demo: cliente@demo.manoprotectt.com / Cliente2025!</p>
+      <div style={{ minHeight: '100vh', background: '#0a0e1a', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div style={{ textAlign: 'center', color: '#fff' }}>
+          <i className="fa-solid fa-shield-halved fa-spin" style={{ fontSize: 48, color: '#3b82f6', marginBottom: 16 }}></i>
+          <p style={{ opacity: 0.6, fontSize: 14 }}>Cargando ManoProtect...</p>
         </div>
       </div>
     );
   }
 
-  // ==================== APP ====================
-  const devices = installData?.devices || [];
-  const cameras = devices.filter(d => d.device_type === 'camera');
+  // ==================== AUTH (LOGIN / REGISTER) ====================
+  if (screen === 'auth') {
+    return (
+      <div data-testid="client-auth" style={{ minHeight: '100vh', background: 'linear-gradient(135deg, #0a0e1a 0%, #1a1f36 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: "'Inter', sans-serif" }}>
+        <div style={{ width: '100%', maxWidth: 400, padding: 32, background: 'rgba(255,255,255,0.04)', borderRadius: 20, border: '1px solid rgba(255,255,255,0.08)', backdropFilter: 'blur(20px)' }}>
+          <div style={{ textAlign: 'center', marginBottom: 28 }}>
+            <div style={{ width: 64, height: 64, borderRadius: '50%', background: 'linear-gradient(135deg, #3b82f6, #1d4ed8)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px', fontSize: 28 }}>
+              <i className="fa-solid fa-shield-halved" style={{ color: '#fff' }}></i>
+            </div>
+            <h1 style={{ color: '#fff', fontSize: 22, fontWeight: 700, margin: 0 }}>ManoProtect</h1>
+            <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 13, marginTop: 4 }}>Seguridad Inteligente para tu Hogar</p>
+          </div>
+
+          {/* Toggle tabs */}
+          <div style={{ display: 'flex', gap: 0, marginBottom: 24, borderRadius: 12, overflow: 'hidden', border: '1px solid rgba(255,255,255,0.1)' }}>
+            {['login', 'register'].map(m => (
+              <button key={m} data-testid={`auth-tab-${m}`} onClick={() => { setAuthMode(m); setError(''); }}
+                style={{ flex: 1, padding: '12px', border: 'none', background: authMode === m ? 'rgba(59,130,246,0.2)' : 'transparent', color: authMode === m ? '#3b82f6' : 'rgba(255,255,255,0.4)', fontSize: 14, fontWeight: 600, cursor: 'pointer' }}>
+                {m === 'login' ? 'Iniciar Sesion' : 'Registro Gratis'}
+              </button>
+            ))}
+          </div>
+
+          <form onSubmit={authMode === 'login' ? login : register}>
+            {authMode === 'register' && (
+              <input data-testid="register-name" type="text" placeholder="Tu nombre" value={form.nombre} onChange={e => setForm(p => ({...p, nombre: e.target.value}))}
+                style={{ width: '100%', padding: '14px 16px', borderRadius: 12, border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.05)', color: '#fff', fontSize: 15, marginBottom: 12, boxSizing: 'border-box', outline: 'none' }} />
+            )}
+            <input data-testid="auth-email" type="email" placeholder="Email" value={form.email} onChange={e => setForm(p => ({...p, email: e.target.value}))} required
+              style={{ width: '100%', padding: '14px 16px', borderRadius: 12, border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.05)', color: '#fff', fontSize: 15, marginBottom: 12, boxSizing: 'border-box', outline: 'none' }} />
+            <input data-testid="auth-password" type="password" placeholder="Contrasena" value={form.password} onChange={e => setForm(p => ({...p, password: e.target.value}))} required
+              style={{ width: '100%', padding: '14px 16px', borderRadius: 12, border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.05)', color: '#fff', fontSize: 15, marginBottom: 16, boxSizing: 'border-box', outline: 'none' }} />
+            {error && <p data-testid="auth-error" style={{ color: '#ef4444', fontSize: 13, marginBottom: 12, textAlign: 'center' }}>{error}</p>}
+            <button data-testid="auth-submit" type="submit" disabled={loading}
+              style={{ width: '100%', padding: '14px', borderRadius: 12, border: 'none', background: 'linear-gradient(135deg, #3b82f6, #1d4ed8)', color: '#fff', fontSize: 16, fontWeight: 600, cursor: 'pointer', opacity: loading ? 0.7 : 1 }}>
+              {loading ? 'Procesando...' : authMode === 'login' ? 'Acceder' : 'Registrarse — 7 dias gratis'}
+            </button>
+          </form>
+
+          {authMode === 'register' && (
+            <p style={{ color: 'rgba(255,255,255,0.3)', fontSize: 11, textAlign: 'center', marginTop: 16 }}>
+              7 dias de prueba gratuita. Todas las funciones desbloqueadas. Sin compromiso.
+            </p>
+          )}
+        </div>
+      </div>
+    );
+  }
+
+  // ==================== PAYWALL ====================
+  if (screen === 'paywall') {
+    return (
+      <div data-testid="paywall" style={{ minHeight: '100vh', background: 'linear-gradient(135deg, #0a0e1a 0%, #1a1f36 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: "'Inter', sans-serif", padding: 20 }}>
+        <div style={{ width: '100%', maxWidth: 420, textAlign: 'center' }}>
+          <div style={{ width: 80, height: 80, borderRadius: '50%', background: 'linear-gradient(135deg, #f59e0b, #d97706)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 24px', fontSize: 36 }}>
+            <i className="fa-solid fa-lock" style={{ color: '#fff' }}></i>
+          </div>
+          <h2 style={{ color: '#fff', fontSize: 24, fontWeight: 700, margin: '0 0 8px' }}>Tu trial ha expirado</h2>
+          <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 14, marginBottom: 32 }}>Continua protegiendo tu hogar con ManoProtect</p>
+
+          <div style={{ background: 'rgba(255,255,255,0.04)', borderRadius: 20, padding: 28, border: '1px solid rgba(255,255,255,0.08)', marginBottom: 20 }}>
+            <p style={{ color: '#f59e0b', fontSize: 12, fontWeight: 600, textTransform: 'uppercase', letterSpacing: 1, marginBottom: 8 }}>Plan Mensual</p>
+            <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'center', gap: 4, marginBottom: 16 }}>
+              <span style={{ color: '#fff', fontSize: 42, fontWeight: 800 }}>9,99</span>
+              <span style={{ color: 'rgba(255,255,255,0.5)', fontSize: 16 }}>/mes</span>
+            </div>
+            <ul style={{ listStyle: 'none', padding: 0, margin: 0, textAlign: 'left' }}>
+              {['Control total de tu alarma', 'Camaras en tiempo real', 'Historial de eventos', 'Alertas SOS inmediatas', 'Soporte prioritario 24/7'].map((f, i) => (
+                <li key={i} style={{ color: 'rgba(255,255,255,0.7)', fontSize: 14, padding: '8px 0', display: 'flex', alignItems: 'center', gap: 10 }}>
+                  <i className="fa-solid fa-check" style={{ color: '#10b981', fontSize: 12 }}></i> {f}
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <button data-testid="subscribe-btn" onClick={startSubscription} disabled={loading}
+            style={{ width: '100%', padding: '16px', borderRadius: 14, border: 'none', background: 'linear-gradient(135deg, #3b82f6, #1d4ed8)', color: '#fff', fontSize: 17, fontWeight: 700, cursor: 'pointer', marginBottom: 12, opacity: loading ? 0.7 : 1 }}>
+            {loading ? 'Redirigiendo a pago...' : 'Continuar suscripcion'}
+          </button>
+          {error && <p style={{ color: '#ef4444', fontSize: 13, marginBottom: 8 }}>{error}</p>}
+          <button data-testid="paywall-logout" onClick={logout} style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.3)', fontSize: 13, cursor: 'pointer', marginTop: 8 }}>Cerrar sesion</button>
+        </div>
+      </div>
+    );
+  }
+
+  // ==================== MAIN APP ====================
+  const subStatus = trialStatus?.subscription_status || user?.subscription_status || 'trial';
+  const daysLeft = trialStatus?.trial_days_left ?? user?.trial_days_left ?? 0;
+  const showWarning = subStatus === 'trial' && daysLeft <= 2;
 
   return (
     <div data-testid="client-app" style={{ minHeight: '100vh', background: '#0a0e1a', fontFamily: "'Inter', sans-serif", paddingBottom: 80 }}>
 
+      {/* Trial Warning Banner */}
+      {showWarning && (
+        <div data-testid="trial-warning" style={{ background: 'linear-gradient(90deg, #f59e0b, #d97706)', padding: '10px 16px', textAlign: 'center', fontSize: 13, fontWeight: 600, color: '#000' }}>
+          <i className="fa-solid fa-clock"></i> Tu trial termina en {daysLeft} dia{daysLeft !== 1 ? 's' : ''}. <span onClick={startSubscription} style={{ textDecoration: 'underline', cursor: 'pointer' }}>Sigue con nosotros</span>
+        </div>
+      )}
+
+      {/* Trial/Active Badge */}
+      {subStatus === 'trial' && !showWarning && (
+        <div style={{ background: 'rgba(59,130,246,0.1)', padding: '8px 16px', textAlign: 'center', fontSize: 12, color: '#3b82f6', borderBottom: '1px solid rgba(59,130,246,0.1)' }}>
+          <i className="fa-solid fa-gift"></i> Trial gratuito — {daysLeft} dias restantes
+        </div>
+      )}
+
       {/* ===== HOME ===== */}
       {activeTab === 'home' && (
         <div style={{ padding: '20px 16px' }}>
-          {/* Header */}
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
             <div>
               <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 13, margin: 0 }}>Bienvenido</p>
@@ -212,64 +308,42 @@ export default function AppCliente() {
             </button>
           </div>
 
-          {/* Security Status Card */}
+          {/* Security Status */}
           <div data-testid="security-status" style={{
-            background: isArmed ? 'linear-gradient(135deg, #059669, #047857)' : 'linear-gradient(135deg, #334155, #1e293b)',
-            borderRadius: 20, padding: 28, marginBottom: 20, textAlign: 'center',
-            border: isArmed ? '1px solid rgba(16,185,129,0.3)' : '1px solid rgba(255,255,255,0.08)',
+            background: 'linear-gradient(135deg, #334155, #1e293b)', borderRadius: 20, padding: 28, marginBottom: 20, textAlign: 'center',
+            border: '1px solid rgba(255,255,255,0.08)',
           }}>
-            <div style={{ width: 80, height: 80, borderRadius: '50%', background: isArmed ? 'rgba(255,255,255,0.15)' : 'rgba(255,255,255,0.05)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px', fontSize: 36 }}>
-              <i className={`fa-solid ${isArmed ? 'fa-lock' : 'fa-lock-open'}`} style={{ color: '#fff' }}></i>
+            <div style={{ width: 80, height: 80, borderRadius: '50%', background: 'rgba(255,255,255,0.05)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px', fontSize: 36 }}>
+              <i className="fa-solid fa-shield-halved" style={{ color: '#3b82f6' }}></i>
             </div>
-            <h3 style={{ color: '#fff', fontSize: 22, fontWeight: 700, margin: '0 0 4px' }}>
-              {armed === 'total' ? 'ARMADO TOTAL' : armed === 'partial' ? 'ARMADO PARCIAL' : 'DESARMADO'}
-            </h3>
-            <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: 13, margin: 0 }}>{installData?.address || ''}, {installData?.city || ''}</p>
+            <h3 style={{ color: '#fff', fontSize: 22, fontWeight: 700, margin: '0 0 4px' }}>SISTEMA ACTIVO</h3>
+            <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 13 }}>Proteccion las 24h</p>
           </div>
 
-          {/* Arm/Disarm buttons */}
-          <div data-testid="arm-controls" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 10, marginBottom: 20 }}>
-            <button data-testid="arm-total-btn" onClick={() => armSystem('total')} disabled={arming}
-              style={{ padding: '16px 8px', borderRadius: 14, border: armed === 'total' ? '2px solid #10b981' : '1px solid rgba(255,255,255,0.1)', background: armed === 'total' ? 'rgba(16,185,129,0.15)' : 'rgba(255,255,255,0.03)', color: armed === 'total' ? '#10b981' : '#fff', cursor: 'pointer', textAlign: 'center' }}>
-              <i className="fa-solid fa-shield" style={{ display: 'block', fontSize: 22, marginBottom: 6 }}></i>
-              <span style={{ fontSize: 11, fontWeight: 600 }}>TOTAL</span>
-            </button>
-            <button data-testid="arm-partial-btn" onClick={() => armSystem('partial')} disabled={arming}
-              style={{ padding: '16px 8px', borderRadius: 14, border: armed === 'partial' ? '2px solid #f59e0b' : '1px solid rgba(255,255,255,0.1)', background: armed === 'partial' ? 'rgba(245,158,11,0.15)' : 'rgba(255,255,255,0.03)', color: armed === 'partial' ? '#f59e0b' : '#fff', cursor: 'pointer', textAlign: 'center' }}>
-              <i className="fa-solid fa-shield-halved" style={{ display: 'block', fontSize: 22, marginBottom: 6 }}></i>
-              <span style={{ fontSize: 11, fontWeight: 600 }}>PARCIAL</span>
-            </button>
-            <button data-testid="disarm-btn" onClick={() => armSystem('disarmed')} disabled={arming}
-              style={{ padding: '16px 8px', borderRadius: 14, border: armed === 'disarmed' ? '2px solid #3b82f6' : '1px solid rgba(255,255,255,0.1)', background: armed === 'disarmed' ? 'rgba(59,130,246,0.15)' : 'rgba(255,255,255,0.03)', color: armed === 'disarmed' ? '#3b82f6' : '#fff', cursor: 'pointer', textAlign: 'center' }}>
-              <i className="fa-solid fa-lock-open" style={{ display: 'block', fontSize: 22, marginBottom: 6 }}></i>
-              <span style={{ fontSize: 11, fontWeight: 600 }}>DESARMAR</span>
-            </button>
-          </div>
-
-          {/* SOS Button */}
-          <button data-testid="sos-btn" onClick={() => { if (window.confirm('¿Activar ALERTA SOS? Se notificara a la CRA inmediatamente.')) triggerSOS('panic'); }}
-            style={{ width: '100%', padding: '18px', borderRadius: 14, border: '2px solid #ef4444', background: 'rgba(239,68,68,0.1)', color: '#ef4444', fontSize: 18, fontWeight: 800, cursor: 'pointer', letterSpacing: 2, marginBottom: 20 }}>
-            <i className="fa-solid fa-triangle-exclamation" style={{ marginRight: 10 }}></i> SOS EMERGENCIA
-          </button>
-
-          {/* Devices Grid */}
-          <h3 style={{ color: '#fff', fontSize: 16, fontWeight: 600, marginBottom: 12 }}>Mis dispositivos ({devices.length})</h3>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-            {devices.map((d, i) => (
-              <div key={i} data-testid={`device-${i}`} style={{ background: 'rgba(255,255,255,0.03)', borderRadius: 14, padding: '14px 12px', border: '1px solid rgba(255,255,255,0.06)' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 8 }}>
-                  <i className={`fa-solid ${DEVICE_ICONS[d.device_type] || 'fa-microchip'}`} style={{ color: d.status === 'online' ? '#10b981' : '#ef4444', fontSize: 18 }}></i>
-                  <span style={{ color: '#fff', fontSize: 12, fontWeight: 600 }}>{d.zone}</span>
-                </div>
-                <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 11, margin: 0 }}>{d.model}</p>
-                {d.battery_level != null && (
-                  <div style={{ marginTop: 6, display: 'flex', alignItems: 'center', gap: 6 }}>
-                    <i className="fa-solid fa-battery-three-quarters" style={{ color: d.battery_level > 20 ? '#10b981' : '#ef4444', fontSize: 11 }}></i>
-                    <span style={{ color: 'rgba(255,255,255,0.4)', fontSize: 10 }}>{d.battery_level}%</span>
-                  </div>
-                )}
-              </div>
+          {/* Quick Actions */}
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 20 }}>
+            {[
+              { icon: 'fa-shield', label: 'Armar Total', color: '#10b981', action: () => armSystem('total') },
+              { icon: 'fa-shield-halved', label: 'Armar Parcial', color: '#f59e0b', action: () => armSystem('partial') },
+              { icon: 'fa-lock-open', label: 'Desarmar', color: '#3b82f6', action: () => armSystem('disarmed') },
+              { icon: 'fa-triangle-exclamation', label: 'SOS', color: '#ef4444', action: () => { if (window.confirm('Activar ALERTA SOS?')) {} } },
+            ].map((a, i) => (
+              <button key={i} data-testid={`quick-action-${i}`} onClick={a.action} disabled={arming}
+                style={{ padding: '18px 12px', borderRadius: 14, border: `1px solid ${a.color}22`, background: `${a.color}11`, color: a.color, cursor: 'pointer', textAlign: 'center' }}>
+                <i className={`fa-solid ${a.icon}`} style={{ display: 'block', fontSize: 22, marginBottom: 6 }}></i>
+                <span style={{ fontSize: 12, fontWeight: 600 }}>{a.label}</span>
+              </button>
             ))}
+          </div>
+
+          {/* Subscription Info */}
+          <div style={{ background: 'rgba(255,255,255,0.03)', borderRadius: 14, padding: '14px 16px', border: '1px solid rgba(255,255,255,0.06)' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <span style={{ color: 'rgba(255,255,255,0.5)', fontSize: 12 }}>Estado</span>
+              <span style={{ color: subStatus === 'active' ? '#10b981' : '#3b82f6', fontSize: 12, fontWeight: 600, textTransform: 'uppercase' }}>
+                {subStatus === 'active' ? 'Suscripcion Activa' : `Trial (${daysLeft}d)`}
+              </span>
+            </div>
           </div>
         </div>
       )}
@@ -278,28 +352,10 @@ export default function AppCliente() {
       {activeTab === 'cameras' && (
         <div style={{ padding: '20px 16px' }}>
           <h2 style={{ color: '#fff', fontSize: 20, fontWeight: 700, marginBottom: 16 }}>Camaras</h2>
-          {cameras.length === 0 ? (
-            <div style={{ textAlign: 'center', padding: 40, color: 'rgba(255,255,255,0.4)' }}>
-              <i className="fa-solid fa-video-slash" style={{ fontSize: 40, marginBottom: 12, display: 'block' }}></i>
-              <p>No hay camaras configuradas</p>
-            </div>
-          ) : cameras.map((c, i) => (
-            <div key={i} data-testid={`camera-${i}`} style={{ background: 'rgba(255,255,255,0.03)', borderRadius: 16, overflow: 'hidden', marginBottom: 12, border: '1px solid rgba(255,255,255,0.06)' }}>
-              <div style={{ height: 180, background: '#111827', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <div style={{ textAlign: 'center' }}>
-                  <i className="fa-solid fa-video" style={{ fontSize: 32, color: 'rgba(255,255,255,0.2)', display: 'block', marginBottom: 8 }}></i>
-                  <span style={{ color: 'rgba(255,255,255,0.3)', fontSize: 12 }}>Stream RTSP pendiente</span>
-                </div>
-              </div>
-              <div style={{ padding: '12px 14px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <div>
-                  <p style={{ color: '#fff', fontSize: 14, fontWeight: 600, margin: 0 }}>{c.zone}</p>
-                  <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 11, margin: 0 }}>{c.model}</p>
-                </div>
-                <span style={{ width: 8, height: 8, borderRadius: '50%', background: c.status === 'online' ? '#10b981' : '#ef4444' }}></span>
-              </div>
-            </div>
-          ))}
+          <div style={{ textAlign: 'center', padding: 40, color: 'rgba(255,255,255,0.4)' }}>
+            <i className="fa-solid fa-video" style={{ fontSize: 40, marginBottom: 12, display: 'block' }}></i>
+            <p>Tus camaras apareceran aqui cuando se configuren</p>
+          </div>
         </div>
       )}
 
@@ -307,21 +363,10 @@ export default function AppCliente() {
       {activeTab === 'events' && (
         <div style={{ padding: '20px 16px' }}>
           <h2 style={{ color: '#fff', fontSize: 20, fontWeight: 700, marginBottom: 16 }}>Historial de Eventos</h2>
-          {events.length === 0 ? (
-            <div style={{ textAlign: 'center', padding: 40, color: 'rgba(255,255,255,0.4)' }}>
-              <i className="fa-solid fa-clock-rotate-left" style={{ fontSize: 40, marginBottom: 12, display: 'block' }}></i>
-              <p>Sin eventos recientes</p>
-            </div>
-          ) : events.map((ev, i) => (
-            <div key={i} data-testid={`event-${i}`} style={{ background: 'rgba(255,255,255,0.03)', borderRadius: 14, padding: '14px 16px', marginBottom: 8, borderLeft: `3px solid ${SEVERITY_COLORS[ev.severity] || '#64748b'}`, border: '1px solid rgba(255,255,255,0.06)' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 }}>
-                <span style={{ color: SEVERITY_COLORS[ev.severity] || '#64748b', fontSize: 12, fontWeight: 700, textTransform: 'uppercase' }}>{ev.event_type?.replace('_', ' ')}</span>
-                <span style={{ color: 'rgba(255,255,255,0.3)', fontSize: 10 }}>{new Date(ev.created_at).toLocaleString('es-ES')}</span>
-              </div>
-              <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: 13, margin: 0 }}>{ev.description}</p>
-              {ev.zone && <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 11, margin: '4px 0 0' }}>Zona: {ev.zone}</p>}
-            </div>
-          ))}
+          <div style={{ textAlign: 'center', padding: 40, color: 'rgba(255,255,255,0.4)' }}>
+            <i className="fa-solid fa-clock-rotate-left" style={{ fontSize: 40, marginBottom: 12, display: 'block' }}></i>
+            <p>Sin eventos recientes</p>
+          </div>
         </div>
       )}
 
@@ -335,16 +380,13 @@ export default function AppCliente() {
                 {(user?.nombre || 'C')[0]}
               </div>
               <div>
-                <h3 style={{ color: '#fff', fontSize: 16, fontWeight: 600, margin: 0 }}>{user?.nombre}</h3>
+                <h3 style={{ color: '#fff', fontSize: 16, fontWeight: 600, margin: 0 }}>{user?.nombre || user?.email}</h3>
                 <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 13, margin: 0 }}>{user?.email}</p>
               </div>
             </div>
             {[
-              ['Telefono', user?.telefono || '-'],
-              ['Instalacion', installData?.id || '-'],
-              ['Plan', installData?.plan_type || '-'],
-              ['Direccion', `${installData?.address || ''}, ${installData?.city || ''}`],
-              ['Dispositivos', `${devices.length} activos`],
+              ['Estado', subStatus === 'active' ? 'Suscripcion Activa' : subStatus === 'trial' ? `Trial (${daysLeft} dias)` : 'Expirado'],
+              ['Plan', subStatus === 'active' ? 'Premium 9,99/mes' : 'Trial Gratuito'],
             ].map(([label, val], i) => (
               <div key={i} style={{ display: 'flex', justifyContent: 'space-between', padding: '10px 0', borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
                 <span style={{ color: 'rgba(255,255,255,0.4)', fontSize: 13 }}>{label}</span>
@@ -352,19 +394,34 @@ export default function AppCliente() {
               </div>
             ))}
           </div>
-          {/* Emergency contacts */}
-          <h3 style={{ color: '#fff', fontSize: 15, fontWeight: 600, marginBottom: 10 }}>Contactos de Emergencia</h3>
-          {(installData?.emergency_contacts || []).map((c, i) => (
-            <div key={i} style={{ background: 'rgba(255,255,255,0.03)', borderRadius: 12, padding: '12px 14px', marginBottom: 8, display: 'flex', justifyContent: 'space-between', alignItems: 'center', border: '1px solid rgba(255,255,255,0.06)' }}>
-              <div>
-                <p style={{ color: '#fff', fontSize: 13, fontWeight: 500, margin: 0 }}>{c.name}</p>
-                <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 11, margin: 0 }}>{c.relation}</p>
-              </div>
-              <a href={`tel:${c.phone}`} style={{ color: '#3b82f6', fontSize: 13 }}>{c.phone}</a>
+
+          {/* Referral Section */}
+          <div style={{ background: 'rgba(59,130,246,0.06)', borderRadius: 16, padding: 20, border: '1px solid rgba(59,130,246,0.15)', marginBottom: 16 }}>
+            <h3 style={{ color: '#3b82f6', fontSize: 14, fontWeight: 700, marginBottom: 8 }}>
+              <i className="fa-solid fa-gift" style={{ marginRight: 8 }}></i>Invita a un amigo
+            </h3>
+            <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 12, marginBottom: 12 }}>Comparte tu codigo y ambos recibis +3 dias de trial gratis</p>
+            <div style={{ background: 'rgba(0,0,0,0.3)', borderRadius: 10, padding: '12px 14px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+              <span data-testid="referral-code" style={{ color: '#fff', fontSize: 16, fontWeight: 700, letterSpacing: 2 }}>{user?.referral_code || '---'}</span>
+              <button onClick={() => { navigator.clipboard?.writeText(user?.referral_code || ''); }} style={{ background: 'rgba(59,130,246,0.2)', border: 'none', borderRadius: 8, padding: '6px 12px', color: '#3b82f6', fontSize: 12, cursor: 'pointer' }}>Copiar</button>
             </div>
-          ))}
+            <div style={{ display: 'flex', gap: 8 }}>
+              <input data-testid="referral-input" placeholder="Codigo de amigo" value={referralCode} onChange={e => setReferralCode(e.target.value)}
+                style={{ flex: 1, padding: '10px 12px', borderRadius: 10, border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.05)', color: '#fff', fontSize: 13, outline: 'none' }} />
+              <button data-testid="referral-apply" onClick={applyReferral} style={{ padding: '10px 16px', borderRadius: 10, border: 'none', background: '#3b82f6', color: '#fff', fontSize: 13, fontWeight: 600, cursor: 'pointer' }}>Aplicar</button>
+            </div>
+            {referralMsg && <p style={{ color: '#10b981', fontSize: 12, marginTop: 8 }}>{referralMsg}</p>}
+          </div>
+
+          {subStatus !== 'active' && (
+            <button data-testid="upgrade-btn" onClick={startSubscription}
+              style={{ width: '100%', padding: '14px', borderRadius: 12, border: 'none', background: 'linear-gradient(135deg, #f59e0b, #d97706)', color: '#000', fontSize: 15, fontWeight: 700, cursor: 'pointer', marginBottom: 16 }}>
+              Actualizar a Premium — 9,99/mes
+            </button>
+          )}
+
           <button data-testid="logout-profile-btn" onClick={logout}
-            style={{ width: '100%', marginTop: 20, padding: '14px', borderRadius: 12, border: '1px solid rgba(239,68,68,0.3)', background: 'rgba(239,68,68,0.08)', color: '#ef4444', fontSize: 15, fontWeight: 600, cursor: 'pointer' }}>
+            style={{ width: '100%', padding: '14px', borderRadius: 12, border: '1px solid rgba(239,68,68,0.3)', background: 'rgba(239,68,68,0.08)', color: '#ef4444', fontSize: 15, fontWeight: 600, cursor: 'pointer' }}>
             Cerrar Sesion
           </button>
         </div>
