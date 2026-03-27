@@ -8,7 +8,7 @@ Sistema de seguridad empresarial completo estilo Securitas Direct con CRA, Back 
 - **Backend**: FastAPI + MongoDB + Socket.IO + Brevo Email + Stripe + Firebase Admin SDK
 - **Frontend**: React + TailwindCSS + Shadcn/UI + Firebase JS SDK
 - **Dominio**: manoprotectt.com (con dos 't')
-- **Android APKs**: TWA compilados con Gradle
+- **Android APKs**: TWA compilados con Gradle (3 apps: Clientes, Comerciales, Instaladores)
 - **Firebase Project**: manoprotect-f889b
 
 ## Usuarios y Roles
@@ -19,6 +19,15 @@ Sistema de seguridad empresarial completo estilo Securitas Direct con CRA, Back 
 | Comercial | comercial@manoprotectt.com | Comercial2025! |
 | Instalador | instalador@manoprotectt.com | Instalador2025! |
 | Cliente (trial) | Registro libre via /app-cliente | 7 dias trial gratis |
+
+## Apps Android (TWA)
+| App | Package | URL | Estado |
+|-----|---------|-----|--------|
+| ManoProtect (Clientes) | com.manoprotect.clientes | /app-cliente | COMPILADO |
+| MP Comerciales | com.manoprotect.comerciales | /gestion/comerciales | COMPILADO |
+| MP Instaladores | com.manoprotect.instaladores | /gestion/instaladores | COMPILADO |
+
+SHA256 Fingerprint: DD:45:D9:49:3A:1D:8A:43:B9:3F:F5:FD:A3:09:97:FA:7D:D9:D2:9C:2F:4A:49:AF:D2:A3:60:9E:F3:5F:C5:DF
 
 ## Sistema Trial + Suscripciones (AppCliente)
 - Registro: Email + password, trial 7 dias automatico
@@ -52,30 +61,18 @@ Sistema de seguridad empresarial completo estilo Securitas Direct con CRA, Back 
 - Boton de emergencia con confirmacion
 - Captura automatica de ubicacion GPS
 - Notifica a CRA y contactos de emergencia
-- Envia link de Google Maps con ubicacion
 
 ### Contactos de Emergencia
 - CRUD completo: crear, listar, eliminar
 - Campos: nombre, telefono, relacion
-- Notificados automaticamente en SOS
 
 ### Ajustes
 - Cambio de PIN de seguridad (4 digitos)
 - Zonas modo noche configurables
 
-## Firebase Push Notifications
-- Service Account: /app/backend/firebase-service-account.json
-- Service Worker: /app/frontend/public/firebase-messaging-sw.js
-- Firebase Config: /app/frontend/src/lib/firebase.js
-- Backend Routes: /app/backend/routes/notification_routes.py
-
-## Paginas Legales
-- Politica de privacidad: /api/privacy-policy
-- Eliminacion de datos: /api/data-deletion
-
 ## Estado Actual
 ### Completado
-- APKs compilados para Play Store (Comerciales + Instaladores)
+- APKs compilados para Play Store (Comerciales + Instaladores + CLIENTES)
 - Sistema Trial + Anti-Abuso + Stripe + Referidos
 - Firebase Push Notifications (Admin SDK + FCM + Service Worker)
 - AppCliente completo con funcionalidades avanzadas de seguridad
@@ -85,7 +82,6 @@ Sistema de seguridad empresarial completo estilo Securitas Direct con CRA, Back 
 - SEO + Performance optimizado
 
 ### Pendiente
-- P1: Compilar APK/AAB para AppCliente (twa-clientes)
 - P1: CI/CD Play Store (pendiente secrets GitHub)
 - P1: SEM/Ads (Meta Pixel, Hotjar, Search Console)
 - P1: RTSP Camera Streaming
