@@ -1,0 +1,152 @@
+{
+  "summary": "Iteration 136: Tested Back Office Admin Panel and Pipeline CRM features. All 25 backend tests passed (100%). Frontend UI tests confirmed login, Pipeline CRM tab with funnel stats, Usuarios tab with user management, and Auditoria tab all working correctly.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [
+      {"screen": "All pages", "issues": ["Stock limitado popup modal appears on page load - can be dismissed with X or Escape"]}
+    ]
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_iteration_136_backoffice_pipeline.py",
+    "/app/test_reports/pytest/iteration_136_backoffice_pipeline.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [],
+  "updated_files": [
+    "/app/backend/tests/test_iteration_136_backoffice_pipeline.py"
+  ],
+  "success_rate": {
+    "backend": "100% (25/25 tests passed)",
+    "frontend": "100%"
+  },
+  "test_credentials": {
+    "admin": {
+      "email": "admin@manoprotectt.com",
+      "password": "ManoAdmin2025!",
+      "endpoint": "/api/gestion/auth/login"
+    },
+    "comercial": {
+      "email": "comercial@manoprotectt.com",
+      "password": "Comercial2025!",
+      "endpoint": "/api/gestion/auth/login"
+    },
+    "instalador": {
+      "email": "instalador@manoprotectt.com",
+      "password": "Instalador2025!",
+      "endpoint": "/api/gestion/auth/login"
+    }
+  },
+  "seed_data_creation": "Test users and leads created during testing with TEST_ prefix for identification",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Back Office Panel at /backoffice is fully functional. Admin login uses /api/gestion/auth/login. Backoffice APIs are at /api/backoffice/*. Pipeline stages: lead, contacto, estudio, propuesta, contrato, instalacion, activacion, activo, cancelado. Client activation requires lead to be in instalacion or activacion stage. ZIP downloads work at /api/descargas/{filename}.zip",
+  "tests_passed": {
+    "backend_tests": [
+      "POST /api/gestion/auth/login with admin credentials - returns token with rol admin - PASSED",
+      "POST /api/gestion/auth/login with wrong password - returns 401 - PASSED",
+      "POST /api/gestion/auth/login with nonexistent user - returns 401 - PASSED",
+      "POST /api/backoffice/usuarios (create comercial) - returns password_temporal - PASSED",
+      "POST /api/backoffice/usuarios (create instalador) - returns password_temporal - PASSED",
+      "POST /api/backoffice/usuarios with invalid rol - returns 400 - PASSED",
+      "GET /api/backoffice/usuarios - returns usuarios array with stats - PASSED",
+      "PUT /api/backoffice/usuarios/{id}/desactivar - deactivates user - PASSED",
+      "PUT /api/backoffice/usuarios/{id}/resetear-password - returns new temp password - PASSED",
+      "POST /api/backoffice/pipeline (create lead) - returns lead_id and etapa=lead - PASSED",
+      "POST /api/backoffice/pipeline (minimal fields) - PASSED",
+      "POST /api/backoffice/pipeline (missing required) - returns 400 - PASSED",
+      "GET /api/backoffice/pipeline - returns leads array with stage_counts - PASSED",
+      "PUT /api/backoffice/pipeline/{id}/avanzar - advances lead stage - PASSED",
+      "PUT /api/backoffice/pipeline/{id}/avanzar (invalid stage) - returns 400 - PASSED",
+      "PUT /api/backoffice/pipeline/{id}/estudio - saves estudio de seguridad - PASSED",
+      "PUT /api/backoffice/pipeline/{id}/propuesta - saves propuesta - PASSED",
+      "PUT /api/backoffice/pipeline/{id}/activar-cliente (wrong stage) - returns 400 - PASSED",
+      "PUT /api/backoffice/pipeline/{id}/activar-cliente (full flow) - creates client credentials - PASSED",
+      "GET /api/backoffice/auditoria - returns audit logs - PASSED",
+      "Audit logs created after user creation - PASSED",
+      "GET /api/descargas/ManoProtect-Desktop-Apps-COMPLETO.zip - returns 200 with application/zip - PASSED",
+      "GET /api/descargas/nonexistent.zip - returns 404 - PASSED",
+      "Comercial cannot access /api/backoffice/usuarios - returns 403 - PASSED",
+      "No token returns 401 - PASSED"
+    ],
+    "frontend_tests": [
+      "Back Office login page loads at /backoffice - PASSED",
+      "Admin login with credentials shows dashboard - PASSED",
+      "Pipeline CRM tab visible and clickable - PASSED",
+      "Pipeline funnel stats displayed (Lead, Contacto, Estudio, etc.) - PASSED",
+      "Nuevo Lead button visible and clickable - PASSED",
+      "New Lead form displays with all fields - PASSED",
+      "Lead detail modal shows stage history - PASSED",
+      "Usuarios tab visible and clickable - PASSED",
+      "User stats displayed (Total, Comerciales, Instaladores, Activos, Pendientes) - PASSED",
+      "Alta Usuario button visible - PASSED",
+      "Auditoria tab visible and clickable - PASSED",
+      "Audit log entries displayed - PASSED"
+    ]
+  },
+  "verified_features": {
+    "backoffice_auth": {
+      "route": "/backoffice",
+      "auth_endpoint": "/api/gestion/auth/login",
+      "features_verified": [
+        "Admin login with JWT token",
+        "Role-based access control (admin/superadmin only)",
+        "Non-admin users get 403 Forbidden"
+      ]
+    },
+    "user_management": {
+      "endpoints": [
+        "POST /api/backoffice/usuarios - Create user with temp password",
+        "GET /api/backoffice/usuarios - List users with stats",
+        "PUT /api/backoffice/usuarios/{id}/desactivar - Deactivate user",
+        "PUT /api/backoffice/usuarios/{id}/resetear-password - Reset password"
+      ],
+      "features_verified": [
+        "Create comercial/instalador with temp password",
+        "List users with role counts",
+        "Deactivate users",
+        "Reset passwords"
+      ]
+    },
+    "pipeline_crm": {
+      "endpoints": [
+        "POST /api/backoffice/pipeline - Create lead",
+        "GET /api/backoffice/pipeline - List leads with stage counts",
+        "PUT /api/backoffice/pipeline/{id}/avanzar - Advance stage",
+        "PUT /api/backoffice/pipeline/{id}/estudio - Save estudio",
+        "PUT /api/backoffice/pipeline/{id}/propuesta - Save propuesta",
+        "PUT /api/backoffice/pipeline/{id}/activar-cliente - Activate client"
+      ],
+      "stages": ["lead", "contacto", "estudio", "propuesta", "contrato", "instalacion", "activacion", "activo", "cancelado"],
+      "features_verified": [
+        "Create leads with required fields (nombre, telefono)",
+        "Advance leads through pipeline stages",
+        "Save estudio de seguridad data",
+        "Save propuesta data",
+        "Activate client (creates app credentials)"
+      ]
+    },
+    "audit_trail": {
+      "endpoint": "GET /api/backoffice/auditoria",
+      "features_verified": [
+        "All admin actions logged",
+        "Logs include admin name, action, details, timestamp"
+      ]
+    },
+    "zip_downloads": {
+      "endpoint": "GET /api/descargas/{filename}.zip",
+      "features_verified": [
+        "Returns 200 with application/zip content type",
+        "Returns 404 for nonexistent files"
+      ]
+    }
+  },
+  "mocked_data": {
+    "has_mocked_apis": false,
+    "mocked_apis_list": []
+  }
+}

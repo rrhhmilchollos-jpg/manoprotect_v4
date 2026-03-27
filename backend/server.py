@@ -48,6 +48,18 @@ app = FastAPI()
 api_router = APIRouter(prefix="/api")
 
 
+# Direct download endpoint (under /api so Kubernetes routes it to backend)
+@api_router.get("/descargas/{filename}")
+async def descargar_zip_directo(filename: str):
+    """Descarga directa de ZIPs"""
+    safe = filename.replace("..", "").replace("/", "")
+    for d in ["/app/downloads", "/app/backend/uploads/downloads"]:
+        fp = Path(d) / safe
+        if fp.exists() and fp.suffix == ".zip":
+            return FileResponse(path=str(fp), media_type="application/zip", filename=safe)
+    raise HTTPException(status_code=404, detail="Archivo no encontrado")
+
+
 # Mount downloads directory
 from starlette.staticfiles import StaticFiles
 import os as _os
@@ -2633,6 +2645,17 @@ async def download_package(package_name: str, key: str = ""):
         filename=filenames[package_name]
     )
 
+
+@public_router.get("/descargas/{filename}")
+async def descargar_zip(filename: str):
+    """Descarga directa de ZIPs sin autenticacion"""
+    safe = filename.replace("..", "").replace("/", "")
+    for d in ["/app/downloads", "/app/backend/uploads/downloads"]:
+        fp = Path(d) / safe
+        if fp.exists() and fp.suffix == ".zip":
+            return FileResponse(path=str(fp), media_type="application/zip", filename=safe)
+    raise HTTPException(status_code=404, detail="Archivo no encontrado")
+
 async def get_api_key_user(request: Request) -> dict:
     """Get user from API key in header"""
     api_key = request.headers.get("X-API-Key")
@@ -3396,6 +3419,10 @@ try:
     from routes.gestion_routes import router as gestion_router, init_gestion, _seed_gestion_users as seed_gestion
     init_gestion(db)
     api_router.include_router(gestion_router)
+
+    from routes.backoffice_routes import router as backoffice_router, init_backoffice
+    init_backoffice(db)
+    api_router.include_router(backoffice_router)
     print("\u2705 Gestion CRA routes loaded")
     
     # Auto-seed gestion users on startup

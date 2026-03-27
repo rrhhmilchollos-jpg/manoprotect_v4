@@ -249,6 +249,7 @@ const ManoprotectConnectPage = lazy(() => import('@/pages/ManoprotectConnectPage
 const AppCliente = lazy(() => import('@/pages/AppCliente'));
 const AppComerciales = lazy(() => import('@/pages/AppComerciales'));
 const AppInstaladores = lazy(() => import('@/pages/AppInstaladores'));
+const BackOfficePanel = lazy(() => import('@/pages/BackOfficePanel'));
 
 // Lazy load non-critical UI components to reduce main thread blocking
 const CookieConsent = lazy(() => import('@/components/CookieConsent'));
@@ -710,6 +711,7 @@ function AppRouter() {
           <Route path="/app-cliente" element={<AppCliente />} />
           <Route path="/app-comerciales" element={<AppComerciales />} />
           <Route path="/app-instaladores" element={<AppInstaladores />} />
+          <Route path="/backoffice" element={<BackOfficePanel />} />
           <Route path="/gestion/admin" element={<GestionAdmin />} />
           
           {/* Family ID Authentication */}

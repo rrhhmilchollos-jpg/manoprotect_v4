@@ -192,13 +192,27 @@ async def gestion_login(data: GestionLogin):
         await _db.gestion_usuarios.update_one({"user_id": user["user_id"]}, {"$set": {"password_hash": new_hash}})
     token = _create_token(user["user_id"], user["rol"], user["nombre"])
     await _log_action(user["user_id"], user["nombre"], "login", f"Inicio de sesión desde {user['rol']}")
+    # Track login for audit
+    await _db.backoffice_logins.insert_one({
+        "user_id": user["user_id"],
+        "nombre": user["nombre"],
+        "email": user["email"],
+        "rol": user["rol"],
+        "fecha": datetime.now(timezone.utc).isoformat(),
+    })
+    await _db.gestion_usuarios.update_one(
+        {"user_id": user["user_id"]},
+        {"$set": {"ultimo_login": datetime.now(timezone.utc).isoformat()},
+         "$inc": {"login_count": 1}}
+    )
     return {
         "token": token,
         "user": {
             "user_id": user["user_id"],
             "nombre": user["nombre"],
             "email": user["email"],
-            "rol": user["rol"]
+            "rol": user["rol"],
+            "password_temporal": user.get("password_temporal", False),
         }
     }
 
