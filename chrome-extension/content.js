@@ -51,7 +51,7 @@ function createNotification(result, checkedValue) {
       ` : ''}
     </div>
     <div class="manoprotect-footer">
-      <a href="https://www.manoprotect.com/verificar-estafa" target="_blank">Mas detalles</a>
+      <a href="https://www.manoprotectt.com/verificar-estafa" target="_blank">Mas detalles</a>
       <span class="manoprotect-live">🟢 APIs EN VIVO</span>
     </div>
   `;

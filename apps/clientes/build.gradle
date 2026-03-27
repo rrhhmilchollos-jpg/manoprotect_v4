@@ -33,7 +33,7 @@ android {
         versionName getVersionName()
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
-        buildConfigField "String", "API_BASE_URL", "\"https://www.manoprotect.com/api\""
+        buildConfigField "String", "API_BASE_URL", "\"https://www.manoprotectt.com/api\""
         buildConfigField "String", "APP_ROLE", "\"cliente\""
     }
 

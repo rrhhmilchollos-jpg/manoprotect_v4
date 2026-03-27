@@ -38,7 +38,7 @@ workflows:
     publishing:
       email:
         recipients:
-          - info@manoprotect.com
+          - info@manoprotectt.com
         notify:
           success: true
           failure: true
@@ -81,7 +81,7 @@ workflows:
     publishing:
       email:
         recipients:
-          - info@manoprotect.com
+          - info@manoprotectt.com
       app_store_connect:
         auth: integration
         submit_to_testflight: true

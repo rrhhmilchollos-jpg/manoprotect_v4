@@ -18,7 +18,7 @@ import java.io.IOException;
 public class MainActivity extends Activity {
     
     private static final String BASE_URL = BuildConfig.API_BASE_URL;
-    private static final String APP_URL = "https://www.manoprotect.com/gestion/instaladores";
+    private static final String APP_URL = "https://www.manoprotectt.com/gestion/instaladores";
     private static final String VERSION_CHECK_URL = BASE_URL + "/gestion/app-versions/check";
     private static final String CURRENT_VERSION = BuildConfig.VERSION_NAME;
     private static final int CURRENT_BUILD = BuildConfig.VERSION_CODE;
@@ -42,7 +42,7 @@ public class MainActivity extends Activity {
         
         webView.setWebViewClient(new WebViewClient());
         webView.setWebChromeClient(new WebChromeClient());
-        webView.loadUrl("https://www.manoprotect.com/gestion/login");
+        webView.loadUrl("https://www.manoprotectt.com/gestion/login");
         
         checkForUpdates();
     }

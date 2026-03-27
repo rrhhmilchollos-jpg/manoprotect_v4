@@ -8,7 +8,7 @@ import androidx.browser.customtabs.CustomTabsIntent;
 
 public class LauncherActivity extends Activity {
     
-    private static final String TARGET_URL = "https://www.manoprotect.com";
+    private static final String TARGET_URL = "https://www.manoprotectt.com";
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {

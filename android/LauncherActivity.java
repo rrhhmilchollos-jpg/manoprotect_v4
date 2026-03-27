@@ -32,7 +32,7 @@ public class LauncherActivity extends AppCompatActivity {
     // private static final String AD_UNIT_ID = "ca-app-pub-7713974112203810/XXXXXXXXXX"; // Production ID
     
     // TWA Configuration
-    private static final String TWA_URL = "https://manoprotect.com";
+    private static final String TWA_URL = "https://manoprotectt.com";
     
     private InterstitialAd mInterstitialAd;
     private boolean adShown = false;

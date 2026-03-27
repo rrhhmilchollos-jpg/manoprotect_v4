@@ -32,17 +32,17 @@
         <meta name="language" content="Spanish" />
         <meta name="geo.region" content="ES" />
         <meta name="geo.placename" content="España" />
-        <link rel="canonical" href="https://www.manoprotect.com/" />
-        <link rel="alternate" hreflang="es" href="https://www.manoprotect.com/" />
-        <link rel="alternate" hreflang="x-default" href="https://www.manoprotect.com/" />
+        <link rel="canonical" href="https://www.manoprotectt.com/" />
+        <link rel="alternate" hreflang="es" href="https://www.manoprotectt.com/" />
+        <link rel="alternate" hreflang="x-default" href="https://www.manoprotectt.com/" />
         
         <!-- Open Graph / Facebook - Optimizado -->
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://www.manoprotect.com/" />
+        <meta property="og:url" content="https://www.manoprotectt.com/" />
         <meta property="og:title" content="ManoProtect - Protección Familiar contra Fraudes Digitales" />
         <meta property="og:description" content="Protege a tu familia contra fraudes, phishing y estafas digitales en tiempo real. IA avanzada para detectar amenazas." />
-        <meta property="og:image" content="https://www.manoprotect.com/og-image.png" />
-        <meta property="og:image:secure_url" content="https://www.manoprotect.com/og-image.png" />
+        <meta property="og:image" content="https://www.manoprotectt.com/og-image.png" />
+        <meta property="og:image:secure_url" content="https://www.manoprotectt.com/og-image.png" />
         <meta property="og:image:type" content="image/png" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
@@ -54,10 +54,10 @@
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:site" content="@manoprotect" />
         <meta name="twitter:creator" content="@manoprotect" />
-        <meta name="twitter:url" content="https://www.manoprotect.com/" />
+        <meta name="twitter:url" content="https://www.manoprotectt.com/" />
         <meta name="twitter:title" content="ManoProtect - Protección Familiar contra Fraudes" />
         <meta name="twitter:description" content="Protege a tu familia contra fraudes y estafas digitales. IA avanzada para detectar amenazas en tiempo real." />
-        <meta name="twitter:image" content="https://www.manoprotect.com/og-image.png" />
+        <meta name="twitter:image" content="https://www.manoprotectt.com/og-image.png" />
         <meta name="twitter:image:alt" content="ManoProtect - Protección familiar digital" />
         
         <!-- Schema.org Organization - Mejorado -->
@@ -67,8 +67,8 @@
             "@type": "Organization",
             "name": "ManoProtect",
             "legalName": "STARTBOOKING SL",
-            "url": "https://www.manoprotect.com",
-            "logo": "https://www.manoprotect.com/manoprotect_logo.webp",
+            "url": "https://www.manoprotectt.com",
+            "logo": "https://www.manoprotectt.com/manoprotect_logo.webp",
             "description": "Plataforma líder en España de protección contra fraudes y estafas digitales",
             "foundingDate": "2024",
             "address": {
@@ -80,7 +80,7 @@
                 "@type": "ContactPoint",
                 "telephone": "+34-601-510-950",
                 "contactType": "customer service",
-                "email": "info@manoprotect.com",
+                "email": "info@manoprotectt.com",
                 "availableLanguage": ["Spanish", "English"],
                 "areaServed": "ES"
             },
@@ -97,7 +97,7 @@
             "@context": "https://schema.org",
             "@type": "SoftwareApplication",
             "name": "ManoProtect",
-            "url": "https://www.manoprotect.com",
+            "url": "https://www.manoprotectt.com",
             "operatingSystem": "ANDROID, IOS, Web",
             "applicationCategory": "SecurityApplication",
             "description": "Aplicación de protección contra fraudes digitales para familias",
@@ -112,9 +112,9 @@
             "provider": {
                 "@type": "Organization",
                 "name": "STARTBOOKING SL",
-                "url": "https://www.manoprotect.com"
+                "url": "https://www.manoprotectt.com"
             },
-            "screenshot": "https://www.manoprotect.com/og-image.png"
+            "screenshot": "https://www.manoprotectt.com/og-image.png"
         }
         </script>
         
@@ -166,10 +166,10 @@
             "@context": "https://schema.org",
             "@type": "WebSite",
             "name": "ManoProtect",
-            "url": "https://www.manoprotect.com",
+            "url": "https://www.manoprotectt.com",
             "potentialAction": {
                 "@type": "SearchAction",
-                "target": "https://www.manoprotect.com/search?q={search_term_string}",
+                "target": "https://www.manoprotectt.com/search?q={search_term_string}",
                 "query-input": "required name=search_term_string"
             }
         }
@@ -233,8 +233,8 @@
         <script>
             (function() {
                 // Only load development scripts when NOT in production
-                var isProduction = window.location.hostname === 'manoprotect.com' || 
-                    window.location.hostname === 'www.manoprotect.com';
+                var isProduction = window.location.hostname === 'manoprotectt.com' || 
+                    window.location.hostname === 'www.manoprotectt.com';
                 
                 if (!isProduction && window.location.hostname === 'localhost') {
                     // Development mode only
@@ -376,13 +376,13 @@
                 <section class="noscript-section">
                     <h2>Contacto</h2>
                     <p><strong>Teléfono:</strong> 601 510 950</p>
-                    <p><strong>Email:</strong> info@manoprotect.com</p>
+                    <p><strong>Email:</strong> info@manoprotectt.com</p>
                     <p><strong>Empresa:</strong> STARTBOOKING SL - Madrid, España</p>
                 </section>
 
                 <div style="text-align: center; margin: 30px 0;">
                     <p>Para disfrutar de todas las funciones de ManoProtect, por favor habilita JavaScript en tu navegador.</p>
-                    <a href="https://www.manoprotect.com" class="noscript-cta">Ir a ManoProtect.com</a>
+                    <a href="https://www.manoprotectt.com" class="noscript-cta">Ir a ManoProtect.com</a>
                 </div>
 
                 <footer class="noscript-footer">

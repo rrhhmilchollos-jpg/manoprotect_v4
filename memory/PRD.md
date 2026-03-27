@@ -1,4 +1,4 @@
-# ManoProtect - PRD v11.3.0
+# ManoProtect - PRD v11.4.0
 
 ## Problema Original
 App de seguridad empresarial "ManoProtect" con gestión de roles, alarmas, equipos de instaladores, apps PWA, SEO completo y optimización de conversión.
@@ -6,6 +6,7 @@ App de seguridad empresarial "ManoProtect" con gestión de roles, alarmas, equip
 ## Dominio
 - **Dominio activo**: `manoprotectt.com` (migrado desde manoprotect.com bloqueado por IONOS)
 - **Emails**: `@manoprotectt.com`
+- **Package Android**: `com.manoprotect.www.twa` (NO cambiar - es ID de Play Store)
 
 ## Arquitectura
 - **Frontend**: React (CRA) + Tailwind CSS + Shadcn/UI
@@ -14,21 +15,23 @@ App de seguridad empresarial "ManoProtect" con gestión de roles, alarmas, equip
 - **Email**: Brevo | **Pagos**: Stripe | **Analytics**: GA4 + GTM
 - **PWA**: Service Worker v5 (SPA app-shell pattern)
 - **Desktop**: Electron apps (CRA Operador + CRM Ventas)
+- **Mobile**: TWA Android + React Native
 
 ## Completado esta sesión
 
-### Migración de dominio manoprotect.com → manoprotectt.com (Mar 27, 2026)
-- **832+ ocurrencias** actualizadas en todo el codebase
-- SEO: index.html canonical, og:url, schema.org, sitemap.xml, robots.txt
-- Backend: CORS, websocket_manager, email templates, brevo, push notifications
-- Frontend: Todas las páginas blog, SEO, landing, componentes, hooks
-- Desktop apps: CRA y CRM Electron ahora apuntan a manoprotectt.com
-- Guías y docs: GUIA_PWABUILDER_APK.md, assetlinks.json, marketing docs
-- **MongoDB migrada**: 15 docs actualizados en 8 colecciones (@manoprotect.com → @manoprotectt.com)
-- **Fix CRA/CRM offline**: Causa raíz — apps Electron apuntaban al dominio bloqueado por IONOS
-- **Fix package names**: Corregido bug de sed que afectó com.manoprotect.comerciales
-- **assetlinks.json**: Actualizado con package real `com.manoprotect.www.twa` + 3 apps
-- Tests: 100% backend + 100% frontend (iteration_130 + iteration_131)
+### Migración TOTAL de dominio (Mar 27, 2026)
+- **Fase 1**: 832+ ocurrencias en frontend/backend/SEO/docs
+- **Fase 2**: 15 docs MongoDB migrados en 8 colecciones
+- **Fase 3**: mobile-app (api.ts, config), chrome-extension, capacitor configs
+- **Fase 4**: apps Android (4 build.gradle, 4 MainActivity.java, google-services.json)
+- **Fase 5**: TWA, android-build, twa-manifest.json, AndroidManifest.xml
+- **Fase 6**: Backend .env emails (VAPID, Brevo)
+- **Fix package names**: Protegidos com.manoprotect.* (Android IDs ≠ dominio)
+- **Fix CRA/CRM offline**: Causa raíz — Electron → dominio bloqueado IONOS
+- **Electron Linux builds**: Compilados (CRA + CRM)
+- **Guía completa**: GUIA_COMPILAR_APPS.md (Electron + APK + Firebase Auth)
+- **Verificado en producción**: www.manoprotectt.com - 100% operativo
+- Tests: 100% (iterations 129, 130, 131)
 
 ### Visibilidad Google Play Store / ASO (Mar 27, 2026)
 - **Hero**: Badge Play Store ★★★★★ 4.8 rating + icono descarga
@@ -89,8 +92,10 @@ App de seguridad empresarial "ManoProtect" con gestión de roles, alarmas, equip
 18. Footer (con internal linking + **Play Store mejorado**)
 
 ## Backlog
-- **P0**: Deploy a producción
-- **P0**: Generar APKs con PWABuilder
+- **P0**: Añadir `manoprotectt.com` + `www.manoprotectt.com` en Firebase Auth (Authorized domains)
+- **P0**: Compilar Electron CRA/CRM en Windows (usar `compilar-escritorio.sh`)
+- **P0**: Generar APKs con PWABuilder (ver GUIA_COMPILAR_APPS.md)
+- **P0**: Actualizar SHA-256 fingerprint en assetlinks.json
 - **P1**: Imágenes para 6 artículos blog (actualmente placeholder verde)
 - **P1**: CI/CD Play Store, RTSP streaming
 - **P1**: SEM/Ads config (Meta Pixel, Hotjar, GSC)

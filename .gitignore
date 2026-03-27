@@ -156,3 +156,9 @@ frontend/node_modules/.cache/default-development/25.pack
 *.env
 *.env.*
 frontend/node_modules/.cache/default-development/11.pack
+desktop-apps/crm-ventas/dist/win-arm64-unpacked/ManoProtect
+CRM.exe
+desktop-apps/crm-ventas/dist/linux-arm64-unpacked/manoprotect-crm
+desktop-apps/cra-operador/dist/win-arm64-unpacked/ManoProtect
+CRA.exe
+desktop-apps/cra-operador/dist/linux-arm64-unpacked/manoprotect-cra

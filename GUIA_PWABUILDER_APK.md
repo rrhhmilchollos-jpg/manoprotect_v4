@@ -10,7 +10,7 @@ Usaremos **PWABuilder** (https://www.pwabuilder.com/) para convertir las 3 apps 
 | App | URL para PWABuilder | Package Name |
 |-----|---------------------|--------------|
 | **Clientes** | `https://www.manoprotectt.com/` | `com.manoprotect.clientes` |
-| **Comerciales** | `https://www.manoprotectt.com/pwa-comerciales.html` | `com.manoprotect.comerciales` |
+| **Comerciales** | `https://www.manoprotectt.com/pwa-comerciales.html` | `com.manoprotectt.comerciales` |
 | **Instaladores** | `https://www.manoprotectt.com/pwa-instaladores.html` | `com.manoprotect.instaladores` |
 
 ---
@@ -50,7 +50,7 @@ Usaremos **PWABuilder** (https://www.pwabuilder.com/) para convertir las 3 apps 
 3. Haz clic en **"Start"**
 4. Haz clic en **"Package for stores"** > **"Android"**
 5. Configura:
-   - **Package ID**: `com.manoprotect.comerciales`
+   - **Package ID**: `com.manoprotectt.comerciales`
    - **App name**: `ManoProtect Comerciales`
    - **App version**: `2.1.0`
    - **App version code**: `4`

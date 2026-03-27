@@ -358,7 +358,7 @@ class TestAppVersionControl:
                 "release_notes": "Test update - new features added",
                 "min_version": "1.0.0",
                 "force_update": False,
-                "download_url": "https://play.google.com/store/apps/details?id=com.manoprotect.comerciales"
+                "download_url": "https://play.google.com/store/apps/details?id=com.manoprotectt.comerciales"
             },
             headers={"Authorization": f"Bearer {admin_token}"}
         )

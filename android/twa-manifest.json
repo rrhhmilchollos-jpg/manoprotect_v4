@@ -1,6 +1,6 @@
 {
   "packageId": "com.manoprotect.app",
-  "host": "manoprotect.com",
+  "host": "manoprotectt.com",
   "name": "ManoProtect",
   "launcherName": "ManoProtect",
   "display": "standalone",
@@ -36,7 +36,7 @@
     }
   ],
   "generatorApp": "PWABuilder",
-  "webManifestUrl": "https://manoprotect.com/manifest.json",
+  "webManifestUrl": "https://manoprotectt.com/manifest.json",
   "fallbackType": "customtabs",
   "features": {
     "locationDelegation": {

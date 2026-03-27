@@ -2,7 +2,7 @@ const { app, BrowserWindow, Menu, shell } = require('electron');
 const path = require('path');
 
 // Production URL
-const MANOPROTECT_URL = 'https://manoprotect.com';
+const MANOPROTECT_URL = 'https://manoprotectt.com';
 
 let mainWindow;
 
@@ -79,11 +79,11 @@ const menuTemplate = [
         submenu: [
             { 
                 label: 'Soporte', 
-                click: () => shell.openExternal('mailto:info@manoprotect.com') 
+                click: () => shell.openExternal('mailto:info@manoprotectt.com') 
             },
             { 
                 label: 'Sitio Web', 
-                click: () => shell.openExternal('https://manoprotect.com') 
+                click: () => shell.openExternal('https://manoprotectt.com') 
             },
             { type: 'separator' },
             { 

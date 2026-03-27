@@ -7,7 +7,7 @@ import android.os.Bundle;
 
 public class LauncherActivity extends com.google.androidbrowserhelper.trusted.LauncherActivity {
 
-    private static final String DEFAULT_URL = "https://www.manoprotect.com";
+    private static final String DEFAULT_URL = "https://www.manoprotectt.com";
 
     @Override
     protected Uri getLaunchingUrl() {

@@ -10,7 +10,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 // For production: Update to your production domain
 const API_BASE_URL = __DEV__ 
   ? 'https://auth-hardened-test.preview.emergentagent.com/api'
-  : 'https://manoprotect.com/api';
+  : 'https://manoprotectt.com/api';
 
 class ApiService {
   private client: AxiosInstance;

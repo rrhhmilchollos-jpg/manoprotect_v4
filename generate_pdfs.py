@@ -465,9 +465,9 @@ MANO es una **plataforma tecnológica de protección en tiempo real** que utiliz
 
 ## MANO Security S.L.
 
-- **Web**: https://manoprotect.com
-- **Email**: inversores@manoprotect.com
-- **Portal de inversores**: https://manoprotect.com/investor-register
+- **Web**: https://manoprotectt.com
+- **Email**: inversores@manoprotectt.com
+- **Portal de inversores**: https://manoprotectt.com/investor-register
 
 ---
 
@@ -605,9 +605,9 @@ MANO es una **plataforma tecnológica de protección en tiempo real** que utiliz
 
 ## CONTACTO
 
-**inversores@manoprotect.com**
+**inversores@manoprotectt.com**
 
-Portal: manoprotect.com/investor-register
+Portal: manoprotectt.com/investor-register
 
 ---
 
@@ -952,8 +952,8 @@ Portal: manoprotect.com/investor-register
 
 **Para consultas sobre inversión:**
 
-- Email: inversores@manoprotect.com
-- Portal: https://manoprotect.com/investor-register
+- Email: inversores@manoprotectt.com
+- Portal: https://manoprotectt.com/investor-register
 
 ---
 

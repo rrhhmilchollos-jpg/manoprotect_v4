@@ -29,7 +29,7 @@ export const APP_CONFIG = {
   FIREBASE_PROJECT_ID: 'manoprotect-f889b',
   
   // Production domain
-  DOMAIN: 'manoprotect.com',
+  DOMAIN: 'manoprotectt.com',
   
   // Deep linking scheme
   URL_SCHEME: 'mano',

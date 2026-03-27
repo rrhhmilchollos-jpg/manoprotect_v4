@@ -10,7 +10,7 @@
   ],
   "host_permissions": [
     "https://auth-hardened-test.preview.emergentagent.com/*",
-    "https://www.manoprotect.com/*"
+    "https://www.manoprotectt.com/*"
   ],
   "action": {
     "default_popup": "popup/popup.html",

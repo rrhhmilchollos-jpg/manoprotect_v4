@@ -5,9 +5,9 @@
     <string name="launcher_name">ManoProtect</string>
     
     <!-- TWA Configuration -->
-    <string name="hostName">www.manoprotect.com</string>
+    <string name="hostName">www.manoprotectt.com</string>
     <string name="launchUrl">/</string>
-    <string name="defaultUrl">https://www.manoprotect.com</string>
+    <string name="defaultUrl">https://www.manoprotectt.com</string>
     
     <!-- Asset Statements for TWA verification -->
     <string name="assetStatements">
@@ -15,7 +15,7 @@
             \"relation\": [\"delegate_permission/common.handle_all_urls\"],
             \"target\": {
                 \"namespace\": \"web\",
-                \"site\": \"https://www.manoprotect.com\"
+                \"site\": \"https://www.manoprotectt.com\"
             }
         }]
     </string>
