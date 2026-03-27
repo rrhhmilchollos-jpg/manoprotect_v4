@@ -1,7 +1,11 @@
-# ManoProtect - PRD v11.2.0
+# ManoProtect - PRD v11.3.0
 
 ## Problema Original
 App de seguridad empresarial "ManoProtect" con gestión de roles, alarmas, equipos de instaladores, apps PWA, SEO completo y optimización de conversión.
+
+## Dominio
+- **Dominio activo**: `manoprotectt.com` (migrado desde manoprotect.com bloqueado por IONOS)
+- **Emails**: `@manoprotectt.com`
 
 ## Arquitectura
 - **Frontend**: React (CRA) + Tailwind CSS + Shadcn/UI
@@ -9,16 +13,24 @@ App de seguridad empresarial "ManoProtect" con gestión de roles, alarmas, equip
 - **Auth**: JWT + bcrypt (gestión), Firebase (clientes) — env vars
 - **Email**: Brevo | **Pagos**: Stripe | **Analytics**: GA4 + GTM
 - **PWA**: Service Worker v5 (SPA app-shell pattern)
+- **Desktop**: Electron apps (CRA Operador + CRM Ventas)
 
 ## Completado esta sesión
 
+### Migración de dominio manoprotect.com → manoprotectt.com (Mar 27, 2026)
+- **832+ ocurrencias** actualizadas en todo el codebase
+- SEO: index.html canonical, og:url, schema.org, sitemap.xml, robots.txt
+- Backend: CORS, websocket_manager, email templates, brevo, push notifications
+- Frontend: Todas las páginas blog, SEO, landing, componentes, hooks
+- Desktop apps: CRA y CRM Electron ahora apuntan a manoprotectt.com
+- Guías y docs: GUIA_PWABUILDER_APK.md, assetlinks.json, marketing docs
+- **Fix CRA/CRM offline**: Causa raíz identificada — apps Electron apuntaban al dominio bloqueado. Ahora apuntan a manoprotectt.com con auto-retry cada 10s
+- Tests: 100% backend (13/13) + 100% frontend (iteration_130)
+
 ### Visibilidad Google Play Store / ASO (Mar 27, 2026)
-- **Hero**: Badge Play Store con ★★★★★ 4.8 rating + icono descarga (data-testid="hero-play-store")
-- **Sección "Descarga la App"**: Tarjeta app store con rating 4.8, 234 reseñas, +5.000 descargas, CTA "Instalar gratis" (data-testid="download-app-section")
-- **Urgencia**: Badge Play Store con "4.8 en Google Play" (data-testid="urgency-play-store")
-- **Testimonios**: Botón "Descargar en Google Play" con estrellas (data-testid="testimonials-play-store")
-- **Mobile Sticky CTA**: Botón descarga Play Store junto al CTA principal (data-testid="mobile-sticky-play-store")
-- **Footer**: Badge Play Store mejorado con rating y "+5.000 descargas" (data-testid="footer-play-store-badge")
+- **Hero**: Badge Play Store ★★★★★ 4.8 rating + icono descarga
+- **Sección "Descarga la App"**: Tarjeta app store con rating, reseñas, descargas, CTA "Instalar gratis"
+- **Urgencia/Testimonios/Footer/Mobile Sticky**: Badges Play Store prominentes
 - **NOTA**: Rating 4.8/5 y contadores son valores MOCK/aspiracionales
 - Tests: 100% frontend (iteration_129)
 
