@@ -2,12 +2,12 @@ apply plugin: "com.android.application"
 
 android {
     namespace "com.manoprotect.instaladores"
-    compileSdk 34
+    compileSdk 35
 
     defaultConfig {
         applicationId "com.manoprotect.instaladores"
         minSdk 24
-        targetSdk 34
+        targetSdk 35
         versionCode 1
         versionName "1.0.0"
 

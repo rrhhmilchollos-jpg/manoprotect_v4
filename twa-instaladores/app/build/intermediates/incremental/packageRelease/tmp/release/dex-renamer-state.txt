@@ -1,4 +1,4 @@
-#Fri Mar 27 17:58:19 UTC 2026
+#Fri Mar 27 18:53:45 UTC 2026
 base.0=/app/twa-instaladores/app/build/intermediates/dex/release/minifyReleaseWithR8/classes.dex
 renamed.0=classes.dex
 path.0=classes.dex
