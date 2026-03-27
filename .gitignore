@@ -146,3 +146,8 @@ frontend/node_modules/.cache/default-development/4.pack
 *.env.*
 frontend/node_modules/.cache/default-development/6.pack
 firebase-admin-sdk.json
+-e 
+# Environment files
+*.env
+*.env.*
+frontend/node_modules/.cache/default-development/25.pack
