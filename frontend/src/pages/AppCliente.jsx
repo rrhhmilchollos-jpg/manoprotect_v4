@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { requestNotificationPermission, onForegroundMessage } from '../lib/firebase';
 
 const API = process.env.REACT_APP_BACKEND_URL;
 
@@ -30,9 +31,20 @@ export default function AppCliente() {
   const [referralCode, setReferralCode] = useState('');
   const [referralMsg, setReferralMsg] = useState('');
   const [arming, setArming] = useState(false);
+  const [notification, setNotification] = useState(null);
   const pollRef = useRef(null);
 
   const headers = useCallback(() => ({ 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }), [token]);
+
+  // Listen for foreground notifications
+  useEffect(() => {
+    const unsub = onForegroundMessage((payload) => {
+      const n = { title: payload.notification?.title, body: payload.notification?.body, type: payload.data?.type, critical: payload.data?.critical === 'true' };
+      setNotification(n);
+      setTimeout(() => setNotification(null), 8000);
+    });
+    return () => { if (typeof unsub === 'function') unsub(); };
+  }, []);
 
   // Check session on mount
   useEffect(() => {
@@ -75,6 +87,8 @@ export default function AppCliente() {
       setToken(data.token); setUser(data.user);
       setTrialStatus({ subscription_status: 'trial', trial_days_left: data.user.trial_days_left, show_expiry_warning: false, price_monthly: 9.99 });
       setScreen('app');
+      // Request push notifications permission
+      requestNotificationPermission(data.user.user_id, API);
     } catch (err) { setError(err.message); } finally { setLoading(false); }
   };
 
@@ -97,6 +111,8 @@ export default function AppCliente() {
       } else {
         setTrialStatus({ subscription_status: data.user.subscription_status, trial_days_left: data.user.trial_days_left, show_expiry_warning: data.user.trial_days_left <= 2, price_monthly: 9.99 });
         setScreen('app');
+        // Request push notifications permission
+        requestNotificationPermission(data.user.user_id, API);
       }
     } catch (err) { setError(err.message); } finally { setLoading(false); }
   };
@@ -285,6 +301,18 @@ export default function AppCliente() {
       {showWarning && (
         <div data-testid="trial-warning" style={{ background: 'linear-gradient(90deg, #f59e0b, #d97706)', padding: '10px 16px', textAlign: 'center', fontSize: 13, fontWeight: 600, color: '#000' }}>
           <i className="fa-solid fa-clock"></i> Tu trial termina en {daysLeft} dia{daysLeft !== 1 ? 's' : ''}. <span onClick={startSubscription} style={{ textDecoration: 'underline', cursor: 'pointer' }}>Sigue con nosotros</span>
+        </div>
+      )}
+
+      {/* Push Notification Alert */}
+      {notification && (
+        <div data-testid="push-notification" onClick={() => setNotification(null)} style={{
+          background: notification.critical ? 'linear-gradient(90deg, #dc2626, #991b1b)' : 'linear-gradient(90deg, #3b82f6, #1d4ed8)',
+          padding: '14px 16px', textAlign: 'center', fontSize: 14, color: '#fff', cursor: 'pointer',
+          animation: notification.critical ? 'pulse 1s infinite' : 'none',
+        }}>
+          <i className={`fa-solid ${notification.critical ? 'fa-triangle-exclamation' : 'fa-bell'}`} style={{ marginRight: 8 }}></i>
+          <strong>{notification.title}</strong> — {notification.body}
         </div>
       )}
 

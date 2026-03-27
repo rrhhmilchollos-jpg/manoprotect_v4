@@ -3499,6 +3499,16 @@ except Exception as e:
     print(f"\u26a0\ufe0f Client Trial routes not loaded: {e}")
 
 
+# Firebase Push Notifications
+try:
+    from routes.notification_routes import router as notif_router, init_notifications
+    init_notifications(db)
+    api_router.include_router(notif_router)
+    print("\u2705 Firebase Push Notifications loaded")
+except Exception as e:
+    print(f"\u26a0\ufe0f Notification routes not loaded: {e}")
+
+
 # Sistema de Gestión CRA (Comerciales, Instaladores, Admin)
 try:
     from routes.gestion_routes import router as gestion_router, init_gestion, _seed_gestion_users as seed_gestion

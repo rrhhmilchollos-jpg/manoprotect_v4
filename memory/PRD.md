@@ -2,13 +2,14 @@
 ## Dominio: manoprotectt.com
 
 ## Descripcion
-Sistema de seguridad empresarial completo estilo Securitas Direct con CRA, Back Office, Pipeline CRM, emails automaticos Brevo, apps para clientes, comerciales e instaladores. Sistema completo de trial, anti-abuso y suscripciones Stripe.
+Sistema de seguridad empresarial completo estilo Securitas Direct con CRA, Back Office, Pipeline CRM, emails automaticos Brevo, Firebase Push Notifications, apps para clientes, comerciales e instaladores. Sistema completo de trial, anti-abuso y suscripciones Stripe.
 
 ## Arquitectura
-- **Backend**: FastAPI + MongoDB + Socket.IO + Brevo Email + Stripe
-- **Frontend**: React + TailwindCSS + Shadcn/UI
+- **Backend**: FastAPI + MongoDB + Socket.IO + Brevo Email + Stripe + Firebase Admin SDK
+- **Frontend**: React + TailwindCSS + Shadcn/UI + Firebase JS SDK
 - **Dominio**: manoprotectt.com (con dos 't')
-- **Android APKs**: TWA (Trusted Web Activity) compilados con Gradle
+- **Android APKs**: TWA compilados con Gradle
+- **Firebase Project**: manoprotect-f889b
 
 ## Usuarios y Roles
 | Rol | Email | Password |
@@ -19,38 +20,27 @@ Sistema de seguridad empresarial completo estilo Securitas Direct con CRA, Back 
 | Instalador | instalador@manoprotectt.com | Instalador2025! |
 | Cliente (trial) | Registro libre via /app-cliente | 7 dias trial gratis |
 
-## Apps y Rutas
-| App | Ruta |
-|-----|------|
-| Back Office | /backoffice |
-| App Cliente | /app-cliente |
-| App Comerciales | /app-comerciales |
-| App Instaladores | /app-instaladores |
-| CRA Dashboard | /cra-operador |
-| Admin Gestion | /gestion |
-
 ## Sistema Trial + Suscripciones (AppCliente)
-- **Registro**: Email + password, trial 7 dias automatico
-- **Trial**: Todas las funciones desbloqueadas, aviso 2 dias antes de expirar
-- **Paywall**: Bloqueo total al expirar (solo login visible)
-- **Suscripcion**: Stripe 9.99 EUR/mes
-- **Referidos**: Codigo unico por usuario, +3 dias trial para ambos
-- **Anti-abuso**: Fingerprint + IP scoring, threshold 80
+- Registro: Email + password, trial 7 dias automatico
+- Trial: Todas las funciones desbloqueadas, aviso 2 dias antes de expirar
+- Paywall: Bloqueo total al expirar (solo login visible)
+- Suscripcion: Stripe 9.99 EUR/mes
+- Referidos: Codigo unico por usuario, +3 dias trial para ambos
+- Anti-abuso: Fingerprint + IP scoring, threshold 80
 
-### Endpoints Trial
-- POST /api/client-trial/register
-- POST /api/client-trial/login
-- GET /api/client-trial/status
-- POST /api/client-trial/checkout (Stripe)
-- GET /api/client-trial/checkout/status/{session_id}
-- POST /api/client-trial/referral/apply
-- POST /api/client-trial/check-abuse
-
-## Android APKs (Play Store)
-| App | Package ID | URL Target |
-|-----|-----------|------------|
-| MP Comerciales | com.manoprotect.comerciales | manoprotectt.com/app-comerciales |
-| MP Instaladores | com.manoprotect.instaladores | manoprotectt.com/app-instaladores |
+## Firebase Push Notifications
+- Service Account: /app/backend/firebase-service-account.json
+- Service Worker: /app/frontend/public/firebase-messaging-sw.js
+- Firebase Config: /app/frontend/src/lib/firebase.js
+- Backend Routes: /app/backend/routes/notification_routes.py
+- Endpoints:
+  - POST /api/notifications/register-token
+  - DELETE /api/notifications/unregister-token
+  - POST /api/notifications/send
+  - GET /api/notifications/status
+- Alarm alert function: send_alarm_alert(user_id, alert_type, message)
+- Alert types: intrusion, fire, panic, tamper, low_battery, arm, disarm
+- Critical alerts (intrusion, fire, panic): high priority, vibration pattern, require interaction
 
 ## Paginas Legales
 - Politica de privacidad: /api/privacy-policy
@@ -58,8 +48,9 @@ Sistema de seguridad empresarial completo estilo Securitas Direct con CRA, Back 
 
 ## Estado Actual
 ### Completado
-- APKs compilados para Play Store (Comerciales + Instaladores) con API 35
-- Sistema completo Trial + Anti-Abuso + Stripe + Referidos para AppCliente
+- APKs compilados para Play Store (API 35, versionCode 3)
+- Sistema Trial + Anti-Abuso + Stripe + Referidos
+- Firebase Push Notifications (Admin SDK + FCM + Service Worker)
 - Back Office + Pipeline CRM
 - Emails automaticos Brevo
 - Socket.IO CRA real-time
@@ -67,8 +58,7 @@ Sistema de seguridad empresarial completo estilo Securitas Direct con CRA, Back 
 - SEO + Performance optimizado
 
 ### Pendiente
-- P0: Firebase Push Notifications
-- P1: CI/CD Play Store
+- P1: CI/CD Play Store (pendiente secrets GitHub)
 - P1: SEM/Ads (Meta Pixel, Hotjar, Search Console)
 - P1: RTSP Camera Streaming
 - P2: iOS App con Capacitor
