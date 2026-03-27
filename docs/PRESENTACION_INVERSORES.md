@@ -127,9 +127,9 @@
 
 ## CONTACTO
 
-**inversores@manoprotect.com**
+**inversores@manoprotectt.com**
 
-Portal: manoprotect.com/investor-register
+Portal: manoprotectt.com/investor-register
 
 ---
 

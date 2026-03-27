@@ -110,8 +110,8 @@ Sin estos permisos, la app no podría cumplir su propósito de **salvar vidas** 
 ---
 
 **Contacto para preguntas adicionales:**
-- Email: info@manoprotect.com
-- Web: https://manoprotect.com
+- Email: info@manoprotectt.com
+- Web: https://manoprotectt.com
 
 **Empresa:**
 STARTBOOKING SL

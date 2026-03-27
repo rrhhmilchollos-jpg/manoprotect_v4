@@ -34,7 +34,7 @@ const PrivacyPolicy = () => {
               <p><strong>Empresa:</strong> ManoProtect S.L.</p>
               <p><strong>CIF:</strong> B19427723</p>
               <p><strong>Dirección:</strong> España</p>
-              <p><strong>Email:</strong> privacidad@manoprotect.com</p>
+              <p><strong>Email:</strong> privacidad@manoprotectt.com</p>
               <p><strong>Teléfono:</strong> +34 601 510 950</p>
             </div>
           </section>
@@ -115,7 +115,7 @@ const PrivacyPolicy = () => {
               </div>
             </div>
             <p className="text-zinc-600 mt-4">
-              Para ejercer tus derechos, contacta con: <strong>privacidad@manoprotect.com</strong>
+              Para ejercer tus derechos, contacta con: <strong>privacidad@manoprotectt.com</strong>
             </p>
           </section>
 
@@ -157,9 +157,9 @@ const PrivacyPolicy = () => {
           <section className="space-y-4 border-t pt-8">
             <h2 className="text-xl font-bold text-zinc-900">10. Contacto</h2>
             <div className="flex flex-wrap gap-4">
-              <a href="mailto:privacidad@manoprotect.com" className="flex items-center gap-2 text-indigo-600 hover:underline">
+              <a href="mailto:privacidad@manoprotectt.com" className="flex items-center gap-2 text-indigo-600 hover:underline">
                 <Mail className="w-5 h-5" />
-                privacidad@manoprotect.com
+                privacidad@manoprotectt.com
               </a>
               <a href="tel:+34601510950" className="flex items-center gap-2 text-indigo-600 hover:underline">
                 <Phone className="w-5 h-5" />

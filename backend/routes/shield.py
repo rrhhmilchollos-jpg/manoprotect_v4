@@ -176,12 +176,12 @@ async def create_trust_seal(data: TrustSealCreate):
         raise HTTPException(status_code=400, detail="This website already has a Trust Seal")
     
     seal_code = generate_seal_code()
-    verification_url = f"https://manoprotect.com/verify/{seal_code}"
+    verification_url = f"https://manoprotectt.com/verify/{seal_code}"
     
     # Generate embed code
     embed_code = f'''<!-- ManoProtect Trust Seal -->
 <div id="manoprotect-seal-{seal_code}"></div>
-<script src="https://manoprotect.com/seal.js" data-seal="{seal_code}"></script>'''
+<script src="https://manoprotectt.com/seal.js" data-seal="{seal_code}"></script>'''
     
     seal_record = {
         "seal_code": seal_code,

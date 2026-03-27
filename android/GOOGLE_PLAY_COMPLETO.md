@@ -22,7 +22,7 @@
 
 ### Paso 1: Ingresa la URL
 ```
-https://www.manoprotect.com
+https://www.manoprotectt.com
 ```
 
 ### Paso 2: Click "Package for stores" → "Android"
@@ -36,7 +36,7 @@ https://www.manoprotect.com
 │  Package ID:              com.manoprotect.app               │
 │  App name:                ManoProtect                       │
 │  Short name:              ManoProtect                       │
-│  Host:                    www.manoprotect.com               │
+│  Host:                    www.manoprotectt.com               │
 │  Start URL:               /                                 │
 │  Version:                 2.0.0                             │
 │  Version code:            2                                 │
@@ -49,9 +49,9 @@ https://www.manoprotect.com
 │  Nav divider color:       #10b981                           │
 │  Nav divider dark color:  #10b981                           │
 │                                                             │
-│  Icon URL:                https://www.manoprotect.com/icons/icon-512x512.png
-│  Maskable icon URL:       https://www.manoprotect.com/icons/icon-512x512.png
-│  Manifest URL:            https://www.manoprotect.com/manifest.json
+│  Icon URL:                https://www.manoprotectt.com/icons/icon-512x512.png
+│  Maskable icon URL:       https://www.manoprotectt.com/icons/icon-512x512.png
+│  Manifest URL:            https://www.manoprotectt.com/manifest.json
 │                                                             │
 │  Splash fade out:         300                               │
 │  Display mode:            Standalone                        │
@@ -129,8 +129,8 @@ ManoProtect te ayuda a proteger a tu familia de estafas digitales y situaciones 
 
 Prueba gratis durante 7 días. Sin tarjeta de crédito requerida.
 
-📧 Contacto: info@manoprotect.com
-🌐 Web: https://manoprotect.com
+📧 Contacto: info@manoprotectt.com
+🌐 Web: https://manoprotectt.com
 📍 Valencia, España
 
 Desarrollado por STARTBOOKING SL
@@ -210,10 +210,10 @@ llamadas falsas, mensajes falsos, ubicación familiar, control parental
 ## 📞 INFORMACIÓN DE CONTACTO (Para Google)
 
 **Nombre del desarrollador:** STARTBOOKING SL
-**Email:** info@manoprotect.com
+**Email:** info@manoprotectt.com
 **Teléfono:** +34 601 510 950
-**Sitio web:** https://manoprotect.com
-**Política de privacidad:** https://manoprotect.com/privacy
+**Sitio web:** https://manoprotectt.com
+**Política de privacidad:** https://manoprotectt.com/privacy
 **Dirección:** C/ Sor Isabel de Villena 82 bajo, Novelé, Valencia, España
 **CIF:** B19427723
 

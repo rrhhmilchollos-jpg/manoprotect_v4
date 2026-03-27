@@ -16,7 +16,7 @@ const ComoElegirBotonSOSEdad = () => {
     "headline": "Cómo Elegir el Botón SOS Adecuado para Cada Edad [Guía 2026]",
     "description": "Guía para elegir el mejor dispositivo SOS según la edad: niños 12-16, adultos 17-55 y seniors 55+. Comparativa de funciones y consejos.",
     "author": { "@type": "Organization", "name": "ManoProtect" },
-    "publisher": { "@type": "Organization", "name": "ManoProtect", "logo": { "@type": "ImageObject", "url": "https://manoprotect.com/logo512.png" } },
+    "publisher": { "@type": "Organization", "name": "ManoProtect", "logo": { "@type": "ImageObject", "url": "https://manoprotectt.com/logo512.png" } },
     "datePublished": "2026-02-25",
     "dateModified": "2026-02-25"
   };
@@ -63,7 +63,7 @@ const ComoElegirBotonSOSEdad = () => {
         <title>Cómo Elegir el Botón SOS Adecuado para Cada Edad [Guía 2026]</title>
         <meta name="description" content="Guía para elegir el mejor botón SOS según la edad. Niños 12-16: Sentinel X juvenil. Adultos 17-55: Sentinel X discreto. Senior 55+: Botón SOS independiente." />
         <meta name="keywords" content="elegir botón SOS, comparar dispositivos SOS, botón SOS por edades, sentinel x vs botón SOS, mejor dispositivo emergencia" />
-        <link rel="canonical" href="https://manoprotect.com/blog/como-elegir-boton-sos-edad" />
+        <link rel="canonical" href="https://manoprotectt.com/blog/como-elegir-boton-sos-edad" />
         <script type="application/ld+json">{JSON.stringify(schema)}</script>
       </Helmet>
 

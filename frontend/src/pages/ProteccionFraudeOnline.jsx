@@ -65,7 +65,7 @@ const ProteccionFraudeOnline = () => {
         <title>Protección contra Fraude Online - Fraud Prevention con IA | ManoProtect</title>
         <meta name="description" content="Protección contra fraude online con inteligencia artificial. Detectamos estafas, fraudes con tarjetas y compras falsas en tiempo real. Fraud prevention avanzado." />
         <meta name="keywords" content="fraude online, fraud prevention, protección fraude, estafas internet, fraude tarjetas, compras seguras, antifraude" />
-        <link rel="canonical" href="https://manoprotect.com/proteccion-fraude-online" />
+        <link rel="canonical" href="https://manoprotectt.com/proteccion-fraude-online" />
       </Helmet>
 
       <LandingHeader />

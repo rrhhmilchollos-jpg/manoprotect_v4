@@ -243,7 +243,7 @@ const EnterpriseLogin = () => {
                     <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500" />
                     <Input
                       type="email"
-                      placeholder="tu@manoprotect.com"
+                      placeholder="tu@manoprotectt.com"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       required
@@ -313,7 +313,7 @@ const EnterpriseLogin = () => {
         </Card>
 
         <p className="text-center text-slate-500 text-xs mt-6">
-          © 2026 ManoProtect - {isAdminSubdomain ? 'admin.manoprotect.com' : 'Manoprotect.com'}. Todos los derechos reservados.
+          © 2026 ManoProtect - {isAdminSubdomain ? 'admin.manoprotectt.com' : 'Manoprotect.com'}. Todos los derechos reservados.
         </p>
       </div>
 
@@ -342,8 +342,8 @@ const EnterpriseLogin = () => {
                   <Mail className={`w-5 h-5 ${isAdminSubdomain ? 'text-emerald-400' : 'text-indigo-400'}`} />
                   <div>
                     <p className="text-slate-400 text-xs">Email</p>
-                    <a href="mailto:soporte@manoprotect.com" className={`text-white ${isAdminSubdomain ? 'hover:text-emerald-300' : 'hover:text-indigo-300'}`}>
-                      soporte@manoprotect.com
+                    <a href="mailto:soporte@manoprotectt.com" className={`text-white ${isAdminSubdomain ? 'hover:text-emerald-300' : 'hover:text-indigo-300'}`}>
+                      soporte@manoprotectt.com
                     </a>
                   </div>
                 </div>

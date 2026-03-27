@@ -44,7 +44,7 @@ En `capacitor.config.json`, verifica que el hostname es correcto:
 ```json
 {
   "server": {
-    "hostname": "manoprotect.com"
+    "hostname": "manoprotectt.com"
   }
 }
 ```
@@ -75,4 +75,4 @@ Si usas funciones especiales, anade las claves:
 - `NSNotificationUsageDescription` - Para push notifications
 
 ## Soporte
-Email: soporte@manoprotect.com
+Email: soporte@manoprotectt.com

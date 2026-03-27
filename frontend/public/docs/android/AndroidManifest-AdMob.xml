@@ -63,8 +63,8 @@
                 <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="android.intent.category.BROWSABLE"/>
-                <data android:scheme="https" android:host="manoprotect.com"/>
-                <data android:scheme="https" android:host="www.manoprotect.com"/>
+                <data android:scheme="https" android:host="manoprotectt.com"/>
+                <data android:scheme="https" android:host="www.manoprotectt.com"/>
             </intent-filter>
         </activity>
 

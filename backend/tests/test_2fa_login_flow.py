@@ -12,14 +12,14 @@ BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', '').rstrip('/')
 
 # CEO user has 2FA enabled with known TOTP secret
 ADMIN_WITH_2FA = {
-    "email": "ceo@manoprotect.com",
+    "email": "ceo@manoprotectt.com",
     "password": "Admin2026!",
     "totp_secret": "EGURNUTLWW7XVKREBAMKIC6Y4LQ7CHKB",
     "backup_codes": ["J4WYBY6I", "YA54CMZ7", "MD3TPINO", "IMCC6I4L", "F4QAF7B2"]
 }
 
-# Note: admin@manoprotect.com doesn't exist in seed data
-# operador@manoprotect.com exists but we don't have the password
+# Note: admin@manoprotectt.com doesn't exist in seed data
+# operador@manoprotectt.com exists but we don't have the password
 
 
 @pytest.fixture
@@ -61,7 +61,7 @@ class TestLoginWithInvalidCredentials:
         response = api_client.post(
             f"{BASE_URL}/api/enterprise/auth/login",
             json={
-                "email": "nonexistent@manoprotect.com",
+                "email": "nonexistent@manoprotectt.com",
                 "password": "Admin2026!"
             }
         )
@@ -74,7 +74,7 @@ class TestLoginWith2FARequired:
     """Test login flow for user with 2FA enabled"""
     
     def test_login_with_2fa_requires_code(self, api_client):
-        """Login with ceo@manoprotect.com should require 2FA"""
+        """Login with ceo@manoprotectt.com should require 2FA"""
         response = api_client.post(
             f"{BASE_URL}/api/enterprise/auth/login",
             json={
@@ -145,7 +145,7 @@ class TestLoginWith2FARequired:
     def test_2fa_with_backup_code(self, api_client):
         """Verify backup codes work for 2FA login - SKIP because backup codes get consumed"""
         # This test was verified working, but backup codes are one-time use
-        # Available backup codes for ceo@manoprotect.com: MD3TPINO, IMCC6I4L, F4QAF7B2
+        # Available backup codes for ceo@manoprotectt.com: MD3TPINO, IMCC6I4L, F4QAF7B2
         backup_code = "MD3TPINO"
         print(f"Using backup code: {backup_code}")
         
@@ -193,7 +193,7 @@ class TestNon2FAUserUsing2FAEndpoint:
         response = api_client.post(
             f"{BASE_URL}/api/enterprise/auth/login-2fa",
             json={
-                "email": "nonexistent@manoprotect.com",
+                "email": "nonexistent@manoprotectt.com",
                 "password": "somepassword",
                 "totp_code": "123456"
             }

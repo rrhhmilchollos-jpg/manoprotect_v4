@@ -20,7 +20,7 @@ const SEOHead = ({
   article
 }) => {
   const siteName = 'ManoProtect';
-  const siteUrl = 'https://manoprotect.com';
+  const siteUrl = 'https://manoprotectt.com';
   const defaultImage = `${siteUrl}/og-image.png`;
   const fullTitle = title ? `${title} | ${siteName}` : `${siteName} - Seguridad Digital para Familias`;
   const fullCanonical = canonical ? `${siteUrl}${canonical}` : siteUrl;

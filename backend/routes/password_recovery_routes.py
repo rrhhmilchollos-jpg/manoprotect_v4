@@ -57,7 +57,7 @@ class ResetPasswordWithCode(BaseModel):
 
 
 # ============================================
-# EMAIL RECOVERY - Users (manoprotect.com)
+# EMAIL RECOVERY - Users (manoprotectt.com)
 # ============================================
 
 @router.post("/user/email")
@@ -101,7 +101,7 @@ async def request_user_recovery_email(data: RecoveryRequestEmail, background_tas
     try:
         from services.email_service import email_service
         
-        reset_url = f"https://manoprotect.com/recuperar-password?token={token}"
+        reset_url = f"https://manoprotectt.com/recuperar-password?token={token}"
         
         email_html = f"""
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
@@ -388,7 +388,7 @@ async def request_employee_recovery_email(data: RecoveryRequestEmail, background
     try:
         from services.email_service import email_service
         
-        reset_url = f"https://admin.manoprotect.com/reset-password?token={token}"
+        reset_url = f"https://admin.manoprotectt.com/reset-password?token={token}"
         
         email_html = f"""
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">

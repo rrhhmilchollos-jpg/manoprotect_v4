@@ -46,7 +46,7 @@ const OpinionesClientes = () => {
       <Helmet>
         <title>Opiniones de clientes ManoProtect - Reseñas reales verificadas</title>
         <meta name="description" content={`Lee las opiniones reales de ${testimonios.length} clientes de ManoProtect. Valoración media: ${avgRating}/5. Descubre por qué las familias españolas confían en nosotros.`} />
-        <link rel="canonical" href="https://manoprotect.com/opiniones-clientes" />
+        <link rel="canonical" href="https://manoprotectt.com/opiniones-clientes" />
         <script type="application/ld+json">{JSON.stringify(reviewSchema)}</script>
       </Helmet>
 

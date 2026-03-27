@@ -1,14 +1,14 @@
 /**
  * Hook to detect subdomain and determine app mode
  * Used to serve different experiences based on subdomain:
- * - admin.manoprotect.com -> Enterprise Portal (Employee Management)
- * - manoprotect.com -> Main Consumer App
+ * - admin.manoprotectt.com -> Enterprise Portal (Employee Management)
+ * - manoprotectt.com -> Main Consumer App
  */
 import { useMemo } from 'react';
 
 export const SUBDOMAIN_MODES = {
-  MAIN: 'main',           // manoprotect.com - Consumer app
-  ADMIN: 'admin',         // admin.manoprotect.com - Enterprise Portal
+  MAIN: 'main',           // manoprotectt.com - Consumer app
+  ADMIN: 'admin',         // admin.manoprotectt.com - Enterprise Portal
   PREVIEW: 'preview'      // *.preview.emergentagent.com - Development
 };
 
@@ -41,7 +41,7 @@ export const useSubdomain = () => {
       };
     }
     
-    // Main domain (manoprotect.com or www.manoprotect.com)
+    // Main domain (manoprotectt.com or www.manoprotectt.com)
     return {
       mode: SUBDOMAIN_MODES.MAIN,
       subdomain: hostname.startsWith('www.') ? 'www' : null,

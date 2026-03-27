@@ -14,14 +14,14 @@ class TestGestionAuth:
     def test_admin_login_success(self):
         """Test admin login with correct credentials"""
         response = requests.post(f"{BASE_URL}/api/gestion/auth/login", json={
-            "email": "admin@manoprotect.com",
+            "email": "admin@manoprotectt.com",
             "password": "ManoAdmin2025!"
         })
         assert response.status_code == 200
         data = response.json()
         assert "token" in data
         assert "user" in data
-        assert data["user"]["email"] == "admin@manoprotect.com"
+        assert data["user"]["email"] == "admin@manoprotectt.com"
         assert data["user"]["rol"] == "admin"
         assert data["user"]["nombre"] == "Administrador ManoProtect"
         assert len(data["token"]) > 0
@@ -30,33 +30,33 @@ class TestGestionAuth:
     def test_comercial_login_success(self):
         """Test comercial login with correct credentials"""
         response = requests.post(f"{BASE_URL}/api/gestion/auth/login", json={
-            "email": "comercial@manoprotect.com",
+            "email": "comercial@manoprotectt.com",
             "password": "Comercial2025!"
         })
         assert response.status_code == 200
         data = response.json()
         assert "token" in data
         assert data["user"]["rol"] == "comercial"
-        assert data["user"]["email"] == "comercial@manoprotect.com"
+        assert data["user"]["email"] == "comercial@manoprotectt.com"
         print(f"Comercial login successful: {data['user']['nombre']}")
     
     def test_instalador_login_success(self):
         """Test instalador login with correct credentials"""
         response = requests.post(f"{BASE_URL}/api/gestion/auth/login", json={
-            "email": "instalador@manoprotect.com",
+            "email": "instalador@manoprotectt.com",
             "password": "Instalador2025!"
         })
         assert response.status_code == 200
         data = response.json()
         assert "token" in data
         assert data["user"]["rol"] == "instalador"
-        assert data["user"]["email"] == "instalador@manoprotect.com"
+        assert data["user"]["email"] == "instalador@manoprotectt.com"
         print(f"Instalador login successful: {data['user']['nombre']}")
     
     def test_wrong_password_returns_error(self):
         """Test that wrong password returns 401 error"""
         response = requests.post(f"{BASE_URL}/api/gestion/auth/login", json={
-            "email": "admin@manoprotect.com",
+            "email": "admin@manoprotectt.com",
             "password": "WrongPassword123!"
         })
         assert response.status_code == 401
@@ -68,7 +68,7 @@ class TestGestionAuth:
     def test_nonexistent_user_returns_error(self):
         """Test that non-existent user returns 401 error"""
         response = requests.post(f"{BASE_URL}/api/gestion/auth/login", json={
-            "email": "nonexistent@manoprotect.com",
+            "email": "nonexistent@manoprotectt.com",
             "password": "AnyPassword123!"
         })
         assert response.status_code == 401
@@ -83,13 +83,13 @@ class TestCEOAuth:
     def test_ceo_login_success(self):
         """Test CEO login with correct credentials"""
         response = requests.post(f"{BASE_URL}/api/auth/login", json={
-            "email": "ceo@manoprotect.com",
+            "email": "ceo@manoprotectt.com",
             "password": "19862210Des"
         })
         assert response.status_code == 200
         data = response.json()
         assert "user_id" in data
-        assert data["email"] == "ceo@manoprotect.com"
+        assert data["email"] == "ceo@manoprotectt.com"
         assert data["role"] == "admin"
         print(f"CEO login successful: {data['name']}")
 
@@ -174,7 +174,7 @@ def api_client():
 def admin_token():
     """Get admin authentication token"""
     response = requests.post(f"{BASE_URL}/api/gestion/auth/login", json={
-        "email": "admin@manoprotect.com",
+        "email": "admin@manoprotectt.com",
         "password": "ManoAdmin2025!"
     })
     if response.status_code == 200:

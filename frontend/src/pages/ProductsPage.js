@@ -92,7 +92,7 @@ const ProductsPage = () => {
       <Helmet>
         <title>Productos Sentinel X, J y S | ManoProtect – Comparativa completa</title>
         <meta name="description" content="Compara los relojes Sentinel X, J y S. GPS, SOS, batería extendida y más. Dispositivo GRATIS con tu suscripción ManoProtect." />
-        <link rel="canonical" href="https://manoprotect.com/productos" />
+        <link rel="canonical" href="https://manoprotectt.com/productos" />
       </Helmet>
 
       {/* Header */}

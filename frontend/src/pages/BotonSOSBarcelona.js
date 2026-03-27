@@ -16,7 +16,7 @@ const BotonSOSBarcelona = () => {
     "description": "Venta y soporte de dispositivos de seguridad personal con botón SOS en Barcelona.",
     "address": { "@type": "PostalAddress", "addressLocality": "Barcelona", "addressRegion": "Cataluña", "postalCode": "08000", "addressCountry": "ES" },
     "geo": { "@type": "GeoCoordinates", "latitude": 41.3874, "longitude": 2.1686 },
-    "url": "https://manoprotect.com/boton-sos-barcelona",
+    "url": "https://manoprotectt.com/boton-sos-barcelona",
     "telephone": "+34601510950",
     "aggregateRating": { "@type": "AggregateRating", "ratingValue": "4.8", "reviewCount": "189" }
   };
@@ -36,7 +36,7 @@ const BotonSOSBarcelona = () => {
         <title>Botón SOS Barcelona | Compra y Atención Local</title>
         <meta name="description" content="Compra tu botón SOS físico en Barcelona con entrega rápida y soporte local. Protege a toda tu familia. Envío gratuito." />
         <meta name="keywords" content="botón SOS Barcelona, dispositivo emergencia Barcelona, teleasistencia Barcelona, seguridad mayores Barcelona, localizador GPS Barcelona" />
-        <link rel="canonical" href="https://manoprotect.com/boton-sos-barcelona" />
+        <link rel="canonical" href="https://manoprotectt.com/boton-sos-barcelona" />
         <script type="application/ld+json">{JSON.stringify(schemaLocalBusiness)}</script>
       </Helmet>
 

@@ -77,7 +77,7 @@ const SentinelS = () => {
         <title>Sentinel S | Reloj de Protección Infantil Premium | Los Niños No Se Tocan | ManoProtect</title>
         <meta name="description" content="Sentinel S: reloj premium de seguridad para niños de 3-12 años. Caja cerámica con acabados rose gold, alerta anti-retirada, sirena 120dB, GPS tiempo real. 6 correas pastel intercambiables. GRATIS los primeros 50." />
         <meta name="keywords" content="reloj seguridad niños premium, reloj GPS niños elegante, protección infantil, sentinel S, los niños no se tocan, localizador niños, smartwatch niños sin internet" />
-        <link rel="canonical" href="https://manoprotect.com/sentinel-s" />
+        <link rel="canonical" href="https://manoprotectt.com/sentinel-s" />
         <meta property="og:title" content="Sentinel S | Protección Infantil Premium | ManoProtect" />
         <meta property="og:description" content="Caja cerámica, acabados rose gold, 6 correas pastel. Alerta anti-retirada, sirena 120dB, GPS. GRATIS los primeros 50." />
         <meta property="og:image" content={SENTINEL_S_IMG} />

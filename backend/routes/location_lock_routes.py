@@ -510,9 +510,9 @@ def _create_welcome_pdf(order_data: dict) -> BytesIO:
     pdf.set_font("Helvetica", '', 10)
     pdf.set_text_color(55, 65, 81)
     pdf.set_xy(20, y_contact + 10)
-    pdf.cell(0, 6, "Web: www.manoprotect.com")
+    pdf.cell(0, 6, "Web: www.manoprotectt.com")
     pdf.set_xy(20, y_contact + 17)
-    pdf.cell(0, 6, "Email: soporte@manoprotect.com")
+    pdf.cell(0, 6, "Email: soporte@manoprotectt.com")
     pdf.set_xy(20, y_contact + 24)
     pdf.cell(0, 6, "WhatsApp: +34 XXX XXX XXX")
     
@@ -624,7 +624,7 @@ def _create_setup_complete_pdf(user_data: dict) -> BytesIO:
     pdf.set_font("Helvetica", '', 10)
     pdf.set_text_color(55, 65, 81)
     pdf.set_xy(20, y + 13)
-    pdf.cell(0, 6, "Web: www.manoprotect.com | Email: soporte@manoprotect.com")
+    pdf.cell(0, 6, "Web: www.manoprotectt.com | Email: soporte@manoprotectt.com")
     pdf.set_xy(20, y + 20)
     pdf.cell(0, 6, "Para desbloquear configuracion: contactar con verificacion de DNI")
     
@@ -701,19 +701,19 @@ async def get_whatsapp_share_link(doc_type: str, request: Request):
     session_token = request.cookies.get("session_token")
     user = await require_auth(request, session_token)
     
-    host = request.headers.get("origin", "https://manoprotect.com")
+    host = request.headers.get("origin", "https://manoprotectt.com")
     
     if doc_type == "welcome":
         text = (
             f"Hola! Ya tengo mi dispositivo ManoProtect Sentinel. "
             f"Descarga tu PDF de bienvenida aqui: {host}/api/documents/welcome-pdf "
-            f"Mas info en www.manoprotect.com"
+            f"Mas info en www.manoprotectt.com"
         )
     elif doc_type == "setup-complete":
         text = (
             f"Mi ManoProtect ya esta configurado! "
             f"GPS en segundo plano activo, boton SOS listo. "
-            f"Mi familia esta protegida. Mas info: www.manoprotect.com"
+            f"Mi familia esta protegida. Mas info: www.manoprotectt.com"
         )
     else:
         raise HTTPException(status_code=400, detail="Tipo de documento no valido")

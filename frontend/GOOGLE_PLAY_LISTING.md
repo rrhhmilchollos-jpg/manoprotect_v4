@@ -79,7 +79,7 @@ Empresa española comprometida con la seguridad digital de las familias. Cumplim
 
 Descarga ManoProtect y mantén a tu familia segura en el mundo digital.
 
-¿Preguntas? Contáctanos en soporte@manoprotect.com
+¿Preguntas? Contáctanos en soporte@manoprotectt.com
 ```
 
 ---
@@ -139,13 +139,13 @@ Respuestas sugeridas:
 ---
 
 ## Política de Privacidad
-**URL:** https://manoprotect.com/privacy-policy
+**URL:** https://manoprotectt.com/privacy-policy
 
 ---
 
 ## Información de Contacto (Visible en Play Store)
-- **Email:** soporte@manoprotect.com
-- **Sitio Web:** https://manoprotect.com
+- **Email:** soporte@manoprotectt.com
+- **Sitio Web:** https://manoprotectt.com
 - **Teléfono:** +34 601 510 950
 
 ---

@@ -26,7 +26,7 @@ const ComparativaRelojesSOS = () => {
     "@type": "WebPage",
     "name": "Comparativa Mejores Relojes SOS para Mayores 2026 | España",
     "description": "Análisis y comparativa de los mejores relojes con botón SOS para personas mayores en España. Sentinel X vs SaveFamily vs Weenect.",
-    "url": "https://manoprotect.com/comparativa-relojes-sos",
+    "url": "https://manoprotectt.com/comparativa-relojes-sos",
     "speakable": {
       "@type": "SpeakableSpecification",
       "cssSelector": ["h1", ".speakable-content"]
@@ -70,11 +70,11 @@ const ComparativaRelojesSOS = () => {
         <title>Comparativa Mejores Relojes SOS para Mayores 2026 | España</title>
         <meta name="description" content="Análisis completo de los mejores relojes con botón SOS para ancianos. Comparamos Sentinel X vs SaveFamily vs Weenect: precios, funciones, GPS, batería y opiniones." />
         <meta name="keywords" content="comparativa relojes sos, mejor reloj sos mayores, sentinel x vs savefamily, reloj emergencias ancianos comparacion, reloj gps mayores cual comprar" />
-        <link rel="canonical" href="https://manoprotect.com/comparativa-relojes-sos" />
+        <link rel="canonical" href="https://manoprotectt.com/comparativa-relojes-sos" />
         
         <meta property="og:title" content="Comparativa Mejores Relojes SOS para Mayores 2026" />
         <meta property="og:description" content="Análisis de los mejores relojes SOS: Sentinel X vs SaveFamily vs Weenect. Precios, funciones y opiniones." />
-        <meta property="og:url" content="https://manoprotect.com/comparativa-relojes-sos" />
+        <meta property="og:url" content="https://manoprotectt.com/comparativa-relojes-sos" />
         
         <script type="application/ld+json">{JSON.stringify(schemaPage)}</script>
         <script type="application/ld+json">{JSON.stringify(schemaFAQ)}</script>

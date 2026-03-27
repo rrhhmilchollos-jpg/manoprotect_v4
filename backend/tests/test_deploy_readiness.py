@@ -28,7 +28,7 @@ class TestSEOFiles:
         assert response.status_code == 200, f"sitemap.xml not accessible: {response.status_code}"
         
         content = response.text
-        assert "manoprotect.com" in content, "manoprotect.com not found in sitemap.xml"
+        assert "manoprotectt.com" in content, "manoprotectt.com not found in sitemap.xml"
         assert "urlset" in content, "urlset not found in sitemap.xml"
         assert "verificar-estafa" in content, "verificar-estafa page not in sitemap"
         assert "privacy-policy" in content, "privacy-policy page not in sitemap"
@@ -43,7 +43,7 @@ class TestSEOFiles:
         assert "User-agent:" in content, "User-agent directive not found"
         assert "Allow: /" in content, "Allow directive not found"
         assert "Sitemap:" in content, "Sitemap directive not found"
-        assert "manoprotect.com/sitemap.xml" in content, "Sitemap URL not correct"
+        assert "manoprotectt.com/sitemap.xml" in content, "Sitemap URL not correct"
         assert "Disallow: /api/" in content, "API should be disallowed"
         print("✅ robots.txt has correct SEO rules")
 
@@ -79,7 +79,7 @@ class TestAuthenticatedAdmin:
         login_response = session.post(
             f"{BASE_URL}/api/auth/login",
             json={
-                "email": "info@manoprotect.com",
+                "email": "info@manoprotectt.com",
                 "password": "19862210Des"
             }
         )
@@ -127,7 +127,7 @@ class TestSOSAlert:
         login_response = session.post(
             f"{BASE_URL}/api/auth/login",
             json={
-                "email": "info@manoprotect.com",
+                "email": "info@manoprotectt.com",
                 "password": "19862210Des"
             }
         )

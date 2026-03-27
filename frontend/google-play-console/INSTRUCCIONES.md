@@ -31,7 +31,7 @@ Déjalo vacío hasta que la app esté publicada.
 
 ## 5️⃣ Sitio web del desarrollador ✅
 ```
-https://www.manoprotect.com
+https://www.manoprotectt.com
 ```
 
 ---
@@ -57,7 +57,7 @@ Desarrollo de aplicaciones Android orientadas a soluciones digitales seguras y f
 
 - [ ] Subir icono de desarrollador (512×512)
 - [ ] Subir imagen de encabezado (4096×2304)
-- [ ] Añadir sitio web: https://www.manoprotect.com
+- [ ] Añadir sitio web: https://www.manoprotectt.com
 - [ ] Añadir texto promocional
 - [ ] Guardar cambios
 

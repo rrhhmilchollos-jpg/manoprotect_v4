@@ -62,7 +62,7 @@
   • Detección basada en IA
   • Actualizaciones constantes de amenazas
 
-  Desarrollado por ManoProtect - www.manoprotect.com
+  Desarrollado por ManoProtect - www.manoprotectt.com
   ```
 
 #### Categoría:
@@ -85,7 +85,7 @@ Necesitas subir:
    - ¿Usa permisos sensibles? → No
    
 2. **Política de privacidad URL**:
-   - https://www.manoprotect.com/privacy-policy
+   - https://www.manoprotectt.com/privacy-policy
 
 ### Paso 6: Distribución
 1. **Visibilidad**: Pública (todos pueden ver)
@@ -125,15 +125,15 @@ Necesitas subir:
 - [ ] Descripción completada en español e inglés
 - [ ] Capturas de pantalla subidas
 - [ ] Política de privacidad vinculada
-- [ ] Información de contacto: inversores@manoprotect.com
+- [ ] Información de contacto: inversores@manoprotectt.com
 - [ ] Revisión enviada
 
 ## Soporte
 
 Si tienes problemas:
-- Email: inversores@manoprotect.com
+- Email: inversores@manoprotectt.com
 - Teléfono: +34 601 510 950
-- Web: https://www.manoprotect.com
+- Web: https://www.manoprotectt.com
 
 ---
 

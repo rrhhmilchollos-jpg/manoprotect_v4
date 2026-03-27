@@ -19,7 +19,7 @@ db = None
 logger = logging.getLogger(__name__)
 
 SENDGRID_API_KEY = os.environ.get('SENDGRID_API_KEY')
-SENDER_EMAIL = os.environ.get('SENDER_EMAIL', os.environ.get('FROM_EMAIL', 'alertas@manoprotect.com'))
+SENDER_EMAIL = os.environ.get('SENDER_EMAIL', os.environ.get('FROM_EMAIL', 'alertas@manoprotectt.com'))
 
 def init_cro_routes(database):
     global db
@@ -453,10 +453,10 @@ def _generate_cro_email(template, name, email):
             </div>
             {body}
             <div style="text-align:center;margin-top:24px;">
-                <a href="https://manoprotect.com/registro" style="display:inline-block;background:#10b981;color:white;padding:14px 32px;border-radius:10px;text-decoration:none;font-weight:bold;font-size:16px;">Proteger a Mi Familia Ahora</a>
+                <a href="https://manoprotectt.com/registro" style="display:inline-block;background:#10b981;color:white;padding:14px 32px;border-radius:10px;text-decoration:none;font-weight:bold;font-size:16px;">Proteger a Mi Familia Ahora</a>
             </div>
             <p style="text-align:center;color:#9ca3af;font-size:12px;margin-top:24px;">
-                Si no quieres recibir m\u00e1s emails, <a href="https://manoprotect.com/unsubscribe?email={email}" style="color:#9ca3af;">cancela aqu\u00ed</a>.
+                Si no quieres recibir m\u00e1s emails, <a href="https://manoprotectt.com/unsubscribe?email={email}" style="color:#9ca3af;">cancela aqu\u00ed</a>.
             </p>
         </div>
     </div>

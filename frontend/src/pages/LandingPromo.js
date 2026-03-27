@@ -84,7 +84,7 @@ const LandingPromo = () => {
         title="ManoProtect - Protección contra Fraudes y Estafas | España"
         description="Protege a tu familia de phishing, estafas telefónicas y fraudes online. Alertas en tiempo real, bloqueo automático y monitoreo 24/7. ¡7 días GRATIS!"
         keywords="protección fraude, antiphishing, estafas telefónicas, seguridad digital, protección online España"
-        canonical="https://manoprotect.com/promo"
+        canonical="https://manoprotectt.com/promo"
       />
       
       {/* Header */}

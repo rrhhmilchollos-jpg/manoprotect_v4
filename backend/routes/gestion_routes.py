@@ -732,9 +732,9 @@ async def seed_admin():
 async def _seed_gestion_users():
     """Crear o actualizar usuarios iniciales del sistema de gestión"""
     default_users = [
-        {"nombre": "Administrador ManoProtect", "email": "admin@manoprotect.com", "password": "ManoAdmin2025!", "rol": "admin"},
-        {"nombre": "Carlos Comercial", "email": "comercial@manoprotect.com", "password": "Comercial2025!", "rol": "comercial"},
-        {"nombre": "Miguel Instalador", "email": "instalador@manoprotect.com", "password": "Instalador2025!", "rol": "instalador"},
+        {"nombre": "Administrador ManoProtect", "email": "admin@manoprotectt.com", "password": "ManoAdmin2025!", "rol": "admin"},
+        {"nombre": "Carlos Comercial", "email": "comercial@manoprotectt.com", "password": "Comercial2025!", "rol": "comercial"},
+        {"nombre": "Miguel Instalador", "email": "instalador@manoprotectt.com", "password": "Instalador2025!", "rol": "instalador"},
     ]
     results = []
     for u in default_users:
@@ -791,9 +791,9 @@ async def _seed_gestion_users():
         "seeded": True,
         "results": results,
         "credenciales": {
-            "admin": {"email": "admin@manoprotect.com", "password": "ManoAdmin2025!"},
-            "comercial": {"email": "comercial@manoprotect.com", "password": "Comercial2025!"},
-            "instalador": {"email": "instalador@manoprotect.com", "password": "Instalador2025!"}
+            "admin": {"email": "admin@manoprotectt.com", "password": "ManoAdmin2025!"},
+            "comercial": {"email": "comercial@manoprotectt.com", "password": "Comercial2025!"},
+            "instalador": {"email": "instalador@manoprotectt.com", "password": "Instalador2025!"}
         }
     }
 

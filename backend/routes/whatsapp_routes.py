@@ -229,7 +229,7 @@ async def whatsapp_webhook(request: Request):
                         from_number,
                         "🛡️ *MANO Protect - Ayuda*\n\n" +
                         "• Envía 'ESTADO' para ver tu protección\n" +
-                        "• Visita manoprotect.com para más opciones\n\n" +
+                        "• Visita manoprotectt.com para más opciones\n\n" +
                         "_Estamos aquí para protegerte._"
                     )
                 elif message_text.upper() == "ESTADO":
@@ -238,7 +238,7 @@ async def whatsapp_webhook(request: Request):
                         "✅ *Tu protección MANO está activa*\n\n" +
                         "📊 Amenazas bloqueadas hoy: 0\n" +
                         "🛡️ Estado: Protegido\n\n" +
-                        "_Visita manoprotect.com para más detalles._"
+                        "_Visita manoprotectt.com para más detalles._"
                     )
         
         return {"status": "ok"}

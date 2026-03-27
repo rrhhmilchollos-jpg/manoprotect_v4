@@ -30,7 +30,7 @@ Dispositivo de emergencia portátil tipo llavero con conectividad GPS/GSM para e
 - Logo del escudo ManoProtect centrado en la parte superior
 - Texto "ManoProtect" debajo del logo
 - Texto "SOS" en el botón central
-- En la parte trasera: "www.manoprotect.com" + número de serie
+- En la parte trasera: "www.manoprotectt.com" + número de serie
 
 ---
 
@@ -212,4 +212,4 @@ POST /api/sos-device/call-112
 
 **Documento creado**: Febrero 2026
 **Versión**: 1.0
-**Contacto**: info@manoprotect.com
+**Contacto**: info@manoprotectt.com

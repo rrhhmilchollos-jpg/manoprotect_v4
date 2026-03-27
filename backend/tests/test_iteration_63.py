@@ -37,12 +37,12 @@ class TestCEOAuthentication:
         """Login as CEO and return session"""
         session = requests.Session()
         login_response = session.post(f"{BASE_URL}/api/auth/login", json={
-            "email": "ceo@manoprotect.com",
+            "email": "ceo@manoprotectt.com",
             "password": "19862210Des"
         })
         assert login_response.status_code == 200
         data = login_response.json()
-        assert data.get("user", {}).get("email") == "ceo@manoprotect.com"
+        assert data.get("user", {}).get("email") == "ceo@manoprotectt.com"
         print(f"PASS: CEO login successful - role: {data.get('user', {}).get('role')}")
         return session
 
@@ -60,7 +60,7 @@ class TestCEOPaymentsAPI:
         """Login as CEO and return session"""
         session = requests.Session()
         login_response = session.post(f"{BASE_URL}/api/auth/login", json={
-            "email": "ceo@manoprotect.com",
+            "email": "ceo@manoprotectt.com",
             "password": "19862210Des"
         })
         assert login_response.status_code == 200
@@ -110,7 +110,7 @@ class TestCEOInventoryAPI:
         """Login as CEO and return session"""
         session = requests.Session()
         login_response = session.post(f"{BASE_URL}/api/auth/login", json={
-            "email": "ceo@manoprotect.com",
+            "email": "ceo@manoprotectt.com",
             "password": "19862210Des"
         })
         assert login_response.status_code == 200
@@ -161,7 +161,7 @@ class TestCEOSubscriptions:
         """Login as CEO and return session"""
         session = requests.Session()
         login_response = session.post(f"{BASE_URL}/api/auth/login", json={
-            "email": "ceo@manoprotect.com",
+            "email": "ceo@manoprotectt.com",
             "password": "19862210Des"
         })
         assert login_response.status_code == 200
@@ -185,7 +185,7 @@ class TestCEOStats:
         """Login as CEO and return session"""
         session = requests.Session()
         login_response = session.post(f"{BASE_URL}/api/auth/login", json={
-            "email": "ceo@manoprotect.com",
+            "email": "ceo@manoprotectt.com",
             "password": "19862210Des"
         })
         assert login_response.status_code == 200

@@ -147,8 +147,8 @@
 
 **Para consultas sobre inversión:**
 
-- Email: inversores@manoprotect.com
-- Portal: https://manoprotect.com/investor-register
+- Email: inversores@manoprotectt.com
+- Portal: https://manoprotectt.com/investor-register
 
 ---
 

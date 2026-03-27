@@ -221,8 +221,8 @@ async def enterprise_login(data: LoginRequest, response: Response, request: Requ
         }}
     )
     
-    # Set cookie - configured for cross-subdomain access (admin.manoprotect.com <-> manoprotect.com)
-    is_production = "manoprotect.com" in str(request.url)
+    # Set cookie - configured for cross-subdomain access (admin.manoprotectt.com <-> manoprotectt.com)
+    is_production = "manoprotectt.com" in str(request.url)
     response.set_cookie(
         key="enterprise_session",
         value=session_token,
@@ -230,7 +230,7 @@ async def enterprise_login(data: LoginRequest, response: Response, request: Requ
         max_age=86400 * 7,  # 7 days
         samesite="none" if is_production else "lax",
         secure=is_production,  # Required for samesite=none
-        domain=".manoprotect.com" if is_production else None  # Share cookie across subdomains
+        domain=".manoprotectt.com" if is_production else None  # Share cookie across subdomains
     )
     
     # Audit log
@@ -410,7 +410,7 @@ async def enterprise_login_with_2fa(data: Login2FARequest, response: Response, r
     )
     
     # Set cookie - configured for cross-subdomain access
-    is_production = "manoprotect.com" in str(request.url)
+    is_production = "manoprotectt.com" in str(request.url)
     response.set_cookie(
         key="enterprise_session",
         value=session_token,
@@ -418,7 +418,7 @@ async def enterprise_login_with_2fa(data: Login2FARequest, response: Response, r
         max_age=86400 * 7,
         samesite="none" if is_production else "lax",
         secure=is_production,
-        domain=".manoprotect.com" if is_production else None
+        domain=".manoprotectt.com" if is_production else None
     )
     
     await create_audit_log(employee, "login_2fa", "auth", employee["employee_id"], request=request)
@@ -505,7 +505,7 @@ async def forgot_password(data: ForgotPasswordRequest, background_tasks: Backgro
     try:
         from services.email_service import email_service
         
-        reset_url = f"https://admin.manoprotect.com/reset-password?token={reset_token}"
+        reset_url = f"https://admin.manoprotectt.com/reset-password?token={reset_token}"
         
         email_html = f"""
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">

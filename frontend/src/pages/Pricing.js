@@ -36,7 +36,7 @@ const Pricing = () => {
       <Helmet>
         <title>Precios y Planes | ManoProtect – Alarmas desde 33,90 EUR/mes</title>
         <meta name="description" content="Todos los planes ManoProtect: Alarmas hogar desde 33,90 EUR, negocio desde 54,90 EUR, Sentinel SOS, Escudo Vecinal Premium. Instalacion GRATIS. SIN permanencia." />
-        <link rel="canonical" href="https://manoprotect.com/plans" />
+        <link rel="canonical" href="https://manoprotectt.com/plans" />
       </Helmet>
 
       {/* Header */}

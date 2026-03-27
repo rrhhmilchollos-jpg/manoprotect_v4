@@ -9,10 +9,10 @@ import os
 BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', '').rstrip('/')
 
 # Test credentials
-GESTION_ADMIN = {"email": "admin@manoprotect.com", "password": "ManoAdmin2025!"}
-GESTION_COMERCIAL = {"email": "comercial@manoprotect.com", "password": "Comercial2025!"}
-GESTION_INSTALADOR = {"email": "instalador@manoprotect.com", "password": "Instalador2025!"}
-CEO_CREDENTIALS = {"email": "ceo@manoprotect.com", "password": "19862210Des"}
+GESTION_ADMIN = {"email": "admin@manoprotectt.com", "password": "ManoAdmin2025!"}
+GESTION_COMERCIAL = {"email": "comercial@manoprotectt.com", "password": "Comercial2025!"}
+GESTION_INSTALADOR = {"email": "instalador@manoprotectt.com", "password": "Instalador2025!"}
+CEO_CREDENTIALS = {"email": "ceo@manoprotectt.com", "password": "19862210Des"}
 
 
 class TestGestionAuthLogin:
@@ -112,7 +112,7 @@ class TestAuthErrorMessages:
         """AUTH ERROR: Non-existent email returns 401 with 'Usuario no encontrado'"""
         response = requests.post(
             f"{BASE_URL}/api/gestion/auth/login",
-            json={"email": "nonexistent_user_12345@manoprotect.com", "password": "anypassword"}
+            json={"email": "nonexistent_user_12345@manoprotectt.com", "password": "anypassword"}
         )
         print(f"Non-existent email response: {response.status_code} - {response.text}")
         assert response.status_code == 401, f"Expected 401, got {response.status_code}"
@@ -143,9 +143,9 @@ class TestAutoSeed:
         assert "admin" in creds
         assert "comercial" in creds
         assert "instalador" in creds
-        assert creds["admin"]["email"] == "admin@manoprotect.com"
-        assert creds["comercial"]["email"] == "comercial@manoprotect.com"
-        assert creds["instalador"]["email"] == "instalador@manoprotect.com"
+        assert creds["admin"]["email"] == "admin@manoprotectt.com"
+        assert creds["comercial"]["email"] == "comercial@manoprotectt.com"
+        assert creds["instalador"]["email"] == "instalador@manoprotectt.com"
         
         print(f"PASSED: Seed-admin endpoint working. Results: {data.get('results')}")
 

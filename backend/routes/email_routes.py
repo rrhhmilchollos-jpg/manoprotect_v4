@@ -22,7 +22,7 @@ def init_email_routes(database):
 
 # SendGrid Configuration
 SENDGRID_API_KEY = os.environ.get('SENDGRID_API_KEY')
-SENDER_EMAIL = os.environ.get('SENDER_EMAIL', 'noreply@manoprotect.com')
+SENDER_EMAIL = os.environ.get('SENDER_EMAIL', 'noreply@manoprotectt.com')
 
 
 class EmailRequest(BaseModel):
@@ -110,7 +110,7 @@ def get_welcome_template(name: str) -> str:
                 <li>✅ Recibir alertas en tiempo real</li>
                 <li>✅ Acceder a nuestra base de conocimiento</li>
             </ul>
-            <a href="https://manoprotect.com/dashboard" class="button">Acceder al Dashboard</a>
+            <a href="https://manoprotectt.com/dashboard" class="button">Acceder al Dashboard</a>
         </div>
         <div class="footer">
             <p>© 2025 MANO Protect. Todos los derechos reservados.</p>
@@ -150,7 +150,7 @@ def get_threat_alert_template(threat_type: str, risk_level: str, description: st
                 <p><strong>Descripción:</strong> {description}</p>
             </div>
             <p>Te recomendamos revisar esta alerta y tomar las precauciones necesarias.</p>
-            <a href="https://manoprotect.com/dashboard" class="button">Ver Detalles</a>
+            <a href="https://manoprotectt.com/dashboard" class="button">Ver Detalles</a>
         </div>
     </body>
     </html>
@@ -360,7 +360,7 @@ def get_alert_subscription_template(name: str, unsubscribe_token: str) -> str:
         </div>
         <div class="footer">
             <p>© 2025 ManoProtect. Tu escudo digital contra fraudes.</p>
-            <p class="unsubscribe">¿Ya no quieres recibir alertas? <a href="https://manoprotect.com/unsubscribe?token={unsubscribe_token}">Darse de baja</a></p>
+            <p class="unsubscribe">¿Ya no quieres recibir alertas? <a href="https://manoprotectt.com/unsubscribe?token={unsubscribe_token}">Darse de baja</a></p>
         </div>
     </body>
     </html>
@@ -420,7 +420,7 @@ def get_new_threat_broadcast_template(threat_type: str, title: str, description:
                 </ul>
             </div>
             <div style="text-align: center;">
-                <a href="https://manoprotect.com/dashboard" class="button">Analizar mensaje sospechoso</a>
+                <a href="https://manoprotectt.com/dashboard" class="button">Analizar mensaje sospechoso</a>
             </div>
         </div>
         <div class="footer">

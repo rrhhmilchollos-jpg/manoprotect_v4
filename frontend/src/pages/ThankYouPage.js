@@ -376,7 +376,7 @@ const ThankYouPage = () => {
                 {/* Share via WhatsApp */}
                 <a
                   href={`https://wa.me/?text=${encodeURIComponent(
-                    `¡Ya tengo mi ${productConfig.name} de ManoProtect! 🛡️\n\nPedido #${orderNumber}\nProtección familiar GPS + SOS activa.\n\nMás info: www.manoprotect.com`
+                    `¡Ya tengo mi ${productConfig.name} de ManoProtect! 🛡️\n\nPedido #${orderNumber}\nProtección familiar GPS + SOS activa.\n\nMás info: www.manoprotectt.com`
                   )}`}
                   target="_blank"
                   rel="noopener noreferrer"
@@ -407,8 +407,8 @@ const ThankYouPage = () => {
             <div className="mt-12 text-center">
               <p className="text-gray-500 text-sm mb-2">¿Tienes alguna pregunta?</p>
               <div className="flex items-center justify-center gap-4 text-sm">
-                <a href="mailto:info@manoprotect.com" className={`${colors.text} hover:underline font-medium`}>
-                  info@manoprotect.com
+                <a href="mailto:info@manoprotectt.com" className={`${colors.text} hover:underline font-medium`}>
+                  info@manoprotectt.com
                 </a>
                 <span className="text-gray-300">|</span>
                 <a href="tel:+34601510950" className={`${colors.text} hover:underline font-medium`}>

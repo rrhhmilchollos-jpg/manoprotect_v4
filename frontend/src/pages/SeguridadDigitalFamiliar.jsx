@@ -73,7 +73,7 @@ const SeguridadDigitalFamiliar = () => {
         <title>Seguridad Digital Familiar - Protege a Tu Familia Online | ManoProtect</title>
         <meta name="description" content="Seguridad digital para toda la familia. Protección infantil, cuidado de mayores, localización GPS y fraud prevention. Un plan familiar para proteger a todos." />
         <meta name="keywords" content="seguridad digital familiar, protección familiar online, control parental, cuidado mayores, localización familiar, seguridad niños internet" />
-        <link rel="canonical" href="https://manoprotect.com/seguridad-digital-familiar" />
+        <link rel="canonical" href="https://manoprotectt.com/seguridad-digital-familiar" />
       </Helmet>
 
       <LandingHeader />

@@ -32,7 +32,7 @@ const BotonSOSValencia = () => {
       "latitude": 39.4699,
       "longitude": -0.3763
     },
-    "url": "https://manoprotect.com/boton-sos-valencia",
+    "url": "https://manoprotectt.com/boton-sos-valencia",
     "telephone": "+34601510950",
     "areaServed": {
       "@type": "GeoCircle",
@@ -62,9 +62,9 @@ const BotonSOSValencia = () => {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     "itemListElement": [
-      { "@type": "ListItem", "position": 1, "name": "Inicio", "item": "https://manoprotect.com" },
-      { "@type": "ListItem", "position": 2, "name": "Botón SOS", "item": "https://manoprotect.com/boton-sos-senior" },
-      { "@type": "ListItem", "position": 3, "name": "Valencia", "item": "https://manoprotect.com/boton-sos-valencia" }
+      { "@type": "ListItem", "position": 1, "name": "Inicio", "item": "https://manoprotectt.com" },
+      { "@type": "ListItem", "position": 2, "name": "Botón SOS", "item": "https://manoprotectt.com/boton-sos-senior" },
+      { "@type": "ListItem", "position": 3, "name": "Valencia", "item": "https://manoprotectt.com/boton-sos-valencia" }
     ]
   };
 
@@ -87,10 +87,10 @@ const BotonSOSValencia = () => {
         <title>Botón SOS Valencia | Compra y Atención Local</title>
         <meta name="description" content="Compra tu botón SOS físico en Valencia con entrega rápida y soporte local. Seguridad inmediata para toda la familia." />
         <meta name="keywords" content="botón SOS Valencia, dispositivo emergencia Valencia, teleasistencia Valencia, seguridad mayores Valencia, localizador GPS Valencia, botón pánico Valencia" />
-        <link rel="canonical" href="https://manoprotect.com/boton-sos-valencia" />
+        <link rel="canonical" href="https://manoprotectt.com/boton-sos-valencia" />
         <meta property="og:title" content="Botón SOS en Valencia | Entrega y Soporte Local" />
         <meta property="og:description" content="Compra tu botón SOS con entrega en 24-48h en Valencia y atención local personalizada." />
-        <meta property="og:url" content="https://manoprotect.com/boton-sos-valencia" />
+        <meta property="og:url" content="https://manoprotectt.com/boton-sos-valencia" />
         <script type="application/ld+json">{JSON.stringify(schemaLocalBusiness)}</script>
         <script type="application/ld+json">{JSON.stringify(schemaProduct)}</script>
         <script type="application/ld+json">{JSON.stringify(schemaBreadcrumb)}</script>

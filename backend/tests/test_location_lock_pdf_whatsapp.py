@@ -18,7 +18,7 @@ import os
 BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', '').rstrip('/')
 
 # Test credentials
-ADMIN_EMAIL = "ceo@manoprotect.com"
+ADMIN_EMAIL = "ceo@manoprotectt.com"
 ADMIN_PASSWORD = "19862210Des"
 
 class TestLocationLockFeatures:

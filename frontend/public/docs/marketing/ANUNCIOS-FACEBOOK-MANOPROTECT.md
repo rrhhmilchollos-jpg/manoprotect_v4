@@ -36,7 +36,7 @@ ManoProtect detecta fraudes en TIEMPO REAL con inteligencia artificial.
 ```
 
 ### CTA: "Probar Gratis"
-### URL: manoprotect.com/pricing
+### URL: manoprotectt.com/pricing
 
 ---
 
@@ -230,7 +230,7 @@ Características rápidas:
 [45-60 seg]
 🎁 "Prueba 15 días GRATIS"
 Logo ManoProtect
-URL: manoprotect.com
+URL: manoprotectt.com
 ```
 
 ### Copy del post:
@@ -306,7 +306,7 @@ Mira cómo ManoProtect detecta fraudes en tiempo real.
 
 # ✅ CHECKLIST ANTES DE PUBLICAR
 
-- [ ] Pixel de Facebook instalado en manoprotect.com
+- [ ] Pixel de Facebook instalado en manoprotectt.com
 - [ ] Eventos de conversión configurados (registro, compra)
 - [ ] Landing page optimizada para móvil
 - [ ] A/B testing de al menos 2 creativos

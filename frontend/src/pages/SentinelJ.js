@@ -71,8 +71,8 @@ const SentinelJ = () => {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     "itemListElement": [
-      { "@type": "ListItem", "position": 1, "name": "Inicio", "item": "https://manoprotect.com" },
-      { "@type": "ListItem", "position": 2, "name": "Sentinel J", "item": "https://manoprotect.com/sentinel-j" }
+      { "@type": "ListItem", "position": 1, "name": "Inicio", "item": "https://manoprotectt.com" },
+      { "@type": "ListItem", "position": 2, "name": "Sentinel J", "item": "https://manoprotectt.com/sentinel-j" }
     ]
   };
 
@@ -102,11 +102,11 @@ const SentinelJ = () => {
         <title>Sentinel J | Reloj SOS para Jóvenes con Correas Intercambiables | ManoProtect</title>
         <meta name="description" content="Sentinel J: reloj con botón SOS y correas intercambiables de 8 colores para jóvenes de 6 a 14 años. GPS, llamadas a padres, zonas seguras. Sin cámara ni internet. 99€ con envío gratuito." />
         <meta name="keywords" content="reloj SOS jóvenes, reloj GPS niños, sentinel J, reloj seguridad infantil, smartwatch niños sin internet, correas intercambiables reloj niños, localizador niños" />
-        <link rel="canonical" href="https://manoprotect.com/sentinel-j" />
+        <link rel="canonical" href="https://manoprotectt.com/sentinel-j" />
         <meta property="og:title" content="Sentinel J | Reloj SOS con Correas de Colores para Jóvenes" />
         <meta property="og:description" content="8 colores de correas intercambiables. Botón SOS, GPS y sin internet. 99€ envío gratuito." />
         <meta property="og:image" content={SENTINEL_J_IMG} />
-        <meta property="og:url" content="https://manoprotect.com/sentinel-j" />
+        <meta property="og:url" content="https://manoprotectt.com/sentinel-j" />
         <meta property="og:type" content="product" />
         <script type="application/ld+json">{JSON.stringify(schemaProduct)}</script>
         <script type="application/ld+json">{JSON.stringify(schemaFAQ)}</script>

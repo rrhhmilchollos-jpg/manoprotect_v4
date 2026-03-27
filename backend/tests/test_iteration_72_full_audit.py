@@ -35,7 +35,7 @@ class TestAlarmCheckout:
         """POST /api/create-checkout-session with plan_type=alarm-essential returns checkout_url"""
         payload = {
             "plan_type": "alarm-essential",
-            "origin_url": "https://manoprotect.com"
+            "origin_url": "https://manoprotectt.com"
         }
         response = requests.post(
             f"{BASE_URL}/api/create-checkout-session",
@@ -53,7 +53,7 @@ class TestAlarmCheckout:
         """POST /api/create-checkout-session with plan_type=alarm-premium returns checkout_url"""
         payload = {
             "plan_type": "alarm-premium",
-            "origin_url": "https://manoprotect.com"
+            "origin_url": "https://manoprotectt.com"
         }
         response = requests.post(
             f"{BASE_URL}/api/create-checkout-session",
@@ -70,7 +70,7 @@ class TestAlarmCheckout:
         """POST /api/create-checkout-session with plan_type=alarm-business returns checkout_url"""
         payload = {
             "plan_type": "alarm-business",
-            "origin_url": "https://manoprotect.com"
+            "origin_url": "https://manoprotectt.com"
         }
         response = requests.post(
             f"{BASE_URL}/api/create-checkout-session",
@@ -87,7 +87,7 @@ class TestAlarmCheckout:
         """POST /api/create-checkout-session with invalid plan_type returns 400"""
         payload = {
             "plan_type": "invalid-plan-xyz",
-            "origin_url": "https://manoprotect.com"
+            "origin_url": "https://manoprotectt.com"
         }
         response = requests.post(
             f"{BASE_URL}/api/create-checkout-session",
@@ -148,7 +148,7 @@ class TestEmployeePortalLogin:
     def test_employee_login_success(self):
         """POST /api/employee-portal/login with valid credentials returns success=true and session_token"""
         payload = {
-            "email": "admin@manoprotect.com",
+            "email": "admin@manoprotectt.com",
             "password": "Admin2026!"
         }
         response = requests.post(
@@ -160,7 +160,7 @@ class TestEmployeePortalLogin:
         if response.status_code == 401:
             # Employee might not be seeded yet - this is acceptable for now
             print(f"⚠️ Employee login returned 401 - employee may not be seeded: {response.text}")
-            pytest.skip("Employee admin@manoprotect.com not seeded in database")
+            pytest.skip("Employee admin@manoprotectt.com not seeded in database")
         
         assert response.status_code == 200, f"Employee login failed: {response.status_code} - {response.text}"
         data = response.json()
@@ -171,7 +171,7 @@ class TestEmployeePortalLogin:
     def test_employee_login_invalid(self):
         """POST /api/employee-portal/login with invalid credentials returns 401"""
         payload = {
-            "email": "invalid@manoprotect.com",
+            "email": "invalid@manoprotectt.com",
             "password": "wrongpassword"
         }
         response = requests.post(

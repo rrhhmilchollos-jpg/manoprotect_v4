@@ -61,7 +61,7 @@ const TrustBadge = ({
   if (variant === 'minimal') {
     return (
       <a 
-        href="https://www.manoprotect.com/shield" 
+        href="https://www.manoprotectt.com/shield" 
         target="_blank" 
         rel="noopener noreferrer"
         className={`inline-flex items-center gap-1.5 px-2.5 py-1.5 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 rounded-lg text-emerald-700 text-xs font-medium transition-colors ${className}`}
@@ -97,7 +97,7 @@ const TrustBadge = ({
     return (
       <div className={`fixed ${positionClasses} z-50`}>
         <a
-          href="https://www.manoprotect.com/shield"
+          href="https://www.manoprotectt.com/shield"
           target="_blank"
           rel="noopener noreferrer"
           className="group flex items-center gap-3 px-4 py-3 bg-white rounded-2xl shadow-xl border border-zinc-200 hover:shadow-2xl transition-all hover:scale-105"
@@ -178,7 +178,7 @@ const TrustBadge = ({
       {/* Footer */}
       <div className="bg-zinc-50 px-4 py-3 border-t border-zinc-200">
         <a 
-          href="https://www.manoprotect.com/shield"
+          href="https://www.manoprotectt.com/shield"
           target="_blank"
           rel="noopener noreferrer"
           className="flex items-center justify-center gap-2 text-sm text-emerald-600 hover:text-emerald-700 font-medium"

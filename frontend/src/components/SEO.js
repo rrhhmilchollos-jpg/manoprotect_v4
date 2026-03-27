@@ -14,7 +14,7 @@ const SEO = ({
   description = 'ManoProtect te protege contra estafas online, fraudes telefónicos y amenazas digitales. Protege a toda tu familia con nuestra tecnología avanzada.',
   keywords = 'protección digital, anti estafas, seguridad online, protección familiar, fraudes online, ciberseguridad, España',
   canonical = '',
-  ogImage = 'https://manoprotect.com/og-image.png',
+  ogImage = 'https://manoprotectt.com/og-image.png',
   type = 'website'
 }) => {
   useEffect(() => {
@@ -77,8 +77,8 @@ const SEO = ({
       "@type": "Organization",
       "name": "ManoProtect",
       "alternateName": "Protección Digital ManoProtect",
-      "url": "https://manoprotect.com",
-      "logo": "https://manoprotect.com/logo.png",
+      "url": "https://manoprotectt.com",
+      "logo": "https://manoprotectt.com/logo.png",
       "description": description,
       "address": {
         "@type": "PostalAddress",

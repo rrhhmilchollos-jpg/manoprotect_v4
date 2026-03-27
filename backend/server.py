@@ -75,7 +75,7 @@ class SecurityHeadersMiddleware(BaseHTTPMiddleware):
             "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; "
             "font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; "
             "img-src 'self' data: https: blob:; "
-            "connect-src 'self' https://*.emergentagent.com https://*.emergent.host https://*.manoprotect.com https://*.stripe.com https://api.stripe.com wss://*.emergentagent.com wss://*.emergent.host wss://*.manoprotect.com; "
+            "connect-src 'self' https://*.emergentagent.com https://*.emergent.host https://*.manoprotectt.com https://*.stripe.com https://api.stripe.com wss://*.emergentagent.com wss://*.emergent.host wss://*.manoprotectt.com; "
             "frame-src 'self' https://www.googletagmanager.com https://js.stripe.com https://widget.trustpilot.com; "
             "frame-ancestors 'none'; "
             "object-src 'none'; "
@@ -144,7 +144,7 @@ class IPBlockMiddleware(BaseHTTPMiddleware):
         if client_ip in _ip_blacklist_cache["ips"]:
             return JSONResponse(
                 status_code=403,
-                content={"detail": "Acceso denegado. Su IP ha sido bloqueada por motivos de seguridad. Contacte soporte@manoprotect.com"}
+                content={"detail": "Acceso denegado. Su IP ha sido bloqueada por motivos de seguridad. Contacte soporte@manoprotectt.com"}
             )
         
         return await call_next(request)
@@ -172,7 +172,7 @@ if not JWT_SECRET:
 # SUPERADMIN CONFIGURATION (passwords from env)
 # ============================================
 SUPERADMIN_ACCOUNTS = [
-    {"email": "info@manoprotect.com", "name": "ManoProtect Admin", "password": os.environ.get('SUPERADMIN_PASSWORD_1')},
+    {"email": "info@manoprotectt.com", "name": "ManoProtect Admin", "password": os.environ.get('SUPERADMIN_PASSWORD_1')},
     {"email": "rrhh.milchollos@gmail.com", "name": "ManoProtect RRHH", "password": os.environ.get('SUPERADMIN_PASSWORD_2')},
     {"email": "ivanrubiosolas@gmail.com", "name": "Ivan Rubio Cano", "password": None},  # None = don't change password if exists
 ]
@@ -3406,7 +3406,7 @@ from fastapi.responses import FileResponse as FR2
 @api_router.get("/rss/feed.xml")
 async def rss_feed():
     """RSS feed for Google Discover and news aggregators"""
-    base = "https://manoprotect.com"
+    base = "https://manoprotectt.com"
     articles = [
         {"title": "Mejores Relojes GPS con SOS para Mayores 2026", "slug": "blog/mejores-relojes-sos-2026",
          "desc": "Comparativa completa de relojes inteligentes con boton SOS y GPS para personas mayores. Sentinel X, Sentinel S y mas.",
@@ -3586,7 +3586,7 @@ async def initialize_superadmins():
     # Initialize Enterprise CEO Employee
     print("👔 Initializing Enterprise CEO employee...")
     try:
-        ceo_email = "ceo@manoprotect.com"
+        ceo_email = "ceo@manoprotectt.com"
         ceo_password = os.environ.get('SUPERADMIN_PASSWORD_1', '')
         
         existing_ceo = await db.enterprise_employees.find_one({"email": ceo_email})

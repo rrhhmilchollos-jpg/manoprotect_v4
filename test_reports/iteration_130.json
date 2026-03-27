@@ -1,0 +1,94 @@
+{
+  "summary": "Domain change from manoprotect.com to manoprotectt.com verified successfully. All 13 backend tests passed. Frontend tests confirmed landing page loads with Google Play badges, gestion login works with new domain emails, and admin dashboard accessible.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_domain_change_iteration_130.py",
+    "/app/test_reports/pytest/iteration_130_domain_change.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [],
+  "updated_files": [
+    "/app/backend/tests/test_domain_change_iteration_130.py"
+  ],
+  "success_rate": {
+    "backend": "100% (13/13 tests passed)",
+    "frontend": "100%"
+  },
+  "test_credentials": {
+    "admin": {
+      "email": "admin@manoprotectt.com",
+      "password": "ManoAdmin2025!",
+      "role": "admin"
+    },
+    "comercial": {
+      "email": "comercial@manoprotectt.com",
+      "password": "Comercial2025!",
+      "role": "comercial"
+    },
+    "instalador": {
+      "email": "instalador@manoprotectt.com",
+      "password": "Instalador2025!",
+      "role": "instalador"
+    }
+  },
+  "seed_data_creation": "",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Domain successfully changed from manoprotect.com to manoprotectt.com. All SEO files (index.html, sitemap.xml, robots.txt) use new domain. Desktop apps (CRA/CRM) point to manoprotectt.com. Management login works with new domain emails. Admin dashboard at /gestion/admin fully functional.",
+  "tests_passed": {
+    "backend_tests": [
+      "test_health_endpoint_returns_healthy - PASSED",
+      "test_sitemap_has_manoprotectt_domain - PASSED",
+      "test_robots_txt_has_manoprotectt_sitemap - PASSED",
+      "test_admin_login_with_new_domain_email - PASSED",
+      "test_comercial_login_with_new_domain_email - PASSED",
+      "test_instalador_login_with_new_domain_email - PASSED",
+      "test_invalid_login_returns_error - PASSED",
+      "test_cra_operador_main_js_has_correct_domain - PASSED",
+      "test_crm_ventas_main_js_has_correct_domain - PASSED",
+      "test_index_html_canonical_url - PASSED",
+      "test_index_html_og_url - PASSED",
+      "test_index_html_schema_org_urls - PASSED",
+      "test_websocket_manager_has_manoprotectt_cors - PASSED"
+    ],
+    "frontend_ui_tests": [
+      "Landing page loads with hero section - PASSED",
+      "Google Play badge (4.8 rating) visible in hero - PASSED",
+      "Gestion login page loads at /gestion/login - PASSED",
+      "Admin login with admin@manoprotectt.com works - PASSED",
+      "Redirect to /gestion/admin after login - PASSED",
+      "Admin dashboard displays correctly with stats - PASSED"
+    ]
+  },
+  "verified_domain_changes": {
+    "index_html": {
+      "canonical_url": "https://manoprotectt.com",
+      "og_url": "https://manoprotectt.com/",
+      "schema_org_urls": "https://manoprotectt.com"
+    },
+    "sitemap_xml": {
+      "all_urls_use": "manoprotectt.com"
+    },
+    "robots_txt": {
+      "sitemap_reference": "https://manoprotectt.com/sitemap.xml"
+    },
+    "desktop_apps": {
+      "cra_operador_main_js": "PRODUCTION_URL = 'https://manoprotectt.com'",
+      "crm_ventas_main_js": "PRODUCTION_URL = 'https://manoprotectt.com'"
+    },
+    "websocket_manager": {
+      "cors_origins_include": ["https://manoprotectt.com", "https://www.manoprotectt.com"]
+    }
+  },
+  "mocked_data": {
+    "google_play_rating": "4.8/5 stars is an aspirational/mock value displayed visually on the landing page"
+  }
+}

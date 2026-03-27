@@ -13,13 +13,13 @@ cors_origins = [
     "http://localhost:3000",
     "http://localhost:3001",
     # Production - Main Site
-    "https://manoprotect.com",
-    "https://www.manoprotect.com",
+    "https://manoprotectt.com",
+    "https://www.manoprotectt.com",
     # Production - Employee Portal
-    "https://admin.manoprotect.com",
-    "https://www.admin.manoprotect.com",
+    "https://admin.manoprotectt.com",
+    "https://www.admin.manoprotectt.com",
     # Production - API
-    "https://api.manoprotect.com",
+    "https://api.manoprotectt.com",
     # Emergent Previews
     "https://auth-hardened-test.preview.emergentagent.com",
     "https://auth-hardened-test.preview.emergentagent.com",

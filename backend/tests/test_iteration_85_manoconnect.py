@@ -20,7 +20,7 @@ if not BASE_URL:
     BASE_URL = "https://auth-hardened-test.preview.emergentagent.com"
 
 # Test credentials
-CEO_EMAIL = "ceo@manoprotect.com"
+CEO_EMAIL = "ceo@manoprotectt.com"
 CEO_PASSWORD = "19862210Des"
 DOWNLOAD_KEY = "mano2025investor"
 INSTALLATION_ID = "inst_oficina_central"

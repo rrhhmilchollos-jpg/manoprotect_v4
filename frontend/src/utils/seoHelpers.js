@@ -8,19 +8,19 @@
 export const generateOrganizationSchema = () => ({
   "@context": "https://schema.org",
   "@type": "Organization",
-  "@id": "https://manoprotect.com/#organization",
+  "@id": "https://manoprotectt.com/#organization",
   "name": "ManoProtect",
   "alternateName": ["Mano Protect", "ManoProtect España", "ManoProtect Seguridad Digital"],
-  "url": "https://manoprotect.com",
+  "url": "https://manoprotectt.com",
   "logo": {
     "@type": "ImageObject",
-    "url": "https://manoprotect.com/logo512.png",
+    "url": "https://manoprotectt.com/logo512.png",
     "width": 512,
     "height": 512
   },
-  "image": "https://manoprotect.com/og-image.png",
+  "image": "https://manoprotectt.com/og-image.png",
   "description": "Líder en seguridad digital en España. Protección contra phishing, fraud prevention y online payment protection para familias.",
-  "email": "info@manoprotect.com",
+  "email": "info@manoprotectt.com",
   "telephone": "+34-601-510-950",
   "foundingDate": "2024",
   "slogan": "Protege lo que más importa",
@@ -82,7 +82,7 @@ export const generateProductSchema = (product) => ({
 export const generatePricingSchema = () => ({
   "@context": "https://schema.org",
   "@type": "Product",
-  "@id": "https://manoprotect.com/#subscription",
+  "@id": "https://manoprotectt.com/#subscription",
   "name": "ManoProtect Suscripción",
   "description": "Planes de seguridad digital con protección contra phishing, fraud prevention y localización GPS",
   "brand": {"@type": "Brand", "name": "ManoProtect"},
@@ -180,7 +180,7 @@ export const generateVideoSchema = (video) => ({
     "name": "ManoProtect",
     "logo": {
       "@type": "ImageObject",
-      "url": "https://manoprotect.com/logo512.png"
+      "url": "https://manoprotectt.com/logo512.png"
     }
   }
 });
@@ -242,7 +242,7 @@ export const generateArticleSchema = (article) => ({
     "name": "ManoProtect",
     "logo": {
       "@type": "ImageObject",
-      "url": "https://manoprotect.com/logo512.png"
+      "url": "https://manoprotectt.com/logo512.png"
     }
   },
   "mainEntityOfPage": {
@@ -263,16 +263,16 @@ export const generateEventSchema = (event) => ({
   "eventAttendanceMode": "https://schema.org/OnlineEventAttendanceMode",
   "location": {
     "@type": "VirtualLocation",
-    "url": "https://manoprotect.com"
+    "url": "https://manoprotectt.com"
   },
   "organizer": {
     "@type": "Organization",
     "name": "ManoProtect",
-    "url": "https://manoprotect.com"
+    "url": "https://manoprotectt.com"
   },
   "offers": {
     "@type": "Offer",
-    "url": "https://manoprotect.com/pricing",
+    "url": "https://manoprotectt.com/pricing",
     "price": "0",
     "priceCurrency": "EUR",
     "availability": "https://schema.org/InStock",
@@ -303,7 +303,7 @@ export const generateMetaTags = (page) => ({
     type: "website",
     title: page.title,
     description: page.description,
-    image: page.image || "https://manoprotect.com/og-image.png",
+    image: page.image || "https://manoprotectt.com/og-image.png",
     url: page.url,
     siteName: "ManoProtect"
   },
@@ -311,21 +311,21 @@ export const generateMetaTags = (page) => ({
     card: "summary_large_image",
     title: page.title,
     description: page.description,
-    image: page.image || "https://manoprotect.com/og-image.png"
+    image: page.image || "https://manoprotectt.com/og-image.png"
   }
 });
 
 // IndexNow API - Para indexación instantánea en Bing y otros
 export const submitToIndexNow = async (urls) => {
   const key = "manoprotect-indexnow-key"; // Necesitas generar este key
-  const keyLocation = "https://manoprotect.com/manoprotect-indexnow-key.txt";
+  const keyLocation = "https://manoprotectt.com/manoprotect-indexnow-key.txt";
   
   try {
     await fetch("https://api.indexnow.org/indexnow", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        host: "manoprotect.com",
+        host: "manoprotectt.com",
         key: key,
         keyLocation: keyLocation,
         urlList: urls

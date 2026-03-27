@@ -14,9 +14,9 @@ import time
 BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', '').rstrip('/')
 
 # Test credentials
-ADMIN_CREDS = {"email": "admin@manoprotect.com", "password": "ManoAdmin2025!"}
-COMERCIAL_CREDS = {"email": "comercial@manoprotect.com", "password": "Comercial2025!"}
-INSTALADOR_CREDS = {"email": "instalador@manoprotect.com", "password": "Instalador2025!"}
+ADMIN_CREDS = {"email": "admin@manoprotectt.com", "password": "ManoAdmin2025!"}
+COMERCIAL_CREDS = {"email": "comercial@manoprotectt.com", "password": "Comercial2025!"}
+INSTALADOR_CREDS = {"email": "instalador@manoprotectt.com", "password": "Instalador2025!"}
 
 class TestGestionAuth:
     """Authentication tests for gestion system"""

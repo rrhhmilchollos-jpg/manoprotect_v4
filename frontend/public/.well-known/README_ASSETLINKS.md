@@ -28,6 +28,6 @@ Ejemplo de fingerprint:
 https://developers.google.com/digital-asset-links/tools/generator
 
 Ingresa:
-- Hosting site domain: www.manoprotect.com
+- Hosting site domain: www.manoprotectt.com
 - App package name: com.manoprotect.app
 - App package fingerprint: (tu fingerprint)

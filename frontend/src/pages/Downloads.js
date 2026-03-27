@@ -266,8 +266,8 @@ const Downloads = () => {
             <div className="grid sm:grid-cols-3 gap-6">
               <div>
                 <div className="font-semibold mb-2 text-indigo-900">Email</div>
-                <a href="mailto:inversores@manoprotect.com" className="text-indigo-600 hover:underline">
-                  inversores@manoprotect.com
+                <a href="mailto:inversores@manoprotectt.com" className="text-indigo-600 hover:underline">
+                  inversores@manoprotectt.com
                 </a>
               </div>
               <div>

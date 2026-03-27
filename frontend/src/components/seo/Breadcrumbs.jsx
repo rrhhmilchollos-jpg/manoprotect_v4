@@ -75,7 +75,7 @@ const Breadcrumbs = ({ customItems, className = '' }) => {
       "@type": "ListItem",
       "position": index + 1,
       "name": item.name,
-      "item": `https://manoprotect.com${item.path}`
+      "item": `https://manoprotectt.com${item.path}`
     }))
   };
   

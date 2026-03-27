@@ -3,9 +3,9 @@ Test Iteration 38: ManoProtect Stripe Bug Fix & Enterprise Portal
 Tests for:
 1. SOS Device Order - Creates order with 'pending_payment' status
 2. SOS Device Order - Returns Stripe checkout_url
-3. Enterprise Portal - Admin login with admin@manoprotect.com / Admin2026!
+3. Enterprise Portal - Admin login with admin@manoprotectt.com / Admin2026!
 4. Enterprise Portal - Employee listing, Client listing, Dashboard stats
-5. Google Play User - Login with review@manoprotect.com / 20142026
+5. Google Play User - Login with review@manoprotectt.com / 20142026
 """
 import pytest
 import requests
@@ -14,9 +14,9 @@ import os
 BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', '').rstrip('/')
 
 # Test credentials from review_request
-ENTERPRISE_ADMIN_EMAIL = "admin@manoprotect.com"
+ENTERPRISE_ADMIN_EMAIL = "admin@manoprotectt.com"
 ENTERPRISE_ADMIN_PASSWORD = "Admin2026!"
-GOOGLE_PLAY_EMAIL = "review@manoprotect.com"
+GOOGLE_PLAY_EMAIL = "review@manoprotectt.com"
 GOOGLE_PLAY_PASSWORD = "20142026"
 
 
@@ -169,7 +169,7 @@ class TestEnterprisePortalAuthentication:
     """Test Enterprise Portal admin login"""
     
     def test_enterprise_admin_login(self):
-        """Test admin login with admin@manoprotect.com / Admin2026!"""
+        """Test admin login with admin@manoprotectt.com / Admin2026!"""
         response = requests.post(f"{BASE_URL}/api/enterprise/auth/login", json={
             "email": ENTERPRISE_ADMIN_EMAIL,
             "password": ENTERPRISE_ADMIN_PASSWORD
@@ -282,7 +282,7 @@ class TestGooglePlayUserLogin:
     """Test Google Play review user can login"""
     
     def test_google_play_user_login_via_auth(self):
-        """Test login with review@manoprotect.com / 20142026 via auth API"""
+        """Test login with review@manoprotectt.com / 20142026 via auth API"""
         response = requests.post(f"{BASE_URL}/api/auth/login", json={
             "email": GOOGLE_PLAY_EMAIL,
             "password": GOOGLE_PLAY_PASSWORD

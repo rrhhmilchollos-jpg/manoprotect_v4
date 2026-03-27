@@ -230,7 +230,7 @@ Descripción 1: Tu comparador de seguros inteligente. Auto, hogar, vida, salud y
               Contrata online en minutos. Gestiona todas tus pólizas en una app.
 Descripción 2: Ahorra hasta un 40% en tus seguros. Sin letra pequeña. 
               Asesoramiento gratuito. Gestión de siniestros 24/7.
-URL: www.manoprotect.com
+URL: www.manoprotectt.com
 ```
 
 ### Anuncio Seguro Auto
@@ -242,7 +242,7 @@ Descripción 1: Introduce tu matrícula y compara precios de 50+ aseguradoras en
               Terceros, terceros ampliado o todo riesgo.
 Descripción 2: Asistencia en carretera incluida. Coche de sustitución. 
               Sin sorpresas en la renovación. Cambiar es gratis.
-URL: www.manoprotect.com/seguro-coche
+URL: www.manoprotectt.com/seguro-coche
 ```
 
 ### Anuncio Seguro Hogar
@@ -254,7 +254,7 @@ Descripción 1: Continente y contenido protegidos. Daños por agua, robo, incend
               Responsabilidad civil incluida.
 Descripción 2: Servicio de urgencias 24h. Cerrajero, fontanero, electricista. 
               Compara precios gratis. Contrata en 5 minutos.
-URL: www.manoprotect.com/seguro-hogar
+URL: www.manoprotectt.com/seguro-hogar
 ```
 
 ### Anuncio Seguro Vida
@@ -266,7 +266,7 @@ Descripción 1: Cobertura por fallecimiento, invalidez y enfermedades graves.
               Sin reconocimiento médico hasta 100.000€.
 Descripción 2: Prima fija garantizada. Sin sorpresas. Beneficiarios libres. 
               Ideal para hipotecas. Calcula tu precio gratis.
-URL: www.manoprotect.com/seguro-vida
+URL: www.manoprotectt.com/seguro-vida
 ```
 
 ### Anuncio Seguro Salud
@@ -278,7 +278,7 @@ Descripción 1: Accede a la mejor sanidad privada. Sin esperas.
               Especialistas, hospitalización, urgencias 24h.
 Descripción 2: Compara Sanitas, Adeslas, DKV, ASISA, Cigna y más. 
               Precios desde 30€/mes. Cobertura dental incluida.
-URL: www.manoprotect.com/seguro-salud
+URL: www.manoprotectt.com/seguro-salud
 ```
 
 ---

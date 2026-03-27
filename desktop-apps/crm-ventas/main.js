@@ -2,7 +2,7 @@ const { app, BrowserWindow, Menu, shell, dialog } = require('electron');
 const path = require('path');
 
 // Production URL - change this to your deployed URL
-const PRODUCTION_URL = 'https://manoprotect.com';
+const PRODUCTION_URL = 'https://manoprotectt.com';
 const APP_ROUTE = '/gestion-empresa';
 const AUTO_REFRESH_INTERVAL = 10000; // 10 seconds
 
@@ -68,8 +68,8 @@ function createWindow() {
     {
       label: 'Ayuda',
       submenu: [
-        { label: 'Web ManoProtect', click: () => shell.openExternal('https://manoprotect.com') },
-        { label: 'Soporte', click: () => shell.openExternal('mailto:soporte@manoprotect.com') },
+        { label: 'Web ManoProtect', click: () => shell.openExternal('https://manoprotectt.com') },
+        { label: 'Soporte', click: () => shell.openExternal('mailto:soporte@manoprotectt.com') },
         { type: 'separator' },
         { label: `Version ${require('./package.json').version}` }
       ]

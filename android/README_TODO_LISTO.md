@@ -35,7 +35,7 @@
 
 ### PASO 2: Generar AAB en PWABuilder
 1. Ve a https://www.pwabuilder.com/
-2. Ingresa: `https://www.manoprotect.com`
+2. Ingresa: `https://www.manoprotectt.com`
 3. Usa la configuración del archivo `GOOGLE_PLAY_COMPLETO.md`
 4. Descarga el ZIP con el archivo .aab
 

@@ -96,7 +96,7 @@ const AlarmasSecuritasStyle = () => {
       <Helmet>
         <title>Alarmas para Hogar y Negocio | ManoProtect 2026 - Desde 33,90 EUR/mes</title>
         <meta name="description" content="Alarma inteligente para casa y empresa. Camaras IA, centro 24h, aviso a Policia, anti-inhibicion. SIN permanencia. Instalacion GRATIS. Sentinel SOS incluido. Desde 33,90 EUR/mes." />
-        <link rel="canonical" href="https://manoprotect.com/alarmas-hogar" />
+        <link rel="canonical" href="https://manoprotectt.com/alarmas-hogar" />
       </Helmet>
 
       {/* ═══ STICKY HEADER ═══ */}

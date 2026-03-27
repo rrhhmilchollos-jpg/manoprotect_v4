@@ -342,4 +342,4 @@ El "fraude del CEO" o "Business Email Compromise (BEC)" es una de las estafas m�
 © 2026 ManoProtect - STARTBOOKING SL
 Todos los derechos reservados.
 
-**Para más información:** info@manoprotect.com | +34 601 510 950
+**Para más información:** info@manoprotectt.com | +34 601 510 950

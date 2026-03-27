@@ -72,7 +72,7 @@ táctil cuando un familiar activa una emergencia.
 
 **URL de tu política de privacidad:**
 ```
-https://manoprotect.com/privacy
+https://manoprotectt.com/privacy
 ```
 
 ---
@@ -144,9 +144,9 @@ La app SÍ:
 ## Contacto para Revisores
 
 Si tienen preguntas adicionales, pueden contactarnos en:
-- **Email:** info@manoprotect.com
+- **Email:** info@manoprotectt.com
 - **Teléfono:** +34 601 510 950
-- **Web:** https://manoprotect.com
+- **Web:** https://manoprotectt.com
 
 Estamos disponibles para proporcionar cualquier información adicional, 
 vídeos demostrativos, o aclaraciones que necesiten.

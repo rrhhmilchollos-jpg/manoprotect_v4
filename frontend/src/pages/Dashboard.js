@@ -1004,7 +1004,7 @@ const Dashboard = () => {
                       <Phone className="w-4 h-4 mr-2" />
                       601 510 950
                     </a>
-                    <a href="mailto:soporte@manoprotect.com" className="inline-flex items-center text-red-600 hover:text-red-700 font-medium">
+                    <a href="mailto:soporte@manoprotectt.com" className="inline-flex items-center text-red-600 hover:text-red-700 font-medium">
                       <Mail className="w-4 h-4 mr-2" />
                       Contactar
                     </a>

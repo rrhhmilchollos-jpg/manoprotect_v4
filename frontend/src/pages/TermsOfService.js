@@ -153,7 +153,7 @@ const TermsOfService = () => {
             <h2 className="text-xl font-bold text-zinc-900">11. Contacto</h2>
             <p className="text-zinc-600">
               Para cualquier consulta sobre estos términos:<br />
-              <strong>Email:</strong> legal@manoprotect.com<br />
+              <strong>Email:</strong> legal@manoprotectt.com<br />
               <strong>Teléfono:</strong> +34 601 510 950
             </p>
           </section>

@@ -19,7 +19,7 @@ class TestSEOFeatures:
         content = response.text
         assert "User-agent:" in content, "robots.txt missing User-agent directive"
         assert "Sitemap:" in content, "robots.txt missing Sitemap directive"
-        assert "manoprotect.com" in content.lower(), "robots.txt should reference manoprotect.com"
+        assert "manoprotectt.com" in content.lower(), "robots.txt should reference manoprotectt.com"
         print("✅ robots.txt is accessible and properly configured")
     
     def test_sitemap_xml_accessible(self):
@@ -31,7 +31,7 @@ class TestSEOFeatures:
         assert '<?xml version="1.0"' in content, "sitemap.xml missing XML declaration"
         assert '<urlset' in content, "sitemap.xml missing urlset element"
         assert '<loc>' in content, "sitemap.xml missing loc elements"
-        assert 'manoprotect.com' in content, "sitemap.xml should reference manoprotect.com"
+        assert 'manoprotectt.com' in content, "sitemap.xml should reference manoprotectt.com"
         print("✅ sitemap.xml is accessible and valid")
     
     def test_sitemap_contains_key_pages(self):
@@ -40,7 +40,7 @@ class TestSEOFeatures:
         content = response.text
         
         key_pages = [
-            "manoprotect.com/",
+            "manoprotectt.com/",
             "verificar-estafa",
             "pricing",
             "login",
@@ -61,7 +61,7 @@ class TestCheckoutWithCompanyInfo:
             f"{BASE_URL}/api/create-checkout-session",
             json={
                 "plan_type": "monthly",
-                "origin_url": "https://manoprotect.com"
+                "origin_url": "https://manoprotectt.com"
             },
             headers={"Content-Type": "application/json"}
         )
@@ -86,7 +86,7 @@ class TestCheckoutWithCompanyInfo:
             f"{BASE_URL}/api/create-checkout-session",
             json={
                 "plan_type": "family-yearly",
-                "origin_url": "https://manoprotect.com"
+                "origin_url": "https://manoprotectt.com"
             },
             headers={"Content-Type": "application/json"}
         )
@@ -111,7 +111,7 @@ class TestCheckoutWithCompanyInfo:
             f"{BASE_URL}/api/create-checkout-session",
             json={
                 "plan_type": "weekly",
-                "origin_url": "https://manoprotect.com"
+                "origin_url": "https://manoprotectt.com"
             },
             headers={"Content-Type": "application/json"}
         )
@@ -193,7 +193,7 @@ class TestNoManoBankReferences:
             f"{BASE_URL}/api/create-checkout-session",
             json={
                 "plan_type": "monthly",
-                "origin_url": "https://manoprotect.com"
+                "origin_url": "https://manoprotectt.com"
             },
             headers={"Content-Type": "application/json"}
         )

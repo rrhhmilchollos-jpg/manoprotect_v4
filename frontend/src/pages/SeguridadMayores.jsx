@@ -93,11 +93,11 @@ const SeguridadMayores = () => {
         <title>Seguridad Digital para Mayores - Protección contra Estafas | ManoProtect</title>
         <meta name="description" content="Protección digital especializada para personas mayores. Botón SOS, localización GPS, detección de estafas telefónicas y fraudes bancarios. Tranquilidad para toda la familia." />
         <meta name="keywords" content="seguridad mayores, protección personas mayores online, estafas mayores, fraude mayores, botón SOS mayores, localización GPS mayores, seguridad tercera edad" />
-        <link rel="canonical" href="https://manoprotect.com/seguridad-mayores" />
+        <link rel="canonical" href="https://manoprotectt.com/seguridad-mayores" />
         
         <meta property="og:title" content="Seguridad Digital para Mayores - ManoProtect" />
         <meta property="og:description" content="Protección especializada para personas mayores contra estafas y fraudes digitales." />
-        <meta property="og:url" content="https://manoprotect.com/seguridad-mayores" />
+        <meta property="og:url" content="https://manoprotectt.com/seguridad-mayores" />
         <meta property="og:type" content="website" />
       </Helmet>
 

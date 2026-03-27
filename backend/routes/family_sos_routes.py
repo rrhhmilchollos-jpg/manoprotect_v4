@@ -33,7 +33,7 @@ def init_family_routes(db, plan_features):
 # Superadmins always have full access
 SUPERADMIN_EMAILS = [
     "rrhh.milchollos@gmail.com",
-    "info@manoprotect.com",
+    "info@manoprotectt.com",
     "ivanrubiosolas@gmail.com"
 ]
 
@@ -1047,7 +1047,7 @@ async def link_family_member_by_phone(
     
     # Send SMS invitation
     sms_sent = False
-    invite_link = f"https://manoprotect.com/unirse/{member_id}"
+    invite_link = f"https://manoprotectt.com/unirse/{member_id}"
     
     try:
         from services.infobip_sms import send_sms
@@ -1328,7 +1328,7 @@ async def add_child_member(
     if data.email:
         try:
             # Generate invite link
-            invite_link = f"https://manoprotect.com/vincular/{child['child_id']}?token={child['invite_token']}"
+            invite_link = f"https://manoprotectt.com/vincular/{child['child_id']}?token={child['invite_token']}"
             
             result = await email_service.send_family_invite(
                 owner_name=user.name,
@@ -1653,7 +1653,7 @@ async def locate_child(
             if is_configured():
                 sms_result = await send_sms(
                     phone_number=child["phone"],
-                    message=f"ManoProtect: {user.name} solicita tu ubicacion. Abre la app para compartirla: {os.environ.get('FRONTEND_URL', 'https://manoprotect.com')}/compartir-ubicacion?req={location_request['request_id']}"
+                    message=f"ManoProtect: {user.name} solicita tu ubicacion. Abre la app para compartirla: {os.environ.get('FRONTEND_URL', 'https://manoprotectt.com')}/compartir-ubicacion?req={location_request['request_id']}"
                 )
                 if sms_result.get("success"):
                     sms_sent = True

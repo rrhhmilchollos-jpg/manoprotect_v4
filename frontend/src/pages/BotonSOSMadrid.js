@@ -17,7 +17,7 @@ const BotonSOSMadrid = () => {
     "description": "Venta y soporte de dispositivos de seguridad personal con botón SOS en Madrid.",
     "address": { "@type": "PostalAddress", "addressLocality": "Madrid", "addressRegion": "Comunidad de Madrid", "postalCode": "28000", "addressCountry": "ES" },
     "geo": { "@type": "GeoCoordinates", "latitude": 40.4168, "longitude": -3.7038 },
-    "url": "https://manoprotect.com/boton-sos-madrid",
+    "url": "https://manoprotectt.com/boton-sos-madrid",
     "telephone": "+34601510950",
     "aggregateRating": { "@type": "AggregateRating", "ratingValue": "4.9", "reviewCount": "234" }
   };
@@ -37,7 +37,7 @@ const BotonSOSMadrid = () => {
         <title>Botón SOS Madrid | Compra y Atención Local</title>
         <meta name="description" content="Compra tu botón SOS físico en Madrid con entrega rápida y soporte local. Protege a toda tu familia: niños, adultos y mayores. Envío gratuito." />
         <meta name="keywords" content="botón SOS Madrid, dispositivo emergencia Madrid, teleasistencia Madrid, seguridad mayores Madrid, localizador GPS Madrid" />
-        <link rel="canonical" href="https://manoprotect.com/boton-sos-madrid" />
+        <link rel="canonical" href="https://manoprotectt.com/boton-sos-madrid" />
         <script type="application/ld+json">{JSON.stringify(schemaLocalBusiness)}</script>
       </Helmet>
 

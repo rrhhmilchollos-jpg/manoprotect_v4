@@ -65,7 +65,7 @@ MANOPROTECT_KEY_PASSWORD=TU_PASSWORD_SEGURO
 cd /app/frontend
 
 # Build de React
-REACT_APP_BACKEND_URL=https://manoprotect.com yarn build
+REACT_APP_BACKEND_URL=https://manoprotectt.com yarn build
 
 # Sincronizar con Android
 npx cap sync android
@@ -174,7 +174,7 @@ Descarga ManoProtect y mantén a tu familia segura en el mundo digital.
 - Típicamente: PEGI 3 / Everyone
 
 ### 6.7 Política de Privacidad
-URL requerida: https://manoprotect.com/privacy-policy
+URL requerida: https://manoprotectt.com/privacy-policy
 
 ---
 

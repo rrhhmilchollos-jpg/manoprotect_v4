@@ -1073,7 +1073,7 @@ async def create_sentinel_x_checkout(
     - full_payment: Fundadores/Premium full payment (one-time)
     """
     try:
-        host_url = str(http_request.headers.get('origin', 'https://manoprotect.com'))
+        host_url = str(http_request.headers.get('origin', 'https://manoprotectt.com'))
         sentinel_img = 'https://customer-assets.emergentagent.com/job_8161c713-bb69-4bfd-84d2-fde54657d491/artifacts/acz8j630_Reloj%20inteligente%20ManoProtect%20SENTINEL%20X.png'
 
         # --- SUBSCRIPTION MODE: Basic watch with mandatory family plan ---

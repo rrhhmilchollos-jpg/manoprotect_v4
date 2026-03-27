@@ -9,7 +9,7 @@ from core.config import db
 
 # Email configuration - will use SendGrid when configured
 SENDGRID_API_KEY = os.environ.get('SENDGRID_API_KEY')
-FROM_EMAIL = os.environ.get('SENDER_EMAIL', os.environ.get('FROM_EMAIL', 'alertas@manoprotect.com'))
+FROM_EMAIL = os.environ.get('SENDER_EMAIL', os.environ.get('FROM_EMAIL', 'alertas@manoprotectt.com'))
 
 
 class EmailNotificationService:
@@ -882,7 +882,7 @@ class EmailNotificationService:
                     </div>
                     
                     <div style="text-align: center; margin-top: 32px;">
-                        <a href="https://manoprotect.com/dashboard" class="btn">Ir al Dashboard</a>
+                        <a href="https://manoprotectt.com/dashboard" class="btn">Ir al Dashboard</a>
                     </div>
                     
                     <p style="text-align: center; color: #9ca3af; font-size: 13px; margin-top: 24px;">
@@ -948,8 +948,8 @@ class EmailNotificationService:
                     <h3 style="color: #1f2937; text-align: center;">¿Qué quieres hacer?</h3>
                     
                     <div class="options">
-                        <a href="https://manoprotect.com/dashboard" class="btn btn-primary">Continuar con Premium</a>
-                        <a href="https://manoprotect.com/profile" class="btn btn-secondary">Cancelar prueba</a>
+                        <a href="https://manoprotectt.com/dashboard" class="btn btn-primary">Continuar con Premium</a>
+                        <a href="https://manoprotectt.com/profile" class="btn btn-secondary">Cancelar prueba</a>
                     </div>
                     
                     <p style="text-align: center; color: #9ca3af; font-size: 13px; margin-top: 24px;">
@@ -1030,7 +1030,7 @@ class EmailNotificationService:
                     </div>
                     
                     <div style="text-align: center; margin-top: 32px;">
-                        <a href="https://manoprotect.com/dashboard" class="btn">Ir al Dashboard</a>
+                        <a href="https://manoprotectt.com/dashboard" class="btn">Ir al Dashboard</a>
                     </div>
                 </div>
                 
@@ -1087,7 +1087,7 @@ class EmailNotificationService:
                     </p>
                     
                     <div style="text-align: center; margin-top: 32px;">
-                        <a href="https://manoprotect.com/pricing" class="btn">Ver planes disponibles</a>
+                        <a href="https://manoprotectt.com/pricing" class="btn">Ver planes disponibles</a>
                     </div>
                 </div>
                 
@@ -1243,13 +1243,13 @@ class EmailNotificationService:
                     </div>
                     
                     <div style="text-align: center; margin-top: 32px;">
-                        <a href="https://manoprotect.com/servicios-sos" class="btn">Ver mi pedido</a>
+                        <a href="https://manoprotectt.com/servicios-sos" class="btn">Ver mi pedido</a>
                     </div>
                 </div>
                 
                 <div class="footer">
                     <p>Si tienes alguna pregunta, contacta con nosotros:</p>
-                    <p>📞 601 510 950 | ✉️ soporte@manoprotect.com</p>
+                    <p>📞 601 510 950 | ✉️ soporte@manoprotectt.com</p>
                     <p>© 2026 ManoProtect - STARTBOOKING SL - CIF: B19427723</p>
                 </div>
             </div>
@@ -1331,7 +1331,7 @@ class EmailNotificationService:
                 </div>
                 
                 <div class="footer">
-                    <p>📞 601 510 950 | ✉️ soporte@manoprotect.com</p>
+                    <p>📞 601 510 950 | ✉️ soporte@manoprotectt.com</p>
                     <p>© 2026 ManoProtect - STARTBOOKING SL - CIF: B19427723</p>
                 </div>
             </div>
@@ -1382,7 +1382,7 @@ class EmailNotificationService:
         }
         role_display = role_names.get(role, role.capitalize())
         
-        full_url = f"https://manoprotect.com{registration_url}" if registration_url.startswith('/') else registration_url
+        full_url = f"https://manoprotectt.com{registration_url}" if registration_url.startswith('/') else registration_url
         
         return f"""
         <!DOCTYPE html>
@@ -1632,7 +1632,7 @@ class EmailNotificationService:
                         
                         <div style="text-align: center; margin-top: 24px;">
                             <a href="https://auth-hardened-test.preview.emergentagent.com/enterprise" class="btn btn-secondary">Ir al Portal</a>
-                            <a href="mailto:it@manoprotect.com?subject=Alerta%20de%20Seguridad%20-%20Acceso%20no%20reconocido" class="btn btn-danger">Reportar acceso sospechoso</a>
+                            <a href="mailto:it@manoprotectt.com?subject=Alerta%20de%20Seguridad%20-%20Acceso%20no%20reconocido" class="btn btn-danger">Reportar acceso sospechoso</a>
                         </div>
                     </div>
                 </div>
@@ -1642,7 +1642,7 @@ class EmailNotificationService:
                     STARTBOOKING SL - CIF: B19427723</p>
                     <p style="margin-top: 12px;">
                         Si no reconoces esta actividad, contacta inmediatamente con IT:<br>
-                        📞 601 510 950 | ✉️ it@manoprotect.com
+                        📞 601 510 950 | ✉️ it@manoprotectt.com
                     </p>
                 </div>
             </div>

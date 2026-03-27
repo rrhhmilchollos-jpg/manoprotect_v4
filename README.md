@@ -18,7 +18,7 @@ ManoProtect es una aplicación de seguridad familiar con:
 
 ## 🚀 Demo
 
-- **Web**: [manoprotect.com](https://manoprotect.com)
+- **Web**: [manoprotectt.com](https://manoprotectt.com)
 - **Preview**: [safety-alert-app-1.preview.emergentagent.com](https://auth-hardened-test.preview.emergentagent.com)
 
 ## 📱 Características
@@ -145,7 +145,7 @@ yarn start
 ## 🔐 Credenciales de Test
 
 ```
-Superadmin: info@manoprotect.com / 19862210Des
+Superadmin: info@manoprotectt.com / 19862210Des
 Test User:  mrisolaz130@gmail.com / 19862210Des!
 ```
 
@@ -174,5 +174,5 @@ Copyright © 2025 STARTBOOKING SL. Todos los derechos reservados.
 
 ## 📞 Soporte
 
-- Web: [manoprotect.com](https://manoprotect.com)
-- Email: info@manoprotect.com
+- Web: [manoprotectt.com](https://manoprotectt.com)
+- Email: info@manoprotectt.com

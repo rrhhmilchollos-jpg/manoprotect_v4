@@ -10,7 +10,7 @@ import uuid
 BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', '').rstrip('/')
 
 # Test credentials
-ADMIN_EMAIL = "ceo@manoprotect.com"
+ADMIN_EMAIL = "ceo@manoprotectt.com"
 ADMIN_PASSWORD = "19862210Des"
 TEST_INSTALLATION_ID = "030a0734-d116-4802-9052-5be831830c0e"
 

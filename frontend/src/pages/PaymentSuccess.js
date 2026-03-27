@@ -160,7 +160,7 @@ const PaymentSuccess = () => {
               </div>
               
               <p className="text-xs text-zinc-500 mt-6">
-                ¿Necesitas ayuda? <a href="mailto:soporte@manoprotect.com" className="text-indigo-600 hover:underline">soporte@manoprotect.com</a>
+                ¿Necesitas ayuda? <a href="mailto:soporte@manoprotectt.com" className="text-indigo-600 hover:underline">soporte@manoprotectt.com</a>
               </p>
             </CardContent>
           </Card>
@@ -273,9 +273,9 @@ const PaymentSuccess = () => {
             Nuestro equipo de soporte está disponible para resolver cualquier duda.
           </p>
           <div className="flex justify-center gap-4 text-sm">
-            <a href="mailto:soporte@manoprotect.com" className="text-indigo-600 hover:underline flex items-center gap-1">
+            <a href="mailto:soporte@manoprotectt.com" className="text-indigo-600 hover:underline flex items-center gap-1">
               <Mail className="w-4 h-4" />
-              soporte@manoprotect.com
+              soporte@manoprotectt.com
             </a>
           </div>
           

@@ -36,7 +36,7 @@ const ContactPage = () => {
       <Helmet>
         <title>Contacto y Soporte | ManoProtect</title>
         <meta name="description" content="Contacta con ManoProtect. Formulario directo, WhatsApp y soporte 24/7. Resolvemos todas tus dudas antes de comprar." />
-        <link rel="canonical" href="https://manoprotect.com/contacto" />
+        <link rel="canonical" href="https://manoprotectt.com/contacto" />
       </Helmet>
 
       {/* Header */}
@@ -124,13 +124,13 @@ const ContactPage = () => {
               </div>
             </a>
 
-            <a href="mailto:info@manoprotect.com" className="flex items-center gap-4 p-5 bg-gray-50 border border-gray-200 rounded-2xl hover:bg-gray-100 transition-colors" data-testid="contact-mail">
+            <a href="mailto:info@manoprotectt.com" className="flex items-center gap-4 p-5 bg-gray-50 border border-gray-200 rounded-2xl hover:bg-gray-100 transition-colors" data-testid="contact-mail">
               <div className="w-12 h-12 bg-gray-700 rounded-xl flex items-center justify-center flex-shrink-0">
                 <Mail className="w-6 h-6 text-white" />
               </div>
               <div>
                 <p className="font-bold text-gray-900">Email</p>
-                <p className="text-sm text-gray-500">info@manoprotect.com</p>
+                <p className="text-sm text-gray-500">info@manoprotectt.com</p>
               </div>
             </a>
 

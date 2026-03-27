@@ -16,10 +16,10 @@ const ComoFuncionaRelojSOS = () => {
     "headline": "Cómo Funciona un Reloj SOS para Mayores [Guía Completa 2026]",
     "description": "Explicación paso a paso de cómo funcionan los relojes con botón de emergencia para personas mayores. GPS, llamadas, detección de caídas y alertas.",
     "author": { "@type": "Organization", "name": "ManoProtect" },
-    "publisher": { "@type": "Organization", "name": "ManoProtect", "logo": { "@type": "ImageObject", "url": "https://manoprotect.com/logo512.png" } },
+    "publisher": { "@type": "Organization", "name": "ManoProtect", "logo": { "@type": "ImageObject", "url": "https://manoprotectt.com/logo512.png" } },
     "datePublished": "2026-02-10",
     "dateModified": "2026-02-24",
-    "mainEntityOfPage": "https://manoprotect.com/blog/como-funciona-reloj-sos"
+    "mainEntityOfPage": "https://manoprotectt.com/blog/como-funciona-reloj-sos"
   };
 
   const schemaHowTo = {
@@ -48,7 +48,7 @@ const ComoFuncionaRelojSOS = () => {
         <title>Cómo Funciona un Reloj SOS para Mayores [Guía Completa 2026]</title>
         <meta name="description" content="Aprende cómo funciona un reloj con botón SOS para ancianos. GPS, llamadas de emergencia, detección de caídas y alertas automáticas. Guía paso a paso." />
         <meta name="keywords" content="como funciona reloj sos, reloj emergencia mayores funcionamiento, boton sos ancianos, reloj gps mayores como funciona" />
-        <link rel="canonical" href="https://manoprotect.com/blog/como-funciona-reloj-sos" />
+        <link rel="canonical" href="https://manoprotectt.com/blog/como-funciona-reloj-sos" />
         <script type="application/ld+json">{JSON.stringify(schemaArticle)}</script>
         <script type="application/ld+json">{JSON.stringify(schemaHowTo)}</script>
       </Helmet>

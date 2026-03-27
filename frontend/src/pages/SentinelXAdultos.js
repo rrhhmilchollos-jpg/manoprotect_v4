@@ -57,9 +57,9 @@ const SentinelXAdultos = () => {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     "itemListElement": [
-      { "@type": "ListItem", "position": 1, "name": "Inicio", "item": "https://manoprotect.com" },
-      { "@type": "ListItem", "position": 2, "name": "Sentinel X", "item": "https://manoprotect.com/sentinel-x" },
-      { "@type": "ListItem", "position": 3, "name": "Sentinel X Adultos", "item": "https://manoprotect.com/sentinel-x-adultos" }
+      { "@type": "ListItem", "position": 1, "name": "Inicio", "item": "https://manoprotectt.com" },
+      { "@type": "ListItem", "position": 2, "name": "Sentinel X", "item": "https://manoprotectt.com/sentinel-x" },
+      { "@type": "ListItem", "position": 3, "name": "Sentinel X Adultos", "item": "https://manoprotectt.com/sentinel-x-adultos" }
     ]
   };
 
@@ -86,10 +86,10 @@ const SentinelXAdultos = () => {
         <title>Sentinel X Adultos | Botón SOS de Emergencia Personal</title>
         <meta name="description" content="Sentinel X para adultos, con botón SOS físico, llamadas automáticas y geolocalización inmediata. Seguridad personal para tu vida diaria y deporte. Envío gratuito." />
         <meta name="keywords" content="botón SOS personal, dispositivo emergencia adultos, seguridad personal con botón físico, botón SOS trabajo y deporte, sentinel x adultos" />
-        <link rel="canonical" href="https://manoprotect.com/sentinel-x-adultos" />
+        <link rel="canonical" href="https://manoprotectt.com/sentinel-x-adultos" />
         <meta property="og:title" content="Sentinel X para Adultos | Botón SOS Personal" />
         <meta property="og:description" content="Seguridad personal con botón SOS físico. Llamadas automáticas, GPS y diseño discreto. 149€ envío gratuito." />
-        <meta property="og:url" content="https://manoprotect.com/sentinel-x-adultos" />
+        <meta property="og:url" content="https://manoprotectt.com/sentinel-x-adultos" />
         <meta property="og:type" content="product" />
         <script type="application/ld+json">{JSON.stringify(schemaProduct)}</script>
         <script type="application/ld+json">{JSON.stringify(schemaFAQ)}</script>

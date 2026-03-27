@@ -194,7 +194,7 @@ const SeguridadViviendaEmpresa = () => {
       <Helmet>
         <title>Alarmas para Casa y Negocio | ManoProtect - Mejor que Securitas Direct</title>
         <meta name="description" content="Alarmas para viviendas y empresas desde 33,90 EUR/mes. SIN permanencia. Instalacion GRATIS. Camaras IA, centro 24h, Sentinel SOS incluido. Supera a Securitas Direct y Prosegur." />
-        <link rel="canonical" href="https://manoprotect.com/seguridad-hogar-empresa" />
+        <link rel="canonical" href="https://manoprotectt.com/seguridad-hogar-empresa" />
       </Helmet>
 
       {/* ═══ HEADER ═══ */}

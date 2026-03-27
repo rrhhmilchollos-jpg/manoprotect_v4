@@ -236,7 +236,7 @@ const SobreNosotros = () => {
                   <Mail className="w-5 h-5 text-blue-700 flex-shrink-0 mt-0.5" />
                   <div>
                     <p className="font-bold text-gray-900 text-sm">Email</p>
-                    <a href="mailto:info@manoprotect.com" className="text-xs text-blue-600 hover:underline">info@manoprotect.com</a>
+                    <a href="mailto:info@manoprotectt.com" className="text-xs text-blue-600 hover:underline">info@manoprotectt.com</a>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">

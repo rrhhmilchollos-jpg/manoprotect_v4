@@ -55,7 +55,7 @@ ID de unidad de anuncios: ca-app-pub-7713974112203810/1234567890
 
 ### 2.1 Accede a PWABuilder
 1. Ve a https://www.pwabuilder.com
-2. Ingresa tu URL: `https://manoprotect.com`
+2. Ingresa tu URL: `https://manoprotectt.com`
 3. Espera a que analice tu PWA
 
 ### 2.2 Generar Paquete Android

@@ -142,7 +142,7 @@ const HighConversionLanding = () => {
       <Helmet>
         <title>Protección digital y alerta SOS familiar | ManoProtect</title>
         <meta name="description" content="ManoProtect protege a tu familia frente a emergencias y fraudes digitales. Activa alertas SOS, monitoreo GPS y asistencia inmediata. Prueba 7 días gratis." />
-        <link rel="canonical" href="https://manoprotect.com/" />
+        <link rel="canonical" href="https://manoprotectt.com/" />
         <script type="application/ld+json">{JSON.stringify({
           "@context": "https://schema.org",
           "@type": "FAQPage",
@@ -158,8 +158,8 @@ const HighConversionLanding = () => {
           "@context": "https://schema.org",
           "@type": "Organization",
           "name": "ManoProtect",
-          "url": "https://manoprotect.com",
-          "logo": "https://manoprotect.com/manoprotect_logo.png",
+          "url": "https://manoprotectt.com",
+          "logo": "https://manoprotectt.com/manoprotect_logo.png",
           "description": "Sistema integral de protección familiar digital con alertas SOS, localización GPS y protección contra estafas online.",
           "address": {"@type": "PostalAddress", "addressCountry": "ES"},
           "sameAs": ["https://www.tiktok.com/@manoprotect"],

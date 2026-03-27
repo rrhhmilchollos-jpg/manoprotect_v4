@@ -10,7 +10,7 @@ El entorno cloud no tiene Android SDK instalado. Pero tu app está lista para em
 
 ### Paso 1: Ve a PWABuilder
 1. Abre: https://www.pwabuilder.com/
-2. Ingresa la URL: `https://manoprotect.com` (o tu URL de producción)
+2. Ingresa la URL: `https://manoprotectt.com` (o tu URL de producción)
 3. Click en **"Start"**
 
 ### Paso 2: Verifica la detección
@@ -70,7 +70,7 @@ mkdir manoprotect-android
 cd manoprotect-android
 
 # Inicializar con tu PWA
-nickvidal init --manifest https://manoprotect.com/manifest.json
+nickvidal init --manifest https://manoprotectt.com/manifest.json
 ```
 
 ### Responder las preguntas:
@@ -124,7 +124,7 @@ En `app/src/main/AndroidManifest.xml`:
         android:exported="true">
         <meta-data
             android:name="nickvidal.nickvidal.HostName"
-            android:value="manoprotect.com" />
+            android:value="manoprotectt.com" />
         <meta-data
             android:name="nickvidal.nickvidal.LaunchUrl"
             android:value="/" />
@@ -215,8 +215,8 @@ ManoProtect te ayuda a proteger a tu familia de estafas digitales.
 
 Prueba gratis durante 7 días. Sin tarjeta de crédito.
 
-Contacto: info@manoprotect.com
-Web: https://manoprotect.com
+Contacto: info@manoprotectt.com
+Web: https://manoprotectt.com
 ```
 
 ---
@@ -225,7 +225,7 @@ Web: https://manoprotect.com
 
 - PWABuilder: https://www.pwabuilder.com/
 - Google Play Console: https://play.google.com/console
-- Tu app: https://manoprotect.com
+- Tu app: https://manoprotectt.com
 
 ---
 

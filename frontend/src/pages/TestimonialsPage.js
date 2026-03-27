@@ -30,7 +30,7 @@ const TestimonialsPage = () => {
       <Helmet>
         <title>Testimonios y Casos de Uso | ManoProtect</title>
         <meta name="description" content="Descubre cómo ManoProtect protege a familias con los relojes Sentinel X, J y S. Testimonios reales de padres, hijos y cuidadores." />
-        <link rel="canonical" href="https://manoprotect.com/testimonios" />
+        <link rel="canonical" href="https://manoprotectt.com/testimonios" />
       </Helmet>
 
       {/* Header */}

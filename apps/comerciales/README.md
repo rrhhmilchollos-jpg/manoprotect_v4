@@ -21,9 +21,9 @@ App móvil profesional para el equipo comercial de ManoProtect. Permite consulta
 3. Ejecutar build: `../scripts/build.sh comerciales`
 
 ## Credenciales de prueba
-- Email: `comercial@manoprotect.com`
+- Email: `comercial@manoprotectt.com`
 - Password: `Comercial2025!`
 
 ## API Base
-- Producción: `https://www.manoprotect.com/api/gestion`
+- Producción: `https://www.manoprotectt.com/api/gestion`
 - Preview: `https://auth-hardened-test.preview.emergentagent.com/api/gestion`

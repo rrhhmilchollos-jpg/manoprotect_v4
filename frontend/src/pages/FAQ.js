@@ -77,7 +77,7 @@ const FAQ = () => {
       <Helmet>
         <title>Preguntas Frecuentes | ManoProtect – Sentinel X, J y S</title>
         <meta name="description" content="Encuentra respuestas a las preguntas más frecuentes sobre ManoProtect, los relojes Sentinel X, J y S, seguimiento GPS, privacidad, envíos y suscripciones." />
-        <link rel="canonical" href="https://manoprotect.com/faq" />
+        <link rel="canonical" href="https://manoprotectt.com/faq" />
         <script type="application/ld+json">{JSON.stringify(schemaFAQ)}</script>
       </Helmet>
 

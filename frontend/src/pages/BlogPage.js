@@ -147,7 +147,7 @@ const BlogPage = () => (
     <Helmet>
       <title>Blog Educativo | ManoProtect – Seguridad Familiar y GPS</title>
       <meta name="description" content="Artículos sobre seguridad familiar, tecnología GPS, protección infantil y cuidado de mayores. Guías prácticas de ManoProtect." />
-      <link rel="canonical" href="https://manoprotect.com/blog" />
+      <link rel="canonical" href="https://manoprotectt.com/blog" />
       <meta property="og:title" content="Blog ManoProtect – Seguridad Familiar" />
       <meta property="og:description" content="Artículos sobre seguridad familiar, tecnología GPS y protección." />
       <meta property="og:type" content="website" />
@@ -226,7 +226,7 @@ export const BlogPostDetail = () => {
       <Helmet>
         <title>{post.title} | Blog ManoProtect</title>
         <meta name="description" content={post.excerpt} />
-        <link rel="canonical" href={`https://manoprotect.com/blog/${post.slug}`} />
+        <link rel="canonical" href={`https://manoprotectt.com/blog/${post.slug}`} />
         <meta property="og:title" content={post.title} />
         <meta property="og:description" content={post.excerpt} />
         <meta property="og:image" content={post.img} />

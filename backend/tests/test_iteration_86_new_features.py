@@ -14,11 +14,11 @@ import os
 BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', 'https://auth-hardened-test.preview.emergentagent.com').rstrip('/')
 
 # Test credentials from seed data
-ADMIN_EMAIL = "admin@manoprotect.com"
+ADMIN_EMAIL = "admin@manoprotectt.com"
 ADMIN_PASSWORD = "ManoAdmin2025!"
-COMERCIAL_EMAIL = "comercial@manoprotect.com"
+COMERCIAL_EMAIL = "comercial@manoprotectt.com"
 COMERCIAL_PASSWORD = "Comercial2025!"
-INSTALADOR_EMAIL = "instalador@manoprotect.com"
+INSTALADOR_EMAIL = "instalador@manoprotectt.com"
 INSTALADOR_PASSWORD = "Instalador2025!"
 
 # Strong password for testing (no common patterns)
@@ -254,12 +254,12 @@ class TestNotificationsSystem:
         instalacion_id = inst_resp.json()["instalacion_id"]
         print(f"Created installation: {instalacion_id}")
 
-        # Get the specific instalador@manoprotect.com user_id (the one our instalador_token is for)
+        # Get the specific instalador@manoprotectt.com user_id (the one our instalador_token is for)
         users_resp = requests.get(
             f"{BASE_URL}/api/gestion/usuarios",
             headers={"Authorization": f"Bearer {admin_token}"}
         )
-        # Find the seeded instalador (instalador@manoprotect.com) specifically
+        # Find the seeded instalador (instalador@manoprotectt.com) specifically
         instaladores = [u for u in users_resp.json()["usuarios"] if u["email"] == INSTALADOR_EMAIL and u["activo"]]
         assert len(instaladores) > 0, f"Seeded instalador {INSTALADOR_EMAIL} not found"
         instalador_id = instaladores[0]["user_id"]
@@ -274,7 +274,7 @@ class TestNotificationsSystem:
         assert assign_resp.status_code == 200, f"Failed to assign installer: {assign_resp.text}"
         print(f"Assigned installer {instalador_id} to {instalacion_id}")
 
-        # Check installer notifications using the instalador_token (which is for instalador@manoprotect.com)
+        # Check installer notifications using the instalador_token (which is for instalador@manoprotectt.com)
         notif_resp = requests.get(
             f"{BASE_URL}/api/gestion/notificaciones",
             headers={"Authorization": f"Bearer {instalador_token}"}
@@ -358,7 +358,7 @@ class TestAppVersionControl:
                 "release_notes": "Test update - new features added",
                 "min_version": "1.0.0",
                 "force_update": False,
-                "download_url": "https://play.google.com/store/apps/details?id=com.manoprotect.comerciales"
+                "download_url": "https://play.google.com/store/apps/details?id=com.manoprotectt.comerciales"
             },
             headers={"Authorization": f"Bearer {admin_token}"}
         )

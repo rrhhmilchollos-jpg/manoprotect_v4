@@ -1,5 +1,5 @@
 # 📋 FRONTEND - Portal de Empleados ManoProtect
-# Código para implementar en admin.manoprotect.com
+# Código para implementar en admin.manoprotectt.com
 
 ## ============================================
 ## 1. COMPONENTE: AbsencesPage.jsx
@@ -1172,4 +1172,4 @@ import NotificationsBell from './NotificationsBell';
 
 ---
 
-Documento generado para admin.manoprotect.com
+Documento generado para admin.manoprotectt.com

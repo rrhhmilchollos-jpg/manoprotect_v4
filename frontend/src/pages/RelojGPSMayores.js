@@ -43,7 +43,7 @@ const RelojGPSMayores = () => {
         <title>Reloj GPS para Mayores | Localizador Ancianos | ManoProtect 2026</title>
         <meta name="description" content="Reloj con GPS para personas mayores. Localiza a tus familiares en tiempo real, historial de rutas, zonas seguras y alertas automáticas. Desde 29,99€. Envío gratis España." />
         <meta name="keywords" content="reloj gps mayores, localizador gps ancianos, reloj localizador personas mayores, gps para mayores, smartwatch gps senior, reloj rastreador ancianos" />
-        <link rel="canonical" href="https://manoprotect.com/reloj-gps-mayores" />
+        <link rel="canonical" href="https://manoprotectt.com/reloj-gps-mayores" />
         
         <script type="application/ld+json">{JSON.stringify(schemaProduct)}</script>
       </Helmet>

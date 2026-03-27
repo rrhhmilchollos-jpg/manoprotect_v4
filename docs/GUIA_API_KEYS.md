@@ -56,7 +56,7 @@ SendGrid permite enviar emails transaccionales (bienvenida, alertas, recibos).
 ```bash
 # En /app/backend/.env
 SENDGRID_API_KEY=SG.xxxxxxxxxxxxxxxxxxxxx
-SENDER_EMAIL=noreply@manoprotect.com
+SENDER_EMAIL=noreply@manoprotectt.com
 ```
 
 ### Verificar Dominio (Opcional pero recomendado)

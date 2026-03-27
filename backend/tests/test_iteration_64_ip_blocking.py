@@ -13,7 +13,7 @@ import time
 BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', '').rstrip('/')
 
 # Test credentials
-CEO_EMAIL = "ceo@manoprotect.com"
+CEO_EMAIL = "ceo@manoprotectt.com"
 CEO_PASSWORD = "19862210Des"
 TEST_IP = "1.2.3.4"
 

@@ -16,10 +16,10 @@ const RelojGPSSinCuotas = () => {
     "headline": "Reloj GPS Sin Cuotas Mensuales: La Verdad Que No Te Cuentan [2026]",
     "description": "¿Existen relojes GPS para mayores sin cuotas? Analizamos la realidad detrás de la publicidad. Costes ocultos, SIM, limitaciones y alternativas.",
     "author": { "@type": "Organization", "name": "ManoProtect" },
-    "publisher": { "@type": "Organization", "name": "ManoProtect", "logo": { "@type": "ImageObject", "url": "https://manoprotect.com/logo512.png" } },
+    "publisher": { "@type": "Organization", "name": "ManoProtect", "logo": { "@type": "ImageObject", "url": "https://manoprotectt.com/logo512.png" } },
     "datePublished": "2026-02-15",
     "dateModified": "2026-02-24",
-    "mainEntityOfPage": "https://manoprotect.com/blog/reloj-gps-sin-cuotas"
+    "mainEntityOfPage": "https://manoprotectt.com/blog/reloj-gps-sin-cuotas"
   };
 
   const myths = [
@@ -53,7 +53,7 @@ const RelojGPSSinCuotas = () => {
         <title>Reloj GPS Sin Cuotas Mensuales: La Verdad Que No Te Cuentan [2026]</title>
         <meta name="description" content="¿De verdad existen relojes GPS sin cuotas? Analizamos costes ocultos, SIM necesaria, apps de pago y alternativas. Comparativa real de precios a 1 y 2 años." />
         <meta name="keywords" content="reloj gps sin cuotas, localizador gps sin cuota mensual, reloj gps mayores sin pago mensual, gps ancianos sin suscripcion" />
-        <link rel="canonical" href="https://manoprotect.com/blog/reloj-gps-sin-cuotas" />
+        <link rel="canonical" href="https://manoprotectt.com/blog/reloj-gps-sin-cuotas" />
         <script type="application/ld+json">{JSON.stringify(schemaArticle)}</script>
       </Helmet>
 

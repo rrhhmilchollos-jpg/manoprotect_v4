@@ -6,7 +6,7 @@
 **Para subir a IONOS (tu hosting web)**
 - Contiene el build de producción de la web
 - Descomprime y sube el contenido de la carpeta `build/` a tu hosting
-- Configura el dominio manoprotect.com apuntando a estos archivos
+- Configura el dominio manoprotectt.com apuntando a estos archivos
 
 ### 2. MANO_Mobile_App.zip (2.6 MB)
 **Para compilar APK y subir a Google Play Store**
@@ -45,7 +45,7 @@
 2. Accede a tu panel de control de IONOS
 3. Ve a "Gestor de archivos" o "FTP"
 4. Sube todo el contenido de la carpeta `build/`
-5. Configura manoprotect.com como dominio principal
+5. Configura manoprotectt.com como dominio principal
 
 ---
 

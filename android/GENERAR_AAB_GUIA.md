@@ -10,7 +10,7 @@ El .aab anterior mostraba "StartBooking SL" en la pantalla de carga porque fue g
 
 ### Paso 1: Ir a PWABuilder
 1. Abre: https://www.pwabuilder.com/
-2. Introduce la URL: `https://manoprotect.com` (o tu URL de preview)
+2. Introduce la URL: `https://manoprotectt.com` (o tu URL de preview)
 3. Click en "Start"
 
 ### Paso 2: Verificar que detecta el PWA correctamente
@@ -64,7 +64,7 @@ mkdir manoprotect-twa
 cd manoprotect-twa
 
 # Usa el manifest.json de tu app
-bubblewrap init --manifest https://manoprotect.com/manifest.json
+bubblewrap init --manifest https://manoprotectt.com/manifest.json
 ```
 
 ### Paso 3: Responder las preguntas EXACTAMENTE así:
@@ -164,8 +164,8 @@ ManoProtect es tu aliado contra las estafas digitales.
 
 Prueba gratis durante 7 días. Sin compromiso, cancela cuando quieras.
 
-Contacto: info@manoprotect.com
-Web: https://manoprotect.com
+Contacto: info@manoprotectt.com
+Web: https://manoprotectt.com
 ```
 
 ---
@@ -185,7 +185,7 @@ El problema ocurrió porque el .aab se generó usando configuración de otro pro
 ## URLs Importantes
 
 - **App en preview**: https://safe-alerts.preview.emergentagent.com
-- **Manifest.json**: https://manoprotect.com/manifest.json
+- **Manifest.json**: https://manoprotectt.com/manifest.json
 - **Icono 512x512**: `/app/frontend/public/manoprotect_icon_512x512.png`
 - **Nuevo icono generado**: Alta calidad, sin pixelación
 

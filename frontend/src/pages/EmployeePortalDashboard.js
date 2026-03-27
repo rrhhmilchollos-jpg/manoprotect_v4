@@ -441,7 +441,7 @@ const EmployeePortalDashboard = () => {
                       <label className="text-sm text-slate-300">Email</label>
                       <Input
                         type="email"
-                        placeholder="empleado@manoprotect.com"
+                        placeholder="empleado@manoprotectt.com"
                         value={inviteForm.email}
                         onChange={(e) => setInviteForm({ ...inviteForm, email: e.target.value })}
                         className="bg-slate-900/50 border-slate-600 text-white"

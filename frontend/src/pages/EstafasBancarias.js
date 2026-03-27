@@ -69,7 +69,7 @@ const EstafasBancarias = () => {
         <title>Estafas Bancarias en España 2025: Guía Completa de Prevención | ManoProtect</title>
         <meta name="description" content="Aprende a protegerte de las estafas bancarias en España. Vishing, phishing, smishing: conoce los tipos de fraude bancario y cómo evitarlos. Guía actualizada 2025." />
         <meta name="keywords" content="estafas bancarias españa, fraude bancario, vishing, phishing banco, smishing, estafa telefono banco, proteccion bancaria" />
-        <link rel="canonical" href="https://manoprotect.com/estafas-bancarias" />
+        <link rel="canonical" href="https://manoprotectt.com/estafas-bancarias" />
         <meta property="og:title" content="Estafas Bancarias en España 2025: Guía de Prevención" />
         <meta property="og:description" content="Guía completa para protegerte de estafas bancarias. Tipos de fraude, estadísticas y consejos de prevención actualizados." />
         <meta property="og:type" content="article" />

@@ -14,7 +14,7 @@ import time
 BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', 'https://auth-hardened-test.preview.emergentagent.com')
 
 # Enterprise credentials
-ENTERPRISE_EMAIL = "ceo@manoprotect.com"
+ENTERPRISE_EMAIL = "ceo@manoprotectt.com"
 ENTERPRISE_PASSWORD = "Admin2026!"
 
 

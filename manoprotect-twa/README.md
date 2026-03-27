@@ -1,7 +1,7 @@
 # Guía de Compilación - ManoProtect TWA (Android)
 
 ## Descripción
-Este proyecto es una **Trusted Web Activity (TWA)** que envuelve la aplicación web de ManoProtect (https://www.manoprotect.com) en una aplicación nativa de Android.
+Este proyecto es una **Trusted Web Activity (TWA)** que envuelve la aplicación web de ManoProtect (https://www.manoprotectt.com) en una aplicación nativa de Android.
 
 ## Requisitos Previos
 - Java JDK 17 (recomendado: [Adoptium Temurin](https://adoptium.net/))
@@ -86,7 +86,7 @@ Las credenciales están en `gradle.properties`:
 Para que el TWA funcione correctamente sin mostrar la barra de navegación de Chrome, 
 debes configurar el archivo `assetlinks.json` en tu servidor web.
 
-Coloca este archivo en: `https://www.manoprotect.com/.well-known/assetlinks.json`
+Coloca este archivo en: `https://www.manoprotectt.com/.well-known/assetlinks.json`
 
 ```json
 [{
@@ -129,4 +129,4 @@ Remove-Item -Recurse -Force ~\.gradle\caches
 - **Version Name**: 2.1.0
 - **Version Code**: 3
 - **Package Name**: com.manoprotect.www.twa
-- **URL**: https://www.manoprotect.com
+- **URL**: https://www.manoprotectt.com

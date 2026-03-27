@@ -11,9 +11,9 @@ load_dotenv()
 
 # Test configuration
 BASE_URL = os.environ.get("TEST_API_URL", "http://localhost:8001/api")
-TEST_EMAIL = "test_pytest@manoprotect.com"
+TEST_EMAIL = "test_pytest@manoprotectt.com"
 TEST_PASSWORD = "TestPass123!"
-ADMIN_EMAIL = "info@manoprotect.com"
+ADMIN_EMAIL = "info@manoprotectt.com"
 ADMIN_PASSWORD = "19862210Des"
 
 

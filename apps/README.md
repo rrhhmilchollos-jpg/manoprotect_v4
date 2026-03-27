@@ -4,7 +4,7 @@
 
 | App | Package ID | Versión | Descripción |
 |-----|-----------|---------|-------------|
-| **Comerciales** | com.manoprotect.comerciales | 2.1.0 (Build 4) | Para el equipo comercial: stock, pedidos, clientes |
+| **Comerciales** | com.manoprotectt.comerciales | 2.1.0 (Build 4) | Para el equipo comercial: stock, pedidos, clientes |
 | **Instaladores** | com.manoprotect.instaladores | 2.1.0 (Build 4) | Para instaladores: órdenes, confirmación, manuales |
 | **Clientes** | com.manoprotect.clientes | 2.1.0 (Build 4) | Para usuarios/familias: alarma, cámaras, SOS |
 
@@ -62,9 +62,9 @@
 
 | Rol | Email | Contraseña |
 |-----|-------|------------|
-| Admin | admin@manoprotect.com | ManoAdmin2025! |
-| Comercial | comercial@manoprotect.com | Comercial2025! |
-| Instalador | instalador@manoprotect.com | Instalador2025! |
+| Admin | admin@manoprotectt.com | ManoAdmin2025! |
+| Comercial | comercial@manoprotectt.com | Comercial2025! |
+| Instalador | instalador@manoprotectt.com | Instalador2025! |
 | Clientes | Registro en /familia | ID Familia + email |
 
 ## Compilar APKs
@@ -110,7 +110,7 @@ apps/clientes/build/outputs/apk/release/app-release.apk
 
 ## API Endpoints
 
-Base URL: `https://www.manoprotect.com/api`
+Base URL: `https://www.manoprotectt.com/api`
 
 ### Autenticación Gestión
 - POST `/gestion/auth/login` → Login JWT

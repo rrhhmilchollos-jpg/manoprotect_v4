@@ -91,7 +91,7 @@ const DeleteAccount = () => {
               <div className="w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold mr-4 flex-shrink-0">1</div>
               <div>
                 <p className="text-gray-700 font-medium">Contacta con nuestro equipo de soporte</p>
-                <p className="text-gray-500 text-sm">Envía un email a soporte@manoprotect.com indicando tu deseo de eliminar la cuenta</p>
+                <p className="text-gray-500 text-sm">Envía un email a soporte@manoprotectt.com indicando tu deseo de eliminar la cuenta</p>
               </div>
             </div>
             <div className="flex items-start">
@@ -127,7 +127,7 @@ const DeleteAccount = () => {
           </p>
           <div className="space-y-3">
             <a 
-              href="mailto:soporte@manoprotect.com?subject=Solicitud de eliminación de cuenta&body=Hola,%0A%0ASolicito la eliminación de mi cuenta de ManoProtect.%0A%0AEmail de la cuenta:%0A%0AGracias."
+              href="mailto:soporte@manoprotectt.com?subject=Solicitud de eliminación de cuenta&body=Hola,%0A%0ASolicito la eliminación de mi cuenta de ManoProtect.%0A%0AEmail de la cuenta:%0A%0AGracias."
               className="flex items-center justify-center w-full bg-white text-blue-600 font-semibold py-3 px-6 rounded-lg hover:bg-blue-50 transition-colors"
             >
               <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -136,7 +136,7 @@ const DeleteAccount = () => {
               Enviar Email a Soporte
             </a>
             <p className="text-center text-blue-200 text-sm">
-              soporte@manoprotect.com
+              soporte@manoprotectt.com
             </p>
           </div>
         </div>
@@ -167,8 +167,8 @@ const DeleteAccount = () => {
         {/* Footer */}
         <div className="text-center mt-8 text-gray-500 text-sm">
           <p>¿Tienes preguntas? Estamos disponibles en</p>
-          <a href="mailto:soporte@manoprotect.com" className="text-blue-600 hover:underline font-medium">
-            soporte@manoprotect.com
+          <a href="mailto:soporte@manoprotectt.com" className="text-blue-600 hover:underline font-medium">
+            soporte@manoprotectt.com
           </a>
         </div>
       </div>

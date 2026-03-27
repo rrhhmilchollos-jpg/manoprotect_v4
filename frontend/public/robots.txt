@@ -47,7 +47,7 @@ Disallow: /auth/
 Disallow: /*.json$
 Disallow: /static/
 
-Sitemap: https://manoprotect.com/sitemap.xml
+Sitemap: https://manoprotectt.com/sitemap.xml
 
 User-agent: Googlebot
 Allow: /

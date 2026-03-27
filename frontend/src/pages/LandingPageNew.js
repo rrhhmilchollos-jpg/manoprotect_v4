@@ -25,7 +25,7 @@ const LandingPage = () => {
         <title>ManoProtect - Protección Digital para tu Familia | Anti-Estafas España</title>
         <meta name="description" content="Protege a tu familia contra estafas online, fraudes telefónicos y amenazas digitales. Detección de estafas en tiempo real. 7 días GRATIS." />
         <meta name="keywords" content="protección digital, anti estafas, seguridad online, protección familiar, fraudes online, ciberseguridad, España" />
-        <link rel="canonical" href="https://manoprotect.com" />
+        <link rel="canonical" href="https://manoprotectt.com" />
       </Helmet>
 
       {/* Header */}

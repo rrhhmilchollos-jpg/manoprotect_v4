@@ -8,7 +8,7 @@ import requests
 
 
 BREVO_API_KEY = os.environ.get("BREVO_API_KEY")
-EMAIL_FROM = os.environ.get("EMAIL_FROM", "no-reply@manoprotect.com")
+EMAIL_FROM = os.environ.get("EMAIL_FROM", "no-reply@manoprotectt.com")
 EMAIL_FROM_NAME = os.environ.get("EMAIL_FROM_NAME", "ManoProtect")
 
 BREVO_URL = "https://api.brevo.com/v3/smtp/email"
@@ -39,7 +39,7 @@ def send_email(to_email: str, subject: str, html_content: str, to_name: str = ""
 
 def send_password_reset_email(to_email: str, to_name: str, reset_token: str, familia_id: str = "") -> dict:
     """Enviar email de recuperación de contraseña"""
-    reset_url = f"https://www.manoprotect.com/familia?mode=reset&token={reset_token}"
+    reset_url = f"https://www.manoprotectt.com/familia?mode=reset&token={reset_token}"
 
     html = f"""
     <!DOCTYPE html>
@@ -64,7 +64,7 @@ def send_password_reset_email(to_email: str, to_name: str, reset_token: str, fam
         </div>
         <p style="color: #64748b; font-size: 12px;">Este enlace expira en 1 hora. Si no solicitaste este cambio, ignora este email.</p>
         <hr style="border-color: #334155; margin: 24px 0;">
-        <p style="color: #475569; font-size: 11px; text-align: center;">ManoProtect - Seguridad Inteligente para tu Hogar<br>www.manoprotect.com</p>
+        <p style="color: #475569; font-size: 11px; text-align: center;">ManoProtect - Seguridad Inteligente para tu Hogar<br>www.manoprotectt.com</p>
       </div>
     </body>
     </html>
@@ -87,9 +87,9 @@ def send_welcome_email(to_email: str, to_name: str, familia_id: str = "") -> dic
         <h2 style="color: #f1f5f9; font-size: 18px;">Bienvenido a ManoProtect</h2>
         <p style="color: #cbd5e1;">Hola <strong>{to_name}</strong>,</p>
         <p style="color: #cbd5e1;">Tu cuenta familiar ha sido creada correctamente{' con el ID: ' + familia_id if familia_id else ''}.</p>
-        <p style="color: #cbd5e1;">Ya puedes acceder a tu panel de seguridad desde la app o desde www.manoprotect.com/familia</p>
+        <p style="color: #cbd5e1;">Ya puedes acceder a tu panel de seguridad desde la app o desde www.manoprotectt.com/familia</p>
         <div style="text-align: center; margin: 20px 0;">
-          <a href="https://www.manoprotect.com/familia" style="display: inline-block; background: #10b981; color: white; padding: 12px 32px; border-radius: 8px; text-decoration: none; font-weight: bold;">Acceder a Mi Cuenta</a>
+          <a href="https://www.manoprotectt.com/familia" style="display: inline-block; background: #10b981; color: white; padding: 12px 32px; border-radius: 8px; text-decoration: none; font-weight: bold;">Acceder a Mi Cuenta</a>
         </div>
         <hr style="border-color: #334155; margin: 24px 0;">
         <p style="color: #475569; font-size: 11px; text-align: center;">ManoProtect - Seguridad Inteligente para tu Hogar</p>

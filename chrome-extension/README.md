@@ -1,7 +1,7 @@
 # ManoProtect Shield - Extensión de Chrome
 
 ## Descripción
-Protección contra estafas en tiempo real mientras navegas. Verifica URLs, emails y teléfonos automáticamente usando las mismas APIs de seguridad que www.manoprotect.com.
+Protección contra estafas en tiempo real mientras navegas. Verifica URLs, emails y teléfonos automáticamente usando las mismas APIs de seguridad que www.manoprotectt.com.
 
 ## Características
 - ✅ Verificación instantánea de URLs sospechosas
@@ -62,8 +62,8 @@ Protección contra estafas en tiempo real mientras navegas. Verifica URLs, email
 - No almacena historial de navegación
 
 ## Soporte
-- Web: https://www.manoprotect.com
-- Email: info@manoprotect.com
+- Web: https://www.manoprotectt.com
+- Email: info@manoprotectt.com
 
 ---
 © 2026 ManoProtect - STARTBOOKING SL

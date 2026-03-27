@@ -22,7 +22,7 @@ GEOFENCE_PLANS = [
 # Superadmins always have access
 SUPERADMIN_EMAILS = [
     "rrhh.milchollos@gmail.com",
-    "info@manoprotect.com",
+    "info@manoprotectt.com",
     "ivanrubiosolas@gmail.com"
 ]
 

@@ -11,12 +11,12 @@ BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', '').rstrip('/')
 
 # Test credentials from the request
 SUPERADMIN_CREDS = {
-    "email": "info@manoprotect.com",
+    "email": "info@manoprotectt.com",
     "password": "19862210Des"
 }
 
 TEST_USER_CREDS = {
-    "email": "reviewer@manoprotect.com",
+    "email": "reviewer@manoprotectt.com",
     "password": "ReviewMano2025!"
 }
 

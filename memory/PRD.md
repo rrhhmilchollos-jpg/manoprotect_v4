@@ -48,10 +48,10 @@ App de seguridad empresarial "ManoProtect" con gestión de roles, alarmas, equip
 ## Credenciales
 | Rol | Email | Password |
 |-----|-------|----------|
-| CEO | ceo@manoprotect.com | 19862210Des |
-| Admin CRA | admin@manoprotect.com | ManoAdmin2025! |
-| Comercial | comercial@manoprotect.com | Comercial2025! |
-| Instalador | instalador@manoprotect.com | Instalador2025! |
+| CEO | ceo@manoprotectt.com | 19862210Des |
+| Admin CRA | admin@manoprotectt.com | ManoAdmin2025! |
+| Comercial | comercial@manoprotectt.com | Comercial2025! |
+| Instalador | instalador@manoprotectt.com | Instalador2025! |
 
 ## Secciones HOME (orden)
 1. Header nav

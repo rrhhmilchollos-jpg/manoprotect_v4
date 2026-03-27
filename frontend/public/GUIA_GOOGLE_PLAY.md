@@ -3,7 +3,7 @@
 ## Paso 1: Acceder a PWA Builder
 
 1. Ve a **[pwabuilder.com](https://www.pwabuilder.com/)**
-2. En el campo de URL, escribe: `https://www.manoprotect.com`
+2. En el campo de URL, escribe: `https://www.manoprotectt.com`
 3. Haz clic en **"Start"**
 
 > ⚠️ **IMPORTANTE**: Primero debes hacer **Redeploy** en Emergent para que los iconos PWA estén en producción.
@@ -18,7 +18,7 @@ PWA Builder analizará tu sitio. Deberías ver:
 - ✅ Iconos disponibles
 - ✅ Screenshots incluidos
 
-Si algo falla, verifica que `manoprotect.com/manifest.json` sea accesible.
+Si algo falla, verifica que `manoprotectt.com/manifest.json` sea accesible.
 
 ---
 
@@ -101,9 +101,9 @@ Empresa: STARTBOOKING SL (CIF: B19427723)
 - **Etiquetas**: Seguridad, Familia, Antifraude
 
 #### Información de contacto
-- **Email**: soporte@manoprotect.com
-- **Sitio web**: https://www.manoprotect.com
-- **Política de privacidad**: https://www.manoprotect.com/privacy-policy
+- **Email**: soporte@manoprotectt.com
+- **Sitio web**: https://www.manoprotectt.com
+- **Política de privacidad**: https://www.manoprotectt.com/privacy-policy
 
 ### 4.4 Subir recursos gráficos
 
@@ -116,7 +116,7 @@ Los archivos están en `/app/frontend/google-play-console/`:
 | Capturas de pantalla | Crear desde el sitio web | Mín. 2 capturas |
 
 #### Crear capturas de pantalla:
-1. Ve a `manoprotect.com` en tu móvil
+1. Ve a `manoprotectt.com` en tu móvil
 2. Toma capturas de: Landing, Dashboard, Verificador
 3. Dimensiones recomendadas: 1080x1920 (móvil)
 
@@ -176,7 +176,7 @@ Una vez aprobada, tu app estará disponible en:
 ## Problemas comunes
 
 ### PWA Builder no detecta el manifest
-- Verifica: `curl https://www.manoprotect.com/manifest.json`
+- Verifica: `curl https://www.manoprotectt.com/manifest.json`
 - Debe retornar el JSON del manifest
 
 ### Error de signing key

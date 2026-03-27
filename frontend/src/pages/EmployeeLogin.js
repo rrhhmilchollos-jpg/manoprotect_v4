@@ -86,7 +86,7 @@ const EmployeeLogin = () => {
                 <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
                 <Input
                   type="email"
-                  placeholder="tu@manoprotect.com"
+                  placeholder="tu@manoprotectt.com"
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                   className="pl-10 bg-slate-900/50 border-slate-600 text-white placeholder:text-slate-500"

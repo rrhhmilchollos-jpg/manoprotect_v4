@@ -43,7 +43,7 @@ const BotonSOSSenior = () => {
         <title>Botón SOS Mayores | Teleasistencia sin Cuotas | ManoProtect</title>
         <meta name="description" content="Botón SOS físico para mayores, con detector de caídas, llamada inmediata y ubicación en tiempo real. Seguridad para ancianos desde 55 años. Envío gratuito." />
         <meta name="keywords" content="botón SOS para mayores, teleasistencia sin cuotas, alerta médica con botón físico, seguridad ancianos con botón SOS, botón pánico ancianos, detector caídas mayores" />
-        <link rel="canonical" href="https://manoprotect.com/boton-sos-senior" />
+        <link rel="canonical" href="https://manoprotectt.com/boton-sos-senior" />
         
         <script type="application/ld+json">{JSON.stringify(schemaProduct)}</script>
       </Helmet>

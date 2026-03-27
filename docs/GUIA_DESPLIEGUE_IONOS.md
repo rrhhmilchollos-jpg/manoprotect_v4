@@ -1,7 +1,7 @@
-# Guía de Despliegue MANO - manoprotect.com
+# Guía de Despliegue MANO - manoprotectt.com
 
 ## Resumen
-Esta guía explica cómo desplegar la aplicación web de MANO en tu dominio `manoprotect.com`.
+Esta guía explica cómo desplegar la aplicación web de MANO en tu dominio `manoprotectt.com`.
 
 ---
 
@@ -62,12 +62,12 @@ firebase deploy --only hosting
 ### Paso 7: Configurar dominio personalizado
 1. Ve a Firebase Console > Hosting
 2. Clic en "Añadir dominio personalizado"
-3. Ingresa: `manoprotect.com`
+3. Ingresa: `manoprotectt.com`
 4. Firebase te dará registros DNS para configurar en IONOS
 
 ### Paso 8: Configurar DNS en IONOS
 1. Inicia sesión en tu panel de IONOS
-2. Ve a "Dominios & SSL" > "manoprotect.com"
+2. Ve a "Dominios & SSL" > "manoprotectt.com"
 3. Clic en "DNS"
 4. Añade los registros que Firebase te proporcionó:
    - Tipo: `A` - Valor: (IP de Firebase)
@@ -109,7 +109,7 @@ Crea un archivo `.htaccess` en la raíz con este contenido:
 
 ### Paso 4: Configurar SSL
 1. En IONOS, ve a "Dominios & SSL"
-2. Activa "SSL Wildcard" para `manoprotect.com`
+2. Activa "SSL Wildcard" para `manoprotectt.com`
 3. Esto habilita HTTPS automáticamente
 
 ---
@@ -131,7 +131,7 @@ El backend seguirá corriendo en Emergent. Asegúrate de:
 
 ## Verificación Post-Despliegue
 
-1. Abre `https://manoprotect.com` en tu navegador
+1. Abre `https://manoprotectt.com` en tu navegador
 2. Verifica que puedes:
    - Ver la página de inicio
    - Registrarte / Iniciar sesión

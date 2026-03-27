@@ -9,12 +9,12 @@ Este directorio contiene la configuración para generar el proyecto Android Stud
 ```bash
 # Opción 1: Usar PWABuilder web
 # Ve a https://www.pwabuilder.com
-# Ingresa: https://manoprotect.com
+# Ingresa: https://manoprotectt.com
 # Descarga "Android Studio Project"
 
 # Opción 2: Usar Bubblewrap CLI
 npm install -g @aspect-build/aspect-bubblewrap
-bubblewrap init --manifest https://manoprotect.com/manifest.json
+bubblewrap init --manifest https://manoprotectt.com/manifest.json
 ```
 
 ### 2. Configurar AdMob

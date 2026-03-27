@@ -49,7 +49,7 @@ const InstruccionesFamiliares = () => {
       icon: UserPlus,
       color: 'bg-blue-500',
       details: [
-        'Ir a manoprotect.com/registro',
+        'Ir a manoprotectt.com/registro',
         'Completar el formulario con nombre, email y contraseña',
         'La contraseña debe tener al menos 8 caracteres',
         'Verificar el email si es necesario'
@@ -289,7 +289,7 @@ const InstruccionesFamiliares = () => {
               <p className="text-sm text-slate-400 mt-1">
                 Verifica que las notificaciones del navegador estén habilitadas. En Chrome, 
                 ve a Configuración → Privacidad y seguridad → Configuración de sitios → Notificaciones 
-                y asegúrate de que manoprotect.com esté permitido.
+                y asegúrate de que manoprotectt.com esté permitido.
               </p>
             </div>
             <div>

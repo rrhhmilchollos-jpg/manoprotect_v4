@@ -695,7 +695,7 @@
 ║             📧  inversores@manobank.es                         ║
 ║                                                                ║
 ║             🌐  www.manobank.es                                ║
-║                 www.manoprotect.com                            ║
+║                 www.manoprotectt.com                            ║
 ║                                                                ║
 ║             📞  +34 900 123 456                                ║
 ║                                                                ║

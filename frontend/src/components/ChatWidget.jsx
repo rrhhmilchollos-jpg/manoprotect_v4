@@ -148,7 +148,7 @@ export default function ChatWidget() {
     try {
       await fetch(`${API}/api/enterprise-central/leads`, {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: form.name, email: form.email || `${form.phone}@chat.manoprotect.com`, phone: form.phone, source: 'chatbot', interest: formContext, notes: `Lead captado via chatbot web. Contexto: ${formContext}` }),
+        body: JSON.stringify({ name: form.name, email: form.email || `${form.phone}@chat.manoprotectt.com`, phone: form.phone, source: 'chatbot', interest: formContext, notes: `Lead captado via chatbot web. Contexto: ${formContext}` }),
       });
       setShowForm(false);
       setLeadSent(true);

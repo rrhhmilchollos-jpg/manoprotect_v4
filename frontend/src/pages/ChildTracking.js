@@ -598,7 +598,7 @@ const ChildTracking = () => {
                         <input
                           type="text"
                           readOnly
-                          value={`https://manoprotect.com/vincular/${child.child_id}?token=${child.invite_token}`}
+                          value={`https://manoprotectt.com/vincular/${child.child_id}?token=${child.invite_token}`}
                           className="flex-1 text-xs p-2 bg-white border border-amber-300 rounded text-zinc-600"
                         />
                         <Button
@@ -606,7 +606,7 @@ const ChildTracking = () => {
                           variant="outline"
                           className="border-amber-500 text-amber-700 hover:bg-amber-100"
                           onClick={() => {
-                            navigator.clipboard.writeText(`https://manoprotect.com/vincular/${child.child_id}?token=${child.invite_token}`);
+                            navigator.clipboard.writeText(`https://manoprotectt.com/vincular/${child.child_id}?token=${child.invite_token}`);
                             toast.success('Enlace copiado al portapapeles');
                           }}
                         >
@@ -618,7 +618,7 @@ const ChildTracking = () => {
                           size="sm"
                           className="flex-1 bg-green-600 hover:bg-green-700 text-white"
                           onClick={() => {
-                            const link = `https://manoprotect.com/vincular/${child.child_id}?token=${child.invite_token}`;
+                            const link = `https://manoprotectt.com/vincular/${child.child_id}?token=${child.invite_token}`;
                             const text = `Hola ${child.name}, te he añadido a mi familia en ManoProtect para poder localizarte en caso de emergencia. Pulsa este enlace para vincular tu dispositivo: ${link}`;
                             window.open(`https://wa.me/${child.phone.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(text)}`, '_blank');
                           }}
@@ -631,7 +631,7 @@ const ChildTracking = () => {
                           variant="outline"
                           className="flex-1"
                           onClick={() => {
-                            const link = `https://manoprotect.com/vincular/${child.child_id}?token=${child.invite_token}`;
+                            const link = `https://manoprotectt.com/vincular/${child.child_id}?token=${child.invite_token}`;
                             const subject = `${user?.name || 'Tu familiar'} te ha añadido a ManoProtect`;
                             const body = `Hola ${child.name},\n\nTe he añadido a mi familia en ManoProtect para poder localizarte en caso de emergencia.\n\nPulsa este enlace para vincular tu dispositivo:\n${link}\n\nSaludos`;
                             window.open(`mailto:${child.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`, '_blank');

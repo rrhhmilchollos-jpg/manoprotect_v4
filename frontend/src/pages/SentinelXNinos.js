@@ -57,9 +57,9 @@ const SentinelXNinos = () => {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     "itemListElement": [
-      { "@type": "ListItem", "position": 1, "name": "Inicio", "item": "https://manoprotect.com" },
-      { "@type": "ListItem", "position": 2, "name": "Sentinel X", "item": "https://manoprotect.com/sentinel-x" },
-      { "@type": "ListItem", "position": 3, "name": "Sentinel X Niños", "item": "https://manoprotect.com/sentinel-x-ninos" }
+      { "@type": "ListItem", "position": 1, "name": "Inicio", "item": "https://manoprotectt.com" },
+      { "@type": "ListItem", "position": 2, "name": "Sentinel X", "item": "https://manoprotectt.com/sentinel-x" },
+      { "@type": "ListItem", "position": 3, "name": "Sentinel X Niños", "item": "https://manoprotectt.com/sentinel-x-ninos" }
     ]
   };
 
@@ -86,10 +86,10 @@ const SentinelXNinos = () => {
         <title>Compra Sentinel X Niños | Botón SOS Físico y GPS</title>
         <meta name="description" content="Sentinel X para niños y adolescentes, con botón SOS físico, localización en tiempo real y seguridad total para tus hijos. Compra ahora. Envío gratuito." />
         <meta name="keywords" content="botón SOS para niños, botón emergencia adolescentes, seguridad hijos con botón SOS, localizador niños con botón físico, reloj gps niños, sentinel x niños" />
-        <link rel="canonical" href="https://manoprotect.com/sentinel-x-ninos" />
+        <link rel="canonical" href="https://manoprotectt.com/sentinel-x-ninos" />
         <meta property="og:title" content="Sentinel X para Niños y Adolescentes | Botón SOS Físico" />
         <meta property="og:description" content="Protege a tus hijos con el botón SOS físico del Sentinel X. Localización GPS, llamadas y control parental. 149€ con envío gratuito." />
-        <meta property="og:url" content="https://manoprotect.com/sentinel-x-ninos" />
+        <meta property="og:url" content="https://manoprotectt.com/sentinel-x-ninos" />
         <meta property="og:type" content="product" />
         <script type="application/ld+json">{JSON.stringify(schemaProduct)}</script>
         <script type="application/ld+json">{JSON.stringify(schemaFAQ)}</script>

@@ -16,7 +16,7 @@ const CuidadoMayoresTeleasistencia = () => {
     "headline": "Cuidado de Mayores: Teleasistencia Moderna vs Tradicional [2026]",
     "description": "Compara la teleasistencia tradicional con dispositivos SOS modernos. Detector de caídas, GPS, llamadas y alertas para personas mayores.",
     "author": { "@type": "Organization", "name": "ManoProtect" },
-    "publisher": { "@type": "Organization", "name": "ManoProtect", "logo": { "@type": "ImageObject", "url": "https://manoprotect.com/logo512.png" } },
+    "publisher": { "@type": "Organization", "name": "ManoProtect", "logo": { "@type": "ImageObject", "url": "https://manoprotectt.com/logo512.png" } },
     "datePublished": "2026-02-24",
     "dateModified": "2026-02-24"
   };
@@ -27,7 +27,7 @@ const CuidadoMayoresTeleasistencia = () => {
         <title>Botón SOS Físico para Mayores – Seguridad y Tranquilidad [2026]</title>
         <meta name="description" content="Compara la teleasistencia tradicional con dispositivos SOS modernos. Detector de caídas automático, GPS y alertas familiares. Guía 2026 para familiares." />
         <meta name="keywords" content="cuidado mayores, teleasistencia moderna, detector caídas ancianos, botón SOS personas mayores, teleasistencia sin cuotas" />
-        <link rel="canonical" href="https://manoprotect.com/blog/cuidado-mayores-teleasistencia" />
+        <link rel="canonical" href="https://manoprotectt.com/blog/cuidado-mayores-teleasistencia" />
         <script type="application/ld+json">{JSON.stringify(schema)}</script>
       </Helmet>
 

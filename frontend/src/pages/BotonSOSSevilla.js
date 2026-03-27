@@ -16,7 +16,7 @@ const BotonSOSSevilla = () => {
     "description": "Venta y soporte de dispositivos de seguridad personal con botón SOS en Sevilla.",
     "address": { "@type": "PostalAddress", "addressLocality": "Sevilla", "addressRegion": "Andalucía", "postalCode": "41000", "addressCountry": "ES" },
     "geo": { "@type": "GeoCoordinates", "latitude": 37.3891, "longitude": -5.9845 },
-    "url": "https://manoprotect.com/boton-sos-sevilla",
+    "url": "https://manoprotectt.com/boton-sos-sevilla",
     "telephone": "+34601510950",
     "aggregateRating": { "@type": "AggregateRating", "ratingValue": "4.9", "reviewCount": "145" }
   };
@@ -36,7 +36,7 @@ const BotonSOSSevilla = () => {
         <title>Botón SOS Sevilla | Compra y Atención Local</title>
         <meta name="description" content="Compra tu botón SOS físico en Sevilla con entrega rápida y soporte local. Protege a toda tu familia. Envío gratuito." />
         <meta name="keywords" content="botón SOS Sevilla, dispositivo emergencia Sevilla, teleasistencia Sevilla, seguridad mayores Sevilla, localizador GPS Sevilla" />
-        <link rel="canonical" href="https://manoprotect.com/boton-sos-sevilla" />
+        <link rel="canonical" href="https://manoprotectt.com/boton-sos-sevilla" />
         <script type="application/ld+json">{JSON.stringify(schemaLocalBusiness)}</script>
       </Helmet>
 

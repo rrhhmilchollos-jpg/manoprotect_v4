@@ -10,9 +10,9 @@ import time
 BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', '').rstrip('/')
 
 # Test credentials
-SUPERADMIN_EMAIL = "info@manoprotect.com"
+SUPERADMIN_EMAIL = "info@manoprotectt.com"
 SUPERADMIN_PASSWORD = "19862210Des"
-TEST_PREMIUM_USER = "reviewer@manoprotect.com"
+TEST_PREMIUM_USER = "reviewer@manoprotectt.com"
 
 # Test coordinates - Madrid center
 MADRID_CENTER = {"lat": 40.4168, "lng": -3.7038}

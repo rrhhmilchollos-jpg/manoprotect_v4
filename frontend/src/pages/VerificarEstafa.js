@@ -38,7 +38,7 @@ const VerificarEstafa = () => {
 
   const handleShare = async (platform) => {
     const text = getShareText();
-    const url = 'https://manoprotect.com/verificar-estafa';
+    const url = 'https://manoprotectt.com/verificar-estafa';
     
     if (platform === 'native' && navigator.share) {
       try {

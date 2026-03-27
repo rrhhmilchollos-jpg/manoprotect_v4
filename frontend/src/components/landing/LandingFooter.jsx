@@ -63,7 +63,7 @@ const LOGO_URL = '/manoprotect_logo.webp';
 // Trustpilot Rating Component with animation
 const TrustpilotWidget = () => (
   <a 
-    href="https://es.trustpilot.com/review/manoprotect.com"
+    href="https://es.trustpilot.com/review/manoprotectt.com"
     target="_blank"
     rel="noopener noreferrer"
     className="group flex items-center gap-3 px-4 py-3 bg-slate-800/50 hover:bg-slate-800 rounded-xl border border-slate-700 hover:border-emerald-500/50 transition-all duration-300"
@@ -149,7 +149,7 @@ const LandingFooter = () => {
                 </div>
               </a>
               <a 
-                href="mailto:info@manoprotect.com" 
+                href="mailto:info@manoprotectt.com" 
                 className="flex items-center gap-3 text-slate-300 hover:text-white transition-colors group"
               >
                 <div className="w-10 h-10 bg-slate-800 rounded-lg flex items-center justify-center group-hover:bg-emerald-600 transition-colors">
@@ -157,7 +157,7 @@ const LandingFooter = () => {
                 </div>
                 <div>
                   <p className="text-xs text-slate-500 uppercase tracking-wider">Email</p>
-                  <p className="font-medium">info@manoprotect.com</p>
+                  <p className="font-medium">info@manoprotectt.com</p>
                 </div>
               </a>
             </div>

@@ -10,9 +10,9 @@ import os
 BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', 'https://auth-hardened-test.preview.emergentagent.com')
 
 # Test credentials
-SUPERADMIN_EMAIL = "info@manoprotect.com"
+SUPERADMIN_EMAIL = "info@manoprotectt.com"
 SUPERADMIN_PASSWORD = "19862210Des"
-TEST_USER_EMAIL = "reviewer@manoprotect.com"
+TEST_USER_EMAIL = "reviewer@manoprotectt.com"
 TEST_USER_PASSWORD = "ReviewMano2025!"
 
 

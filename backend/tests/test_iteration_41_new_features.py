@@ -21,7 +21,7 @@ if BASE_URL.endswith('/'):
     BASE_URL = BASE_URL.rstrip('/')
 
 # Enterprise credentials
-ENTERPRISE_EMAIL = "ceo@manoprotect.com"
+ENTERPRISE_EMAIL = "ceo@manoprotectt.com"
 ENTERPRISE_PASSWORD = "Admin2026!"
 
 

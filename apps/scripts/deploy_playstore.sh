@@ -21,7 +21,7 @@ log() { echo "[$(date '+%H:%M:%S')] $1" | tee -a "$LOGS_DIR/deploy_${TIMESTAMP}.
 SERVICE_ACCOUNT_JSON="${GOOGLE_PLAY_SERVICE_ACCOUNT:-$ROOT_DIR/play-store-credentials.json}"
 
 PACKAGE_NAMES=(
-    ["comerciales"]="com.manoprotect.comerciales"
+    ["comerciales"]="com.manoprotectt.comerciales"
     ["instaladores"]="com.manoprotect.instaladores"
     ["admin"]="com.manoprotect.admin"
 )
@@ -147,7 +147,7 @@ deploy_app() {
     echo "{\"app\":\"$APP_NAME\",\"version\":\"$VERSION_NAME\",\"code\":$VERSION_CODE,\"track\":\"$TRACK\",\"timestamp\":\"$TIMESTAMP\",\"status\":\"success\"}" >> "$LOGS_DIR/deploy_history.jsonl"
     
     # Notify backend about new version
-    local API_URL="${MANOPROTECT_API_URL:-https://www.manoprotect.com}"
+    local API_URL="${MANOPROTECT_API_URL:-https://www.manoprotectt.com}"
     local ADMIN_TOKEN="${MANOPROTECT_ADMIN_TOKEN:-}"
     if [ -n "$ADMIN_TOKEN" ]; then
         curl -s -X PUT "$API_URL/api/gestion/app-versions/$APP_NAME" \

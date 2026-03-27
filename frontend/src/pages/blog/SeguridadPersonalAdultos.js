@@ -16,7 +16,7 @@ const SeguridadPersonalAdultos = () => {
     "headline": "Seguridad Personal para Adultos: Botón SOS en Trabajo y Deporte [2026]",
     "description": "Cómo un botón SOS físico mejora tu seguridad laboral y deportiva. Prevención de riesgos, protección personal y emergencias.",
     "author": { "@type": "Organization", "name": "ManoProtect" },
-    "publisher": { "@type": "Organization", "name": "ManoProtect", "logo": { "@type": "ImageObject", "url": "https://manoprotect.com/logo512.png" } },
+    "publisher": { "@type": "Organization", "name": "ManoProtect", "logo": { "@type": "ImageObject", "url": "https://manoprotectt.com/logo512.png" } },
     "datePublished": "2026-02-24",
     "dateModified": "2026-02-24"
   };
@@ -27,7 +27,7 @@ const SeguridadPersonalAdultos = () => {
         <title>Protección Personal con Sentinel X – Botón SOS para Adultos [2026]</title>
         <meta name="description" content="Protege tu seguridad personal con un botón SOS físico. Ideal para trabajo en campo, deporte solitario y viajes. Prevención de riesgos laborales." />
         <meta name="keywords" content="seguridad personal adultos, botón SOS trabajo, protección laboral, botón emergencia deporte, seguridad runners" />
-        <link rel="canonical" href="https://manoprotect.com/blog/seguridad-personal-adultos" />
+        <link rel="canonical" href="https://manoprotectt.com/blog/seguridad-personal-adultos" />
         <script type="application/ld+json">{JSON.stringify(schema)}</script>
       </Helmet>
 

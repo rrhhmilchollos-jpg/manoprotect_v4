@@ -62,7 +62,7 @@ const ProteccionPhishing = () => {
         <title>Protección contra Phishing - Detecta y Bloquea Estafas | ManoProtect</title>
         <meta name="description" content="Protección contra phishing con IA. Detecta emails falsos, SMS fraudulentos y llamadas de estafa en tiempo real. Protege tu identidad digital. Prueba GRATIS." />
         <meta name="keywords" content="protección phishing, anti phishing, detector phishing, estafas email, smishing, vishing, fraude online, seguridad digital" />
-        <link rel="canonical" href="https://manoprotect.com/proteccion-phishing" />
+        <link rel="canonical" href="https://manoprotectt.com/proteccion-phishing" />
       </Helmet>
 
       <LandingHeader />

@@ -229,16 +229,16 @@ async def get_team():
         emps.append(e)
     if not emps:
         defaults = [
-            {"emp_id": "EMP-001", "name": "Daniel Escriva", "role": "CEO / Fundador", "department": "direccion", "email": "ceo@manoprotect.com", "phone": "601510950", "status": "activo"},
-            {"emp_id": "EMP-002", "name": "Maria Lopez", "role": "Dir. Operaciones", "department": "operaciones", "email": "maria@manoprotect.com", "phone": "600111222", "status": "activo"},
-            {"emp_id": "EMP-003", "name": "Carlos Ruiz", "role": "CTO", "department": "tecnologia", "email": "carlos@manoprotect.com", "phone": "600333444", "status": "activo"},
-            {"emp_id": "EMP-004", "name": "Ana Garcia", "role": "Dir. Comercial", "department": "ventas", "email": "ana@manoprotect.com", "phone": "600555666", "status": "activo"},
-            {"emp_id": "EMP-005", "name": "Javier Martinez", "role": "Jefe Instalaciones", "department": "instalaciones", "email": "javier@manoprotect.com", "phone": "600777888", "status": "activo"},
-            {"emp_id": "EMP-006", "name": "Laura Fernandez", "role": "Atencion al Cliente", "department": "soporte", "email": "laura@manoprotect.com", "phone": "600999000", "status": "activo"},
-            {"emp_id": "EMP-007", "name": "Pedro Sanchez", "role": "Tecnico Instalador", "department": "instalaciones", "email": "pedro@manoprotect.com", "phone": "600112233", "status": "activo"},
-            {"emp_id": "EMP-008", "name": "Sofia Torres", "role": "Comercial", "department": "ventas", "email": "sofia@manoprotect.com", "phone": "600445566", "status": "activo"},
-            {"emp_id": "EMP-009", "name": "Miguel Angel Ramos", "role": "Tecnico Instalador", "department": "instalaciones", "email": "miguel@manoprotect.com", "phone": "600778899", "status": "activo"},
-            {"emp_id": "EMP-010", "name": "Carmen Diaz", "role": "Comercial", "department": "ventas", "email": "carmen@manoprotect.com", "phone": "600001122", "status": "activo"},
+            {"emp_id": "EMP-001", "name": "Daniel Escriva", "role": "CEO / Fundador", "department": "direccion", "email": "ceo@manoprotectt.com", "phone": "601510950", "status": "activo"},
+            {"emp_id": "EMP-002", "name": "Maria Lopez", "role": "Dir. Operaciones", "department": "operaciones", "email": "maria@manoprotectt.com", "phone": "600111222", "status": "activo"},
+            {"emp_id": "EMP-003", "name": "Carlos Ruiz", "role": "CTO", "department": "tecnologia", "email": "carlos@manoprotectt.com", "phone": "600333444", "status": "activo"},
+            {"emp_id": "EMP-004", "name": "Ana Garcia", "role": "Dir. Comercial", "department": "ventas", "email": "ana@manoprotectt.com", "phone": "600555666", "status": "activo"},
+            {"emp_id": "EMP-005", "name": "Javier Martinez", "role": "Jefe Instalaciones", "department": "instalaciones", "email": "javier@manoprotectt.com", "phone": "600777888", "status": "activo"},
+            {"emp_id": "EMP-006", "name": "Laura Fernandez", "role": "Atencion al Cliente", "department": "soporte", "email": "laura@manoprotectt.com", "phone": "600999000", "status": "activo"},
+            {"emp_id": "EMP-007", "name": "Pedro Sanchez", "role": "Tecnico Instalador", "department": "instalaciones", "email": "pedro@manoprotectt.com", "phone": "600112233", "status": "activo"},
+            {"emp_id": "EMP-008", "name": "Sofia Torres", "role": "Comercial", "department": "ventas", "email": "sofia@manoprotectt.com", "phone": "600445566", "status": "activo"},
+            {"emp_id": "EMP-009", "name": "Miguel Angel Ramos", "role": "Tecnico Instalador", "department": "instalaciones", "email": "miguel@manoprotectt.com", "phone": "600778899", "status": "activo"},
+            {"emp_id": "EMP-010", "name": "Carmen Diaz", "role": "Comercial", "department": "ventas", "email": "carmen@manoprotectt.com", "phone": "600001122", "status": "activo"},
         ]
         for e in defaults:
             e["created_at"] = now()

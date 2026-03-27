@@ -196,4 +196,4 @@ Cuando despliegues a producción, actualiza `capacitor.config.json`:
 
 ## Contacto
 
-Para soporte técnico: info@manoprotect.com
+Para soporte técnico: info@manoprotectt.com

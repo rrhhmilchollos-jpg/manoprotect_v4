@@ -83,11 +83,11 @@ const EstafasBancarias = () => {
         <title>Protección contra Estafas Bancarias - Banking Fraud Protection | ManoProtect</title>
         <meta name="description" content="Protección contra estafas bancarias: vishing, phishing y smishing. Detectamos llamadas falsas de bancos, emails y SMS fraudulentos. Protege tu dinero con IA avanzada." />
         <meta name="keywords" content="estafas bancarias, fraude bancario, vishing banco, phishing bancario, smishing, protección cuenta bancaria, fraud prevention banking, seguridad bancaria" />
-        <link rel="canonical" href="https://manoprotect.com/estafas-bancarias" />
+        <link rel="canonical" href="https://manoprotectt.com/estafas-bancarias" />
         
         <meta property="og:title" content="Protección contra Estafas Bancarias - ManoProtect" />
         <meta property="og:description" content="Detectamos y bloqueamos estafas bancarias: llamadas falsas, emails y SMS fraudulentos." />
-        <meta property="og:url" content="https://manoprotect.com/estafas-bancarias" />
+        <meta property="og:url" content="https://manoprotectt.com/estafas-bancarias" />
         <meta property="og:type" content="website" />
       </Helmet>
 

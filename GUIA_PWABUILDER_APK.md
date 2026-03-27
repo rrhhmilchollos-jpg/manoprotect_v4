@@ -9,9 +9,9 @@ Usaremos **PWABuilder** (https://www.pwabuilder.com/) para convertir las 3 apps 
 
 | App | URL para PWABuilder | Package Name |
 |-----|---------------------|--------------|
-| **Clientes** | `https://www.manoprotect.com/` | `com.manoprotect.clientes` |
-| **Comerciales** | `https://www.manoprotect.com/pwa-comerciales.html` | `com.manoprotect.comerciales` |
-| **Instaladores** | `https://www.manoprotect.com/pwa-instaladores.html` | `com.manoprotect.instaladores` |
+| **Clientes** | `https://www.manoprotectt.com/` | `com.manoprotect.clientes` |
+| **Comerciales** | `https://www.manoprotectt.com/pwa-comerciales.html` | `com.manoprotectt.comerciales` |
+| **Instaladores** | `https://www.manoprotectt.com/pwa-instaladores.html` | `com.manoprotect.instaladores` |
 
 ---
 
@@ -20,7 +20,7 @@ Usaremos **PWABuilder** (https://www.pwabuilder.com/) para convertir las 3 apps 
 ### 1. App de Clientes (Principal)
 
 1. Ve a **https://www.pwabuilder.com/**
-2. Escribe la URL: `https://www.manoprotect.com/`
+2. Escribe la URL: `https://www.manoprotectt.com/`
 3. Haz clic en **"Start"**
 4. PWABuilder analizará la web. Espera a que termine.
 5. Haz clic en **"Package for stores"** > **"Android"**
@@ -29,7 +29,7 @@ Usaremos **PWABuilder** (https://www.pwabuilder.com/) para convertir las 3 apps 
    - **App name**: `ManoProtect`
    - **App version**: `2.1.0`
    - **App version code**: `4`
-   - **Host**: `www.manoprotect.com`
+   - **Host**: `www.manoprotectt.com`
    - **Start URL**: `/`
    - **Theme color**: `#10b981`
    - **Background color**: `#ffffff`
@@ -46,15 +46,15 @@ Usaremos **PWABuilder** (https://www.pwabuilder.com/) para convertir las 3 apps 
 ### 2. App de Comerciales
 
 1. Ve a **https://www.pwabuilder.com/**
-2. Escribe la URL: `https://www.manoprotect.com/pwa-comerciales.html`
+2. Escribe la URL: `https://www.manoprotectt.com/pwa-comerciales.html`
 3. Haz clic en **"Start"**
 4. Haz clic en **"Package for stores"** > **"Android"**
 5. Configura:
-   - **Package ID**: `com.manoprotect.comerciales`
+   - **Package ID**: `com.manoprotectt.comerciales`
    - **App name**: `ManoProtect Comerciales`
    - **App version**: `2.1.0`
    - **App version code**: `4`
-   - **Host**: `www.manoprotect.com`
+   - **Host**: `www.manoprotectt.com`
    - **Start URL**: `/gestion/login?app=comerciales`
    - **Theme color**: `#10b981`
    - **Background color**: `#0f172a`
@@ -64,7 +64,7 @@ Usaremos **PWABuilder** (https://www.pwabuilder.com/) para convertir las 3 apps 
 ### 3. App de Instaladores
 
 1. Ve a **https://www.pwabuilder.com/**
-2. Escribe la URL: `https://www.manoprotect.com/pwa-instaladores.html`
+2. Escribe la URL: `https://www.manoprotectt.com/pwa-instaladores.html`
 3. Haz clic en **"Start"**
 4. Haz clic en **"Package for stores"** > **"Android"**
 5. Configura:
@@ -72,7 +72,7 @@ Usaremos **PWABuilder** (https://www.pwabuilder.com/) para convertir las 3 apps 
    - **App name**: `ManoProtect Instaladores`
    - **App version**: `2.1.0`
    - **App version code**: `4`
-   - **Host**: `www.manoprotect.com`
+   - **Host**: `www.manoprotectt.com`
    - **Start URL**: `/gestion/login?app=instaladores`
    - **Theme color**: `#f59e0b`
    - **Background color**: `#0f172a`
@@ -96,7 +96,7 @@ Usaremos **PWABuilder** (https://www.pwabuilder.com/) para convertir las 3 apps 
    - Icono de la app
    - Categoría: **Herramientas** o **Negocios**
    - Clasificación de contenido
-   - Política de privacidad: `https://www.manoprotect.com/privacy`
+   - Política de privacidad: `https://www.manoprotectt.com/privacy`
 6. Haz clic en **"Enviar a revisión"**
 
 ---
@@ -106,7 +106,7 @@ Usaremos **PWABuilder** (https://www.pwabuilder.com/) para convertir las 3 apps 
 Después de generar el APK, PWABuilder te dará un archivo `assetlinks.json`.
 
 1. Copia el contenido del archivo
-2. Debe estar accesible en: `https://www.manoprotect.com/.well-known/assetlinks.json`
+2. Debe estar accesible en: `https://www.manoprotectt.com/.well-known/assetlinks.json`
 3. Este archivo ya existe en tu servidor (pregunta si necesitas actualizarlo)
 
 ---

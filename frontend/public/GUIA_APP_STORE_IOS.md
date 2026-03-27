@@ -170,9 +170,9 @@ Necesitas capturas para:
 ### 4.4 Información adicional
 
 ```
-URL de soporte: https://www.manoprotect.com/faq
-URL de marketing: https://www.manoprotect.com
-URL de privacidad: https://www.manoprotect.com/privacy-policy
+URL de soporte: https://www.manoprotectt.com/faq
+URL de marketing: https://www.manoprotectt.com
+URL de privacidad: https://www.manoprotectt.com/privacy-policy
 ```
 
 ---

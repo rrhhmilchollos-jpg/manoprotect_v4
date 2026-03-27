@@ -7,11 +7,11 @@
 
 ### URL de Acceso:
 ```
-https://manoprotect.com/empleados/login
+https://manoprotectt.com/empleados/login
 ```
 
 ### Credenciales del Director General:
-- **Email:** director@manoprotect.com
+- **Email:** director@manoprotectt.com
 - **Contraseña:** Director2026!
 
 ---
@@ -19,7 +19,7 @@ https://manoprotect.com/empleados/login
 ## 👥 CÓMO CREAR NUEVOS EMPLEADOS
 
 ### Paso 1: Inicia sesión como Director
-1. Ve a https://manoprotect.com/empleados/login
+1. Ve a https://manoprotectt.com/empleados/login
 2. Introduce las credenciales del Director
 3. Haz clic en "Iniciar Sesión"
 
@@ -87,7 +87,7 @@ El nuevo empleado debe:
 ## 📞 SOPORTE
 
 Si tienes problemas de acceso:
-- Email: soporte@manoprotect.com
+- Email: soporte@manoprotectt.com
 - Teléfono: +34 601 510 950
 
 ---

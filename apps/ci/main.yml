@@ -23,7 +23,7 @@ on:
 
 env:
   JAVA_VERSION: '17'
-  API_BASE_URL: https://www.manoprotect.com/api
+  API_BASE_URL: https://www.manoprotectt.com/api
 
 jobs:
   # ============================================

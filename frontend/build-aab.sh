@@ -29,7 +29,7 @@ fi
 # 3. Build de React para producción
 echo ""
 echo "📦 Paso 1/4: Compilando React para producción..."
-REACT_APP_BACKEND_URL=https://manoprotect.com yarn build
+REACT_APP_BACKEND_URL=https://manoprotectt.com yarn build
 
 # 4. Sincronizar con Capacitor
 echo ""

@@ -9,7 +9,7 @@ import os
 BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', 'https://auth-hardened-test.preview.emergentagent.com').rstrip('/')
 
 # CEO credentials
-CEO_EMAIL = "ceo@manoprotect.com"
+CEO_EMAIL = "ceo@manoprotectt.com"
 CEO_PASSWORD = "19862210Des"
 
 
@@ -195,7 +195,7 @@ class TestSEOFiles:
         assert '<loc>' in content
         
         # Verify key pages are included
-        assert 'manoprotect.com/' in content
+        assert 'manoprotectt.com/' in content
         assert 'productos' in content
         assert 'plans' in content
         

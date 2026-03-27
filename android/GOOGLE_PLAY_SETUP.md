@@ -149,10 +149,10 @@ MANOPROTECT_KEY_PASSWORD=tu_password
 
 ### 10. URLs Importantes
 
-- App: https://manoprotect.com
-- Privacidad: https://manoprotect.com/privacidad
-- Términos: https://manoprotect.com/terminos
-- Soporte: info@manoprotect.com
+- App: https://manoprotectt.com
+- Privacidad: https://manoprotectt.com/privacidad
+- Términos: https://manoprotectt.com/terminos
+- Soporte: info@manoprotectt.com
 - WhatsApp: +34 601 510 950
 
 ---

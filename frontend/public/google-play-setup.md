@@ -37,8 +37,8 @@
 3. Nombre: "Equipo interno"
 4. Añade estos emails:
    ```
-   internal.tester@manoprotect.com
-   info@manoprotect.com
+   internal.tester@manoprotectt.com
+   info@manoprotectt.com
    ```
 5. Guarda y copia el **enlace de participación**
 
@@ -61,7 +61,7 @@
    - Panel familiar completo
    - Perfil de salud para emergencias
    
-   Por favor, reporta cualquier problema a soporte@manoprotect.com
+   Por favor, reporta cualquier problema a soporte@manoprotectt.com
    ```
 6. Guarda y revisa la versión
 7. Haz clic en **"Iniciar lanzamiento en Prueba cerrada"**
@@ -72,8 +72,8 @@
 3. Nombre: "Testers Alpha"
 4. Añade estos emails:
    ```
-   alpha.tester@manoprotect.com
-   reviewer@manoprotect.com
+   alpha.tester@manoprotectt.com
+   reviewer@manoprotectt.com
    [Añade aquí más emails de testers]
    ```
 5. En "Configuración de comentarios", activa la opción de recibir feedback
@@ -101,7 +101,7 @@
    🔔 Notificaciones push instantáneas
    
    Tu feedback nos ayuda a mejorar. 
-   Reporta problemas a: soporte@manoprotect.com
+   Reporta problemas a: soporte@manoprotectt.com
    ```
 6. Guarda y revisa la versión
 7. Haz clic en **"Iniciar lanzamiento en Prueba abierta"**
@@ -131,11 +131,11 @@ Te invitamos a probar la versión interna de ManoProtect.
 2. Acepta la invitación e instala la app
 
 3. Usa estas credenciales:
-   Email: internal.tester@manoprotect.com
+   Email: internal.tester@manoprotectt.com
    Contraseña: InternalTest2025!
 
 4. Consulta la guía de pruebas:
-   https://manoprotect.com/testing-guide.html
+   https://manoprotectt.com/testing-guide.html
 
 ¡Gracias por tu ayuda!
 ```
@@ -156,14 +156,14 @@ Para participar:
 2. Acepta la invitación e instala la app
 
 3. Credenciales de prueba:
-   Email: alpha.tester@manoprotect.com
+   Email: alpha.tester@manoprotectt.com
    Contraseña: AlphaTest2025!
 
 4. Guía de pruebas completa:
-   https://manoprotect.com/testing-guide.html
+   https://manoprotectt.com/testing-guide.html
 
 Tu feedback es muy importante. Si encuentras algún problema,
-escríbenos a soporte@manoprotect.com
+escríbenos a soporte@manoprotectt.com
 
 ¡Gracias!
 Equipo ManoProtect
@@ -190,8 +190,8 @@ Equipo ManoProtect
 
 ## 🔗 Enlaces Útiles
 
-- **Guía de pruebas para testers**: https://manoprotect.com/testing-guide.html
-- **Soporte**: soporte@manoprotect.com
+- **Guía de pruebas para testers**: https://manoprotectt.com/testing-guide.html
+- **Soporte**: soporte@manoprotectt.com
 - **Play Console**: https://play.google.com/console
 
 ---

@@ -10,11 +10,11 @@ import os
 BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', '').rstrip('/')
 
 # Test credentials
-ADMIN_EMAIL = "admin@manoprotect.com"
+ADMIN_EMAIL = "admin@manoprotectt.com"
 ADMIN_PASSWORD = "ManoAdmin2025!"
-COMERCIAL_EMAIL = "comercial@manoprotect.com"
+COMERCIAL_EMAIL = "comercial@manoprotectt.com"
 COMERCIAL_PASSWORD = "Comercial2025!"
-INSTALADOR_EMAIL = "instalador@manoprotect.com"
+INSTALADOR_EMAIL = "instalador@manoprotectt.com"
 INSTALADOR_PASSWORD = "Instalador2025!"
 
 

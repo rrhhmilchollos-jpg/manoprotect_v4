@@ -21,10 +21,10 @@ from datetime import datetime
 BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', 'https://auth-hardened-test.preview.emergentagent.com').rstrip('/')
 
 # Test credentials
-CEO_CREDS = {"email": "ceo@manoprotect.com", "password": "19862210Des"}
-GESTION_ADMIN_CREDS = {"email": "admin@manoprotect.com", "password": "ManoAdmin2025!"}
-GESTION_COMERCIAL_CREDS = {"email": "comercial@manoprotect.com", "password": "Comercial2025!"}
-GESTION_INSTALADOR_CREDS = {"email": "instalador@manoprotect.com", "password": "Instalador2025!"}
+CEO_CREDS = {"email": "ceo@manoprotectt.com", "password": "19862210Des"}
+GESTION_ADMIN_CREDS = {"email": "admin@manoprotectt.com", "password": "ManoAdmin2025!"}
+GESTION_COMERCIAL_CREDS = {"email": "comercial@manoprotectt.com", "password": "Comercial2025!"}
+GESTION_INSTALADOR_CREDS = {"email": "instalador@manoprotectt.com", "password": "Instalador2025!"}
 
 
 @pytest.fixture(scope="module")
@@ -105,7 +105,7 @@ class TestGestionAuth:
         assert "token" in data
         assert "user" in data
         assert data["user"]["rol"] == "admin"
-        assert data["user"]["email"] == "admin@manoprotect.com"
+        assert data["user"]["email"] == "admin@manoprotectt.com"
         print(f"Admin login successful: {data['user']['nombre']}, rol={data['user']['rol']}")
 
     def test_gestion_comercial_login_returns_token(self, api_client):
@@ -322,7 +322,7 @@ class TestGestionAuthMe:
         assert "user_id" in data
         assert "email" in data
         assert "rol" in data
-        assert data["email"] == "admin@manoprotect.com"
+        assert data["email"] == "admin@manoprotectt.com"
         print(f"Auth/me successful: {data['email']}, rol={data['rol']}")
 
 

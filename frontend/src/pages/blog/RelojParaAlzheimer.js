@@ -16,10 +16,10 @@ const RelojParaAlzheimer = () => {
     "headline": "Reloj GPS para Personas con Alzheimer: Guía de Compra 2026",
     "description": "El mejor localizador GPS para enfermos de Alzheimer y demencia. Comparamos funciones, zonas seguras, alertas y precios.",
     "author": { "@type": "Organization", "name": "ManoProtect" },
-    "publisher": { "@type": "Organization", "name": "ManoProtect", "logo": { "@type": "ImageObject", "url": "https://manoprotect.com/logo512.png" } },
+    "publisher": { "@type": "Organization", "name": "ManoProtect", "logo": { "@type": "ImageObject", "url": "https://manoprotectt.com/logo512.png" } },
     "datePublished": "2026-02-12",
     "dateModified": "2026-02-24",
-    "mainEntityOfPage": "https://manoprotect.com/blog/reloj-gps-alzheimer"
+    "mainEntityOfPage": "https://manoprotectt.com/blog/reloj-gps-alzheimer"
   };
 
   const features = [
@@ -44,7 +44,7 @@ const RelojParaAlzheimer = () => {
         <title>Reloj GPS para Personas con Alzheimer: Guía de Compra 2026</title>
         <meta name="description" content="El mejor localizador GPS para personas con Alzheimer y demencia. Zonas seguras, alertas automáticas y botón SOS. Comparativa de precios y funciones 2026." />
         <meta name="keywords" content="reloj gps alzheimer, localizador alzheimer, gps demencia, reloj para personas con alzheimer, localizador gps mayores alzheimer" />
-        <link rel="canonical" href="https://manoprotect.com/blog/reloj-gps-alzheimer" />
+        <link rel="canonical" href="https://manoprotectt.com/blog/reloj-gps-alzheimer" />
         <script type="application/ld+json">{JSON.stringify(schemaArticle)}</script>
       </Helmet>
 

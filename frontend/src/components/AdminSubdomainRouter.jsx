@@ -1,5 +1,5 @@
 /**
- * AdminSubdomainRouter - Router for admin.manoprotect.com
+ * AdminSubdomainRouter - Router for admin.manoprotectt.com
  * This component handles all routing when accessed via the admin subdomain
  * Only shows enterprise portal routes, no consumer app routes
  */

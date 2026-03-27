@@ -170,7 +170,7 @@ Texto: "¿Es real o es estafa?"
 
 [4-6 seg]
 Logo + URL
-"manoprotect.com - Prueba gratis"
+"manoprotectt.com - Prueba gratis"
 ```
 
 ### Guión (versión 15 seg):
@@ -188,7 +188,7 @@ Demostración rápida
 [10-15 seg]
 "Protege a tu familia"
 "Prueba 15 días gratis"
-URL: manoprotect.com
+URL: manoprotectt.com
 ```
 
 ---
@@ -292,7 +292,7 @@ Respuesta: "FALSO ❌"
 ```
 
 Accesibles en:
-- manoprotect.com/marketing/videos/facebook_alerta.mp4
-- manoprotect.com/marketing/videos/facebook_familia.mp4
+- manoprotectt.com/marketing/videos/facebook_alerta.mp4
+- manoprotectt.com/marketing/videos/facebook_familia.mp4
 
 *Recuerda hacer Deploy para que estén disponibles en producción*

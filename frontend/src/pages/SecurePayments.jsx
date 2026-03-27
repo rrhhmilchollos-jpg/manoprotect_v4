@@ -58,7 +58,7 @@ const SecurePayments = () => {
         <title>Secure Online Payments - Online Payment Protection | ManoProtect</title>
         <meta name="description" content="Protege tus pagos online con ManoProtect. Secure online payments con fraud prevention avanzado y online payment protection. Detección de fraudes en tiempo real." />
         <meta name="keywords" content="secure online payments, online payment protection, fraud prevention, pagos seguros, protección pagos online, antifraude, seguridad transacciones" />
-        <link rel="canonical" href="https://manoprotect.com/secure-payments" />
+        <link rel="canonical" href="https://manoprotectt.com/secure-payments" />
       </Helmet>
 
       <LandingHeader />

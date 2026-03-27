@@ -68,7 +68,7 @@ class TestChatbotLeadAPI:
         """Test lead with phone-based generated email (chatbot behavior)"""
         lead_data = {
             "name": "TEST_PhoneOnlyLead79",
-            "email": "612345678@chat.manoprotect.com",  # Generated from phone
+            "email": "612345678@chat.manoprotectt.com",  # Generated from phone
             "phone": "612345678",
             "source": "chatbot",
             "interest": "precios-hogar",

@@ -36,7 +36,7 @@ const LegalNotice = () => {
               <p><strong>Denominación Social:</strong> ManoProtect S.L.</p>
               <p><strong>CIF:</strong> B19427723</p>
               <p><strong>Domicilio Social:</strong> España</p>
-              <p><strong>Email de contacto:</strong> info@manoprotect.com</p>
+              <p><strong>Email de contacto:</strong> info@manoprotectt.com</p>
               <p><strong>Teléfono:</strong> +34 601 510 950</p>
               <p><strong>Inscripción:</strong> Inscrita en el Registro Mercantil de Valencia</p>
             </div>
@@ -45,7 +45,7 @@ const LegalNotice = () => {
           <section className="space-y-4">
             <h2 className="text-xl font-bold text-zinc-900">2. Objeto</h2>
             <p className="text-zinc-600">
-              El presente Aviso Legal regula el uso del sitio web <strong>www.manoprotect.com</strong> y 
+              El presente Aviso Legal regula el uso del sitio web <strong>www.manoprotectt.com</strong> y 
               de la aplicación móvil ManoProtect (en adelante, conjuntamente, "la Plataforma"), 
               del que es titular ManoProtect S.L.
             </p>
@@ -189,8 +189,8 @@ const LegalNotice = () => {
           <section className="space-y-4 border-t pt-8">
             <h2 className="text-xl font-bold text-zinc-900">13. Contacto</h2>
             <div className="bg-zinc-50 p-4 rounded-lg space-y-2">
-              <p><strong>Email general:</strong> info@manoprotect.com</p>
-              <p><strong>Email legal:</strong> legal@manoprotect.com</p>
+              <p><strong>Email general:</strong> info@manoprotectt.com</p>
+              <p><strong>Email legal:</strong> legal@manoprotectt.com</p>
               <p><strong>Teléfono:</strong> +34 601 510 950</p>
               <p><strong>Dirección:</strong> España</p>
             </div>

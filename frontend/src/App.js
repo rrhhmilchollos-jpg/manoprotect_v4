@@ -4,7 +4,7 @@ import { AuthProvider, useAuth } from '@/context/AuthContext';
 import { useEffect, lazy, Suspense, useState } from 'react';
 import { getSubdomainInfo } from '@/hooks/useSubdomain';
 
-// Admin subdomain router (for admin.manoprotect.com)
+// Admin subdomain router (for admin.manoprotectt.com)
 const AdminSubdomainRouter = lazy(() => import('@/components/AdminSubdomainRouter'));
 
 // Defer non-critical component loading
@@ -882,7 +882,7 @@ function AppRouter() {
 }
 
 function App() {
-  // Detect if we're on admin.manoprotect.com subdomain
+  // Detect if we're on admin.manoprotectt.com subdomain
   const subdomainInfo = getSubdomainInfo();
   
   // If on admin subdomain, render only the enterprise portal
@@ -905,7 +905,7 @@ function App() {
     );
   }
   
-  // Main ManoProtect app (manoprotect.com)
+  // Main ManoProtect app (manoprotectt.com)
   return (
     <div className="App">
       <BrowserRouter>

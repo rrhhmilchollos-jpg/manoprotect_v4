@@ -146,5 +146,5 @@ npm run build:linux
 
 ## Soporte
 
-Email: info@manoprotect.com
-Web: https://manoprotect.com
+Email: info@manoprotectt.com
+Web: https://manoprotectt.com

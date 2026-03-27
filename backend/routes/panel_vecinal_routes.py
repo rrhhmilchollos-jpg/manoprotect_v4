@@ -190,7 +190,7 @@ async def create_referral(data: ReferralCreate, request: Request, session_token:
     return {
         "referral_code": referral_code,
         "message": f"Invitacion enviada a {data.neighbor_email}. Cuando contrate el plan, recibiras 1 mes gratis.",
-        "share_url": f"https://manoprotect.com/panel-vecinal?ref={referral_code}",
+        "share_url": f"https://manoprotectt.com/panel-vecinal?ref={referral_code}",
     }
 
 

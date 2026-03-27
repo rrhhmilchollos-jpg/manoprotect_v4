@@ -350,11 +350,11 @@ export default function OrderConfirmation() {
               601 510 950
             </a>
             <a 
-              href="mailto:soporte@manoprotect.com" 
+              href="mailto:soporte@manoprotectt.com" 
               className="flex items-center gap-2 text-emerald-600 hover:text-emerald-700"
             >
               <Mail className="w-4 h-4" />
-              soporte@manoprotect.com
+              soporte@manoprotectt.com
             </a>
           </div>
         </div>

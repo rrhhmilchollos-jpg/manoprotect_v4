@@ -19,11 +19,11 @@ const SEOArticleLayout = ({ title, metaTitle, metaDescription, canonical, publis
     "@type": "Article",
     "headline": metaTitle || title,
     "description": metaDescription,
-    "author": { "@type": "Organization", "name": "ManoProtect", "url": "https://manoprotect.com" },
-    "publisher": { "@type": "Organization", "name": "ManoProtect", "logo": { "@type": "ImageObject", "url": "https://manoprotect.com/manoprotect_logo.png" } },
+    "author": { "@type": "Organization", "name": "ManoProtect", "url": "https://manoprotectt.com" },
+    "publisher": { "@type": "Organization", "name": "ManoProtect", "logo": { "@type": "ImageObject", "url": "https://manoprotectt.com/manoprotect_logo.png" } },
     "datePublished": publishDate || "2026-03-06",
     "dateModified": "2026-03-06",
-    "mainEntityOfPage": { "@type": "WebPage", "@id": `https://manoprotect.com${canonical}` },
+    "mainEntityOfPage": { "@type": "WebPage", "@id": `https://manoprotectt.com${canonical}` },
     "inLanguage": "es"
   };
 
@@ -32,11 +32,11 @@ const SEOArticleLayout = ({ title, metaTitle, metaDescription, canonical, publis
       <Helmet>
         <title>{metaTitle || title} | ManoProtect</title>
         <meta name="description" content={metaDescription} />
-        <link rel="canonical" href={`https://manoprotect.com${canonical}`} />
+        <link rel="canonical" href={`https://manoprotectt.com${canonical}`} />
         <meta property="og:title" content={metaTitle || title} />
         <meta property="og:description" content={metaDescription} />
         <meta property="og:type" content="article" />
-        <meta property="og:url" content={`https://manoprotect.com${canonical}`} />
+        <meta property="og:url" content={`https://manoprotectt.com${canonical}`} />
         <script type="application/ld+json">{JSON.stringify(articleSchema)}</script>
       </Helmet>
 

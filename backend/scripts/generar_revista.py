@@ -83,11 +83,11 @@ class RevistaManoProtect(FPDF):
         self.set_font('Helvetica', 'B', 10)
         self.set_text_color(*self._color('#10b981'))
         self.set_xy(25, 253)
-        self.cell(160, 5, 'www.manoprotect.com', 0, 0, 'C')
+        self.cell(160, 5, 'www.manoprotectt.com', 0, 0, 'C')
         self.set_font('Helvetica', '', 9)
         self.set_text_color(*self._color('#94a3b8'))
         self.set_xy(25, 260)
-        self.cell(160, 5, 'info@manoprotect.com  |  soporte@manoprotect.com', 0, 0, 'C')
+        self.cell(160, 5, 'info@manoprotectt.com  |  soporte@manoprotectt.com', 0, 0, 'C')
         self.set_xy(25, 267)
         self.cell(160, 5, 'Atencion 24h  |  Instalacion profesional en toda Espana', 0, 0, 'C')
 
@@ -724,9 +724,9 @@ class RevistaManoProtect(FPDF):
         self.cell(160, 8, 'CONTACTA CON NOSOTROS', 0, 0, 'C')
         
         contactos = [
-            ("Web:", "www.manoprotect.com"),
-            ("Email:", "info@manoprotect.com"),
-            ("Soporte:", "soporte@manoprotect.com"),
+            ("Web:", "www.manoprotectt.com"),
+            ("Email:", "info@manoprotectt.com"),
+            ("Soporte:", "soporte@manoprotectt.com"),
             ("Atencion:", "24 horas, 365 dias al ano"),
             ("Cobertura:", "Toda Espana peninsular e islas"),
         ]
@@ -753,7 +753,7 @@ class RevistaManoProtect(FPDF):
         self.cell(140, 10, 'SOLICITA TU PRESUPUESTO', 0, 0, 'C')
         self.set_font('Helvetica', '', 9)
         self.set_xy(35, y + 17)
-        self.cell(140, 7, 'www.manoprotect.com/presupuesto', 0, 0, 'C')
+        self.cell(140, 7, 'www.manoprotectt.com/presupuesto', 0, 0, 'C')
         
         # Garantias
         y = 245

@@ -3,7 +3,7 @@
 ## Configuracion
 
 - **Nombre de la App:** Mano
-- **Dominio:** manoprotect.com
+- **Dominio:** manoprotectt.com
 - **Package Android:** com.Manoprotect.Mano
 - **Firebase Project:** manoprotect-f889b
 
@@ -140,7 +140,7 @@ yarn android
 
 - **Documentacion Firebase:** https://firebase.google.com/docs
 - **React Native:** https://reactnative.dev/docs/getting-started
-- **Mano Web:** https://manoprotect.com
+- **Mano Web:** https://manoprotectt.com
 
 ---
 

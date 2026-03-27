@@ -69,7 +69,7 @@ El servidor actual es ARM64 y no puede compilar APKs nativos. Aquí tienes 3 opc
 ## Opción 3: Usar PWA Builder (Sin compilar)
 
 1. Ve a [pwabuilder.com](https://www.pwabuilder.com/)
-2. Ingresa: `https://www.manoprotect.com`
+2. Ingresa: `https://www.manoprotectt.com`
 3. Click en "Package for stores" > "Android"
 4. Descarga el AAB generado automáticamente
 

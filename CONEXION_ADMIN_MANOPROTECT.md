@@ -1,13 +1,13 @@
-# Conexión del Portal admin.manoprotect.com
+# Conexión del Portal admin.manoprotectt.com
 
 ## Resumen
-Este documento explica cómo conectar el frontend del portal de empleados en `admin.manoprotect.com` con el backend de ManoProtect.
+Este documento explica cómo conectar el frontend del portal de empleados en `admin.manoprotectt.com` con el backend de ManoProtect.
 
 ## Arquitectura
 
 ```
 ┌─────────────────────────────────────┐     ┌──────────────────────────────────┐
-│  admin.manoprotect.com              │     │  api.manoprotect.com / backend   │
+│  admin.manoprotectt.com              │     │  api.manoprotectt.com / backend   │
 │  (Proyecto Separado - Frontend)     │ ──► │  (Este Proyecto)                 │
 │                                     │     │                                  │
 │  - Login empleados ManoProtect      │     │  /api/enterprise/*               │
@@ -21,11 +21,11 @@ Este documento explica cómo conectar el frontend del portal de empleados en `ad
 ## Configuración del Backend (YA COMPLETADO ✅)
 
 ### 1. CORS Configurado
-El backend ya acepta requests desde `https://admin.manoprotect.com`:
+El backend ya acepta requests desde `https://admin.manoprotectt.com`:
 ```python
 allowed_origins = [
     ...
-    "https://admin.manoprotect.com",  # ✅ Ya configurado
+    "https://admin.manoprotectt.com",  # ✅ Ya configurado
     ...
 ]
 ```
@@ -40,19 +40,19 @@ response.set_cookie(
     max_age=86400 * 7,
     samesite="none",      # Permite cross-site
     secure=True,          # Requiere HTTPS
-    domain=".manoprotect.com"  # Compartido entre subdominios
+    domain=".manoprotectt.com"  # Compartido entre subdominios
 )
 ```
 
 ---
 
-## Configuración del Frontend (admin.manoprotect.com)
+## Configuración del Frontend (admin.manoprotectt.com)
 
 ### Variable de Entorno Requerida
 ```env
-REACT_APP_BACKEND_URL=https://api.manoprotect.com
+REACT_APP_BACKEND_URL=https://api.manoprotectt.com
 # O si usas el mismo dominio:
-REACT_APP_BACKEND_URL=https://manoprotect.com
+REACT_APP_BACKEND_URL=https://manoprotectt.com
 ```
 
 ### Endpoints API Disponibles
@@ -146,7 +146,7 @@ REACT_APP_BACKEND_URL=https://manoprotect.com
 ## Ejemplo de Implementación del Login
 
 ```javascript
-// admin.manoprotect.com/src/services/api.js
+// admin.manoprotectt.com/src/services/api.js
 const API_URL = process.env.REACT_APP_BACKEND_URL;
 
 export const enterpriseLogin = async (email, password) => {
@@ -203,7 +203,7 @@ export const getClients = async () => {
 
 | Usuario | Email | Contraseña | Rol |
 |---------|-------|------------|-----|
-| CEO | ceo@manoprotect.com | 19862210Des | super_admin |
+| CEO | ceo@manoprotectt.com | 19862210Des | super_admin |
 
 ---
 
@@ -211,19 +211,19 @@ export const getClients = async () => {
 
 ```bash
 # 1. Login
-curl -X POST "https://manoprotect.com/api/enterprise/auth/login" \
+curl -X POST "https://manoprotectt.com/api/enterprise/auth/login" \
   -H "Content-Type: application/json" \
-  -d '{"email":"ceo@manoprotect.com","password":"19862210Des"}'
+  -d '{"email":"ceo@manoprotectt.com","password":"19862210Des"}'
 
 # Respuesta:
 # {"success":true,"session_token":"abc123...","employee_id":"emp_xxx","name":"CEO ManoProtect","role":"super_admin"}
 
 # 2. Obtener empleados (con token)
-curl -X GET "https://manoprotect.com/api/enterprise/employees" \
+curl -X GET "https://manoprotectt.com/api/enterprise/employees" \
   -H "X-Session-Token: abc123..."
 
 # 3. Obtener clientes
-curl -X GET "https://manoprotect.com/api/enterprise/clients" \
+curl -X GET "https://manoprotectt.com/api/enterprise/clients" \
   -H "X-Session-Token: abc123..."
 ```
 
@@ -259,5 +259,5 @@ curl -X GET "https://manoprotect.com/api/enterprise/clients" \
 - ✅ SOS en tiempo real
 - ✅ Pagos y reembolsos (Stripe)
 - ✅ Auditoría completa
-- ✅ CORS configurado para admin.manoprotect.com
+- ✅ CORS configurado para admin.manoprotectt.com
 - ✅ Cookies cross-domain configuradas

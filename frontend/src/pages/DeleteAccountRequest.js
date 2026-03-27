@@ -389,8 +389,8 @@ const DeleteAccountRequest = () => {
           </p>
           <p>
             ¿Preguntas? Contacta con{' '}
-            <a href="mailto:soporte@manoprotect.com" className="text-indigo-400 hover:underline">
-              soporte@manoprotect.com
+            <a href="mailto:soporte@manoprotectt.com" className="text-indigo-400 hover:underline">
+              soporte@manoprotectt.com
             </a>
           </p>
         </div>

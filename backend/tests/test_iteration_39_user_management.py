@@ -14,7 +14,7 @@ import os
 BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', '').rstrip('/')
 
 # Enterprise admin credentials
-ADMIN_EMAIL = "ceo@manoprotect.com"
+ADMIN_EMAIL = "ceo@manoprotectt.com"
 ADMIN_PASSWORD = "Admin2026!"
 
 

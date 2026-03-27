@@ -19,5 +19,5 @@ App móvil/web de administración para gestores de ManoProtect. Control total de
 3. Ejecutar build: `../scripts/build.sh admin`
 
 ## Credenciales de prueba
-- Email: `admin@manoprotect.com`
+- Email: `admin@manoprotectt.com`
 - Password: `ManoAdmin2025!`

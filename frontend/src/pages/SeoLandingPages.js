@@ -63,7 +63,7 @@ export const RelojSosAncianos = () => (
     <Helmet>
       <title>Reloj SOS para Ancianos con GPS | ManoProtect Sentinel S</title>
       <meta name="description" content="Reloj SOS para personas mayores con GPS en tiempo real, botón de emergencia, detector de caídas y sirena de 120dB. Protección 24h para ancianos en España." />
-      <link rel="canonical" href="https://manoprotect.com/reloj-sos-ancianos" />
+      <link rel="canonical" href="https://manoprotectt.com/reloj-sos-ancianos" />
       <script type="application/ld+json">{JSON.stringify({
         "@context": "https://schema.org", "@type": "Product", "name": "ManoProtect Sentinel S - Reloj SOS Ancianos",
         "description": "Reloj SOS con GPS para personas mayores. Botón de emergencia, detector de caídas, sirena 120dB.",
@@ -112,7 +112,7 @@ export const RelojGpsMayores = () => (
     <Helmet>
       <title>Reloj GPS para Mayores 2026 | Localización en Tiempo Real | ManoProtect</title>
       <meta name="description" content="Reloj con GPS para personas mayores en España. Localización en tiempo real, zonas seguras, alertas a familiares. Sentinel S desde 9,99€/mes." />
-      <link rel="canonical" href="https://manoprotect.com/reloj-gps-mayores" />
+      <link rel="canonical" href="https://manoprotectt.com/reloj-gps-mayores" />
     </Helmet>
     <SeoHeader />
     <section className="py-16 bg-gradient-to-b from-emerald-50 to-white">
@@ -152,7 +152,7 @@ export const BotonSosSenior = () => (
     <Helmet>
       <title>Botón SOS para Personas Mayores | Emergencia 24h | ManoProtect</title>
       <meta name="description" content="Botón de emergencia SOS para personas mayores con alerta instantánea a familiares. GPS integrado, detector de caídas. Desde 9,99€/mes." />
-      <link rel="canonical" href="https://manoprotect.com/boton-sos-senior" />
+      <link rel="canonical" href="https://manoprotectt.com/boton-sos-senior" />
     </Helmet>
     <SeoHeader />
     <section className="py-16 bg-gradient-to-b from-red-50 to-white">
@@ -181,7 +181,7 @@ export const ProteccionPhishing = () => (
     <Helmet>
       <title>Protección contra Phishing y Estafas Online | ManoProtect</title>
       <meta name="description" content="Protege a tu familia del phishing, smishing y estafas digitales. ManoProtect: alertas en tiempo real, formación y dispositivos de seguridad." />
-      <link rel="canonical" href="https://manoprotect.com/proteccion-phishing" />
+      <link rel="canonical" href="https://manoprotectt.com/proteccion-phishing" />
     </Helmet>
     <SeoHeader />
     <section className="py-16 bg-gradient-to-b from-amber-50 to-white">
@@ -215,7 +215,7 @@ export const ProteccionFraudeOnline = () => (
     <Helmet>
       <title>Protección contra Fraude Online en España | ManoProtect 2026</title>
       <meta name="description" content="Protección completa contra fraude online para familias españolas. Alertas en tiempo real, monitorización 24h, formación anti-estafas. Desde 9,99€/mes." />
-      <link rel="canonical" href="https://manoprotect.com/proteccion-fraude-online" />
+      <link rel="canonical" href="https://manoprotectt.com/proteccion-fraude-online" />
     </Helmet>
     <SeoHeader />
     <section className="py-16 bg-gradient-to-b from-slate-50 to-white">
@@ -244,7 +244,7 @@ export const SeguridadDigitalFamiliar = () => (
     <Helmet>
       <title>Seguridad Digital Familiar en España | ManoProtect 2026</title>
       <meta name="description" content="Plataforma de seguridad digital para familias españolas. GPS, SOS, anti-phishing, protección de menores y mayores. Todo en un plan desde 9,99€/mes." />
-      <link rel="canonical" href="https://manoprotect.com/seguridad-digital-familiar" />
+      <link rel="canonical" href="https://manoprotectt.com/seguridad-digital-familiar" />
     </Helmet>
     <SeoHeader />
     <section className="py-16 bg-gradient-to-b from-emerald-50 to-white">
@@ -278,7 +278,7 @@ export const SeguridadMayores = () => (
     <Helmet>
       <title>Seguridad para Personas Mayores | GPS + SOS + Caídas | ManoProtect</title>
       <meta name="description" content="Sistema de seguridad para mayores: reloj GPS, botón SOS, detector de caídas, sirena 120dB. Protección 24h para ancianos. Desde 9,99€/mes en España." />
-      <link rel="canonical" href="https://manoprotect.com/seguridad-mayores" />
+      <link rel="canonical" href="https://manoprotectt.com/seguridad-mayores" />
     </Helmet>
     <SeoHeader />
     <section className="py-16 bg-gradient-to-b from-blue-50 to-white">

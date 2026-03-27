@@ -95,7 +95,7 @@ Repetir lo mismo para `cra-operador/`.
 
 La URL del servidor esta configurada en `main.js`:
 ```javascript
-const PRODUCTION_URL = 'https://manoprotect.com';
+const PRODUCTION_URL = 'https://manoprotectt.com';
 ```
 
 Si necesitas cambiar el servidor (por ejemplo, para desarrollo), edita esta linea.
@@ -106,12 +106,12 @@ Si necesitas cambiar el servidor (por ejemplo, para desarrollo), edita esta line
 
 | Usuario | Contrasena | Acceso |
 |---------|------------|--------|
-| ceo@manoprotect.com | 19862210Des | CRM + CRA (Admin) |
-| operador@manoprotect.com | (contactar admin) | CRA Operador |
+| ceo@manoprotectt.com | 19862210Des | CRM + CRA (Admin) |
+| operador@manoprotectt.com | (contactar admin) | CRA Operador |
 
 ---
 
 ## Soporte
 
-Email: soporte@manoprotect.com
-Web: https://manoprotect.com
+Email: soporte@manoprotectt.com
+Web: https://manoprotectt.com

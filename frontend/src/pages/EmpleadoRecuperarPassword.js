@@ -258,7 +258,7 @@ const EmpleadoRecuperarPassword = () => {
               
               <Input
                 type="email"
-                placeholder="tu@manoprotect.com"
+                placeholder="tu@manoprotectt.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="bg-slate-900/50 border-slate-600 text-white placeholder:text-slate-500"

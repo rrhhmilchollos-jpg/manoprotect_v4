@@ -346,7 +346,7 @@ const RefundPolicy = () => {
                     </p>
                     <ul className="mt-3 space-y-2 text-emerald-700 text-sm">
                       <li>• El formulario de desistimiento disponible en la plataforma</li>
-                      <li>• Correo electrónico a: reembolsos@manoprotect.com</li>
+                      <li>• Correo electrónico a: reembolsos@manoprotectt.com</li>
                       <li>• Comunicación postal a la dirección de la empresa</li>
                     </ul>
                   </div>
@@ -398,7 +398,7 @@ const RefundPolicy = () => {
                   <div>
                     <h4 className="font-bold text-slate-900 mb-1">Solicitud por Correo Electrónico</h4>
                     <p className="text-slate-600 text-sm">
-                      Alternativamente, envíe un correo a <strong>reembolsos@manoprotect.com</strong> incluyendo: 
+                      Alternativamente, envíe un correo a <strong>reembolsos@manoprotectt.com</strong> incluyendo: 
                       nombre completo, correo electrónico de registro, fecha de contratación y número de referencia de pago.
                     </p>
                   </div>
@@ -669,8 +669,8 @@ const RefundPolicy = () => {
                       </div>
                       <div>
                         <p className="text-emerald-100 text-xs">Correo electrónico</p>
-                        <a href="mailto:reembolsos@manoprotect.com" className="font-semibold hover:underline">
-                          reembolsos@manoprotect.com
+                        <a href="mailto:reembolsos@manoprotectt.com" className="font-semibold hover:underline">
+                          reembolsos@manoprotectt.com
                         </a>
                       </div>
                     </div>
@@ -712,8 +712,8 @@ const RefundPolicy = () => {
               <div className="bg-slate-100 rounded-xl p-5 text-center">
                 <p className="text-slate-600 text-sm">
                   Para consultas generales no relacionadas con reembolsos, puede contactar con 
-                  <a href="mailto:info@manoprotect.com" className="text-emerald-600 font-medium ml-1 hover:underline">
-                    info@manoprotect.com
+                  <a href="mailto:info@manoprotectt.com" className="text-emerald-600 font-medium ml-1 hover:underline">
+                    info@manoprotectt.com
                   </a>
                 </p>
               </div>

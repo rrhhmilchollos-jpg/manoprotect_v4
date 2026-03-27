@@ -69,11 +69,11 @@ const ProteccionIdentidadDigital = () => {
         <title>Protección de Identidad Digital - Evita el Robo de Identidad | ManoProtect</title>
         <meta name="description" content="Protección de identidad digital completa. Monitorización dark web, alertas de brechas de datos, prevención de suplantación. Protege tu identidad online 24/7." />
         <meta name="keywords" content="protección identidad digital, robo identidad, identity theft protection, suplantación identidad, dark web monitoring, brechas datos, seguridad identidad online" />
-        <link rel="canonical" href="https://manoprotect.com/proteccion-identidad-digital" />
+        <link rel="canonical" href="https://manoprotectt.com/proteccion-identidad-digital" />
         
         <meta property="og:title" content="Protección de Identidad Digital - ManoProtect" />
         <meta property="og:description" content="Protege tu identidad digital del robo y la suplantación. Monitorización 24/7 de la dark web." />
-        <meta property="og:url" content="https://manoprotect.com/proteccion-identidad-digital" />
+        <meta property="og:url" content="https://manoprotectt.com/proteccion-identidad-digital" />
         <meta property="og:type" content="website" />
       </Helmet>
 

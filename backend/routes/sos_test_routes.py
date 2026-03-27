@@ -15,7 +15,7 @@ test_alerts = {}
 
 class TestSOSRequest(BaseModel):
     sender_name: str = "Usuario Prueba"
-    sender_email: str = "test@manoprotect.com"
+    sender_email: str = "test@manoprotectt.com"
     latitude: float = 40.4168  # Madrid
     longitude: float = -3.7038
     message: Optional[str] = "Esto es una prueba del sistema SOS"

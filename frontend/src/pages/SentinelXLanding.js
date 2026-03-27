@@ -114,7 +114,7 @@ const SentinelXLanding = () => {
         <meta property="og:title" content="SENTINEL X GRATIS – Solo Pagas Envío | ManoProtect" />
         <meta property="og:description" content="Reloj de seguridad con SOS invisible y GPS. Versión Basic GRATIS (Bluetooth). Premium con 4G desde 149€." />
         <meta property="og:image" content={SENTINEL_IMAGES.hero} />
-        <link rel="canonical" href="https://manoprotect.com/sentinel-x" />
+        <link rel="canonical" href="https://manoprotectt.com/sentinel-x" />
       </Helmet>
 
       <div className="min-h-screen bg-black text-white">

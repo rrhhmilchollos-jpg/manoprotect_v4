@@ -37,12 +37,12 @@ const MejoresRelojesSOS2026 = () => {
       "name": "ManoProtect",
       "logo": {
         "@type": "ImageObject",
-        "url": "https://manoprotect.com/logo512.png"
+        "url": "https://manoprotectt.com/logo512.png"
       }
     },
     "datePublished": "2026-02-01",
     "dateModified": "2026-02-24",
-    "mainEntityOfPage": "https://manoprotect.com/blog/mejores-relojes-sos-2026",
+    "mainEntityOfPage": "https://manoprotectt.com/blog/mejores-relojes-sos-2026",
     "speakable": {
       "@type": "SpeakableSpecification",
       "cssSelector": ["h1", ".speakable"]
@@ -86,7 +86,7 @@ const MejoresRelojesSOS2026 = () => {
         <title>Los 5 Mejores Relojes SOS para Mayores en 2026 [Guía Actualizada]</title>
         <meta name="description" content="Ranking actualizado de los mejores relojes con botón SOS para ancianos. Comparamos Sentinel X, SaveFamily, Weenect y más. Precios desde 79€." />
         <meta name="keywords" content="mejores relojes sos, reloj sos mayores 2026, ranking relojes emergencia ancianos, cual es el mejor reloj sos" />
-        <link rel="canonical" href="https://manoprotect.com/blog/mejores-relojes-sos-2026" />
+        <link rel="canonical" href="https://manoprotectt.com/blog/mejores-relojes-sos-2026" />
         
         <script type="application/ld+json">{JSON.stringify(schemaArticle)}</script>
       </Helmet>

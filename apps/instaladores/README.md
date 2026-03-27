@@ -18,5 +18,5 @@ App móvil profesional para el equipo de instaladores de ManoProtect. Permite re
 3. Ejecutar build: `../scripts/build.sh instaladores`
 
 ## Credenciales de prueba
-- Email: `instalador@manoprotect.com`
+- Email: `instalador@manoprotectt.com`
 - Password: `Instalador2025!`

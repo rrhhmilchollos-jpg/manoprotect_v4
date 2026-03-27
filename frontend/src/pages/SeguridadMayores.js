@@ -89,7 +89,7 @@ const ProteccionMayores = () => {
         <title>Protección Digital para Mayores | Evita Estafas a Ancianos | ManoProtect</title>
         <meta name="description" content="Protege a tus padres y abuelos de estafas digitales. Sistema fácil de usar diseñado para mayores. Alertas familiares, verificación de llamadas y botón SOS." />
         <meta name="keywords" content="protección mayores estafas, estafas ancianos, seguridad digital tercera edad, proteger abuelos fraude, app mayores seguridad" />
-        <link rel="canonical" href="https://manoprotect.com/proteccion-mayores" />
+        <link rel="canonical" href="https://manoprotectt.com/proteccion-mayores" />
         <script type="application/ld+json">
           {JSON.stringify({
             "@context": "https://schema.org",

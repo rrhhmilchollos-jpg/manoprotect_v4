@@ -21,7 +21,7 @@ if not BASE_URL:
     BASE_URL = "https://auth-hardened-test.preview.emergentagent.com"
 
 # Test credentials from review request
-CEO_EMAIL = "ceo@manoprotect.com"
+CEO_EMAIL = "ceo@manoprotectt.com"
 CEO_PASSWORD = "19862210Des"
 DOWNLOAD_KEY = "mano2025investor"
 
@@ -203,7 +203,7 @@ class TestCORSHeaders:
             json={"email": "test@example.com", "password": "testpassword"},
             headers={
                 "Content-Type": "application/json",
-                "Origin": "https://manoprotect.com"
+                "Origin": "https://manoprotectt.com"
             }
         )
         
@@ -225,7 +225,7 @@ class TestCORSHeaders:
         response = requests.options(
             f"{BASE_URL}/api/auth/login",
             headers={
-                "Origin": "https://manoprotect.com",
+                "Origin": "https://manoprotectt.com",
                 "Access-Control-Request-Method": "POST",
                 "Access-Control-Request-Headers": "content-type"
             }

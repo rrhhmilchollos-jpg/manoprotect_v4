@@ -18,7 +18,7 @@ _db = None
 # VAPID keys for Web Push (generate your own for production)
 VAPID_PUBLIC_KEY = os.environ.get("VAPID_PUBLIC_KEY", "")
 VAPID_PRIVATE_KEY = os.environ.get("VAPID_PRIVATE_KEY", "")
-VAPID_EMAIL = os.environ.get("VAPID_EMAIL", "soporte@manoprotect.com")
+VAPID_EMAIL = os.environ.get("VAPID_EMAIL", "soporte@manoprotectt.com")
 
 def init_db(db):
     global _db

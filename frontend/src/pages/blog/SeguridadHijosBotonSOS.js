@@ -16,7 +16,7 @@ const SeguridadHijosBotonSOS = () => {
     "headline": "Seguridad para Niños y Adolescentes: Guía del Botón SOS [2026]",
     "description": "Cómo proteger a tus hijos con tecnología SOS. Botón de emergencia, localización escolar, control parental y zonas seguras.",
     "author": { "@type": "Organization", "name": "ManoProtect" },
-    "publisher": { "@type": "Organization", "name": "ManoProtect", "logo": { "@type": "ImageObject", "url": "https://manoprotect.com/logo512.png" } },
+    "publisher": { "@type": "Organization", "name": "ManoProtect", "logo": { "@type": "ImageObject", "url": "https://manoprotectt.com/logo512.png" } },
     "datePublished": "2026-02-24",
     "dateModified": "2026-02-24"
   };
@@ -27,7 +27,7 @@ const SeguridadHijosBotonSOS = () => {
         <title>Cómo Garantizar la Seguridad de tus Hijos con un Botón SOS [2026]</title>
         <meta name="description" content="Protege a tus hijos con un botón SOS físico. Localización escolar, control parental, zonas seguras y alertas. Guía para padres 2026." />
         <meta name="keywords" content="seguridad niños boton sos, localización escolar, botón emergencia adolescentes, control parental gps, proteger hijos" />
-        <link rel="canonical" href="https://manoprotect.com/blog/seguridad-hijos-boton-sos" />
+        <link rel="canonical" href="https://manoprotectt.com/blog/seguridad-hijos-boton-sos" />
         <script type="application/ld+json">{JSON.stringify(schema)}</script>
       </Helmet>
 

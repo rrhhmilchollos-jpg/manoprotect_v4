@@ -306,7 +306,7 @@ class TestScamReporting:
                 "scam_type": "vishing",
                 "contact_info": unique_phone,
                 "description": "TEST: Llamada fraudulenta de soporte técnico falso",
-                "reporter_email": "test@manoprotect.com"
+                "reporter_email": "test@manoprotectt.com"
             }
         )
         assert response.status_code == 200, f"Report failed: {response.text}"

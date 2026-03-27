@@ -519,7 +519,7 @@
 **Para más información sobre esta oportunidad de inversión:**
 
 - **Email**: inversores@manobank.es
-- **Web**: www.manobank.es | www.manoprotect.com
+- **Web**: www.manobank.es | www.manoprotectt.com
 - **Teléfono**: +34 900 123 456
 
 ---

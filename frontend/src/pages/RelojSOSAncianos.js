@@ -82,11 +82,11 @@ const RelojSOSAncianos = () => {
         <title>Reloj SOS para Ancianos | Botón Emergencia Mayores | ManoProtect 2026</title>
         <meta name="description" content="El mejor reloj SOS para ancianos en España. Botón de emergencia, GPS en tiempo real, detección de caídas y llamadas automáticas. Protege a tus mayores. Desde 29,99€" />
         <meta name="keywords" content="reloj sos ancianos, reloj emergencias mayores, reloj gps personas mayores, botón pánico ancianos, reloj con localizador para mayores, smartwatch ancianos, reloj llamadas emergencia" />
-        <link rel="canonical" href="https://manoprotect.com/reloj-sos-ancianos" />
+        <link rel="canonical" href="https://manoprotectt.com/reloj-sos-ancianos" />
         
         <meta property="og:title" content="Reloj SOS para Ancianos | Protección 24/7 | ManoProtect" />
         <meta property="og:description" content="Reloj con botón de emergencia SOS para personas mayores. GPS, llamadas automáticas y detección de caídas. Desde 29,99€" />
-        <meta property="og:url" content="https://manoprotect.com/reloj-sos-ancianos" />
+        <meta property="og:url" content="https://manoprotectt.com/reloj-sos-ancianos" />
         
         <script type="application/ld+json">{JSON.stringify(schemaProduct)}</script>
         <script type="application/ld+json">{JSON.stringify(schemaFAQ)}</script>
