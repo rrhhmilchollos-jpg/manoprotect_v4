@@ -69,6 +69,38 @@ async def privacy_policy():
 <p>Para cualquier consulta sobre privacidad: <strong>info@manoprotectt.com</strong></p>
 </body></html>"""
 
+# Data Deletion Request endpoint for Google Play Store
+@api_router.get("/data-deletion", response_class=HTMLResponse)
+async def data_deletion():
+    return """<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Solicitud de Eliminacion de Datos - ManoProtect</title><style>body{font-family:system-ui,sans-serif;max-width:800px;margin:0 auto;padding:20px;color:#333;line-height:1.6}h1{color:#1a1a2e}h2{color:#10B981;margin-top:24px}ul{padding-left:20px}li{margin-bottom:8px}.btn{display:inline-block;background:#10B981;color:#fff;padding:12px 24px;border-radius:8px;text-decoration:none;margin-top:16px;font-weight:bold}</style></head><body>
+<h1>Solicitud de Eliminacion de Datos</h1>
+<p><strong>ManoProtect</strong> - MP Comerciales y MP Instaladores</p>
+<h2>Como solicitar la eliminacion de tus datos</h2>
+<p>Para solicitar la eliminacion completa de tu cuenta y datos personales, sigue estos pasos:</p>
+<ul>
+<li><strong>Paso 1:</strong> Envia un correo electronico a <strong>info@manoprotectt.com</strong> con el asunto "Solicitud de eliminacion de datos".</li>
+<li><strong>Paso 2:</strong> Incluye en el correo tu nombre completo y la direccion de correo electronico asociada a tu cuenta.</li>
+<li><strong>Paso 3:</strong> Nuestro equipo procesara tu solicitud en un plazo maximo de 30 dias laborables.</li>
+</ul>
+<h2>Datos que se eliminan</h2>
+<ul>
+<li>Nombre, correo electronico y datos de perfil profesional</li>
+<li>Historial de actividad dentro de la aplicacion (leads, pedidos, instalaciones)</li>
+<li>Datos de ubicacion almacenados</li>
+<li>Fotografias e imagenes capturadas desde la aplicacion</li>
+</ul>
+<h2>Datos que se conservan</h2>
+<ul>
+<li>Registros de facturacion y contratos (obligacion legal: 5 anos segun normativa fiscal espanola)</li>
+<li>Logs de seguridad anonimizados (obligacion legal: 12 meses)</li>
+</ul>
+<h2>Contacto</h2>
+<p>Para cualquier consulta: <strong>info@manoprotectt.com</strong></p>
+<a class="btn" href="mailto:info@manoprotectt.com?subject=Solicitud%20de%20eliminacion%20de%20datos">Solicitar eliminacion por email</a>
+</body></html>"""
+
+
+
 
 
 # Direct download endpoint (under /api so Kubernetes routes it to backend)
