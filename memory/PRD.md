@@ -60,18 +60,25 @@ App de seguridad empresarial "ManoProtect" con gestión de roles, alarmas, equip
 ### Promo Sentinel S TikTok actualizada (Mar 27, 2026)
 - Precio actualizado: 49,99 EUR/mes (antes 9,99) / 499,99 EUR/ano (antes 99,99)
 - Badge "EXCLUSIVO TIKTOK" prominente
-- Lista "Lo que recibes": Suscripción + Sentinel S GRATIS + Acceso completo
+- Lista "Lo que recibes": Suscripcion + Sentinel S GRATIS + Acceso completo
 - Contador en tiempo real 93/100 unidades restantes desde backend
 - CTA principal: "Suscribirme y recibir mi Sentinel S"
-- Tests: 100% (iteration_132)
+- **50 codigos TikTok generados** (TIKTOK-XXXXXX) en coleccion promo_codes
+- **Campo validacion codigos** en landing page con input + boton "Validar"
+- Endpoints: GET /api/promo/tiktok-codes, POST /validate, POST /redeem
+- Tests: 100% (iteration_132 + 133)
 
 ### Oferta Escudo Vecinal 20% (Mar 27, 2026)
-- Nueva sección en /escudo-vecinal con descuento 20% para primeros 50 suscriptores
-- 299,99 → 239,99 EUR/año, badge -20%
-- Hasta 10 vecinos incluidos, ampliable solicitándolo (coste extra)
-- Un solo barrio/zona por suscripción
-- Contador 43/50 plazas restantes (MOCK estático)
-- Tests: 100% (iteration_132)
+- Nueva seccion en /escudo-vecinal con descuento 20% para primeros 50 suscriptores
+- 299,99 -> 239,99 EUR/ano, badge -20%
+- Hasta 10 vecinos incluidos, ampliable solicitandolo (coste extra)
+- Un solo barrio/zona por suscripcion
+- **Contador DINAMICO** desde backend: GET /api/promo/escudo-vecinal/status
+- Tests: 100% (iteration_132 + 133)
+
+### Superadmin (Mar 27, 2026)
+- Usuario rrhh.milchollos@gmail.com con rol admin en gestion_usuarios
+- Acceso completo a todos los modulos del CRA/CRM
 
 ### Deploy Fix + Service Worker v5 (Mar 6, 2026)
 - Firebase JSON eliminado, SW v5 app shell pattern
@@ -79,6 +86,7 @@ App de seguridad empresarial "ManoProtect" con gestión de roles, alarmas, equip
 ## Credenciales
 | Rol | Email | Password |
 |-----|-------|----------|
+| **Gerencia/Superadmin** | rrhh.milchollos@gmail.com | 19862210De |
 | CEO | ceo@manoprotectt.com | 19862210Des |
 | Admin CRA | admin@manoprotectt.com | ManoAdmin2025! |
 | Comercial | comercial@manoprotectt.com | Comercial2025! |
