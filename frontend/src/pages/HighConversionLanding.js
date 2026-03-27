@@ -90,8 +90,30 @@ const HighConversionLanding = () => {
   const [openFaq, setOpenFaq] = useState(null);
   const [promoData, setPromoData] = useState(null);
   const [promoLoading, setPromoLoading] = useState(false);
+  const [tikTokCode, setTikTokCode] = useState('');
+  const [codeStatus, setCodeStatus] = useState(null); // {valid, message, error}
 
   const API = process.env.REACT_APP_BACKEND_URL;
+
+  const validateTikTokCode = async () => {
+    if (!tikTokCode.trim()) return;
+    try {
+      const r = await fetch(`${API}/api/promo/tiktok-codes/validate`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ code: tikTokCode.trim().toUpperCase() })
+      });
+      const d = await r.json();
+      if (r.ok) {
+        setCodeStatus({ valid: true, message: 'Codigo valido. Procede con tu suscripcion para recibir el Sentinel S gratis.' });
+        track('tiktok_code_valid', { code: tikTokCode });
+      } else {
+        setCodeStatus({ valid: false, error: d.detail || 'Codigo no valido' });
+      }
+    } catch {
+      setCodeStatus({ valid: false, error: 'Error de conexion. Intentalo de nuevo.' });
+    }
+  };
 
   useEffect(() => { trackPageView('/'); }, []);
   useEffect(() => {
@@ -334,6 +356,30 @@ const HighConversionLanding = () => {
                   <span className="flex items-center gap-1"><Check className="w-3 h-3" /> Sin permanencia</span>
                   <span className="flex items-center gap-1"><Lock className="w-3 h-3" /> Pago seguro Stripe</span>
                   <span className="flex items-center gap-1"><Clock className="w-3 h-3" /> Se agotan rapido</span>
+                </div>
+
+                {/* TikTok Code Input */}
+                <div className="mt-5 max-w-md mx-auto lg:mx-0" data-testid="tiktok-code-input">
+                  <p className="text-white/60 text-xs mb-2">Tienes un codigo de TikTok? Verificalo aqui:</p>
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      value={tikTokCode}
+                      onChange={e => { setTikTokCode(e.target.value); setCodeStatus(null); }}
+                      placeholder="TIKTOK-XXXXXX"
+                      className="flex-1 bg-black/30 border border-white/20 text-white placeholder-white/30 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-yellow-400 uppercase"
+                      maxLength={13}
+                      data-testid="tiktok-code-field"
+                    />
+                    <button onClick={validateTikTokCode} className="bg-yellow-400 text-black font-bold px-4 py-2.5 rounded-lg hover:bg-yellow-300 transition-colors text-sm" data-testid="tiktok-code-validate">
+                      Validar
+                    </button>
+                  </div>
+                  {codeStatus && (
+                    <p className={`text-xs mt-2 ${codeStatus.valid ? 'text-emerald-400' : 'text-red-400'}`} data-testid="tiktok-code-result">
+                      {codeStatus.valid ? codeStatus.message : codeStatus.error}
+                    </p>
+                  )}
                 </div>
               </div>
 

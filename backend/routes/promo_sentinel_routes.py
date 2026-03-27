@@ -314,3 +314,86 @@ async def update_order_tracking(order_id: str, data: TrackingUpdateRequest):
     )
 
     return {"message": f"Tracking actualizado: {data.tracking_number}", "status": new_status}
+
+
+# ============================
+# TIKTOK PROMO CODES
+# ============================
+
+@router.get("/tiktok-codes")
+async def get_tiktok_codes():
+    """Get all TikTok promo codes with their status"""
+    codes = await db.promo_codes.find(
+        {"type": "tiktok_sentinel_s"},
+        {"_id": 0}
+    ).sort("created_at", -1).to_list(200)
+    total = len(codes)
+    used = sum(1 for c in codes if c.get("used"))
+    return {
+        "total": total,
+        "used": used,
+        "available": total - used,
+        "codes": codes
+    }
+
+@router.post("/tiktok-codes/validate")
+async def validate_tiktok_code(data: dict):
+    """Validate a TikTok promo code"""
+    code = data.get("code", "").strip().upper()
+    if not code:
+        raise HTTPException(status_code=400, detail="Codigo requerido")
+    
+    promo = await db.promo_codes.find_one({"code": code, "type": "tiktok_sentinel_s"})
+    if not promo:
+        raise HTTPException(status_code=404, detail="Codigo no valido")
+    if promo.get("used"):
+        raise HTTPException(status_code=400, detail="Este codigo ya ha sido utilizado")
+    
+    return {"valid": True, "code": code, "description": promo.get("discount_description", "")}
+
+@router.post("/tiktok-codes/redeem")
+async def redeem_tiktok_code(data: dict):
+    """Redeem a TikTok promo code"""
+    code = data.get("code", "").strip().upper()
+    email = data.get("email", "").strip()
+    
+    if not code or not email:
+        raise HTTPException(status_code=400, detail="Codigo y email requeridos")
+    
+    promo = await db.promo_codes.find_one({"code": code, "type": "tiktok_sentinel_s"})
+    if not promo:
+        raise HTTPException(status_code=404, detail="Codigo no valido")
+    if promo.get("used"):
+        raise HTTPException(status_code=400, detail="Este codigo ya ha sido utilizado")
+    
+    await db.promo_codes.update_one(
+        {"code": code},
+        {"$set": {
+            "used": True,
+            "used_by": email,
+            "used_at": datetime.now(timezone.utc).isoformat()
+        }}
+    )
+    
+    return {"success": True, "message": "Codigo canjeado correctamente. Tu Sentinel S sera enviado con tu suscripcion."}
+
+
+# ============================
+# ESCUDO VECINAL DYNAMIC COUNTER
+# ============================
+
+@router.get("/escudo-vecinal/status")
+async def get_escudo_vecinal_status():
+    """Get dynamic counter for Escudo Vecinal promo"""
+    ESCUDO_TOTAL = 50
+    claimed = await db.escudo_vecinal_subs.count_documents({"status": {"$ne": "canceled"}})
+    return {
+        "total": ESCUDO_TOTAL,
+        "claimed": min(claimed, ESCUDO_TOTAL),
+        "remaining": max(0, ESCUDO_TOTAL - claimed),
+        "active": (ESCUDO_TOTAL - claimed) > 0,
+        "discount_percent": 20,
+        "price_original": 299.99,
+        "price_discounted": 239.99,
+        "max_neighbors": 10
+    }

@@ -248,6 +248,7 @@ export default function EscudoVecinal() {
   const [clickPos, setClickPos] = useState(null);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('mapa');
+  const [escudoPromo, setEscudoPromo] = useState({ remaining: 43, total: 50, active: true });
 
   const fetchIncidents = useCallback(async (lat = 0, lng = 0) => {
     try {
@@ -267,6 +268,8 @@ export default function EscudoVecinal() {
 
   useEffect(() => {
     setLoading(true);
+    // Fetch Escudo Vecinal promo status
+    fetch(`${API}/api/promo/escudo-vecinal/status`).then(r => r.json()).then(d => setEscudoPromo(d)).catch(() => {});
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (pos) => {
@@ -603,10 +606,10 @@ export default function EscudoVecinal() {
                 <div className="bg-black/30 rounded-xl p-3 mb-5 max-w-sm mx-auto md:mx-0">
                   <div className="flex items-center justify-between text-sm mb-1.5">
                     <span className="text-slate-400">Plazas con descuento</span>
-                    <span className="text-emerald-400 font-bold">43/50 restantes</span>
+                    <span className="text-emerald-400 font-bold">{escudoPromo.remaining}/{escudoPromo.total} restantes</span>
                   </div>
                   <div className="w-full h-2 bg-black/40 rounded-full overflow-hidden">
-                    <div className="h-full bg-gradient-to-r from-emerald-400 to-blue-500 rounded-full" style={{ width: '14%' }} />
+                    <div className="h-full bg-gradient-to-r from-emerald-400 to-blue-500 rounded-full transition-all duration-1000" style={{ width: `${Math.max(2, (escudoPromo.claimed || 0) / escudoPromo.total * 100)}%` }} />
                   </div>
                 </div>
 
