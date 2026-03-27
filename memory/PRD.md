@@ -76,9 +76,13 @@ App de seguridad empresarial "ManoProtect" con gestión de roles, alarmas, equip
 - **Contador DINAMICO** desde backend: GET /api/promo/escudo-vecinal/status
 - Tests: 100% (iteration_132 + 133)
 
-### Superadmin (Mar 27, 2026)
-- Usuario rrhh.milchollos@gmail.com con rol admin en gestion_usuarios
-- Acceso completo a todos los modulos del CRA/CRM
+### 3 Apps Standalone PWA (Mar 27, 2026)
+- **App Cliente CRA** (`/app-cliente`): Panel alarma (armar/desarmar/parcial), boton SOS, 6 zonas seguridad, historial alertas, familia GPS, config
+- **App Comerciales** (`/app-comerciales`): Dashboard KPIs, catalogo 8 productos (kits + camaras + Sentinel), gestion leads, comisiones, perfil
+- **App Instaladores** (`/app-instaladores`): Agenda 5 trabajos, checklist 14 items instalacion, material en vehiculo, info equipo
+- PWA manifests: manifest-cliente.json, manifest-comerciales.json, manifest-instaladores.json
+- **ZIPs descargables**: /downloads/ManoProtect-CRA-Operador.zip, ManoProtect-CRM-Ventas.zip, ManoProtect-Build-Kit.zip
+- Tests: 100% backend + 100% frontend (iteration_134)
 
 ### Deploy Fix + Service Worker v5 (Mar 6, 2026)
 - Firebase JSON eliminado, SW v5 app shell pattern
