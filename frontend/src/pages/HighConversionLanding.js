@@ -8,7 +8,7 @@ import { Helmet } from 'react-helmet-async';
 import { Link, useNavigate } from 'react-router-dom';
 import {
   Shield, MapPin, Phone, Bell, ChevronDown,
-  Check, Star, Lock, Eye,
+  Check, Star, Lock, Eye, Users,
   ArrowRight, X, Smartphone, Watch, Gift,
   History, Fingerprint, Wifi, Battery, Clock, Truck
 } from 'lucide-react';
@@ -187,18 +187,18 @@ const HighConversionLanding = () => {
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="text-center lg:text-left">
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white leading-[1.08] tracking-tight mb-5" data-testid="hero-title">
-                Protección inmediata para tu familia frente a emergencias y estafas digitales
+                Protege a tu familia frente a emergencias y estafas digitales
               </h1>
               <p className="text-lg sm:text-xl text-gray-300 mb-6 max-w-xl mx-auto lg:mx-0 leading-relaxed" data-testid="hero-subtitle">
-                Activa alertas SOS, monitoreo de seguridad y asistencia cuando más lo necesitas con <strong className="text-emerald-400">Sentinel X, J y S</strong>
+                ManoProtect activa alertas SOS, monitoriza amenazas online y te ayuda cuando más lo necesitas.
               </p>
               <div className="flex flex-wrap gap-4 justify-center lg:justify-start mb-6">
                 <button onClick={() => cta('hero')} className="inline-flex items-center gap-2 bg-emerald-500 text-white font-bold px-8 py-4 rounded-xl hover:bg-emerald-400 transition-all text-base shadow-xl shadow-emerald-500/25 hover:-translate-y-0.5 active:translate-y-0" data-testid="hero-cta-main">
-                  <Shield className="w-5 h-5" /> Activar protección ahora
+                  <Shield className="w-5 h-5" /> Activar protección
                 </button>
-                <Link to="/productos" className="inline-flex items-center gap-2 border-2 border-white/20 text-white font-semibold px-6 py-4 rounded-xl hover:border-emerald-400 hover:text-emerald-400 transition-all text-base" data-testid="hero-cta-secondary">
-                  Ver productos <ArrowRight className="w-4 h-4" />
-                </Link>
+                <button onClick={() => cta('hero_trial')} className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border-2 border-white/30 text-white font-bold px-6 py-4 rounded-xl hover:bg-white/20 transition-all text-base" data-testid="hero-cta-trial">
+                  Probar 7 días gratis <ArrowRight className="w-4 h-4" />
+                </button>
               </div>
               <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-gray-400 justify-center lg:justify-start" data-testid="hero-microcopy">
                 <span className="flex items-center gap-1.5"><Check className="w-4 h-4 text-emerald-400" /> Sin compromiso</span>
@@ -320,52 +320,55 @@ const HighConversionLanding = () => {
         </section>
       )}
 
-      {/* ═══════ BENEFICIOS ═══════ */}
+      {/* ═══════ BENEFICIOS VISUALES ═══════ */}
       <section className="py-16 sm:py-20 bg-white" id="beneficios" data-testid="benefits-section">
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
           <div className="text-center mb-12">
-            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3">Beneficios destacados</h2>
-            <p className="text-gray-500 max-w-xl mx-auto">Todo lo que necesitas para proteger a tu familia con un solo dispositivo.</p>
+            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3">Todo lo que necesitas para proteger a tu familia</h2>
+            <p className="text-gray-500 max-w-xl mx-auto">Un solo sistema, protección completa para todos.</p>
           </div>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
-              { icon: <MapPin className="w-7 h-7" />, bg: 'bg-emerald-50', text: 'text-emerald-600', title: 'Localización instantánea', desc: 'Ve la ubicación de tus familiares en tiempo real con precisión GPS.' },
-              { icon: <Bell className="w-7 h-7" />, bg: 'bg-red-50', text: 'text-red-500', title: 'Alertas SOS automáticas', desc: 'Cada vez que se active un botón de emergencia, recibirás notificación inmediata.' },
-              { icon: <History className="w-7 h-7" />, bg: 'bg-blue-50', text: 'text-blue-500', title: 'Historial de ubicaciones seguro', desc: 'Revisa dónde han estado tus familiares, sin comprometer la privacidad.' },
-              { icon: <Watch className="w-7 h-7" />, bg: 'bg-violet-50', text: 'text-violet-500', title: 'Compatible con Sentinel X, J y S', desc: 'Relojes fáciles de usar para todas las edades.' },
-              { icon: <Fingerprint className="w-7 h-7" />, bg: 'bg-amber-50', text: 'text-amber-500', title: 'Privacidad y seguridad total', desc: 'Tus datos cifrados y protegidos 24/7.' },
+              { icon: <Bell className="w-10 h-10" />, bg: 'bg-red-50', ring: 'ring-red-100', text: 'text-red-500', title: 'Botón SOS inmediato', desc: 'Envía una señal de emergencia en segundos con ubicación GPS exacta a todos tus contactos.' },
+              { icon: <Shield className="w-10 h-10" />, bg: 'bg-emerald-50', ring: 'ring-emerald-100', text: 'text-emerald-600', title: 'Protección contra estafas online', desc: 'Detecta amenazas digitales como phishing, smishing y fraudes bancarios en tiempo real.' },
+              { icon: <MapPin className="w-10 h-10" />, bg: 'bg-blue-50', ring: 'ring-blue-100', text: 'text-blue-500', title: 'Localización en emergencias', desc: 'Saber dónde están tus seres queridos cuando más importa, con GPS de alta precisión.' },
+              { icon: <Users className="w-10 h-10" />, bg: 'bg-violet-50', ring: 'ring-violet-100', text: 'text-violet-500', title: 'Seguridad familiar completa', desc: 'Protege a niños, adultos y mayores con un solo sistema. Toda la familia conectada.' },
             ].map((item, i) => (
               <Reveal key={i} delay={i * 100}>
-                <div className="bg-white p-6 rounded-2xl border border-gray-100 hover:shadow-lg hover:border-gray-200 transition-all duration-300 h-full" data-testid={`benefit-card-${i}`}>
-                  <div className={`w-12 h-12 ${item.bg} rounded-xl flex items-center justify-center ${item.text} mb-4`}>{item.icon}</div>
-                  <h3 className="font-bold text-gray-900 mb-2">{item.title}</h3>
+                <div className="text-center p-6 rounded-2xl border border-gray-100 hover:shadow-xl hover:border-gray-200 transition-all duration-300 h-full group" data-testid={`benefit-card-${i}`}>
+                  <div className={`w-20 h-20 ${item.bg} ring-8 ${item.ring} rounded-2xl flex items-center justify-center ${item.text} mx-auto mb-5 group-hover:scale-110 transition-transform`}>{item.icon}</div>
+                  <h3 className="font-bold text-gray-900 mb-2 text-lg">{item.title}</h3>
                   <p className="text-sm text-gray-500 leading-relaxed">{item.desc}</p>
                 </div>
               </Reveal>
             ))}
           </div>
+          <div className="text-center mt-10">
+            <button onClick={() => cta('benefits')} className="inline-flex items-center gap-2 bg-emerald-500 text-white font-bold px-8 py-4 rounded-xl hover:bg-emerald-600 transition-all shadow-lg shadow-emerald-200 hover:-translate-y-0.5" data-testid="benefits-cta">
+              Activar protección ahora <ArrowRight className="w-5 h-5" />
+            </button>
+          </div>
         </div>
       </section>
 
       {/* ═══════ CÓMO FUNCIONA ═══════ */}
-      <section className="py-16 sm:py-20 bg-slate-50" id="como-funciona" data-testid="how-section" style={{ contentVisibility: 'auto', containIntrinsicSize: '0 800px' }}>
+      <section className="py-16 sm:py-20 bg-slate-50" id="como-funciona" data-testid="how-section">
         <div className="max-w-5xl mx-auto px-4 sm:px-6">
           <div className="text-center mb-12">
-            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3">Cómo funciona</h2>
-            <p className="text-gray-500">3 pasos simples. Sin complicaciones.</p>
+            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3">Cómo funciona ManoProtect</h2>
+            <p className="text-gray-500">Activa tu protección en 3 simples pasos.</p>
           </div>
           <div className="grid md:grid-cols-3 gap-8">
             {[
-              { step: '1', icon: <Watch className="w-8 h-8" />, img: IMG_CHILD_SCHOOL, title: 'Coloca el reloj en el familiar', desc: 'Fácil y rápido. Sentinel X para adultos, J para niños, S para mayores.' },
-              { step: '2', icon: <Smartphone className="w-8 h-8" />, img: IMG_TEENAGER, title: 'Activa el seguimiento seguro', desc: 'Todo desde la app móvil. Configura zonas seguras y contactos de emergencia.' },
-              { step: '3', icon: <Bell className="w-8 h-8" />, img: IMG_ELDERLY, title: 'Recibe alertas y ubicación al instante', desc: 'Tranquilidad garantizada. GPS en tiempo real y notificaciones SOS inmediatas.' },
+              { step: '1', title: 'Activa tu cuenta en menos de 1 minuto', desc: 'Regístrate, elige tu plan y configura los contactos de emergencia. Sin complicaciones.', color: 'from-emerald-500 to-emerald-600' },
+              { step: '2', title: 'Protege a todos los miembros de tu familia', desc: 'Añade a niños, adultos y mayores. Cada uno con su dispositivo Sentinel adaptado.', color: 'from-blue-500 to-blue-600' },
+              { step: '3', title: 'Recibe alertas y asistencia inmediata', desc: 'Botón SOS, localización GPS, protección digital y notificaciones en tiempo real. 24/7.', color: 'from-violet-500 to-violet-600' },
             ].map((item, i) => (
               <Reveal key={i} delay={i * 150}>
-                <div className="relative text-center group" data-testid={`step-${i}`}>
-                  {i < 2 && <div className="hidden md:block absolute top-24 left-[60%] w-[80%] h-[2px] bg-emerald-200" />}
-                  <div className="relative mb-4 rounded-2xl overflow-hidden shadow-md" style={{ aspectRatio: '16/7' }}>
-                    <img src={item.img} alt={item.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" decoding="async" width="400" height="176" />
-                    <div className="absolute top-3 right-3 w-8 h-8 bg-emerald-500 rounded-full flex items-center justify-center text-white text-sm font-bold shadow-md">{item.step}</div>
+                <div className="relative text-center" data-testid={`step-${i}`}>
+                  {i < 2 && <div className="hidden md:block absolute top-12 left-[60%] w-[80%] h-[2px] bg-gradient-to-r from-gray-300 to-transparent" />}
+                  <div className={`w-24 h-24 bg-gradient-to-br ${item.color} rounded-3xl flex items-center justify-center text-white text-4xl font-black mx-auto mb-6 shadow-lg`}>
+                    {item.step}
                   </div>
                   <h3 className="font-bold text-gray-900 mb-2 text-lg">{item.title}</h3>
                   <p className="text-sm text-gray-500 max-w-xs mx-auto leading-relaxed">{item.desc}</p>
@@ -543,6 +546,96 @@ const HighConversionLanding = () => {
         </div>
       </section>
 
+      {/* ═══════ SIMULACIÓN SOS INTERACTIVA ═══════ */}
+      <section className="py-16 sm:py-20 bg-gradient-to-br from-slate-900 via-slate-800 to-red-900" data-testid="sos-demo-section">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6">
+          <div className="text-center mb-10">
+            <h2 className="text-2xl sm:text-3xl font-bold text-white mb-3">Mira cómo funciona el botón SOS</h2>
+            <p className="text-gray-400">Así de rápido actúa ManoProtect en una emergencia real.</p>
+          </div>
+
+          <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-3xl p-8 md:p-12">
+            <div className="grid md:grid-cols-2 gap-8 items-center">
+              {/* SOS Button */}
+              <div className="text-center">
+                <div className="relative inline-block">
+                  <div className="absolute inset-0 bg-red-500/20 rounded-full animate-ping" style={{ animationDuration: '2s' }} />
+                  <div className="relative w-36 h-36 bg-gradient-to-br from-red-500 to-red-700 rounded-full flex items-center justify-center shadow-2xl shadow-red-500/30 ring-8 ring-red-500/20 cursor-pointer hover:scale-105 transition-transform" data-testid="sos-demo-button">
+                    <span className="text-white font-black text-3xl tracking-wider">SOS</span>
+                  </div>
+                </div>
+                <p className="text-gray-400 text-sm mt-4">Pulsa 3 segundos para activar</p>
+              </div>
+
+              {/* Steps */}
+              <div className="space-y-4">
+                {[
+                  { num: '1', text: 'Se envía tu ubicación GPS exacta', time: '0.5s', color: 'text-red-400 bg-red-500/10 border-red-500/20' },
+                  { num: '2', text: 'Se avisa a tu familia inmediatamente', time: '1s', color: 'text-amber-400 bg-amber-500/10 border-amber-500/20' },
+                  { num: '3', text: 'Se activa grabación de audio en la nube', time: '1.5s', color: 'text-blue-400 bg-blue-500/10 border-blue-500/20' },
+                  { num: '4', text: 'Se abre alerta en la central CRA', time: '2s', color: 'text-emerald-400 bg-emerald-500/10 border-emerald-500/20' },
+                ].map((s, i) => (
+                  <div key={i} className={`flex items-center gap-4 p-4 rounded-xl border ${s.color} transition-all`} data-testid={`sos-step-${i}`}>
+                    <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-lg flex-shrink-0 ${s.color}`}>{s.num}</div>
+                    <div className="flex-1">
+                      <p className="text-white font-medium">{s.text}</p>
+                      <p className="text-xs text-gray-500">En {s.time}</p>
+                    </div>
+                    <Check className="w-5 h-5 text-emerald-400 flex-shrink-0" />
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <div className="text-center mt-10">
+            <button onClick={() => cta('sos_demo')} className="inline-flex items-center gap-2 bg-red-500 text-white font-bold px-8 py-4 rounded-xl hover:bg-red-600 transition-all shadow-lg shadow-red-500/30 hover:-translate-y-0.5" data-testid="sos-demo-cta">
+              Activar protección SOS <Shield className="w-5 h-5" />
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════ CONFÍAN EN MANOPROTECT (TRUST STATS) ═══════ */}
+      <section className="py-16 sm:py-20 bg-white" data-testid="trust-stats-section">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6">
+          <div className="text-center mb-12">
+            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3">Confían en ManoProtect</h2>
+            <p className="text-gray-500">Miles de familias españolas ya se sienten más seguras.</p>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+            {[
+              { value: '+2.400', label: 'Familias protegidas', color: 'text-emerald-600' },
+              { value: '24/7', label: 'Soporte y monitorización', color: 'text-blue-600' },
+              { value: '99.9%', label: 'Disponibilidad del servicio', color: 'text-violet-600' },
+              { value: '<2s', label: 'Tiempo de alerta SOS', color: 'text-red-500' },
+            ].map((s, i) => (
+              <Reveal key={i} delay={i * 100}>
+                <div className="text-center p-6 bg-gray-50 rounded-2xl" data-testid={`trust-stat-${i}`}>
+                  <p className={`text-3xl sm:text-4xl font-black ${s.color} mb-1`}>{s.value}</p>
+                  <p className="text-sm text-gray-500">{s.label}</p>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+
+          {/* Trust Seals */}
+          <div className="flex flex-wrap items-center justify-center gap-6 mt-10 pt-8 border-t border-gray-100">
+            {[
+              { icon: <Lock className="w-5 h-5 text-emerald-500" />, text: 'SSL Seguro' },
+              { icon: <Shield className="w-5 h-5 text-blue-500" />, text: 'Cifrado AES-256' },
+              { icon: <Check className="w-5 h-5 text-violet-500" />, text: 'Cumple RGPD' },
+              { icon: <MapPin className="w-5 h-5 text-red-500" />, text: 'Servidores en Europa' },
+              { icon: <Lock className="w-5 h-5 text-amber-500" />, text: 'Pagos seguros Stripe' },
+            ].map((seal, i) => (
+              <div key={i} className="flex items-center gap-2 text-sm text-gray-600 bg-gray-50 px-4 py-2 rounded-full" data-testid={`trust-seal-${i}`}>
+                {seal.icon} {seal.text}
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ═══════ TESTIMONIOS – RESEÑAS GOOGLE ═══════ */}
       <section className="py-16 sm:py-20 bg-white" data-testid="testimonials-section">
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
@@ -606,6 +699,21 @@ const HighConversionLanding = () => {
               <span className="text-sm font-bold text-gray-700">4.9 de 5</span>
               <span className="text-xs text-gray-400">basado en 127 reseñas en Google</span>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════ REFERRAL - INVITA A TU FAMILIA ═══════ */}
+      <section className="py-12 bg-gradient-to-r from-violet-600 to-indigo-600" data-testid="referral-section">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+            <div className="text-center md:text-left">
+              <h2 className="text-xl sm:text-2xl font-bold text-white mb-2">Invita a 3 familiares y obtén 1 mes gratis</h2>
+              <p className="text-violet-200 text-sm">Comparte ManoProtect con tu familia. Cada familiar que se suscriba te da un mes de regalo.</p>
+            </div>
+            <button onClick={() => cta('referral')} className="flex-shrink-0 inline-flex items-center gap-2 bg-white text-violet-600 font-bold px-6 py-3 rounded-xl hover:bg-violet-50 transition-all shadow-lg" data-testid="referral-cta">
+              <Users className="w-5 h-5" /> Invitar ahora
+            </button>
           </div>
         </div>
       </section>
