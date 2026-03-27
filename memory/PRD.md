@@ -24,8 +24,11 @@ App de seguridad empresarial "ManoProtect" con gestión de roles, alarmas, equip
 - Frontend: Todas las páginas blog, SEO, landing, componentes, hooks
 - Desktop apps: CRA y CRM Electron ahora apuntan a manoprotectt.com
 - Guías y docs: GUIA_PWABUILDER_APK.md, assetlinks.json, marketing docs
-- **Fix CRA/CRM offline**: Causa raíz identificada — apps Electron apuntaban al dominio bloqueado. Ahora apuntan a manoprotectt.com con auto-retry cada 10s
-- Tests: 100% backend (13/13) + 100% frontend (iteration_130)
+- **MongoDB migrada**: 15 docs actualizados en 8 colecciones (@manoprotect.com → @manoprotectt.com)
+- **Fix CRA/CRM offline**: Causa raíz — apps Electron apuntaban al dominio bloqueado por IONOS
+- **Fix package names**: Corregido bug de sed que afectó com.manoprotect.comerciales
+- **assetlinks.json**: Actualizado con package real `com.manoprotect.www.twa` + 3 apps
+- Tests: 100% backend + 100% frontend (iteration_130 + iteration_131)
 
 ### Visibilidad Google Play Store / ASO (Mar 27, 2026)
 - **Hero**: Badge Play Store ★★★★★ 4.8 rating + icono descarga
