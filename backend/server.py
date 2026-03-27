@@ -47,6 +47,14 @@ db = client[os.environ['DB_NAME']]
 app = FastAPI()
 api_router = APIRouter(prefix="/api")
 
+
+# Mount downloads directory
+from starlette.staticfiles import StaticFiles
+import os as _os
+downloads_path = _os.path.join(_os.path.dirname(__file__), '..', 'downloads')
+if _os.path.exists(downloads_path):
+    app.mount("/downloads", StaticFiles(directory=downloads_path), name="downloads")
+
 # ============================================
 # SECURITY MIDDLEWARE
 # ============================================

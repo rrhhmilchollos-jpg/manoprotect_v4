@@ -58,4 +58,8 @@
   <url><loc>https://manoprotectt.com/reloj-sos-ancianos</loc><lastmod>2026-03-06</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://manoprotectt.com/reloj-gps-mayores</loc><lastmod>2026-03-06</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://manoprotectt.com/boton-sos-senior</loc><lastmod>2026-03-06</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <!-- APPS -->
+  <url><loc>https://www.manoprotectt.com/app-cliente</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.manoprotectt.com/app-comerciales</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.manoprotectt.com/app-instaladores</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
 </urlset>

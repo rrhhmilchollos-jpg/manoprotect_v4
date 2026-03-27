@@ -246,6 +246,9 @@ const FamiliaAuth = lazy(() => import('@/pages/FamiliaAuth'));
 const SentinelLockPage = lazy(() => import('@/pages/SentinelLockPage'));
 const CRAPlatformPage = lazy(() => import('@/pages/CRAPlatformPage'));
 const ManoprotectConnectPage = lazy(() => import('@/pages/ManoprotectConnectPage'));
+const AppCliente = lazy(() => import('@/pages/AppCliente'));
+const AppComerciales = lazy(() => import('@/pages/AppComerciales'));
+const AppInstaladores = lazy(() => import('@/pages/AppInstaladores'));
 
 // Lazy load non-critical UI components to reduce main thread blocking
 const CookieConsent = lazy(() => import('@/components/CookieConsent'));
@@ -702,6 +705,11 @@ function AppRouter() {
           <Route path="/gestion/login" element={<GestionLogin />} />
           <Route path="/gestion/comerciales" element={<GestionComerciales />} />
           <Route path="/gestion/instaladores" element={<GestionInstaladores />} />
+
+          {/* Standalone Apps */}
+          <Route path="/app-cliente" element={<AppCliente />} />
+          <Route path="/app-comerciales" element={<AppComerciales />} />
+          <Route path="/app-instaladores" element={<AppInstaladores />} />
           <Route path="/gestion/admin" element={<GestionAdmin />} />
           
           {/* Family ID Authentication */}
