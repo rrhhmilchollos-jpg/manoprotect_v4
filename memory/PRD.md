@@ -57,8 +57,21 @@ App de seguridad empresarial "ManoProtect" con gestión de roles, alarmas, equip
 - /opiniones-clientes con 12 testimonios + AggregateRating schema
 - Sitemap 42 URLs, robots.txt optimizado, internal linking
 
-### Promo TikTok Sentinel S (Mar 6, 2026)
-- Backend + banner + checkout Stripe + formulario envío + admin panel
+### Promo Sentinel S TikTok actualizada (Mar 27, 2026)
+- Precio actualizado: 49,99 EUR/mes (antes 9,99) / 499,99 EUR/ano (antes 99,99)
+- Badge "EXCLUSIVO TIKTOK" prominente
+- Lista "Lo que recibes": Suscripción + Sentinel S GRATIS + Acceso completo
+- Contador en tiempo real 93/100 unidades restantes desde backend
+- CTA principal: "Suscribirme y recibir mi Sentinel S"
+- Tests: 100% (iteration_132)
+
+### Oferta Escudo Vecinal 20% (Mar 27, 2026)
+- Nueva sección en /escudo-vecinal con descuento 20% para primeros 50 suscriptores
+- 299,99 → 239,99 EUR/año, badge -20%
+- Hasta 10 vecinos incluidos, ampliable solicitándolo (coste extra)
+- Un solo barrio/zona por suscripción
+- Contador 43/50 plazas restantes (MOCK estático)
+- Tests: 100% (iteration_132)
 
 ### Deploy Fix + Service Worker v5 (Mar 6, 2026)
 - Firebase JSON eliminado, SW v5 app shell pattern
