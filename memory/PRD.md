@@ -2,7 +2,7 @@
 ## Dominio: manoprotectt.com
 
 ## Descripcion
-Sistema de seguridad empresarial completo con Central Receptora de Alarmas (CRA), aplicaciones para clientes, comerciales e instaladores, CRM de ventas, y panel de administracion.
+Sistema de seguridad empresarial completo estilo Securitas Direct con Central Receptora de Alarmas (CRA), Back Office administrativo, Pipeline CRM, aplicaciones para clientes, comerciales e instaladores.
 
 ## Arquitectura
 - **Backend**: FastAPI + MongoDB + Socket.IO (real-time)
@@ -19,84 +19,93 @@ Sistema de seguridad empresarial completo con Central Receptora de Alarmas (CRA)
 | Cliente Demo | cliente@demo.manoprotectt.com | Cliente2025! |
 
 ## Apps y Rutas
-| App | Ruta | Auth Endpoint |
-|-----|------|---------------|
-| App Cliente | /app-cliente | /api/client-app/login |
-| App Comerciales | /app-comerciales | /api/gestion/auth/login |
-| App Instaladores | /app-instaladores | /api/gestion/auth/login |
-| CRA Dashboard | /cra-operador | N/A (open) |
-| Admin Gestion | /gestion | /api/gestion/auth/login |
+| App | Ruta | Descripcion |
+|-----|------|-------------|
+| Back Office | /backoffice | Administracion central: usuarios, pipeline CRM, auditoria |
+| App Cliente | /app-cliente | Dashboard seguridad con armar/desarmar, SOS, camaras |
+| App Comerciales | /app-comerciales | CRM ventas: leads, KPIs, comisiones |
+| App Instaladores | /app-instaladores | Agenda instalaciones, checklists, material |
+| CRA Dashboard | /cra-operador | Monitoreo alarmas en tiempo real |
+| Admin Gestion | /gestion | Panel admin empleados |
 
 ## Funcionalidades Implementadas
 
-### App Cliente (Securitas Direct style)
-- Login con JWT propio
-- Dashboard de seguridad: estado armado/desarmado
-- Controles: Armar Total, Armar Parcial, Desarmar
-- Boton SOS Emergencia → Alerta critica a CRA en tiempo real
-- Vista de dispositivos (10 tipos: panel, sensores, camaras, sirena, teclado)
-- Historial de eventos de alarma
-- Camaras (placeholder RTSP)
-- Perfil y contactos de emergencia
+### Back Office — Administracion Central (NUEVO)
+- Alta de comerciales/instaladores con contrasena temporal
+- Generacion automatica de credenciales seguras
+- Desactivar/bloquear usuarios
+- Reset de contrasenas
+- Cambio obligatorio en primer login
+- Dashboard de stats: total, comerciales, instaladores, activos, pendientes
+- Registro completo de auditoria
 
-### App Comerciales (CRM Ventas)
-- Dashboard KPIs: Total leads, cerrados, pendientes, conversion %
-- Tarjeta de comisiones acumuladas (250 EUR/venta)
-- CRUD de leads/pedidos
-- Cambio de estado (pendiente → confirmado → instalado)
+### Pipeline CRM — Flujo Securitas Direct (NUEVO)
+Etapas: Lead → Contacto → Estudio → Propuesta → Contrato → Instalacion → Activacion → Activo
+- Captura de leads (nombre, telefono, email, direccion, tipo inmueble, canal)
+- Avance por etapas con historial
+- Estudio de seguridad del inmueble
+- Propuesta personalizada (equipos, cuotas, descuentos)
+- Activacion de cliente: genera credenciales app automaticamente
+- Funnel visual con estadisticas por etapa
+
+### App Cliente (Securitas Direct style)
+- Login JWT, dashboard seguridad, armar/desarmar
+- SOS Emergencia → CRA en tiempo real via Socket.IO
+- 10+ tipos de dispositivos, camaras, eventos, perfil, contactos emergencia
+
+### App Comerciales
+- Dashboard KPIs, comisiones (250 EUR/venta), CRUD leads
 
 ### App Instaladores
-- Agenda de instalaciones asignadas
-- Stats: programadas, en curso, completadas
-- Info de equipo asignado
-- Checklist de instalacion (14 items)
-- Material en vehiculo
-- Cambio de estado de instalacion
+- Agenda, checklist 14 items, material vehiculo, equipo asignado
 
-### CRA Dashboard (Central Receptora de Alarmas)
-- Stats en tiempo real: instalaciones, dispositivos, alarmas
-- Lista de alarmas con severidad y estados
-- Socket.IO para eventos en tiempo real
-- Protocolos de actuacion
-- Acciones: Video-verificar, Llamar titular, Avisar Policia, Despachar Acuda, Falsa alarma, Resolver
+### CRA Dashboard
+- Socket.IO real-time, alarmas con severidad, protocolos
 
-### Backend Real-time
-- Socket.IO emite eventos CRA en arm/disarm/SOS
-- CRA Dashboard recibe alarmas instantaneamente
-- Polling fallback cada 15s
-- Demo data seeded on startup
+### Descarga de ZIPs (ARREGLADO)
+- Endpoint: /api/descargas/{filename}.zip
+- Pack Completo, CRM, CRA, TWA Android
 
-## API Endpoints Principales
+## API Endpoints
+### Back Office
+- `POST /api/backoffice/usuarios` — Alta usuario
+- `GET /api/backoffice/usuarios` — Listar con stats
+- `PUT /api/backoffice/usuarios/{id}/desactivar` — Desactivar
+- `PUT /api/backoffice/usuarios/{id}/resetear-password` — Reset password
+- `POST /api/backoffice/cambiar-password` — Cambiar contrasena
+
+### Pipeline CRM
+- `POST /api/backoffice/pipeline` — Crear lead
+- `GET /api/backoffice/pipeline` — Listar con funnel
+- `PUT /api/backoffice/pipeline/{id}/avanzar` — Avanzar etapa
+- `PUT /api/backoffice/pipeline/{id}/estudio` — Guardar estudio
+- `PUT /api/backoffice/pipeline/{id}/propuesta` — Guardar propuesta
+- `PUT /api/backoffice/pipeline/{id}/activar-cliente` — Activar cliente
+
+### Apps
 - `POST /api/client-app/login` — Login cliente
-- `GET /api/client-app/installation/{id}` — Datos instalacion
-- `POST /api/cra/installations/{id}/arm` — Armar/desarmar
-- `POST /api/client-app/installation/{id}/sos` — SOS emergencia
 - `GET /api/gestion/comercial/mis-stats` — Stats comercial
-- `POST /api/gestion/pedidos` — Crear lead
 - `GET /api/gestion/instalador/mi-agenda` — Agenda instalador
 - `GET/PUT /api/gestion/instalaciones/{id}/checklist` — Checklist
-- `PUT /api/gestion/instalaciones/{id}/estado` — Cambiar estado
-- `GET /api/cra/dashboard` — Stats CRA
-- `GET /api/cra/alarms` — Lista alarmas
 - Socket.IO en `/api/socket.io`
 
 ## DB Schema
-- `client_app_users`: Credenciales clientes
-- `client_app_access`: Relacion cliente → instalacion
-- `cra_installations`: Instalaciones de alarma
-- `cra_devices`: Dispositivos por instalacion
-- `cra_alarm_events`: Eventos/alarmas
-- `gestion_usuarios`: Empleados (admin, comercial, instalador)
-- `gestion_pedidos`: Leads/ventas
-- `gestion_instalaciones`: Trabajos de instalacion
+- `gestion_usuarios`: Empleados con password_temporal, login_count, ultimo_login
+- `pipeline_leads`: Leads CRM con historial_etapas, estudio, propuesta, contrato
+- `client_app_users`: Credenciales clientes generadas desde pipeline
+- `backoffice_audit`: Log de auditoria completo
+- `backoffice_logins`: Historial de logins
+- `cra_installations`, `cra_devices`, `cra_alarm_events`: Sistema CRA
+- `gestion_pedidos`, `gestion_instalaciones`: Pedidos e instalaciones
 - `gestion_checklists`: Checklists de instalacion
-- `gestion_equipos`: Equipos de instaladores
 
-## Estado del Proyecto
-- **Funcionando**: Todas las apps conectadas a backend real con datos de MongoDB
-- **Mocked**: Ninguno — toda la data es real
-- **Pendiente**: 
-  - RTSP Camera Streaming
-  - CI/CD Play Store (requiere secrets del usuario)
-  - SEM/Ads Config (requiere IDs del usuario)
-  - iOS App con Capacitor
+## Estado
+- **Funcionando**: Todo conectado a backend real
+- **Mocked**: Nada
+- **Pendiente**:
+  - P1: Firebase Push Notifications
+  - P1: CI/CD Play Store
+  - P1: SEM/Ads Config
+  - P2: RTSP Camera Streaming
+  - P2: iOS App Capacitor
+  - P3: Videos marketing Sora 2
