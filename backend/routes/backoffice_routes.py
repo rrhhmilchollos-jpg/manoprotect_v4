@@ -115,7 +115,18 @@ async def crear_usuario(request: Request):
         "password_temporal": temp_password,
         "rol": rol,
         "instrucciones": f"Envie estas credenciales al usuario. En su primer login debera cambiar la contrasena.",
+        "email_enviado": await _send_employee_email(email, nombre, rol, temp_password),
     }
+
+
+async def _send_employee_email(email, nombre, rol, temp_password):
+    try:
+        from services.brevo_email import send_employee_credentials_email
+        send_employee_credentials_email(email, nombre, rol, temp_password)
+        return True
+    except Exception as e:
+        print(f"[BackOffice] Error enviando email a {email}: {e}")
+        return False
 
 
 @router.get("/usuarios")
@@ -438,6 +449,15 @@ async def avanzar_etapa(lead_id: str, request: Request):
         }
 
     await _db.pipeline_leads.update_one({"lead_id": lead_id}, {"$set": update})
+
+    # Send stage notification email to lead if they have email
+    if lead.get("email") and nueva_etapa in ("contacto", "estudio", "propuesta", "contrato", "instalacion", "activacion"):
+        try:
+            from services.brevo_email import send_pipeline_stage_email
+            send_pipeline_stage_email(lead["email"], lead.get("nombre", ""), nueva_etapa, notas)
+        except Exception as e:
+            print(f"[BackOffice] Error enviando email etapa a {lead.get('email')}: {e}")
+
     return {"message": f"Lead avanzado a: {STAGE_LABELS.get(nueva_etapa, nueva_etapa)}", "etapa": nueva_etapa}
 
 
@@ -525,10 +545,20 @@ async def activar_cliente(lead_id: str, request: Request):
         }}
     )
 
+    # Send activation email to client
+    email_sent = False
+    try:
+        from services.brevo_email import send_client_activation_email
+        send_client_activation_email(email, lead.get("nombre", ""), temp_pass)
+        email_sent = True
+    except Exception as e:
+        print(f"[BackOffice] Error enviando email activacion a {email}: {e}")
+
     return {
         "message": "Cliente activado correctamente",
         "email": email,
         "password_temporal": temp_pass,
+        "email_enviado": email_sent,
         "instrucciones": "Envie estas credenciales al cliente para acceder a la App ManoProtect.",
     }
 
