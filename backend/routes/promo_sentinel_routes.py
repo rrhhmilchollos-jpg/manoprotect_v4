@@ -382,6 +382,39 @@ async def redeem_tiktok_code(data: dict):
 # ESCUDO VECINAL DYNAMIC COUNTER
 # ============================
 
+async def seed_tiktok_promo_codes():
+    """Ensure 100 TikTok promo codes exist in the database"""
+    existing = await db.promo_codes.count_documents({"type": "tiktok_sentinel_s"})
+    if existing >= 100:
+        return {"message": f"Already have {existing} codes", "created": 0}
+    
+    codes_to_create = 100 - existing
+    new_codes = []
+    existing_codes = set()
+    async for doc in db.promo_codes.find({"type": "tiktok_sentinel_s"}, {"code": 1, "_id": 0}):
+        existing_codes.add(doc["code"])
+    
+    while len(new_codes) < codes_to_create:
+        chars = string.ascii_uppercase + string.digits
+        code = f"TIKTOK-{''.join(secrets.choice(chars) for _ in range(6))}"
+        if code not in existing_codes:
+            existing_codes.add(code)
+            new_codes.append({
+                "code": code,
+                "type": "tiktok_sentinel_s",
+                "discount_description": "Sentinel S GRATIS con suscripcion ManoProtect",
+                "used": False,
+                "used_by": None,
+                "used_at": None,
+                "created_at": datetime.now(timezone.utc).isoformat()
+            })
+    
+    if new_codes:
+        await db.promo_codes.insert_many(new_codes)
+    
+    return {"message": f"Created {len(new_codes)} codes. Total: {existing + len(new_codes)}", "created": len(new_codes)}
+
+
 @router.get("/escudo-vecinal/status")
 async def get_escudo_vecinal_status():
     """Get dynamic counter for Escudo Vecinal promo"""

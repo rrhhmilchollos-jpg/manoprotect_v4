@@ -3706,6 +3706,17 @@ try:
             print("\U0001f464 Client demo data seeded")
         except Exception as e:
             print(f"\u26a0\ufe0f Client demo seed error: {e}")
+
+    # Auto-seed 100 TikTok promo codes on startup
+    @app.on_event("startup")
+    async def auto_seed_tiktok_codes():
+        try:
+            from routes.promo_sentinel_routes import seed_tiktok_promo_codes
+            result = await seed_tiktok_promo_codes()
+            print(f"\U0001f3ab TikTok promo codes: {result['message']}")
+        except Exception as e:
+            print(f"\u26a0\ufe0f TikTok promo seed error: {e}")
+
 except Exception as e:
     print(f"\u26a0\ufe0f Gestion CRA routes not loaded: {e}")
 

@@ -358,8 +358,22 @@ const HighConversionLanding = () => {
                   <span className="flex items-center gap-1"><Clock className="w-3 h-3" /> Se agotan rapido</span>
                 </div>
 
+                {/* TikTok Profile Link */}
+                <a href="https://www.tiktok.com/@manoprotect" target="_blank" rel="noopener noreferrer"
+                  className="mt-5 max-w-md mx-auto lg:mx-0 flex items-center gap-3 bg-black/40 backdrop-blur-sm border border-white/20 rounded-xl px-4 py-3 hover:bg-black/60 transition-all group"
+                  data-testid="tiktok-profile-link">
+                  <svg className="w-6 h-6 text-white flex-shrink-0" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1v-3.5a6.37 6.37 0 00-.79-.05A6.34 6.34 0 003.15 15.2a6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.34-6.34V8.78a8.18 8.18 0 004.76 1.52v-3.4a4.85 4.85 0 01-1-.21z"/>
+                  </svg>
+                  <div className="flex-1">
+                    <p className="text-white font-bold text-sm group-hover:text-yellow-200 transition-colors">@manoprotect</p>
+                    <p className="text-white/50 text-xs">Siguenos en TikTok para codigos exclusivos</p>
+                  </div>
+                  <svg className="w-4 h-4 text-white/40 group-hover:text-white group-hover:translate-x-1 transition-all flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7"/></svg>
+                </a>
+
                 {/* TikTok Code Input */}
-                <div className="mt-5 max-w-md mx-auto lg:mx-0" data-testid="tiktok-code-input">
+                <div className="mt-3 max-w-md mx-auto lg:mx-0" data-testid="tiktok-code-input">
                   <p className="text-white/60 text-xs mb-2">Tienes un codigo de TikTok? Verificalo aqui:</p>
                   <div className="flex gap-2">
                     <input

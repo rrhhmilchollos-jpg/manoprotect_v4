@@ -356,10 +356,24 @@ const LandingFooter = () => {
               <Link to="/privacy-policy#cookies" className="text-slate-500 hover:text-white transition-colors">Cookies</Link>
             </div>
 
-            {/* Location */}
-            <div className="flex items-center gap-2 text-slate-500 text-sm">
-              <MapPin className="w-4 h-4" />
-              <span>España</span>
+            {/* Social + Location */}
+            <div className="flex items-center gap-4">
+              <a href="https://www.tiktok.com/@manoprotect" target="_blank" rel="noopener noreferrer"
+                className="w-8 h-8 bg-slate-800 hover:bg-slate-700 rounded-lg flex items-center justify-center transition-colors group"
+                data-testid="footer-tiktok-link" aria-label="TikTok">
+                <svg className="w-4 h-4 text-slate-400 group-hover:text-white transition-colors" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1v-3.5a6.37 6.37 0 00-.79-.05A6.34 6.34 0 003.15 15.2a6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.34-6.34V8.78a8.18 8.18 0 004.76 1.52v-3.4a4.85 4.85 0 01-1-.21z"/>
+                </svg>
+              </a>
+              <a href="https://wa.me/34601510950" target="_blank" rel="noopener noreferrer"
+                className="w-8 h-8 bg-slate-800 hover:bg-slate-700 rounded-lg flex items-center justify-center transition-colors group"
+                data-testid="footer-whatsapp-link" aria-label="WhatsApp">
+                <Phone className="w-4 h-4 text-slate-400 group-hover:text-[#25D366] transition-colors" />
+              </a>
+              <div className="flex items-center gap-2 text-slate-500 text-sm">
+                <MapPin className="w-4 h-4" />
+                <span>España</span>
+              </div>
             </div>
           </div>
           <p className="text-center text-xs text-slate-600 mt-4">Compra segura – Garantía de devolución – Stripe 3D Secure</p>
