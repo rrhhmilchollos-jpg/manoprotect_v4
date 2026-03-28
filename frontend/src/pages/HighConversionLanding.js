@@ -162,8 +162,8 @@ const HighConversionLanding = () => {
   return (
     <div className="min-h-screen bg-white" data-testid="high-conversion-landing">
       <Helmet>
-        <title>Protección digital y alerta SOS familiar | ManoProtect</title>
-        <meta name="description" content="ManoProtect protege a tu familia frente a emergencias y fraudes digitales. Activa alertas SOS, monitoreo GPS y asistencia inmediata. Prueba 7 días gratis." />
+        <title>ManoProtect - Protege a tu familia hoy mismo | Sentinel S GRATIS</title>
+        <meta name="description" content="Protege a tu familia con ManoProtect. Sentinel S GRATIS para los primeros 100 suscriptores. Boton SOS 24/7, GPS en tiempo real, proteccion contra estafas. 7 dias gratis, sin permanencia. 49,99 EUR/mes." />
         <link rel="canonical" href="https://manoprotectt.com/" />
         <script type="application/ld+json">{JSON.stringify({
           "@context": "https://schema.org",
@@ -240,23 +240,23 @@ const HighConversionLanding = () => {
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="text-center lg:text-left">
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white leading-[1.08] tracking-tight mb-5" data-testid="hero-title">
-                Protege a tu familia frente a emergencias y estafas digitales
+                Protege a tu familia hoy mismo.
               </h1>
               <p className="text-lg sm:text-xl text-gray-300 mb-6 max-w-xl mx-auto lg:mx-0 leading-relaxed" data-testid="hero-subtitle">
-                ManoProtect activa alertas SOS, monitoriza amenazas online y te ayuda cuando más lo necesitas.
+                Sentinel S <strong className="text-emerald-400">GRATIS</strong> (Valorado en 149 EUR) para los primeros 100 suscriptores. Boton SOS 24/7, localizacion GPS en tiempo real y proteccion contra estafas bancarias.
               </p>
               <div className="flex flex-wrap gap-4 justify-center lg:justify-start mb-6">
                 <button onClick={() => cta('hero')} className="inline-flex items-center gap-2 bg-emerald-500 text-white font-bold px-8 py-4 rounded-xl hover:bg-emerald-400 transition-all text-base shadow-xl shadow-emerald-500/25 hover:-translate-y-0.5 active:translate-y-0" data-testid="hero-cta-main">
-                  <Shield className="w-5 h-5" /> Activar protección
+                  <Gift className="w-5 h-5" /> RECLAMAR MI SENTINEL GRATIS
                 </button>
                 <button onClick={() => cta('hero_trial')} className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border-2 border-white/30 text-white font-bold px-6 py-4 rounded-xl hover:bg-white/20 transition-all text-base" data-testid="hero-cta-trial">
-                  Probar 7 días gratis <ArrowRight className="w-4 h-4" />
+                  Probar 7 dias gratis <ArrowRight className="w-4 h-4" />
                 </button>
               </div>
               <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-gray-400 justify-center lg:justify-start" data-testid="hero-microcopy">
-                <span className="flex items-center gap-1.5"><Check className="w-4 h-4 text-emerald-400" /> Sin compromiso</span>
-                <span className="flex items-center gap-1.5"><Lock className="w-4 h-4 text-emerald-400" /> Protección segura y privada</span>
-                <span className="flex items-center gap-1.5"><Shield className="w-4 h-4 text-emerald-400" /> Garantía de 7 días</span>
+                <span className="flex items-center gap-1.5"><Check className="w-4 h-4 text-emerald-400" /> Sin permanencia</span>
+                <span className="flex items-center gap-1.5"><Truck className="w-4 h-4 text-emerald-400" /> Envio en 24h</span>
+                <span className="flex items-center gap-1.5"><Shield className="w-4 h-4 text-emerald-400" /> 7 dias gratis</span>
               </div>
               {/* Google Play Badge in Hero */}
               <div className="mt-5 flex justify-center lg:justify-start" data-testid="hero-play-store">

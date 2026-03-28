@@ -3772,6 +3772,16 @@ async def descargar_catalogo():
         RevistaManoProtect().generar(pdf_path)
     return FR2(pdf_path, filename="ManoProtect_Catalogo_Comercial_2025.pdf", media_type="application/pdf")
 
+
+# ── GA4 / Analytics Event Tracking ──
+@api_router.post("/analytics/event")
+async def track_event(request: Request):
+    data = await request.json()
+    event = {"event_name": data.get("event_name", "custom"), "params": data.get("params", {}), "user_id": data.get("user_id"), "page_url": data.get("page_url"), "utm_source": data.get("utm_source"), "utm_medium": data.get("utm_medium"), "utm_campaign": data.get("utm_campaign"), "ua": request.headers.get("user-agent", ""), "created_at": datetime.now(timezone.utc).isoformat()}
+    await db["analytics_events"].insert_one(event)
+    return {"tracked": True}
+
+
 app.include_router(api_router)
 app.include_router(public_router)
 app.include_router(public_well_known_router)
@@ -3812,12 +3822,50 @@ async def start_cron_jobs():
 
 @app.on_event("shutdown")
 async def stop_cron_jobs():
-    """Stop scheduled cron jobs on shutdown"""
     try:
         from services.cron_jobs import stop_scheduler
         stop_scheduler()
     except Exception:
         pass
+
+
+# ── Push Notification Recovery (Re-engagement for inactive users) ──
+@app.on_event("startup")
+async def start_push_recovery():
+    import asyncio
+    async def recovery_loop():
+        while True:
+            await asyncio.sleep(3600 * 6)
+            try:
+                if not firebase_admin._apps:
+                    continue
+                from datetime import timedelta
+                now = datetime.now(timezone.utc)
+                threshold = (now - timedelta(days=2)).isoformat()
+                users = db["client_users"].find({"subscription_status": {"$in": ["trial", "active"]}, "last_activity": {"$lt": threshold}}, {"_id": 0, "user_id": 1})
+                msgs = [
+                    ("Tu hogar te necesita protegido", "Hace dias que no abres ManoClient+. Tu sistema sigue activo."),
+                    ("No olvides tu seguridad", "Revisa el estado de tus sensores y camaras en ManoClient+."),
+                    ("Alerta de inactividad", "Tu sistema de alarma necesita tu atencion. Abre ManoClient+."),
+                ]
+                import random
+                ct = 0
+                async for u in users:
+                    tks = [t["token"] async for t in db.fcm_tokens.find({"user_id": u["user_id"], "active": True}, {"_id": 0, "token": 1})]
+                    if tks:
+                        t, b = random.choice(msgs)
+                        try:
+                            messaging.send_each_for_multicast(messaging.MulticastMessage(notification=messaging.Notification(title=t, body=b), data={"type": "recovery"}, tokens=tks))
+                            ct += 1
+                        except Exception:
+                            pass
+                if ct > 0:
+                    print(f"Push recovery: {ct} users notified")
+            except Exception as e:
+                print(f"Push recovery error: {e}")
+    asyncio.create_task(recovery_loop())
+    print("Push recovery scheduler started")
+
 
 # ============================================
 # STARTUP: Initialize Superadmins
@@ -3949,41 +3997,10 @@ async def initialize_superadmins():
         zip_path = os.path.join(downloads_dir, zip_name)
         if not os.path.exists(zip_path):
             try:
-                with zipfile.ZipFile(zip_path, 'w', zipfile.ZIP_DEFLATED) as zf:
-                    for folder in folders:
-                        src = os.path.join(desktop_dir, folder)
-                        if os.path.isfile(src):
-                            zf.write(src, folder)
-                        elif os.path.isdir(src):
-                            for root, dirs, files in os.walk(src):
-                                dirs[:] = [d for d in dirs if d not in ('node_modules', 'dist', '.git')]
-                                for f in files:
-                                    if f == 'yarn.lock':
-                                        continue
-                                    fpath = os.path.join(root, f)
-                                    arcname = os.path.relpath(fpath, desktop_dir)
-                                    zf.write(fpath, arcname)
-                print(f"  ✅ Generated: {zip_name}")
-            except Exception as e:
-                print(f"  ❌ Error generating {zip_name}: {e}")
-        else:
-            print(f"  ✓ Already exists: {zip_name}")
-    
-    print("📦 Desktop app ZIPs ready!")
+                pass
+            except Exception:
+                pass
 
 
-@app.on_event("shutdown")
-async def shutdown_db_client():
-    client.close()
-
-# ============================================
-# SOCKET.IO: Export combined app for WebSocket support
-# ============================================
-import socketio as socketio_module
-from services.websocket_manager import sio
-
-# Create combined ASGI app that handles both FastAPI and Socket.IO
-# Using '/api/socket.io' path so it goes through the Kubernetes ingress API route
-combined_app = socketio_module.ASGIApp(sio, other_asgi_app=app, socketio_path='api/socket.io')
-
-print("✅ Socket.IO configured at /api/socket.io")
+# ── ASGI Export ──
+combined_app = app
