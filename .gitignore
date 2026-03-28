@@ -167,3 +167,7 @@ desktop-apps/cra-operador/dist/linux-arm64-unpacked/manoprotect-cra
 *.env
 *.env.*
 frontend/node_modules/.cache/default-development/1.pack
+-e 
+# Environment files
+*.env
+*.env.*
