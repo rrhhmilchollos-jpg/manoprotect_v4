@@ -4,31 +4,9 @@
     "target": {
       "namespace": "android_app",
       "package_name": "com.manoprotect.www.twa",
-      "sha256_cert_fingerprints": ["__SHA256_FINGERPRINT_FROM_PWABUILDER__"]
-    }
-  },
-  {
-    "relation": ["delegate_permission/common.handle_all_urls"],
-    "target": {
-      "namespace": "android_app",
-      "package_name": "com.manoprotect.clientes",
-      "sha256_cert_fingerprints": ["__SHA256_FINGERPRINT_FROM_PWABUILDER__"]
-    }
-  },
-  {
-    "relation": ["delegate_permission/common.handle_all_urls"],
-    "target": {
-      "namespace": "android_app",
-      "package_name": "com.manoprotect.comerciales",
-      "sha256_cert_fingerprints": ["__SHA256_FINGERPRINT_FROM_PWABUILDER__"]
-    }
-  },
-  {
-    "relation": ["delegate_permission/common.handle_all_urls"],
-    "target": {
-      "namespace": "android_app",
-      "package_name": "com.manoprotect.instaladores",
-      "sha256_cert_fingerprints": ["__SHA256_FINGERPRINT_FROM_PWABUILDER__"]
+      "sha256_cert_fingerprints": [
+        "15:53:21:F0:A5:A7:CE:1D:B1:4D:42:8F:97:09:ED:08:C2:11:4B:AF:32:C1:E8:19:74:65:63:65:12:F4:1D:9A"
+      ]
     }
   }
 ]

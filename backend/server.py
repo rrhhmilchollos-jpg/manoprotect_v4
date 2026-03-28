@@ -47,6 +47,19 @@ db = client[os.environ['DB_NAME']]
 app = FastAPI()
 api_router = APIRouter(prefix="/api")
 
+# Digital Asset Links for Android TWA verification
+# Served at /.well-known/assetlinks.json (no /api prefix)
+public_well_known_router = APIRouter()
+
+@public_well_known_router.get("/.well-known/assetlinks.json")
+async def assetlinks():
+    import json
+    assetlinks_path = Path(__file__).parent.parent / ".well-known" / "assetlinks.json"
+    if assetlinks_path.exists():
+        data = json.loads(assetlinks_path.read_text())
+        return JSONResponse(content=data, media_type="application/json")
+    return JSONResponse(content=[], media_type="application/json")
+
 
 # Privacy Policy endpoint for Google Play Store
 @api_router.get("/privacy-policy", response_class=HTMLResponse)
@@ -3761,6 +3774,7 @@ async def descargar_catalogo():
 
 app.include_router(api_router)
 app.include_router(public_router)
+app.include_router(public_well_known_router)
 
 # Note: Socket.IO is mounted earlier in the file (after WebSocket manager init)
 
