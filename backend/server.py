@@ -482,6 +482,16 @@ SUBSCRIPTION_PACKAGES = {
     "sentinel-basic": {"amount": 9.99, "name": "Sentinel Basic", "period": "mes", "max_users": 1, "is_sentinel": True},
     "sentinel-plus": {"amount": 14.99, "name": "Sentinel Plus", "period": "mes", "max_users": 1, "is_sentinel": True},
     "sentinel-pro": {"amount": 24.99, "name": "Sentinel Pro", "period": "mes", "max_users": 1, "is_sentinel": True},
+    # === NUEVA ESTRUCTURA DE PRECIOS (Efecto Ancla) ===
+    # App Connect (Solo App - 0 hardware)
+    "app-connect-monthly": {"amount": 14.99, "name": "App Connect Mensual", "period": "mes", "max_users": 5, "tier": "app-connect"},
+    "app-connect-yearly": {"amount": 149.99, "name": "App Connect Anual", "period": "ano", "max_users": 5, "tier": "app-connect"},
+    # Sentinel S (Senior/Infantil - 49 EUR alta)
+    "sentinel-s-monthly": {"amount": 29.99, "name": "Sentinel S Mensual", "period": "mes", "max_users": 5, "tier": "sentinel-s", "setup_fee": 49},
+    "sentinel-s-yearly": {"amount": 299.99, "name": "Sentinel S Anual", "period": "ano", "max_users": 5, "tier": "sentinel-s", "setup_fee": 49},
+    # Sentinel X (Premium - 99 EUR alta)
+    "sentinel-x-monthly": {"amount": 49.99, "name": "Sentinel X Mensual", "period": "mes", "max_users": 5, "tier": "sentinel-x", "setup_fee": 99},
+    "sentinel-x-yearly": {"amount": 499.99, "name": "Sentinel X Anual", "period": "ano", "max_users": 5, "tier": "sentinel-x", "setup_fee": 99},
     # PLAN VECINAL PREMIUM - INDEPENDIENTE Y OPCIONAL - SOLO ANUAL - POR FAMILIA
     # No requiere ningún otro plan. Cualquier grupo de vecinos puede contratarlo.
     "vecinal-anual": {"amount": 299.99, "name": "Escudo Vecinal Premium", "period": "ano", "max_users": -1, "is_vecinal": True, "annual_only": True, "standalone": True, "per_family": True, "unlimited_families": True},
@@ -1184,6 +1194,86 @@ async def get_available_plans():
         },
     ]
 
+    # === NUEVA ESTRUCTURA: 3 Tiers (Efecto Ancla) ===
+    pricing_tiers = [
+        {
+            "id": "app-connect",
+            "name": "App Connect",
+            "subtitle": "Solo App - Sin hardware",
+            "monthly_price": 14.99,
+            "yearly_price": 149.99,
+            "yearly_monthly_equiv": 12.49,
+            "setup_fee": 0,
+            "monthly_plan_id": "app-connect-monthly",
+            "yearly_plan_id": "app-connect-yearly",
+            "badge": "ENTRADA",
+            "features": [
+                "Boton SOS 24/7 en tu movil",
+                "GPS en tiempo real",
+                "Proteccion contra estafas digitales",
+                "Hasta 5 miembros familia",
+                "Alertas push instantaneas",
+                "Historial de ubicaciones"
+            ],
+            "ideal_for": "Quien quiere proteccion digital inmediata sin dispositivo"
+        },
+        {
+            "id": "sentinel-s",
+            "name": "Sentinel S",
+            "subtitle": "Reloj GPS para mayores e infantil",
+            "monthly_price": 29.99,
+            "yearly_price": 299.99,
+            "yearly_monthly_equiv": 24.99,
+            "setup_fee": 49,
+            "monthly_plan_id": "sentinel-s-monthly",
+            "yearly_plan_id": "sentinel-s-yearly",
+            "popular": True,
+            "badge": "MAS POPULAR",
+            "features": [
+                "Todo de App Connect",
+                "Reloj Sentinel S con GPS",
+                "Boton SOS fisico",
+                "Detector de caidas",
+                "Llamada directa",
+                "Resistente al agua",
+                "Alerta anti-retirada"
+            ],
+            "ideal_for": "Familias con mayores o ninos que necesitan proteccion fisica",
+            "tiktok_promo": "GRATIS sin cuota de alta para los primeros 100 de TikTok"
+        },
+        {
+            "id": "sentinel-x",
+            "name": "Sentinel X",
+            "subtitle": "Reloj GPS premium para adultos",
+            "monthly_price": 49.99,
+            "yearly_price": 499.99,
+            "yearly_monthly_equiv": 41.66,
+            "setup_fee": 99,
+            "monthly_plan_id": "sentinel-x-monthly",
+            "yearly_plan_id": "sentinel-x-yearly",
+            "badge": "PREMIUM",
+            "features": [
+                "Todo de Sentinel S",
+                "Reloj Sentinel X premium",
+                "Camara + internet integrado",
+                "Sensor cardiaco",
+                "Grabacion en la nube 30 dias",
+                "Monitorizacion CRA 24/7",
+                "Servicio Acuda",
+                "E-SIM integrada"
+            ],
+            "ideal_for": "La alternativa real a Prosegur o Securitas, con tecnologia propia"
+        }
+    ]
+
+    # Comparativa ManoProtect vs Alarma Tradicional
+    savings_comparison = {
+        "manoprotect": {"name": "ManoProtect", "monthly": 29.99, "yearly": 299.99, "setup": 49, "commitment": "Sin permanencia", "cancel": "Cancela cuando quieras"},
+        "traditional": {"name": "Alarma Tradicional", "monthly": 55, "yearly": 660, "setup": 300, "commitment": "24 meses permanencia", "cancel": "Penalizacion por cancelar"},
+        "yearly_savings": 360,
+        "total_savings_2y": 1020
+    }
+
     return {
         "individual_plans": individual_plans,
         "family_plans": family_plans,
@@ -1191,12 +1281,16 @@ async def get_available_plans():
         "alarm_plans": alarm_plans,
         "alarm_business_plans": alarm_business_plans,
         "sentinel_plans": sentinel_plans,
+        "pricing_tiers": pricing_tiers,
+        "savings_comparison": savings_comparison,
         "currency": "EUR",
         "referral_bonus": "1 mes gratis para ambos (referidor y referido)",
-        "billing_options": ["monthly", "quarterly", "yearly"],
+        "billing_options": ["monthly", "yearly"],
+        "annual_discount": "2 meses GRATIS",
+        "trial_days": 7,
+        "guarantee_days": 14,
         "discounts": {
-            "quarterly": 17,
-            "yearly": 31
+            "yearly": "2 meses gratis"
         }
     }
 

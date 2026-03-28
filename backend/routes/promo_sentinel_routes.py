@@ -353,7 +353,7 @@ async def validate_tiktok_code(data: dict):
 
 @router.post("/tiktok-codes/redeem")
 async def redeem_tiktok_code(data: dict):
-    """Redeem a TikTok promo code"""
+    """Redeem a TikTok promo code and generate a referral link"""
     code = data.get("code", "").strip().upper()
     email = data.get("email", "").strip()
     
@@ -366,16 +366,92 @@ async def redeem_tiktok_code(data: dict):
     if promo.get("used"):
         raise HTTPException(status_code=400, detail="Este codigo ya ha sido utilizado")
     
+    # Check if email already redeemed a code
+    existing = await db.promo_codes.find_one({"type": "tiktok_sentinel_s", "used_by": email, "used": True})
+    if existing:
+        raise HTTPException(status_code=409, detail="Ya has canjeado un codigo. Solo 1 por usuario.")
+    
+    # Generate unique referral code for this user
+    referral_code = f"REF-{''.join(secrets.choice(string.ascii_uppercase + string.digits) for _ in range(8))}"
+    
     await db.promo_codes.update_one(
         {"code": code},
         {"$set": {
             "used": True,
             "used_by": email,
-            "used_at": datetime.now(timezone.utc).isoformat()
+            "used_at": datetime.now(timezone.utc).isoformat(),
+            "referral_code": referral_code
         }}
     )
     
-    return {"success": True, "message": "Codigo canjeado correctamente. Tu Sentinel S sera enviado con tu suscripcion."}
+    # Create referral record
+    await db.tiktok_referrals.insert_one({
+        "email": email,
+        "tiktok_code": code,
+        "referral_code": referral_code,
+        "referrals_count": 0,
+        "free_months_earned": 0,
+        "referrals": [],
+        "created_at": datetime.now(timezone.utc).isoformat()
+    })
+    
+    return {
+        "success": True,
+        "message": "Codigo canjeado. Tu Sentinel S sera enviado con tu suscripcion.",
+        "referral_code": referral_code,
+        "referral_link": f"https://manoprotectt.com/?ref={referral_code}#promo-sentinel"
+    }
+
+
+@router.get("/referral/{referral_code}")
+async def get_referral_info(referral_code: str):
+    """Get referral stats for a TikTok user"""
+    ref = await db.tiktok_referrals.find_one(
+        {"referral_code": referral_code.strip().upper()},
+        {"_id": 0}
+    )
+    if not ref:
+        raise HTTPException(status_code=404, detail="Codigo de referido no encontrado")
+    return {
+        "referral_code": ref["referral_code"],
+        "referrals_count": ref.get("referrals_count", 0),
+        "free_months_earned": ref.get("free_months_earned", 0),
+        "referral_link": f"https://manoprotectt.com/?ref={ref['referral_code']}#promo-sentinel"
+    }
+
+
+@router.post("/referral/track")
+async def track_referral(data: dict):
+    """Track when a referred user subscribes, award free month to referrer"""
+    referral_code = data.get("referral_code", "").strip().upper()
+    referred_email = data.get("email", "").strip()
+    
+    if not referral_code or not referred_email:
+        raise HTTPException(status_code=400, detail="Codigo de referido y email requeridos")
+    
+    ref = await db.tiktok_referrals.find_one({"referral_code": referral_code})
+    if not ref:
+        raise HTTPException(status_code=404, detail="Codigo de referido no valido")
+    
+    # Check if this email was already referred
+    if referred_email in [r.get("email") for r in ref.get("referrals", [])]:
+        raise HTTPException(status_code=409, detail="Este usuario ya fue referido")
+    
+    # Add referral and award free month
+    await db.tiktok_referrals.update_one(
+        {"referral_code": referral_code},
+        {
+            "$push": {"referrals": {"email": referred_email, "date": datetime.now(timezone.utc).isoformat()}},
+            "$inc": {"referrals_count": 1, "free_months_earned": 1}
+        }
+    )
+    
+    return {
+        "success": True,
+        "message": f"Referido registrado. {ref['email']} gana 1 mes gratis.",
+        "referrer_email": ref["email"],
+        "total_free_months": ref.get("free_months_earned", 0) + 1
+    }
 
 
 # ============================

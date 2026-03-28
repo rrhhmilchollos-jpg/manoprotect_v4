@@ -91,7 +91,11 @@ const HighConversionLanding = () => {
   const [promoData, setPromoData] = useState(null);
   const [promoLoading, setPromoLoading] = useState(false);
   const [tikTokCode, setTikTokCode] = useState('');
-  const [codeStatus, setCodeStatus] = useState(null); // {valid, message, error}
+  const [codeStatus, setCodeStatus] = useState(null);
+  const [billingPeriod, setBillingPeriod] = useState('monthly'); // monthly | yearly
+  const [redeemEmail, setRedeemEmail] = useState('');
+  const [redeemStatus, setRedeemStatus] = useState(null);
+  const [referralData, setReferralData] = useState(null);
 
   const API = process.env.REACT_APP_BACKEND_URL;
 
@@ -115,6 +119,46 @@ const HighConversionLanding = () => {
     }
   };
 
+  const redeemTikTokCode = async () => {
+    if (!tikTokCode.trim() || !redeemEmail.trim()) return;
+    try {
+      const r = await fetch(`${API}/api/promo/tiktok-codes/redeem`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ code: tikTokCode.trim().toUpperCase(), email: redeemEmail.trim() })
+      });
+      const d = await r.json();
+      if (r.ok) {
+        setRedeemStatus({ success: true, message: d.message, referral_code: d.referral_code, referral_link: d.referral_link });
+        setReferralData({ code: d.referral_code, link: d.referral_link, count: 0, months: 0 });
+        track('tiktok_code_redeemed', { code: tikTokCode });
+      } else {
+        setRedeemStatus({ success: false, error: d.detail || 'Error al canjear' });
+      }
+    } catch {
+      setRedeemStatus({ success: false, error: 'Error de conexion' });
+    }
+  };
+
+  const handleTierCheckout = async (planId) => {
+    setPromoLoading(true);
+    try {
+      const res = await fetch(`${API}/api/create-checkout-session`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ plan_type: planId, origin_url: window.location.origin })
+      });
+      const data = await res.json();
+      if (res.ok && data.checkout_url) {
+        window.location.href = data.checkout_url;
+      } else {
+        alert(data.detail || 'Error al procesar');
+      }
+    } catch { alert('Error de conexion'); }
+    finally { setPromoLoading(false); }
+  };
+
   useEffect(() => { trackPageView('/'); }, []);
   useEffect(() => {
     const fn = () => setScrolled(window.scrollY > 20);
@@ -123,6 +167,17 @@ const HighConversionLanding = () => {
   }, []);
   useEffect(() => {
     fetch(`${API}/api/promo/sentinel-s/status`).then(r => r.json()).then(d => setPromoData(d)).catch(() => {});
+  }, [API]);
+
+  // Check for referral param in URL
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const ref = params.get('ref');
+    if (ref) {
+      fetch(`${API}/api/promo/referral/${ref}`).then(r => r.json()).then(d => {
+        if (d.referral_code) setReferralData(d);
+      }).catch(() => {});
+    }
   }, [API]);
 
   // Auto-scroll to #promo-sentinel when coming from TikTok link
@@ -372,19 +427,15 @@ const HighConversionLanding = () => {
                   <svg className="w-4 h-4 text-white/40 group-hover:text-white group-hover:translate-x-1 transition-all flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7"/></svg>
                 </a>
 
-                {/* TikTok Code Input */}
+                {/* TikTok Code Input + Redeem */}
                 <div className="mt-3 max-w-md mx-auto lg:mx-0" data-testid="tiktok-code-input">
-                  <p className="text-white/60 text-xs mb-2">Tienes un codigo de TikTok? Verificalo aqui:</p>
+                  <p className="text-white/60 text-xs mb-2">Tienes un codigo de TikTok? Canjealo aqui:</p>
                   <div className="flex gap-2">
-                    <input
-                      type="text"
-                      value={tikTokCode}
-                      onChange={e => { setTikTokCode(e.target.value); setCodeStatus(null); }}
+                    <input type="text" value={tikTokCode}
+                      onChange={e => { setTikTokCode(e.target.value); setCodeStatus(null); setRedeemStatus(null); }}
                       placeholder="TIKTOK-XXXXXX"
                       className="flex-1 bg-black/30 border border-white/20 text-white placeholder-white/30 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-yellow-400 uppercase"
-                      maxLength={13}
-                      data-testid="tiktok-code-field"
-                    />
+                      maxLength={13} data-testid="tiktok-code-field" />
                     <button onClick={validateTikTokCode} className="bg-yellow-400 text-black font-bold px-4 py-2.5 rounded-lg hover:bg-yellow-300 transition-colors text-sm" data-testid="tiktok-code-validate">
                       Validar
                     </button>
@@ -393,6 +444,33 @@ const HighConversionLanding = () => {
                     <p className={`text-xs mt-2 ${codeStatus.valid ? 'text-emerald-400' : 'text-red-400'}`} data-testid="tiktok-code-result">
                       {codeStatus.valid ? codeStatus.message : codeStatus.error}
                     </p>
+                  )}
+                  {codeStatus?.valid && !redeemStatus?.success && (
+                    <div className="mt-3 space-y-2" data-testid="tiktok-redeem-form">
+                      <input type="email" value={redeemEmail} onChange={e => setRedeemEmail(e.target.value)}
+                        placeholder="tu@email.com" className="w-full bg-black/30 border border-white/20 text-white placeholder-white/30 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-yellow-400"
+                        data-testid="tiktok-redeem-email" />
+                      <button onClick={redeemTikTokCode} className="w-full bg-emerald-500 text-white font-bold py-2.5 rounded-lg hover:bg-emerald-400 transition-colors text-sm"
+                        data-testid="tiktok-redeem-btn">
+                        Canjear codigo y obtener enlace de referido
+                      </button>
+                    </div>
+                  )}
+                  {redeemStatus?.success && (
+                    <div className="mt-3 bg-emerald-500/20 border border-emerald-400/30 rounded-xl p-3 space-y-2" data-testid="tiktok-referral-result">
+                      <p className="text-emerald-300 text-xs font-bold">{redeemStatus.message}</p>
+                      <p className="text-white/70 text-xs">Tu enlace de referido (comparte y gana 1 mes gratis por cada amigo):</p>
+                      <div className="flex gap-1">
+                        <input type="text" readOnly value={redeemStatus.referral_link}
+                          className="flex-1 bg-black/40 text-yellow-300 text-xs rounded px-2 py-1.5 font-mono" />
+                        <button onClick={() => { navigator.clipboard.writeText(redeemStatus.referral_link); }}
+                          className="bg-yellow-400 text-black text-xs font-bold px-3 py-1.5 rounded hover:bg-yellow-300 transition-colors"
+                          data-testid="copy-referral-link">Copiar</button>
+                      </div>
+                    </div>
+                  )}
+                  {redeemStatus && !redeemStatus.success && (
+                    <p className="text-red-400 text-xs mt-2">{redeemStatus.error}</p>
                   )}
                 </div>
               </div>
@@ -494,7 +572,190 @@ const HighConversionLanding = () => {
         </div>
       </section>
 
-      {/* ═══════ PRODUCTOS DESTACADOS ═══════ */}
+      {/* ═══════ NUEVA ESTRUCTURA DE PRECIOS — 3 TIERS ═══════ */}
+      <section className="py-16 sm:py-20 bg-white" id="precios" data-testid="pricing-tiers-section">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
+          <div className="text-center mb-4">
+            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3">Elige tu plan de proteccion</h2>
+            <p className="text-gray-500 max-w-xl mx-auto">Empieza con la app y, cuando quieras, anade un dispositivo Sentinel.</p>
+          </div>
+
+          {/* Billing Toggle */}
+          <div className="flex items-center justify-center gap-3 mb-10" data-testid="billing-toggle">
+            <span className={`text-sm font-medium ${billingPeriod === 'monthly' ? 'text-gray-900' : 'text-gray-400'}`}>Mensual</span>
+            <button onClick={() => setBillingPeriod(p => p === 'monthly' ? 'yearly' : 'monthly')}
+              className={`relative w-14 h-7 rounded-full transition-colors ${billingPeriod === 'yearly' ? 'bg-emerald-500' : 'bg-gray-300'}`}
+              data-testid="billing-toggle-btn">
+              <div className={`absolute top-0.5 left-0.5 w-6 h-6 bg-white rounded-full shadow transition-transform ${billingPeriod === 'yearly' ? 'translate-x-7' : ''}`} />
+            </button>
+            <span className={`text-sm font-medium ${billingPeriod === 'yearly' ? 'text-gray-900' : 'text-gray-400'}`}>Anual</span>
+            {billingPeriod === 'yearly' && (
+              <span className="bg-emerald-100 text-emerald-700 text-xs font-bold px-2.5 py-1 rounded-full animate-pulse" data-testid="annual-badge">2 MESES GRATIS</span>
+            )}
+          </div>
+
+          {/* Garantia 7 dias */}
+          <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-4 text-center mb-8" data-testid="trial-guarantee">
+            <p className="text-emerald-700 font-bold text-sm flex items-center justify-center gap-2">
+              <Shield className="w-5 h-5" /> 7 dias de prueba gratis — Sin compromiso — Garantia devolucion 14 dias
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-6 lg:gap-8">
+            {/* TIER 1: App Connect */}
+            <Reveal delay={0}>
+              <div className="bg-white rounded-2xl border-2 border-gray-200 hover:border-emerald-300 p-6 transition-all hover:shadow-lg relative" data-testid="tier-app-connect">
+                <span className="inline-block text-[10px] font-bold bg-gray-100 text-gray-600 px-2.5 py-1 rounded-full mb-3">ENTRADA</span>
+                <h3 className="text-xl font-bold text-gray-900 mb-1">App Connect</h3>
+                <p className="text-sm text-gray-500 mb-4">Solo App — Sin hardware</p>
+                <div className="mb-4">
+                  {billingPeriod === 'monthly' ? (
+                    <div><span className="text-4xl font-black text-gray-900">14,99</span><span className="text-gray-500 text-sm">EUR/mes</span></div>
+                  ) : (
+                    <div>
+                      <span className="text-4xl font-black text-emerald-600">12,49</span><span className="text-gray-500 text-sm">EUR/mes</span>
+                      <p className="text-xs text-gray-400 mt-0.5"><span className="line-through">179,88 EUR</span> <span className="text-emerald-600 font-bold">149,99 EUR/ano</span></p>
+                    </div>
+                  )}
+                  <p className="text-xs text-gray-400 mt-1">Cuota de alta: 0 EUR</p>
+                </div>
+                <ul className="space-y-2 text-sm text-gray-600 mb-6">
+                  {['Boton SOS 24/7 en tu movil', 'GPS en tiempo real', 'Proteccion contra estafas', 'Hasta 5 miembros familia', 'Alertas push instantaneas', 'Historial de ubicaciones'].map((f,i) => (
+                    <li key={i} className="flex items-center gap-2"><Check className="w-4 h-4 text-emerald-500 flex-shrink-0" /> {f}</li>
+                  ))}
+                </ul>
+                <button onClick={() => handleTierCheckout(billingPeriod === 'yearly' ? 'app-connect-yearly' : 'app-connect-monthly')}
+                  disabled={promoLoading} className="w-full py-3 bg-gray-900 text-white font-bold rounded-xl hover:bg-gray-800 transition-colors disabled:opacity-50"
+                  data-testid="cta-tier-app-connect">
+                  Empezar gratis 7 dias
+                </button>
+                <p className="text-[10px] text-gray-400 text-center mt-2">Ideal para proteccion digital inmediata</p>
+              </div>
+            </Reveal>
+
+            {/* TIER 2: Sentinel S — MAS POPULAR */}
+            <Reveal delay={150}>
+              <div className="bg-white rounded-2xl border-2 border-emerald-500 p-6 transition-all shadow-xl shadow-emerald-100 relative" data-testid="tier-sentinel-s">
+                <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-emerald-500 text-white text-xs font-bold px-4 py-1 rounded-full">MAS POPULAR</div>
+                <span className="inline-block text-[10px] font-bold bg-emerald-100 text-emerald-700 px-2.5 py-1 rounded-full mb-3">SENIOR / INFANTIL</span>
+                <h3 className="text-xl font-bold text-gray-900 mb-1">Sentinel S</h3>
+                <p className="text-sm text-gray-500 mb-4">Reloj GPS + SOS para mayores</p>
+                <div className="mb-4">
+                  {billingPeriod === 'monthly' ? (
+                    <div>
+                      <span className="text-4xl font-black text-gray-900">29,99</span><span className="text-gray-500 text-sm">EUR/mes</span>
+                      <p className="text-xs text-gray-400 mt-0.5"><span className="line-through text-red-400">55 EUR/mes</span> alarma tradicional</p>
+                    </div>
+                  ) : (
+                    <div>
+                      <span className="text-4xl font-black text-emerald-600">24,99</span><span className="text-gray-500 text-sm">EUR/mes</span>
+                      <p className="text-xs text-gray-400 mt-0.5"><span className="line-through">359,88 EUR</span> <span className="text-emerald-600 font-bold">299,99 EUR/ano</span></p>
+                    </div>
+                  )}
+                  <p className="text-xs text-gray-400 mt-1">Cuota de alta: <span className="font-bold">49 EUR</span> (incluye dispositivo)</p>
+                  {promoData?.active && <p className="text-xs text-red-500 font-bold mt-1">TikTok: 0 EUR alta para primeros {promoData.remaining} suscriptores</p>}
+                </div>
+                <ul className="space-y-2 text-sm text-gray-600 mb-6">
+                  {['Todo de App Connect', 'Reloj Sentinel S con GPS', 'Boton SOS fisico', 'Detector de caidas', 'Llamada directa', 'Resistente al agua', 'Alerta anti-retirada'].map((f,i) => (
+                    <li key={i} className="flex items-center gap-2"><Check className="w-4 h-4 text-emerald-500 flex-shrink-0" /> {f}</li>
+                  ))}
+                </ul>
+                <button onClick={() => handleTierCheckout(billingPeriod === 'yearly' ? 'sentinel-s-yearly' : 'sentinel-s-monthly')}
+                  disabled={promoLoading} className="w-full py-3.5 bg-emerald-500 text-white font-bold rounded-xl hover:bg-emerald-600 transition-colors disabled:opacity-50 shadow-lg shadow-emerald-200"
+                  data-testid="cta-tier-sentinel-s">
+                  Suscribirme ahora
+                </button>
+                <p className="text-[10px] text-gray-400 text-center mt-2">Ideal para familias con mayores o ninos</p>
+              </div>
+            </Reveal>
+
+            {/* TIER 3: Sentinel X — PREMIUM */}
+            <Reveal delay={300}>
+              <div className="bg-gradient-to-b from-gray-900 to-gray-950 rounded-2xl border border-gray-800 p-6 transition-all hover:shadow-xl relative" data-testid="tier-sentinel-x">
+                <span className="inline-block text-[10px] font-bold bg-amber-500/20 text-amber-400 px-2.5 py-1 rounded-full mb-3">PREMIUM</span>
+                <h3 className="text-xl font-bold text-white mb-1">Sentinel X</h3>
+                <p className="text-sm text-gray-400 mb-4">Reloj GPS premium para adultos</p>
+                <div className="mb-4">
+                  {billingPeriod === 'monthly' ? (
+                    <div>
+                      <span className="text-4xl font-black text-white">49,99</span><span className="text-gray-400 text-sm">EUR/mes</span>
+                      <p className="text-xs text-gray-500 mt-0.5"><span className="line-through text-red-400">89 EUR/mes</span> Securitas/Prosegur</p>
+                    </div>
+                  ) : (
+                    <div>
+                      <span className="text-4xl font-black text-emerald-400">41,66</span><span className="text-gray-400 text-sm">EUR/mes</span>
+                      <p className="text-xs text-gray-500 mt-0.5"><span className="line-through">599,88 EUR</span> <span className="text-emerald-400 font-bold">499,99 EUR/ano</span></p>
+                    </div>
+                  )}
+                  <p className="text-xs text-gray-500 mt-1">Cuota de alta: <span className="font-bold text-white">99 EUR</span> (incluye dispositivo)</p>
+                </div>
+                <ul className="space-y-2 text-sm text-gray-300 mb-6">
+                  {['Todo de Sentinel S', 'Reloj Sentinel X premium', 'Camara + internet integrado', 'Sensor cardiaco', 'Grabacion nube 30 dias', 'Monitorizacion CRA 24/7', 'Servicio Acuda', 'E-SIM integrada'].map((f,i) => (
+                    <li key={i} className="flex items-center gap-2"><Check className="w-4 h-4 text-amber-400 flex-shrink-0" /> {f}</li>
+                  ))}
+                </ul>
+                <button onClick={() => handleTierCheckout(billingPeriod === 'yearly' ? 'sentinel-x-yearly' : 'sentinel-x-monthly')}
+                  disabled={promoLoading} className="w-full py-3.5 bg-gradient-to-r from-amber-500 to-orange-500 text-white font-bold rounded-xl hover:from-amber-400 hover:to-orange-400 transition-colors disabled:opacity-50 shadow-lg"
+                  data-testid="cta-tier-sentinel-x">
+                  Suscribirme ahora
+                </button>
+                <p className="text-[10px] text-gray-500 text-center mt-2">La alternativa real a Prosegur o Securitas</p>
+              </div>
+            </Reveal>
+          </div>
+
+          <p className="text-center text-xs text-gray-400 mt-6">Todos los planes incluyen 7 dias de prueba gratis. Sin permanencia. Cancela cuando quieras.</p>
+        </div>
+      </section>
+
+      {/* ═══════ COMPARATIVA AHORRO: ManoProtect vs Alarma Tradicional ═══════ */}
+      <section className="py-12 sm:py-16 bg-slate-50" data-testid="savings-comparison-section">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6">
+          <div className="text-center mb-8">
+            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">Ahorra mas de 300 EUR al ano</h2>
+            <p className="text-gray-500">Compara ManoProtect con una alarma tradicional.</p>
+          </div>
+          <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm" data-testid="savings-table">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="bg-gray-50 border-b">
+                  <th className="p-4 text-left font-bold text-gray-900"></th>
+                  <th className="p-4 text-center">
+                    <span className="inline-flex items-center gap-1.5 bg-emerald-100 text-emerald-700 font-bold px-3 py-1 rounded-full text-xs">
+                      <Shield className="w-3.5 h-3.5" /> ManoProtect
+                    </span>
+                  </th>
+                  <th className="p-4 text-center text-gray-400 font-medium">Alarma Tradicional</th>
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  ['Cuota mensual', '29,99 EUR', '55 EUR', true],
+                  ['Cuota anual', '299,99 EUR', '660 EUR', true],
+                  ['Coste instalacion', '49 EUR', '300 EUR', true],
+                  ['Permanencia', 'Sin permanencia', '24 meses', true],
+                  ['Cancelacion', 'Gratis, cuando quieras', 'Penalizacion', true],
+                  ['GPS en tiempo real', 'Incluido', 'No incluido', true],
+                  ['App movil completa', 'Incluida', 'Basica', true],
+                  ['Dispositivo SOS portatil', 'Incluido', 'No incluido', true],
+                ].map(([label, mp, trad, mpWins], i) => (
+                  <tr key={i} className={i % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                    <td className="p-3 font-medium text-gray-900 border-b border-gray-100">{label}</td>
+                    <td className={`p-3 text-center border-b border-gray-100 font-bold ${mpWins ? 'text-emerald-600' : 'text-gray-600'}`}>{mp}</td>
+                    <td className="p-3 text-center border-b border-gray-100 text-gray-400">{trad}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            <div className="bg-emerald-500 p-4 text-center">
+              <p className="text-white font-bold text-lg" data-testid="savings-total">Ahorro anual con ManoProtect: <span className="text-yellow-300 text-2xl">+360 EUR</span></p>
+              <p className="text-emerald-100 text-xs mt-1">Ahorro en 2 anos: +1.020 EUR comparado con alarma tradicional</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════ PRODUCTOS DESTACADOS (Sentinel Hardware) ═══════ */}
       <section className="py-16 sm:py-20 bg-white" id="productos" data-testid="products-section" style={{ contentVisibility: 'auto', containIntrinsicSize: '0 900px' }}>
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
           <div className="text-center mb-4">
