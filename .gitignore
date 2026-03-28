@@ -162,3 +162,7 @@ desktop-apps/crm-ventas/dist/linux-arm64-unpacked/manoprotect-crm
 desktop-apps/cra-operador/dist/win-arm64-unpacked/ManoProtect
 CRA.exe
 desktop-apps/cra-operador/dist/linux-arm64-unpacked/manoprotect-cra
+-e 
+# Environment files
+*.env
+*.env.*

@@ -14,7 +14,7 @@ android {
         manifestPlaceholders = [
             hostName: "www.manoprotectt.com",
             defaultUrl: "https://www.manoprotectt.com/app-cliente",
-            launcherName: "ManoProtect",
+            launcherName: "ManoClient+",
             assetStatements: '[{ "relation": ["delegate_permission/common.handle_all_urls"], "target": { "namespace": "web", "site": "https://www.manoprotectt.com" } }]'
         ]
     }
