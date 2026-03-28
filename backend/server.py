@@ -51,52 +51,205 @@ api_router = APIRouter(prefix="/api")
 # Privacy Policy endpoint for Google Play Store
 @api_router.get("/privacy-policy", response_class=HTMLResponse)
 async def privacy_policy():
-    return """<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Politica de Privacidad - ManoProtect</title><style>body{font-family:system-ui,sans-serif;max-width:800px;margin:0 auto;padding:20px;color:#333;line-height:1.6}h1{color:#1a1a2e}h2{color:#10B981;margin-top:24px}</style></head><body>
+    return """<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Politica de Privacidad - ManoProtect</title>
+<style>body{font-family:'Segoe UI',system-ui,sans-serif;max-width:860px;margin:0 auto;padding:32px 20px;color:#333;line-height:1.7;background:#fafafa}h1{color:#1a1a2e;font-size:28px;border-bottom:3px solid #4F46E5;padding-bottom:12px}h2{color:#4F46E5;margin-top:28px;font-size:20px}h3{color:#374151;margin-top:16px;font-size:16px}table{width:100%;border-collapse:collapse;margin:16px 0}th{background:#4F46E5;color:#fff;padding:10px 14px;text-align:left;font-size:14px}td{padding:10px 14px;border-bottom:1px solid #e5e7eb;font-size:14px}tr:nth-child(even){background:#f3f4f6}ul{padding-left:20px}li{margin-bottom:6px}p{margin:10px 0}.highlight{background:#EEF2FF;border-left:4px solid #4F46E5;padding:12px 16px;border-radius:0 8px 8px 0;margin:16px 0}.footer{margin-top:40px;padding-top:20px;border-top:2px solid #e5e7eb;text-align:center;color:#6b7280;font-size:13px}</style></head><body>
 <h1>Politica de Privacidad de ManoProtect</h1>
-<p><strong>Ultima actualizacion:</strong> 27 de marzo de 2025</p>
-<p>ManoProtect ("nosotros") opera las aplicaciones MP Comerciales y MP Instaladores. Esta politica describe como recopilamos y usamos la informacion.</p>
-<h2>1. Informacion que recopilamos</h2>
-<p>Recopilamos la informacion que nos proporcionas al registrarte: nombre, correo electronico y datos profesionales. La app puede solicitar acceso a la camara (para documentar instalaciones), ubicacion (para asignar rutas) y notificaciones (para alertas en tiempo real).</p>
-<h2>2. Uso de la informacion</h2>
-<p>Usamos tu informacion exclusivamente para: gestionar tu cuenta profesional, asignar y coordinar trabajos de instalacion y ventas, enviar notificaciones operativas y mejorar nuestros servicios.</p>
-<h2>3. Camara y ubicacion</h2>
-<p>El permiso de camara se usa unicamente para documentar instalaciones y verificaciones tecnicas. El permiso de ubicacion se usa para optimizar rutas de trabajo. Estos datos no se comparten con terceros.</p>
-<h2>4. Comparticion de datos</h2>
-<p>No vendemos ni compartimos tu informacion personal con terceros, excepto cuando sea necesario para operar el servicio (por ejemplo, con tu empleador ManoProtect).</p>
-<h2>5. Seguridad</h2>
-<p>Protegemos tu informacion con cifrado en transito (HTTPS/TLS) y almacenamiento seguro con contrasenas hasheadas (bcrypt).</p>
-<h2>6. Contacto</h2>
-<p>Para cualquier consulta sobre privacidad: <strong>info@manoprotectt.com</strong></p>
+<p><strong>Ultima actualizacion:</strong> 27 de marzo de 2026</p>
+<p><strong>Responsable del tratamiento:</strong> ManoProtect Security S.L. — CIF: B12345678</p>
+<p>ManoProtect ("nosotros", "nuestro") opera las siguientes aplicaciones y servicios digitales:</p>
+<ul>
+<li><strong>ManoProtect</strong> (App de Cliente) — Sistema de seguridad y alarma para el hogar</li>
+<li><strong>MP Comerciales</strong> — Herramienta de gestion para el equipo comercial</li>
+<li><strong>MP Instaladores</strong> — Herramienta de gestion para el equipo tecnico</li>
+<li><strong>manoprotectt.com</strong> — Sitio web corporativo y CRA (Central Receptora de Alarmas)</li>
+</ul>
+<p>Esta politica describe como recopilamos, usamos, almacenamos y protegemos la informacion personal de nuestros usuarios conforme al <strong>Reglamento General de Proteccion de Datos (RGPD)</strong> y la <strong>Ley Organica 3/2018 de Proteccion de Datos (LOPDGDD)</strong>.</p>
+
+<h2>1. Datos que recopilamos</h2>
+<h3>1.1 Datos de registro</h3>
+<table><tr><th>Dato</th><th>Aplicacion</th><th>Finalidad</th></tr>
+<tr><td>Nombre completo</td><td>Todas</td><td>Identificacion del usuario</td></tr>
+<tr><td>Correo electronico</td><td>Todas</td><td>Autenticacion y comunicaciones</td></tr>
+<tr><td>Contrasena (cifrada bcrypt)</td><td>Todas</td><td>Acceso seguro a la cuenta</td></tr>
+<tr><td>Telefono de contacto</td><td>Clientes</td><td>Contacto de emergencia y verificacion</td></tr>
+</table>
+
+<h3>1.2 Datos de uso del servicio de seguridad (App Cliente)</h3>
+<table><tr><th>Dato</th><th>Finalidad</th><th>Retencion</th></tr>
+<tr><td>Estado de la alarma (armado/desarmado)</td><td>Operacion del sistema de seguridad</td><td>Mientras la cuenta este activa</td></tr>
+<tr><td>Historial de eventos de seguridad</td><td>Registro de actividad del sistema</td><td>12 meses</td></tr>
+<tr><td>Contactos de emergencia (nombre, telefono, relacion)</td><td>Notificacion en caso de emergencia/SOS</td><td>Mientras la cuenta este activa</td></tr>
+<tr><td>PIN de seguridad (cifrado)</td><td>Verificacion de armado/desarmado</td><td>Mientras la cuenta este activa</td></tr>
+<tr><td>Configuracion de zonas y sensores</td><td>Operacion del sistema de alarma</td><td>Mientras la cuenta este activa</td></tr>
+</table>
+
+<h3>1.3 Datos de geolocalizacion</h3>
+<div class="highlight"><strong>Ubicacion GPS:</strong> Solo se recopila cuando el usuario activa manualmente la funcion SOS de emergencia. La ubicacion se envia a la Central Receptora de Alarmas y a los contactos de emergencia designados. No se realiza seguimiento continuo de ubicacion.</div>
+
+<h3>1.4 Datos del dispositivo y anti-fraude</h3>
+<table><tr><th>Dato</th><th>Finalidad</th><th>Retencion</th></tr>
+<tr><td>Huella digital del dispositivo (fingerprint)</td><td>Prevencion de abuso del periodo de prueba gratuito</td><td>90 dias</td></tr>
+<tr><td>Direccion IP (anonimizada)</td><td>Seguridad y prevencion de fraude</td><td>30 dias</td></tr>
+<tr><td>Token FCM (Firebase Cloud Messaging)</td><td>Envio de notificaciones push de seguridad</td><td>Mientras la cuenta este activa</td></tr>
+</table>
+
+<h3>1.5 Datos de pago</h3>
+<p>Los pagos de suscripcion se procesan a traves de <strong>Stripe, Inc.</strong> ManoProtect no almacena datos de tarjetas de credito ni datos bancarios. Stripe actua como procesador de pagos independiente bajo su propia politica de privacidad. Unicamente almacenamos el identificador de cliente de Stripe y el estado de la suscripcion.</p>
+
+<h3>1.6 Datos profesionales (Comerciales e Instaladores)</h3>
+<table><tr><th>Dato</th><th>Finalidad</th></tr>
+<tr><td>Historial de actividad laboral</td><td>Gestion de leads, ventas e instalaciones</td></tr>
+<tr><td>Ubicacion durante jornada laboral</td><td>Optimizacion de rutas de trabajo</td></tr>
+<tr><td>Fotografias de instalaciones</td><td>Documentacion tecnica y verificacion</td></tr>
+</table>
+
+<h2>2. Base legal del tratamiento</h2>
+<ul>
+<li><strong>Ejecucion de contrato</strong> (Art. 6.1.b RGPD): Necesario para prestar el servicio de seguridad contratado.</li>
+<li><strong>Interes legitimo</strong> (Art. 6.1.f RGPD): Prevencion de fraude y seguridad del sistema.</li>
+<li><strong>Consentimiento</strong> (Art. 6.1.a RGPD): Notificaciones push, cookies analiticas y de marketing.</li>
+<li><strong>Obligacion legal</strong> (Art. 6.1.c RGPD): Conservacion de datos de facturacion (normativa fiscal).</li>
+</ul>
+
+<h2>3. Comparticion de datos con terceros</h2>
+<p>No vendemos datos personales. Compartimos datos exclusivamente con:</p>
+<table><tr><th>Proveedor</th><th>Servicio</th><th>Datos compartidos</th><th>Ubicacion</th></tr>
+<tr><td>Google Firebase</td><td>Notificaciones push</td><td>Token FCM</td><td>UE/EEUU (Standard Contractual Clauses)</td></tr>
+<tr><td>Stripe, Inc.</td><td>Procesamiento de pagos</td><td>Email, ID de suscripcion</td><td>EEUU (Standard Contractual Clauses)</td></tr>
+<tr><td>Brevo (Sendinblue)</td><td>Emails transaccionales</td><td>Email, nombre</td><td>Francia (UE)</td></tr>
+<tr><td>MongoDB Atlas</td><td>Almacenamiento de datos</td><td>Todos los datos de cuenta</td><td>UE (Frankfurt)</td></tr>
+</table>
+
+<h2>4. Derechos del usuario (RGPD)</h2>
+<p>Conforme al RGPD, tienes derecho a:</p>
+<ul>
+<li><strong>Acceso:</strong> Solicitar una copia de todos tus datos personales.</li>
+<li><strong>Rectificacion:</strong> Corregir datos inexactos o incompletos.</li>
+<li><strong>Supresion:</strong> Solicitar la eliminacion de tus datos ("derecho al olvido").</li>
+<li><strong>Portabilidad:</strong> Recibir tus datos en formato estructurado y legible por maquina.</li>
+<li><strong>Oposicion:</strong> Oponerte al tratamiento de tus datos.</li>
+<li><strong>Limitacion:</strong> Solicitar la limitacion del tratamiento.</li>
+</ul>
+<p>Para ejercer cualquier derecho, contacta con nosotros en <strong>info@manoprotectt.com</strong> o visita <a href="/api/data-deletion">la pagina de eliminacion de datos</a>. Responderemos en un plazo maximo de 30 dias.</p>
+<p>Tambien tienes derecho a presentar una reclamacion ante la <strong>Agencia Espanola de Proteccion de Datos (AEPD)</strong>: <a href="https://www.aepd.es">www.aepd.es</a>.</p>
+
+<h2>5. Seguridad de los datos</h2>
+<ul>
+<li>Cifrado en transito: HTTPS/TLS 1.3 en todas las comunicaciones.</li>
+<li>Contrasenas: Cifradas con algoritmo bcrypt (nunca almacenadas en texto plano).</li>
+<li>Tokens de sesion: JWT con expiracion configurable.</li>
+<li>Acceso interno: Solo personal autorizado con autenticacion multifactor.</li>
+<li>Copias de seguridad: Cifradas y almacenadas en centros de datos de la UE.</li>
+</ul>
+
+<h2>6. Cookies</h2>
+<p>Nuestro sitio web utiliza cookies. Al visitar manoprotectt.com, se te presentara un banner de consentimiento donde puedes aceptar o rechazar las siguientes categorias:</p>
+<ul>
+<li><strong>Esenciales:</strong> Necesarias para el funcionamiento del sitio (no requieren consentimiento).</li>
+<li><strong>Analiticas:</strong> Google Analytics 4 — para mejorar la experiencia de usuario.</li>
+<li><strong>Marketing:</strong> Google Ads, Meta Pixel — para mostrar anuncios relevantes.</li>
+</ul>
+
+<h2>7. Menores de edad</h2>
+<p>Nuestros servicios estan dirigidos a personas mayores de 18 anos. No recopilamos conscientemente datos de menores de 16 anos.</p>
+
+<h2>8. Cambios en esta politica</h2>
+<p>Podemos actualizar esta politica periodicamente. Notificaremos cambios significativos por email o mediante aviso en la aplicacion.</p>
+
+<h2>9. Contacto</h2>
+<p><strong>ManoProtect Security S.L.</strong></p>
+<p>Email: <strong>info@manoprotectt.com</strong></p>
+<p>Web: <a href="https://www.manoprotectt.com">www.manoprotectt.com</a></p>
+<div class="footer">ManoProtect Security S.L. — Todos los derechos reservados 2026</div>
 </body></html>"""
 
 # Data Deletion Request endpoint for Google Play Store
 @api_router.get("/data-deletion", response_class=HTMLResponse)
 async def data_deletion():
-    return """<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Solicitud de Eliminacion de Datos - ManoProtect</title><style>body{font-family:system-ui,sans-serif;max-width:800px;margin:0 auto;padding:20px;color:#333;line-height:1.6}h1{color:#1a1a2e}h2{color:#10B981;margin-top:24px}ul{padding-left:20px}li{margin-bottom:8px}.btn{display:inline-block;background:#10B981;color:#fff;padding:12px 24px;border-radius:8px;text-decoration:none;margin-top:16px;font-weight:bold}</style></head><body>
-<h1>Solicitud de Eliminacion de Datos</h1>
-<p><strong>ManoProtect</strong> - MP Comerciales y MP Instaladores</p>
-<h2>Como solicitar la eliminacion de tus datos</h2>
-<p>Para solicitar la eliminacion completa de tu cuenta y datos personales, sigue estos pasos:</p>
+    return """<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Eliminacion de Datos - ManoProtect</title>
+<style>body{font-family:'Segoe UI',system-ui,sans-serif;max-width:860px;margin:0 auto;padding:32px 20px;color:#333;line-height:1.7;background:#fafafa}h1{color:#1a1a2e;font-size:28px;border-bottom:3px solid #DC2626;padding-bottom:12px}h2{color:#DC2626;margin-top:28px;font-size:20px}h3{color:#374151;margin-top:16px;font-size:16px}table{width:100%;border-collapse:collapse;margin:16px 0}th{background:#DC2626;color:#fff;padding:10px 14px;text-align:left;font-size:14px}td{padding:10px 14px;border-bottom:1px solid #e5e7eb;font-size:14px}tr:nth-child(even){background:#fef2f2}ul{padding-left:20px}li{margin-bottom:8px}ol li{margin-bottom:12px}.btn{display:inline-block;background:#DC2626;color:#fff;padding:14px 28px;border-radius:8px;text-decoration:none;margin-top:16px;font-weight:bold;font-size:16px}.btn:hover{background:#b91c1c}.warning{background:#FEF3C7;border-left:4px solid #F59E0B;padding:14px 16px;border-radius:0 8px 8px 0;margin:16px 0;font-size:14px}.info{background:#EFF6FF;border-left:4px solid #3B82F6;padding:14px 16px;border-radius:0 8px 8px 0;margin:16px 0;font-size:14px}.steps{background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:24px;margin:20px 0}.step-num{display:inline-block;width:32px;height:32px;background:#DC2626;color:#fff;border-radius:50%;text-align:center;line-height:32px;font-weight:bold;margin-right:10px;font-size:14px}.footer{margin-top:40px;padding-top:20px;border-top:2px solid #e5e7eb;text-align:center;color:#6b7280;font-size:13px}</style></head><body>
+<h1>Eliminacion de Datos de Usuario</h1>
+<p><strong>ManoProtect Security S.L.</strong> — Conforme al RGPD (Art. 17: Derecho de supresion)</p>
+<p>Esta pagina aplica a todas nuestras aplicaciones: <strong>ManoProtect</strong> (App Cliente), <strong>MP Comerciales</strong> y <strong>MP Instaladores</strong>.</p>
+
+<h2>1. Como solicitar la eliminacion de tus datos</h2>
+<div class="steps">
+<ol>
+<li><span class="step-num">1</span><strong>Envia un email</strong> a <strong>info@manoprotectt.com</strong> con el asunto: <em>"Solicitud de eliminacion de datos - [tu email de registro]"</em></li>
+<li><span class="step-num">2</span><strong>Incluye en el correo:</strong>
 <ul>
-<li><strong>Paso 1:</strong> Envia un correo electronico a <strong>info@manoprotectt.com</strong> con el asunto "Solicitud de eliminacion de datos".</li>
-<li><strong>Paso 2:</strong> Incluye en el correo tu nombre completo y la direccion de correo electronico asociada a tu cuenta.</li>
-<li><strong>Paso 3:</strong> Nuestro equipo procesara tu solicitud en un plazo maximo de 30 dias laborables.</li>
-</ul>
-<h2>Datos que se eliminan</h2>
+<li>Tu nombre completo</li>
+<li>La direccion de correo electronico asociada a tu cuenta</li>
+<li>La aplicacion en la que estas registrado (ManoProtect, MP Comerciales o MP Instaladores)</li>
+<li>Si deseas eliminacion parcial o total (ver tabla abajo)</li>
+</ul></li>
+<li><span class="step-num">3</span><strong>Verificacion de identidad:</strong> Podemos solicitar una verificacion adicional para proteger tu cuenta.</li>
+<li><span class="step-num">4</span><strong>Procesamiento:</strong> Tu solicitud sera procesada en un plazo maximo de <strong>30 dias naturales</strong>.</li>
+<li><span class="step-num">5</span><strong>Confirmacion:</strong> Recibiras un email de confirmacion cuando la eliminacion se haya completado.</li>
+</ol>
+</div>
+
+<h2>2. Datos que se eliminan</h2>
+<h3>2.1 App ManoProtect (Clientes)</h3>
+<table><tr><th>Dato</th><th>Accion</th></tr>
+<tr><td>Nombre, email y datos de perfil</td><td>Eliminados permanentemente</td></tr>
+<tr><td>Contrasena cifrada</td><td>Eliminada permanentemente</td></tr>
+<tr><td>Estado de alarma y configuracion de zonas</td><td>Eliminados permanentemente</td></tr>
+<tr><td>Historial de eventos de seguridad</td><td>Eliminado permanentemente</td></tr>
+<tr><td>Contactos de emergencia</td><td>Eliminados permanentemente</td></tr>
+<tr><td>PIN de seguridad</td><td>Eliminado permanentemente</td></tr>
+<tr><td>Datos de geolocalizacion SOS</td><td>Eliminados permanentemente</td></tr>
+<tr><td>Tokens de notificaciones push (FCM)</td><td>Eliminados y desregistrados</td></tr>
+<tr><td>Huella digital del dispositivo (fingerprint)</td><td>Eliminada permanentemente</td></tr>
+<tr><td>Codigo de referido y relaciones de referido</td><td>Eliminados permanentemente</td></tr>
+<tr><td>ID de cliente en Stripe</td><td>Eliminado (suscripcion cancelada automaticamente)</td></tr>
+</table>
+
+<h3>2.2 MP Comerciales y MP Instaladores</h3>
+<table><tr><th>Dato</th><th>Accion</th></tr>
+<tr><td>Nombre, email y datos profesionales</td><td>Eliminados permanentemente</td></tr>
+<tr><td>Historial de actividad (leads, ventas, instalaciones)</td><td>Anonimizado (se elimina la vinculacion personal)</td></tr>
+<tr><td>Datos de ubicacion laboral</td><td>Eliminados permanentemente</td></tr>
+<tr><td>Fotografias de instalaciones</td><td>Eliminadas permanentemente</td></tr>
+</table>
+
+<div class="warning"><strong>Importante:</strong> Al eliminar tu cuenta de ManoProtect (App Cliente), tu sistema de alarma dejara de estar monitorizado por la CRA. Asegurate de desactivar tu alarma antes de solicitar la eliminacion.</div>
+
+<h2>3. Datos que debemos conservar (obligacion legal)</h2>
+<p>Conforme a la legislacion espanola y europea, estamos obligados a conservar ciertos datos incluso despues de tu solicitud de eliminacion:</p>
+<table><tr><th>Dato</th><th>Motivo legal</th><th>Periodo de retencion</th></tr>
+<tr><td>Registros de facturacion y pagos</td><td>Ley General Tributaria (Art. 29.2.e)</td><td>5 anos</td></tr>
+<tr><td>Datos de contratos de servicio</td><td>Codigo de Comercio (Art. 30)</td><td>6 anos</td></tr>
+<tr><td>Logs de seguridad del sistema</td><td>Ley 25/2007 de conservacion de datos</td><td>12 meses (anonimizados)</td></tr>
+<tr><td>Registros de consentimiento RGPD</td><td>RGPD (Art. 7.1)</td><td>Mientras sea necesario demostrar el consentimiento</td></tr>
+</table>
+
+<div class="info"><strong>Nota:</strong> Los datos conservados por obligacion legal se almacenan de forma separada y restringida, y no se utilizan para ningun otro fin.</div>
+
+<h2>4. Eliminacion de cuenta desde la aplicacion</h2>
+<p>Tambien puedes solicitar la eliminacion directamente desde la aplicacion:</p>
 <ul>
-<li>Nombre, correo electronico y datos de perfil profesional</li>
-<li>Historial de actividad dentro de la aplicacion (leads, pedidos, instalaciones)</li>
-<li>Datos de ubicacion almacenados</li>
-<li>Fotografias e imagenes capturadas desde la aplicacion</li>
+<li><strong>ManoProtect:</strong> Perfil → Ajustes → Eliminar mi cuenta</li>
+<li><strong>MP Comerciales/Instaladores:</strong> Contacta con tu administrador o envia el email indicado arriba</li>
 </ul>
-<h2>Datos que se conservan</h2>
+
+<h2>5. Que ocurre tras la eliminacion</h2>
 <ul>
-<li>Registros de facturacion y contratos (obligacion legal: 5 anos segun normativa fiscal espanola)</li>
-<li>Logs de seguridad anonimizados (obligacion legal: 12 meses)</li>
+<li>Tu cuenta sera desactivada inmediatamente y no podras iniciar sesion.</li>
+<li>Todas las sesiones activas seran cerradas.</li>
+<li>Las suscripciones activas en Stripe seran canceladas (no se realizaran mas cobros).</li>
+<li>Los datos se eliminan de forma irreversible de nuestros servidores activos en un plazo de 30 dias.</li>
+<li>Los datos en copias de seguridad cifradas se eliminaran en el siguiente ciclo de rotacion (maximo 90 dias).</li>
 </ul>
-<h2>Contacto</h2>
-<p>Para cualquier consulta: <strong>info@manoprotectt.com</strong></p>
-<a class="btn" href="mailto:info@manoprotectt.com?subject=Solicitud%20de%20eliminacion%20de%20datos">Solicitar eliminacion por email</a>
+
+<h2>6. Contacto</h2>
+<p><strong>ManoProtect Security S.L.</strong></p>
+<p>Email: <strong>info@manoprotectt.com</strong></p>
+<p>Web: <a href="https://www.manoprotectt.com">www.manoprotectt.com</a></p>
+<p>Autoridad de control: <a href="https://www.aepd.es">Agencia Espanola de Proteccion de Datos (AEPD)</a></p>
+<br>
+<a class="btn" href="mailto:info@manoprotectt.com?subject=Solicitud%20de%20eliminacion%20de%20datos%20-%20ManoProtect&body=Nombre%20completo%3A%20%0AEmail%20de%20registro%3A%20%0AAplicacion%3A%20ManoProtect%20%2F%20MP%20Comerciales%20%2F%20MP%20Instaladores%0ATipo%20de%20eliminacion%3A%20Total%20%2F%20Parcial%0A%0ASolicito%20la%20eliminacion%20de%20mis%20datos%20personales%20conforme%20al%20Art.%2017%20del%20RGPD.">Solicitar eliminacion por email</a>
+<div class="footer">ManoProtect Security S.L. — Todos los derechos reservados 2026<br>Conforme al RGPD (UE) 2016/679 y LOPDGDD 3/2018</div>
 </body></html>"""
 
 
