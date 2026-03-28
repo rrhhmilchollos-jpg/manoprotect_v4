@@ -306,45 +306,47 @@ RATE_LIMIT_WINDOW = 60  # seconds
 RATE_LIMIT_MAX_REQUESTS = 100  # max requests per window
 
 class SecurityHeadersMiddleware(BaseHTTPMiddleware):
-    """Add security headers to all responses"""
     async def dispatch(self, request: Request, call_next):
         response = await call_next(request)
         
-        # Security headers to prevent common attacks
         response.headers["X-Content-Type-Options"] = "nosniff"
         response.headers["X-Frame-Options"] = "DENY"
         response.headers["X-XSS-Protection"] = "1; mode=block"
         response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
-        response.headers["Permissions-Policy"] = "geolocation=(self), microphone=()"
+        response.headers["Permissions-Policy"] = "geolocation=(self), microphone=(), camera=(self)"
         
-        # Content Security Policy - Prevent XSS and injection attacks
         response.headers["Content-Security-Policy"] = (
             "default-src 'self'; "
-            "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://cdnjs.cloudflare.com https://widget.trustpilot.com; "
+            "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://cdnjs.cloudflare.com https://widget.trustpilot.com https://www.tiktok.com; "
             "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; "
             "font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; "
             "img-src 'self' data: https: blob:; "
-            "connect-src 'self' https://*.emergentagent.com https://*.emergent.host https://*.manoprotectt.com https://*.stripe.com https://api.stripe.com wss://*.emergentagent.com wss://*.emergent.host wss://*.manoprotectt.com; "
-            "frame-src 'self' https://www.googletagmanager.com https://js.stripe.com https://widget.trustpilot.com; "
+            "connect-src 'self' https://*.emergentagent.com https://*.emergent.host https://*.manoprotectt.com https://*.stripe.com https://api.stripe.com https://firebaseinstallations.googleapis.com https://fcmregistrations.googleapis.com wss://*.emergentagent.com wss://*.emergent.host wss://*.manoprotectt.com; "
+            "frame-src 'self' https://www.googletagmanager.com https://js.stripe.com https://widget.trustpilot.com https://www.tiktok.com; "
             "frame-ancestors 'none'; "
             "object-src 'none'; "
             "base-uri 'self'; "
             "form-action 'self';"
         )
         
-        # Strict Transport Security (HSTS)
-        response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains"
+        response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains; preload"
         
-        # Cache control for sensitive endpoints
-        if "/api/" in str(request.url):
-            # Allow caching for public read-only endpoints
-            cacheable_paths = ["/api/plans", "/api/dashboard-barrio/", "/api/community-shield/heatmap", "/api/referrals/validate/"]
-            is_cacheable = any(request.url.path.startswith(p) for p in cacheable_paths)
-            if is_cacheable:
-                response.headers["Cache-Control"] = "public, max-age=300, stale-while-revalidate=600"
+        path = str(request.url.path)
+        if path.startswith("/api/"):
+            cacheable = ["/api/plans", "/api/dashboard-barrio/", "/api/community-shield/", "/api/referrals/validate/", "/api/rss/", "/api/privacy", "/api/data-deletion"]
+            if any(path.startswith(p) for p in cacheable):
+                response.headers["Cache-Control"] = "public, max-age=600, stale-while-revalidate=1200"
             else:
                 response.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, private"
-            response.headers["Pragma"] = "no-cache"
+                response.headers["Pragma"] = "no-cache"
+        elif path.endswith(('.js', '.css', '.woff2', '.woff', '.ttf')):
+            response.headers["Cache-Control"] = "public, max-age=31536000, immutable"
+        elif path.endswith(('.webp', '.png', '.jpg', '.jpeg', '.svg', '.ico', '.avif')):
+            response.headers["Cache-Control"] = "public, max-age=2592000, stale-while-revalidate=86400"
+        elif path.endswith(('.aab', '.apk')):
+            response.headers["Cache-Control"] = "public, max-age=3600"
+        elif path == '/' or path.endswith('.html'):
+            response.headers["Cache-Control"] = "public, max-age=60, stale-while-revalidate=300"
         
         return response
 
