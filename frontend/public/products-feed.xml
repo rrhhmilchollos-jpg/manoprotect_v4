@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss xmlns:g="http://base.google.com/ns/1.0" version="2.0">
+  <channel>
+    <title>ManoProtect - Productos de Seguridad Familiar</title>
+    <link>https://manoprotectt.com</link>
+    <description>Alarmas profesionales y relojes GPS SOS para protección familiar en Xátiva</description>
+
+    <!-- PRODUCTO 1: Sentinel S - Infantil/Senior -->
+    <item>
+      <g:id>sentinel-s-infantil</g:id>
+      <title>Reloj GPS Sentinel S - Protección para Niños (Paquete Mensual)</title>
+      <description>Reloj GPS inteligente con botón SOS para niños de 3-12 años. Incluye alerta anti-retirada, sirena 120dB, detector de caídas y localización GPS en tiempo real. Perfecto para proteger a tus hijos en Xátiva.</description>
+      <link>https://manoprotectt.com/sentinel-s</link>
+      <g:image_link>https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800&amp;h=800&amp;fit=crop</g:image_link>
+      <g:price>39.99 EUR</g:price>
+      <g:sale_price>39.99 EUR</g:sale_price>
+      <g:availability>in stock</g:availability>
+      <g:condition>new</g:condition>
+      <g:google_product_category>Electronics &gt; Computers &gt; Wearables</g:google_product_category>
+      <g:product_type>Electrónica &gt; Relojes Inteligentes &gt; Relojes GPS</g:product_type>
+      <g:brand>ManoProtect</brand>
+      <g:gtin>8719327045892</g:gtin>
+      <g:mpn>SENTINEL-S-MONTHLY</g:mpn>
+      <g:item_group_id>sentinel-s</g:item_group_id>
+      <g:color>Lavanda</g:color>
+      <g:size>Único</g:size>
+      <g:age_group>kids</g:age_group>
+      <g:gender>unisex</g:gender>
+      <g:shipping>
+        <g:country>ES</g:country>
+        <g:service>Envío Estándar</g:service>
+        <g:price>4.95 EUR</g:price>
+      </g:shipping>
+      <g:shipping_label>España</g:shipping_label>
+      <g:shipping_weight>30 g</g:shipping_weight>
+      <g:material>Cerámica, Silicona</g:material>
+      <g:pattern>Sólido</g:pattern>
+      <g:subscription>true</g:subscription>
+      <g:subscription_period>month</g:subscription_period>
+      <g:subscription_cost>39.99 EUR</g:subscription_cost>
+    </item>
+
+    <!-- PRODUCTO 2: Sentinel S - Senior/Mayores -->
+    <item>
+      <g:id>sentinel-s-senior</g:id>
+      <title>Reloj GPS Sentinel S - Protección para Mayores (Paquete Mensual)</title>
+      <description>Reloj GPS inteligente con botón SOS para personas mayores. Incluye detector de caídas, alerta anti-retirada, sirena 120dB y localización GPS en tiempo real. Ideal para monitorizar a abuelos y personas de la tercera edad en Xátiva.</description>
+      <link>https://manoprotectt.com/sentinel-s</link>
+      <g:image_link>https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800&amp;h=800&amp;fit=crop</g:image_link>
+      <g:price>39.99 EUR</g:price>
+      <g:sale_price>39.99 EUR</g:sale_price>
+      <g:availability>in stock</g:availability>
+      <g:condition>new</g:condition>
+      <g:google_product_category>Electronics &gt; Computers &gt; Wearables</g:google_product_category>
+      <g:product_type>Electrónica &gt; Relojes Inteligentes &gt; Relojes GPS</g:product_type>
+      <g:brand>ManoProtect</g:brand>
+      <g:gtin>8719327045892</g:gtin>
+      <g:mpn>SENTINEL-S-SENIOR</g:mpn>
+      <g:item_group_id>sentinel-s</g:item_group_id>
+      <g:color>Lavanda</g:color>
+      <g:size>Único</g:size>
+      <g:age_group>adult</g:age_group>
+      <g:gender>unisex</g:gender>
+      <g:shipping>
+        <g:country>ES</g:country>
+        <g:service>Envío Estándar</g:service>
+        <g:price>4.95 EUR</g:price>
+      </g:shipping>
+      <g:shipping_label>España</g:shipping_label>
+      <g:shipping_weight>30 g</g:shipping_weight>
+      <g:material>Cerámica, Silicona</g:material>
+      <g:pattern>Sólido</g:pattern>
+      <g:subscription>true</g:subscription>
+      <g:subscription_period>month</g:subscription_period>
+      <g:subscription_cost>39.99 EUR</g:subscription_cost>
+    </item>
+
+    <!-- PRODUCTO 3: Sentinel S - Paquete Anual -->
+    <item>
+      <g:id>sentinel-s-annual</g:id>
+      <title>Reloj GPS Sentinel S - Protección para Mayores (Paquete Anual)</title>
+      <description>Reloj GPS inteligente con botón SOS para personas mayores. Paquete anual con descuento. Incluye detector de caídas, alerta anti-retirada, sirena 120dB y localización GPS en tiempo real. Ahorra 120€ al año comparado con plan mensual.</description>
+      <link>https://manoprotectt.com/sentinel-s</link>
+      <g:image_link>https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800&amp;h=800&amp;fit=crop</g:image_link>
+      <g:price>359.88 EUR</g:price>
+      <g:sale_price>359.88 EUR</g:sale_price>
+      <g:availability>in stock</g:availability>
+      <g:condition>new</g:condition>
+      <g:google_product_category>Electronics &gt; Computers &gt; Wearables</g:google_product_category>
+      <g:product_type>Electrónica &gt; Relojes Inteligentes &gt; Relojes GPS</g:product_type>
+      <g:brand>ManoProtect</g:brand>
+      <g:gtin>8719327045892</g:gtin>
+      <g:mpn>SENTINEL-S-ANNUAL</g:mpn>
+      <g:item_group_id>sentinel-s</g:item_group_id>
+      <g:color>Lavanda</g:color>
+      <g:size>Único</g:size>
+      <g:age_group>adult</g:age_group>
+      <g:gender>unisex</g:gender>
+      <g:shipping>
+        <g:country>ES</g:country>
+        <g:service>Envío Estándar</g:service>
+        <g:price>4.95 EUR</g:price>
+      </g:shipping>
+      <g:shipping_label>España</g:shipping_label>
+      <g:shipping_weight>30 g</g:shipping_weight>
+      <g:material>Cerámica, Silicona</g:material>
+      <g:pattern>Sólido</g:pattern>
+      <g:subscription>true</g:subscription>
+      <g:subscription_period>year</g:subscription_period>
+      <g:subscription_cost>359.88 EUR</g:subscription_cost>
+    </item>
+
+    <!-- PRODUCTO 4: Sentinel X - Adultos -->
+    <item>
+      <g:id>sentinel-x-adultos</g:id>
+      <title>Reloj GPS Sentinel X - Protección Premium para Adultos (Paquete Mensual)</title>
+      <description>Reloj GPS premium para adultos con cámara integrada, sensor cardíaco, botón SOS invisible y monitorización CRA 24/7. Incluye grabación en nube 30 días y servicio Acuda. Protección completa para profesionales en Xátiva.</description>
+      <link>https://manoprotectt.com/sentinel-x</link>
+      <g:image_link>https://images.unsplash.com/photo-1579586337278-3befd40fd17c?w=800&amp;h=800&amp;fit=crop</g:image_link>
+      <g:price>59.99 EUR</g:price>
+      <g:sale_price>59.99 EUR</g:sale_price>
+      <g:availability>in stock</g:availability>
+      <g:condition>new</g:condition>
+      <g:google_product_category>Electronics &gt; Computers &gt; Wearables</g:google_product_category>
+      <g:product_type>Electrónica &gt; Relojes Inteligentes &gt; Relojes GPS Premium</g:product_type>
+      <g:brand>ManoProtect</g:brand>
+      <g:gtin>8719327045908</g:gtin>
+      <g:mpn>SENTINEL-X-MONTHLY</g:mpn>
+      <g:item_group_id>sentinel-x</g:item_group_id>
+      <g:color>Negro</g:color>
+      <g:size>Único</g:size>
+      <g:age_group>adult</g:age_group>
+      <g:gender>unisex</g:gender>
+      <g:shipping>
+        <g:country>ES</g:country>
+        <g:service>Envío Estándar</g:service>
+        <g:price>4.95 EUR</g:price>
+      </g:shipping>
+      <g:shipping_label>España</g:shipping_label>
+      <g:shipping_weight>35 g</g:shipping_weight>
+      <g:material>Titanio, Silicona</g:material>
+      <g:pattern>Sólido</g:pattern>
+      <g:subscription>true</g:subscription>
+      <g:subscription_period>month</g:subscription_period>
+      <g:subscription_cost>59.99 EUR</g:subscription_cost>
+    </item>
+
+    <!-- PRODUCTO 5: Sentinel X - Paquete Anual -->
+    <item>
+      <g:id>sentinel-x-annual</g:id>
+      <title>Reloj GPS Sentinel X - Protección Premium para Adultos (Paquete Anual)</title>
+      <description>Reloj GPS premium para adultos con cámara integrada, sensor cardíaco, botón SOS invisible y monitorización CRA 24/7. Paquete anual con descuento. Ahorra 180€ al año comparado con plan mensual.</description>
+      <link>https://manoprotectt.com/sentinel-x</link>
+      <g:image_link>https://images.unsplash.com/photo-1579586337278-3befd40fd17c?w=800&amp;h=800&amp;fit=crop</g:image_link>
+      <g:price>539.91 EUR</g:price>
+      <g:sale_price>539.91 EUR</g:sale_price>
+      <g:availability>in stock</g:availability>
+      <g:condition>new</g:condition>
+      <g:google_product_category>Electronics &gt; Computers &gt; Wearables</g:google_product_category>
+      <g:product_type>Electrónica &gt; Relojes Inteligentes &gt; Relojes GPS Premium</g:product_type>
+      <g:brand>ManoProtect</g:brand>
+      <g:gtin>8719327045908</g:gtin>
+      <g:mpn>SENTINEL-X-ANNUAL</g:mpn>
+      <g:item_group_id>sentinel-x</g:item_group_id>
+      <g:color>Negro</g:color>
+      <g:size>Único</g:size>
+      <g:age_group>adult</g:age_group>
+      <g:gender>unisex</g:gender>
+      <g:shipping>
+        <g:country>ES</g:country>
+        <g:service>Envío Estándar</g:service>
+        <g:price>4.95 EUR</g:price>
+      </g:shipping>
+      <g:shipping_label>España</g:shipping_label>
+      <g:shipping_weight>35 g</g:shipping_weight>
+      <g:material>Titanio, Silicona</g:material>
+      <g:pattern>Sólido</g:pattern>
+      <g:subscription>true</g:subscription>
+      <g:subscription_period>year</g:subscription_period>
+      <g:subscription_cost>539.91 EUR</g:subscription_cost>
+    </item>
+
+    <!-- PRODUCTO 6: Sentinel J - Jóvenes -->
+    <item>
+      <g:id>sentinel-j-jovenes</g:id>
+      <title>Reloj GPS Sentinel J - Protección para Jóvenes (Paquete Mensual)</title>
+      <description>Reloj GPS inteligente para jóvenes de 13-17 años. Incluye botón SOS, localización GPS en tiempo real, zonas seguras y alertas de emergencia. Diseñado para adolescentes que necesitan independencia con seguridad.</description>
+      <link>https://manoprotectt.com/sentinel-j</link>
+      <g:image_link>https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800&amp;h=800&amp;fit=crop</g:image_link>
+      <g:price>49.99 EUR</g:price>
+      <g:sale_price>49.99 EUR</g:sale_price>
+      <g:availability>in stock</g:availability>
+      <g:condition>new</g:condition>
+      <g:google_product_category>Electronics &gt; Computers &gt; Wearables</g:google_product_category>
+      <g:product_type>Electrónica &gt; Relojes Inteligentes &gt; Relojes GPS</g:product_type>
+      <g:brand>ManoProtect</g:brand>
+      <g:gtin>8719327045915</g:gtin>
+      <g:mpn>SENTINEL-J-MONTHLY</g:mpn>
+      <g:item_group_id>sentinel-j</g:item_group_id>
+      <g:color>Azul</g:color>
+      <g:size>Único</g:size>
+      <g:age_group>teens</g:age_group>
+      <g:gender>unisex</g:gender>
+      <g:shipping>
+        <g:country>ES</g:country>
+        <g:service>Envío Estándar</g:service>
+        <g:price>4.95 EUR</g:price>
+      </g:shipping>
+      <g:shipping_label>España</g:shipping_label>
+      <g:shipping_weight>32 g</g:shipping_weight>
+      <g:material>Aluminio, Silicona</g:material>
+      <g:pattern>Sólido</g:pattern>
+      <g:subscription>true</g:subscription>
+      <g:subscription_period>month</g:subscription_period>
+      <g:subscription_cost>49.99 EUR</g:subscription_cost>
+    </item>
+
+    <!-- PRODUCTO 7: Alarma Hogar -->
+    <item>
+      <g:id>alarma-hogar</g:id>
+      <title>Sistema de Alarma Profesional para Hogar - Instalación Incluida</title>
+      <description>Sistema de alarma profesional para viviendas con sensores inteligentes, monitorización CRA 24/7, servicio Acuda y respuesta inmediata ante intrusiones. Instalación gratuita en Xátiva. Sin permanencia.</description>
+      <link>https://manoprotectt.com/alarmas</link>
+      <g:image_link>https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&amp;h=800&amp;fit=crop</g:image_link>
+      <g:price>89.99 EUR</g:price>
+      <g:sale_price>89.99 EUR</g:sale_price>
+      <g:availability>in stock</g:availability>
+      <g:condition>new</g:condition>
+      <g:google_product_category>Home &amp; Garden &gt; Security &amp; Surveillance &gt; Alarm Systems</g:google_product_category>
+      <g:product_type>Hogar &gt; Seguridad &gt; Sistemas de Alarma</g:product_type>
+      <g:brand>ManoProtect</g:brand>
+      <g:gtin>8719327045922</g:gtin>
+      <g:mpn>ALARMA-HOGAR</g:mpn>
+      <g:item_group_id>alarma-hogar</g:item_group_id>
+      <g:color>Blanco</g:color>
+      <g:size>Estándar</g:size>
+      <g:gender>unisex</g:gender>
+      <g:shipping>
+        <g:country>ES</g:country>
+        <g:service>Instalación Incluida</g:service>
+        <g:price>0 EUR</g:price>
+      </g:shipping>
+      <g:shipping_label>España</g:shipping_label>
+      <g:material>Plástico ABS, Acero Inoxidable</g:material>
+      <g:pattern>Sólido</g:pattern>
+      <g:subscription>true</g:subscription>
+      <g:subscription_period>month</g:subscription_period>
+      <g:subscription_cost>89.99 EUR</g:subscription_cost>
+    </item>
+
+    <!-- PRODUCTO 8: Alarma Negocio -->
+    <item>
+      <g:id>alarma-negocio</g:id>
+      <title>Sistema de Alarma Profesional para Negocios - Instalación Incluida</title>
+      <description>Sistema de alarma avanzado para negocios y comercios con sensores de movimiento, cámaras de vigilancia, monitorización CRA 24/7 y servicio Acuda. Instalación profesional gratuita en Xátiva. Protección completa para tu negocio.</description>
+      <link>https://manoprotectt.com/alarmas</link>
+      <g:image_link>https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&amp;h=800&amp;fit=crop</g:image_link>
+      <g:price>149.99 EUR</g:price>
+      <g:sale_price>149.99 EUR</g:sale_price>
+      <g:availability>in stock</g:availability>
+      <g:condition>new</g:condition>
+      <g:google_product_category>Home &amp; Garden &gt; Security &amp; Surveillance &gt; Alarm Systems</g:google_product_category>
+      <g:product_type>Negocios &gt; Seguridad &gt; Sistemas de Alarma</g:product_type>
+      <g:brand>ManoProtect</g:brand>
+      <g:gtin>8719327045939</g:gtin>
+      <g:mpn>ALARMA-NEGOCIO</g:mpn>
+      <g:item_group_id>alarma-negocio</g:item_group_id>
+      <g:color>Negro</g:color>
+      <g:size>Profesional</g:size>
+      <g:gender>unisex</g:gender>
+      <g:shipping>
+        <g:country>ES</g:country>
+        <g:service>Instalación Incluida</g:service>
+        <g:price>0 EUR</g:price>
+      </g:shipping>
+      <g:shipping_label>España</g:shipping_label>
+      <g:material>Plástico ABS, Acero Inoxidable</g:material>
+      <g:pattern>Sólido</g:pattern>
+      <g:subscription>true</g:subscription>
+      <g:subscription_period>month</g:subscription_period>
+      <g:subscription_cost>149.99 EUR</g:subscription_cost>
+    </item>
+
+  </channel>
+</rss>
