@@ -148,6 +148,8 @@ const ThankYouPage = lazy(() => import('@/pages/ThankYouPage'));
 const BlogPage = lazy(() => import('@/pages/BlogPage'));
 const BlogPostDetail = lazy(() => import('@/pages/BlogPage').then(m => ({ default: m.BlogPostDetail })));
 const BlogPostPage = lazy(() => import('@/pages/BlogPostPage'));
+const News = lazy(() => import('@/pages/News'));
+const NewsDetail = lazy(() => import('@/pages/NewsDetail'));
 const ContactPage = lazy(() => import('@/pages/ContactPage'));
 const TestimonialsPage = lazy(() => import('@/pages/TestimonialsPage'));
 const ProductsPage = lazy(() => import('@/pages/ProductsPage'));
@@ -461,6 +463,8 @@ function AppRouter() {
           <Route path="/landing-original" element={<LandingPage />} />
           <Route path="/blog" element={<BlogPage />} />
           <Route path="/blog/:slug" element={<BlogPostDetail />} />
+          <Route path="/noticias" element={<News />} />
+          <Route path="/noticias/:slug" element={<NewsDetail />} />
           <Route path="/contacto" element={<ContactPage />} />
           <Route path="/testimonios" element={<TestimonialsPage />} />
           <Route path="/productos" element={<ProductsPage />} />
