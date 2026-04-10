@@ -1,124 +1,897 @@
-<!doctype html>
-<html lang="es">
+<!DOCTYPE html>
+<html lang="es" dir="ltr">
     <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5, user-scalable=yes" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests" />
-        <meta name="theme-color" content="#6366f1" />
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+        <meta name="theme-color" content="#10b981" media="(prefers-color-scheme: light)" />
+        <meta name="theme-color" content="#064e3b" media="(prefers-color-scheme: dark)" />
         
-        <!-- Preconnect FIRST - Before anything else -->
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-        <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
-        <link rel="dns-prefetch" href="https://www.google-analytics.com" />
+        <!-- ============================================ -->
+        <!-- PRIMARY META TAGS - SEO OPTIMIZED -->
+        <!-- ============================================ -->
+        <title>ManoProtect - Localiza a tu familia en segundos en caso de emergencia</title>
+        <meta name="description" content="ManoProtect: Alarmas profesionales para hogar y negocio con Central Receptora 24/7. Sentinel Lock, app movil, GPS familiar. Instalacion GRATIS, sin permanencia. Desde 33,90 EUR/mes." />
+        <meta name="keywords" content="alarmas hogar, alarmas negocio, seguridad profesional, CRA 24/7, Sentinel Lock, GPS familiar, proteccion hogar, instalacion alarmas gratis, sin permanencia, seguridad digital, proteccion familiar, ManoProtect" />
         
-        <!-- Google Fonts - Non-blocking -->
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&family=Public+Sans:wght@400;500;600&display=swap" media="print" onload="this.media='all'" />
-        <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&family=Public+Sans:wght@400;500;600&display=swap" /></noscript>
+        <!-- ============================================ -->
+        <!-- SECURITY HEADERS -->
+        <!-- ============================================ -->
+        <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+        <!-- X-Frame-Options is set via HTTP headers by the server -->
+        <meta http-equiv="X-XSS-Protection" content="1; mode=block" />
+        <meta http-equiv="Permissions-Policy" content="geolocation=(self), microphone=(), camera=()" />
+        <meta name="referrer" content="strict-origin-when-cross-origin" />
         
-        <!-- SEO Meta Tags - Optimizados -->
-        <title>ManoProtect - Protección Familiar contra Fraudes Digitales | España</title>
-        <meta name="description" content="Protege a tu familia contra fraudes, phishing y estafas digitales en tiempo real. IA avanzada, alertas instantáneas. Prueba gratis 7 días." />
-        <meta name="keywords" content="protección fraudes, anti phishing, detectar estafas, seguridad digital, protección familiar, alertas fraude, smishing, vishing, España" />
-        <meta name="author" content="STARTBOOKING SL" />
+        <!-- ============================================ -->
+        <!-- CANONICAL & HREFLANG (Internacionalización) -->
+        <!-- ============================================ -->
+        <link rel="canonical" href="https://manoprotect.com" />
+        <link rel="alternate" hreflang="es" href="https://manoprotect.com" />
+        <link rel="alternate" hreflang="es-ES" href="https://manoprotect.com" />
+        <link rel="alternate" hreflang="x-default" href="https://manoprotect.com" />
+        
+        <!-- ============================================ -->
+        <!-- OPEN GRAPH / FACEBOOK -->
+        <!-- ============================================ -->
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://manoprotect.com/" />
+        <meta property="og:title" content="ManoProtect - Seguridad Integral para Hogar y Negocio" />
+        <meta property="og:description" content="Alarmas profesionales para hogar y negocio con Central Receptora 24/7. Sentinel Lock, app movil, GPS familiar. Instalacion GRATIS, sin permanencia. Desde 33,90 EUR/mes." />
+        <meta property="og:image" content="https://manoprotect.com/images/optimized/hero-family-hd.webp" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="840" />
+        <meta property="og:image:alt" content="ManoProtect - Alarmas Profesionales y Seguridad Familiar" />
+        <meta property="og:image:type" content="image/webp" />
+        <meta property="og:locale" content="es_ES" />
+        <meta property="og:site_name" content="ManoProtect" />
+        
+        <!-- ============================================ -->
+        <!-- TWITTER CARDS -->
+        <!-- ============================================ -->
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:site" content="@manoprotect" />
+        <meta name="twitter:creator" content="@manoprotect" />
+        <meta name="twitter:title" content="ManoProtect - Localiza a tu familia en segundos" />
+        <meta name="twitter:description" content="Alarmas profesionales para hogar y negocio con Central Receptora 24/7. Sentinel Lock, app movil, GPS familiar. Instalacion GRATIS, sin permanencia. Desde 33,90 EUR/mes." />
+        <meta name="twitter:image" content="https://manoprotect.com/og-image.png" />
+        <meta name="twitter:image:alt" content="ManoProtect Digital Security" />
+        
+        <!-- ============================================ -->
+        <!-- ADDITIONAL SEO META TAGS -->
+        <!-- ============================================ -->
         <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
-        <meta name="googlebot" content="index, follow" />
-        <meta name="google" content="notranslate" />
-        <meta name="google-adsense-account" content="ca-pub-7713974112203810" />
+        <meta name="googlebot" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+        <meta name="bingbot" content="index, follow" />
+        <meta name="author" content="ManoProtect" />
+        <meta name="publisher" content="ManoProtect" />
+        <meta name="copyright" content="ManoProtect 2024-2026" />
+        <meta name="geo.region" content="ES" />
+        <meta name="geo.placename" content="Valencia, España" />
+        <meta name="geo.position" content="38.9806;-0.5479" />
+        <meta name="ICBM" content="38.9806, -0.5479" />
         <meta name="rating" content="general" />
         <meta name="distribution" content="global" />
         <meta name="revisit-after" content="7 days" />
         <meta name="language" content="Spanish" />
-        <meta name="geo.region" content="ES" />
-        <meta name="geo.placename" content="España" />
-        <link rel="canonical" href="https://www.manoprotect.com/" />
-        <link rel="alternate" hreflang="es" href="https://www.manoprotect.com/" />
-        <link rel="alternate" hreflang="x-default" href="https://www.manoprotect.com/" />
+        <meta name="coverage" content="Worldwide" />
+        <meta name="target" content="all" />
+        <meta name="HandheldFriendly" content="True" />
+        <meta name="MobileOptimized" content="320" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <meta name="apple-mobile-web-app-title" content="ManoProtect" />
+        <meta name="application-name" content="ManoProtect" />
+        <meta name="format-detection" content="telephone=yes" />
         
-        <!-- Open Graph / Facebook - Optimizado -->
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://www.manoprotect.com/" />
-        <meta property="og:title" content="ManoProtect - Protección Familiar contra Fraudes Digitales" />
-        <meta property="og:description" content="Protege a tu familia contra fraudes, phishing y estafas digitales en tiempo real. IA avanzada para detectar amenazas." />
-        <meta property="og:image" content="https://www.manoprotect.com/og-image.png" />
-        <meta property="og:image:secure_url" content="https://www.manoprotect.com/og-image.png" />
-        <meta property="og:image:type" content="image/png" />
-        <meta property="og:image:width" content="1200" />
-        <meta property="og:image:height" content="630" />
-        <meta property="og:image:alt" content="ManoProtect - Protección familiar digital" />
-        <meta property="og:locale" content="es_ES" />
-        <meta property="og:site_name" content="ManoProtect" />
+        <!-- ============================================ -->
+        <!-- GOOGLE SEARCH CONSOLE VERIFICATION -->
+        <!-- ============================================ -->
+        <meta name="google-site-verification" content="%REACT_APP_GOOGLE_VERIFICATION%" />
         
-        <!-- Twitter Cards - Optimizado -->
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:site" content="@manoprotect" />
-        <meta name="twitter:creator" content="@manoprotect" />
-        <meta name="twitter:url" content="https://www.manoprotect.com/" />
-        <meta name="twitter:title" content="ManoProtect - Protección Familiar contra Fraudes" />
-        <meta name="twitter:description" content="Protege a tu familia contra fraudes y estafas digitales. IA avanzada para detectar amenazas en tiempo real." />
-        <meta name="twitter:image" content="https://www.manoprotect.com/og-image.png" />
-        <meta name="twitter:image:alt" content="ManoProtect - Protección familiar digital" />
+        <!-- ============================================ -->
+        <!-- ADVANCED SEO: BUSINESS & LOCAL -->
+        <!-- ============================================ -->
+        <meta name="subject" content="Alarmas Profesionales y Seguridad Integral para Hogar y Negocio" />
+        <meta name="abstract" content="ManoProtect ofrece alarmas profesionales con Central Receptora de Alarmas 24/7, Sentinel Lock, GPS familiar y app movil. Instalacion gratuita, sin permanencia." />
+        <meta name="topic" content="Alarmas, Seguridad Hogar, Seguridad Negocio, CRA 24/7, GPS Familiar" />
+        <meta name="summary" content="Empresa lider en seguridad integral para hogar y negocio en Espana. Alarmas profesionales, Sentinel Lock, Central Receptora 24/7." />
+        <meta name="classification" content="Security Software, Consumer Protection, Family Safety" />
+        <meta name="designer" content="ManoProtect Development Team" />
+        <meta name="owner" content="STARTBOOKING SL" />
+        <meta name="url" content="https://manoprotect.com" />
+        <meta name="identifier-URL" content="https://manoprotect.com" />
+        <meta name="directory" content="submission" />
+        <meta name="category" content="Security, Technology, Family Safety" />
+        <meta name="pagename" content="ManoProtect - Seguridad Digital España" />
         
-        <!-- Schema.org Organization - Mejorado -->
+        <!-- ============================================ -->
+        <!-- DUBLIN CORE METADATA (Academic/Enterprise SEO) -->
+        <!-- ============================================ -->
+        <meta name="DC.title" content="ManoProtect - Digital Security Platform" />
+        <meta name="DC.creator" content="ManoProtect" />
+        <meta name="DC.subject" content="Digital Security, Fraud Prevention, Online Safety" />
+        <meta name="DC.description" content="Plataforma de seguridad digital con protección contra phishing, fraud prevention y online payment protection." />
+        <meta name="DC.publisher" content="STARTBOOKING SL" />
+        <meta name="DC.contributor" content="Iván Rubio Cano" />
+        <meta name="DC.date" content="2024-2026" />
+        <meta name="DC.type" content="Service" />
+        <meta name="DC.format" content="text/html" />
+        <meta name="DC.identifier" content="https://manoprotect.com" />
+        <meta name="DC.language" content="es" />
+        <meta name="DC.coverage" content="España" />
+        <meta name="DC.rights" content="Copyright 2024-2026 ManoProtect - STARTBOOKING SL. All rights reserved." />
+        
+        <!-- ============================================ -->
+        <!-- PINTEREST & WHATSAPP -->
+        <!-- ============================================ -->
+        <meta name="pinterest-rich-pin" content="true" />
+        <meta property="og:whatsapp_sticker_pack_publisher_email" content="info@manoprotect.com" />
+        
+        <!-- ============================================ -->
+        <!-- GOOGLE NEWS & ARTICLES -->
+        <!-- ============================================ -->
+        <meta name="news_keywords" content="alarmas hogar, seguridad profesional, CRA 24/7, Sentinel Lock, GPS familiar, proteccion familiar, seguridad digital" />
+        <meta name="original-source" content="https://manoprotect.com" />
+        <meta name="syndication-source" content="https://manoprotect.com" />
+        <meta name="standout" content="https://manoprotect.com" />
+        
+        <!-- ============================================ -->
+        <!-- APPLE & SAFARI SPECIFIC -->
+        <!-- ============================================ -->
+        <!-- Apple Store ID - Pendiente publicación -->
+        <!-- <meta name="apple-itunes-app" content="app-id=APP_STORE_ID" /> -->
+        <link rel="apple-touch-startup-image" href="/splash.png" />
+        
+        <!-- ============================================ -->
+        <!-- GOOGLE PLAY STORE -->
+        <!-- ============================================ -->
+        <meta name="google-play-app" content="app-id=com.manoprotect.clientes" />
+        
+        <!-- ============================================ -->
+        <!-- PERFORMANCE: PRELOAD CRITICAL RESOURCES -->
+        <!-- ============================================ -->
+        <link rel="preload" href="/manoprotect_logo.webp" as="image" type="image/webp" />
+        
+        <!-- RSS Feed for Google Discover -->
+        <link rel="alternate" type="application/rss+xml" title="ManoProtect Blog" href="https://manoprotect.com/api/rss/feed.xml" />
+        
+        <!-- Preconnect to critical origins ONLY -->
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        
+        <!-- Google Fonts: Non-blocking load with font-display:optional (prevents CLS from font swap) -->
+        <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=optional" />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=optional" media="print" onload="this.media='all'" />
+        
+        <!-- Preload LCP hero image (local WebP optimized) -->
+        <link rel="preload" as="image" href="/images/optimized/hero-family.webp" fetchpriority="high" type="image/webp" />
+        
+        <!-- DNS Prefetch for deferred third-party resources -->
+        <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+        <link rel="dns-prefetch" href="https://connect.facebook.net" />
+        
+        <!-- ============================================ -->
+        <!-- PWA MANIFEST & ICONS -->
+        <!-- ============================================ -->
+        <link rel="manifest" href="/manifest.json" />
+        <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+        <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#10b981" />
+        <meta name="msapplication-TileColor" content="#10b981" />
+        <meta name="msapplication-config" content="/browserconfig.xml" />
+        
+        <!-- ============================================ -->
+        <!-- CRITICAL CSS - INLINE FOR PERFORMANCE -->
+        <!-- ============================================ -->
+        <style>
+            /* Critical CSS - Above the fold content */
+            *,*::before,*::after{box-sizing:border-box}
+            html{-webkit-text-size-adjust:100%;tab-size:4;scroll-behavior:smooth}
+            body{margin:0;background:#f8fafc;font-family:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;line-height:1.5;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+            #root{min-height:100vh;display:flex;flex-direction:column}
+            img,video{max-width:100%;height:auto;display:block}
+            /* Loading state */
+            .app-loading{display:flex;align-items:center;justify-content:center;min-height:100vh;background:linear-gradient(135deg,#059669 0%,#10b981 100%)}
+            .app-loading::after{content:'';width:48px;height:48px;border:4px solid rgba(255,255,255,0.3);border-top-color:#fff;border-radius:50%;animation:spin 1s linear infinite}
+            @keyframes spin{to{transform:rotate(360deg)}}
+            /* Prevent CLS */
+            .hero-section{min-height:80vh}
+            .header{height:72px}
+        </style>
+        
+        <!-- ============================================ -->
+        <!-- STRUCTURED DATA: ORGANIZATION -->
+        <!-- ============================================ -->
         <script type="application/ld+json">
         {
             "@context": "https://schema.org",
             "@type": "Organization",
+            "@id": "https://manoprotect.com/#organization",
             "name": "ManoProtect",
-            "legalName": "STARTBOOKING SL",
-            "url": "https://www.manoprotect.com",
-            "logo": "https://www.manoprotect.com/manoprotect_logo.webp",
-            "description": "Plataforma líder en España de protección contra fraudes y estafas digitales",
+            "alternateName": ["Mano Protect", "ManoProtect España"],
+            "url": "https://manoprotect.com",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https://manoprotect.com/logo512.png",
+                "width": 512,
+                "height": 512
+            },
+            "image": "https://manoprotect.com/og-image.png",
+            "description": "Localiza a tu familia en segundos en caso de emergencia. GPS en segundo plano 24/7, alertas SOS y protecci\u00f3n familiar.",
+            "email": "info@manoprotect.com",
+            "telephone": "+34672184738",
             "foundingDate": "2024",
+            "founders": [{
+                "@type": "Person",
+                "name": "Iván Rubio Cano"
+            }],
             "address": {
                 "@type": "PostalAddress",
-                "addressCountry": "ES",
-                "addressLocality": "Madrid"
+                "streetAddress": "Novelé",
+                "addressLocality": "Valencia",
+                "addressRegion": "Comunidad Valenciana",
+                "postalCode": "46814",
+                "addressCountry": "ES"
             },
-            "contactPoint": {
+            "geo": {
+                "@type": "GeoCoordinates",
+                "latitude": 38.9806,
+                "longitude": -0.5479
+            },
+            "areaServed": [{
+                "@type": "Country",
+                "name": "España"
+            }, {
+                "@type": "Country", 
+                "name": "México"
+            }],
+            "sameAs": [
+                "https://www.youtube.com/@manoprotect",
+                "https://twitter.com/manoprotect",
+                "https://www.linkedin.com/company/manoprotect",
+                "https://www.facebook.com/manoprotect"
+            ],
+            "contactPoint": [{
                 "@type": "ContactPoint",
-                "telephone": "+34-601-510-950",
+                "telephone": "+34672184738",
                 "contactType": "customer service",
-                "email": "info@manoprotect.com",
                 "availableLanguage": ["Spanish", "English"],
                 "areaServed": "ES"
-            },
-            "sameAs": [
-                "https://twitter.com/manoprotect",
-                "https://www.linkedin.com/company/manoprotect"
-            ]
+            }, {
+                "@type": "ContactPoint",
+                "telephone": "+34672184738",
+                "contactType": "technical support",
+                "availableLanguage": "Spanish"
+            }]
         }
         </script>
         
-        <!-- Schema.org SoftwareApplication - Mejorado -->
+        <!-- ============================================ -->
+        <!-- STRUCTURED DATA: WEBSITE + SEARCH ACTION -->
+        <!-- ============================================ -->
+        <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "WebSite",
+            "@id": "https://manoprotect.com/#website",
+            "name": "ManoProtect",
+            "alternateName": "ManoProtect - Digital Security",
+            "url": "https://manoprotect.com",
+            "description": "Plataforma lider en alarmas profesionales para hogar y negocio con Central Receptora 24/7",
+            "publisher": {"@id": "https://manoprotect.com/#organization"},
+            "inLanguage": "es-ES",
+            "potentialAction": {
+                "@type": "SearchAction",
+                "target": {
+                    "@type": "EntryPoint",
+                    "urlTemplate": "https://manoprotect.com/search?q={search_term_string}"
+                },
+                "query-input": "required name=search_term_string"
+            }
+        }
+        </script>
+        
+        <!-- ============================================ -->
+        <!-- STRUCTURED DATA: SOFTWARE APPLICATION -->
+        <!-- ============================================ -->
         <script type="application/ld+json">
         {
             "@context": "https://schema.org",
             "@type": "SoftwareApplication",
+            "@id": "https://manoprotect.com/#software",
             "name": "ManoProtect",
-            "url": "https://www.manoprotect.com",
-            "operatingSystem": "ANDROID, IOS, Web",
             "applicationCategory": "SecurityApplication",
-            "description": "Aplicación de protección contra fraudes digitales para familias",
+            "applicationSubCategory": "Digital Security",
+            "operatingSystem": "Web, iOS, Android",
+            "description": "Aplicación de seguridad digital con fraud prevention, protección contra phishing y online payment protection",
             "offers": {
                 "@type": "AggregateOffer",
                 "lowPrice": "0",
                 "highPrice": "399.99",
                 "priceCurrency": "EUR",
                 "offerCount": "3",
-                "availability": "https://schema.org/InStock"
+                "offers": [{
+                    "@type": "Offer",
+                    "name": "Plan Básico - Prueba Gratuita",
+                    "price": "0",
+                    "priceCurrency": "EUR",
+                    "description": "7 días gratis de digital security - Sin tarjeta requerida",
+                    "availability": "https://schema.org/InStock",
+                    "priceValidUntil": "2026-12-31",
+                    "shippingDetails": {
+                        "@type": "OfferShippingDetails",
+                        "shippingRate": {
+                            "@type": "MonetaryAmount",
+                            "value": "0",
+                            "currency": "EUR"
+                        },
+                        "shippingDestination": {
+                            "@type": "DefinedRegion",
+                            "addressCountry": "ES"
+                        },
+                        "deliveryTime": {
+                            "@type": "ShippingDeliveryTime",
+                            "handlingTime": {
+                                "@type": "QuantitativeValue",
+                                "minValue": "0",
+                                "maxValue": "0",
+                                "unitCode": "DAY"
+                            },
+                            "transitTime": {
+                                "@type": "QuantitativeValue",
+                                "minValue": "0",
+                                "maxValue": "0",
+                                "unitCode": "DAY"
+                            }
+                        }
+                    },
+                    "hasMerchantReturnPolicy": {
+                        "@type": "MerchantReturnPolicy",
+                        "applicableCountry": "ES",
+                        "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+                        "merchantReturnDays": "14",
+                        "returnMethod": "https://schema.org/ReturnByMail",
+                        "returnFees": "https://schema.org/FreeReturn"
+                    }
+                }, {
+                    "@type": "Offer",
+                    "name": "Plan Individual",
+                    "price": "249.99",
+                    "priceCurrency": "EUR",
+                    "priceSpecification": {
+                        "@type": "UnitPriceSpecification",
+                        "price": "249.99",
+                        "priceCurrency": "EUR",
+                        "billingDuration": "P1Y",
+                        "unitText": "año"
+                    },
+                    "description": "Protección 24/7 avanzada - 20,83€/mes facturado anualmente. Ahorras 110€",
+                    "availability": "https://schema.org/InStock",
+                    "priceValidUntil": "2026-12-31",
+                    "shippingDetails": {
+                        "@type": "OfferShippingDetails",
+                        "shippingRate": {
+                            "@type": "MonetaryAmount",
+                            "value": "0",
+                            "currency": "EUR"
+                        },
+                        "shippingDestination": {
+                            "@type": "DefinedRegion",
+                            "addressCountry": "ES"
+                        },
+                        "deliveryTime": {
+                            "@type": "ShippingDeliveryTime",
+                            "handlingTime": {
+                                "@type": "QuantitativeValue",
+                                "minValue": "0",
+                                "maxValue": "0",
+                                "unitCode": "DAY"
+                            },
+                            "transitTime": {
+                                "@type": "QuantitativeValue",
+                                "minValue": "0",
+                                "maxValue": "0",
+                                "unitCode": "DAY"
+                            }
+                        }
+                    },
+                    "hasMerchantReturnPolicy": {
+                        "@type": "MerchantReturnPolicy",
+                        "applicableCountry": "ES",
+                        "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+                        "merchantReturnDays": "14",
+                        "returnMethod": "https://schema.org/ReturnByMail",
+                        "returnFees": "https://schema.org/FreeReturn"
+                    }
+                }, {
+                    "@type": "Offer",
+                    "name": "Plan Familiar",
+                    "price": "399.99",
+                    "priceCurrency": "EUR",
+                    "priceSpecification": {
+                        "@type": "UnitPriceSpecification",
+                        "price": "399.99",
+                        "priceCurrency": "EUR",
+                        "billingDuration": "P1Y",
+                        "unitText": "año"
+                    },
+                    "description": "Hasta 5 miembros familia - 33,33€/mes facturado anualmente. Ahorras 200€",
+                    "availability": "https://schema.org/InStock",
+                    "priceValidUntil": "2026-12-31",
+                    "shippingDetails": {
+                        "@type": "OfferShippingDetails",
+                        "shippingRate": {
+                            "@type": "MonetaryAmount",
+                            "value": "0",
+                            "currency": "EUR"
+                        },
+                        "shippingDestination": {
+                            "@type": "DefinedRegion",
+                            "addressCountry": "ES"
+                        },
+                        "deliveryTime": {
+                            "@type": "ShippingDeliveryTime",
+                            "handlingTime": {
+                                "@type": "QuantitativeValue",
+                                "minValue": "0",
+                                "maxValue": "0",
+                                "unitCode": "DAY"
+                            },
+                            "transitTime": {
+                                "@type": "QuantitativeValue",
+                                "minValue": "0",
+                                "maxValue": "0",
+                                "unitCode": "DAY"
+                            }
+                        }
+                    },
+                    "hasMerchantReturnPolicy": {
+                        "@type": "MerchantReturnPolicy",
+                        "applicableCountry": "ES",
+                        "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+                        "merchantReturnDays": "14",
+                        "returnMethod": "https://schema.org/ReturnByMail",
+                        "returnFees": "https://schema.org/FreeReturn"
+                    }
+                }]
             },
-            "provider": {
-                "@type": "Organization",
-                "name": "STARTBOOKING SL",
-                "url": "https://www.manoprotect.com"
+            "aggregateRating": {
+                "@type": "AggregateRating",
+                "ratingValue": "4.8",
+                "ratingCount": "327",
+                "bestRating": "5",
+                "worstRating": "1"
             },
-            "screenshot": "https://www.manoprotect.com/og-image.png"
+            "author": {"@id": "https://manoprotect.com/#organization"},
+            "provider": {"@id": "https://manoprotect.com/#organization"},
+            "screenshot": "https://manoprotect.com/screenshots/dashboard.png",
+            "featureList": [
+                "Central Receptora de Alarmas CRA 24/7",
+                "Boton SOS con GPS en tiempo real",
+                "Deteccion de caidas automatica",
+                "Alertas SOS a contactos de emergencia",
+                "Geocercas y zonas seguras",
+                "App movil para toda la familia",
+                "Instalacion profesional gratuita",
+                "Sin permanencia ni cuotas ocultas"
+            ]
         }
         </script>
         
-        <!-- Schema.org FAQPage - Actualizado -->
+        <!-- ============================================ -->
+        <!-- STRUCTURED DATA: SENTINEL X PRODUCT -->
+        <!-- ============================================ -->
+        <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "Product",
+            "@id": "https://manoprotect.com/sentinel-x#product",
+            "name": "SENTINEL X - Smartwatch de Seguridad",
+            "alternateName": "ManoProtect SENTINEL X",
+            "description": "Reloj inteligente de seguridad con SOS invisible, modo PIN falso, grabación segura en la nube y trayecto seguro automático. Funciona independiente del teléfono con conectividad 4G LTE.",
+            "image": [
+                "https://customer-assets.emergentagent.com/job_8161c713-bb69-4bfd-84d2-fde54657d491/artifacts/acz8j630_Reloj%20inteligente%20ManoProtect%20SENTINEL%20X.png",
+                "https://customer-assets.emergentagent.com/job_8161c713-bb69-4bfd-84d2-fde54657d491/artifacts/450nzm76_Reloj%20y%20m%C3%B3vil%20seguros.png"
+            ],
+            "brand": {
+                "@type": "Brand",
+                "name": "ManoProtect"
+            },
+            "manufacturer": {"@id": "https://manoprotect.com/#organization"},
+            "category": "Smartwatches > Security Devices > Personal Safety",
+            "color": ["Negro Mate", "Titanio"],
+            "material": "Titanio y Cristal de Zafiro",
+            "releaseDate": "2026-06-01",
+            "offers": {
+                "@type": "Offer",
+                "url": "https://manoprotect.com/sentinel-x",
+                "priceCurrency": "EUR",
+                "price": "199",
+                "priceValidUntil": "2026-12-31",
+                "availability": "https://schema.org/InStock",
+                "itemCondition": "https://schema.org/NewCondition",
+                "seller": {"@id": "https://manoprotect.com/#organization"},
+                "shippingDetails": {
+                    "@type": "OfferShippingDetails",
+                    "shippingRate": {
+                        "@type": "MonetaryAmount",
+                        "value": "0",
+                        "currency": "EUR"
+                    },
+                    "shippingDestination": {
+                        "@type": "DefinedRegion",
+                        "addressCountry": ["ES", "PT", "FR", "DE", "IT", "NL", "BE", "AT"]
+                    },
+                    "deliveryTime": {
+                        "@type": "ShippingDeliveryTime",
+                        "handlingTime": {
+                            "@type": "QuantitativeValue",
+                            "minValue": "90",
+                            "maxValue": "120",
+                            "unitCode": "DAY"
+                        }
+                    }
+                },
+                "hasMerchantReturnPolicy": {
+                    "@type": "MerchantReturnPolicy",
+                    "applicableCountry": "ES",
+                    "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+                    "merchantReturnDays": "14",
+                    "returnMethod": "https://schema.org/ReturnByMail",
+                    "returnFees": "https://schema.org/FreeReturn"
+                }
+            },
+            "additionalProperty": [
+                {"@type": "PropertyValue", "name": "Pantalla", "value": "AMOLED 1.78 pulgadas"},
+                {"@type": "PropertyValue", "name": "Conectividad", "value": "4G LTE independiente"},
+                {"@type": "PropertyValue", "name": "Autonomía", "value": "5 días"},
+                {"@type": "PropertyValue", "name": "Resistencia", "value": "IP68 + 5ATM"},
+                {"@type": "PropertyValue", "name": "GPS", "value": "Multi-banda alta precisión"}
+            ]
+        }
+        </script>
+        
+        <!-- ============================================ -->
+        <!-- STRUCTURED DATA: LOCAL BUSINESS -->
+        <!-- ============================================ -->
+        <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "LocalBusiness",
+            "@id": "https://manoprotect.com/#localbusiness",
+            "name": "ManoProtect",
+            "image": "https://manoprotect.com/logo512.png",
+            "url": "https://manoprotect.com",
+            "telephone": "+34672184738",
+            "email": "info@manoprotect.com",
+            "priceRange": "€€",
+            "address": {
+                "@type": "PostalAddress",
+                "streetAddress": "Novelé",
+                "addressLocality": "Valencia",
+                "addressRegion": "Comunidad Valenciana",
+                "postalCode": "46814",
+                "addressCountry": "ES"
+            },
+            "geo": {
+                "@type": "GeoCoordinates",
+                "latitude": 38.9806,
+                "longitude": -0.5479
+            },
+            "openingHoursSpecification": [{
+                "@type": "OpeningHoursSpecification",
+                "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+                "opens": "09:00",
+                "closes": "18:00"
+            }],
+            "aggregateRating": {
+                "@type": "AggregateRating",
+                "ratingValue": "4.9",
+                "reviewCount": "847"
+            }
+        }
+        </script>
+        
+        <!-- ============================================ -->
+        <!-- STRUCTURED DATA: PRODUCT (SOS DEVICE) -->
+        <!-- ============================================ -->
+        <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "Product",
+            "@id": "https://manoprotect.com/#product-sos",
+            "name": "ManoProtect Dispositivo SOS GPS",
+            "description": "Dispositivo de emergencia SOS con GPS en tiempo real. Localización GPS para familias y mayores. Botón de pánico con alertas instantáneas.",
+            "image": [
+                "https://manoprotect.com/sos-device.png",
+                "https://static.prod-images.emergentagent.com/jobs/57731f5f-bdc3-4065-aa81-f8dc7ddad247/images/4a10ef76a79b16a8b4b57b4d18673d1fdf11d23b55e68841a8c3c2dadeea1a97.png"
+            ],
+            "sku": "MANO-SOS-001",
+            "mpn": "MANOPROTECT-SOS",
+            "brand": {
+                "@type": "Brand",
+                "name": "ManoProtect"
+            },
+            "manufacturer": {"@id": "https://manoprotect.com/#organization"},
+            "category": "Security Devices > GPS Trackers > Family Safety",
+            "color": ["Plata", "Negro", "Azul", "Rosa", "Verde Menta", "Naranja"],
+            "material": "ABS Premium",
+            "weight": {
+                "@type": "QuantitativeValue",
+                "value": "35",
+                "unitCode": "GRM"
+            },
+            "offers": {
+                "@type": "Offer",
+                "url": "https://manoprotect.com/dispositivo-sos",
+                "priceCurrency": "EUR",
+                "price": "0",
+                "priceValidUntil": "2026-12-31",
+                "availability": "https://schema.org/InStock",
+                "itemCondition": "https://schema.org/NewCondition",
+                "seller": {"@id": "https://manoprotect.com/#organization"},
+                "shippingDetails": {
+                    "@type": "OfferShippingDetails",
+                    "shippingRate": {
+                        "@type": "MonetaryAmount",
+                        "value": "4.95",
+                        "currency": "EUR"
+                    },
+                    "shippingDestination": {
+                        "@type": "DefinedRegion",
+                        "addressCountry": "ES"
+                    },
+                    "deliveryTime": {
+                        "@type": "ShippingDeliveryTime",
+                        "handlingTime": {
+                            "@type": "QuantitativeValue",
+                            "minValue": "1",
+                            "maxValue": "2",
+                            "unitCode": "DAY"
+                        },
+                        "transitTime": {
+                            "@type": "QuantitativeValue",
+                            "minValue": "1",
+                            "maxValue": "2",
+                            "unitCode": "DAY"
+                        }
+                    }
+                },
+                "hasMerchantReturnPolicy": {
+                    "@type": "MerchantReturnPolicy",
+                    "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+                    "merchantReturnDays": "30",
+                    "returnMethod": "https://schema.org/ReturnByMail"
+                }
+            },
+            "aggregateRating": {
+                "@type": "AggregateRating",
+                "ratingValue": "4.8",
+                "reviewCount": "327",
+                "bestRating": "5"
+            },
+            "review": [{
+                "@type": "Review",
+                "reviewRating": {
+                    "@type": "Rating",
+                    "ratingValue": "5",
+                    "bestRating": "5"
+                },
+                "author": {"@type": "Person", "name": "María García"},
+                "datePublished": "2026-01-15",
+                "reviewBody": "El dispositivo SOS me da tranquilidad. Mis padres mayores lo llevan siempre y sé que puedo localizarlos en cualquier momento. La calidad es excelente."
+            }, {
+                "@type": "Review",
+                "reviewRating": {
+                    "@type": "Rating",
+                    "ratingValue": "5",
+                    "bestRating": "5"
+                },
+                "author": {"@type": "Person", "name": "Carlos López"},
+                "datePublished": "2026-01-20",
+                "reviewBody": "Perfecto para mis hijos. El botón SOS funciona de maravilla y las alertas llegan al instante. Muy recomendado para familias."
+            }, {
+                "@type": "Review",
+                "reviewRating": {
+                    "@type": "Rating",
+                    "ratingValue": "5",
+                    "bestRating": "5"
+                },
+                "author": {"@type": "Person", "name": "Ana Martínez"},
+                "datePublished": "2026-02-05",
+                "reviewBody": "Increíble relación calidad-precio. El dispositivo es GRATIS y solo pagas el envío. La app funciona perfectamente."
+            }]
+        }
+        </script>
+        
+        <!-- ============================================ -->
+        <!-- STRUCTURED DATA: FAQ PAGE -->
+        <!-- ============================================ -->
+        <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [{
+                "@type": "Question",
+                "name": "¿Qué es digital security y cómo protege ManoProtect?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Digital security es la protección de tu identidad, datos y transacciones online contra fraudes, phishing y estafas digitales. ManoProtect usa inteligencia artificial avanzada para detectar y bloquear amenazas en tiempo real, protegiendo a toda tu familia."
+                }
+            }, {
+                "@type": "Question",
+                "name": "¿Cómo funciona el fraud prevention de ManoProtect?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Nuestro sistema de fraud prevention analiza en tiempo real mensajes SMS, emails y llamadas para detectar intentos de phishing y estafas. Cuando detectamos una amenaza, te alertamos instantáneamente antes de que puedas ser víctima."
+                }
+            }, {
+                "@type": "Question",
+                "name": "¿Qué incluye el online payment protection?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "El online payment protection de ManoProtect incluye verificación de sitios web antes de comprar, alertas de transacciones sospechosas, protección contra clonación de tarjetas y monitorización de tus cuentas bancarias."
+                }
+            }, {
+                "@type": "Question",
+                "name": "¿Cómo funciona el botón SOS con GPS?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Con un solo clic en el botón SOS, enviamos tu ubicación GPS exacta a tus contactos de emergencia por WhatsApp, SMS y notificación push. Tus familiares pueden ver tu ubicación en tiempo real hasta que confirmes que estás a salvo."
+                }
+            }, {
+                "@type": "Question",
+                "name": "¿ManoProtect ofrece prueba gratuita?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Sí, ofrecemos 7 días de prueba completamente GRATIS con todas las funciones de digital security, fraud prevention y online payment protection. No se requiere tarjeta de crédito para empezar."
+                }
+            }]
+        }
+        </script>
+        
+        <!-- ============================================ -->
+        <!-- STRUCTURED DATA: ALARM PRODUCTS (Google Product Snippets) -->
+        <!-- ============================================ -->
+        <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "Product",
+            "@id": "https://manoprotect.com/alarmas/vivienda#product",
+            "name": "Alarma Hogar ManoProtect",
+            "description": "Alarma inteligente para viviendas con camaras IA, centro de control 24h, anti-inhibicion y Sentinel SOS incluido. Instalacion profesional GRATIS. SIN permanencia.",
+            "image": "https://manoprotect.com/og-image.png",
+            "brand": {"@type": "Brand", "name": "ManoProtect"},
+            "manufacturer": {"@id": "https://manoprotect.com/#organization"},
+            "category": "Security Systems > Home Alarm Systems",
+            "offers": {
+                "@type": "AggregateOffer",
+                "lowPrice": "33.90",
+                "highPrice": "54.90",
+                "priceCurrency": "EUR",
+                "offerCount": "2",
+                "offers": [{
+                    "@type": "Offer",
+                    "name": "Alarma Essential - Pisos y apartamentos",
+                    "price": "33.90",
+                    "priceCurrency": "EUR",
+                    "description": "Kit completo: hub, 2 camaras Full HD, 3 sensores PIR, sirena, mando, centro control 24h. Instalacion GRATIS.",
+                    "availability": "https://schema.org/InStock",
+                    "priceValidUntil": "2026-12-31",
+                    "priceSpecification": {
+                        "@type": "UnitPriceSpecification",
+                        "price": "33.90",
+                        "priceCurrency": "EUR",
+                        "billingDuration": "P1M",
+                        "unitText": "mes"
+                    },
+                    "shippingDetails": {
+                        "@type": "OfferShippingDetails",
+                        "shippingRate": {"@type": "MonetaryAmount", "value": "0", "currency": "EUR"},
+                        "shippingDestination": {"@type": "DefinedRegion", "addressCountry": "ES"},
+                        "deliveryTime": {"@type": "ShippingDeliveryTime", "handlingTime": {"@type": "QuantitativeValue", "minValue": "1", "maxValue": "3", "unitCode": "DAY"}, "transitTime": {"@type": "QuantitativeValue", "minValue": "1", "maxValue": "3", "unitCode": "DAY"}}
+                    },
+                    "hasMerchantReturnPolicy": {"@type": "MerchantReturnPolicy", "applicableCountry": "ES", "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow", "merchantReturnDays": "14", "returnMethod": "https://schema.org/ReturnByMail", "returnFees": "https://schema.org/FreeReturn"}
+                }, {
+                    "@type": "Offer",
+                    "name": "Alarma Premium - Chalets y casas",
+                    "price": "44.90",
+                    "priceCurrency": "EUR",
+                    "description": "Kit pro: hub 10 pulgadas, 6 camaras 2K+PTZ, 10 sensores, Acuda, grabacion nube, mantenimiento. Instalacion GRATIS.",
+                    "availability": "https://schema.org/InStock",
+                    "priceValidUntil": "2026-12-31",
+                    "priceSpecification": {
+                        "@type": "UnitPriceSpecification",
+                        "price": "44.90",
+                        "priceCurrency": "EUR",
+                        "billingDuration": "P1M",
+                        "unitText": "mes"
+                    },
+                    "shippingDetails": {
+                        "@type": "OfferShippingDetails",
+                        "shippingRate": {"@type": "MonetaryAmount", "value": "0", "currency": "EUR"},
+                        "shippingDestination": {"@type": "DefinedRegion", "addressCountry": "ES"},
+                        "deliveryTime": {"@type": "ShippingDeliveryTime", "handlingTime": {"@type": "QuantitativeValue", "minValue": "1", "maxValue": "3", "unitCode": "DAY"}, "transitTime": {"@type": "QuantitativeValue", "minValue": "1", "maxValue": "3", "unitCode": "DAY"}}
+                    },
+                    "hasMerchantReturnPolicy": {"@type": "MerchantReturnPolicy", "applicableCountry": "ES", "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow", "merchantReturnDays": "14", "returnMethod": "https://schema.org/ReturnByMail", "returnFees": "https://schema.org/FreeReturn"}
+                }]
+            },
+            "aggregateRating": {"@type": "AggregateRating", "ratingValue": "4.9", "reviewCount": "156", "bestRating": "5"},
+            "review": [
+                {"@type": "Review", "reviewRating": {"@type": "Rating", "ratingValue": "5", "bestRating": "5"}, "author": {"@type": "Person", "name": "Javier R."}, "datePublished": "2026-01-28", "reviewBody": "Instalacion impecable, tecnico muy profesional. Las camaras funcionan de maravilla y la app es facil de usar."},
+                {"@type": "Review", "reviewRating": {"@type": "Rating", "ratingValue": "5", "bestRating": "5"}, "author": {"@type": "Person", "name": "Laura M."}, "datePublished": "2026-02-10", "reviewBody": "Mejor que Securitas Direct y sin permanencia. El Sentinel X de regalo es un detalle increible."}
+            ]
+        }
+        </script>
+        
+        <!-- STRUCTURED DATA: ALARM NEGOCIO -->
+        <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "Product",
+            "@id": "https://manoprotect.com/alarmas/negocio#product",
+            "name": "Alarma Negocio ManoProtect",
+            "description": "Alarma profesional para negocios con camaras 4K IA, control acceso biometrico, centro 24h, servicio Acuda. Instalacion GRATIS. SIN permanencia.",
+            "image": "https://manoprotect.com/og-image.png",
+            "brand": {"@type": "Brand", "name": "ManoProtect"},
+            "category": "Security Systems > Business Alarm Systems",
+            "offers": {
+                "@type": "AggregateOffer",
+                "lowPrice": "54.90",
+                "highPrice": "89.90",
+                "priceCurrency": "EUR",
+                "offerCount": "2",
+                "offers": [{
+                    "@type": "Offer",
+                    "name": "Alarma Comercio - Tiendas y locales",
+                    "price": "54.90",
+                    "priceCurrency": "EUR",
+                    "availability": "https://schema.org/InStock",
+                    "priceValidUntil": "2026-12-31",
+                    "shippingDetails": {"@type": "OfferShippingDetails", "shippingRate": {"@type": "MonetaryAmount", "value": "0", "currency": "EUR"}, "shippingDestination": {"@type": "DefinedRegion", "addressCountry": "ES"}, "deliveryTime": {"@type": "ShippingDeliveryTime", "handlingTime": {"@type": "QuantitativeValue", "minValue": "1", "maxValue": "3", "unitCode": "DAY"}}},
+                    "hasMerchantReturnPolicy": {"@type": "MerchantReturnPolicy", "applicableCountry": "ES", "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow", "merchantReturnDays": "14", "returnMethod": "https://schema.org/ReturnByMail", "returnFees": "https://schema.org/FreeReturn"}
+                }, {
+                    "@type": "Offer",
+                    "name": "Alarma Empresa - Naves y oficinas",
+                    "price": "74.90",
+                    "priceCurrency": "EUR",
+                    "availability": "https://schema.org/InStock",
+                    "priceValidUntil": "2026-12-31",
+                    "shippingDetails": {"@type": "OfferShippingDetails", "shippingRate": {"@type": "MonetaryAmount", "value": "0", "currency": "EUR"}, "shippingDestination": {"@type": "DefinedRegion", "addressCountry": "ES"}, "deliveryTime": {"@type": "ShippingDeliveryTime", "handlingTime": {"@type": "QuantitativeValue", "minValue": "1", "maxValue": "3", "unitCode": "DAY"}}},
+                    "hasMerchantReturnPolicy": {"@type": "MerchantReturnPolicy", "applicableCountry": "ES", "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow", "merchantReturnDays": "14", "returnMethod": "https://schema.org/ReturnByMail", "returnFees": "https://schema.org/FreeReturn"}
+                }]
+            },
+            "aggregateRating": {"@type": "AggregateRating", "ratingValue": "4.8", "reviewCount": "89", "bestRating": "5"}
+        }
+        </script>
+        
+        <!-- ============================================ -->
+        <!-- STRUCTURED DATA: BREADCRUMB -->
+        <!-- ============================================ -->
+        <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [{
+                "@type": "ListItem",
+                "position": 1,
+                "name": "Inicio",
+                "item": "https://manoprotect.com"
+            }, {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "Registro",
+                "item": "https://manoprotect.com/registro"
+            }, {
+                "@type": "ListItem",
+                "position": 3,
+                "name": "Sobre Nosotros",
+                "item": "https://manoprotect.com/sobre-nosotros"
+            }]
+        }
+        </script>
         <script type="application/ld+json">
         {
             "@context": "https://schema.org",
@@ -126,296 +899,334 @@
             "mainEntity": [
                 {
                     "@type": "Question",
-                    "name": "¿Qué es ManoProtect?",
+                    "name": "\u00bfConsume bater\u00eda ManoProtect?",
                     "acceptedAnswer": {
                         "@type": "Answer",
-                        "text": "ManoProtect es una plataforma de seguridad digital que protege a familias contra fraudes, phishing, smishing y otras estafas digitales usando inteligencia artificial avanzada."
+                        "text": "No. ManoProtect est\u00e1 optimizado para bajo consumo. El GPS en segundo plano usa menos del 3% de bater\u00eda al d\u00eda."
                     }
                 },
                 {
                     "@type": "Question",
-                    "name": "¿Puedo cancelar en cualquier momento?",
+                    "name": "\u00bfEs legal rastrear a mi hijo con ManoProtect?",
                     "acceptedAnswer": {
                         "@type": "Answer",
-                        "text": "Sí, sin preguntas. Cancela desde tu perfil y seguirás teniendo acceso hasta el final del período pagado."
+                        "text": "S\u00ed. Como padre o tutor legal, tienes derecho a supervisar la ubicaci\u00f3n de tu hijo menor. ManoProtect siempre requiere consentimiento expl\u00edcito."
                     }
                 },
                 {
                     "@type": "Question",
-                    "name": "¿Qué incluye la garantía de 7 días?",
+                    "name": "\u00bfMi hijo puede desactivar ManoProtect?",
                     "acceptedAnswer": {
                         "@type": "Answer",
-                        "text": "Si no estás satisfecho, te devolvemos el 100% del importe. Sin letra pequeña, sin complicaciones."
+                        "text": "No. Los permisos se bloquean autom\u00e1ticamente despu\u00e9s de la configuraci\u00f3n inicial. Solo se pueden modificar verificando identidad con DNI."
                     }
                 },
                 {
                     "@type": "Question",
-                    "name": "¿Cómo funciona el botón SOS?",
+                    "name": "\u00bfCu\u00e1nto cuesta ManoProtect?",
                     "acceptedAnswer": {
                         "@type": "Answer",
-                        "text": "Al pulsarlo, se envía tu ubicación GPS a tus contactos de emergencia y suena una alarma en sus dispositivos."
+                        "text": "Plan Mensual: 9,99\u20ac/mes. Plan Anual: 99,99\u20ac/a\u00f1o (equivale a 8,33\u20ac/mes). 7 d\u00edas de prueba gratis. Cancela cuando quieras."
                     }
                 }
             ]
         }
         </script>
         
-        <!-- Schema.org WebSite with SearchAction -->
+        <!-- ============================================ -->
+        <!-- STRUCTURED DATA: SERVICE -->
+        <!-- ============================================ -->
         <script type="application/ld+json">
         {
             "@context": "https://schema.org",
-            "@type": "WebSite",
-            "name": "ManoProtect",
-            "url": "https://www.manoprotect.com",
-            "potentialAction": {
-                "@type": "SearchAction",
-                "target": "https://www.manoprotect.com/search?q={search_term_string}",
-                "query-input": "required name=search_term_string"
+            "@type": "Service",
+            "serviceType": "Family Location & Safety Service",
+            "name": "ManoProtect - Protecci\u00f3n Familiar 24/7",
+            "description": "Localiza a tu familia en segundos en caso de emergencia. GPS en segundo plano, alertas SOS instant\u00e1neas, zonas seguras y notificaciones push.",
+            "provider": {"@id": "https://manoprotect.com/#organization"},
+            "areaServed": {"@type": "Country", "name": "Espa\u00f1a"},
+            "audience": {"@type": "Audience", "audienceType": "Padres con hijos adolescentes, Familias"},
+            "hasOfferCatalog": {
+                "@type": "OfferCatalog",
+                "name": "Planes ManoProtect",
+                "itemListElement": [{
+                    "@type": "Offer",
+                    "itemOffered": {"@type": "Service", "name": "Plan Mensual", "description": "GPS 24/7, SOS, hasta 5 familiares"},
+                    "price": "9.99",
+                    "priceCurrency": "EUR",
+                    "availability": "https://schema.org/InStock",
+                    "priceValidUntil": "2026-12-31",
+                    "hasMerchantReturnPolicy": {
+                        "@type": "MerchantReturnPolicy",
+                        "applicableCountry": "ES",
+                        "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+                        "merchantReturnDays": "14",
+                        "returnMethod": "https://schema.org/ReturnByMail",
+                        "returnFees": "https://schema.org/FreeReturn"
+                    }
+                }, {
+                    "@type": "Offer",
+                    "itemOffered": {"@type": "Service", "name": "Plan Anual", "description": "Todo del Mensual + Dispositivo GRATIS + Prioridad soporte"},
+                    "price": "99.99",
+                    "priceCurrency": "EUR",
+                    "availability": "https://schema.org/InStock",
+                    "priceValidUntil": "2026-12-31",
+                    "hasMerchantReturnPolicy": {
+                        "@type": "MerchantReturnPolicy",
+                        "applicableCountry": "ES",
+                        "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+                        "merchantReturnDays": "14",
+                        "returnMethod": "https://schema.org/ReturnByMail",
+                        "returnFees": "https://schema.org/FreeReturn"
+                    }
+                }]
             }
         }
         </script>
         
-        <!-- PWA Meta Tags -->
-        <meta name="apple-mobile-web-app-capable" content="yes" />
-        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-        <meta name="apple-mobile-web-app-title" content="ManoProtect" />
-        <meta name="mobile-web-app-capable" content="yes" />
-        <meta name="application-name" content="ManoProtect" />
-        <meta name="msapplication-TileColor" content="#6366f1" />
-        <meta name="msapplication-tap-highlight" content="no" />
-        <meta name="format-detection" content="telephone=no" />
-        
-        <!-- Apple Touch Icons -->
-        <link rel="apple-touch-icon" href="/icons/icon-152x152.png" />
-        <link rel="apple-touch-icon" sizes="180x180" href="/icons/icon-192x192.png" />
-        
-        <!-- Manifest -->
-        <link rel="manifest" href="/manifest.json" />
-        
-        <!-- Favicon -->
-        <link rel="icon" href="/favicon.ico" />
-        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
-        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
-        
-        <!-- Critical CSS for faster FCP/LCP -->
-        <style>
-            /* Critical above-the-fold styles - Inlined for performance */
-            *,*::before,*::after{box-sizing:border-box}
-            body{margin:0;font-family:'Public Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#fafafa;-webkit-font-smoothing:antialiased}
-            h1,h2,h3,h4,h5,h6{font-family:'Outfit',sans-serif;letter-spacing:-0.02em;margin:0}
-            img{max-width:100%;height:auto;display:block}
-            /* Header skeleton */
-            .glass{background:rgba(255,255,255,0.8);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
-            /* Hero section skeleton for CLS prevention */
-            .hero-skeleton{min-height:600px;display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:center}
-            @media(max-width:1024px){.hero-skeleton{grid-template-columns:1fr;min-height:auto}}
-            /* Loading state */
-            .loading-screen{display:flex;align-items:center;justify-content:center;min-height:100vh;background:#fafafa}
-            .loading-spinner{width:48px;height:48px;border:3px solid #e5e7eb;border-top-color:#6366f1;border-radius:50%;animation:spin 1s linear infinite}
-            @keyframes spin{to{transform:rotate(360deg)}}
-            /* Button base styles */
-            button{font-family:inherit}
-            /* Reduce layout shift */
-            #root{min-height:100vh}
-            /* Preload skeleton */
-            .skeleton{background:linear-gradient(90deg,#f0f0f0 25%,#e0e0e0 50%,#f0f0f0 75%);background-size:200% 100%;animation:shimmer 1.5s infinite}
-            @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
-            /* Content visibility for below-fold optimization - CRITICAL for LCP */
-            .content-visibility-auto{content-visibility:auto;contain-intrinsic-size:auto 500px}
-            /* Sections below the fold - Deferred paint */
-            section:not(:first-of-type){content-visibility:auto;contain-intrinsic-size:auto 600px}
-            /* Preconnect hints inline */
-            @font-face{font-family:'Public Sans';font-display:swap;src:local('Public Sans')}
-            @font-face{font-family:'Outfit';font-display:swap;src:local('Outfit')}
-        </style>
-        
-        <!-- Development Tools - Only load in development/preview mode -->
-        <script>
-            (function() {
-                // Only load development scripts when NOT in production
-                var isProduction = window.location.hostname === 'manoprotect.com' || 
-                    window.location.hostname === 'www.manoprotect.com';
-                
-                if (!isProduction && window.location.hostname === 'localhost') {
-                    // Development mode only
-                    console.log('ManoProtect - Development Mode');
-                }
-            })();
+        <!-- ============================================ -->
+        <!-- STRUCTURED DATA: ARTICLE LIST (GOOGLE DISCOVER) -->
+        <!-- ============================================ -->
+        <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "ItemList",
+            "itemListElement": [
+                {"@type": "ListItem", "position": 1, "url": "https://manoprotect.com/blog/mejores-relojes-sos-2026", "name": "Mejores Relojes GPS con SOS para Mayores 2026"},
+                {"@type": "ListItem", "position": 2, "url": "https://manoprotect.com/blog/como-funciona-reloj-sos", "name": "Como Funciona un Reloj SOS: Guia Completa"},
+                {"@type": "ListItem", "position": 3, "url": "https://manoprotect.com/blog/seguridad-familiar-digital-2026", "name": "Alarmas para Hogar sin Permanencia 2026"}
+            ]
+        }
+        </script>
+
+        <!-- ============================================ -->
+        <!-- STRUCTURED DATA: FAQ (GOOGLE DISCOVER) -->
+        <!-- ============================================ -->
+        <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [
+                {"@type": "Question", "name": "Como funciona el boton SOS del reloj ManoProtect?", "acceptedAnswer": {"@type": "Answer", "text": "Al pulsar el boton SOS durante 3 segundos, el reloj envia automaticamente tu ubicacion GPS a la Central Receptora de Alarmas 24/7 y a tus contactos de emergencia. La CRA contacta con el 112 si es necesario."}},
+                {"@type": "Question", "name": "Cuanto cuesta la alarma ManoProtect sin permanencia?", "acceptedAnswer": {"@type": "Answer", "text": "ManoProtect ofrece alarmas profesionales desde 33,90 euros al mes sin permanencia ni cuotas ocultas. La instalacion es totalmente gratuita."}},
+                {"@type": "Question", "name": "Que diferencia hay entre Sentinel X, Sentinel J y Sentinel S?", "acceptedAnswer": {"@type": "Answer", "text": "Sentinel X es el reloj premium para adultos con 4G LTE y SOS invisible. Sentinel J para jovenes con GPS. Sentinel S para mayores con deteccion de caidas automatica."}},
+                {"@type": "Question", "name": "ManoProtect tiene Central Receptora de Alarmas?", "acceptedAnswer": {"@type": "Answer", "text": "Si, ManoProtect cuenta con una CRA profesional operativa 24/7, homologada y conectada con los servicios de emergencia 112."}}
+            ]
+        }
         </script>
         
-        <!-- PWA Service Worker Registration -->
+        <!-- ============================================ -->
+        <!-- STRUCTURED DATA: SPEAKABLE (Voice Search) -->
+        <!-- ============================================ -->
+        <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "WebPage",
+            "name": "ManoProtect - Digital Security España",
+            "speakable": {
+                "@type": "SpeakableSpecification",
+                "cssSelector": ["h1", ".hero-description", ".main-cta"]
+            },
+            "url": "https://manoprotect.com"
+        }
+        </script>
+        
+        <!-- ============================================ -->
+        <!-- PWA SERVICE WORKER -->
+        <!-- ============================================ -->
         <script>
             if ('serviceWorker' in navigator) {
                 window.addEventListener('load', function() {
-                    navigator.serviceWorker.register('/sw.js')
-                        .then(function(registration) {
-                            console.log('ManoProtect PWA: Service Worker registrado');
-                        })
-                        .catch(function(error) {
-                            // Service worker not found is OK - will work without it
-                        });
+                    navigator.serviceWorker.register('/sw.js').catch(function() {});
                 });
             }
         </script>
         
-        <!-- BigData Analytics -->
+        <!-- BigData Analytics (deferred) -->
         <script src="/bigdata-analytics.js" defer></script>
         
-        <!-- Google Ads Conversion Tracking -->
+        <!-- ManoProtect Analytics Events -->
+        <script src="/analytics-events.js" defer></script>
+        
+        <!-- Google Ads Conversion Tracking (deferred) -->
         <script src="/google-ads/conversion-tracking.js" defer></script>
         
-        <!-- Social Media Ads Pixels - DESACTIVADOS hasta configurar Pixel IDs reales -->
-        <!--
-        <script src="/ads/facebook-pixel.js" defer></script>
-        <script src="/ads/tiktok-pixel.js" defer></script>
-        <script src="/ads/twitter-pixel.js" defer></script>
-        <script src="/ads/linkedin-pixel.js" defer></script>
-        <script src="/ads/snapchat-pixel.js" defer></script>
-        <script src="/ads/pinterest-pixel.js" defer></script>
-        <script src="/ads/unified-ads-manager.js" defer></script>
-        <script src="/ads/rewarded-ads.js" defer></script>
-        -->
+        <!-- TrustBox script - Trustpilot Reviews -->
+        <script type="text/javascript" src="//widget.trustpilot.com/bootstrap/v5/tp.widget.bootstrap.min.js" async></script>
+        <!-- End TrustBox script -->
     </head>
     <body>
-        <!-- Google Tag Manager (noscript) -->
-        <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MK53XZ8Q"
-        height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-        <!-- End Google Tag Manager (noscript) -->
+        <!-- Structured Data for Google (hidden) -->
+        <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "ItemList",
+            "itemListElement": [{
+                "@type": "SiteNavigationElement",
+                "position": 1,
+                "name": "Inicio",
+                "url": "https://manoprotect.com"
+            }, {
+                "@type": "SiteNavigationElement",
+                "position": 2,
+                "name": "Precios",
+                "url": "https://manoprotect.com/pricing"
+            }, {
+                "@type": "SiteNavigationElement",
+                "position": 3,
+                "name": "Cómo Funciona",
+                "url": "https://manoprotect.com/how-it-works"
+            }, {
+                "@type": "SiteNavigationElement",
+                "position": 4,
+                "name": "Blog",
+                "url": "https://manoprotect.com/blog"
+            }]
+        }
+        </script>
         
-        <!-- Fallback content for SEO and AdSense compliance - visible to crawlers and users without JS -->
+        <!-- Critical CSS: Inline for instant FCP -->
+        <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;-webkit-font-smoothing:antialiased}
+        #root{min-height:100vh}
+        .app-loading{background:#fff}
+        header{position:fixed;top:0;left:0;right:0;z-index:50;background:#fff;height:64px}
+        [data-testid="hero-section"]{min-height:600px;background:linear-gradient(135deg,#0f172a,#1e293b,#064e3b)}
+        [data-testid="hero-family-image"]{aspect-ratio:3/2;width:100%;max-width:32rem}
+        img{content-visibility:auto}
+        </style>
+        
+        <!-- React App Root with Loading State -->
+        <div id="root" class="app-loading"></div>
+        
+        <!-- Google Tag Manager (noscript fallback) -->
         <noscript>
-            <style>
-                .noscript-content { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; max-width: 1200px; margin: 0 auto; padding: 20px; }
-                .noscript-header { background: linear-gradient(135deg, #6366f1 0%, #10b981 100%); color: white; padding: 40px 20px; text-align: center; border-radius: 16px; margin-bottom: 30px; }
-                .noscript-header h1 { font-size: 2.5rem; margin: 0 0 10px 0; }
-                .noscript-header p { font-size: 1.2rem; margin: 0; opacity: 0.9; }
-                .noscript-section { background: #f9fafb; padding: 30px; border-radius: 12px; margin-bottom: 20px; }
-                .noscript-section h2 { color: #1f2937; margin-top: 0; }
-                .noscript-section p, .noscript-section li { color: #4b5563; line-height: 1.6; }
-                .noscript-features { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin: 30px 0; }
-                .noscript-feature { background: white; padding: 20px; border-radius: 8px; border: 1px solid #e5e7eb; }
-                .noscript-feature h3 { color: #6366f1; margin-top: 0; }
-                .noscript-cta { background: #6366f1; color: white; padding: 15px 30px; border-radius: 8px; text-decoration: none; display: inline-block; font-weight: 600; }
-                .noscript-stats { display: flex; justify-content: space-around; flex-wrap: wrap; gap: 20px; text-align: center; padding: 20px 0; }
-                .noscript-stat { flex: 1; min-width: 150px; }
-                .noscript-stat-number { font-size: 2rem; font-weight: bold; color: #6366f1; }
-                .noscript-stat-label { color: #6b7280; font-size: 0.9rem; }
-                .noscript-footer { text-align: center; padding: 30px; color: #6b7280; border-top: 1px solid #e5e7eb; margin-top: 30px; }
-            </style>
-            <div class="noscript-content">
-                <header class="noscript-header">
-                    <h1>ManoProtect</h1>
-                    <p>Tu escudo digital contra fraudes y estafas en España</p>
-                </header>
-                
-                <section class="noscript-section">
-                    <h2>¿Qué es ManoProtect?</h2>
-                    <p>ManoProtect es la plataforma líder en España para proteger a tu familia contra fraudes digitales, phishing, smishing y estafas telefónicas. Utilizamos inteligencia artificial avanzada para detectar amenazas en tiempo real y mantener seguros a tus seres queridos.</p>
-                </section>
-
-                <div class="noscript-stats">
-                    <div class="noscript-stat">
-                        <div class="noscript-stat-number">IA</div>
-                        <div class="noscript-stat-label">Análisis Inteligente</div>
-                    </div>
-                    <div class="noscript-stat">
-                        <div class="noscript-stat-number">SMS</div>
-                        <div class="noscript-stat-label">Alertas Instantáneas</div>
-                    </div>
-                    <div class="noscript-stat">
-                        <div class="noscript-stat-number">7 días</div>
-                        <div class="noscript-stat-label">Prueba Gratuita</div>
-                    </div>
-                    <div class="noscript-stat">
-                        <div class="noscript-stat-number">24/7</div>
-                        <div class="noscript-stat-label">Protección Continua</div>
-                    </div>
-                </div>
-
-                <div class="noscript-features">
-                    <div class="noscript-feature">
-                        <h3>Protección contra Phishing</h3>
-                        <p>Detectamos y bloqueamos emails fraudulentos que intentan robar tus datos bancarios y personales.</p>
-                    </div>
-                    <div class="noscript-feature">
-                        <h3>Anti-Smishing SMS</h3>
-                        <p>Analizamos SMS sospechosos de supuestos bancos, correos o empresas de paquetería.</p>
-                    </div>
-                    <div class="noscript-feature">
-                        <h3>Bloqueo de Llamadas</h3>
-                        <p>Identificamos y bloqueamos llamadas de estafadores que se hacen pasar por técnicos o bancos.</p>
-                    </div>
-                    <div class="noscript-feature">
-                        <h3>Protección Familiar</h3>
-                        <p>Protege a tus padres, abuelos y toda tu familia con alertas compartidas en tiempo real.</p>
-                    </div>
-                </div>
-
-                <section class="noscript-section">
-                    <h2>Planes y Precios</h2>
-                    <ul>
-                        <li><strong>Plan Personal</strong> - 4,99€/mes: Protección individual completa</li>
-                        <li><strong>Plan Familiar</strong> - 9,99€/mes: Hasta 5 miembros de la familia</li>
-                        <li><strong>Plan Enterprise</strong> - Desde 49€/mes: Para empresas y organizaciones</li>
-                    </ul>
-                    <p><strong>Prueba gratuita de 7 días</strong> - Sin compromiso, cancela cuando quieras.</p>
-                </section>
-
-                <section class="noscript-section">
-                    <h2>Lo que dicen nuestros clientes</h2>
-                    <blockquote>
-                        <p>"Llevo tiempo utilizándola, estoy tranquila. Tengo dos adolescentes y las tengo controladas, sé dónde están. Muy útil y me gusta mucho."</p>
-                        <cite>— Selomit, España (Reseña de Google)</cite>
-                    </blockquote>
-                    <blockquote>
-                        <p>"Muy útil! Con mi madre de 78 años para saber dónde está en todo momento y tener controlado en caso de caída o incidente."</p>
-                        <cite>— María Deseada Solas Sanchis, España (Reseña de Google)</cite>
-                    </blockquote>
-                </section>
-
-                <section class="noscript-section">
-                    <h2>Contacto</h2>
-                    <p><strong>Teléfono:</strong> 601 510 950</p>
-                    <p><strong>Email:</strong> info@manoprotect.com</p>
-                    <p><strong>Empresa:</strong> STARTBOOKING SL - Madrid, España</p>
-                </section>
-
-                <div style="text-align: center; margin: 30px 0;">
-                    <p>Para disfrutar de todas las funciones de ManoProtect, por favor habilita JavaScript en tu navegador.</p>
-                    <a href="https://www.manoprotect.com" class="noscript-cta">Ir a ManoProtect.com</a>
-                </div>
-
-                <footer class="noscript-footer">
-                    <p>&copy; 2025 ManoProtect - STARTBOOKING SL. Todos los derechos reservados.</p>
-                    <p>
-                        <a href="/privacy-policy">Política de Privacidad</a> | 
-                        <a href="/terms-of-service">Términos y Condiciones</a> | 
-                        <a href="/legal-notice">Aviso Legal</a>
-                    </p>
-                </footer>
-            </div>
+            <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MK53XZ8Q" height="0" width="0" style="display:none;visibility:hidden" title="Google Tag Manager"></iframe>
         </noscript>
         
-        <div id="root"></div>
-        
-        <!-- Google Tag Manager (noscript) -->
-        <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MK53XZ8Q" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-        
-        <!-- Google Tag Manager - Loaded AFTER page render for better LCP -->
+        <!-- Deferred GTM Loading for Performance -->
         <script>
-        // Load GTM after page is fully interactive (5 seconds delay)
-        if(typeof requestIdleCallback==='function'){
-            requestIdleCallback(function(){
-                setTimeout(loadGTM,3000);
+        (function(){
+            // Load GTM after page is interactive
+            function loadGTM(){
+                (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});
+                var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';
+                j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;
+                f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-MK53XZ8Q');
+            }
+            
+            // Use requestIdleCallback for better performance
+            if('requestIdleCallback' in window){
+                requestIdleCallback(function(){setTimeout(loadGTM,1500);});
+            }else{
+                window.addEventListener('load',function(){setTimeout(loadGTM,2000);});
+            }
+        })();
+        </script>
+        
+        <!-- Performance: Remove loading class when React mounts -->
+        <script>
+            window.addEventListener('DOMContentLoaded', function() {
+                setTimeout(function() {
+                    document.getElementById('root').classList.remove('app-loading');
+                }, 100);
             });
-        }else{
-            window.addEventListener('load',function(){setTimeout(loadGTM,3000);});
-        }
-        function loadGTM(){
-            (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});
-            var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';
-            j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;
-            f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-MK53XZ8Q');
+        </script>
+
+        <!-- ============================================ -->
+        <!-- DEFERRED: META PIXEL + HOTJAR + GA4 (after page load) -->
+        <!-- ============================================ -->
+        <script>
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                /* Facebook/Meta Pixel */
+                var _mpPixelId = '%REACT_APP_META_PIXEL_ID%';
+                if (_mpPixelId && _mpPixelId !== '' && !_mpPixelId.includes('REACT_APP')) {
+                    !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+                    n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+                    n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+                    t.src=v;s=b.getElementsByTagName(e)[0];
+                    s.parentNode.insertBefore(t,s)}(window,document,'script',
+                    'https://connect.facebook.net/en_US/fbevents.js');
+                    fbq('init', _mpPixelId);
+                    fbq('track', 'PageView');
+                }
+                /* Hotjar */
+                var _hjSiteId = '%REACT_APP_HOTJAR_ID%';
+                if (_hjSiteId && _hjSiteId !== '' && !_hjSiteId.includes('REACT_APP')) {
+                    (function(h,o,t,j,a,r){
+                        h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
+                        h._hjSettings={hjid:_hjSiteId,hjsv:6};
+                        a=o.getElementsByTagName('head')[0];
+                        r=o.createElement('script');r.async=1;
+                        r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
+                        a.appendChild(r);
+                    })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
+                }
+                /* GA4 */
+                var _ga4Id = '%REACT_APP_GA4_ID%';
+                if (_ga4Id && _ga4Id !== '' && !_ga4Id.includes('REACT_APP')) {
+                    var s = document.createElement('script');
+                    s.async = true;
+                    s.src = 'https://www.googletagmanager.com/gtag/js?id=' + _ga4Id;
+                    document.head.appendChild(s);
+                    window.dataLayer = window.dataLayer || [];
+                    function gtag(){dataLayer.push(arguments);}
+                    window.gtag = gtag;
+                    gtag('js', new Date());
+                    gtag('config', _ga4Id);
+                }
+            }, 3000);
+        });
+        </script>
+
+        <!-- Local Business Structured Data (JSON-LD) -->
+        <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "SecurityCompany",
+            "name": "ManoProtect",
+            "alternateName": "STARTBOOKING SL",
+            "url": "https://manoprotect.com",
+            "logo": "https://manoprotect.com/logo192.png",
+            "description": "Empresa de seguridad integral para hogar y negocio. Alarmas profesionales, Sentinel Lock, Central Receptora de Alarmas 24/7, app movil ManoProtect Connect.",
+            "address": {
+                "@type": "PostalAddress",
+                "addressCountry": "ES",
+                "addressLocality": "Valencia",
+                "addressRegion": "Comunidad Valenciana"
+            },
+            "contactPoint": {
+                "@type": "ContactPoint",
+                "telephone": "+34672184738",
+                "contactType": "customer service",
+                "availableLanguage": ["Spanish"],
+                "areaServed": "ES"
+            },
+            "sameAs": [],
+            "priceRange": "33.90 EUR - 89.90 EUR/mes",
+            "openingHours": "Mo-Su 00:00-23:59",
+            "hasOfferCatalog": {
+                "@type": "OfferCatalog",
+                "name": "Planes de Seguridad ManoProtect",
+                "itemListElement": [
+                    {
+                        "@type": "Offer",
+                        "name": "Alarma Hogar Essential",
+                        "price": "33.90",
+                        "priceCurrency": "EUR",
+                        "description": "Alarma profesional para hogar con instalacion gratuita"
+                    },
+                    {
+                        "@type": "Offer",
+                        "name": "Sentinel Lock",
+                        "price": "249.00",
+                        "priceCurrency": "EUR",
+                        "description": "Cerradura inteligente con IA de deteccion de intrusion"
+                    }
+                ]
+            }
         }
         </script>
     </body>
