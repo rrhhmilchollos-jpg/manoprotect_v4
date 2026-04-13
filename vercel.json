@@ -3,7 +3,9 @@
     "frontend": {
       "entrypoint": "frontend",
       "routePrefix": "/",
-      "framework": "create-react-app"
+      "framework": "create-react-app",
+      "installCommand": "yarn install",
+      "buildCommand": "CI=false yarn run build"
     },
     "backend": {
       "entrypoint": "backend",
